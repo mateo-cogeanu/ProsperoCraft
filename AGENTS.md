@@ -1383,3 +1383,8 @@ User requests26.4snapshots. Explicit1–6launch candidates only; original publis
 ## Development119 snapshot6 bootstrap — 2026-10-28
 
 User confirms118snapshots1–5fully functional,6crash/reopened. Previous-run logs identify mandatory NativeLibrariesBootstrap.loadJNA -> missing PS5 jnidispatch before window, while CPU provider works.119uses runtime5b25cc2genuine JNA builder/nativeABI7.0.4/69JNIexports with existing libffi and resident jnidispatch. Supported loader policy only for original JNA5.19.1receipt; no game/JNA Java replacements. Direct original loadJNA host test forces new native and passes;119physicalretest pending, not full JNA compatibility. Preserve117Store,118candidate, accepted snapshots and64ZIPbudget; microphone/performance unchanged. See docs/client-snapshot6-jna-119.md.
+
+
+##119 release acceptance — 2026-10-28
+
+User reports119all good and explicitly requests Store release; snapshots remain off by default. Publish exactcandidate de43986035602bcedc81ed904ec1db22b4148ec7b22001c95725ad2348c63c19, no rebuild. Preserve Store description/credits/icon; update version/artifact/digest and release changelog. Keep saved explicit snapshot choices; default-off must be verified from shipped library classes. Include matching OpenAL source/relink materials/checksums/acceptance and verify uploads. Submit catalogPR, do not monitor afterward per user preference. Snapshot6functional feedback does not establish standalone JNA APIs/callbacks/endurance or new Java milestone. Preserve117/118and frozen packages.

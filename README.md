@@ -6,12 +6,13 @@
 
 Download Minecraft on your console, manage separate instances and play with DualSense controls, native graphics and game audio. Minecraft gameplay and account login have been tested on PS5. The high-refresh update reached 119 FPS in console testing; extended endurance remains under testing.
 
-**[Download 01.000.117](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.117)** · [Install and release notes](docs/releases/client-controls-worlds-117.md) · [Changelog](CHANGELOG.md)
+**[Download 01.000.119](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.119)** · [Install and release notes](docs/releases/client-snapshots-119.md) · [Changelog](CHANGELOG.md)
 
 ## Downloads
 
 | Release | Includes |
 | :--- | :--- |
+| [**ProsperoCraft 01.000.119**](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.119) | 26.4 snapshots 1–6, snapshot 6 native startup repair, and snapshots hidden by default. |
 | [**ProsperoCraft 01.000.117**](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.117) | Instance duplication, consistent animated controls, default Controlify, world-handle repair and improved dependency queues. |
 | [**ProsperoCraft 01.000.108**](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.108) | Fabric, Modrinth content, dependency repair, input controls, larger icons and Uninstall. |
 | [**ProsperoCraft 01.000.101**](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.101) | Clearer tabs, correct account actions, dropdown resolution, cursor-only game menus and custom player skins. |
@@ -28,7 +29,7 @@ Development117 arranges Mods, Shaders, Resource Packs and Duplicate Instance in 
 
 ## Current status
 
-- **26.3 is the accepted playable baseline.** Snapshots1–5have functional PS5 feedback on118. Development119 repairs snapshot6native JNA bootstrap for retesting. Other versions remain download-only; see [snapshot test notes](docs/client-snapshots-118.md).
+- **26.3 is the accepted playable baseline.** Snapshots 1–5 have functional PS5 feedback on 118, and the user confirms 119 works after the snapshot 6 native JNA repair. Snapshots are off by default. Other versions remain download-only; see [snapshot test notes](docs/client-snapshots-118.md).
 - **Login and gameplay are console-tested.** The existing experimental authentication flow remains in use; a valid Java Edition entitlement/profile is required.
 - **High-refresh gameplay:** up to 120 Hz output on compatible displays, with 119 FPS reported on build097. Release100 has accepted PS5 feedback for much smoother gameplay; sustained frame-time and long-session testing remain incomplete.
 - **Native GUI:** animated backgrounds, instance icons, clear active tabs, state-aware account actions, dropdown resolution and optional vibration. Successful sign-in opens Instances; new libraries hide snapshots by default.
@@ -67,7 +68,7 @@ Use the [issue forms](https://github.com/mateo-cogeanu/ProsperoCraft/issues/new/
 ### Coming next
 
 - [ ] Higher-resolution crafting-table icon.
-- [ ] All Minecraft 26.x releases, including snapshots. Snapshots1–5have functional118feedback;119snapshot6repair awaits PS5 testing.
+- [ ] All Minecraft 26.x releases, including snapshots. 26.4 snapshots 1–6 have positive console feedback across 118/119; other versions remain pending.
 - [ ] NeoForge instance support — coming soon.
 - [ ] Performance sufficient for shaders.
 - [ ] Custom menu music by CogiArt.

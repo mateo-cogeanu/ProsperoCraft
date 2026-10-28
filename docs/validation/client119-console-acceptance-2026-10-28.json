@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-28",
+  "build": "01.000.119",
+  "title_id": "PPSA99874",
+  "package_sha256": "de43986035602bcedc81ed904ec1db22b4148ec7b22001c95725ad2348c63c19",
+  "human_report": "all good! lets make a prosperostore release. but snapshots remain off by default",
+  "previous_feedback": "Snapshots1\u20135 fully functional on118;119repairs snapshot6 early native JNA bootstrap.",
+  "authorization": "Publish exact119public release and existing Store listing update. Preserve description/credits and snapshot-default-off behavior.",
+  "snapshot_policy": "Off by default; existing saved user choices retained.",
+  "scope": "Functional console acceptance, not a new Java ALL PASS milestone or exhaustive JNI/endurance validation."
+}
