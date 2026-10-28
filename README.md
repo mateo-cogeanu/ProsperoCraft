@@ -59,25 +59,24 @@ Use the [issue forms](https://github.com/mateo-cogeanu/ProsperoCraft/issues/new/
 - [x] Centered top-bar button text.
 - [x] Controller vibration.
 - [x] Unlock the 60 FPS cap on compatible 120 Hz displays — 119 FPS reported in PS5 testing. Fully uncapped presentation remains future work.
+- [x] Fabric instances and Modrinth mods, shaders and resource packs.
+- [x] SDL3 integration for Controlify.
+- [x] Keyboard/mouse gameplay support.
+- [x] Controller remapping.
 
 ### Coming next
 
 - [ ] Higher-resolution crafting-table icon.
 - [ ] All Minecraft 26.x releases, including snapshots.
-- [x] Fabric instances and Modrinth mods, shaders and resource packs.
 - [ ] NeoForge instance support — coming soon.
-- [x] SDL3 integration for Controlify.
 - [ ] Performance sufficient for shaders.
 - [ ] Custom menu music by CogiArt.
 - [ ] `.mrpack` imports.
-- [x] Keyboard/mouse gameplay support.
-- [x] Controller remapping.
 - [ ] JVM 21 for broader Minecraft support.
 - [ ] JVM 17 for even broader Minecraft support.
 - [ ] Custom AMD Ryzen Zen 2 8C/16T CPU identification.
 - [ ] Home menu.
 - [ ] Themes.
-
 Broader account-refresh, save/reload and lifecycle validation continues alongside
 these features. Client mod-loader support is separate from the existing server
 milestones; each game/loader version needs its own validation.
