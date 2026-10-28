@@ -1,0 +1,100 @@
+name: Mod compatibility report
+description: Tell us whether a Fabric mod works on ProsperoCraft.
+title: "[Mod] "
+labels: ["mod-compatibility"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for testing a mod on PS5. Reports that **work** are just as useful as crashes, so please send both.
+        One mod per report. If several mods only fail together, list the others under "Other installed mods".
+  - type: input
+    id: mod-name
+    attributes:
+      label: Mod name
+      placeholder: Sodium
+    validations:
+      required: true
+  - type: input
+    id: mod-link
+    attributes:
+      label: Modrinth or source link
+      placeholder: https://modrinth.com/mod/sodium
+    validations:
+      required: true
+  - type: input
+    id: mod-version
+    attributes:
+      label: Mod version
+      description: Shown in the Installed tab or on the Modrinth version page.
+      placeholder: 0.9.2
+    validations:
+      required: true
+  - type: input
+    id: build
+    attributes:
+      label: ProsperoCraft build
+      description: Shown in the launcher footer.
+      placeholder: 01.000.117
+    validations:
+      required: true
+  - type: input
+    id: mc-version
+    attributes:
+      label: Minecraft version
+      value: "26.3"
+    validations:
+      required: true
+  - type: dropdown
+    id: loader
+    attributes:
+      label: Loader
+      options:
+        - Fabric
+        - NeoForge (not supported yet)
+    validations:
+      required: true
+  - type: dropdown
+    id: result
+    attributes:
+      label: Result
+      options:
+        - Works
+        - Works with minor issues
+        - Crashes on launch
+        - Crashes in game
+        - Will not install or dependency error
+    validations:
+      required: true
+  - type: checkboxes
+    id: tested
+    attributes:
+      label: What did you test?
+      options:
+        - label: Game reaches the main menu
+        - label: World loads and is playable
+        - label: Save, quit and reload the world
+        - label: Multiplayer server
+        - label: The mod's own features
+  - type: textarea
+    id: other-mods
+    attributes:
+      label: Other installed mods
+      description: Name and version of every other mod in the instance, or "none".
+      placeholder: |
+        Fabric API 0.x
+        Controlify 2.x
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes and screenshots
+      description: Anything that looked wrong, performance impact, workarounds. Drag images here.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: |
+        For crashes, attach the instance's `logs/latest.log` or `crash-reports/` file, plus `native-stderr.log` and `exceptions.log` from `/download0/ProsperoCraft`. Remove account tokens and personal info first.
+      render: shell

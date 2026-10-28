@@ -37,6 +37,10 @@ Development117 arranges Mods, Shaders, Resource Packs and Duplicate Instance in 
 
 Development continues on `main`, which contains the merged authenticated game-test work. The merged `Temp_gametest` and `codex/demo` branches have been retired. Release101 retains the existing `temp_gametest` package channel. The exact096 and097 packages remain preserved. Older Demo history, all frozen validation snapshots and public releases remain intact. Home/favorites are deferred; this release opens Instances, with Settings and Account beside it.
 
+## Reporting issues
+
+Use the [issue forms](https://github.com/mateo-cogeanu/ProsperoCraft/issues/new/choose) for bugs, mod compatibility and shader pack reports. Working mods and shaders are worth reporting too.
+
 ## Credits
 
 - **GUI:** [Mihawk's PS5_VKHomebrewUI](https://github.com/mihawk-99/PS5_VKHomebrewUI), based on BlackBearReloaded's ps5-homebrew-ui. Thanks for the native Vulkan UI toolkit.

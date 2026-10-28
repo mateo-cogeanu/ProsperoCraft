@@ -1,0 +1,108 @@
+name: Shader pack report
+description: Tell us how a shader pack runs on ProsperoCraft.
+title: "[Shader] "
+labels: ["shader-compatibility"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for testing a shader pack on PS5. One shader pack per report.
+        Iris currently cannot run on PS5 because ProsperoCraft renders with Vulkan, not OpenGL. Use Vitrail for shader tests.
+  - type: input
+    id: pack-name
+    attributes:
+      label: Shader pack name
+      placeholder: BSL Shaders
+    validations:
+      required: true
+  - type: input
+    id: pack-link
+    attributes:
+      label: Modrinth or source link
+      placeholder: https://modrinth.com/shader/...
+    validations:
+      required: true
+  - type: input
+    id: pack-version
+    attributes:
+      label: Shader pack version
+    validations:
+      required: true
+  - type: dropdown
+    id: engine
+    attributes:
+      label: Shader engine
+      options:
+        - Vitrail
+        - Iris (blocked on PS5)
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: engine-version
+    attributes:
+      label: Shader engine version
+      placeholder: 0.13.0-beta+mc26.3
+  - type: input
+    id: build
+    attributes:
+      label: ProsperoCraft build
+      description: Shown in the launcher footer.
+      placeholder: 01.000.117
+    validations:
+      required: true
+  - type: input
+    id: mc-version
+    attributes:
+      label: Minecraft version
+      value: "26.3"
+    validations:
+      required: true
+  - type: dropdown
+    id: shadow-scale
+    attributes:
+      label: Shadow map scale
+      description: Set on the Shaders page in Instance Settings.
+      options:
+        - Pack default
+        - 100%
+        - 50%
+    validations:
+      required: true
+  - type: dropdown
+    id: result
+    attributes:
+      label: Result
+      options:
+        - Renders correctly
+        - Visual glitches
+        - Runs but very low FPS
+        - Crashes on load
+        - Crashes in game
+    validations:
+      required: true
+  - type: textarea
+    id: performance
+    attributes:
+      label: Performance
+      description: Approximate FPS from F3, stutters, render distance used.
+      placeholder: About 40 FPS at render distance 12, short stutters when turning.
+  - type: textarea
+    id: other-content
+    attributes:
+      label: Other installed mods and resource packs
+      placeholder: none
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes and screenshots
+      description: Drag images here. Screenshots of glitches help a lot.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: |
+        For crashes, attach the instance's `logs/latest.log` or `crash-reports/` file, plus `native-stderr.log` and `exceptions.log` from `/download0/ProsperoCraft`. Remove account tokens and personal info first.
+      render: shell

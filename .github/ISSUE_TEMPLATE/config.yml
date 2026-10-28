@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Latest release and install notes
+    url: https://github.com/mateo-cogeanu/ProsperoCraft/releases/latest
+    about: Check you are on the newest build before reporting.
+  - name: README and current status
+    url: https://github.com/mateo-cogeanu/ProsperoCraft#readme
+    about: Known limitations and roadmap.
