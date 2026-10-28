@@ -1388,3 +1388,5 @@ User confirms118snapshots1–5fully functional,6crash/reopened. Previous-run log
 ##119 release acceptance — 2026-10-28
 
 User reports119all good and explicitly requests Store release; snapshots remain off by default. Publish exactcandidate de43986035602bcedc81ed904ec1db22b4148ec7b22001c95725ad2348c63c19, no rebuild. Preserve Store description/credits/icon; update version/artifact/digest and release changelog. Keep saved explicit snapshot choices; default-off must be verified from shipped library classes. Include matching OpenAL source/relink materials/checksums/acceptance and verify uploads. Submit catalogPR, do not monitor afterward per user preference. Snapshot6functional feedback does not establish standalone JNA APIs/callbacks/endurance or new Java milestone. Preserve117/118and frozen packages.
+
+119publicationcomplete: full release with five downloaded/hash-verified assets, exact normal/replacement OpenAL relinks and shipped-class snapshot-default checks. CatalogPR907submitted; description/credits/icon unchanged. No PR/checks/deployment/liveStore monitoring per user preference. See docs/validation/client119-store-publication-2026-10-28.json.

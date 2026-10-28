@@ -25,7 +25,7 @@ Install the release's **PPSA99874.zip** using your normal homebrew workflow. The
 
 The client and server share **PPSA99874**: installing one replaces the other. Back up your worlds and preserve `/download0/ProsperoCraft` when updating. Storage remains 4 GiB; existing instances and cache are retained. Instance deletion is permanent after confirmation, including that instance's worlds—there is no Undo for new deletions.
 
-Development117 arranges Mods, Shaders, Resource Packs and Duplicate Instance in a 2×2 grid and shares animated Settings-style buttons across instance/content controls. It adds a trigger-travel fallback for the native per-zone effect rejection observed in116. Host checks pass; physical adaptive triggers and launcher behavior require PS5 testing. See [development notes](docs/client-buttons-triggers-117.md). Release117 is published; the Store update is submitted in [PR896](https://github.com/darkxex/ps5-homebrew-catalog/pull/896). The user confirms the Store update was accepted, reinstalled and works, with a second user also reporting success.
+Release119 adds 26.4 snapshots 1–6 and the native startup repair for snapshot 6. Snapshots stay off by default; existing saved preferences are retained. The user confirms it works. The Store update is submitted in [PR907](https://github.com/darkxex/ps5-homebrew-catalog/pull/907); deployment has not been checked.
 
 ## Current status
 

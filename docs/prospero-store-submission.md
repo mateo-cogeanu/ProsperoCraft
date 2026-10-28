@@ -230,3 +230,12 @@ requestedfunctionsaccepted;broaderendurance/memory/lifecycletests remain scoped.
 Exact117release is public, with five downloaded/hash-verified assets and matching OpenAL source/relink materials. Existing description and credits are unchanged; only catalog version/artifact/digest are updated, with release changelog. Catalog PR: https://github.com/darkxex/ps5-homebrew-catalog/pull/896
 
 User requested no PR monitoring. Checks, merge, deployment and live Store availability are deliberately uninspected. See validation/client117-store-publication-2026-10-28.json. No new console ALL PASS or frozen milestone is inferred.
+
+
+##119 snapshot release — 2026-10-28
+
+Exact accepted119is public with five downloaded/hash-verified release assets and matching OpenAL source/relink kit. The exact shipped library classes verify snapshots off by default/missing setting and preservation of saved choices. Description, credits and icon stay unchanged; version/artifact/digest and release changelog update the existing listing.
+
+Catalog PR: https://github.com/darkxex/ps5-homebrew-catalog/pull/907
+
+No monitoring of CI/merge/deployment/liveStore is performed, per user preference. See validation/client119-store-publication-2026-10-28.json. Functional feedback is recorded without inferring full JNA/endurance coverage or a new Java milestone.

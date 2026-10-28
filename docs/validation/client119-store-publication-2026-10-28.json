@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-28",
+  "version": "01.000.119",
+  "release_url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.119",
+  "release_tag_commit": "04787d1965d48ebb9fa9281418cfbabe2595e5ba",
+  "implementation_commit": "60e932cbcb1b75273698382dfe122649fcf7d708",
+  "runtime_implementation_commit": "5b25cc2446f58bbbff2c2537b9310d3330007d99",
+  "runtime_feedback_commit": "a1503720b04f02126ef8146b1ddc71893240d868",
+  "package_sha256": "de43986035602bcedc81ed904ec1db22b4148ec7b22001c95725ad2348c63c19",
+  "assets": [
+    {
+      "name": "PPSA99874.zip",
+      "bytes": 122936964,
+      "sha256": "de43986035602bcedc81ed904ec1db22b4148ec7b22001c95725ad2348c63c19"
+    },
+    {
+      "name": "SHA256SUMS",
+      "bytes": 379,
+      "sha256": "658605658f5008bb7aa0adcc1142cb8680ee5913057e649dfafcbc8e4aa1f760"
+    },
+    {
+      "name": "client119-build-validation.json",
+      "bytes": 1319,
+      "sha256": "fc613c9210fe7fd48c4532ca88c6741d2db0f3d68871656c179d1457eec15a4b"
+    },
+    {
+      "name": "client119-console-validation.json",
+      "bytes": 734,
+      "sha256": "5d0402a52c8d320b81c6c05e29320598e606a557398f1c55b4551f0bad6f7021"
+    },
+    {
+      "name": "client119-openal-source-relink.zip",
+      "bytes": 90230911,
+      "sha256": "60806c04647984bf4208046a5c84d107edfa08173d693319402fd5fe8a10fc87"
+    }
+  ],
+  "verification": "All five public assets downloaded and hash verified. Relink kit CRC/every retained input verified; normal/replacement OpenAL relinks reproduce exact native ELF.155catalog records valid;232tests pass/2skipped; online verification0errors/0warnings.",
+  "snapshot_policy": "Exact shipped library classes tested: snapshots off by default, off when setting missing, explicit saved choice retained. No rebuild of accepted bytes.",
+  "catalog_pr": "https://github.com/darkxex/ps5-homebrew-catalog/pull/907",
+  "catalog_head": "cb2164b",
+  "catalog_status": "Submitted; user preference is no PR monitoring. No checks/merge/deployment/live Store claim.",
+  "description": "Minecraft Java runs natively on PS5 with a Native Java 25 Runtime. Java ownership required. GUI: mihawk-99/PS5_VKHomebrewUI; icons: MultiMC/Prism.",
+  "metadata_preservation": "Description/credits/icon unchanged. Only catalog version/artifact/digest updated; release changelog covers119.",
+  "console_feedback": "User reports119all good after snapshot6repair; snapshots1\u20135functional on118. Endurance/mod combinations/general standalone JNA API tests remain scoped and incomplete. No new frozen Java milestone.",
+  "preservation": "117/118and all previous assets/frozen milestones retained"
+}
