@@ -1,0 +1,14 @@
+{
+  "version": "7.7.2",
+  "artifact": {
+    "url": "https://libraries.minecraft.net/com/github/oshi/oshi-common/7.7.2/oshi-common-7.7.2.jar",
+    "size": 1108843,
+    "sha1": "439207661a164275a98644b3cf042aaad39073f7",
+    "sha256": "69964db6f04ea5edcbd6615b555794aa9a7c9afa6475f0c9e48b3ca93a36ae51"
+  },
+  "scope": "OSHI7 supported service-provider extension; actual PS5 CPU identity/logical count only. No game or dependency classes replaced.",
+  "license": {
+    "url": "https://raw.githubusercontent.com/oshi/oshi/oshi-parent-7.7.2/LICENSE",
+    "sha256": "e5936ec705d2fb0515b0d3e9a76acb52c1eef3e8ff88c7b9f80269b7909c959c"
+  }
+}

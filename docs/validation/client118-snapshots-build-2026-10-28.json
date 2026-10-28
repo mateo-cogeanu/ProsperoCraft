@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-28",
+  "version": "01.000.118",
+  "package_sha256": "333ba0d079f3bc4cf479f7a30a3549b367b47c3def2feebce0e8513e1de0c328",
+  "scope": "Experimental26.4snapshots1\u20136; no automatic later version enablement",
+  "publisher": "Official manifest latest26.4-snapshot-6; six Java25/same LWJGL hash profiles inspected",
+  "tests": [
+    "Real six publisher installs/assets/receipt/cache verification",
+    "Original Main startup reaches expected unprovided host native library bootstrap for each snapshot",
+    "Original game CPU debug entry on both OSHI APIs",
+    "Snapshot arguments/future Java rejection/bounded allowlist",
+    "26.3 instance/account/publisher/CPU regressions",
+    "Target package/toolkit/source/license audits"
+  ],
+  "console": "Pending each snapshot title/menu/render/input/audio/newworld/save/reload; no formal ALL PASS",
+  "public_store": "117 unchanged",
+  "runtime": "No Java implementation change;0126 integration unchanged"
+}

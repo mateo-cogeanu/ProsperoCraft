@@ -1373,3 +1373,8 @@ User explicitly requests ProsperoStore117 now. Preserve the exact candidate ZIP5
 ##117 acceptance and performance investigation — 2026-10-28
 
 User confirms accepted Store117 reinstall works and second tester succeeds. Requested completed README ticks: Fabric/Modrinth content, SDL3Controlify, remapping. Investigate before performance changes; shadows100% is explicit, do not lower it. Safari current117baseline logs show full metadataGC167ms and recurring4–8msstops; startup history has synchronous rumble/compiler diagnostic traffic. No current Vitrail phase/GPU/frame timing is captured, so shader bottleneck remains unproven. See docs/client-performance-investigation-117.md and validation record. This turn is documentation only; no new build/runtime/release changes. Microphone deferred.
+
+
+## Development118 snapshot integration — 2026-10-28
+
+User requests26.4snapshots. Explicit1–6launch candidates only; original publisher hashes pin same26.3LWJGL ABI/Java25. Keep snapshot versionType/asset index and reject future Java. Snapshot visibility stays off by default. Existing6.9CPU overlay follows dependency; snapshot6uses OSHI7.7.2supported SPI provider (priority100, opt-in native CPU handoff), not replaced game/OSHI7factory classes. See docs/client-snapshots-118.md and client/ports/oshi7. Host real publisher installs/Main native-bootstrap/CPU fixtures are not PS5 acceptance. Preserve117release,64ZIPbudget, all old candidates; no Store/runtime/performance/microphone changes. Console snapshot menu/render/world save/reload pending.

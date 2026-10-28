@@ -1,5 +1,11 @@
 # Changelog
 
+## Development 01.000.118
+
+- Enable explicit experimental launch candidates for26.4snapshots1–6 with correct snapshot arguments and asset indexes; reject newer Java requirements and unreviewed versions.
+- Select the existing PS5 CPU provider by dependency and add a separate OSHI7SPI provider for snapshot6, preserving original game/library JARs.
+- Original publisher install/bootstrap/CPU and26.3regression checks pass. PS5 rendering/world tests remain pending; public/Store117preserved. See [details](docs/client-snapshots-118.md).
+
 ## Development 01.000.117
 
 - Arrange Mods, Shaders, Resource Packs and Duplicate Instance in a 2x2 grid with matching directional navigation.

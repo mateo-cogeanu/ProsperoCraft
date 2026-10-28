@@ -40,9 +40,11 @@ public final class Ps5Hardware implements HardwareAbstractionLayer {
   public List<ProcessorCache> getProcessorCaches(){throw unsupported();}
   public List<String> getFeatureFlags(){throw unsupported();}
   public double getSystemCpuLoadBetweenTicks(long[] old){throw unsupported();}
+  public double getSystemCpuLoadBetweenTicks(long[] old,long[] current){throw unsupported();}
   public long[] getSystemCpuLoadTicks(){throw unsupported();}
   public double[] getSystemLoadAverage(int n){throw unsupported();}
   public double[] getProcessorCpuLoadBetweenTicks(long[][] old){throw unsupported();}
+  public double[] getProcessorCpuLoadBetweenTicks(long[][] old,long[][] current){throw unsupported();}
   public long[][] getProcessorCpuLoadTicks(){throw unsupported();}
   public int getPhysicalProcessorCount(){throw unsupported();}
   public int getPhysicalPackageCount(){throw unsupported();}

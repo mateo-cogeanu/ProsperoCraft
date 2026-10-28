@@ -28,7 +28,7 @@ Development117 arranges Mods, Shaders, Resource Packs and Duplicate Instance in 
 
 ## Current status
 
-- **26.3 is the playable native baseline.** Other 26.x versions and snapshots can be downloaded but are not claimed launchable.
+- **26.3 is the accepted playable baseline.** Development118 enables experimental26.4snapshots1–6 for PS5 testing. Other versions remain download-only; see [snapshot test notes](docs/client-snapshots-118.md).
 - **Login and gameplay are console-tested.** The existing experimental authentication flow remains in use; a valid Java Edition entitlement/profile is required.
 - **High-refresh gameplay:** up to 120 Hz output on compatible displays, with 119 FPS reported on build097. Release100 has accepted PS5 feedback for much smoother gameplay; sustained frame-time and long-session testing remain incomplete.
 - **Native GUI:** animated backgrounds, instance icons, clear active tabs, state-aware account actions, dropdown resolution and optional vibration. Successful sign-in opens Instances; new libraries hide snapshots by default.
@@ -67,7 +67,7 @@ Use the [issue forms](https://github.com/mateo-cogeanu/ProsperoCraft/issues/new/
 ### Coming next
 
 - [ ] Higher-resolution crafting-table icon.
-- [ ] All Minecraft 26.x releases, including snapshots.
+- [ ] All Minecraft 26.x releases, including snapshots. Development118 enables26.4snapshots1–6 as experimental candidates; PS5 validation pending.
 - [ ] NeoForge instance support — coming soon.
 - [ ] Performance sufficient for shaders.
 - [ ] Custom menu music by CogiArt.

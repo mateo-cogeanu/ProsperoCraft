@@ -14,7 +14,7 @@ for channel in ('temp_gametest',):
         prefix='PPSA99874/';java=prefix+'assets/java25/'
         param=json.loads(z.read(prefix+'sce_sys/param.json'))
         assert param['attribute3']&0x40
-        assert param['contentVersion']=='01.000.117' and param['titleId']=='PPSA99874' and param['downloadDataSize']==4096
+        assert param['contentVersion']=='01.000.118' and param['titleId']=='PPSA99874' and param['downloadDataSize']==4096
         with zipfile.ZipFile(io.BytesIO(z.read(java+'client-probe.jar'))) as jar:
             assert jar.read('prosperocraft-channel.txt').decode().strip()==channel
             assert ('offline-import-public-key.der' in jar.namelist())==(channel=='offline')
@@ -34,6 +34,7 @@ for channel in ('temp_gametest',):
             assert z.read(java+'launcher-toolkit/'+name)==(KIT/name).read_bytes()
         binaries[channel]=sha(z.read(prefix+'eboot.bin'))
         assert z.read(java+'ports/oshi-6.9.0-ps5-platform.jar')==(ROOT/'build/client-ports/oshi/oshi-6.9.0-ps5-platform.jar').read_bytes()
+        assert z.read(java+'ports/oshi-7.7.2-ps5-provider.jar')==(ROOT/'build/client-ports/oshi7/oshi-7.7.2-ps5-provider.jar').read_bytes()
     assert json.loads((folder/'channel.json').read_text())['package_sha256']==sha(package.read_bytes())
     symbols=subprocess.check_output([str(LLVM/'llvm-nm'),'--defined-only',str(folder/'bootstrap-symbols.elf')],text=True)
     table={l.split()[-1]:int(l.split()[0],16) for l in symbols.splitlines() if len(l.split())==3}
@@ -54,4 +55,4 @@ for name,digest in audit['objects_sha256'].items():
     obj=work/name;assert sha(obj.read_bytes())==digest
     refs=subprocess.check_output([str(LLVM/'llvm-nm'),'--undefined-only',str(obj)],text=True)
     assert not {l.split()[-1] for l in refs.splitlines() if l.split()}.intersection({'malloc','calloc','realloc','free','posix_memalign'})
-print('PASS Temp_gametest117 package/CRC/identity/key exclusion and retention,toolkit pin/source/font/license hashes,real linked renderer/components/blit,explicit glyph constructor and no automatic constructors,paired C++ allocation,OSHI retained;console pending')
+print('PASS Temp_gametest118 package/CRC/identity/key exclusion and retention,toolkit pin/source/font/license hashes,real linked renderer/components/blit,explicit glyph constructor and no automatic constructors,paired C++ allocation,OSHI retained;console pending')

@@ -1,0 +1,173 @@
+{
+  "scope": "Explicit experimental snapshot launch candidates, verified publisher metadata/Java25/identical26.3LWJGL ABI. PS5 acceptance pending; no future snapshots automatically enabled.",
+  "versions": [
+    {
+      "id": "26.4-snapshot-6",
+      "type": "snapshot",
+      "metadata": {
+        "url": "https://piston-meta.mojang.com/v1/packages/04be0f389fdac9f1c8b9b551c1e717104a08899d/26.4-snapshot-6.json",
+        "sha1": "04be0f389fdac9f1c8b9b551c1e717104a08899d"
+      },
+      "javaMajor": 25,
+      "assetIndex": "36",
+      "client": {
+        "sha1": "8a97d5dafe80783525a2807b220527b65df724a5",
+        "size": 42156998,
+        "url": "https://piston-data.mojang.com/v1/objects/8a97d5dafe80783525a2807b220527b65df724a5/client.jar"
+      },
+      "lwjgl": [
+        "org.lwjgl:lwjgl-freetype:3.4.3",
+        "org.lwjgl:lwjgl-jemalloc:3.4.3",
+        "org.lwjgl:lwjgl-openal:3.4.3",
+        "org.lwjgl:lwjgl-opengl:3.4.3",
+        "org.lwjgl:lwjgl-sdl:3.4.3",
+        "org.lwjgl:lwjgl-shaderc:3.4.3",
+        "org.lwjgl:lwjgl-spvc:3.4.3",
+        "org.lwjgl:lwjgl-stb:3.4.3",
+        "org.lwjgl:lwjgl-vma:3.4.3",
+        "org.lwjgl:lwjgl-vulkan:3.4.3",
+        "org.lwjgl:lwjgl:3.4.3"
+      ]
+    },
+    {
+      "id": "26.4-snapshot-5",
+      "type": "snapshot",
+      "metadata": {
+        "url": "https://piston-meta.mojang.com/v1/packages/3b4ce2d85f06dfbc4127708426f4a9740af5e25b/26.4-snapshot-5.json",
+        "sha1": "3b4ce2d85f06dfbc4127708426f4a9740af5e25b"
+      },
+      "javaMajor": 25,
+      "assetIndex": "36",
+      "client": {
+        "sha1": "dabe2b9759859995565e7d01c4a96d05043718ee",
+        "size": 42066245,
+        "url": "https://piston-data.mojang.com/v1/objects/dabe2b9759859995565e7d01c4a96d05043718ee/client.jar"
+      },
+      "lwjgl": [
+        "org.lwjgl:lwjgl-freetype:3.4.3",
+        "org.lwjgl:lwjgl-jemalloc:3.4.3",
+        "org.lwjgl:lwjgl-openal:3.4.3",
+        "org.lwjgl:lwjgl-opengl:3.4.3",
+        "org.lwjgl:lwjgl-sdl:3.4.3",
+        "org.lwjgl:lwjgl-shaderc:3.4.3",
+        "org.lwjgl:lwjgl-spvc:3.4.3",
+        "org.lwjgl:lwjgl-stb:3.4.3",
+        "org.lwjgl:lwjgl-vma:3.4.3",
+        "org.lwjgl:lwjgl-vulkan:3.4.3",
+        "org.lwjgl:lwjgl:3.4.3"
+      ]
+    },
+    {
+      "id": "26.4-snapshot-4",
+      "type": "snapshot",
+      "metadata": {
+        "url": "https://piston-meta.mojang.com/v1/packages/a88be7bfe816ceb44f249005aff3fdf82c87855f/26.4-snapshot-4.json",
+        "sha1": "a88be7bfe816ceb44f249005aff3fdf82c87855f"
+      },
+      "javaMajor": 25,
+      "assetIndex": "36",
+      "client": {
+        "sha1": "ac783fa45b137dd545c7ffb76bbd595ea85fda0a",
+        "size": 41947724,
+        "url": "https://piston-data.mojang.com/v1/objects/ac783fa45b137dd545c7ffb76bbd595ea85fda0a/client.jar"
+      },
+      "lwjgl": [
+        "org.lwjgl:lwjgl-freetype:3.4.3",
+        "org.lwjgl:lwjgl-jemalloc:3.4.3",
+        "org.lwjgl:lwjgl-openal:3.4.3",
+        "org.lwjgl:lwjgl-opengl:3.4.3",
+        "org.lwjgl:lwjgl-sdl:3.4.3",
+        "org.lwjgl:lwjgl-shaderc:3.4.3",
+        "org.lwjgl:lwjgl-spvc:3.4.3",
+        "org.lwjgl:lwjgl-stb:3.4.3",
+        "org.lwjgl:lwjgl-vma:3.4.3",
+        "org.lwjgl:lwjgl-vulkan:3.4.3",
+        "org.lwjgl:lwjgl:3.4.3"
+      ]
+    },
+    {
+      "id": "26.4-snapshot-3",
+      "type": "snapshot",
+      "metadata": {
+        "url": "https://piston-meta.mojang.com/v1/packages/2122819a22c0709997254afd463dae6eb5bf5c0b/26.4-snapshot-3.json",
+        "sha1": "2122819a22c0709997254afd463dae6eb5bf5c0b"
+      },
+      "javaMajor": 25,
+      "assetIndex": "36",
+      "client": {
+        "sha1": "96611d3cbefeae43527552fd008a7031b6f46e71",
+        "size": 41918883,
+        "url": "https://piston-data.mojang.com/v1/objects/96611d3cbefeae43527552fd008a7031b6f46e71/client.jar"
+      },
+      "lwjgl": [
+        "org.lwjgl:lwjgl-freetype:3.4.3",
+        "org.lwjgl:lwjgl-jemalloc:3.4.3",
+        "org.lwjgl:lwjgl-openal:3.4.3",
+        "org.lwjgl:lwjgl-opengl:3.4.3",
+        "org.lwjgl:lwjgl-sdl:3.4.3",
+        "org.lwjgl:lwjgl-shaderc:3.4.3",
+        "org.lwjgl:lwjgl-spvc:3.4.3",
+        "org.lwjgl:lwjgl-stb:3.4.3",
+        "org.lwjgl:lwjgl-vma:3.4.3",
+        "org.lwjgl:lwjgl-vulkan:3.4.3",
+        "org.lwjgl:lwjgl:3.4.3"
+      ]
+    },
+    {
+      "id": "26.4-snapshot-2",
+      "type": "snapshot",
+      "metadata": {
+        "url": "https://piston-meta.mojang.com/v1/packages/f8e25aa72f1a6baac3ab3e812027242bfd1d3e28/26.4-snapshot-2.json",
+        "sha1": "f8e25aa72f1a6baac3ab3e812027242bfd1d3e28"
+      },
+      "javaMajor": 25,
+      "assetIndex": "35",
+      "client": {
+        "sha1": "57390e151851510972714846a752c6b8307f7fae",
+        "size": 41582220,
+        "url": "https://piston-data.mojang.com/v1/objects/57390e151851510972714846a752c6b8307f7fae/client.jar"
+      },
+      "lwjgl": [
+        "org.lwjgl:lwjgl-freetype:3.4.3",
+        "org.lwjgl:lwjgl-jemalloc:3.4.3",
+        "org.lwjgl:lwjgl-openal:3.4.3",
+        "org.lwjgl:lwjgl-opengl:3.4.3",
+        "org.lwjgl:lwjgl-sdl:3.4.3",
+        "org.lwjgl:lwjgl-shaderc:3.4.3",
+        "org.lwjgl:lwjgl-spvc:3.4.3",
+        "org.lwjgl:lwjgl-stb:3.4.3",
+        "org.lwjgl:lwjgl-vma:3.4.3",
+        "org.lwjgl:lwjgl-vulkan:3.4.3",
+        "org.lwjgl:lwjgl:3.4.3"
+      ]
+    },
+    {
+      "id": "26.4-snapshot-1",
+      "type": "snapshot",
+      "metadata": {
+        "url": "https://piston-meta.mojang.com/v1/packages/4623b369080d3afbeab635c536b5f4cd2c6fdcb1/26.4-snapshot-1.json",
+        "sha1": "4623b369080d3afbeab635c536b5f4cd2c6fdcb1"
+      },
+      "javaMajor": 25,
+      "assetIndex": "35",
+      "client": {
+        "sha1": "99dea8ec5ae3c5adc7d246061a90960e7d8441c3",
+        "size": 41549885,
+        "url": "https://piston-data.mojang.com/v1/objects/99dea8ec5ae3c5adc7d246061a90960e7d8441c3/client.jar"
+      },
+      "lwjgl": [
+        "org.lwjgl:lwjgl-freetype:3.4.3",
+        "org.lwjgl:lwjgl-jemalloc:3.4.3",
+        "org.lwjgl:lwjgl-openal:3.4.3",
+        "org.lwjgl:lwjgl-opengl:3.4.3",
+        "org.lwjgl:lwjgl-sdl:3.4.3",
+        "org.lwjgl:lwjgl-shaderc:3.4.3",
+        "org.lwjgl:lwjgl-spvc:3.4.3",
+        "org.lwjgl:lwjgl-stb:3.4.3",
+        "org.lwjgl:lwjgl-vma:3.4.3",
+        "org.lwjgl:lwjgl-vulkan:3.4.3",
+        "org.lwjgl:lwjgl:3.4.3"
+      ]
+    }
+  ]
+}

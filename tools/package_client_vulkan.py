@@ -56,6 +56,10 @@ if args.startup:
  oshi_port=build_oshi(args.java_home,args.offline);shutil.copy2(oshi_port,ports/oshi_port.name)
  shutil.copy2(ROOT/'build/client-ports/oshi/audit.json',java/'oshi-platform-audit.json')
  licenses=java/'oshi-licenses';shutil.copytree(ROOT/'client/ports/oshi',licenses,ignore=shutil.ignore_patterns('__pycache__'))
+ from build_oshi7_platform import build as build_oshi7
+ oshi7_port=build_oshi7(args.java_home,args.offline);shutil.copy2(oshi7_port,ports/oshi7_port.name)
+ shutil.copy2(ROOT/'build/client-ports/oshi7/audit.json',java/'oshi7-platform-audit.json')
+ shutil.copytree(ROOT/'client/ports/oshi7',java/'oshi7-licenses',ignore=shutil.ignore_patterns('__pycache__'))
 port=ROOT/'build/client-ports/lwjgl/lwjgl-3.4.3-ps5-platform.jar';shutil.copyfile(port,ports/port.name)
 audit=json.loads((ROOT/'build/client-ports/lwjgl/audit.json').read_text());audit['activated_for_probe']=True;audit['activated_for_game']=bool(args.startup)
 (java/'dependency-port-audit.json').write_text(json.dumps(audit,indent=2)+'\n')

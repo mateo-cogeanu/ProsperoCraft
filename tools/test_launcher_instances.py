@@ -22,8 +22,8 @@ public class InstanceCheck {
  static void waitFor(ProsperoLauncher model)throws Exception{long end=System.nanoTime()+5_000_000_000L;while(model.tick(0)[64].equals("BUSY")&&System.nanoTime()<end)Thread.sleep(5);if(model.tick(0)[64].equals("BUSY"))throw new AssertionError("worker stuck");}
  public static void main(String[]args)throws Exception{
   Path root=Path.of(args[0]);fixture();
-  byte[] originalManifest=files.get(ProsperoInstall.MANIFEST);String snapUrl=META.replace("26.2","26.4-snapshot-5");byte[] snapMeta=bytes(new String(files.get(META),java.nio.charset.StandardCharsets.UTF_8).replace("26.2","26.4-snapshot-5").replace("\"majorVersion\":25","\"majorVersion\":26"));files.put(snapUrl,snapMeta);
-  String snapRow="{\"id\":\"26.4-snapshot-5\",\"type\":\"snapshot\",\"url\":\""+snapUrl+"\",\"sha1\":\""+hash(snapMeta)+"\"}";
+  byte[] originalManifest=files.get(ProsperoInstall.MANIFEST);String snapUrl=META.replace("26.2","26.4-snapshot-999");byte[] snapMeta=bytes(new String(files.get(META),java.nio.charset.StandardCharsets.UTF_8).replace("26.2","26.4-snapshot-999").replace("\"majorVersion\":25","\"majorVersion\":26"));files.put(snapUrl,snapMeta);
+  String snapRow="{\"id\":\"26.4-snapshot-999\",\"type\":\"snapshot\",\"url\":\""+snapUrl+"\",\"sha1\":\""+hash(snapMeta)+"\"}";
   String releases=new String(originalManifest,java.nio.charset.StandardCharsets.UTF_8);files.put(ProsperoInstall.MANIFEST,bytes(releases.replace("[","["+snapRow+",")));
   var snapshotInstaller=new ProsperoInstall(root.resolve("snapshot-cache"),InstanceCheck::open);if(snapshotInstaller.catalog(false,()->false).size()!=1||snapshotInstaller.catalog(true,()->false).size()!=2)throw new AssertionError("snapshot/release filter");
   var snapshotReceipt=snapshotInstaller.install(snapshotInstaller.catalog(true,()->false).get(0),1,(text,done,total)->{},()->false);if(snapshotReceipt.javaMajor!=26||ProsperoLauncher.supported(snapshotReceipt.version))throw new AssertionError("future runtime download/launch guard");files.put(ProsperoInstall.MANIFEST,originalManifest);
