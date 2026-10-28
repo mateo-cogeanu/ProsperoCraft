@@ -1,0 +1,104 @@
+{
+  "date": "2026-10-28",
+  "build": "01.000.117",
+  "run": "client-01.000.117-1793191418-735785727",
+  "collection": "Safari read-only downloads; current build/session verified. GC/JIT reports have uptime but no independent run ID; no joined frame timestamps.",
+  "files": [
+    {
+      "file": "build-4.txt",
+      "bytes": 57,
+      "sha256": "7239784fa99b3771f85b0ad59a84af218aa9b7420a3cbf3a9316ef94384d49bf"
+    },
+    {
+      "file": "session-9.txt",
+      "bytes": 133,
+      "sha256": "1bdb242338436bc239121c65d793a9e174e4c840c3ac990d756acacdea18b9ee"
+    },
+    {
+      "file": "process-usage-4.log",
+      "bytes": 164,
+      "sha256": "8507d43a9722b76b4ceebb058286a9688765aa4123587a25ebefc3468e740b83"
+    },
+    {
+      "file": "native-stderr-10.log",
+      "bytes": 54601,
+      "sha256": "1a3ae4fb906060f07da6fb7489264ce952e4d5f2dc465db89e66a3b5b0609e49"
+    },
+    {
+      "file": "jit-3.log",
+      "bytes": 3712508,
+      "sha256": "0d5a66d78fc8ca67b28a76fddd379922ff15f51a5f8db39abda733bae893225c"
+    },
+    {
+      "file": "gc-2.log",
+      "bytes": 840143,
+      "sha256": "e49083071e48caf5619fe2c5c9ead64f1a1cca9ab062326b9532d40dddcc456f"
+    },
+    {
+      "file": "exceptions-8.log",
+      "bytes": 35999,
+      "sha256": "3fd34dfeffd1e5e93c8fce43e4c9b5dbc63faad7bd2fedfd2df07f4d2c441256"
+    },
+    {
+      "file": "startup-tail-11.log",
+      "bytes": 524288,
+      "sha256": "458fcc00ed0f8902a503a7d0be0dbe284280e95ec799aca23e38ff05761a9fb2"
+    },
+    {
+      "file": "server-2.log",
+      "bytes": 166,
+      "sha256": "cbde7a52ee7bbe88d3eec888361050b4baa621b6248a29ac785ebbcffa98b531"
+    }
+  ],
+  "gc": {
+    "count": 2489,
+    "p50_ms": 3.964,
+    "p95_ms": 5.805,
+    "p99_ms": 7.965,
+    "max_ms": 167.13,
+    "over_8_333ms": 19,
+    "over_16_667ms": 1
+  },
+  "safepoints": {
+    "count": 2490,
+    "p50_ms": 4.289359,
+    "p95_ms": 7.203217,
+    "p99_ms": 9.424353,
+    "max_ms": 167.232802,
+    "over_8_333ms": 47,
+    "over_16_667ms": 1
+  },
+  "last_300_seconds_gc": {
+    "count": 139,
+    "p50_ms": 3.995,
+    "p95_ms": 6.51,
+    "p99_ms": 6.887,
+    "max_ms": 7.445,
+    "over_8_333ms": 0,
+    "over_16_667ms": 0
+  },
+  "last_300_seconds_safepoints": {
+    "count": 139,
+    "p50_ms": 4.140856,
+    "p95_ms": 6.736378,
+    "p99_ms": 7.173469,
+    "max_ms": 8.00419,
+    "over_8_333ms": 0,
+    "over_16_667ms": 0
+  },
+  "full_gc": {
+    "uptime_ms": 364538,
+    "reason": "Metadata GC Threshold",
+    "duration_ms": 167.13
+  },
+  "startup_tail": {
+    "bytes": 524288,
+    "lines": 7152,
+    "rumble_lines": 702,
+    "shaderc_glslang_checkpoint_lines": 4886,
+    "caveat": "Startup report appends historical runs; counts do not establish current-run event rates."
+  },
+  "current_mod_context": "Fabric/Controlify/Fabric API/Mod Menu/Sodium listed; no Vitrail in current mod list. No shader-enabled phase is established.",
+  "quality_constraint": "User explicitly requires shadows100%; no quality reduction authorized.",
+  "scope": "Investigation and README only; no performance code, JVM settings, mod/game JAR or release asset changes."
+}

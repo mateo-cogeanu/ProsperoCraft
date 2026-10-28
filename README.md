@@ -24,7 +24,7 @@ Install the release's **PPSA99874.zip** using your normal homebrew workflow. The
 
 The client and server share **PPSA99874**: installing one replaces the other. Back up your worlds and preserve `/download0/ProsperoCraft` when updating. Storage remains 4 GiB; existing instances and cache are retained. Instance deletion is permanent after confirmation, including that instance's worlds—there is no Undo for new deletions.
 
-Development117 arranges Mods, Shaders, Resource Packs and Duplicate Instance in a 2×2 grid and shares animated Settings-style buttons across instance/content controls. It adds a trigger-travel fallback for the native per-zone effect rejection observed in116. Host checks pass; physical adaptive triggers and launcher behavior require PS5 testing. See [development notes](docs/client-buttons-triggers-117.md). Release117 is published; the Store update is submitted in [PR896](https://github.com/darkxex/ps5-homebrew-catalog/pull/896). Deployment has not been checked.
+Development117 arranges Mods, Shaders, Resource Packs and Duplicate Instance in a 2×2 grid and shares animated Settings-style buttons across instance/content controls. It adds a trigger-travel fallback for the native per-zone effect rejection observed in116. Host checks pass; physical adaptive triggers and launcher behavior require PS5 testing. See [development notes](docs/client-buttons-triggers-117.md). Release117 is published; the Store update is submitted in [PR896](https://github.com/darkxex/ps5-homebrew-catalog/pull/896). The user confirms the Store update was accepted, reinstalled and works, with a second user also reporting success.
 
 ## Current status
 
@@ -60,14 +60,14 @@ Development continues on `main`, which contains the merged authenticated game-te
 
 - [ ] Higher-resolution crafting-table icon.
 - [ ] All Minecraft 26.x releases, including snapshots.
-- [ ] Fabric instances and Modrinth mods, shaders and resource packs — implemented in development; PS5 validation pending.
+- [x] Fabric instances and Modrinth mods, shaders and resource packs.
 - [ ] NeoForge instance support — coming soon.
-- [ ] SDL3 integration for Controlify.
+- [x] SDL3 integration for Controlify.
 - [ ] Performance sufficient for shaders.
 - [ ] Custom menu music by CogiArt.
 - [ ] `.mrpack` imports.
 - [x] Keyboard/mouse gameplay support.
-- [ ] Controller remapping — implemented in development; broader PS5 validation pending.
+- [x] Controller remapping.
 - [ ] JVM 21 for broader Minecraft support.
 - [ ] JVM 17 for even broader Minecraft support.
 - [ ] Custom AMD Ryzen Zen 2 8C/16T CPU identification.
