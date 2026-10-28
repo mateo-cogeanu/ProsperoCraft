@@ -93,7 +93,7 @@ body:
     attributes:
       label: Logs
       description: |
-        Over FTP, copy `native-stderr.log`, `exceptions.log` and `session.txt` from `/download0/ProsperoCraft`, plus the instance's `logs/latest.log` and any `crash-reports/` file. Reopening the app replaces some logs, so collect them right after the problem.
+        Over FTP, copy `/download0/probe-native-stderr.log`, `/download0/java25-exceptions.log` and `/download0/probe-session.txt`, plus the instance's `logs/latest.log` and any `crash-reports/` file. Collect them right after the problem, before reopening the app. With ProsperoCraft open, you can also download the reports from `http://<PS5-IP>:8765/`; the HTTP filenames are aliases for these files.
       render: shell
   - type: checkboxes
     id: privacy

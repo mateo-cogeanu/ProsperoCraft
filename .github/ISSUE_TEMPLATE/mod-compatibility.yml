@@ -96,5 +96,5 @@ body:
     attributes:
       label: Logs
       description: |
-        For crashes, attach the instance's `logs/latest.log` or `crash-reports/` file, plus `native-stderr.log` and `exceptions.log` from `/download0/ProsperoCraft`. Remove account tokens and personal info first.
+        For crashes, attach the instance's `logs/latest.log` or `crash-reports/` file, plus `/download0/probe-native-stderr.log`, `/download0/java25-exceptions.log` and `/download0/probe-session.txt` over FTP. Collect them before reopening the app. With ProsperoCraft open, reports are also available at `http://<PS5-IP>:8765/`. Remove account tokens and personal info first.
       render: shell
