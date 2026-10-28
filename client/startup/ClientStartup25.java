@@ -202,6 +202,10 @@ public final class ClientStartup25 {
   }
   public void close(){synchronized(console){running=false;}worker.interrupt();}
  }
+ static void configureJna(boolean resident){
+  System.setProperty("jna.nosys",resident?"false":"true");
+  if(resident){System.setProperty("jna.boot.library.name","jnidispatch");System.setProperty("jna.noclasspath","true");System.setProperty("jna.nounpack","true");}
+ }
  public static void main(String[] args)throws Throwable{
   PrintStream previousOut=System.out,previousErr=System.err;
   PrintStream console=new PrintStream(new FileOutputStream(Path.of("/download0/java25-exceptions.log").toFile(),false),true,StandardCharsets.UTF_8);
@@ -218,7 +222,7 @@ public final class ClientStartup25 {
    console.println(configurationSummary(work));
    System.setProperty("user.dir",work.toString());System.setProperty("user.home",work.toString());System.setProperty("java.io.tmpdir",work.resolve("native-cache").toString());
    for(String key:new String[]{"jna.tmpdir","io.netty.native.workdir"})System.setProperty(key,work.resolve("native-cache").toString());
-   System.setProperty("jna.nosys","true");
+   configureJna(ProsperoLauncher.selectedResidentJna());
    prepareCpuInformation();ProsperoNetwork.check();
    stage("PS5_LAUNCH phase=CONFIGURE_BINDINGS");
    Configuration.OPENGL_CONTEXT_API.set("OSMesa");Configuration.OPENGL_OSMESA_LIBRARY_NAME.set(System.mapLibraryName("ps5clientgl"));

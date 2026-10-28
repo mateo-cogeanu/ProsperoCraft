@@ -1,5 +1,10 @@
 # Changelog
 
+## Development 01.000.119
+
+- Integrate genuine native JNA dispatch for snapshot6early bootstrap using the existing resident library mechanism and supported JNA loader settings. Keep original game/dependency JARs intact.
+- Record user-confirmed functional snapshots1–5on118and the concrete snapshot6missing-native crash. Direct original-bootstrap/native host checks pass;119PS5retest pending. Public/Store117unchanged. See [details](docs/client-snapshot6-jna-119.md).
+
 ## Development 01.000.118
 
 - Enable explicit experimental launch candidates for26.4snapshots1–6 with correct snapshot arguments and asset indexes; reject newer Java requirements and unreviewed versions.

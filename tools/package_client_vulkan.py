@@ -198,6 +198,15 @@ if args.native_bootstrap:
  ffi_object,ffi_audit=build_ffi(runtime,args.java_home,offline=args.offline)
  scoped_ffi=work/'ffi.o';subprocess.run(['/opt/homebrew/opt/llvm/bin/llvm-objcopy','--redefine-syms='+str(ROOT/'build/client-gpu/sdl-bindings.txt'),str(ffi_object),str(scoped_ffi)],check=True)
  spec['resident_libraries'][2]['objects'].append(str(scoped_ffi));ffi_audit['scoped_object_sha256']=hashlib.sha256(scoped_ffi.read_bytes()).hexdigest();(java/'ffi-audit.json').write_text(json.dumps(ffi_audit,indent=2)+'\n')
+ if args.startup:
+  from build_jna_native import build as build_jna
+  jna_object,jna_audit,jna_source=build_jna(runtime,args.offline)
+  spec['resident_libraries'].append({'name':'jnidispatch','objects':[str(jna_object)]})
+  (java/'jna-audit.json').write_text(json.dumps(jna_audit,indent=2)+'\n')
+  jna_licenses=java/'jna-licenses';jna_licenses.mkdir()
+  for name in ['LICENSE','AL2.0','LGPL2.1']:shutil.copyfile(jna_source/name,jna_licenses/name)
+  shutil.copyfile(runtime/'tools/java25_jna.py',jna_licenses/'java25_jna.py')
+
  from build_openal_native import build as build_openal
  al_object,al_lifecycle,al_audit=build_openal(runtime,offline=args.offline)
  al_objects=[str(al_object),str(al_lifecycle)]

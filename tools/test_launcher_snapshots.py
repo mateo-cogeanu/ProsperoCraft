@@ -77,6 +77,7 @@ public class SnapshotCheck {
    try{prepare.invoke(model,instance,copy);throw new AssertionError("future Java accepted");}catch(InvocationTargetException expected){check(expected.getCause() instanceof java.io.IOException&&expected.getCause().getMessage().contains("requires Java 26"),"future Java error");}
    // Set already-verified launch state to inspect argument routing without account I/O.
    for(String key:new String[]{"detail","receipt","launch"}){var f=ProsperoLauncher.class.getDeclaredField(key);f.setAccessible(true);f.set(model,key.equals("detail")?instance:key.equals("receipt")?receipt:true);}
+   var current=ProsperoLauncher.class.getDeclaredField("current");current.setAccessible(true);Object before=current.get(null);try{current.set(null,model);check(ProsperoLauncher.selectedResidentJna()==id.endsWith("-6"),"matching resident JNA policy");}finally{current.set(null,before);}
    List<String> args=List.of(model.arguments(null,null));check(args.get(args.indexOf("--version")+1).equals(id)&&args.get(args.indexOf("--versionType")+1).equals("snapshot")&&args.get(args.indexOf("--assetIndex")+1).equals(receipt.assetIndex)&&args.contains("vulkan"),"snapshot original arguments");
    System.out.println("PASS "+id+" publisher install/assets/hash verification; isolated original Main; native dispatch/provider/argument/runtime policy");
   }

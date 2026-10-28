@@ -40,3 +40,6 @@ Install the complete118candidate, enable snapshots in Settings, create a separat
 Candidate ZIP SHA-256: `333ba0d079f3bc4cf479f7a30a3549b367b47c3def2feebce0e8513e1de0c328`.
 
 Primary metadata: [Mojang version manifest](https://piston-meta.mojang.com/mc/game/version_manifest_v2.json). Hash-verified library/source API inspection is recorded by the tests and pins. Hardware and graphics behavior still require actual PS5 testing.
+
+
+Follow-up: user reports snapshots1–5fully functional, while snapshot6crashes in its newly mandatory JNA native bootstrap before creating a game window. See [119repair](client-snapshot6-jna-119.md) and the matching console feedback record.118remains preserved.

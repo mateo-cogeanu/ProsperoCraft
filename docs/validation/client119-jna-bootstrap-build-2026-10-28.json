@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-28",
+  "build": "01.000.119",
+  "package_sha256": "de43986035602bcedc81ed904ec1db22b4148ec7b22001c95725ad2348c63c19",
+  "repair": "Genuine JNA5.19.1 native dispatch registered as resident jnidispatch; supported JNA system-library lookup for the selected5.19.1dependency, no native extraction or game-JAR changes",
+  "runtime_commit": "5b25cc2446f58bbbff2c2537b9310d3330007d99",
+  "runtime_tool": "Development/tools/java25_jna.py",
+  "checks": [
+    "target original dispatch/callback compilation and native link",
+    "forced genuine newly built host JNI with original publisher JNA Java artifact",
+    "native ABI sizes/last-error/memory/string/libffi calls",
+    "unchanged original snapshot6 NativeLibrariesBootstrap.loadJNA method succeeds with forced bridge on host",
+    "26.3 instance/account and startup-policy regressions",
+    "target package and toolkit audits"
+  ],
+  "console": "Pending snapshot6 title/menu/world play/save/reload and snapshot1\u20135/26.3regressions; no full PS5 JNA compatibility claim",
+  "public_store": "117 unchanged",
+  "preservation": "Accepted117 and failed118candidate/original game JARs preserved"
+}

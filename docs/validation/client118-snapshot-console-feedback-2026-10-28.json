@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-28",
+  "build": "01.000.118",
+  "title_id": "PPSA99874",
+  "package_sha256": "333ba0d079f3bc4cf479f7a30a3549b367b47c3def2feebce0e8513e1de0c328",
+  "human_report": "SNP1 - fully functional; SNP2 - fully functional; SNP3 - fully functional; SNP4 - fully functional; SNP5 - fully functional; SNP6 - Crashed! Reopened for logs.",
+  "passing_versions": [
+    "26.4-snapshot-1",
+    "26.4-snapshot-2",
+    "26.4-snapshot-3",
+    "26.4-snapshot-4",
+    "26.4-snapshot-5"
+  ],
+  "failing_version": "26.4-snapshot-6",
+  "failing_run": "client-01.000.118-1793199161-414730331",
+  "reopened_run": "client-01.000.118-1793199334-727576662",
+  "failure": "NativeLibrariesBootstrap.loadJNA -> com.sun.jna.Native initialization cannot find PS5 jnidispatch. Java startup crash before game window. OSHI7 CPU provider is present in crash details.",
+  "scope": "User functional feedback for snapshots1\u20135, not exhaustive benchmark/endurance or a new frozen Java milestone",
+  "reports": [
+    {
+      "name": "build-5.txt",
+      "bytes": 57,
+      "sha256": "a09465951d5703f7c0b1bee559100b216ad7b26d48d14bd81d77439b2724788f"
+    },
+    {
+      "name": "session-10.txt",
+      "bytes": 133,
+      "sha256": "ce02a7ff3dc0ed9c5ea30850216ed031d3ce978b2f6a695dbbf564fb38e57474"
+    },
+    {
+      "name": "previous-native-stderr-8.log",
+      "bytes": 2843,
+      "sha256": "59e4e24528c2f8d8fc1f96b6acee19a46ed94651c98524c42a4985ea26d211d7"
+    },
+    {
+      "name": "previous-exceptions-8.log",
+      "bytes": 26298,
+      "sha256": "9b003811b3312cdba748a708a8992933519e5ff81f2359c1a95fd6bcb6d6acdb"
+    },
+    {
+      "name": "previous-abort-2.txt",
+      "bytes": 133,
+      "sha256": "a9b976a760ecf56776b05ab996705130b73f65dda30c1319397d5e05ddad3024"
+    },
+    {
+      "name": "previous-hs-error-2.log",
+      "bytes": 163,
+      "sha256": "0166af84cb45a27ce1ba0212137ea45a012f1101c40957b9a3a463c10ed20083"
+    },
+    {
+      "name": "startup-tail-12.log",
+      "bytes": 524288,
+      "sha256": "fc056acf18bbcc7b8670e88425ff6241e23f7f2952da6cfe260217b5d0cfbfe8"
+    }
+  ]
+}

@@ -36,6 +36,7 @@ public final class ProsperoLauncher {
  static String gameMain(){return "fabric".equals(current.detail.loader)?ProsperoFabric.MAIN:"net.minecraft.client.main.Main";}
  static ClassLoader runningGameLoader(){return "fabric".equals(current.detail.loader)?Thread.currentThread().getContextClassLoader():gameLoader();}
  static void configureGameLaunch(){if("fabric".equals(current.detail.loader))ProsperoFabric.configure(current.loader,current.library.root.resolve("cache/versions/"+current.detail.version+"/client.jar"),current.detail.version);}
+ static boolean selectedResidentJna(){return current.receipt!=null&&current.receipt.classpath.stream().anyMatch(p->p.endsWith("/jna-5.19.1.jar"));}
  static boolean verifySelected()throws Exception{current.installer.verify(current.receipt);return true;}
  public static String[] nativeTick(int buttons){return current.tick(buttons);}
  synchronized void cancel(){generation++;code="";uri="";if(worker!=null&&worker.isAlive()){worker.interrupt();busy=true;task="STOPPING";}else{busy=false;task="";}cached=null;}
