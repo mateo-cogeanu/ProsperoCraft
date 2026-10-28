@@ -77,6 +77,7 @@ Use the [issue forms](https://github.com/mateo-cogeanu/ProsperoCraft/issues/new/
 - [ ] Custom AMD Ryzen Zen 2 8C/16T CPU identification.
 - [ ] Home menu.
 - [ ] Themes.
+
 Broader account-refresh, save/reload and lifecycle validation continues alongside
 these features. Client mod-loader support is separate from the existing server
 milestones; each game/loader version needs its own validation.
