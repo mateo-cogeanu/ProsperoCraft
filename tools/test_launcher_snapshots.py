@@ -92,5 +92,5 @@ for row in lock['versions']:
  text=result.stdout+result.stderr;(work/(row['id']+'-main.log')).write_text(text)
  assert result.returncode!=0 and ('UnsatisfiedLinkError' in text or 'Failed to locate library' in text) and 'org.lwjgl' in text and 'MissingRequiredOptionsException' not in text,(row['id'],result.returncode,text[-2000:])
  print('PASS actual original Main startup reaches expected unprovided host LWJGL native bootstrap:',row['id'],'exit',result.returncode)
-for p,digest in checks.items():assert sha(Path(p))==digest,'Publisher original changed' 
+for p,digest in checks.items():assert sha(Path(p))==digest,'Publisher original changed'
 print('PASS all six pinned snapshot original JARs unchanged; no PS5 startup/menu/gameplay acceptance')
