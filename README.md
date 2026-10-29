@@ -122,3 +122,7 @@ unreported exit remains under investigation; PS5 validation is pending.
 App130 [Fabric26.2 compiler-TLS allocation repair](docs/client-fabric-emutls-130.md)
 addresses the native abort identified in129's retained trace. PS5 launch,
 world and sustained-operation validation remain pending.
+
+App131 [PS5 SDL native synchronization reserve](docs/client-fabric-sdl-sync-131.md)
+addresses130's explicit mutex-initialization failure by reserving native SDL
+mutex and condition objects before JVM startup. Console validation is pending.

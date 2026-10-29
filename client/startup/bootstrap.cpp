@@ -52,6 +52,8 @@ extern "C" std::uint64_t sceKernelGetProcessTime();
 extern "C" void JNU_PS5SetDirectScratchEnabled(int);
 extern "C" void JNU_PS5SetVerifierSmallReserveEnabled(int);
 extern "C" void ps5_emutls_enable_direct(int);
+extern "C" int prospero_sdl_mutex_preinit();
+extern "C" int prospero_sdl_condition_preinit();
 extern "C" int sceKernelUsleep(std::uint32_t);
 // File-open diagnostics specific to this probe; the real platform API is used.
 static char native_open_error[192]{};
@@ -267,6 +269,11 @@ void run_test(int i) {
   size_t count=0;
   for(auto *fn=__jvm_init_array_start;fn!=__jvm_init_array_end;++fn) {if(*fn) {(*fn)();++count;}}
   initialized=true;log_stage("Embedded constructors complete");
+  int mutex_rc=prospero_sdl_mutex_preinit();
+  int condition_rc=mutex_rc?0:prospero_sdl_condition_preinit();
+  char sync_note[160];std::snprintf(sync_note,sizeof(sync_note),"PS5 SDL native sync reserve: mutex=%d condition=%d capacities256/128;before JVM",mutex_rc,condition_rc);log_stage(sync_note);
+  if(mutex_rc||condition_rc){result(i,mutex_rc?mutex_rc:condition_rc,"Cannot reserve SDL native sync before JVM");return;}
+
   // Prepare the SDK service on the native startup thread before JVM heap/workers.
   client_ps5_audio_early_init_result=sceAudioOutInit();
   char audio_stage[160];std::snprintf(audio_stage,sizeof(audio_stage),"AudioOut pre-JVM init result=%d (0x%08X);failure is nonfatal",client_ps5_audio_early_init_result,static_cast<unsigned>(client_ps5_audio_early_init_result));log_stage(audio_stage);

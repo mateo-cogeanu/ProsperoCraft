@@ -14,6 +14,7 @@ def build(runtime):
         subprocess.run(['tar','-x','-C',str(source)],stdin=archive,check=True)
     subprocess.run(['git','apply','--unsafe-paths','--directory='+str(source),str(port/'0001-register-ps5.patch')],check=True)
     subprocess.run(['git','apply','--unsafe-paths','--directory='+str(source),str(port/'0002-ps5-rwlock.patch')],check=True)
+    subprocess.run(['git','apply','--unsafe-paths','--directory='+str(source),str(port/'0003-ps5-native-sync-reserve.patch')],check=True)
     sdk=ROOT/'.tools/graphics-sdk';out.mkdir(exist_ok=True)
     toolchain=out/'ps5.cmake';toolchain.write_text('set(CMAKE_SYSTEM_NAME FreeBSD)\nset(CMAKE_SYSTEM_VERSION 9)\nset(CMAKE_SYSTEM_PROCESSOR x86_64)\nset(CMAKE_CROSSCOMPILING TRUE)\nset(PS5 TRUE)\nset(CMAKE_C_COMPILER '+str(LLVM/'clang')+')\nset(CMAKE_C_COMPILER_TARGET x86_64-sie-ps5)\nset(CMAKE_AR '+str(LLVM/'llvm-ar')+')\nset(CMAKE_RANLIB '+str(LLVM/'llvm-ranlib')+')\nset(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)\n')
     flags='-isysroot '+str(sdk)+' -isystem '+str(sdk/'target/include')+' -fvisibility-nodllstorageclass=default -march=x86-64 -mno-avx -mno-avx2 -mno-fma -fno-stack-protector'

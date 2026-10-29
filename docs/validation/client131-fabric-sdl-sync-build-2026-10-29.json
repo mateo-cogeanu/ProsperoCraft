@@ -1,0 +1,73 @@
+{
+  "date": "2026-10-29",
+  "build": "01.000.131",
+  "title_id": "PPSA99874",
+  "package_sha256": "3683267eb00ce48b22f1823622c1730de4ba64b3b2a5f86825d1cb8db7c9d009",
+  "failed_run": "client-01.000.130-1793281245-258448706",
+  "observed_failure": "OriginalMinecraftInitializingGame report:GLFW0x10008PS5SDLpthread_mutex_initfailed;checkpointinsideSDLvideo/eventsinit;retainedtraceJavaShutdownhalt0andexit-1,notpriorcompilerTLSabort. UnderlyingSDKreturncode/ordinaryallocationpressureunproven.",
+  "change": "PS5SDLpreJVMreserve256recursivepthreadmutexobjects+128nativeconditionobjects;atomicboundedleases,releaseleaseonSDLdestroy,retainnativeobjectsprocesslifetime;originalpthreadlock/wait/signal/broadcastcodeunchanged;explicitnativepreinitfailurestop",
+  "sdl_integration": {
+    "sdl": {
+      "repository": "https://github.com/libsdl-org/SDL",
+      "tag": "release-3.4.2",
+      "commit": "683181b47cfabd293e3ea409f838915b8297a4fd"
+    },
+    "reference": {
+      "repository": "https://github.com/griches/PS5_Dusklight",
+      "commit": "72d6885cc8b4ff4c5f6be23682ab11578ec926c4",
+      "scope": "Only ps5/sdl video/joystick, platform.h and input-only extraction of ps5/src/platform.c; no game/artwork/Dawn/audio code",
+      "files_sha256": {
+        "ps5/sdl/SDL_ps5video.c": "74dfa37af36944402f5edf9d93369da088ad91613a424ecec39af62af8afa818",
+        "ps5/sdl/SDL_ps5joystick.c": "27fdfb224db6def91c6daf12538da2528287987ad2cef247d22ffe4706cdd199",
+        "ps5/src/platform.h": "618acb99691f2739d0978af9ad1fae07d9d6fe6196064fcda0b0d39b67364b0b",
+        "ps5/src/platform.c": "515591123435389426d798204150c11df6a136e7141a00c3bd082605df26a992"
+      }
+    },
+    "profile": "Static SDL3,dynapi disabled,PS5 video/joystick/events/native gyro and primary-controller actuator-only audio;game speaker audio remains OpenAL;renderers/GPU/standalone sensors/camera/HIDAPI/desktop windows disabled",
+    "port_sha256": {
+      "0001-register-ps5.patch": "c1041c2768b1d7c37d5c5078d0d1f82a6d411a25a2328fc8653759b788065461",
+      "0002-ps5-rwlock.patch": "185a679f87b50c39aab5e8a41cc8c89cefc48d64f67daa5d20cc1ec2061e229e",
+      "0003-ps5-native-sync-reserve.patch": "fcdeeb674e2a9cf655d78cfdd80dc133e5440a7d0d1d5b9774ec7f0e30ac14c6",
+      "MIT.txt": "d8db1712b2a1383b27cebeab2ddb8840a6e31ea820b0d56552a0f1c65f920983",
+      "README.md": "8cd30fca56937b0becf1a9921c765605bac6f987b78a4af7eb3b037274bfc9d2",
+      "SDL_ps5audio.c": "afdf8d072db3e2add072ebd3bc687c0251faee5338af2dcaed25fc200db47cf6",
+      "SDL_ps5joystick.c": "db16c6fe639dc01b7689422d86264c7bf4c469cd29195f97c1cd34d1e4c895a0",
+      "SDL_ps5rwlock.c": "fd25d3606287c2da85a30d6ca450a80fede1683c437c6abd7bd4533a240c9c64",
+      "SDL_ps5video.c": "2550e565a1019689b11f7a41c353a2af06ef83f72f1537340a6c7e0f7a18ebe5",
+      "Zlib.txt": "bd9162684043a9d1d7fd18ea992233a24d82d97b7f70471b6ed25e85848dd677",
+      "host-loader-source.json": "872b442bc1c3f698f1c495836e3ef15ef22ea6f1d920d9eeeeab3ef1c9f4e991",
+      "platform-input.c": "44c2436e973fdccba9e59c483f55e426099e7deb20290ecf229ea8bc42333485",
+      "platform.h": "af99d81a0ace1b17805a3a47718b33c46f4ff5da79257bb03180b4a18bc4804e",
+      "ps5_bindings.h": "0c9ab147ea9599d2b5fa5d55eb592dd8e4e3285ee0193eba240d04ffd6cc9a7a",
+      "ps5_display_mode.h": "93be74741068785b8a91de8bd854660b3b712c2b60492848bf74b177b6eddfe4",
+      "ps5_haptic_pcm.h": "79a10b0b384c2829c150fce1a0bfded20397f0263c7a3b8506040335a6308be2",
+      "ps5_hid.h": "e45706985b7784880f8b8491d407f1a02c3ec90c9bb4f16f52181405e1e7a166",
+      "ps5_hid_native.c": "b442351e336c66909412e9a27ce3bc50f4810061b39c5289fba76db7139f0f61",
+      "ps5_mouse_imports.c": "a6c5be2db892ab4e65c5e0c07d38fc3b06ac94ccedd23da042d329a99383464f",
+      "ps5_relative_mouse.h": "f668854c09e4b1bac98a33b4e636338e32b4e63d1406887ffd3fb9f40ceea3b3",
+      "ps5_startup_boundary.h": "7ed580a345b4929e879ffeca4f6f87f3c0f46a2621eeec72cdabafb8d01ccde9",
+      "ps5_temporary_input.h": "3ddd563a4225d3207f94830de2b05d38a531161b5719dc0c8560a355b43628dc",
+      "ps5_trigger_effect.h": "ffd7a61de7c3b1d27ab105b9ec73ee7158c33c57666b8205d3cb22a18409a95f",
+      "ps5_trigger_follow.h": "11d4c766b187e99ebd716a72d7a051b1bbfefaf304fbcb45b45503262b38b095",
+      "ps5_usb_input.h": "b4153bf704cefda407b1207a73a46061f90ad0e391d91590de01d43aa759bf3a",
+      "sources.json": "d643247a8251f962f1a4d5b6a15a94c5ed01b1ecf0e34d7e760c0869108fc286"
+    },
+    "object_sha256": "d934ce3e198ea092a2a8ce2279cc96d21330f72b521ccee5e165e960a6732f70",
+    "scope": "Actual SDL3 core/events/PS5 video/Vulkan/joystick driver; primary DualSense actuator-only SDL audio and native joystick gyro; game speaker audio remains OpenAL; native compatible rumble and translated Controlify adaptive-trigger effects;LED/impulse-trigger-rumble/process spawn unsupported; no game modifications",
+    "console": "pending",
+    "scoped_object_sha256": "1b5b583d7617977c8e9f043699cb04eb99317e65b52faace56d4a1538d99fc0c",
+    "binding_scope": "Existing graphics provider binding map; JVM global providers unchanged"
+  },
+  "checks": [
+    "ActualpatchedSDLpthreadsourceASan/UBSan unpreparedfailure,256/128uniqueleases/exhaustion,refusedlateinit,recursive/exclusivemutex,conditiontimeout/signal/broadcast/reacquisition/datavisibility,NULL,10000reusecycles,exact256/128nativeinitcalls",
+    "ExistingSDLreaderwriteractualbackendASan/UBSancontention/bounds",
+    "Target131build/signing andactualmutexrecursiveconfigenabled",
+    "PackagedSDLpatchhash/nativepreinitexports/startupmarker,runtime/GLFWpins/object/source/CRC audits",
+    "LauncherhostoriginalMain/JARunchanged",
+    "Fullpackage CRC/signatures/source/licenses/frozenhistory/toolkit checks"
+  ],
+  "runtime": "Existingruntime130pins/compilerTLSfallbackandverifierpolicyunchanged;consumer-onlySDLsourcechange",
+  "console": "PendingPS5earlyreserveacceptance,Fabric26.2launch/render/world/input/audio/save/reload,lockconditionlifecycle/endurance;nativeoperationinternalsmaystillneedresources",
+  "publication": "ProsperoCraftsource/testcandidateonly;noStore/frozenmilestone",
+  "preservation": "130andpriorcanonicalcandidates/accepted124vanilla/public121preserved;officialJARs/instances/auth/settings/heap/GCunchanged"
+}

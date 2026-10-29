@@ -1,0 +1,122 @@
+--- a/src/thread/pthread/SDL_sysmutex.c
++++ b/src/thread/pthread/SDL_sysmutex.c
+@@ -25,38 +25,41 @@
+ 
+ #include "SDL_sysmutex_c.h"
+ 
++/* ProsperoCraft PS5 alteration: reserve native objects before JVM pressure.
++ * Destruction releases the lease, retaining the initialized native primitive.
++ * SDL requires no owners or waiters when destroying these objects. */
++static SDL_Mutex ps5_mutex_reserve[256];
++static unsigned ps5_mutex_leased[256];
++static unsigned ps5_mutex_ready;
++int prospero_sdl_mutex_preinit(void)
++{
++    pthread_mutexattr_t attr;
++    int rc=pthread_mutexattr_init(&attr);if(rc)return rc;
++    rc=pthread_mutexattr_settype(&attr,PTHREAD_MUTEX_RECURSIVE);
++    if(rc){pthread_mutexattr_destroy(&attr);return rc;}
++    while(ps5_mutex_ready<256){rc=pthread_mutex_init(&ps5_mutex_reserve[ps5_mutex_ready].id,&attr);if(rc)break;++ps5_mutex_ready;}
++    pthread_mutexattr_destroy(&attr);
++    return rc;
++}
++
+ SDL_Mutex *SDL_CreateMutex(void)
+ {
+-    SDL_Mutex *mutex;
+-    pthread_mutexattr_t attr;
+-
+-    // Allocate the structure
+-    mutex = (SDL_Mutex *)SDL_calloc(1, sizeof(*mutex));
+-    if (mutex) {
+-        pthread_mutexattr_init(&attr);
+-#ifdef SDL_THREAD_PTHREAD_RECURSIVE_MUTEX
+-        pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+-#elif defined(SDL_THREAD_PTHREAD_RECURSIVE_MUTEX_NP)
+-        pthread_mutexattr_setkind_np(&attr, PTHREAD_MUTEX_RECURSIVE_NP);
+-#else
+-        // No extra attributes necessary
+-#endif
+-        if (pthread_mutex_init(&mutex->id, &attr) != 0) {
+-            SDL_SetError("pthread_mutex_init() failed");
+-            SDL_free(mutex);
+-            mutex = NULL;
+-        }
+-	    pthread_mutexattr_destroy(&attr);
++    for(unsigned i=0;i<ps5_mutex_ready;i++){
++        unsigned expected=0;
++        if(__atomic_compare_exchange_n(&ps5_mutex_leased[i],&expected,1,false,__ATOMIC_ACQUIRE,__ATOMIC_RELAXED))
++            return &ps5_mutex_reserve[i];
+     }
+-    return mutex;
++    SDL_SetError("PS5 SDL mutex reserve unavailable or exhausted (256)");
++    return NULL;
+ }
+ 
+ void SDL_DestroyMutex(SDL_Mutex *mutex)
+ {
+-    if (mutex) {
+-        pthread_mutex_destroy(&mutex->id);
+-        SDL_free(mutex);
++    if(!mutex)return;
++    for(unsigned i=0;i<ps5_mutex_ready;i++)if(mutex==&ps5_mutex_reserve[i]){
++        __atomic_store_n(&ps5_mutex_leased[i],0,__ATOMIC_RELEASE);return;
+     }
++    SDL_SetError("PS5 SDL invalid mutex reserve pointer");
+ }
+ 
+ void SDL_LockMutex(SDL_Mutex *mutex) SDL_NO_THREAD_SAFETY_ANALYSIS // clang doesn't know about NULL mutexes
+--- a/src/thread/pthread/SDL_syscond.c
++++ b/src/thread/pthread/SDL_syscond.c
+@@ -34,28 +34,38 @@
+ };
+ 
+ // Create a condition variable
++/* ProsperoCraft PS5 alteration: reserve native objects before JVM pressure.
++ * Destruction releases the lease, retaining the initialized native primitive.
++ * SDL requires no owners or waiters when destroying these objects. */
++static SDL_Condition ps5_condition_reserve[128];
++static unsigned ps5_condition_leased[128];
++static unsigned ps5_condition_ready;
++int prospero_sdl_condition_preinit(void)
++{
++    int rc=0;
++    while(ps5_condition_ready<128){rc=pthread_cond_init(&ps5_condition_reserve[ps5_condition_ready].cond,NULL);if(rc)break;++ps5_condition_ready;}
++    return rc;
++}
++
+ SDL_Condition *SDL_CreateCondition(void)
+ {
+-    SDL_Condition *cond;
+-
+-    cond = (SDL_Condition *)SDL_malloc(sizeof(SDL_Condition));
+-    if (cond) {
+-        if (pthread_cond_init(&cond->cond, NULL) != 0) {
+-            SDL_SetError("pthread_cond_init() failed");
+-            SDL_free(cond);
+-            cond = NULL;
+-        }
++    for(unsigned i=0;i<ps5_condition_ready;i++){
++        unsigned expected=0;
++        if(__atomic_compare_exchange_n(&ps5_condition_leased[i],&expected,1,false,__ATOMIC_ACQUIRE,__ATOMIC_RELAXED))
++            return &ps5_condition_reserve[i];
+     }
+-    return cond;
++    SDL_SetError("PS5 SDL condition reserve unavailable or exhausted (128)");
++    return NULL;
+ }
+ 
+ // Destroy a condition variable
+ void SDL_DestroyCondition(SDL_Condition *cond)
+ {
+-    if (cond) {
+-        pthread_cond_destroy(&cond->cond);
+-        SDL_free(cond);
++    if(!cond)return;
++    for(unsigned i=0;i<ps5_condition_ready;i++)if(cond==&ps5_condition_reserve[i]){
++        __atomic_store_n(&ps5_condition_leased[i],0,__ATOMIC_RELEASE);return;
+     }
++    SDL_SetError("PS5 SDL invalid condition reserve pointer");
+ }
+ 
+ // Restart one of the threads that are waiting on the condition variable

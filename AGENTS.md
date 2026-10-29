@@ -1551,3 +1551,14 @@ separately.130pins/recompilesruntimeownedadapterandexplicitlyenablesbeforeJVM;
 existingnative256MiB/2048entrybudgetshared,normalallocatorsfirst,heap/GCunchanged.
 See docs/client-fabric-emutls-130.md;hostfailure/lifecycle/targetchecks andPS5
 startup/world/endurancepending. Preserve129/accepted124/Store121;noStore/frozenpass.
+
+##131 SDL native synchronization reserve — 2026-10-29
+
+Failed130run1793281245-258448706 gets pastTLSabort;actualMinecraftreport GLFWSDL
+pthread_mutex_init failed insidevideo/eventsinit;JavaShutdownexit-1.131consumer
+SDLPS5patch preinitializes256recursive nativemutexes/128conditions beforeJVM,
+leases/recycleswithoutlateinit;originalpthreadlock/waitcodeunchanged. Native
+preinitresultcodefailurestopsexplicitly. Actualpatchedhostbounds/lateinitrefusal/
+recursion/exclusion/timedwait/signal/broadcast/10000reusepass. See
+ docs/client-fabric-sdl-sync-131.md. Runtime130pinsunchanged;PS5preinit/startup/
+world/endurancepending,preserve130/accepted124/Store121,noStore/frozenpass.
