@@ -33,8 +33,10 @@ def build(runtime,host=False,offline=False):
                 archive=subprocess.check_output(['git','-C',str(path),'archive','HEAD'])
                 with tarfile.open(fileobj=io.BytesIO(archive))as contents:contents.extractall(target,filter='data')
                 subprocess.run(['git','apply','--unsafe-paths','--directory='+str(target),str(port/'0002-parser-checkpoints.patch')],check=True)
+                subprocess.run(['git','apply','--unsafe-paths','--directory='+str(target),str(port/'0004-glslang-reserved-init-mutex.patch')],check=True)
             else:target.symlink_to(path.resolve(),target_is_directory=True)
         subprocess.run(['git','apply','--unsafe-paths','--directory='+str(configured_source),str(patch)],check=True)
+        subprocess.run(['git','apply','--unsafe-paths','--directory='+str(configured_source),str(port/'0003-reserved-init-mutex.patch')],check=True)
     cache=out/'CMakeCache.txt'
     if cache.exists():
         home=re.search(r'^CMAKE_HOME_DIRECTORY:INTERNAL=(.+)$',cache.read_text(),re.M)
@@ -44,7 +46,7 @@ def build(runtime,host=False,offline=False):
         sdk=ROOT/'.tools/graphics-sdk';toolchain=out/'toolchain.cmake'
         toolchain.write_text('set(CMAKE_SYSTEM_NAME FreeBSD)\nset(CMAKE_SYSTEM_VERSION 9)\nset(CMAKE_SYSTEM_PROCESSOR x86_64)\nset(CMAKE_CROSSCOMPILING TRUE)\nset(CMAKE_C_COMPILER '+str(LLVM/'clang')+')\nset(CMAKE_CXX_COMPILER '+str(LLVM/'clang++')+')\nset(CMAKE_C_COMPILER_TARGET x86_64-sie-ps5)\nset(CMAKE_CXX_COMPILER_TARGET x86_64-sie-ps5)\nset(CMAKE_AR '+str(LLVM/'llvm-ar')+')\nset(CMAKE_RANLIB '+str(LLVM/'llvm-ranlib')+')\nset(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)\n')
         flags='-isysroot '+str(sdk)+' -isystem '+str(sdk/'target/include')+' -fvisibility-nodllstorageclass=default -march=x86-64 -msse2 -mno-avx -mno-avx2 -mno-fma -fno-stack-protector -femulated-tls'
-        args+=['-DCMAKE_DISABLE_PRECOMPILE_HEADERS=ON','-DCMAKE_TOOLCHAIN_FILE='+str(toolchain),'-DCMAKE_C_FLAGS='+flags,'-DCMAKE_CXX_FLAGS=-isystem '+str(sdk/'target/include/c++/v1')+' -DPS5_SHADERC_CHECKPOINTS '+flags]
+        args+=['-DCMAKE_DISABLE_PRECOMPILE_HEADERS=ON','-DCMAKE_TOOLCHAIN_FILE='+str(toolchain),'-DCMAKE_C_FLAGS='+flags,'-DCMAKE_CXX_FLAGS=-I'+str(port)+' -I'+str(ROOT/'build/sdl-src/include')+' -isystem '+str(sdk/'target/include/c++/v1')+' -DPS5_SHADERC_CHECKPOINTS '+flags]
     subprocess.run(args,check=True);subprocess.run(['cmake','--build',str(out),'--target','shaderc_shared'if host else'shaderc_combined','-j','4'if host else'6'],check=True)
     if host:return out/'libshaderc/libshaderc_shared.dylib'
     raw=out/'compiler-raw.o';obj=out/'compiler.o'
@@ -69,6 +71,6 @@ def build(runtime,host=False,offline=False):
     combined=out/'lifecycle.o'
     subprocess.run(['/opt/homebrew/opt/lld/bin/ld.lld','-r',str(lifecycle),str(fault),'-o',str(combined)],check=True)
     lifecycle=combined
-    audit={'sources':lock,'diagnostic_patch_sha256':hashlib.sha256(patch.read_bytes()).hexdigest(),'parser_patch_sha256':hashlib.sha256((port/'0002-parser-checkpoints.patch').read_bytes()).hexdigest(),'fault_source_sha256':hashlib.sha256((port/'fault.c').read_bytes()).hexdigest(),'constructor_sections':initializers,'lifecycle':'Explicit resident JNI_OnLoad initializes retained compiler constructors once after VM; no module teardown claim','objects_sha256':{p.name:hashlib.sha256(p.read_bytes()).hexdigest()for p in [obj,lifecycle]},'bindings':bindings,'console':'pending'};(out/'audit.json').write_text(json.dumps(audit,indent=2)+'\n');return obj,lifecycle,audit
+    audit={'init_mutex_source_sha256':hashlib.sha256((port/'ps5_init_mutex.hpp').read_bytes()).hexdigest(),'init_mutex_patch_sha256':{name:hashlib.sha256((port/name).read_bytes()).hexdigest()for name in ['0003-reserved-init-mutex.patch','0004-glslang-reserved-init-mutex.patch']},'sources':lock,'diagnostic_patch_sha256':hashlib.sha256(patch.read_bytes()).hexdigest(),'parser_patch_sha256':hashlib.sha256((port/'0002-parser-checkpoints.patch').read_bytes()).hexdigest(),'fault_source_sha256':hashlib.sha256((port/'fault.c').read_bytes()).hexdigest(),'constructor_sections':initializers,'lifecycle':'Explicit resident JNI_OnLoad initializes retained compiler constructors once after VM; no module teardown claim','objects_sha256':{p.name:hashlib.sha256(p.read_bytes()).hexdigest()for p in [obj,lifecycle]},'bindings':bindings,'console':'pending'};(out/'audit.json').write_text(json.dumps(audit,indent=2)+'\n');return obj,lifecycle,audit
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--runtime-workspace',required=True,type=Path);p.add_argument('--host',action='store_true');p.add_argument('--offline',action='store_true');a=p.parse_args();build(a.runtime_workspace,a.host,a.offline);print('PASS pinned shaderc dependency build; host'if a.host else'PASS pinned PS5 shaderc dependency build and explicit constructor staging; console pending')

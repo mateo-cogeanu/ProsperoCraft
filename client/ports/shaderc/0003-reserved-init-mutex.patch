@@ -1,0 +1,73 @@
+--- a/libshaderc_util/include/libshaderc_util/compiler.h
++++ b/libshaderc_util/include/libshaderc_util/compiler.h
+@@ -19,6 +19,11 @@
+ #include <cassert>
+ #include <functional>
+ #include <mutex>
++#ifdef PS5_SHADERC_CHECKPOINTS
++#include "ps5_init_mutex.hpp"
++#else
++using PS5ShaderInitMutex=std::mutex;
++#endif
+ #include <ostream>
+ #include <string>
+ #include <unordered_map>
+@@ -54,7 +59,7 @@
+ 
+   // Using a bare pointer here to avoid any global class construction at the
+   // beginning of the execution.
+-  static std::mutex* glslang_mutex_;
++  static PS5ShaderInitMutex* glslang_mutex_;
+ };
+ 
+ // Maps macro names to their definitions.  Stores string_pieces, so the
+--- a/libshaderc_util/src/compiler.cc
++++ b/libshaderc_util/src/compiler.cc
+@@ -110,21 +110,21 @@
+ namespace shaderc_util {
+ 
+ unsigned int GlslangInitializer::initialize_count_ = 0;
+-std::mutex* GlslangInitializer::glslang_mutex_ = nullptr;
++PS5ShaderInitMutex* GlslangInitializer::glslang_mutex_ = nullptr;
+ 
+ GlslangInitializer::GlslangInitializer() {
+-  static std::mutex first_call_mutex;
++  static PS5ShaderInitMutex first_call_mutex;
+ 
+   // If this is the first call, glslang_mutex_ needs to be created, but in
+   // thread safe manner.
+   {
+-    const std::lock_guard<std::mutex> first_call_lock(first_call_mutex);
++    const std::lock_guard<PS5ShaderInitMutex> first_call_lock(first_call_mutex);
+     if (glslang_mutex_ == nullptr) {
+-      glslang_mutex_ = new std::mutex();
+-    }
+-  }
+-
+-  const std::lock_guard<std::mutex> glslang_lock(*glslang_mutex_);
++      glslang_mutex_ = new PS5ShaderInitMutex();
++    }
++  }
++
++  const std::lock_guard<PS5ShaderInitMutex> glslang_lock(*glslang_mutex_);
+ 
+   if (initialize_count_ == 0) {
+     glslang::InitializeProcess();
+@@ -134,7 +134,7 @@
+ }
+ 
+ GlslangInitializer::~GlslangInitializer() {
+-  const std::lock_guard<std::mutex> glslang_lock(*glslang_mutex_);
++  const std::lock_guard<PS5ShaderInitMutex> glslang_lock(*glslang_mutex_);
+ 
+   initialize_count_--;
+ 
+@@ -143,7 +143,7 @@
+     // There is no delete for glslang_mutex_ here, because we cannot guarantee
+     // there isn't a caller waiting for glslang_mutex_ in GlslangInitializer().
+     //
+-    // This means that this class does leak one std::mutex worth of memory after
++    // This means that this class does leak one PS5ShaderInitMutex worth of memory after
+     // the final instance is destroyed, but this allows us to defer allocating
+     // and constructing until we are sure we need to.
+   }

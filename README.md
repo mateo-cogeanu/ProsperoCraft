@@ -143,3 +143,7 @@ device creation on133. PS5 launch/gameplay validation remains pending.
 App135 [native C++ exception diagnostic candidate](docs/client-fabric-native-throw-135.md)
 records the original throw before low-memory exception formatting can hide its
 cause. Build134's original exception remains unresolved; PS5 testing is pending.
+
+App136 [shader compiler initialization lock candidate](docs/client-fabric-shaderc-locks-136.md)
+uses reserved native SDL mutexes for targeted shaderc/glslang initialization
+locks after135 captured native system_error12. PS5 validation remains pending.

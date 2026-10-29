@@ -1606,3 +1606,15 @@ consumerfinal__cxa_throwwraprecordsrawtype/caller/anchor/exactlibc++system_error
 caught/suppressedthrows/newruntime/gamepolicyfixclaim. See
  docs/client-fabric-native-throw-135.md;actualhostC++ABI/cap/IO tests,targetroute
 andpackageaudits;PS5originalcause/startup/worldpending. Preserve134/Store121.
+
+##136 shader compiler initialization locks — 2026-10-29
+
+135capturedexactlibc++system_errorcode12atshadercinit,originalthrowhelpercaller
+notoperationcaller. Targetshadercfirstcall/processmutex+glslanginit_lock useSDK
+lazy stdmutex;136PS5dependencyexportpatches replaceonlythese withreservednative
+SDLmutexshim,atomicfirstlease/returnedloserraces/nativeexclusion/lifecycle.
+No bypassinitialization/refcounts;explicitfatalreserveexhaustion;originalthrow
+recorderretained. Actualpatchedinitializerhost8000concurrentlifetimes/1000cycles/
+80klockincrementspasswithlateinitrefused. See docs/client-fabric-shaderc-locks-136.md;
+PS5compilercreation/realshaders/world/regressionpending. Runtimeunchanged;
+preserve135/accepted124/Store121,noStore/frozenpass.

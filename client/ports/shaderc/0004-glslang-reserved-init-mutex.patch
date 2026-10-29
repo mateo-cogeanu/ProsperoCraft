@@ -1,0 +1,46 @@
+--- a/glslang/MachineIndependent/ShaderLang.cpp
++++ b/glslang/MachineIndependent/ShaderLang.cpp
+@@ -46,6 +46,7 @@
+ #include <sstream>
+ #include <memory>
+ #include <mutex>
++#include "ps5_init_mutex.hpp"
+ #include "SymbolTable.h"
+ #include "ParseHelper.h"
+ #include "Scan.h"
+@@ -83,7 +84,7 @@
+ 
+ // global initialization lock
+ #ifndef DISABLE_THREAD_SUPPORT
+-std::mutex init_lock;
++PS5ShaderInitMutex init_lock;
+ #endif
+ 
+ 
+@@ -430,7 +431,7 @@
+ 
+     // Make sure only one thread tries to do this at a time
+ #ifndef DISABLE_THREAD_SUPPORT
+-    const std::lock_guard<std::mutex> lock(init_lock);
++    const std::lock_guard<PS5ShaderInitMutex> lock(init_lock);
+ #endif
+ 
+     // See if it's already been done for this version/profile combination
+@@ -1333,7 +1334,7 @@
+ int ShInitialize()
+ {
+ #ifndef DISABLE_THREAD_SUPPORT
+-    const std::lock_guard<std::mutex> lock(init_lock);
++    const std::lock_guard<PS5ShaderInitMutex> lock(init_lock);
+ #endif
+     ++NumberOfClients;
+ 
+@@ -1390,7 +1391,7 @@
+ int ShFinalize()
+ {
+ #ifndef DISABLE_THREAD_SUPPORT
+-    const std::lock_guard<std::mutex> lock(init_lock);
++    const std::lock_guard<PS5ShaderInitMutex> lock(init_lock);
+ #endif
+     --NumberOfClients;
+     assert(NumberOfClients >= 0);
