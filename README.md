@@ -196,3 +196,9 @@ is not ALL PASS. Store121 and previous candidates remain preserved.
 remains unresolved. App145 [repairs scoped audio mutex allocation failures and adds bounded input/presentation observations](docs/client-fabric-audio-input-145.md).
 Host OpenAL mixer/locking checks pass; audible PS5 audio, screen transitions,
 world/save and working-version regression remain pending. Store121 is preserved.
+
+App146 [OpenAL device-state lock repair](docs/client-fabric-device-state-146.md)
+addresses145's recorded native mutex failure inside alcGetString. The complete
+native audio library is rebuilt with a consistent device layout. PS5 startup,
+audio, Controlify/input and world/save regression remain pending; Store121 stays
+preserved.

@@ -39,6 +39,8 @@ def build(host=False,speakers=False,host_objects=()):
  subprocess.run(['git','-C',str(source),'diff','--exit-code','HEAD'],check=True)
  base=ROOT/('build/openal-host'if host else'build/openal-ps5')
  out=ROOT/('build/openal-startup-boundary-host'if host else'build/openal-startup-boundary-ps5');out.mkdir(exist_ok=True)
+ source=base/'source'
+ assert (source/'alc/device.h').read_text().count('ps5audio::Mutex StateLock;')==1
  original=source/'alc/alc.cpp';text=original.read_text()
  for name,anchor,value in ANCHORS:
   assert text.count(anchor)==1,name

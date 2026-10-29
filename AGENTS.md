@@ -1742,3 +1742,16 @@ noinputstate/order/resultchange,fixedatomicbudget. Hostdedup/concurrency/bounds
 checked;PS5exitcause/world/save/regressionpending. See
  docs/client-fabric-audio-input-145.md. Runtimepins/heap/GC/gameJARsunchanged,
 preserve144/accepted124/Store121,noStore/frozenpass/rawreportpublication.
+
+##146 OpenAL Device StateLock — 2026-10-29
+
+145run1793297205-488924696 loadingcrash recordsSIGABRT andstdmutexENOMEM;
+exact145caller1956f4d-minus400000 resolvesalcGetString devStateLock,disasmfield/
+callverified;laterdemangle995reallocabortsecondary.Shaderstacknotfatalcaller.
+146privatepinnedOpenALexport changesonlyDevice::StateLock tops5audio::Mutex;
+fullbase+boundaryobjectscoherentlyrebuiltsamestructlayout,relinkexportsheaders,
+originalcachepristine.OtherDevicelocks/nativewait/SDK/JVMunchanged,noexception
+suppression.HostactualOpenALnewlayoutPCM/lifecycle/failure+mutex/portcontrols,
+targetfullbuild/hash/packagechecks;PS5menu/audio/input/world/save/regressionpending,
+144unreportedexitnotclaimedfixed. See docs/client-fabric-device-state-146.md.
+Preserve145/accepted124/Store121;noStore/frozenpass/runtimepin/gameJARchanges.

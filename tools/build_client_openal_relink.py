@@ -59,6 +59,8 @@ def build(runtime,output,variant="native_bootstrap",version="01.000.026",tested_
    cmake=kit/'openal-startup-source/CMakeLists.txt'
    cmake.write_text(cmake.read_text()+'\ntarget_sources(OpenAL PRIVATE alc/backends/ps5_backend.cpp)\ntarget_include_directories(OpenAL PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/alc/backends")\n')
    patched.write_text(patched.read_text().replace('#include "ps5_backend.h"','#include "backends/ps5_backend.h"'))
+   shutil.copyfile(ROOT/'build/openal-ps5/source/alc/device.h',kit/'openal-startup-source/alc/device.h')
+   shutil.copyfile(ROOT/'client/ports/openal/ps5_audio_mutex.hpp',kit/'openal-startup-source/alc/ps5_audio_mutex.hpp')
    logging=kit/'openal-startup-source/core/logging.cpp'
    logging.write_text('#include "ps5_audio_mutex.hpp"\n'+(ROOT/'build/openal-startup-boundary-ps5/logging.cpp').read_text())
   shutil.copyfile(work/'startup-openal.o',kit/'accepted-startup-openal.o')
