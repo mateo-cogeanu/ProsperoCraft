@@ -130,3 +130,8 @@ mutex and condition objects before JVM startup. Console validation is pending.
 App132 [Mesa option-string allocator integration](docs/client-fabric-mesa-strings-132.md)
 addresses the identified display-initialization abort after131's native lock
 reservation succeeded. PS5 Fabric launch and gameplay validation remain pending.
+
+App133 [26.2 GLFW native mutex integration](docs/client-fabric-glfw-mutex-133.md)
+uses the existing reserved SDL native mutex pool after132 progressed through
+display initialization. PS5 launch/gameplay and working-version regressions
+remain pending.

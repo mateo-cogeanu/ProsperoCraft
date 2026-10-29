@@ -1,0 +1,58 @@
+--- a/src/posix_thread.h
++++ b/src/posix_thread.h
+@@ -44,6 +44,6 @@
+ typedef struct _GLFWmutexPOSIX
+ {
+     GLFWbool        allocated;
+-    pthread_mutex_t handle;
++    void*          ps5_sdl_mutex; /* ProsperoCraft: native SDL mutex lease */
+ } _GLFWmutexPOSIX;
+ 
+--- a/src/posix_thread.c
++++ b/src/posix_thread.c
+@@ -31,6 +31,8 @@
+ 
+ #include <assert.h>
+ #include <string.h>
++#include <SDL3/SDL.h>
++// ProsperoCraft alteration: use pre-reserved SDL native mutex leases.
+ 
+ 
+ //////////////////////////////////////////////////////////////////////////
+@@ -75,9 +77,10 @@
+ {
+     assert(mutex->posix.allocated == GLFW_FALSE);
+ 
+-    if (pthread_mutex_init(&mutex->posix.handle, NULL) != 0)
++    mutex->posix.ps5_sdl_mutex=SDL_CreateMutex();
++    if (!mutex->posix.ps5_sdl_mutex)
+     {
+-        _glfwInputError(GLFW_PLATFORM_ERROR, "POSIX: Failed to create mutex");
++        _glfwInputError(GLFW_PLATFORM_ERROR, "PS5: SDL native mutex reserve unavailable");
+         return GLFW_FALSE;
+     }
+ 
+@@ -87,20 +90,20 @@
+ void _glfwPlatformDestroyMutex(_GLFWmutex* mutex)
+ {
+     if (mutex->posix.allocated)
+-        pthread_mutex_destroy(&mutex->posix.handle);
++        SDL_DestroyMutex((SDL_Mutex*)mutex->posix.ps5_sdl_mutex);
+     memset(mutex, 0, sizeof(_GLFWmutex));
+ }
+ 
+ void _glfwPlatformLockMutex(_GLFWmutex* mutex)
+ {
+     assert(mutex->posix.allocated == GLFW_TRUE);
+-    pthread_mutex_lock(&mutex->posix.handle);
++    SDL_LockMutex((SDL_Mutex*)mutex->posix.ps5_sdl_mutex);
+ }
+ 
+ void _glfwPlatformUnlockMutex(_GLFWmutex* mutex)
+ {
+     assert(mutex->posix.allocated == GLFW_TRUE);
+-    pthread_mutex_unlock(&mutex->posix.handle);
++    SDL_UnlockMutex((SDL_Mutex*)mutex->posix.ps5_sdl_mutex);
+ }
+ 
+ #endif // GLFW_BUILD_POSIX_THREAD

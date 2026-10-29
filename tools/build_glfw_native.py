@@ -14,6 +14,7 @@ def build(runtime,host=False,offline=False):
   for m in tar.getmembers():
    m.name='/'.join(m.name.split('/')[1:])
    if m.name:tar.extract(m,source,filter='data')
+ subprocess.run(['git','apply','--unsafe-paths','--directory='+str(source),str(port/'0001-sdl-native-mutex.patch')],check=True)
  p=source/'src/null_init.c';text=p.read_text();assert text.count('*platform = null;')==1;p.write_text(text.replace('*platform = null;','*platform = null;\n    extern void _glfwConfigurePs5(_GLFWplatform*);\n    _glfwConfigurePs5(platform);'))
  p=source/'src/null_platform.h';text=p.read_text().replace('#define GLFW_NULL_CURSOR_STATE','#define GLFW_NULL_CURSOR_STATE void* ps5_cursor;').replace('typedef struct _GLFWwindowNull\n{','typedef struct _GLFWwindowNull\n{\n    void* ps5_window; void* ps5_preedit; void* ps5_ime; int ps5_rect[4];').replace('typedef struct _GLFWmonitorNull\n{','typedef struct _GLFWmonitorNull\n{\n    unsigned ps5_display;');p.write_text(text)
  p=source/'src/input.c';text=p.read_text();text=text.replace('switch (mode)\n    {','if(mode==208903){extern int ps5glfw_ime_get(_GLFWwindow*);return ps5glfw_ime_get(window); }\n    switch (mode)\n    {',1)

@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-29",
+  "build": "01.000.133",
+  "title_id": "PPSA99874",
+  "package_sha256": "b3fa2c39a99943af846a22257237572d2b6b9c67205bb4efae56aedf0e83b800",
+  "failed_run": "client-01.000.132-1793283250-125463199",
+  "observed_failure": "SDLvideo/display/Vulkanhandoff/monitorandGLFWplatforminitcomplete;originalMinecraft reportGLFW0x10008POSIXFailedtocreatemutex. SDKcode/overallnativepressureunproven.",
+  "change": "26.2GLFWprivatePOSIXmutexbackendusesexistingpreJVMreservedSDLnativeMutexlease APIs;destroyreturnsleaseandclearsstate;errorsonunprepared/exhaustion;TLSandotherplatformopsunchanged",
+  "glfw_integration": {
+    "upstream": {
+      "repository": "https://github.com/glfw/glfw",
+      "commit": "a74efa0d5628b74adc0426af4c5710e287fa7c2c",
+      "version": "3.4",
+      "archive_url": "https://codeload.github.com/glfw/glfw/tar.gz/refs/tags/3.4",
+      "archive_sha256": "c038d34200234d071fae9345bc455e4a8f2f544ab60150765d7704e08f3dac01"
+    },
+    "scope": "Genuine GLFW core with explicit SDL3 PS5 window/input/Vulkan backend selected via GLFW_PLATFORM_NULL; no original game or GLFW Java class replacements; no OpenGL or arbitrary loader",
+    "target": "PS5 real SDL Vulkan window",
+    "source_sha256": {
+      "context.c": "839a96ff1dcc712129f9bcb9522b8d459b9d6a9b8d029ce32c729c523b9ea012",
+      "init.c": "61ac2188518cae852bc2bfe0c0f2363dad365f8166099a3aa78a3c9ff8504654",
+      "input.c": "b0a40bdd5587d2cfb4900644c525b1814b6aad6960f98d639cb70231d69cb74c",
+      "monitor.c": "1671bbe37502419f08b8072e80a13a78494feea6c008ccb2727ebd44a43afd6a",
+      "platform.c": "117f5e8698eb4f028d7f80ae594fd2b2eb141f55c6122a6c24fd45d1b90209bc",
+      "vulkan.c": "5948e9f0b347640473d23f7dfd94cea82375149639f2cbd288491747312d3a33",
+      "window.c": "c102fd119fd7423ca0cebd17c1fba722d7fe149ef689f09962f6ff79c82dd289",
+      "egl_context.c": "933150523fa2cf24e8f3e7cd279b0d8308635f769e052f035e4088c4ebc83ccf",
+      "osmesa_context.c": "2bb65aa05606a7bb652ee59fb481c45abb223795163fe9c57d808de3e082b09b",
+      "null_init.c": "08a12e1eab00a4ad74b14b02b7bc0bffc865e44231c7e9d0141a6b73a0a84897",
+      "null_monitor.c": "12face8cf2462b5590d8f1ac5502184e0246696f5d5b117dddca3dfbb5658759",
+      "null_window.c": "244c6843b93298f97066a5d40324286b9a2de240200ead019470b0e8846595d9",
+      "null_joystick.c": "5da9465db10034b81b87c3722328bff7dfc3b4a94670cce71672b7d464fd6820",
+      "posix_thread.c": "2c38b730025ed079c44aed73c0014ad3d5df3f35959b3c3ddd2090b2dcfda7ce",
+      "posix_time.c": "548431aa62bc3ead2a82c1f049fd53659b7a92c8702abaa9d9176a0583edadb2",
+      "ps5_platform.c": "84f5ebb569e41578d86fd479463b31dbc193b5586b4a11a59128038eb151263d",
+      "vulkan_bridge.c": "fdf8f58afa4e04f3f631cc287e3d02b3b84771b948bc330f609e05fe0e8fc4ac",
+      "modules.c": "22df9512c4f39498c1d18d6f7ef027879d6e5d749c2b74b545c930852df05d9c"
+    },
+    "local_source_sha256": {
+      "sources.json": "58292058b846aef2eb6907a70f4f9442f616670d19cd2ed7bc32b93015384152",
+      "LICENSE.md": "149704059b5d0bf551637e50042dd4de9c2cae921021f6636298911e3a5f9462",
+      "modules.c": "22df9512c4f39498c1d18d6f7ef027879d6e5d749c2b74b545c930852df05d9c",
+      "binding.json": "52edeff6cf92be3debd6169cbb07cd5075322eb60d2e49853d85069ac616a96d",
+      "0001-sdl-native-mutex.patch": "f30fd543675152ee3c00f191296dc26d0eabb5d8af2e75453f431d2a36e9d555",
+      "README.md": "685662fcf6e23d7b6571fc5ef8b108be59c3ba35782063f9902fcacc29b6f77b",
+      "vulkan_bridge.c": "fdf8f58afa4e04f3f631cc287e3d02b3b84771b948bc330f609e05fe0e8fc4ac",
+      "ps5_platform.c": "84f5ebb569e41578d86fd479463b31dbc193b5586b4a11a59128038eb151263d"
+    },
+    "console": "Pending26.2startup/menu/input/gameplay"
+  },
+  "checks": [
+    "ActualpatchedGLFW+actualreservedSDLASan/UBSanunprepared/exhaustionerrors,256leases/destroyzeroing,80000contendedincrements,10000reusecycles,nopthreadmutexinitafterreserve",
+    "GenuineGLFW+realSDLdummy3init/window/input/Unicode/teardowncyclesandmonitorOOMcleanupregression",
+    "ActualSDLnative256mutex/128conditionreservefailure/bounds/recursion/exclusion/timeout/signal/broadcast/10000reuse regression",
+    "Target133build/signing",
+    "GLFWtargetobjectnopthreadmutexinit/destroy/lock/unlockreferences;allfourSDLmutexAPIrefs;actualGLFWsourcepatchhashes,exports/package/runtime/graphicsbindingaudits",
+    "LauncherhostoriginalMain/JARunchanged",
+    "FullpackageCRC/signatures/source/licenses/frozenhistory/toolkit checks"
+  ],
+  "runtime": "NoJava/Mesa/heap/GC/policychanges;existing130TLSfallback,131SDLreserve,132stringscopepreserved",
+  "console": "PendingPS5Fabric26.2GLFWcompletion/window/render/world/input/audio/save/reload/mutexlifecycle/endurance;26.3/snapshot/vanillaregressionbeforepublicrelease",
+  "publication": "ProsperoCraftsource/testcandidateonly;noStore/frozenmilestone",
+  "preservation": "132andpriorcanonicalcandidates/accepted124vanilla/public121preserved;officialJARs/instances/auth/settingsunchanged"
+}

@@ -1573,3 +1573,13 @@ ActualMesaMacrooldrefusalabort/newrouteASan/UBSan,strings/bounds/failure/10000
 cleanupcyclespass;targetbinding/sourcehash/exports audited. See
  docs/client-fabric-mesa-strings-132.md. Java runtime unchanged;PS5display/world/
 endurancepending. Preserve131/accepted124/Store121;noStore/frozenpass.
+
+##133 GLFW mutex lease — 2026-10-29
+
+132passesSDL/Mesadisplay/GLFWplatforminit,thenoriginalreportPOSIXFailedtocreate
+mutex.133consumerGLFWprivatePOSIXmutexbackenddelegatescreate/lock/unlock/destroy
+toexistingpreJVMreservedSDLnativepool;noextrastorage/init,leasesreturnandstate
+clears,errorsonexhaustion. TLSandotherGLFWopsunchanged;26.2onlybackend. Actual
+GLFW+reservedSDLASan/UBSan80kcontention/10kreuse andwindow/input/regressionpass.
+See docs/client-fabric-glfw-mutex-133.md;PS5startup/world/working-versionregression
+pending. Runtimeunchanged;preserve132/accepted124/Store121,noStore/frozenpass.

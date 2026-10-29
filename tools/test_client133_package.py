@@ -1,0 +1,61 @@
+#!/usr/bin/env python3
+"""Audit actual133GLFW/TinyFD native exports, routing and packaged source."""
+from pathlib import Path
+import zipfile,json,hashlib,subprocess,re
+ROOT=Path(__file__).resolve().parents[1]
+elf=ROOT/'build/client-startup-probe/bootstrap-01.000.133-symbols.elf'
+exports=set(line.split()[-1]for line in subprocess.check_output(['/opt/homebrew/opt/llvm/bin/llvm-nm','--defined-only',str(elf)],text=True).splitlines()if line.split())
+functions=subprocess.check_output(['/Library/Java/JavaVirtualMachines/openjdk-25.jdk/Contents/Home/bin/javap','-classpath',str(ROOT/'build/version122-research/lwjgl-glfw-3.4.1.jar'),'-c','-p','org.lwjgl.glfw.GLFW$Functions'],text=True)
+required=[name for name,kind in re.findall(r'// String (glfw\w+)\n\s+\d+: invokestatic[^\n]+// Method org/lwjgl/system/APIUtil\.(apiGetFunctionAddress\w*)',functions)if kind=='apiGetFunctionAddress']
+assert len(required)==118 and set(required)<=exports
+for name in ['glfwCreateWindowSurface','glfwVulkanSupported','glfwInitVulkanLoader','glfwGetRequiredInstanceExtensions','glfwSetPreeditCallback','glfwSetIMEStatusCallback','glfwSetPreeditCursorRectangle','ps5_builtin_load_ps5glfw','ps5_builtin_load_lwjgl_tinyfd','Java_org_lwjgl_util_tinyfd_TinyFileDialogs_ntinyfd_1getGlobalChar']:assert name in exports,name
+with zipfile.ZipFile(ROOT/'dist/client-startup/PPSA99874.zip')as package:
+ assert package.testzip()is None;prefix='PPSA99874/assets/java25/';audit=json.loads(package.read(prefix+'glfw-audit.json'))
+ for name,digest in audit['local_source_sha256'].items():assert hashlib.sha256(package.read(prefix+'glfw-source/'+name)).hexdigest()==digest==hashlib.sha256((ROOT/'client/ports/glfw'/name).read_bytes()).hexdigest()
+ scratch=json.loads(package.read(prefix+'core-scratch-runtime-audit.json'));runtime=ROOT.parents[2]
+ assert scratch['runtime']==json.loads((ROOT/'client/ports/core-scratch-runtime.json').read_text())
+ assert hashlib.sha256(package.read(prefix+'lib/libjava.so')).hexdigest()==scratch['libjava_sha256']
+ for name,digest in scratch['objects_sha256'].items():assert hashlib.sha256((runtime/'.tools/java25/openjdk/build/ps5-bootstrap/support/native/java.base/libjava'/name).read_bytes()).hexdigest()==digest
+ assert hashlib.sha256(package.read(prefix+'lib/libverify.so')).hexdigest()==scratch['libverify_sha256']
+ assert hashlib.sha256((runtime/'.tools/java25/openjdk/build/ps5-bootstrap/support/native/java.base/libverify/check_code.o').read_bytes()).hexdigest()==scratch['verifier_object_sha256']
+ assert 'JNU_PS5SetVerifierSmallReserveEnabled' in exports
+ assert 'JNU_PS5SetDirectScratchEnabled' in exports
+ assert package.read(prefix+'tinyfd-source/ps5_dialogs.c')==(ROOT/'client/ports/tinyfd/ps5_dialogs.c').read_bytes()
+ binding=prefix+'ports/lwjgl-glfw-3.4.1-ps5-callback343.jar';binding_audit=json.loads(package.read(prefix+'glfw-binding-audit.json'))
+ assert hashlib.sha256(package.read(binding)).hexdigest()==binding_audit['output_sha256']
+ assert len(binding_audit['changed_source_units'])==26
+ assert package.read(binding)==(ROOT/'build/client-ports/glfw/lwjgl-glfw-3.4.1-ps5-callback343.jar').read_bytes()
+ assert b'ps5glfw'in package.read(prefix+'classes/ClientStartup25.class') and b'selectedGlfw'in package.read(prefix+'classes/ClientStartup25.class')
+sdl=ROOT/'build/sdl3-native/resident-sdl.o'
+undefined={line.split()[-1] for line in subprocess.check_output(['/opt/homebrew/opt/llvm/bin/llvm-nm','-u',str(sdl)],text=True).splitlines() if line.split()}
+assert not any(name.startswith('pthread_rwlock_') for name in undefined),undefined
+with zipfile.ZipFile(ROOT/'dist/client-startup/PPSA99874.zip') as package:
+ audit=json.loads(package.read('PPSA99874/assets/java25/sdl-audit.json'))
+ for name in ['SDL_ps5rwlock.c','0002-ps5-rwlock.patch','ps5_startup_boundary.h','SDL_ps5video.c','0003-ps5-native-sync-reserve.patch']:
+  assert audit['port_sha256'][name]==hashlib.sha256((ROOT/'client/ports/sdl'/name).read_bytes()).hexdigest()
+with zipfile.ZipFile(ROOT/'dist/client-startup/PPSA99874.zip') as package:
+ image=package.read('PPSA99874/eboot.bin')
+ for marker in [b'BEGIN PREVIOUS VM TRACE TAIL',b'GLFW platform init enter',b'GLFW monitor allocation failed',b'PS5 SDL video driver init enter']:
+  assert marker in image,marker
+with zipfile.ZipFile(ROOT/'dist/client-startup/PPSA99874.zip') as package:
+ audit=json.loads(package.read('PPSA99874/assets/java25/emutls-runtime-audit.json'))
+ assert audit['runtime']==json.loads((ROOT/'client/ports/emutls-runtime.json').read_text())
+ assert audit['object_sha256']==hashlib.sha256((runtime/'build/java25/emutls-adapter/backend.o').read_bytes()).hexdigest()
+ for name,digest in audit['runtime']['source_sha256'].items():assert hashlib.sha256((runtime/name).read_bytes()).hexdigest()==digest
+ for name in ['ps5_emutls_enable_direct','ps5_emutls_direct_map','ps5_emutls_direct_unmap']:assert name in exports,name
+ names=subprocess.check_output(['/opt/homebrew/opt/llvm/bin/llvm-nm','--defined-only',str(elf)],text=True)
+ assert sum(line.endswith('_ZZN17ps5_native_direct5stateEvE5value') for line in names.splitlines())==1,'Native direct ledger must be shared'
+for name in ['prospero_sdl_mutex_preinit','prospero_sdl_condition_preinit']:assert name in exports,name
+with zipfile.ZipFile(ROOT/'dist/client-startup/PPSA99874.zip')as package:assert b'PS5 SDL native sync reserve' in package.read('PPSA99874/eboot.bin')
+support=ROOT/'build/client-gpu/graphics-support.o'
+undefined={line.split()[-1] for line in subprocess.check_output(['/opt/homebrew/opt/llvm/bin/llvm-nm','-u',str(ROOT/'build/client-gpu/radv-raw.o')],text=True).splitlines() if line.split()}
+assert 'strdup' not in undefined and 'strndup' not in undefined
+for name in ['clientgpu_strdup','clientgpu_strndup']:assert name in exports,name
+with zipfile.ZipFile(ROOT/'dist/client-startup/PPSA99874.zip')as package:
+ gpu=json.loads(package.read('PPSA99874/assets/java25/gpu-integration-audit.json'))
+ assert gpu['graphics_bindings']['strdup']=='clientgpu_strdup' and gpu['graphics_bindings']['strndup']=='clientgpu_strndup'
+ assert gpu['string_allocator_source_sha256']==hashlib.sha256((ROOT/'client/gpu/string_alloc.c').read_bytes()).hexdigest()
+glfw_refs={line.split()[-1]for line in subprocess.check_output(['/opt/homebrew/opt/llvm/bin/llvm-nm','-u',str(ROOT/'build/glfw-native/ps5/glfw.o')],text=True).splitlines()if line.split()}
+assert not glfw_refs.intersection({'pthread_mutex_init','pthread_mutex_destroy','pthread_mutex_lock','pthread_mutex_unlock'})
+assert {'SDL_CreateMutex','SDL_DestroyMutex','SDL_LockMutex','SDL_UnlockMutex'}<=glfw_refs
+print('PASS actual133 rebuilt runtime127+129 libjava/libverify/object hashes and explicit enablement; all118GLFW exports, callbacks/TinyFD/source/CRC preserved; PS5 SDL allocation-free RWLock source/pin and no pthread_rwlock imports; Fabric validation pending')
