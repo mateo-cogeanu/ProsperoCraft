@@ -6,13 +6,13 @@
 
 Download Minecraft on your console, manage separate instances and play with DualSense controls, native graphics and game audio. Minecraft gameplay and account login have been tested on PS5. The high-refresh update reached 119 FPS in console testing; extended endurance remains under testing.
 
-**[Download 01.000.120](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.120)** · [Install and release notes](docs/releases/client-approved-auth-120.md) · [Changelog](CHANGELOG.md)
+**[Download 01.000.120](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.121)** · [Install and release notes](docs/releases/client-approved-auth-120.md) · [Changelog](CHANGELOG.md)
 
 ## Downloads
 
 | Release | Includes |
 | :--- | :--- |
-| [**ProsperoCraft 01.000.120**](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.120) | Approved ProsperoCraft Microsoft application and app-bound saved logins. A fresh sign-in is required after updating. |
+| [**ProsperoCraft 01.000.120**](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.121) | Approved ProsperoCraft Microsoft application and app-bound saved logins. A fresh sign-in is required after updating. |
 | [**ProsperoCraft 01.000.119**](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.119) | 26.4 snapshots 1–6, snapshot 6 native startup repair, and snapshots hidden by default. |
 | [**ProsperoCraft 01.000.117**](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.117) | Instance duplication, consistent animated controls, default Controlify, world-handle repair and improved dependency queues. |
 | [**ProsperoCraft 01.000.108**](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.108) | Fabric, Modrinth content, dependency repair, input controls, larger icons and Uninstall. |

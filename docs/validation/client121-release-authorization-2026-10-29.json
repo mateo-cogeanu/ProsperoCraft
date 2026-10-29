@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-29",
+  "build": "01.000.121",
+  "package_sha256": "3ae5d35308bc84119ed0285869630153b2ee9c8ce054e098ce58d0c6851dafaf",
+  "human_request": "lets make a prosperostore release!",
+  "authorization": "Publish exact121 and submit catalog PR; preserve Store description/credits/icon; do not monitor PR after creation",
+  "feedback": "User comments that the redesigned cursor resembles Windows11, requests a before/after image and public theme announcement, then authorizes release",
+  "console_status": "No formal ALL PASS or explicit complete theme persistence/input/lifecycle checklist supplied; those physical PS5 checks remain pending",
+  "preservation": "No new frozen milestone; preserve120 and older release assets",
+  "runtime": "No runtime source changes"
+}

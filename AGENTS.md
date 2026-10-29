@@ -1419,3 +1419,15 @@ controls. Native/Java mailbox expands together to105fields. Cursor uses a vector
 keyboard overlay. See docs/client-themes-cursor-121.md. Build/host checks do not
 establish PS5 acceptance. Preserve120Store/older candidates/frozen snapshots;
 no runtime source or Store publication change.
+
+
+##121 release authorization — 2026-10-29
+
+User explicitly requests ProsperoStore release121 after the cursor/theme preview
+and announcement. Publish exact candidate3ae5d35308bc84119ed0285869630153b2ee9c8ce054e098ce58d0c6851dafaf
+without rebuild. Keep Store description/credits/icon unchanged; update changelog
+and required version/artifact/digest. Include exact OpenAL corresponding source,
+relink materials, checksums/validation and verify all uploaded asset downloads.
+Submit catalog PR and do not monitor afterward. Release authorization does not
+establish formal ALL PASS; theme reopen/input/endurance remain pending. Preserve
+120 and older release/frozen assets; no runtime source changes.
