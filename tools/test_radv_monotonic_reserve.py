@@ -20,7 +20,7 @@ int test_timedwait(pthread_cond_t*c,pthread_mutex_t*m,const struct timespec*t){i
 '''
 (w/'native.c').write_text(native)
 (w/'native.h').write_text('#include <pthread.h>\n#include <time.h>\nint test_attr_init(pthread_condattr_t*);int test_attr_clock(pthread_condattr_t*,clockid_t);int test_attr_destroy(pthread_condattr_t*);int test_init(pthread_cond_t*,const pthread_condattr_t*);int test_timedwait(pthread_cond_t*,pthread_mutex_t*,const struct timespec*);\n')
-flags=['clang','-std=c11','-fsanitize=address,undefined','-pthread','-DHAVE_PTHREAD','-DHAVE_STRUCT_TIMESPEC','-I'+str(r/'.tools/PS5_Mesa/src')]
+flags=['clang','-include',str(r/'tools/fixtures/pthread_timedlock_host.h'),'-std=c11','-fsanitize=address,undefined','-pthread','-DHAVE_PTHREAD','-DHAVE_STRUCT_TIMESPEC','-I'+str(r/'.tools/PS5_Mesa/src')]
 subprocess.run([*flags,'-include',str(w/'native.h'),'-Dpthread_cond_init=test_init','-Dpthread_condattr_init=test_attr_init','-Dpthread_condattr_setclock=test_attr_clock','-Dpthread_condattr_destroy=test_attr_destroy','-Dpthread_cond_timedwait=test_timedwait','-c',str(r/'client/gpu/condition_reserve.c'),'-o',str(w/'reserve.o')],check=True)
 source=(r/'.tools/PS5_Mesa/src/util/cnd_monotonic.c').read_text();body=source[source.index('int\nu_cnd_monotonic_init'):]
 # All exported monotonic routines are kept; select the actual POSIX clock branch

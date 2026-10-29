@@ -161,3 +161,9 @@ uses VMA's supported custom lock hooks after138 recorded an allocation failure
 in the shared-mutex path during GPU buffer creation. Host concurrency and real
 GPU allocation/transfer checks pass; PS5 Fabric26.2 startup/world/save and
 working-version regression remain pending. Store121 is preserved.
+
+App140 [native presentation reserves](docs/client-fabric-present-reserve-140.md)
+addresses139's failed first VideoOut worker creation after VMA/shader/swapchain
+startup. It reserves that native worker and RADV mutexes before JVM startup;
+PS5 presentation, Fabric26.2 gameplay/audio/save and working-version regression
+remain pending. Store121 and all prior canonical candidates are preserved.

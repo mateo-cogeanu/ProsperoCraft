@@ -1655,3 +1655,20 @@ VMA/JNI/gameJARs;noSDKglobal/runtime/heap/GCchange. ActualpinnedVMAguardsASan/UB
 targetobjectmusthavenoSDKmutex/pthreadrefs,packagedheader/audit hasheschecked.
 See docs/client-fabric-vma-locks-139.md. PS5Fabricstartup/world/save/enduranceand
 working-versionregressionpending;preserve138/accepted124/Store121,noStore/frozenpass.
+
+##140 pre-JVM presentation worker and RADV mutex reserve — 2026-10-29
+
+139failedrun1793292744-490193153 passesVMA/shaders/3swapchainimages then WSIflip
+threadcreate2;originalMC RenderFrame VK_ERROR_OUT_OF_HOST_MEMORY. RADVmtx_lock
+alsoENOMEM;OpenALdiagnosticstdmutexexceptionsnotclaimedfixed.140precreatesone
+nativeworkerbeforeJVM;WSIprivatepatchassignsoriginalfliproutine/argumentonce,
+actualpthreadidentity,explicitfailure/nopresentationbypass/processlifetime.
+RADV-onlysixmutexbindings lease256normal/64recursivepre-JVMnativeobjects;
+conditionwaitsresolvebothmutexandcondition.Nativeblocking/ownership/deadlines
+retained;foreignattrsfallthrough,boundedENOMEM,lifetimecontractrequired.
+ActualworkerASan/UBSan failure/retry/identity/result/late-refusal andactualMesaC11
+mutex/condition80kcontention/10kreuse/recursion/bounds/try/timed/wake/reacquire
+hostchecks;macOStimedmutexfixtureonly,PS5nativeAPI. See
+ docs/client-fabric-present-reserve-140.md. Targethashes/routes/packagedsources
+checked;PS5presentation/world/audio/save/regressionpending. NoJavaruntime/pin/
+heap/GC/globalpthread/gameJARchange;preserve139/accepted124/Store121,noStore/pass.

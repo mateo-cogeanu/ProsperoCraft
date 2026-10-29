@@ -19,6 +19,7 @@ static void lock_entries(void){while(__atomic_exchange_n(&guard,1,__ATOMIC_ACQUI
 #endif
 }}
 static void unlock_entries(void){__atomic_store_n(&guard,0,__ATOMIC_RELEASE);}
+#include "mutex_reserve.inc"
 int clientgpu_condition_preinit(void)
 {
  while(ready<128){int rc=pthread_cond_init(&entries[ready].native,NULL);if(rc)return rc;++ready;}
@@ -74,5 +75,5 @@ int clientgpu_cond_destroy(pthread_cond_t *owner)
 }
 int clientgpu_cond_signal(pthread_cond_t *owner){return pthread_cond_signal(resolve(owner));}
 int clientgpu_cond_broadcast(pthread_cond_t *owner){return pthread_cond_broadcast(resolve(owner));}
-int clientgpu_cond_wait(pthread_cond_t *owner,pthread_mutex_t *mutex){return pthread_cond_wait(resolve(owner),mutex);}
-int clientgpu_cond_timedwait(pthread_cond_t *owner,pthread_mutex_t *mutex,const struct timespec *time){return pthread_cond_timedwait(resolve(owner),mutex,time);}
+int clientgpu_cond_wait(pthread_cond_t *owner,pthread_mutex_t *mutex){return pthread_cond_wait(resolve(owner),mutex_resolve(mutex));}
+int clientgpu_cond_timedwait(pthread_cond_t *owner,pthread_mutex_t *mutex,const struct timespec *time){return pthread_cond_timedwait(resolve(owner),mutex_resolve(mutex),time);}

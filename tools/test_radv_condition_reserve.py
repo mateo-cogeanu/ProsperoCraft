@@ -3,7 +3,7 @@
 from pathlib import Path
 import subprocess
 r=Path(__file__).resolve().parents[1];w=r/'build/radv-condition-host';w.mkdir(exist_ok=True)
-names=['init','destroy','signal','broadcast','wait','timedwait'];flags=['clang','-std=c11','-fsanitize=address,undefined','-pthread','-DHAVE_PTHREAD','-DHAVE_STRUCT_TIMESPEC','-I'+str(r/'.tools/PS5_Mesa/src')]
+names=['init','destroy','signal','broadcast','wait','timedwait'];flags=['clang','-include',str(r/'tools/fixtures/pthread_timedlock_host.h'),'-std=c11','-fsanitize=address,undefined','-pthread','-DHAVE_PTHREAD','-DHAVE_STRUCT_TIMESPEC','-I'+str(r/'.tools/PS5_Mesa/src')]
 subprocess.run([*flags,*['-Dpthread_cond_'+n+'=clientgpu_cond_'+n for n in names],'-c',str(r/'.tools/PS5_Mesa/src/c11/impl/threads_posix.c'),'-o',str(w/'mesa-threads.o')],check=True)
 (w/'clock-host.h').write_text('#include <pthread.h>\n#include <time.h>\nint test_native_condattr_setclock(pthread_condattr_t*,clockid_t);\n')
 subprocess.run([*flags,'-include',str(w/'clock-host.h'),'-Dpthread_condattr_setclock=test_native_condattr_setclock','-Dpthread_cond_init=test_native_cond_init','-c',str(r/'client/gpu/condition_reserve.c'),'-o',str(w/'reserve.o')],check=True)

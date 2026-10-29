@@ -92,6 +92,10 @@ def finish(runtime,java_home,work,assets,spec,gpu_support,gpu_audit,variant="gpu
          'scoped_object_sha256':hashlib.sha256(cpp.read_bytes()).hexdigest(),'console':'pending'}
   (java/'cpp-allocation-audit.json').write_text(json.dumps(audit,indent=2)+'\n')
  if variant=='startup':
+  sync_source=java/'gpu-sync-source';sync_source.mkdir(exist_ok=True)
+  for name in ['present_worker.c','condition_reserve.c','mutex_reserve.inc']:
+   shutil.copyfile(ROOT/'client/gpu'/name,sync_source/name)
+  shutil.copyfile(ROOT/'client/ports/mesa/0008-videoout-reserved-worker.patch',sync_source/'0008-videoout-reserved-worker.patch')
   exception_obj=work/'native-exception-trace.o'
   run(LLVM/'clang++','-target','x86_64-sie-ps5','-fvisibility-nodllstorageclass=default','-isysroot',sdk,'-isystem',sdk/'target/include/c++/v1','-isystem',sdk/'target/include','-std=c++20','-O2','-Wall','-Wextra','-Werror','-fno-exceptions','-fno-rtti','-fno-stack-protector','-c',ROOT/'client/gpu/exception_trace.cpp','-o',exception_obj)
   objects.append(exception_obj)

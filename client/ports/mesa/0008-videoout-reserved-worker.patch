@@ -1,0 +1,20 @@
+--- a/wsi_common_videoout.c
++++ b/wsi_common_videoout.c
+@@ -1145,6 +1145,8 @@
+    return VK_SUCCESS;
+ }
+ 
++extern int clientgpu_present_worker_start(thrd_t*, thrd_start_t, void*);
++
+ static VkResult
+ videoout_swapchain_queue_present(struct wsi_swapchain *wsi_chain, uint32_t image_index, uint64_t present_id,
+                                  const VkPresentRegionKHR *damage)
+@@ -1161,7 +1163,7 @@
+       return VK_ERROR_OUT_OF_DATE_KHR;
+    }
+    if (!out->thread_started) {
+-      const int thread_result = thrd_create(&out->thread, videoout_flip_thread, NULL);
++      const int thread_result = clientgpu_present_worker_start(&out->thread, videoout_flip_thread, NULL);
+       videoout_probe("WSI flip thread create result%d",thread_result);
+       if (thread_result != thrd_success) {
+          mtx_unlock(&out->lock);

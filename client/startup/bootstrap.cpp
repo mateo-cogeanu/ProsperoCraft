@@ -54,6 +54,8 @@ extern "C" void JNU_PS5SetVerifierSmallReserveEnabled(int);
 extern "C" void ps5_emutls_enable_direct(int);
 extern "C" int prospero_sdl_mutex_preinit();
 extern "C" int clientgpu_condition_preinit();
+extern "C" int clientgpu_mutex_preinit();
+extern "C" int clientgpu_present_worker_preinit();
 extern "C" int prospero_sdl_condition_preinit();
 extern "C" int sceKernelUsleep(std::uint32_t);
 // File-open diagnostics specific to this probe; the real platform API is used.
@@ -270,6 +272,12 @@ void run_test(int i) {
   size_t count=0;
   for(auto *fn=__jvm_init_array_start;fn!=__jvm_init_array_end;++fn) {if(*fn) {(*fn)();++count;}}
   initialized=true;log_stage("Embedded constructors complete");
+  int present_worker_rc=clientgpu_present_worker_preinit();
+  char worker_note[128];std::snprintf(worker_note,sizeof(worker_note),"PS5 VideoOut pre-JVM worker reserve result=%d",present_worker_rc);log_stage(worker_note);
+  if(present_worker_rc){result(i,present_worker_rc,"Cannot reserve VideoOut native worker before JVM");return;}
+  int graphics_mutex_rc=clientgpu_mutex_preinit();
+  char mutex_note[128];std::snprintf(mutex_note,sizeof(mutex_note),"PS5 RADV pre-JVM mutex reserve result=%d capacities256normal/64recursive",graphics_mutex_rc);log_stage(mutex_note);
+  if(graphics_mutex_rc){result(i,graphics_mutex_rc,"Cannot reserve RADV native mutexes before JVM");return;}
   int graphics_cond_rc=clientgpu_condition_preinit();
   char graphics_sync_note[128];std::snprintf(graphics_sync_note,sizeof(graphics_sync_note),"PS5 RADV native condition reserve: result=%d capacities128realtime/128monotonic;before JVM",graphics_cond_rc);log_stage(graphics_sync_note);
   if(graphics_cond_rc){result(i,graphics_cond_rc,"Cannot reserve RADV native conditions before JVM");return;}
