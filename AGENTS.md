@@ -1630,3 +1630,15 @@ absolute deadlines/wake/mutex semanticsretained. ActualMesaPOSIXhosttestwith
 macOSclockfixture+realtime regressionpass;PS5nativeclock/reserve/semaphore/world/
 regressionpending. See docs/client-fabric-monotonic-137.md. Runtimeunchanged;
 preserve136/accepted124/Store121;noStore/frozenpass.
+
+##138 remaining mutex caller diagnostic — 2026-10-29
+
+137bothclockreservesandshadercinitpass,thenanotherstdsystem_error12;genericthrow
+helperdoesnotidentifyoperation.138startup-onlylibc++mutex::lockwrapgatedatshaderc
+entryrecords256enter/returnIDs/caller/anchor/object;alloriginalcalls/throwsforward
+unchanged. Separate64failednativepthreadmutexrecordscoverinlinedSDKcallswith
+actualreturncode+caller. Exactknownsystem_errorwhatmessageaddedtothrowrecord,no demangle.
+Weaklifecyclehookkeepsotherprobesunrequired. Actualhostblocking/throw/cap/IO/errno
+andC++ABIregressionspass,targetcallrouteaudits. See
+ docs/client-fabric-mutex-caller-138.md. Diagnosticnotconfirmedfix;PS5caller/world/
+regressionpending. Runtimepolicyunchanged,preserve137/Store121,noStore/frozenpass.

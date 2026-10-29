@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-29",
+  "build": "01.000.138",
+  "title_id": "PPSA99874",
+  "package_sha256": "5784712bbfa132a26a2e6953e93d6c6046b3da61b1d1cdd85ef55ab238fb1d0b",
+  "failed_run": "client-01.000.137-1793290330-927421401",
+  "observed_failure": "Bothclockreservesandshaderccompilerinitializationsucceed;thenstdsystem_error12anddemangleallocationabort. Originaloperation/callerunresolved;genericthrowhelpercallerinsufficient.",
+  "change": "Diagnostic-onlynative std::mutex::lockwrapper activatedatshadercentry,256callenter/returnIDs/caller/anchor/object;original lockcalledalwaysandthrowpropagates;knownsystem_errorwhatexistingmessageaddedtothrowrecord;independent64nativepthreadlockfailure records actualcode+caller,originalresult/errno preserved",
+  "integration": {
+    "source_sha256": "f63c5b55f40616b9d38175849556b0368766475193b1f38329682fd84a75ed20",
+    "object_sha256": "d0ef5c1fe40bfa326c769190d2518949a5b9b186603d52c3abaab9953750da03",
+    "policy": "Diagnostic only;enabled at shaderc entry,256calls max;original lock unchanged,errno preserved;unreturned enter identifies throwing caller"
+  },
+  "checks": [
+    "ActualmutextracerASan/UBSan disabledgate,originalnativeblocking/exclusion,unchangedthrow/unreturnedenter,errno,partialwrites/EINTR/openfailure,256callcapwhileallcallsforward;64nativefailurecap/resultanderrno",
+    "ActualthrowrecorderC++ABItype/code/message/destructor regression",
+    "Target138build/signing",
+    "ActualELF SDKtimed_mutex inlinednativepthreadmutexlockcallroutes nativefailurewrapper;stdmutexwrapperforwardsoriginal;source/object/hash/marker checks",
+    "LauncherhostoriginalMain/JARunchanged",
+    "FullpackageCRC/signatures/source/licenses/frozenhistory/toolkit checks"
+  ],
+  "console": "PendingPS5exactnativecalleridentification/Fabric26.2startup/world/input/audio/save/reload/enduranceandworking-versionregression;diagnosticcandidate notfixclaim",
+  "runtime": "NoJava source/pins/heap/GC/allocation/lockingpolicychange;priorfixesretained",
+  "publication": "ProsperoCraftsource/testcandidateonly;noStore/frozenmilestone",
+  "preservation": "137andpriorcanonicalcandidates/accepted124vanilla/public121preserved;officialJARs/instances/auth/settingsunchanged"
+}

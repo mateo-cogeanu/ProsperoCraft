@@ -44,7 +44,7 @@ def finish(runtime,java_home,work,assets,spec,gpu_support,gpu_audit,variant="gpu
  flags=[p for p in inputs if p.startswith('-')]
  backends=[p for p in inputs if not p.startswith('-')and not p.endswith('.a')]
  archives=[p for p in inputs if p.endswith('.a')]
- inputs=[*flags,'--wrap=close',*(['--wrap=__cxa_throw'] if variant=='startup' else []),str(build/'embedded-jvm.o'),*old_objects,str(gpu_support),*backends,*archives,'--defsym=__cxa_thread_atexit_impl=clientgpu_ps5___cxa_thread_atexit_impl']
+ inputs=[*flags,'--wrap=close',*(['--wrap=__cxa_throw','--wrap=_ZNSt3__15mutex4lockEv','--wrap=pthread_mutex_lock'] if variant=='startup' else []),str(build/'embedded-jvm.o'),*old_objects,str(gpu_support),*backends,*archives,'--defsym=__cxa_thread_atexit_impl=clientgpu_ps5___cxa_thread_atexit_impl']
  layout=work/'gpu-probe.ld';s=(build/'jni-probe.ld').read_text();needle='        *(.data.rel.ro .data.rel.ro.*)';assert needle in s
  s=s.replace(needle,'''        PROVIDE_HIDDEN(__client_gl_init_start = .);
         KEEP(*(SORT(.data.rel.ro.clientgl.init_array.*)))
@@ -95,7 +95,12 @@ def finish(runtime,java_home,work,assets,spec,gpu_support,gpu_audit,variant="gpu
   exception_obj=work/'native-exception-trace.o'
   run(LLVM/'clang++','-target','x86_64-sie-ps5','-fvisibility-nodllstorageclass=default','-isysroot',sdk,'-isystem',sdk/'target/include/c++/v1','-isystem',sdk/'target/include','-std=c++20','-O2','-Wall','-Wextra','-Werror','-fno-exceptions','-fno-rtti','-fno-stack-protector','-c',ROOT/'client/gpu/exception_trace.cpp','-o',exception_obj)
   objects.append(exception_obj)
-  (java/'native-exception-trace-audit.json').write_text(json.dumps({'source_sha256':hashlib.sha256((ROOT/'client/gpu/exception_trace.cpp').read_bytes()).hexdigest(),'object_sha256':hashlib.sha256(exception_obj.read_bytes()).hexdigest(),'policy':'Diagnostic only;128records max,exactSDKsystem_error code,original__cxa_throw forwarded,errno preserved;no message formatting/demangling','console':'Pending original exception identification'},indent=2)+'\n')
+  mutex_obj=work/'native-mutex-trace.o'
+  run(LLVM/'clang++','-target','x86_64-sie-ps5','-fvisibility-nodllstorageclass=default','-isysroot',sdk,'-isystem',sdk/'target/include/c++/v1','-isystem',sdk/'target/include','-std=c++20','-O2','-Wall','-Wextra','-Werror','-fno-exceptions','-fno-rtti','-fno-stack-protector','-c',ROOT/'client/gpu/mutex_trace.cpp','-o',mutex_obj)
+  objects.append(mutex_obj)
+  (java/'native-mutex-trace-audit.json').write_text(json.dumps({'source_sha256':hashlib.sha256((ROOT/'client/gpu/mutex_trace.cpp').read_bytes()).hexdigest(),'object_sha256':hashlib.sha256(mutex_obj.read_bytes()).hexdigest(),'policy':'Diagnostic only;enabled at shaderc entry,256calls max;original lock unchanged,errno preserved;unreturned enter identifies throwing caller'},indent=2)+'\n')
+
+  (java/'native-exception-trace-audit.json').write_text(json.dumps({'source_sha256':hashlib.sha256((ROOT/'client/gpu/exception_trace.cpp').read_bytes()).hexdigest(),'object_sha256':hashlib.sha256(exception_obj.read_bytes()).hexdigest(),'policy':'Diagnostic only;128records max,exactSDKsystem_error code,original__cxa_throw forwarded,errno preserved;existingwhatmessage/no demangling or message construction','console':'Pending original exception identification'},indent=2)+'\n')
  stubs=[]
  for name in ['libSceAgc','libSceAgcDriver']:
   # Real native003 import declaration files, never executable implementations.

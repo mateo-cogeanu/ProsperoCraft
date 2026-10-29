@@ -151,3 +151,7 @@ locks after135 captured native system_error12. PS5 validation remains pending.
 App137 [RADV timeline condition clock integration](docs/client-fabric-monotonic-137.md)
 adds reserved native monotonic conditions after136 successfully created the
 shader compiler. PS5 semaphore creation and gameplay validation remain pending.
+
+App138 [native mutex caller diagnostic](docs/client-fabric-mutex-caller-138.md)
+adds bounded call-site tracing after137 passed shader compiler initialization
+but encountered another native resource exception. PS5 diagnosis remains pending.

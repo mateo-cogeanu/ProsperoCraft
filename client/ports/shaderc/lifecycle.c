@@ -20,7 +20,9 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM*vm,void*reserved){
 /* Observational boundary: actual compiler entry is renamed only to forward
  * here, with identical arguments/result and no success substitution. */
 extern void* ps5shaderc_real_compiler_initialize(void);
+extern void ps5_cpp_mutex_trace_enable(void) __attribute__((weak));
 void* shaderc_compiler_initialize(void){
+ if(ps5_cpp_mutex_trace_enable)ps5_cpp_mutex_trace_enable();
  client_gpu_stage("ENTER actual native shaderc_compiler_initialize",INT32_MIN);
  void* compiler=ps5shaderc_real_compiler_initialize();
  client_gpu_stage("RETURN actual native shaderc_compiler_initialize",compiler?0:-1);
