@@ -179,3 +179,9 @@ addresses141's exhausted4096monitor-mutex reserve during Controlify FFM class
 generation near loading-screen completion. Native pool host tests pass in
 default and extended modes; PS5 priming/startup/gameplay/audio/regression remain
 pending. Earlier candidates and Store121 remain preserved.
+
+App143 [native exit diagnostics](docs/client-fabric-native-exit-diagnostics-143.md)
+improves signal recording, enables bounded stack/resource sampling and limits
+repetitive shader trace detail after142closed without a fresh fatal report.
+The cause remains unproven; PS5 retesting is needed. Earlier candidates and
+Store121 remain preserved.

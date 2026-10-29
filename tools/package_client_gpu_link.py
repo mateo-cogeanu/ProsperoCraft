@@ -102,6 +102,10 @@ def finish(runtime,java_home,work,assets,spec,gpu_support,gpu_audit,variant="gpu
   for name in ['present_worker.c','condition_reserve.c','mutex_reserve.inc']:
    shutil.copyfile(ROOT/'client/gpu'/name,sync_source/name)
   shutil.copyfile(ROOT/'client/ports/mesa/0008-videoout-reserved-worker.patch',sync_source/'0008-videoout-reserved-worker.patch')
+  diagnostic_sources=java/'startup-diagnostic-source';diagnostic_sources.mkdir(exist_ok=True)
+  for path in [ROOT/'client/ports/shaderc/fault.c',ROOT/'client/startup/shader_stage_budget.hpp']:
+   shutil.copyfile(path,diagnostic_sources/path.name)
+  (java/'startup-diagnostics-audit.json').write_text(json.dumps({'fault_source_sha256':hashlib.sha256((ROOT/'client/ports/shaderc/fault.c').read_bytes()).hexdigest(),'stage_budget_source_sha256':hashlib.sha256((ROOT/'client/startup/shader_stage_budget.hpp').read_bytes()).hexdigest(),'bootstrap_source_sha256':hashlib.sha256((ROOT/'client/startup/bootstrap.cpp').read_bytes()).hexdigest(),'main_object_sha256':hashlib.sha256((work/'main.o').read_bytes()).hexdigest(),'policy':'Diagnostic143:explicit existing1Hz stack/resource observer;256detailed shader stages,failures/unrelated stages retained;atomic fault guard and7signals with legacy4signal API;142cause unproven'},indent=2)+'\n')
   exception_obj=work/'native-exception-trace.o'
   run(LLVM/'clang++','-target','x86_64-sie-ps5','-fvisibility-nodllstorageclass=default','-isysroot',sdk,'-isystem',sdk/'target/include/c++/v1','-isystem',sdk/'target/include','-std=c++20','-O2','-Wall','-Wextra','-Werror','-fno-exceptions','-fno-rtti','-fno-stack-protector','-c',ROOT/'client/gpu/exception_trace.cpp','-o',exception_obj)
   objects.append(exception_obj)

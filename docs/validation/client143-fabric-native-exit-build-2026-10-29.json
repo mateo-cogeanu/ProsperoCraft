@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-29",
+  "build": "01.000.143",
+  "title_id": "PPSA99874",
+  "package_sha256": "8af8509d540f3cc122f7e8129f74ebf41fa71516fd079b8b87244cb07d82a3de",
+  "symbols_sha256": "48ba91e7ab7475b8eca148155d3f46cde9b7260d15b46140b3efba5501e8cb2d",
+  "failed_run": "client-01.000.142-1793295111-54984214",
+  "observed_failure": "User confirms PS5 application error/closed afterloading,no menu;matching142native stderr/Java/startup logs endduringresource reload/shaderdiagnostic formatting;previous-abort says noVMabort;nofresh matching HSfatal report;local141fatalreport excluded",
+  "cause": "Unproven:last shadercheckpoint not causal proof;native priming counts notretained;samplesdisabled;OpenALmutex exceptions remain",
+  "change": "Diagnostic-onlyconsumer143:repair uncheckednativepthreadfaultguard withfixedatomics,addFPE/TRAP/SYSforwarding retaininglegacy4signalAPI,new7bitownershiplog;existingstack/resourceobserver explicitly enabled;256detailedshaderstagecap/one notice,saturatingcounter,allfailure/unrelatedstagesretained",
+  "integration": {
+    "fault_source_sha256": "2c5ab59276d522eff8af3189638be895a1896c68992d66c95df2d8b14437a7b5",
+    "stage_budget_source_sha256": "f8f30aa97d1d6d35aa16960ce4f13f6b55fd38369e037048403a73b27959d775",
+    "bootstrap_source_sha256": "15ea02ba07112f9cf5612a4be27ad5964acba9e0bfdd8e9c3e47661a3a4ba875",
+    "main_object_sha256": "e6fb9c997627cddf300fbcb2579e910de9dabb9a883cd2659eca8af255dad012",
+    "policy": "Diagnostic143:explicit existing1Hz stack/resource observer;256detailed shader stages,failures/unrelated stages retained;atomic fault guard and7signals with legacy4signal API;142cause unproven"
+  },
+  "checks": [
+    "PASS actual signal recorder registration/delegation/restoration/masks/displacement,legacy4bit/extended7bitownership,8000concurrent nestedscopeleases,ILL/FPE/TRAP/SYSandSA_SIGINFOSEGVforwarding;hostcontext4words,targetexisting96words retained",
+    "PASS actual shaderstagebudgetASan/UBSan80000concurrentcalls,256details/1notice/saturation;everyfailure/unrelatedstage retained",
+    "PASS nativeobserverASan/UBSan query values/errors/formatting/appendfailure/errno,actuallauncherhostpolicy/observer/bootstrap/GC andunchangedgameJAR",
+    "PASS targetbuild/link/signing;faultobjectnopthreadmutexrefs,packagedsource/mainobject/header/audithashes,existingruntimepinsnativehashes",
+    "PASS final packageCRC/signatures/version/runtime/source/licenses/frozenhistory/toolkit checks"
+  ],
+  "console": "Pending exact143native signal/stack/resource evidence andunderlyingexit diagnosis;Fabric26.2menu/world/input/audio/save/regression unvalidated;diagnosticnotconfirmedcrashrepair",
+  "runtime": "No reusable Java runtime source/pin orheap/GCchanges;previouspatchesretained",
+  "publication": "ProsperoCraft consumer source andlocaldiagnosticapp;noStore/frozenmilestone/branchmerge",
+  "preservation": "142/141andpriorcanonicalpackages/symbols,accepted124vanilla,Store121,frozenmilestones retained;instances/worlds/auth/settings/upstreamgame/modJARs unchanged"
+}

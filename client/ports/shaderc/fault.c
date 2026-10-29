@@ -7,18 +7,28 @@
 #include <stdint.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <pthread.h>
+
 #ifndef PS5_SHADERC_FAULT_LOG
 #define PS5_SHADERC_FAULT_LOG "/download0/java25-vm-trace.log"
 #endif
 #ifndef PS5_SHADERC_CONTEXT_WORDS
 #define PS5_SHADERC_CONTEXT_WORDS 96
 #endif
-static const int signals[] = {SIGSEGV,SIGBUS,SIGILL,SIGABRT};
-static struct sigaction previous[4];
-static int installed[4];
+/* First four positions preserve the existing scope/status ABI. */
+static const int signals[] = {SIGSEGV,SIGBUS,SIGILL,SIGABRT,SIGFPE,SIGTRAP,SIGSYS};
+enum { signal_count=sizeof(signals)/sizeof(signals[0]) };
+static struct sigaction previous[signal_count];
+static int installed[signal_count];
 static volatile sig_atomic_t report_fd=-1;
-static pthread_mutex_t lock=PTHREAD_MUTEX_INITIALIZER;
+static unsigned lock_word;
+static void guard_lock(void){while(__atomic_exchange_n(&lock_word,1,__ATOMIC_ACQUIRE)){
+#if defined(__x86_64__)
+ __asm__ volatile("pause");
+#elif defined(__aarch64__)
+ __asm__ volatile("yield");
+#endif
+}}
+static void guard_unlock(void){__atomic_store_n(&lock_word,0,__ATOMIC_RELEASE);}
 static unsigned users;
 static void value(const char *label,uint64_t number){
  char line[128];unsigned n=0;
@@ -43,7 +53,7 @@ static void handler(int sig,siginfo_t *info,void *context){
    }
   }
  }
- for(unsigned i=0;i<4;i++)if(signals[i]==sig){
+ for(unsigned i=0;i<signal_count;i++)if(signals[i]==sig){
   if(previous[i].sa_handler==SIG_IGN)return;
   if(previous[i].sa_handler==SIG_DFL){
    (void)sigaction(sig,&previous[i],0);(void)raise(sig);return;
@@ -54,10 +64,10 @@ static void handler(int sig,siginfo_t *info,void *context){
  }
 }
 int ps5shaderc_fault_begin(void){
- pthread_mutex_lock(&lock);
+ guard_lock();
  if(users++==0){
   report_fd=open(PS5_SHADERC_FAULT_LOG,O_WRONLY|O_CREAT|O_APPEND,0600);
-  for(unsigned i=0;i<4;i++){
+  for(unsigned i=0;i<signal_count;i++){
    installed[i]=0;
    if(sigaction(signals[i],0,&previous[i])!=0)continue;
    struct sigaction action=previous[i];
@@ -66,12 +76,12 @@ int ps5shaderc_fault_begin(void){
   }
  }
  int count=0;for(unsigned i=0;i<4;i++)count+=installed[i];
- pthread_mutex_unlock(&lock);return report_fd>=0?count:-1;
+ guard_unlock();return report_fd>=0?count:-1;
 }
 void ps5shaderc_fault_end(void){
- pthread_mutex_lock(&lock);
+ guard_lock();
  if(users && --users==0){
-  for(unsigned i=0;i<4;i++)if(installed[i]){
+  for(unsigned i=0;i<signal_count;i++)if(installed[i]){
    struct sigaction current;
    if(sigaction(signals[i],0,&current)==0 && current.sa_sigaction==handler)
     (void)sigaction(signals[i],&previous[i],0);
@@ -80,19 +90,22 @@ void ps5shaderc_fault_end(void){
   if(report_fd>=0)(void)close(report_fd);
   report_fd=-1;
  }
- pthread_mutex_unlock(&lock);
+ guard_unlock();
 }
 
 /* Read-only ownership observation; never reinstall a displaced handler. */
-unsigned ps5shaderc_fault_status(unsigned *query_errors){
+static unsigned fault_status(unsigned *query_errors,unsigned count){
  int saved_errno=errno;unsigned owned=0,errors=0;
- pthread_mutex_lock(&lock);
- for(unsigned i=0;i<4;i++){
+ guard_lock();
+ for(unsigned i=0;i<count;i++){
   struct sigaction current;
   if(sigaction(signals[i],0,&current)!=0)errors|=1u<<i;
   else if(installed[i]&&(current.sa_flags&SA_SIGINFO)&&current.sa_sigaction==handler)owned|=1u<<i;
  }
- pthread_mutex_unlock(&lock);
+ guard_unlock();
  if(query_errors)*query_errors=errors;
  errno=saved_errno;return owned;
 }
+
+unsigned ps5shaderc_fault_status(unsigned *errors){return fault_status(errors,4);}
+unsigned ps5shaderc_fault_extended_status(unsigned *errors){return fault_status(errors,signal_count);}

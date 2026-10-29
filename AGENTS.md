@@ -1700,3 +1700,16 @@ wait/8kconcurrency/cleanup andtargetIR/buildchecked;PS5primecounts/FFM/world/aud
 save/regressionpending;141OpenALdevicefailureunresolved. See
  docs/client-fabric-monitor-reserve-142.md. Preserve141/accepted124/Store121,
 noStore/frozenpass;reusablesourceinJavarepo/rawreportslocal.
+
+##143 unreported native exit diagnostics — 2026-10-29
+
+142failedrun1793295111-54984214closeswithPS5errorafterloading;noVMabort/freshfatal,
+shadertracetailstopsatdiagnosticformatting,notproofofcause.143replacesfaultrecorder
+uncheckedlazySDKmutexwithatomicguard,capturesFPE/TRAP/SYSpluslegacy4signals,
+forwardsoriginalcontext/handler;legacy4signalAPIsretained,new7bitstatuslogged.
+Existingstack/resourceobserverexplicitlyenabled;256detailshadertracecap+one
+notice,saturatingatomiccounter,errors/unrelatedstagesalwaysretained. Actualhost
+signalforward/restoration/ownership/8kconcurrentscopes and80kstagebudgettests;
+PS5cause/evidence/menu/world/audio/save/regressionpending.Diagnosticnotfixclaim.
+See docs/client-fabric-native-exit-diagnostics-143.md. Runtimepins/heap/GC/gameJARs
+unchanged;preserve142/accepted124/Store121,noStore/frozenpass/rawreportpublication.

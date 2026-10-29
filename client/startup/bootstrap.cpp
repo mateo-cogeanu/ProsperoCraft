@@ -20,6 +20,7 @@ extern "C" int sceAudioOutOpen(int,int,int,unsigned,unsigned,unsigned);
 #include <signal.h>
 #include "jni.h"
 #include "native_trace.hpp"
+#include "shader_stage_budget.hpp"
 #include "native_stderr.hpp"
 #include "observer_native.hpp"
 #define PROSPERO_TOOLKIT 1
@@ -85,6 +86,7 @@ extern "C" int __real_close(int);
 extern "C" int __wrap_close(int fd){int result=__real_close(fd);int saved=errno;ps5::file_activity::close_result(fd,result);errno=saved;return result;}
 #endif
 extern "C" int ps5shaderc_fault_begin(void);
+extern "C" unsigned ps5shaderc_fault_extended_status(unsigned*);
 extern "C" void ps5shaderc_fault_end(void);
 namespace {
 bool resume_library=false,return_to_library=false;
@@ -374,6 +376,7 @@ void run_test(int i) {
    {const_cast<char *>("-XX:ActiveProcessorCount=4"),nullptr},
    {const_cast<char *>("-XX:-UsePerfData"),nullptr},
    {const_cast<char *>("-XX:ErrorFile=/download0/hs_err_java25.log"),nullptr},
+   {const_cast<char *>("-Dps5.startupObserver=true"),nullptr},
    {const_cast<char *>(CLIENT_CLASSPATH_OPTION),nullptr},
    {const_cast<char *>("-Djava.io.tmpdir=/download0"),nullptr},
    {const_cast<char *>("-Duser.home=/download0"),nullptr},
@@ -474,6 +477,8 @@ void run_test(int i) {
   StartupFaultScope startup_faults(i==3);
   if(i==3) {
    char fault_note[128];std::snprintf(fault_note,sizeof(fault_note),"Original startup fault recorder installed handlers%d (expected4)",startup_faults.handlers);log_stage(fault_note);
+   unsigned extended_errors=0;unsigned extended_mask=ps5shaderc_fault_extended_status(&extended_errors);
+   char extended_note[128];std::snprintf(extended_note,sizeof(extended_note),"Native extended signal recorder owned_mask=0x%x query_errors=0x%x expected_mask=0x7f",extended_mask,extended_errors);log_stage(extended_note);
    if(startup_faults.handlers!=4) {
     java_env->DeleteLocalRef(arguments);java_env->DeleteLocalRef(string_class);java_env->DeleteLocalRef(klass);
     result(i,-1320,"Cannot install complete original-startup fault recorder");return;
@@ -504,6 +509,10 @@ void run_test(int i) {
 }
 extern "C" void client_sdl_diagnostic(const char* text) {log_stage(text);}
 extern "C" void client_gpu_stage(const char *name,int code) {
+ static ShaderStageBudget budget;
+ auto decision=budget.admit(name,code);
+ if(decision==ShaderStageBudget::Suppress)return;
+ if(decision==ShaderStageBudget::FirstSuppressed){log_stage("SHADER_TRACE detail limit256 reached;failure stages and stack/resource sampling remain enabled");return;}
  char stage[512];std::snprintf(stage,sizeof(stage),"GPU083 %s code=%d: %s",code==INT32_MIN?"RUN":code==0?"PASS":"FAIL",code,name);log_stage(stage);
 }
 extern "C" int sceKernelSendNotificationRequest(std::uint32_t,void*,std::size_t,int);
