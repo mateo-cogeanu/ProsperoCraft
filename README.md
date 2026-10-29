@@ -40,6 +40,8 @@ Release 120 switches from Mojang's application client ID to ProsperoCraft's own 
 
 Release 121 adds six saved launcher color themes in Settings, uniform Settings bars, and an antialiased vector-based fallback in-game pointer. The Store update is submitted in [PR924](https://github.com/darkxex/ps5-homebrew-catalog/pull/924); deployment has not been checked. See [the change and test notes](docs/client-themes-cursor-121.md). Physical PS5 validation is pending.
 
+Development 123 repairs the 26.2 GLFW callback ABI failure observed on build 122; [crash and repair notes](docs/client-26.2-callbacks-123.md). PS5 retesting is pending.
+
 Development 122 adds a Minecraft 26.2 test candidate using a genuine GLFW core with the existing PS5 SDL/Vulkan backend. The original game JAR stays intact. [Integration and test notes](docs/client-26.2-glfw-122.md); PS5 menu/world/input/save validation is pending. Public release 121 is preserved.
 
 Development continues on `main`, which contains the merged authenticated game-test work. The merged `Temp_gametest` and `codex/demo` branches have been retired. Release101 retains the existing `temp_gametest` package channel. The exact096 and097 packages remain preserved. Older Demo history, all frozen validation snapshots and public releases remain intact. Home/favorites are deferred; this release opens Instances, with Settings and Account beside it.

@@ -68,7 +68,7 @@ import java.nio.file.*;import java.net.*;import java.util.*;import java.lang.ref
 public class Release262Check {
  static void check(boolean b,String msg){if(!b)throw new AssertionError(msg);}
  public static void main(String[] a)throws Exception {
-  Path project=Path.of(a[0]),work=Path.of(a[1]);var mapping=JsonParser.parseString(Files.readString(work.resolve("url-map.json"))).getAsJsonObject();
+  Path project=Path.of(a[0]),work=Path.of(a[1]);System.setProperty("ps5.glfw.binding",project.resolve("build/client-ports/glfw/lwjgl-glfw-3.4.1-ps5-callback343.jar").toString());var mapping=JsonParser.parseString(Files.readString(work.resolve("url-map.json"))).getAsJsonObject();
   var installer=new ProsperoInstall(work.resolve("cache"),url->{var p=mapping.get(url);if(p==null)throw new java.io.IOException("Unexpected network request");return Files.newInputStream(Path.of(p.getAsString()));});
   if(a.length>2){String id=a[2];var receipt=installer.receipt(id);try(var loader=installer.loader(receipt)){
    Thread.currentThread().setContextClassLoader(loader);Path game=work.resolve("smoke-"+id);Files.createDirectories(game);
@@ -80,6 +80,7 @@ public class Release262Check {
    check(receipt.javaMajor==25&&receipt.window.equals("GLFW")&&receipt.assetIndex.equals(row.get("assetIndex").getAsString()),"metadata handoff "+id);
    check(ProsperoLauncher.supported(id)&&!ProsperoLauncher.snapshot(id),"snapshot gate "+id);
    try(var loader=installer.loader(receipt)){
+    var binding=Class.forName("org.lwjgl.glfw.GLFWErrorCallbackI",false,loader);check(binding.getProtectionDomain().getCodeSource().getLocation().toString().endsWith("lwjgl-glfw-3.4.1-ps5-callback343.jar"),"correct callback ABI binding precedence");
     var main=Class.forName("net.minecraft.client.main.Main",false,loader);check(main.getClassLoader()==loader,"game loader");check(main.getProtectionDomain().getCodeSource().getLocation().toString().endsWith("versions/"+id+"/client.jar"),"intact game source");
     check(Class.forName("org.lwjgl.system.Configuration",false,loader).getClassLoader()==ProsperoInstall.class.getClassLoader(),"native dispatch parent");
     int resolved=0;for(var reference:JsonParser.parseString(Files.readString(project.resolve("build/version122-research/native-method-refs.json"))).getAsJsonArray()){

@@ -1461,3 +1461,15 @@ text for the existing bounded1–6support set. Preserve [snapshot] type labels,
 default visibility off, saved choices and future-version Coming soon gate. Source
 change applies to next build; exact122candidate remains preserved/unchanged. No
 new binary/Store release or runtime source changes.
+
+##123 observed26.2callback repair — 2026-10-29
+
+Safari prior122run1793270980-859997175crashes originalMain inGLFWErrorCallbackI:
+Callback.Descriptor(Lookup,FFICIF)removed inresident3.4.3.936game refs missed
+bindinginternalconstructor.123pinnedGLFW3.4.1source recompile adds ownClass to
+26descriptorinitializers, packaged binding precedes originalGLFW only26.2;
+missingbinding fails explicitly. Do not rewrite original game/downloads.26real
+descriptors/native error+key libffi closure init/invoke/free checked onhost;
+PS5 later startup/menu/world pending. Snapshot acceptedlabel update included.
+See docs/client-26.2-callbacks-123.md;rawlogs staylocal. Preserve122/public121;
+consumer source publication/testapp only, no runtime/Store/frozen pass change.

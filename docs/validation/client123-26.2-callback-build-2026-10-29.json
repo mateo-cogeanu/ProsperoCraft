@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-29",
+  "build": "01.000.123",
+  "title_id": "PPSA99874",
+  "package_sha256": "a67e0b480042e726e3159435b33895c2d30ca2ece728b95cd31fb20a21f2d62d",
+  "observed_run": "client-01.000.122-1793270980-859997175",
+  "retrieval": "Safari computer use;startup tail, previous stderr and previous Java exceptions inspected; current launcher session identified as122run1793271023-45333266",
+  "cause": "NoSuchMethodError Callback.Descriptor(Lookup,FFICIF) in GLFWErrorCallbackI initialization; original GLFW3.4.1binding expects constructor removed in resident3.4.3core",
+  "repair": "Pinned original GLFW3.4.1Java source rebuilt with26explicit callback interface Class arguments for3.4.3Descriptor; packaged before originalGLFW only for26.2, missingbinding fails explicitly",
+  "checks": [
+    "26actualGLFWdescriptors initialized plus actual libffi native-to-Java error/key closures with argument checks and cleanup",
+    "Original26.2publisher install/hash/Main/CPU/argument and patched-binding precedence;936game method references resolve",
+    "All six snapshot install/loader/provider/Main regressions",
+    "Startup host/original-JAR tests",
+    "Target build/signing and123GLFW/binding source/hash/CRC audit",
+    "Startup package/toolkit audit including preserved prior artifacts"
+  ],
+  "also": "Accepted26.4snapshot Experimental annotations/status and stale testing text removed; defaultsoff unchanged",
+  "console": "On-device callback cause repaired in bytecode;123PS5launch/menu/input/world/audio/save/reopen still pending; no ALL PASS",
+  "publication": "Consumer source and123testapp only;no Store/binary release/new frozen milestone",
+  "runtime": "No runtime source change; raw reports remain local",
+  "preservation": "Exact122andpublic121candidate checksums preserved"
+}
