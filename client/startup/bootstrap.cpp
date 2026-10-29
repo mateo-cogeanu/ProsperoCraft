@@ -491,7 +491,7 @@ int main(int argc,char** argv) {
  // Core constructors and early AudioOut init stay on the original startup thread.
  JNU_PS5SetDirectScratchEnabled(1);
  JNU_PS5SetVerifierSmallReserveEnabled(1);
- log_stage("PS5 verifier small reserve enabled: 16384 slots of 256 bytes after libc refusal");
+ log_stage("PS5 verifier variable reserve enabled: 4MiB contiguous 256-byte units after libc refusal");
  log_stage("PS5 core direct scratch fallback enabled: two8MiB/64slot temporary-buffer budgets;normal allocators first");
  run_test(0);
  if(resume_library)log_stage("PS5_SESSION RESUME_LIBRARY fresh process; saved notice preference retained");

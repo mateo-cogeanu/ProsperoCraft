@@ -1509,3 +1509,13 @@ with pin/hash audits. Runtime source eb8b8cc published separately;no gameJAR,
 heap/GC or instance edits. Host allocation/ownership/concurrency+targetbuild pass;
 PS5Fabric startup/world/save/endurancepending. See docs/client-fabric-verifier-126.md.
 Preserve125/accepted124Vanilla/public121;noStore/frozenpass;rawreportslocal.
+
+##127 Fabric26.2 variable verifier buffers — 2026-10-29
+
+Failed126run1793274682-683235147 Matrix4f verifier3560CCinit2048byteENOMEM shows
+128single256byte slots inadequate.127pins runtime129fea0390 contiguous-unit
+4MiB arena, retainsdefaultoffruntime/explicitconsumer policy/mallocfirst and
+larger/exhausted anonymous fallback. ActualoriginalMatrix4f+fourJOMLclasses pass
+legacy verifier withmalloc+mmapdenied;allocationcleanup/concurrency/targetnative
+build checked. See docs/client-fabric-verifier-127.md;PS5Fabricstartup/world/save/
+endurancepending. Preserve126/accepted124Vanilla/Store121;noStore/frozenpass.

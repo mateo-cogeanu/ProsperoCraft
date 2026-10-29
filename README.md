@@ -104,3 +104,8 @@ Minecraft files and third-party trademarks are not relicensed by this project. P
 App126 [Fabric26.2 verifier allocation candidate](docs/client-fabric-verifier-126.md)
 reduces native page waste observed in125's launch failure. Console Fabric
 startup and world validation remain pending; vanilla26.2 was accepted on124.
+
+App127 [Fabric26.2 variable-buffer verifier candidate](docs/client-fabric-verifier-127.md)
+addresses the larger allocations that still failed on126. The actual failing
+class passes host verification with ordinary allocators denied; PS5 validation
+remains pending.

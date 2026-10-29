@@ -6,9 +6,15 @@
   "default": "Disabled;consumer125explicitly enables bounded temporary-buffer fallback",
   "documentation": "Development/docs/java25-core-direct-scratch.md",
   "verifier_reserve": {
-    "commit": "eb8b8ccc4e6a32a3a39a146e063a3d371c8501b1",
-    "patch": "0128-opt-in-verifier-small-allocation-reserve.patch",
-    "patch_sha256": "8337c48306d71c4cf20a1f266f968e4a4359c132834a3a4562c8f5252baece10",
-    "documentation": "Development/docs/java25-verifier-small-reserve.md"
+    "commit": "fea0390a02e093317d2bbac457802ef0efbe7d29",
+    "patch": "0129-verifier-variable-size-reserve.patch",
+    "patch_sha256": "475d6efabae9433d977949922ae7ed8bf79dba799f8d3188386d133a77730af8",
+    "documentation": "Development/docs/java25-verifier-variable-reserve.md",
+    "prerequisite": {
+      "commit": "eb8b8ccc4e6a32a3a39a146e063a3d371c8501b1",
+      "patch": "0128-opt-in-verifier-small-allocation-reserve.patch",
+      "patch_sha256": "8337c48306d71c4cf20a1f266f968e4a4359c132834a3a4562c8f5252baece10",
+      "documentation": "Development/docs/java25-verifier-small-reserve.md"
+    }
   }
 }
