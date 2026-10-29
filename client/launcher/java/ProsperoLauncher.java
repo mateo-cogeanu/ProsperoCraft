@@ -52,7 +52,7 @@ public final class ProsperoLauncher {
   String face="";try{face=ProsperoAvatar.fetch(auth.skin(result));if(face.isEmpty()&&auth.skin(result).isEmpty())face=ProsperoAvatar.defaultFace(library.root,result.id);}catch(Exception unavailable){}
   synchronized(this){if(!cancelled(attempt)&&session==result){avatar=face;cached=null;}}
  }
- private void restoreAccount(){runTask("ACCOUNT",attempt->{String refresh=accounts.load();if(refresh.isEmpty())return;try{acceptAccount(auth.resume(refresh,accountView(attempt),()->cancelled(attempt)),attempt);}catch(ProsperoAuth.Failure failure){if(failure.code.equals("DECLINED")||failure.code.equals("REGISTRATION"))accounts.clear();throw failure;}});}
+ private void restoreAccount(){runTask("ACCOUNT",attempt->{String refresh;try{refresh=accounts.load();}catch(ProsperoAccountStore.SignInRequired changedApp){synchronized(this){if(!cancelled(attempt)){message=changedApp.getMessage();cached=null;}}return;}if(refresh.isEmpty())return;try{acceptAccount(auth.resume(refresh,accountView(attempt),()->cancelled(attempt)),attempt);}catch(ProsperoAuth.Failure failure){if(failure.code.equals("DECLINED")||failure.code.equals("REGISTRATION"))accounts.clear();throw failure;}});}
  private void signIn(){if(busy)return;message="Connecting to Microsoft";runTask("AUTH",attempt->acceptAccount(auth.signIn(accountView(attempt),()->cancelled(attempt)),attempt));}
 
  private void install(boolean play){if(detail==null||busy)return;var instance=detail;message="Preparing "+instance.version;completed=0;total=1;runTask("DOWNLOAD",attempt->{

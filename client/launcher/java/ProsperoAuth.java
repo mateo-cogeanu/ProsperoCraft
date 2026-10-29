@@ -8,10 +8,11 @@ import java.util.function.BooleanSupplier;
 
 /** Device-code public client. Secrets never appear in diagnostics or toString. */
 public final class ProsperoAuth {
- public static final String CLIENT_ID="00000000402b5328";
+ public static final String CLIENT_ID="f0c7635e-8d50-4d7e-afa3-d15db4a0a3d3";
+ public static final String SCOPE="XboxLive.signin offline_access";
  public enum Endpoint {
-  DEVICE("https://login.live.com/oauth20_connect.srf"),
-  TOKEN("https://login.live.com/oauth20_token.srf"),
+  DEVICE("https://login.microsoftonline.com/consumers/oauth2/v2.0/devicecode"),
+  TOKEN("https://login.microsoftonline.com/consumers/oauth2/v2.0/token"),
   XBOX("https://user.auth.xboxlive.com/user/authenticate"),
   XSTS("https://xsts.auth.xboxlive.com/xsts/authorize"),
   MINECRAFT("https://api.minecraftservices.com/authentication/login_with_xbox"),
@@ -136,7 +137,7 @@ public final class ProsperoAuth {
  public Session signIn(View view,BooleanSupplier cancelled)throws Failure {
   try{
    active(cancelled);view.stage("Connecting to Microsoft");
-   Reply device=request(Endpoint.DEVICE,"POST",form("client_id",CLIENT_ID,"scope","service::user.auth.xboxlive.com::MBI_SSL","response_type","device_code"),null);success(device,"REGISTRATION");
+   Reply device=request(Endpoint.DEVICE,"POST",form("client_id",CLIENT_ID,"scope",SCOPE),null);success(device,"REGISTRATION");
    String secret=str(device.json,"device_code"),code=str(device.json,"user_code"),uri=str(device.json,"verification_uri");
    URI verification=URI.create(uri);String host=verification.getHost();
    if(!"https".equals(verification.getScheme())||verification.getUserInfo()!=null||verification.getPort()!=-1||!("microsoft.com".equals(host)||"www.microsoft.com".equals(host)||"login.microsoftonline.com".equals(host)))throw new Failure("RESPONSE");
@@ -158,7 +159,7 @@ public final class ProsperoAuth {
   }catch(Failure failure){throw failure;}catch(InterruptedException stopped){Thread.currentThread().interrupt();throw new Failure("CANCELLED");}catch(Exception ignored){throw new Failure("NETWORK");}
  }
  public Session resume(String refresh,View view,BooleanSupplier cancelled)throws Failure {
-  try{active(cancelled);Reply reply=request(Endpoint.TOKEN,"POST",form("grant_type","refresh_token","client_id",CLIENT_ID,"refresh_token",refresh,"scope","service::user.auth.xboxlive.com::MBI_SSL"),null);success(reply,"DECLINED");return complete(str(reply.json,"access_token"),optional(reply.json,"refresh_token",refresh),view,cancelled);}
+  try{active(cancelled);Reply reply=request(Endpoint.TOKEN,"POST",form("grant_type","refresh_token","client_id",CLIENT_ID,"refresh_token",refresh,"scope",SCOPE),null);success(reply,"DECLINED");return complete(str(reply.json,"access_token"),optional(reply.json,"refresh_token",refresh),view,cancelled);}
   catch(Failure failure){throw failure;}catch(InterruptedException stopped){Thread.currentThread().interrupt();throw new Failure("CANCELLED");}catch(Exception ignored){throw new Failure("NETWORK");}
  }
  static String optional(JsonObject o,String key,String fallback){try{return str(o,key);}catch(Failure absent){return fallback;}}
@@ -166,7 +167,7 @@ public final class ProsperoAuth {
  String skin(Session session){return session.skin;}
  private Session complete(String msa,String refresh,View view,BooleanSupplier cancelled)throws Exception {
    active(cancelled);view.stage("Connecting your Xbox profile");
-   JsonObject body=new JsonObject(),props=new JsonObject();props.addProperty("AuthMethod","RPS");props.addProperty("SiteName","user.auth.xboxlive.com");props.addProperty("RpsTicket",msa);body.add("Properties",props);body.addProperty("RelyingParty","http://auth.xboxlive.com");body.addProperty("TokenType","JWT");
+   JsonObject body=new JsonObject(),props=new JsonObject();props.addProperty("AuthMethod","RPS");props.addProperty("SiteName","user.auth.xboxlive.com");props.addProperty("RpsTicket","d="+msa);body.add("Properties",props);body.addProperty("RelyingParty","http://auth.xboxlive.com");body.addProperty("TokenType","JWT");
    Reply xbox=request(Endpoint.XBOX,"POST",body.toString(),null);success(xbox,"XBOX");String xboxToken=str(xbox.json,"Token"),uhs=hash(xbox.json);
    active(cancelled);body=new JsonObject();props=new JsonObject();props.addProperty("SandboxId","RETAIL");JsonArray tokens=new JsonArray();tokens.add(xboxToken);props.add("UserTokens",tokens);body.add("Properties",props);body.addProperty("RelyingParty","rp://api.minecraftservices.com/");body.addProperty("TokenType","JWT");
    Reply xsts=request(Endpoint.XSTS,"POST",body.toString(),null);success(xsts,"XBOX");if(!uhs.equals(hash(xsts.json)))throw new Failure("RESPONSE");

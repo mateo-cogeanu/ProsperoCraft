@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-29",
+  "client_id": "f0c7635e-8d50-4d7e-afa3-d15db4a0a3d3",
+  "approval": "User reports newly approved application; live app registration/consent not independently exercised",
+  "oauth_authority": "https://login.microsoftonline.com/consumers/oauth2/v2.0",
+  "scopes": [
+    "XboxLive.signin",
+    "offline_access"
+  ],
+  "xbox_ticket_prefix": "d=",
+  "cache": "AES-GCM v2 header binds client ID; unbound legacy/foreign client cache prompts sign-in without network or old-token decryption",
+  "checks": {
+    "device_xbox_xsts_minecraft_pipeline": "PASS scripted requests, error/cancel/ownership/profile and refresh retention/rotation",
+    "cache_migration": "PASS zero legacy/foreign token network requests; relabeling rejected by GCM",
+    "saved_login": "PASS current-app restore and rotation, network retry retention, revocation/signout",
+    "data_preservation": "PASS instances/world/cache bytes and settings fixtures unchanged",
+    "account_ui": "PASS account flow/labels and no token disclosure; stale mailbox-length assertion narrowed",
+    "https_transport": "PASS local actual HTTPS errors/redirect/body/TLS/redaction checks",
+    "instance_regression": "PASS existing installer/instance/account flow"
+  },
+  "console_validation": "Pending PS5 fresh approved-app sign-in, owned Minecraft launch/profile/skin and restart/restore. No live credentials used.",
+  "publication_scope": "Consumer source only; no runtime source changes, package rebuild/version bump, branch merges, GitHub binary release or Store update"
+}
