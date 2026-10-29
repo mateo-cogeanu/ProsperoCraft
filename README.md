@@ -147,3 +147,7 @@ cause. Build134's original exception remains unresolved; PS5 testing is pending.
 App136 [shader compiler initialization lock candidate](docs/client-fabric-shaderc-locks-136.md)
 uses reserved native SDL mutexes for targeted shaderc/glslang initialization
 locks after135 captured native system_error12. PS5 validation remains pending.
+
+App137 [RADV timeline condition clock integration](docs/client-fabric-monotonic-137.md)
+adds reserved native monotonic conditions after136 successfully created the
+shader compiler. PS5 semaphore creation and gameplay validation remain pending.

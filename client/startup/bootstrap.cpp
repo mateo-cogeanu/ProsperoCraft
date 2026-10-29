@@ -271,7 +271,7 @@ void run_test(int i) {
   for(auto *fn=__jvm_init_array_start;fn!=__jvm_init_array_end;++fn) {if(*fn) {(*fn)();++count;}}
   initialized=true;log_stage("Embedded constructors complete");
   int graphics_cond_rc=clientgpu_condition_preinit();
-  char graphics_sync_note[128];std::snprintf(graphics_sync_note,sizeof(graphics_sync_note),"PS5 RADV native condition reserve: result=%d capacity128;before JVM",graphics_cond_rc);log_stage(graphics_sync_note);
+  char graphics_sync_note[128];std::snprintf(graphics_sync_note,sizeof(graphics_sync_note),"PS5 RADV native condition reserve: result=%d capacities128realtime/128monotonic;before JVM",graphics_cond_rc);log_stage(graphics_sync_note);
   if(graphics_cond_rc){result(i,graphics_cond_rc,"Cannot reserve RADV native conditions before JVM");return;}
   int mutex_rc=prospero_sdl_mutex_preinit();
   int condition_rc=mutex_rc?0:prospero_sdl_condition_preinit();

@@ -51,7 +51,7 @@ def build(runtime,java_home,wsi_diagnostics=False):
  zsymbols={line.split()[-1]for line in ztext.splitlines()if len(line.split())==3}
  zmap={name:'clientgpu_zlib_'+name for name in zsymbols}
  binding.update(zmap)
- mesa_sync={name:'clientgpu_'+name.removeprefix('pthread_') for name in ['pthread_cond_init','pthread_cond_destroy','pthread_cond_signal','pthread_cond_broadcast','pthread_cond_wait','pthread_cond_timedwait']}
+ mesa_sync={name:'clientgpu_'+name.removeprefix('pthread_') for name in ['pthread_cond_init','pthread_cond_destroy','pthread_cond_signal','pthread_cond_broadcast','pthread_cond_wait','pthread_cond_timedwait','pthread_condattr_init','pthread_condattr_setclock','pthread_condattr_destroy']}
  for obj,mapping in [(platform,pmap),(mesa,{**binding,**mesa_sync})]:
   path=out/(obj.stem+'-renames.txt');path.write_text(''.join(a+' '+b+'\n'for a,b in sorted(mapping.items())))
   run(LLVM/'llvm-objcopy','--redefine-syms='+str(path),obj)

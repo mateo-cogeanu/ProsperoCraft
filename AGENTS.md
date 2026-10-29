@@ -1618,3 +1618,15 @@ recorderretained. Actualpatchedinitializerhost8000concurrentlifetimes/1000cycles
 80klockincrementspasswithlateinitrefused. See docs/client-fabric-shaderc-locks-136.md;
 PS5compilercreation/realshaders/world/regressionpending. Runtimeunchanged;
 preserve135/accepted124/Store121,noStore/frozenpass.
+
+##137 monotonic RADV timeline conditions — 2026-10-29
+
+136shadercinitreturns;actualsubmitVkSemaphoreerror/nativevk_sync_timeline123
+u_cnd_monotonic_initfailed.134defaultonlyreservepassedexplicitclockattrs tolate
+SDKinit.137adds128nativeCLOCK_MONOTONICconditionsalongside128realtime;RADV-only
+init/setclock/destroyattribute64entrymetadata choosescorrectnativepool;invalid
+clock/duplicate/capacityerrorspreserved,foreignnativepathsunchanged. Native
+absolute deadlines/wake/mutex semanticsretained. ActualMesaPOSIXhosttestwith
+macOSclockfixture+realtime regressionpass;PS5nativeclock/reserve/semaphore/world/
+regressionpending. See docs/client-fabric-monotonic-137.md. Runtimeunchanged;
+preserve136/accepted124/Store121;noStore/frozenpass.
