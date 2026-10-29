@@ -202,3 +202,8 @@ addresses145's recorded native mutex failure inside alcGetString. The complete
 native audio library is rebuilt with a consistent device layout. PS5 startup,
 audio, Controlify/input and world/save regression remain pending; Store121 stays
 preserved.
+
+App147 [OpenAL HRTF lock repair](docs/client-fabric-hrtf-locks-147.md)
+addresses146's recorded mutex allocation failure during spatialization-data
+discovery. Native HRTF behavior remains enabled. PS5 startup/audio, Controlify,
+world/save and regression checks remain pending; Store121 is preserved.

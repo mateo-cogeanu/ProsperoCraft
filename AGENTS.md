@@ -1755,3 +1755,16 @@ suppression.HostactualOpenALnewlayoutPCM/lifecycle/failure+mutex/portcontrols,
 targetfullbuild/hash/packagechecks;PS5menu/audio/input/world/save/regressionpending,
 144unreportedexitnotclaimedfixed. See docs/client-fabric-device-state-146.md.
 Preserve145/accepted124/Store121;noStore/frozenpass/runtimepin/gameJARchanges.
+
+##147 OpenAL HRTF locks — 2026-10-29
+
+146run1793299213-131825017 originalstdmutexENOMEMcaller19bd95e/mutex74e1a90;
+exact146symbolsminus400000 resolveEnumerateHrtf/EnumeratedHrtfLock70e1a90.
+LaterSIGABRT/demangle995reallocsecondary.147privateOpenALsource changesonlytwo
+HRTFglobals LoadedHrtfLock/EnumeratedHrtfLock toexistingps5audioMutex;exclusive
+protection/discovery/data/cachekept,nocondvaruse/noaudio-disable/errorbypass.
+Target+hostcoherentprivatebuild/auditsandrelinkexportincludeexactHRTFheader/source.
+HostrealOpenALPCM/lifecycle/failures+targetnative/noSDKmutexrefs/packagechecks;
+PS5startup/audio/Controlify/world/save/regressionpending,144exitnotclaimedfixed.
+See docs/client-fabric-hrtf-locks-147.md. Preserve146/accepted124/Store121,
+noStore/frozenpass/Java runtimepin/heap/GC/gameJARchanges/rawlogpublication.
