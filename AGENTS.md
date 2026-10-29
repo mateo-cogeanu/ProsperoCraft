@@ -1583,3 +1583,15 @@ clears,errorsonexhaustion. TLSandotherGLFWopsunchanged;26.2onlybackend. Actual
 GLFW+reservedSDLASan/UBSan80kcontention/10kreuse andwindow/input/regressionpass.
 See docs/client-fabric-glfw-mutex-133.md;PS5startup/world/working-versionregression
 pending. Runtimeunchanged;preserve132/accepted124/Store121,noStore/frozenpass.
+
+##134 RADV queue conditions — 2026-10-29
+
+133GLFW/window/surface succeeds;currentMinecraftVulkandeviceVK_ERROR_UNKNOWN
+andnativestderr vk_queue.c83cnd_initfailed.134preJVMreserves128nativeconditions;
+RADV-onlysixpthreadconditionbindingsleasebyopaqueaddress,preserveoriginalMesa
+C11returnmapping/nativewait+caller-mutex/timeout/signal/broadcast;destroyreturns
+lease,holdsobjectprocesslifetime. SDK/SDL/GLFW/OSMesa/JVMglobalbindingsunchanged;
+foreignattributes/staticobjectsretainnativefallback. ActualMesaC11+adapterhost
+failure/bounds/wake/reacquisition/10000reusepass. See docs/client-fabric-radv-conditions-134.md.
+Runtimeunchanged;PS5device/world/endurance/working-versionregressionpending;
+preserve133/accepted124/Store121,noStore/frozenpass.

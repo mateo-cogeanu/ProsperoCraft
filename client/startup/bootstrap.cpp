@@ -53,6 +53,7 @@ extern "C" void JNU_PS5SetDirectScratchEnabled(int);
 extern "C" void JNU_PS5SetVerifierSmallReserveEnabled(int);
 extern "C" void ps5_emutls_enable_direct(int);
 extern "C" int prospero_sdl_mutex_preinit();
+extern "C" int clientgpu_condition_preinit();
 extern "C" int prospero_sdl_condition_preinit();
 extern "C" int sceKernelUsleep(std::uint32_t);
 // File-open diagnostics specific to this probe; the real platform API is used.
@@ -269,6 +270,9 @@ void run_test(int i) {
   size_t count=0;
   for(auto *fn=__jvm_init_array_start;fn!=__jvm_init_array_end;++fn) {if(*fn) {(*fn)();++count;}}
   initialized=true;log_stage("Embedded constructors complete");
+  int graphics_cond_rc=clientgpu_condition_preinit();
+  char graphics_sync_note[128];std::snprintf(graphics_sync_note,sizeof(graphics_sync_note),"PS5 RADV native condition reserve: result=%d capacity128;before JVM",graphics_cond_rc);log_stage(graphics_sync_note);
+  if(graphics_cond_rc){result(i,graphics_cond_rc,"Cannot reserve RADV native conditions before JVM");return;}
   int mutex_rc=prospero_sdl_mutex_preinit();
   int condition_rc=mutex_rc?0:prospero_sdl_condition_preinit();
   char sync_note[160];std::snprintf(sync_note,sizeof(sync_note),"PS5 SDL native sync reserve: mutex=%d condition=%d capacities256/128;before JVM",mutex_rc,condition_rc);log_stage(sync_note);

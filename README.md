@@ -135,3 +135,7 @@ App133 [26.2 GLFW native mutex integration](docs/client-fabric-glfw-mutex-133.md
 uses the existing reserved SDL native mutex pool after132 progressed through
 display initialization. PS5 launch/gameplay and working-version regressions
 remain pending.
+
+App134 [RADV queue condition reserve](docs/client-fabric-radv-conditions-134.md)
+addresses the explicit native condition-initialization error during Vulkan
+device creation on133. PS5 launch/gameplay validation remains pending.
