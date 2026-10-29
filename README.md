@@ -109,3 +109,7 @@ App127 [Fabric26.2 variable-buffer verifier candidate](docs/client-fabric-verifi
 addresses the larger allocations that still failed on126. The actual failing
 class passes host verification with ordinary allocators denied; PS5 validation
 remains pending.
+
+App128 [PS5 SDL reader/writer lock candidate](docs/client-fabric-sdl-locks-128.md)
+addresses the GLFW/SDL lock initialization failure seen after127 passed class
+verification. PS5 Fabric startup and gameplay validation remain pending.

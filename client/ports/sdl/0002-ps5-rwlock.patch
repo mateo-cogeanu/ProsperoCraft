@@ -1,0 +1,11 @@
+--- a/cmake/sdlchecks.cmake
++++ b/cmake/sdlchecks.cmake
+@@ -1089,7 +1089,7 @@
+         "${SDL3_SOURCE_DIR}/src/thread/pthread/SDL_systhread.c"
+         "${SDL3_SOURCE_DIR}/src/thread/pthread/SDL_sysmutex.c"   # Can be faked, if necessary
+         "${SDL3_SOURCE_DIR}/src/thread/pthread/SDL_syscond.c"    # Can be faked, if necessary
+-        "${SDL3_SOURCE_DIR}/src/thread/pthread/SDL_sysrwlock.c"   # Can be faked, if necessary
++        $<IF:$<BOOL:${PS5}>,${SDL_PS5_PORT_DIR}/SDL_ps5rwlock.c,${SDL3_SOURCE_DIR}/src/thread/pthread/SDL_sysrwlock.c>
+         "${SDL3_SOURCE_DIR}/src/thread/pthread/SDL_systls.c"
+       )
+       if(HAVE_PTHREADS_SEM)

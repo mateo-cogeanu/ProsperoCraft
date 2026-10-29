@@ -1519,3 +1519,14 @@ larger/exhausted anonymous fallback. ActualoriginalMatrix4f+fourJOMLclasses pass
 legacy verifier withmalloc+mmapdenied;allocationcleanup/concurrency/targetnative
 build checked. See docs/client-fabric-verifier-127.md;PS5Fabricstartup/world/save/
 endurancepending. Preserve126/accepted124Vanilla/Store121;noStore/frozenpass.
+
+##128 Fabric26.2 SDL lock initialization — 2026-10-29
+
+Failed127run1793275520-7687009 passesverifier then originalMain crashesGLFW0x10008
+PS5SDLpthread_rwlock_init failed;actualerrorcodeunrecorded. Consumer-onlyPS5SDL
+backend nowbounded256allocation-free atomicRWlocks:parallel/recursive readers,
+exclusivewriters,try/NULL,acquire/release,50usbackoff,noFIFO/writerpreference.
+PS5CMakepatch only;otherSDLthreads unchanged;targetresident mustnotimport
+pthread_rwlock. HostrealbackendASan/UBSan/contention/bounds passed;targetpackage
+andPS5world validation explicit. See docs/client-fabric-sdl-locks-128.md. Keep
+runtime129pins/candidates127/accepted124/public121;noStore/frozenpass.
