@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-29",
+  "build": "01.000.144",
+  "title_id": "PPSA99874",
+  "package_sha256": "213953a8a1655faa1bddbd9e74b527c6249326d6f2cea4e20ec76889ca58922d",
+  "symbols_sha256": "ee7a1e53710cc3394b93b4e0d71328d44382e27d31fbf3de51870c4287eb8318",
+  "observation": {
+    "build": "01.000.143",
+    "run": "client-01.000.143-1793295752-296589221",
+    "menu": "User reports menu launches;live renderFrame/runTick snapshots corroborate",
+    "world": "User reports Loading terrain neverfinishes;live Starting integrated server task fails NoClassDefFoundError Deflater after priorNativeLibraries.findBuiltinLib OutOfMemoryError during compression initialization;no serverthreadstarts",
+    "controlify": "Controller manager catches samefindBuiltinLibOOM onSDLresident load",
+    "audio": "OpenALdevicefailed;separate unresolved issue"
+  },
+  "change": "Runtime132 NativeLibraries temporaryname/symbol buffers useexistingopt-in bounded directscratch mapper andpairedrelease afterlibc/anonymousENOMEM;3libjava64slot/8MiBunits total24MiB,libnetindependent;freshprocessrequired forpriorfailedclassinitialization",
+  "integration": {
+    "runtime": {
+      "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
+      "commit": "e92cdce6595e35a77085f74e10ae1fd969d288b7",
+      "patch": "0127-opt-in-core-direct-scratch.patch",
+      "patch_sha256": "19ad299722ba04c2f88f53444a6b9be07caf1609a354a284ff6b050082ccbc96",
+      "default": "Disabled;consumer125explicitly enables bounded temporary-buffer fallback",
+      "documentation": "Development/docs/java25-core-direct-scratch.md",
+      "verifier_reserve": {
+        "commit": "fea0390a02e093317d2bbac457802ef0efbe7d29",
+        "patch": "0129-verifier-variable-size-reserve.patch",
+        "patch_sha256": "475d6efabae9433d977949922ae7ed8bf79dba799f8d3188386d133a77730af8",
+        "documentation": "Development/docs/java25-verifier-variable-reserve.md",
+        "prerequisite": {
+          "commit": "eb8b8ccc4e6a32a3a39a146e063a3d371c8501b1",
+          "patch": "0128-opt-in-verifier-small-allocation-reserve.patch",
+          "patch_sha256": "8337c48306d71c4cf20a1f266f968e4a4359c132834a3a4562c8f5252baece10",
+          "documentation": "Development/docs/java25-verifier-small-reserve.md"
+        }
+      },
+      "native_library_scratch": {
+        "commit": "b1df916944e53dee39ee41f6681f1af3f7dc32a1",
+        "patch": "0132-opt-in-native-library-name-scratch.patch",
+        "patch_sha256": "42e4aa63f2af0eacc53d3eaf78795a058d0da95d67499ea1e8662f0764345d9f",
+        "documentation": "Development/docs/java25-native-library-direct-scratch.md"
+      }
+    },
+    "objects_sha256": {
+      "jni_util.o": "a8a935fa8ca61e910bcc87b156fe9dc618950510033d5e8805a132b766a95ac9",
+      "ClassLoader.o": "bd58cf6df7b7987c416337f0ac442e66d079e2dde22f65e1280e6089e7edc59a",
+      "NativeLibraries.o": "281dc7bb10168d520c8ac2ebec9f144ad0cb5c4b5c449fe8b4084c9210801e29"
+    },
+    "libjava_sha256": "222151ba72952a5d0230f5fc29a5c242069209835cb6bd82bbe16f1f28f44397",
+    "libverify_sha256": "6e09c52fc27a3b9a3ec645f7ff911cc0e5861fbb4eaf015e135b226eb652f166",
+    "verifier_object_sha256": "4d9f839aa570890e8145228db9366fd8aded687f1e99dab15d58b0f277827745",
+    "consumer_policy": "Explicitly enabled beforeJVM;normal allocators first;platform-string/ClassLoader temporary buffers plus independent4MiB variable verifier reserve in contiguous256byte units;64slots/8MiBperCunit,3libjavaunits24MiBaggregate includingtemporary library/symbolnames;Javaheap/GCunchanged",
+    "console": "PendingFabric26.2startup/world/nativecleanup,endurance"
+  },
+  "checks": [
+    "PASS actual native library lookup/symbol JNI bodies realhostJVM Xcheck:jni/UBSan;default/mapped/refusal/malformed/null/unknown/JNIcallbacks/Javastringfailure/512cleanup lifetimes plusdirectopt-in withsimultaneouslibc/anonymousENOMEM",
+    "PASS unchanged desktopnameallocationfailure control andactualscratchmapper bounds/concurrency/rollback/failedcleanupownership",
+    "PASS genuinePS5 java.base-libs,NativeLibraries.o policy/directrefs/nativeobject/libjava hashes,appliedpatch",
+    "PASS consumerhostlauncher/bootstrap/observer/GC andofficialgameJARunchanged",
+    "PASS targetbuild/link/signing/runtimepin/newnativeobject/libjava/packageversion/CRC/source/licenses/frozenhistory/toolkit checks"
+  ],
+  "runtime_publication": "b1df916944e53dee39ee41f6681f1af3f7dc32a1 pushed andremotemainverified;reusable sourceinJavarepo only",
+  "console": "143menuonlyconfirmed,notALLPASS;pending144Controlify/FFM/compression/worldcreation/save/reopen/input/audio/endurance andworkingversionregression",
+  "unresolved": "OpenALdevice/diagnosticmutexfailure;142hardexitcauseunproven;nosavepass orfullmodcompatibilityclaim",
+  "publication": "Consumer source andlocalcandidate only;noStore/branchmerge/frozenmilestone",
+  "preservation": "143andpreviouscanonicalpackages/symbols,accepted124,Store121,frozenmilestones retained;instances/worlds/auth/settings/upstreamgame/modJARs unchanged"
+}

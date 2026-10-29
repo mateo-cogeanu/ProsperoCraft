@@ -546,7 +546,7 @@ int main(int argc,char** argv) {
  ps5_vm_trace("PS5 libnet node scratch enabled:three8MiB/64slot budgets;normal allocators first");
  JNU_PS5SetVerifierSmallReserveEnabled(1);
  log_stage("PS5 verifier variable reserve enabled: 4MiB contiguous 256-byte units after libc refusal");
- log_stage("PS5 core direct scratch fallback enabled: two8MiB/64slot temporary-buffer budgets;normal allocators first");
+ log_stage("PS5 core direct scratch fallback enabled: three8MiB/64slot temporary-buffer budgets including library names;normal allocators first");
  run_test(0);
  if(resume_library)log_stage("PS5_SESSION RESUME_LIBRARY fresh process; saved notice preference retained");
  if(status[0]!=1){notify("Client083 runtime initialization failed; inspect logs.");for(;;)(void)sceKernelUsleep(1000000);}

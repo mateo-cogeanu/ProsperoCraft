@@ -16,5 +16,11 @@
       "patch_sha256": "8337c48306d71c4cf20a1f266f968e4a4359c132834a3a4562c8f5252baece10",
       "documentation": "Development/docs/java25-verifier-small-reserve.md"
     }
+  },
+  "native_library_scratch": {
+    "commit": "b1df916944e53dee39ee41f6681f1af3f7dc32a1",
+    "patch": "0132-opt-in-native-library-name-scratch.patch",
+    "patch_sha256": "42e4aa63f2af0eacc53d3eaf78795a058d0da95d67499ea1e8662f0764345d9f",
+    "documentation": "Development/docs/java25-native-library-direct-scratch.md"
   }
 }

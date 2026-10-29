@@ -1713,3 +1713,17 @@ signalforward/restoration/ownership/8kconcurrentscopes and80kstagebudgettests;
 PS5cause/evidence/menu/world/audio/save/regressionpending.Diagnosticnotfixclaim.
 See docs/client-fabric-native-exit-diagnostics-143.md. Runtimepins/heap/GC/gameJARs
 unchanged;preserve142/accepted124/Store121,noStore/frozenpass/rawreportpublication.
+
+##144 native library-name pressure integration/menu feedback — 2026-10-29
+
+User143menuconfirmed;live renderFrame/runTick corroborates,notALLPASS. Worldcreation
+Loadingterrain:Startingintegratedserver failsDeflaterclinit afterfindBuiltinLibOOM
+inWorkerMaincompression;ControlifySDLresidentloadsameOOM,serverneverstarts.
+Runtimeb1df916 patch0132separatelypublished;144pinsit/NativeLibraries.o/libjava,
+existingopt-in libjava scratchmapper+pairedrelease adds3rd64slot/8MiBCunit,total
+24MiB,libnetindependent. libc/anonymousfirst,no registry/search/JNIlifecycle/
+classrecovery/heap/GC/gameJARchange. Freshprocessrequiredforpoisonedclasses.
+HostactualJNIlookup/direct/refusal/cleanup controls+targetbuild/nativehashchecks;
+PS5Controlify/FFM/compression/world/save/regressionpending;OpenALaudioerrorunresolved.
+See docs/client-fabric-library-names-144.md. Preserve143/accepted124/Store121,
+noStore/frozenpass,reusablesourceonlyJava/rawreportslocal;143diagnosticsretained.

@@ -185,3 +185,9 @@ improves signal recording, enables bounded stack/resource sampling and limits
 repetitive shader trace detail after142closed without a fresh fatal report.
 The cause remains unproven; PS5 retesting is needed. Earlier candidates and
 Store121 remain preserved.
+
+The user confirms143reaches the Fabric26.2menu. World creation remains blocked
+by a native library-name allocation failure during compression initialization;
+Controlify records the same loader error. App144 [integrates the runtime repair](docs/client-fabric-library-names-144.md).
+PS5 world/save/Controlify/audio/regression checks remain pending; menu startup
+is not ALL PASS. Store121 and previous candidates remain preserved.
