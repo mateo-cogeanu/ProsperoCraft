@@ -36,6 +36,9 @@ def build(runtime,java_home,wsi_diagnostics=False):
   target='__wrap_'+name
   if target in prefix:binding[name]=prefix[target]
  pmap=dict(prefix);pmap.update(binding)
+ # SDK platform internals retain their original libc string ownership. Mesa
+ # and graphics callers duplicate through the same heap as their scoped free.
+ binding.update({'strdup':'clientgpu_strdup','strndup':'clientgpu_strndup'})
  # Real calls underneath its wrappers intentionally keep the original OS/SDK
  # behavior. Core JVM wraps still map these __real_* references in the final link.
  for name in ['fclose','fflush','posix_memalign','malloc_usable_size','pthread_detach']:
@@ -57,11 +60,13 @@ def build(runtime,java_home,wsi_diagnostics=False):
  run(LLVM/'clang','-target','x86_64-sie-ps5','-fvisibility-nodllstorageclass=default','-isysroot',sdk,'-isystem',sdk/'target/include','-march=x86-64','-mno-avx','-mno-avx2','-mno-fma','-O2','-I'+str(ROOT/'build'),'-c',ROOT/'build/graphics-cpu-model.c','-o',cpu)
  scoped=out/'libgraphics-platform.a'
  run(LLVM/'llvm-objcopy','--redefine-syms='+str(out/'platform-raw-renames.txt'),sdk/'target/lib/libps5platform.a',scoped)
+ strings=out/'graphics-string-alloc.o'
+ run(LLVM/'clang','-target','x86_64-sie-ps5','-fvisibility-nodllstorageclass=default','-isysroot',sdk,'-isystem',sdk/'target/include','-std=c11','-O2','-Wall','-Wextra','-Werror','-c',ROOT/'client/gpu/string_alloc.c','-o',strings)
  merged=out/'graphics-support.o'
  core_sdk=runtime/'.tools/native-sdk/ps5-payload-sdk'
  for name in ['libc++.a','libc++abi.a','libunwind.a']:
   assert (core_sdk/'target/lib'/name).read_bytes()==(sdk/'target/lib'/name).read_bytes(),'Shared C++ ABI mismatch'
- run(LLD,'-r','--undefined=clientgpu_ps5_fp_ieee','--undefined=clientgpu_ps5___cxa_thread_atexit_impl',mesa,scoped,cpu,'--start-group',*[core_sdk/'target/lib'/n for n in ['libc++.a','libc++abi.a','libunwind.a']],'--end-group','-o',merged)
+ run(LLD,'-r','--undefined=clientgpu_ps5_fp_ieee','--undefined=clientgpu_ps5___cxa_thread_atexit_impl',mesa,scoped,cpu,strings,'--start-group',*[core_sdk/'target/lib'/n for n in ['libc++.a','libc++abi.a','libunwind.a']],'--end-group','-o',merged)
  sections=subprocess.check_output([str(LLVM/'llvm-readelf'),'-SW',str(merged)],text=True)
  names=sorted(set(re.findall(r'\]\s+(\.(?:init_array|ctors)(?:\.\S+)?)\s',sections)))
  assert names,'Expected real native graphics constructors'
@@ -78,7 +83,7 @@ def build(runtime,java_home,wsi_diagnostics=False):
  # Its OnLoad explicitly runs the retained graphics constructor array once.
  bridge=out/'gpu-bridge.o';headers=runtime/'.tools/java25/openjdk/build/ps5-bootstrap/support/modules_include/java.base'
  run(LLVM/'clang',*(['-DPS5_GPU_EARLY_VIDEOOUT=1']if wsi_diagnostics else []),'-std=c11','-O2','-Wall','-Wextra','-Werror','-fPIC','-target','x86_64-sie-ps5','-march=x86-64','-mno-avx','-mno-avx2','-mno-fma','-fvisibility-nodllstorageclass=default','-isysroot',sdk,'-isystem',sdk/'target/include','-I'+str(ROOT/'.tools/PS5_Mesa/include'),'-I'+str(headers),'-I'+str(headers/'freebsd'),'-c',ROOT/'client/gpu/bridge.c','-o',bridge)
- audit={'scope':'Consumer-owned scoped graphics dependency providers; JVM process-wide allocation/thread/DNS behavior retained','provider_definitions':prefix,'graphics_bindings':binding,'constructors':{'sections':names,'normalized_priorities':priorities,'execution':'pthread_once before launcher RADV use or JNI_OnLoad; retained functions, no automatic startup execution'},'callback':'The SDK C++ ABI optional TLS destructor callback resolves to the real scoped platform provider for this combined title','objects_sha256':{p.name:hashlib.sha256(p.read_bytes()).hexdigest()for p in [merged,bridge]},'console':'pending'}
+ audit={'scope':'Consumer-owned scoped graphics dependency providers; JVM process-wide allocation/thread/DNS behavior retained','provider_definitions':prefix,'graphics_bindings':binding,'constructors':{'sections':names,'normalized_priorities':priorities,'execution':'pthread_once before launcher RADV use or JNI_OnLoad; retained functions, no automatic startup execution'},'callback':'The SDK C++ ABI optional TLS destructor callback resolves to the real scoped platform provider for this combined title','string_allocator_source_sha256':hashlib.sha256((ROOT/'client/gpu/string_alloc.c').read_bytes()).hexdigest(),'objects_sha256':{p.name:hashlib.sha256(p.read_bytes()).hexdigest()for p in [merged,bridge,strings]},'console':'pending'}
  if wsi_audit is not None:audit['wsi_diagnostics']=wsi_audit;audit['early_videoout_owner']='Same WSI output initialized after GPU constructors,before original Main;negative result fails JNI_OnLoad;no external handle/handoff'
  (out/'audit.json').write_text(json.dumps(audit,indent=2)+'\n')
  print('Built scoped graphics support and resident JNI bridge',out)

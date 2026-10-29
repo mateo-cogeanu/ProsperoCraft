@@ -126,3 +126,7 @@ world and sustained-operation validation remain pending.
 App131 [PS5 SDL native synchronization reserve](docs/client-fabric-sdl-sync-131.md)
 addresses130's explicit mutex-initialization failure by reserving native SDL
 mutex and condition objects before JVM startup. Console validation is pending.
+
+App132 [Mesa option-string allocator integration](docs/client-fabric-mesa-strings-132.md)
+addresses the identified display-initialization abort after131's native lock
+reservation succeeded. PS5 Fabric launch and gameplay validation remain pending.

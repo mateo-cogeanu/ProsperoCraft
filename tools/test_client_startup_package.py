@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Verify actual original-client startup package and all publisher asset objects."""
 from pathlib import Path
-import argparse,json,zipfile,hashlib,subprocess,struct,tarfile,io
+import argparse,json,zipfile,hashlib,subprocess,struct,tarfile,io,tempfile
 from functools import lru_cache
 ROOT=Path(__file__).resolve().parents[1];LLVM=Path('/opt/homebrew/opt/llvm/bin')
 p=argparse.ArgumentParser(description=__doc__);p.add_argument('--runtime-workspace',type=Path,required=True);a=p.parse_args();runtime=a.runtime_workspace
@@ -39,7 +39,7 @@ def without_build_id(blob):
    result[start+16:start+32]=bytes(16);found+=1
  assert found==1
  return bytes(result)
-elf=work/'bootstrap-01.000.131-symbols.elf';text=subprocess.check_output([str(LLVM/'llvm-nm'),'--defined-only',str(elf)],text=True);symbols={l.split()[-1]:int(l.split()[0],16)for l in text.splitlines()if len(l.split())==3}
+elf=work/'bootstrap-01.000.132-symbols.elf';text=subprocess.check_output([str(LLVM/'llvm-nm'),'--defined-only',str(elf)],text=True);symbols={l.split()[-1]:int(l.split()[0],16)for l in text.splitlines()if len(l.split())==3}
 assert symbols.get('client_ps5_audio_early_init_result') and symbols.get('client_ps5_audio_early_port')
 imports=subprocess.check_output([str(LLVM/'llvm-nm'),'--undefined-only',str(elf)],text=True)
 for jna in ['Java_com_sun_jna_Native_getLastError','Java_com_sun_jna_Native_setLastError','Java_com_sun_jna_Native_sizeof','Java_com_sun_jna_Native_initIDs','ps5_builtin_load_jnidispatch']:assert symbols.get(jna),jna
@@ -71,7 +71,7 @@ with zipfile.ZipFile(package)as z,zipfile.ZipFile(ROOT/'dist/milestones/Client_C
  for name in ['awt','lcms']:
   assert sha(z.read('PPSA99874/assets/java25/lib/lib'+name+'.so'))==sha((runtime/'build/java25/imageio-target'/('lib'+name+'.so')).read_bytes())
   assert imageio['groups'][name]['output_sha256']==sha((runtime/'build/java25/imageio-target'/('lib'+name+'.o')).read_bytes())
- assert z.testzip()is None;prefix='PPSA99874/';param=json.loads(z.read(prefix+'sce_sys/param.json'));assert param['attribute3']&0x40;old=json.loads(baseline.read(prefix+'sce_sys/param.json'));assert param['contentVersion']=='01.000.131';assert param['downloadDataSize']==4096
+ assert z.testzip()is None;prefix='PPSA99874/';param=json.loads(z.read(prefix+'sce_sys/param.json'));assert param['attribute3']&0x40;old=json.loads(baseline.read(prefix+'sce_sys/param.json'));assert param['contentVersion']=='01.000.132';assert param['downloadDataSize']==4096
  assert param['localizedParameters']['en-US']['titleName']=='ProsperoCraft'
  assert z.read(prefix+'sce_sys/icon0.png')==(ROOT/'assets/branding/icon0.png').read_bytes()
  from apply_branding import presentation_assets,validate_background
@@ -79,7 +79,7 @@ with zipfile.ZipFile(package)as z,zipfile.ZipFile(ROOT/'dist/milestones/Client_C
   assert z.read(prefix+'sce_sys/'+name)==pixels;validate_background(pixels)
  assert prefix+'sce_sys/prosperocraft_title.png'not in z.namelist()
  for k in ['titleId','contentId','conceptId']:assert param[k]==old[k]
- assert b'-Xmx1536m'in z.read(prefix+'eboot.bin') and b'Minecraft Original Client Startup 01.000.131'in z.read(prefix+'eboot.bin')
+ assert b'-Xmx1536m'in z.read(prefix+'eboot.bin') and b'Minecraft Original Client Startup 01.000.132'in z.read(prefix+'eboot.bin')
  for flag in [b'-Xmixed',b'-XX:TieredStopAtLevel=1',b'-XX:CICompilerCount=1',b'-XX:CompileThresholdScaling=4.0',b'-XX:CompileCommand=MemLimit,*.*,2M',b'-XX:ReservedCodeCacheSize=96m',b'-XX:MetaspaceSize=128m',b'-XX:+ExplicitGCInvokesConcurrent',b'-Djava.awt.headless=true',b'java25-jit.log']:
   assert flag in z.read(prefix+'eboot.bin'),flag
  assert b'-XX:+UseG1GC' in z.read(prefix+'eboot.bin') and b'-XX:NewRatio=' not in z.read(prefix+'eboot.bin')
@@ -283,7 +283,24 @@ for folder,digest in [('Client_Continuous_Direct_Scene-01.000.023','846cd9adea6f
 with zipfile.ZipFile(package)as z:
  assert z.read('PPSA99874/assets/java25/ports/lwjgl-3.4.3-ps5-modules.jar')==(ROOT/'build/client-ports/lwjgl-modules/lwjgl-3.4.3-ps5-modules.jar').read_bytes()
  validation=json.loads((ROOT/'Client_OpenGL_Provider/validation.json').read_text())
- assert json.loads(z.read('PPSA99874/assets/java25/opengl-provider-audit.json'))['objects_sha256']==validation['opengl_provider_audit']['objects_sha256']
+ current_gl=json.loads(z.read('PPSA99874/assets/java25/opengl-provider-audit.json'));old_gl=validation['opengl_provider_audit']
+ assert current_gl['renames']=={**old_gl['renames'],'strdup':'clientgpu_strdup','strndup':'clientgpu_strndup'}
+ for key,value in old_gl.items():
+  if key not in ['renames','objects_sha256']:assert current_gl[key]==value,key
+ for name,digest in current_gl['objects_sha256'].items():
+  assert sha((ROOT/'build/osmesa-ps5'/name).read_bytes())==digest
+  if name!='osmesa-resident.o':assert digest==old_gl['objects_sha256'][name]
+ # Reproduce the frozen object's exact bytes from the same raw object with its
+ # old binding map; only the two intended string routes differ in the new one.
+ with tempfile.TemporaryDirectory()as directory:
+  directory=Path(directory);mapping=directory/'old.map';mapping.write_text(''.join(k+' '+v+'\n'for k,v in sorted(old_gl['renames'].items())))
+  original=directory/'old.o';subprocess.run([str(LLVM/'llvm-objcopy'),'--redefine-syms='+str(mapping),str(ROOT/'build/osmesa-ps5/osmesa-raw.o'),str(original)],check=True)
+  options=[]
+  for name in old_gl['constructor_sections']:
+   suffix=name.rsplit('.',1)[-1];priority=(65535-int(suffix)if name.startswith('.ctors.')else int(suffix))if suffix.isdigit()else 65535
+   options+=['--rename-section',name+'=.data.rel.ro.clientgl.init_array.'+f'{priority:05d}'+name]
+  if options:subprocess.run([str(LLVM/'llvm-objcopy'),*options,str(original)],check=True)
+  assert sha(original.read_bytes())==old_gl['objects_sha256']['osmesa-resident.o']
  assert json.loads(z.read('PPSA99874/assets/java25/opengl-jni-audit.json'))['object_sha256']==validation['opengl_jni_audit']['object_sha256']
  assert sha(z.read('PPSA99874/assets/java25/ports/lwjgl-3.4.3-ps5-modules.jar'))==validation['module_platform_audit']['output_sha256']
  assert (work/'classes/ClientStartup25.class').read_bytes()==(ROOT/'build/startup-host-096/ClientStartup25.class').read_bytes()
@@ -295,7 +312,12 @@ with zipfile.ZipFile(package)as z:
   assert z.read(prefix+'assets/java25/stb-audit.json')==stb_baseline.read(prefix+'assets/java25/stb-audit.json')
   assert next(g for g in groups if g['name']=='lwjgl_stb')==json.loads(stb_baseline.read(prefix+'assets/java25/resident-libraries-audit.json'))['external_resident_libraries'][-1]
  with zipfile.ZipFile(ROOT/'dist/milestones/Client_OpenGL_Provider-01.000.029/PPSA99874-full-local.zip')as gl_baseline:
-  assert [g for g in groups if g['name']in ['ps5clientgl','lwjgl_opengl']]==json.loads(gl_baseline.read(prefix+'assets/java25/resident-libraries-audit.json'))['external_resident_libraries'][-2:]
+  prior_groups=json.loads(gl_baseline.read(prefix+'assets/java25/resident-libraries-audit.json'))['external_resident_libraries'][-2:]
+  for group in prior_groups:
+   if group['name']=='ps5clientgl':
+    assert group['objects_sha256'][0]==old_gl['objects_sha256']['osmesa-resident.o']
+    group['objects_sha256'][0]=current_gl['objects_sha256']['osmesa-resident.o']
+  assert [g for g in groups if g['name']in ['ps5clientgl','lwjgl_opengl']]==prior_groups
  assert sha((ROOT/'build/lwjgl-stb-ps5/lwjgl-stb.o').read_bytes())==json.loads(z.read(prefix+'assets/java25/stb-audit.json'))['object_sha256']
  assert sha((ROOT/'dist/milestones/Client_STB_Codecs-01.000.031/PPSA99874-full-local.zip').read_bytes())==stb_validation['tested_full_package_sha256']
  assert failure_hash(ROOT/'dist/failures/Client_Original_Startup-01.000.030/PPSA99874-full-local.zip')=='1eb5bc45080aa65b9d38817db58e4984ff58668f491598322783c83c41cc8ce1'
@@ -382,7 +404,7 @@ with (ROOT/'dist/accepted/Client_Auth_Errors-01.000.078/PPSA99874-full-local.zip
 
 with (ROOT/'dist/accepted/Client_Instances-01.000.079/PPSA99874-full-local.zip').open('rb')as stream:assert hashlib.file_digest(stream,'sha256').hexdigest()=='ee4238389de4c454d7b19173fa2613a4515d9c6e685ee083e3e70772b3deb6bf'
 
-print('PASS131 actual package/CRC/signatures,launcher-only dependencies/zero bundled game JARs or asset objects,exact0126coreimage/rebuilt0125libnio/unchanged023otherlibrarybytes except verifiedGNUbuildIDs plus exact0121HotSpot,359+4+5+15+1staged constructors/19real resident groups/actual036 SPIRV-Cross+035 VMA+033 FreeType+031 STB+029 OSMesa/OpenGL+026 libffi+OpenAL+module overlay/paired C++ allocator/actual Main invocation bytecode/workdir/log config and preserved022/023 packages. Menu confirmation recorded separately;gameplay/stability validation pending. SHA256',sha(package.read_bytes()))
+print('PASS132 actual package/CRC/signatures,launcher-only dependencies/zero bundled game JARs or asset objects,exact0126coreimage/rebuilt0125libnio/unchanged023otherlibrarybytes except verifiedGNUbuildIDs plus exact0121HotSpot,359+4+5+15+1staged constructors/19real resident groups/actual036 SPIRV-Cross+035 VMA+033 FreeType+031 STB+029 OSMesa/OpenGL+026 libffi+OpenAL+module overlay/paired C++ allocator/actual Main invocation bytecode/workdir/log config and preserved022/023 packages. Menu confirmation recorded separately;gameplay/stability validation pending. SHA256',sha(package.read_bytes()))
 
 with (ROOT/'dist/published/ProsperoCraft-01.000.082/PPSA99874.zip').open('rb') as frozen082:
  assert hashlib.file_digest(frozen082,'sha256').hexdigest()=='ab49cad8977736be2be72230743232a270dba9bd17fa70a66b64a93c48230820'

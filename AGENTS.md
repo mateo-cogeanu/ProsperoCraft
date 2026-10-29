@@ -1562,3 +1562,14 @@ preinitresultcodefailurestopsexplicitly. Actualpatchedhostbounds/lateinitrefusal
 recursion/exclusion/timedwait/signal/broadcast/10000reusepass. See
  docs/client-fabric-sdl-sync-131.md. Runtime130pinsunchanged;PS5preinit/startup/
 world/endurancepending,preserve130/accepted124/Store121,noStore/frozenpass.
+
+##132 Mesa option strings — 2026-10-29
+
+131nativeSDLreserve mutex0/condition0 passes;videodriverinitaborts. Retained
+abort2b52159/priorstrdup2b51f26NULLminus400000resolvesactualMesaXMLoptionparser
+2752159/2751f26(xmlconfig389XSTRDUP).132scopesMesa/graphicsstrdup+strnduptothe
+samegraphicsheapaspairedmalloc/free;SDKplatforminternals/JVM/libcunchanged.
+ActualMesaMacrooldrefusalabort/newrouteASan/UBSan,strings/bounds/failure/10000
+cleanupcyclespass;targetbinding/sourcehash/exports audited. See
+ docs/client-fabric-mesa-strings-132.md. Java runtime unchanged;PS5display/world/
+endurancepending. Preserve131/accepted124/Store121;noStore/frozenpass.
