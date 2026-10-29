@@ -1780,3 +1780,14 @@ HRTFspecifiers+namesandPCM/lifecycle/errors;targethelpersnoSDKmutexrefs/package/
 relinkchecks.PS5startup/audio/input/world/save/regressionpending;overallpressure/
 144exitnotclaimedresolved.See docs/client-fabric-data-search-148.md. Preserve147/
 accepted124/Store121,noStore/frozenpass/Java/runtimepin/heap/GC/gameJARchanges.
+
+##149 Reserved OpenAL mixer workers — 2026-10-29
+
+148 reached menu; Down mask0x40 followed by four completed presents. No fresh
+fatal signal/VM abort; later exit remains unproven. Actual audio context failed
+with std::thread error35. 149 reserves two256KiB process-lifetime pthread workers
+before JVM; atomic exclusive jobs/completion before device close, no late thread
+creation. Initialization/exhaustion retain real failure. Host concurrency/reuse/
+failure ASan/UBSan and real mixer/audio lifecycle checks; PS5 menu/audio/world/
+save/regression pending. See docs/client-fabric-audio-workers-149.md. Preserve
+148/accepted124/Store121;no Store/merge/runtime pin/heap/GC/game JAR changes.

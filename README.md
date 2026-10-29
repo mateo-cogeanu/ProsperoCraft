@@ -212,3 +212,8 @@ App148 [OpenAL data-discovery lock repair](docs/client-fabric-data-search-148.md
 addresses147's recorded SearchDataFiles mutex allocation failure while retaining
 audio/HRTF discovery. Host discovery/mixer checks and target packaging do not
 establish PS5 startup/audio/world acceptance. Store121 remains preserved.
+
+Build 149 reserves OpenAL mixer workers before Java starts, addressing the
+confirmed mixer-thread creation failure in 148. The later menu exit after Down
+has no fatal report and remains unproven. Console audio, input and world tests
+are pending; see [validation notes](docs/client-fabric-audio-workers-149.md).

@@ -12,7 +12,7 @@
 #include <cstdio>
 #include <mutex>
 #include "ps5_audio_mutex.hpp"
-#include <thread>
+#include "ps5_mixer_workers.hpp"
 #include "althrd_setname.h"
 #include "core/device.h"
 #include "core/helpers.h"
@@ -48,6 +48,7 @@ int initialize()
     if(result>=0 || static_cast<std::uint32_t>(result)==AudioAlreadyInit)state.ready=true;
     return result;
 }
+ps5audio::MixerWorkers mixerWorkers;
 ps5audio::PortPool& ports(){static ps5audio::PortPool pool;return pool;}
 void confirmedOpen()
 {
@@ -58,7 +59,7 @@ struct Ps5Backend final : BackendBase {
     ~Ps5Backend() override {stop();close();}
     int port=-1;bool healthy=true;
     std::atomic<bool> kill{true};
-    std::thread thread;
+    ps5audio::MixerWorkers::Slot* worker=nullptr;
     alignas(64) std::array<std::int16_t,Frames*Channels> pcm{};
     void close() noexcept {
         if(port<0)return;
@@ -128,20 +129,21 @@ struct Ps5Backend final : BackendBase {
     }
     void start() override {
         if(port<0)throw al::backend_exception{al::backend_error::DeviceError,"PS5 audio port closed"};
-        if(thread.joinable())stop();
+        if(worker)stop();
         kill.store(false,std::memory_order_release);
-        try {thread=std::thread{&Ps5Backend::mix,this};}
-        catch(const std::exception& error) {
+        worker=mixerWorkers.assign([](void* context){static_cast<Ps5Backend*>(context)->mix();},this);
+        if(!worker) {
             kill.store(true,std::memory_order_release);
-            throw al::backend_exception{al::backend_error::DeviceError,"PS5 mixer thread failed: {}",error.what()};
+            throw al::backend_exception{al::backend_error::DeviceError,"PS5 reserved mixer worker unavailable"};
         }
     }
     void stop() override {
         kill.store(true,std::memory_order_release);
-        if(thread.joinable())thread.join();
+        mixerWorkers.wait_release(worker);worker=nullptr;
     }
 };
 }
+extern "C" __attribute__((visibility("default"))) int client_ps5_audio_worker_preinit() {return mixerWorkers.preinit();}
 auto Ps5BackendFactory::init() -> bool {return true;}
 auto Ps5BackendFactory::querySupport(BackendType type) -> bool {return type==BackendType::Playback;}
 auto Ps5BackendFactory::enumerate(BackendType type) -> std::vector<std::string> {

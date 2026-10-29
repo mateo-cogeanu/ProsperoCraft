@@ -42,6 +42,7 @@ void initialize_toolkit_graphics(){pthread_once(&toolkit_once,initialize_toolkit
 #include <sys/sysctl.h>
 static void notify(const char* text);
 extern "C" int sceAudioOutInit();
+extern "C" int client_ps5_audio_worker_preinit();
 extern "C" {int client_ps5_audio_early_init_result=INT32_MIN;int client_ps5_audio_early_port=-1;}
 using Initializer=void (*)();
 extern "C" Initializer __jvm_init_array_start[],__jvm_init_array_end[];
@@ -291,6 +292,8 @@ void run_test(int i) {
   char sync_note[160];std::snprintf(sync_note,sizeof(sync_note),"PS5 SDL native sync reserve: mutex=%d condition=%d capacities256/128;before JVM",mutex_rc,condition_rc);log_stage(sync_note);
   if(mutex_rc||condition_rc){result(i,mutex_rc?mutex_rc:condition_rc,"Cannot reserve SDL native sync before JVM");return;}
 
+  const int mixer_worker_rc=client_ps5_audio_worker_preinit();
+  char mixer_worker_note[128];std::snprintf(mixer_worker_note,sizeof(mixer_worker_note),"PS5 OpenAL pre-JVM mixer workers result=%d capacity2",mixer_worker_rc);log_stage(mixer_worker_note);
   // Prepare the SDK service on the native startup thread before JVM heap/workers.
   client_ps5_audio_early_init_result=sceAudioOutInit();
   char audio_stage[160];std::snprintf(audio_stage,sizeof(audio_stage),"AudioOut pre-JVM init result=%d (0x%08X);failure is nonfatal",client_ps5_audio_early_init_result,static_cast<unsigned>(client_ps5_audio_early_init_result));log_stage(audio_stage);

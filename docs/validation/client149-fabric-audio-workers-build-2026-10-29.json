@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-29",
+  "build": "01.000.149",
+  "title_id": "PPSA99874",
+  "package_sha256": "dbc86c48912888d050d752732ebb92c8833fe801a5261c6bb44303bc412df76a",
+  "symbols_sha256": "f24036666c6d9b32e06e9db7989ae8c05a82ab8501fd93d5412822abab0017d1",
+  "failed_run": "client-01.000.148-1793300736-257060851",
+  "observed": {
+    "user": "Application crashed after Down in Minecraft menu",
+    "input": "Mask 0x40 followed by four completed queue/fence/flip cycles",
+    "fatal": "No matching fatal signal, VM abort or fresh JVM error report; later exit cause unproven",
+    "audio": "std::thread constructor error35 Resource temporarily unavailable; PS5 backend alcCreateContext failed with 0xa001",
+    "discovery": "directory_iterator ENOMEM caught by OpenAL; no fatal attribution",
+    "stale_report": "Previous hs_error timestamp18:18:19 is unrelated to this run"
+  },
+  "change": "Two 256KiB process-lifetime pthread mixer workers reserved pre-JVM; exclusive atomic job leases and completion before port drain/device destruction; no late creation/allocation, no fake success on failure/exhaustion",
+  "integration": {
+    "source_sha256": "7669361debaa737f057df734855cb80c3df7f2abfc5e9fbde3a77c77f145b36a",
+    "header_sha256": "17682abae06397cfb76087dc007b8eded74f9292c5eeae1eea4fb60db399c210",
+    "worker_header_sha256": "7cbe35f2dcc173246c4480bd05f49d9f563ec4fe37e1bcb0bc2c6c6af1b0fe57",
+    "worker_policy": "Two process-lifetime pre-JVM pthread workers;256KiB stacks;atomic job leases;completion before device close;no late thread creation",
+    "port_pool_header_sha256": "4c1c4ce283fb658ca29252c3b46c2a257ffc6da3415922b241400760548c555c",
+    "object_sha256": "5981b7d363e4a831f01a64d6ee5d29996ca336aa4945961b56293197d9ce53fc",
+    "name": "ps5/PS5 Speakers",
+    "format": "ActualOpenALmixer->AudioOutSYSTEM/main,48kHz,stereoS16,256frames;outputpacedworker,joinbeforeclose",
+    "console": "PendingactualPS5sound"
+  },
+  "checks": [
+    "PASS real worker initialization/idempotence/first and partial failure/two concurrent jobs/exhaustion/1000 reuses with late thread creation denied under ASan/UBSan",
+    "PASS actual host OpenAL nonzero PCM/resample/HRTF queries/pause/resume/device reload/retained port/AudioOut error paths using real reserved workers",
+    "PASS host original game Main/JAR preservation checks",
+    "PASS native target build/link/sign/version/worker source/header/object/runtime pins/package checks",
+    "PASS launcher toolkit package integrity",
+    "PASS full package CRC/signatures/licenses/source/frozen preservation checks",
+    "PASS exact native ELF relink and exact source/header export"
+  ],
+  "console": "Pending exact149 menu Down/input transitions,audible sound,world creation/save/reopen,endurance,working-version regression;later menu exit unproven;not a passing milestone",
+  "runtime": "No Java runtime source/pin/heap/GC changes",
+  "publication": "ProsperoCraft source/local candidate only;no Store/merge",
+  "preservation": "148 and all earlier canonical packages/symbols,accepted124,frozen milestones and Store121 retained;original game/mod JARs,instances/worlds/settings/auth unchanged"
+}

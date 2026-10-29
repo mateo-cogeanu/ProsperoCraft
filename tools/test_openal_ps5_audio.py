@@ -48,7 +48,8 @@ subprocess.run(['install_name_tool','-id',str(library),str(library)],check=True)
 #include <cstring>
 #include <unistd.h>
 extern "C" {void test_audio_mode(int);int test_audio_blocks();int test_audio_nonzero();int test_audio_opens();int test_audio_closes();int test_audio_inits();int test_audio_waits();int test_audio_attempts();double test_audio_balance();}
-int main(int argc,char**argv){int mode=argc>1?atoi(argv[1]):0;test_audio_mode(mode);
+extern "C" int client_ps5_audio_worker_preinit();
+int main(int argc,char**argv){assert(client_ps5_audio_worker_preinit()==0);assert(client_ps5_audio_worker_preinit()==0);int mode=argc>1?atoi(argv[1]):0;test_audio_mode(mode);
  for(int cycle=0;cycle<(mode==3?1:3);++cycle){
   ALCdevice*d=alcOpenDevice("PS5 Speakers");
   if(mode==1||mode==2||mode==5||mode==8||mode==9||mode==14){assert(!d);assert(test_audio_opens()==0&&test_audio_closes()==0);

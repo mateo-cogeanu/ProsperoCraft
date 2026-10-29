@@ -53,7 +53,7 @@ def build(runtime,output,variant="native_bootstrap",version="01.000.026",tested_
   patched=kit/'openal-startup-source/alc/alc.cpp'
   patched.write_text('#include "startup_boundary.hpp"\n'+patched.read_text())
   if json.loads((ROOT/'build/openal-startup-boundary-ps5/audit.json').read_text()).get('speaker_backend'):
-   for name in ['ps5_backend.cpp','ps5_backend.h','ps5_port_pool.hpp','ps5_audio_mutex.hpp']:
+   for name in ['ps5_backend.cpp','ps5_backend.h','ps5_port_pool.hpp','ps5_audio_mutex.hpp','ps5_mixer_workers.hpp']:
     shutil.copyfile(ROOT/'client/ports/openal'/name,kit/'openal-startup-source/alc/backends'/name)
     dest=kit/'consumer-source/client/ports/openal'/name;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(ROOT/'client/ports/openal'/name,dest)
    cmake=kit/'openal-startup-source/CMakeLists.txt'
