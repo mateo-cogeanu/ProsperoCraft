@@ -207,3 +207,8 @@ App147 [OpenAL HRTF lock repair](docs/client-fabric-hrtf-locks-147.md)
 addresses146's recorded mutex allocation failure during spatialization-data
 discovery. Native HRTF behavior remains enabled. PS5 startup/audio, Controlify,
 world/save and regression checks remain pending; Store121 is preserved.
+
+App148 [OpenAL data-discovery lock repair](docs/client-fabric-data-search-148.md)
+addresses147's recorded SearchDataFiles mutex allocation failure while retaining
+audio/HRTF discovery. Host discovery/mixer checks and target packaging do not
+establish PS5 startup/audio/world acceptance. Store121 remains preserved.

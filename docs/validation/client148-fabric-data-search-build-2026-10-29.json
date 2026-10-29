@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-29",
+  "build": "01.000.148",
+  "title_id": "PPSA99874",
+  "package_sha256": "4ba5dcdde652a625c8887c1a4bd8b5e667a67c3425fad59cd0beafbf65667d32",
+  "symbols_sha256": "63314d4475fe016b7cfa477d0aea5b3d52b2b97a2609c2aa3a1444faed4744b4",
+  "failed_run": "client-01.000.147-1793299926-481499524",
+  "observed_failure": {
+    "caller": "0x19b7939 minus 0x400000 resolves SearchDataFiles",
+    "mutex": "0x74e1a30 minus 0x400000 equals gSearchLock 0x70e1a30",
+    "original": "std::system_error 12 mutex lock failed: Cannot allocate memory",
+    "secondary": "SIGABRT during exception formatter allocation failure"
+  },
+  "change": "Private OpenAL gSearchLock uses existing allocation-free ps5audio::Mutex; search paths/results/ownership retained. Previous Device/HRTF repairs retained.",
+  "integration": {
+    "sources": {
+      "repository": "https://github.com/kcat/openal-soft.git",
+      "tag": "1.25.2",
+      "commit": "b2c48f7718ef3fcf67921a8b6534c4914e328970",
+      "scope": "PinnedOpenALmixer;originalnull/loopback retained. Startup067privatePS5AudioOutbackend addsreal48kHz/stereoS16speakeroutput;actualconsoleaudio pending.",
+      "license": "LGPL-2.0-or-later with bundled BSD/MIT components;retain source/relink inputs for distribution"
+    },
+    "data_search_mutex": {
+      "original_source_sha256": "3abcbd9c7b21257c144934e7de78b37d7ee6fbb2533d81a1c45217cbbb7ed040",
+      "private_source_sha256": "806cfbcb049485dc4b6cff5c935dc1e1826e30d3853edf7aa24b24084093ebfb",
+      "policy": "Only data-discovery gSearchLock uses allocation-free mutex;search paths/ownership unchanged"
+    },
+    "hrtf_mutex": {
+      "original_source_sha256": "77d980eb640fb18ae9487965b46d7e8883164611fd8bb360134aaa08d4ae77e6",
+      "patched_source_sha256": "86762f029da418336f98eb404c912a5ee744cff90f3418db97c9195a71e45b21",
+      "mutex_header_sha256": "4ecdd18872724a2f9bcfad961d4aa374824a393cbc81ecf2a5d4db3b2f6c044f",
+      "policy": "Only LoadedHrtfLock/EnumeratedHrtfLock use allocation-free mutex;HRTF discovery/data unchanged"
+    },
+    "device_state_mutex": {
+      "original_header_sha256": "662b4cb8fa8e89daf80cc027019a5ede9a23fef635276fc72eb504174175e36a",
+      "patched_header_sha256": "26c743e53366fd919f84880d2a5507dbc61a9bff7038bfd7d02a3d955f0eb7c3",
+      "mutex_header_sha256": "4ecdd18872724a2f9bcfad961d4aa374824a393cbc81ecf2a5d4db3b2f6c044f",
+      "policy": "All OpenAL native units compiled from same private tree with allocation-free StateLock;other Device locks unchanged"
+    }
+  },
+  "checks": [
+    "PASS actual host OpenAL HRTF discovery queries, PCM mixing/resample/pause/resume/retained-port/error controls",
+    "PASS host launcher original game JAR unchanged",
+    "PASS target build/link/sign and dedicated package/runtime/source/object/pin checks",
+    "PASS launcher toolkit package checks",
+    "PASS exact native ELF relink reproduction",
+    "PASS full package source/licenses/CRC/signature/frozen-history checks; 14 explicit OpenAL constructors, helpers SDK mutex destructor registration removed"
+  ],
+  "console": "Pending exact 148 startup/audible audio/Controlify input/world generation/save/reopen/endurance/working-version regression. No console pass.",
+  "runtime": "No Java runtime source/pins/heap/GC changes",
+  "publication": "ProsperoCraft source and local candidate only; no Store release or merge",
+  "preservation": "147 and prior canonical packages/symbols, accepted 124, frozen milestones and Store121 retained; worlds/settings/auth/game/mod JARs unchanged"
+}

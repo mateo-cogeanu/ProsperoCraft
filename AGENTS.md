@@ -1768,3 +1768,15 @@ HostrealOpenALPCM/lifecycle/failures+targetnative/noSDKmutexrefs/packagechecks;
 PS5startup/audio/Controlify/world/save/regressionpending,144exitnotclaimedfixed.
 See docs/client-fabric-hrtf-locks-147.md. Preserve146/accepted124/Store121,
 noStore/frozenpass/Java runtimepin/heap/GC/gameJARchanges/rawlogpublication.
+
+##148 OpenAL data discovery lock — 2026-10-29
+
+147run1793299926-481499524 stdmutexENOMEMcaller19b7939/mutex74e1a30 minus400000
+resolvesSearchDataFiles/gSearchLock70e1a30;laterdemangle995reallocSIGABRTsecondary.
+148changesonlyprivateOpenALgSearchLock tops5audioMutex;searchpaths/results/errors/
+HRTFenabled/protectionretained,nocondwaituse/bypass. Originalpinpristine,
+privatehelper/boundaryobjects/audits/relinksourcecoherent. HostrealOpenALnowqueries
+HRTFspecifiers+namesandPCM/lifecycle/errors;targethelpersnoSDKmutexrefs/package/
+relinkchecks.PS5startup/audio/input/world/save/regressionpending;overallpressure/
+144exitnotclaimedresolved.See docs/client-fabric-data-search-148.md. Preserve147/
+accepted124/Store121,noStore/frozenpass/Java/runtimepin/heap/GC/gameJARchanges.

@@ -57,6 +57,8 @@ int main(int argc,char**argv){int mode=argc>1?atoi(argv[1]):0;test_audio_mode(mo
    else assert(test_audio_inits()==(mode==14?0:1)&&test_audio_attempts()==(mode==1?0:1)&&test_audio_waits()==0);
    puts("PASS AudioOut unknown/init/open/permanentbusy/wait failure: real device failure, bounded attempts, no leaked port");return 0;}
   assert(d);assert(!strcmp(alcGetString(d,ALC_ALL_DEVICES_SPECIFIER),"PS5 Speakers"));
+  ALCint hrtfs=-1;alcGetIntegerv(d,ALC_NUM_HRTF_SPECIFIERS_SOFT,1,&hrtfs);assert(hrtfs>=0&&alcGetError(d)==ALC_NO_ERROR);
+  for(int i=0;i<hrtfs;i++)assert(alcGetStringiSOFT(d,ALC_HRTF_SPECIFIER_SOFT,i));
   ALCcontext*c=alcCreateContext(d,nullptr);assert(c&&alcMakeContextCurrent(c));
   ALuint buffer,source;alGenBuffers(1,&buffer);alGenSources(1,&source);
   int16_t samples[4410];for(int i=0;i<4410;++i)samples[i]=(int16_t)(8000*sin(2*3.141592653589793*440*i/44100));
