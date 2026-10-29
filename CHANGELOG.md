@@ -1,5 +1,13 @@
 # Changelog
 
+## Release 01.000.153
+
+- Add Minecraft 26.2 Vanilla support through the native GLFW/SDL Vulkan integration. Fabric for 26.2 is marked Coming soon in instance creation, existing instances and launch controls while compatibility work continues. Existing worlds, mods and downloads are kept.
+- Improve native allocation and synchronization handling during startup, including graphics, shader compilation and audio initialization.
+- Reserve audio mixer and event workers before Java starts and improve OpenAL context/device synchronization. Broader audio and gameplay endurance testing continues.
+- Separate the account name and player head in the top bar. Heads now sit centered in their own theme-colored tiles on both the top bar and account screen, keeping their original size and position.
+- Remove the Experimental label from the supported 26.4 snapshots. Snapshots remain off by default; explicitly saved choices are retained.
+
 ## Release 01.000.121
 
 - Add six saved launcher color themes: Forest, Ocean, Amethyst, Rose, Amber and Graphite.

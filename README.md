@@ -6,12 +6,13 @@
 
 Download Minecraft on your console, manage separate instances and play with DualSense controls, native graphics and game audio. Minecraft gameplay and account login have been tested on PS5. The high-refresh update reached 119 FPS in console testing; extended endurance remains under testing.
 
-**[Download 01.000.121](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.121)** · [Install and release notes](docs/releases/client-themes-cursor-121.md) · [Changelog](CHANGELOG.md)
+**[Download 01.000.153](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.153)** · [Install and release notes](docs/releases/client-native-compatibility-153.md) · [Changelog](CHANGELOG.md)
 
 ## Downloads
 
 | Release | Includes |
 | :--- | :--- |
+| [**ProsperoCraft 01.000.153**](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.153) | Vanilla 26.2, native compatibility improvements and themed account tiles. Fabric 26.2 remains Coming soon. |
 | [**ProsperoCraft 01.000.121**](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.121) | Six saved color themes, uniform Settings bars and a smooth vector-based fallback cursor. |
 | [**ProsperoCraft 01.000.120**](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.120) | Approved ProsperoCraft Microsoft application and app-bound saved logins. A fresh sign-in is required after updating. |
 | [**ProsperoCraft 01.000.119**](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.119) | 26.4 snapshots 1–6, snapshot 6 native startup repair, and snapshots hidden by default. |

@@ -1805,3 +1805,14 @@ Host actual debug/property APIs/event callbacks/audio lifecycle and target audit
 relink checks;PS5 loading/menu/audio/world/save/regression pending. HRTF directory
 ENOMEM and148 later exit remain unresolved. See docs/client-fabric-context-locks-150.md.
 Preserve149/accepted124/Store121;no Store/merge/runtime pin/heap/GC/game JAR changes.
+
+##153 release authorization — 2026-10-29
+
+User explicitly requests ProsperoStore153. Publish exact candidate
+07f3e3b2bed254ffd3c6b42cefca66892f6f48d61d2f2ba512944e959b4ce4b0 without
+rebuild. Keep Store description/credits/icon unchanged, update only changelog
+and required version/artifact/digest. Fabric26.2 stays Coming soon;Vanilla26.2
+remains available,all native fixes retained. Include matching OpenAL source/
+relink,checksums and honest pending-console validation. Submit catalog PR and
+attach it,do not monitor afterward. Explicit release is not formal ALL PASS.
+Preserve121 and all prior release/candidate/frozen assets,no branch merge.
