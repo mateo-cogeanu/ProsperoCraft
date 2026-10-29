@@ -238,8 +238,15 @@ public final class ClientStartup25 {
     ClassLoader game=ProsperoLauncher.gameLoader();
     Class<?> glfw=Class.forName("org.lwjgl.glfw.GLFW",true,game);
     glfw.getMethod("glfwInitHint",int.class,int.class).invoke(null,0x00050003,0x00060005);
-    Class<?> bridge=Class.forName("org.lwjgl.glfw.GLFWVulkan",true,game);
-    bridge.getMethod("glfwInitVulkanLoader",long.class).invoke(null,org.lwjgl.vulkan.VK.getFunctionProvider().getFunctionAddress("vkGetInstanceProcAddr"));
+    // Do not initialize LWJGL VK here: original26.2Main calls VK.create().
+    try(var provider=new org.lwjgl.system.ps5.PS5Library(System.mapLibraryName("ps5clientgpu"))){
+     long address=provider.getFunctionAddress("vkGetInstanceProcAddr");
+     if(address==0)throw new UnsatisfiedLinkError("Resident Vulkan loader entry is missing");
+     var library=(org.lwjgl.system.SharedLibrary)glfw.getMethod("getLibrary").invoke(null);
+     long configure=library.getFunctionAddress("glfwInitVulkanLoader");
+     if(configure==0)throw new UnsatisfiedLinkError("GLFW Vulkan loader configuration is missing");
+     org.lwjgl.system.JNI.invokePV(address,configure);
+    }
     stage("26.2 genuine GLFW with SDL PS5 backend; resident Vulkan loader configured; original game JAR unchanged");
    }
    stage("Menu inactivity FPS policy=minimized;other options retained,original backed up when migrated");

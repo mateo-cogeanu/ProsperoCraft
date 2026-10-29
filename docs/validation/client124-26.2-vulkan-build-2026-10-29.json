@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-29",
+  "build": "01.000.124",
+  "title_id": "PPSA99874",
+  "package_sha256": "110d9ab07c36a177a162ebe64b7b0e669e992af3df78a3260215bd6238aadec6",
+  "observed_run": "client-01.000.123-1793271764-318175786",
+  "observation": "Check4FFFFFAE5after originalMainfailedstartup;callbackconstructor repaired;Vulkanloadermarkedmissing after duplicate VK.create",
+  "cause": "Launcher GLFW setup called VK.getFunctionProvider before original26.2bootstrap could select explicitinit; originalVK.create threw already-created, then bothVulkan/unavailableOpenGL failed",
+  "repair": "Direct residentPS5Library vkGetInstanceProcAddr and genericJNI call to genuine glfwInitVulkanLoader; no VK/GLFWVulkanJava initialization before originalMain; shutdown verifier preserved",
+  "checks": [
+    "Real original26.2NativeLibrariesBootstrap.tryLoadingVulkan succeeds on actual hostLavapipe after directnative GLFW loader setup; VKuninitialized beforeMain,duplicatecreate reproducer and cleanup",
+    "26realGLFWcallbackdescriptors and nativeerror/keyclosures",
+    "26.2originalpublisher/install/loader/bindingprecedence/Main checks",
+    "Startuphostpolicy/observer/originalJAR checks",
+    "Targetbuild/signing/CRC/source/bindingnativeaudit",
+    "Startuppackage/toolkitchecks with earlierfrozenartifacts preserved"
+  ],
+  "console": "124PS5title/menu/render/input/audio/world/save/reopen/cleanquit pending; no ALL PASS",
+  "runtime": "No runtime source changes",
+  "publication": "Consumer source/testcandidate only;noStore/binaryrelease/newfrozenmilestone",
+  "logs": "Rawreports local only;Safari exception/warning followed by read-only directLAN retrieval when SafariSave unavailable",
+  "preservation": "Exact123/122/public121preserved"
+}

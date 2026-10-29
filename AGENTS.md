@@ -1473,3 +1473,15 @@ descriptors/native error+key libffi closure init/invoke/free checked onhost;
 PS5 later startup/menu/world pending. Snapshot acceptedlabel update included.
 See docs/client-26.2-callbacks-123.md;rawlogs staylocal. Preserve122/public121;
 consumer source publication/testapp only, no runtime/Store/frozen pass change.
+
+##124 observed26.2Vulkan ownership repair — 2026-10-29
+
+Current123run1793271764-318175786passescallbacks but failscheck4after caught
+VK.create duplicate: launchergetFunctionProvider initializedVKtooearly; original
+bootstrapmarksloaderunavailable then Vulkan/OpenGLfallback fails. Keep shutdown
+verifierstrict.124uses existingresidentPS5Libraryentry + genericJNI call directly
+toglfwInitVulkanLoader,without touchingVK/GLFWVulkanJava; originalMainownsVK.create.
+Host actualoriginal26.2bootstrap + realLavapipe demonstrates initownership/duplicate
+reproducer/cleanup. See docs/client-26.2-vulkan-handoff-124.md;rawreportslocal.
+PS5menu/render/world/input/audio/save/cleanquit pending; preserve123/122/public121.
+Consumer source/testapp only;no runtime/Store/frozenmilestone changes.
