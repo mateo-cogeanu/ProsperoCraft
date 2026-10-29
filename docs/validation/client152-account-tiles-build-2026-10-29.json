@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-29",
+  "build": "01.000.152",
+  "change": "Replace avatar outline with theme-colored rounded tile. Visually separate top account name and head with a gap;shared account action/focus retained. Sign-in head tile stays at the same location.",
+  "geometry": {
+    "top_head": {
+      "x": 1784,
+      "y": 66,
+      "size": 40,
+      "padding": 10
+    },
+    "account_page_head": {
+      "x": 929,
+      "y": "389 plus existing page slide",
+      "size": 96,
+      "padding": 16
+    }
+  },
+  "source": "client/launcher/native_menu.hpp",
+  "checks": [
+    "Actual native software and Vulkan toolkit previews",
+    "Nearly black skin rendered in both locations across all six themes",
+    "Original face RGB,size and call-site coordinates preserved;no light outline/keyline",
+    "Target package/link/CRC/signatures/frozen-history/toolkit checks",
+    "Exact LGPL native relink reproduction"
+  ],
+  "console": "Pending exact152 PS5 visual/input confirmation;Fabric26.2 gameplay validation remains pending",
+  "publication": "ProsperoCraft source/local app only;no Store release or merge",
+  "preservation": "No auth/skin decoder/runtime/audio/graphics policy changes;151 and prior canonical packages/symbols retained",
+  "title_id": "PPSA99874",
+  "package_sha256": "2eab54663e40601d6ac7b00360f614e8fa48a1441d76d0d54888edc65f61555d",
+  "symbols_sha256": "5c48c608383b0f3e0bcaf6418fc53b6542ef006f57116d6067c9d18b7a8a5a0e",
+  "source_sha256": "1abf52317198741d36d1786416f4c98f8e0be04f28c32fc6302bf06b59ff0963"
+}

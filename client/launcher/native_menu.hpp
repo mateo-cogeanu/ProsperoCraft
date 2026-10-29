@@ -170,12 +170,9 @@ inline void row_control(Canvas& c,int y,const char* name,const char* value,bool 
  }
 }
 inline void player_head(Canvas& c,int x,int y,int size){
- // A neutral light mat and dark inner keyline separate every skin from any theme.
- // Keep the original face pixels and size; the shared frame covers both account views.
- const int padding=std::max(3,size/12);
- c.rounded(x-padding-1,y-padding-1,size+2*padding+2,size+2*padding+2,padding+4,prospero_palette::raw_ink(0x10151c));
- c.rounded(x-padding,y-padding,size+2*padding,size+2*padding,padding+3,prospero_palette::raw_ink(0xc1c9d2));
- c.rectangle(x-1,y-1,size+2,size+2,static_cast<ps5::demo::Color>(prospero_palette::raw_ink(0x303943)));
+ // Center the unchanged face in its own theme-colored tile, with no outline.
+ const int padding=std::max(10,size/6);
+ c.rounded(x-padding,y-padding,size+2*padding,size+2*padding,padding,ink(0x729b83));
  const char* hex=fields[80].data();if(std::strlen(hex)!=384){c.rounded(x,y,size,size,6,ink(0x568b72));label(c,x+size/4,y+size/5,"?",unsigned(size/2),0xeaf0e8);return;}
  for(int py=0;py<8;py++)for(int px=0;px<8;px++){char rgb[7]{};std::memcpy(rgb,hex+(py*8+px)*6,6);c.rectangle(x+px*size/8,y+py*size/8,(size+7)/8,(size+7)/8,static_cast<ps5::demo::Color>(prospero_palette::raw_ink(unsigned(std::strtoul(rgb,nullptr,16)))));}
 }
@@ -192,7 +189,17 @@ inline void compose(Canvas& c) noexcept {
  c.rounded(40,32,1840,108,24,ink(0x10221c));block(c,66,53,64,0);label(c,149,66,"ProsperoCraft",30);label(c,405,72,"NATIVE JAVA 25",24,0x718d7b);
  const bool signed_in=fields[81][0]&&std::strcmp(fields[5].data(),"Not signed in")!=0;
  const char* tabs[]={"Instances","Settings",signed_in?fields[81].data():"Sign in"};const int tx[]={865,1245,1555},tw[]={350,280,280};
- for(int i=0;i<3;i++){bool current=tab==i;if(current&&top)selection(c,tx[i],52,tw[i],68);c.rounded(tx[i],52,tw[i],68,18,ink(current?0x53885c:0x14251e));auto text=centered_text(tx[i],52,tw[i]-(i==2&&signed_in?55:0),68,tabs[i],i==2?24:30);title(c,text.x,text.y,tabs[i],i==2?24:30,tw[i]-45,current?0xc7f4cf:0xb0c4b5);if(current){c.rounded(tx[i]+24,124,tw[i]-48,6,3,ink(0xd0ff9a));}if(i==2&&signed_in)player_head(c,tx[i]+tw[i]-51,66,40);}
+ for(int i=0;i<3;i++){
+  const bool current=tab==i,account=i==2&&signed_in;
+  const int name_width=tw[i]-(account?68:0);
+  if(current&&top)selection(c,tx[i],52,tw[i],68);
+  c.rounded(tx[i],52,name_width,68,18,ink(current?0x53885c:0x14251e));
+  auto text=centered_text(tx[i],52,name_width,68,tabs[i],i==2?24:30);
+  if(account)text.x=std::max(tx[i]+16,text.x);
+  title(c,text.x,text.y,tabs[i],i==2?24:30,account?name_width-32:tw[i]-45,current?0xc7f4cf:0xb0c4b5);
+  if(current)c.rounded(tx[i]+24,124,tw[i]-48,6,3,ink(0xd0ff9a));
+  if(account)player_head(c,tx[i]+tw[i]-51,66,40);
+ }
 #ifdef PROSPERO_TOOLKIT
  c.begin_content();
 #endif
