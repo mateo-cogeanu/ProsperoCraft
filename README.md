@@ -217,3 +217,8 @@ Build 149 reserves OpenAL mixer workers before Java starts, addressing the
 confirmed mixer-thread creation failure in 148. The later menu exit after Down
 has no fatal report and remains unproven. Console audio, input and world tests
 are pending; see [validation notes](docs/client-fabric-audio-workers-149.md).
+
+Build 150 repairs the OpenAL context property/debug locks identified in 149's
+loading crash and reserves async event workers before Java starts. The mixer
+submitted real audio in 149; audible output and stable gameplay still require
+PS5 validation. See [build notes](docs/client-fabric-context-locks-150.md).

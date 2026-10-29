@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-29",
+  "build": "01.000.150",
+  "title_id": "PPSA99874",
+  "package_sha256": "53326b81c3cd5dcebcf6bb80174712b722fac7e4420b1319b57cfa8e6644970a",
+  "symbols_sha256": "7020af0cf3d4b3cbc38e2846354b54fcfe2d7ba5901ea4acce87a5d20ba02394",
+  "failed_run": "client-01.000.149-1793301493-600091835",
+  "observed": {
+    "progress": "Pre-JVM mixer reserve0 and first real PCM submitted",
+    "original_fatal": "alEnable_ caller0x1952f55 minus0x400000;context+0x1b8 mPropLock;ENOMEM12",
+    "earlier_error": "alDebugMessageControlEXT_ caller0x192bfaf minus0x400000;context+0x200 mDebugCbLock;ENOMEM12",
+    "other": "EventThread std::thread creation error35;HRTF directory iteration ENOMEM caught",
+    "secondary": "SIGABRT during exception formatting allocation failure"
+  },
+  "change": "Five Context and four Device exclusive nonrecursive locks use existing allocation-free mutex with coherent rebuilt layouts. Two pre-JVM event workers run original EventThread/FIFO/kill/drain, waiting for completion before context release. Prior mixer workers retained.",
+  "integration": {
+    "files_sha256": {
+      "alc/device.h": "c1c82a1c11893d0b0294dbdf426ab27703de74dc931cbe0ca5dd2c65343b80c2",
+      "alc/context.hpp": "3ebc533092a2237e7d9d779659d42d862f2d1696faff41574862a3123949285b",
+      "al/debug.cpp": "c316bc3a6b98c971574fb34c8e1c0b891dd15c8b278ad941760a30ab24138a6c",
+      "core/context.h": "a3cbcba7e53bdaa22e12fa5371f52e4600e4e41e2af366fb5210902e1f9c19f8",
+      "al/event.cpp": "46ab353d3c41d2c5f28b8c0067ba87225db2bc0e2b30bf703623d9b722fe789e"
+    },
+    "worker_header_sha256": "7cbe35f2dcc173246c4480bd05f49d9f563ec4fe37e1bcb0bc2c6c6af1b0fe57",
+    "policy": "All five Context and four Device nonrecursive exclusive locks use ps5audio::Mutex;two pre-JVM event workers preserve original event queue/kill/drain logic"
+  },
+  "checks": [
+    "PASS actual host debug-message control and source-distance enable APIs",
+    "PASS actual asynchronous source-state callbacks,nonzero PCM/resample,pause/resume,repeated context/device reload,retained ports,AudioOut errors",
+    "PASS worker concurrency/exhaustion/1000 reuse/late-create-denial/first and partial initialization failure ASan/UBSan",
+    "PASS host original game Main/JAR integrity checks",
+    "PASS target compilation/link/sign/runtime/source/object/worker/layout audits",
+    "PASS package CRC/signatures/licenses/frozen-history and toolkit integrity",
+    "PASS exact native ELF relink and exact modified source/worker header export"
+  ],
+  "console": "Pending exact150 PS5 loading/menu/input,audible sound,event delivery,world creation/save/reopen,endurance,working-version regression;148 later unreported menu exit remains unproven",
+  "known_limitations": [
+    "HRTF directory_iterator ENOMEM remains caught/unresolved",
+    "Event pool bound2 active contexts,process lifetime256KiB workers;1ms idle poll/no FIFO guarantee"
+  ],
+  "runtime": "No Java runtime source/pin/heap/GC changes",
+  "publication": "ProsperoCraft source/local candidate only;no Store release or merge",
+  "preservation": "149 and earlier canonical packages/symbols,accepted124,frozen milestones and Store121 retained;original game/mod JARs,instances/worlds/auth/settings unchanged"
+}

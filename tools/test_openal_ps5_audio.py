@@ -41,6 +41,7 @@ subprocess.run(['install_name_tool','-id',str(library),str(library)],check=True)
 #include <AL/alc.h>
 #include <AL/alext.h>
 #include <cassert>
+#include <atomic>
 #include <cmath>
 #include <cstdint>
 #include <cstdio>
@@ -48,8 +49,11 @@ subprocess.run(['install_name_tool','-id',str(library),str(library)],check=True)
 #include <cstring>
 #include <unistd.h>
 extern "C" {void test_audio_mode(int);int test_audio_blocks();int test_audio_nonzero();int test_audio_opens();int test_audio_closes();int test_audio_inits();int test_audio_waits();int test_audio_attempts();double test_audio_balance();}
+static std::atomic<int> events{0};
+static void AL_APIENTRY event_callback(ALenum type,ALuint,ALuint,ALsizei,const ALchar*,void*) noexcept {assert(type==AL_EVENT_TYPE_SOURCE_STATE_CHANGED_SOFT);++events;}
 extern "C" int client_ps5_audio_worker_preinit();
-int main(int argc,char**argv){assert(client_ps5_audio_worker_preinit()==0);assert(client_ps5_audio_worker_preinit()==0);int mode=argc>1?atoi(argv[1]):0;test_audio_mode(mode);
+extern "C" int client_ps5_audio_event_preinit();
+int main(int argc,char**argv){assert(client_ps5_audio_event_preinit()==0);assert(client_ps5_audio_worker_preinit()==0);assert(client_ps5_audio_worker_preinit()==0);int mode=argc>1?atoi(argv[1]):0;test_audio_mode(mode);
  for(int cycle=0;cycle<(mode==3?1:3);++cycle){
   ALCdevice*d=alcOpenDevice("PS5 Speakers");
   if(mode==1||mode==2||mode==5||mode==8||mode==9||mode==14){assert(!d);assert(test_audio_opens()==0&&test_audio_closes()==0);
@@ -61,11 +65,14 @@ int main(int argc,char**argv){assert(client_ps5_audio_worker_preinit()==0);asser
   ALCint hrtfs=-1;alcGetIntegerv(d,ALC_NUM_HRTF_SPECIFIERS_SOFT,1,&hrtfs);assert(hrtfs>=0&&alcGetError(d)==ALC_NO_ERROR);
   for(int i=0;i<hrtfs;i++)assert(alcGetStringiSOFT(d,ALC_HRTF_SPECIFIER_SOFT,i));
   ALCcontext*c=alcCreateContext(d,nullptr);assert(c&&alcMakeContextCurrent(c));
+  auto debug_control=reinterpret_cast<decltype(&alDebugMessageControlEXT)>(alGetProcAddress("alDebugMessageControlEXT"));assert(debug_control);debug_control(AL_DONT_CARE_EXT,AL_DONT_CARE_EXT,AL_DONT_CARE_EXT,0,nullptr,AL_FALSE);assert(alGetError()==AL_NO_ERROR);
+  alEnable(AL_SOURCE_DISTANCE_MODEL);assert(alIsEnabled(AL_SOURCE_DISTANCE_MODEL)&&alGetError()==AL_NO_ERROR);
+  ALenum event_type=AL_EVENT_TYPE_SOURCE_STATE_CHANGED_SOFT;alEventCallbackSOFT(event_callback,nullptr);alEventControlSOFT(1,&event_type,AL_TRUE);assert(alGetError()==AL_NO_ERROR);int old_events=events.load();
   ALuint buffer,source;alGenBuffers(1,&buffer);alGenSources(1,&source);
   int16_t samples[4410];for(int i=0;i<4410;++i)samples[i]=(int16_t)(8000*sin(2*3.141592653589793*440*i/44100));
   alBufferData(buffer,AL_FORMAT_MONO16,samples,sizeof(samples),44100);alSourcei(source,AL_BUFFER,buffer);alSourcei(source,AL_LOOPING,AL_TRUE);alSourcePlay(source);assert(alGetError()==AL_NO_ERROR);
   int before=test_audio_nonzero();for(int i=0;i<1000&&test_audio_nonzero()<before+512;++i)usleep(1000);
-  assert(test_audio_nonzero()>=before+512); // Actual resample/mixer -> stereo PCM,not a fabricated callback.
+  assert(test_audio_nonzero()>=before+512);for(int i=0;i<1000&&events.load()==old_events;++i)usleep(1000);assert(events.load()>old_events); // Actual resample/mixer -> stereo PCM,not a fabricated callback.
   if(mode==3){for(int i=0;i<1000&&test_audio_blocks()<=8;++i)usleep(1000);usleep(10000);ALCint connected=1;alcGetIntegerv(d,ALC_CONNECTED,1,&connected);assert(!connected);}
   else {
    alcDevicePauseSOFT(d);int stopped=test_audio_blocks();usleep(10000);assert(test_audio_blocks()==stopped);

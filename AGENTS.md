@@ -1791,3 +1791,17 @@ creation. Initialization/exhaustion retain real failure. Host concurrency/reuse/
 failure ASan/UBSan and real mixer/audio lifecycle checks; PS5 menu/audio/world/
 save/regression pending. See docs/client-fabric-audio-workers-149.md. Preserve
 148/accepted124/Store121;no Store/merge/runtime pin/heap/GC/game JAR changes.
+
+##150 OpenAL Context locks and event workers — 2026-10-29
+
+149 mixer reserve succeeded/real PCM submitted. Original ENOMEM locks identify
+alDebugMessageControlEXT_ mDebugCbLock and fatal alEnable_ mPropLock; exact149
+symbols/disassembly/context offsets match. Secondary formatting abort is not the
+original failure.150 coherently rebuilds five Context/four Device exclusive
+nonrecursive locks with existing scoped mutex, no condition pairing/SDK override.
+Two pre-JVM event workers run original FIFO/event function/kill/drain sequence;
+exclusive lease/completion before context release, failures reported, bound2.
+Host actual debug/property APIs/event callbacks/audio lifecycle and target audit/
+relink checks;PS5 loading/menu/audio/world/save/regression pending. HRTF directory
+ENOMEM and148 later exit remain unresolved. See docs/client-fabric-context-locks-150.md.
+Preserve149/accepted124/Store121;no Store/merge/runtime pin/heap/GC/game JAR changes.
