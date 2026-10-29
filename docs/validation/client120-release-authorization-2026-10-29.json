@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-29",
+  "build": "01.000.120",
+  "package_sha256": "7977a4ba179dc28109bd837b9b4c357cc5e7a04199c0b39e1898bf6e9820e699",
+  "human_request": "can we publish on ProsperoStore and in the changelog that we were using Mojang's ID and now we have Our own so everyone will have to re-log in?",
+  "authorization": "Publish exact120and submit catalog update; description/credits unchanged.",
+  "console_status": "No explicit new120live PS5 authentication/restore result supplied. Do not infer ALL PASS from publication authorization.",
+  "migration": "All existing unbound legacy logins require fresh sign-in; new app-bound refresh restoration/rotation are host-tested.",
+  "scope": "No new frozen milestone; preserve119and all older releases."
+}

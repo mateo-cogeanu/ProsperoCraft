@@ -1400,3 +1400,8 @@ User authorizes auth-only replacement with approved public client f0c7635e-8d50-
 ##120 approved-auth test app — 2026-10-29
 
 User subsequently requests installable app for e23a091auth migration.120packages it with next in-app version; no further auth/game changes. Preserve119release and candidates. Packaged class audits must check approvedID/v2endpoint/scope/client-bound cache and absence of legacyID/scope; host checks are not console sign-in acceptance. Fresh Microsoft sign-in then owned launch/profile/skin and reopen/restore remain pending. No Store/binary release or branch merge. See docs/validation/client120-approved-auth-build-2026-10-29.json. Runtime source unchanged.
+
+
+##120 release authorization — 2026-10-29
+
+User explicitly requests ProsperoStore120release with public changelog explaining previous Mojang applicationID, new approved ProsperoCraftID and mandatory fresh sign-in. This supersedes earlier auth-task no-release hold for exact120, not branch merges or console ALL PASS. Publish exact7977a4ba179dc28109bd837b9b4c357cc5e7a04199c0b39e1898bf6e9820e699 with matching source/relink/checksum/validation. Keep Store description/credits/icon unchanged and snapshot defaults off. No explicit live120auth/restore feedback is supplied; record pending validation honestly. Submit catalogPR without monitoring afterward per preference. Preserve119and all prior artifacts.

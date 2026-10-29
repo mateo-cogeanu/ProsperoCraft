@@ -6,12 +6,13 @@
 
 Download Minecraft on your console, manage separate instances and play with DualSense controls, native graphics and game audio. Minecraft gameplay and account login have been tested on PS5. The high-refresh update reached 119 FPS in console testing; extended endurance remains under testing.
 
-**[Download 01.000.119](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.119)** · [Install and release notes](docs/releases/client-snapshots-119.md) · [Changelog](CHANGELOG.md)
+**[Download 01.000.120](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.120)** · [Install and release notes](docs/releases/client-approved-auth-120.md) · [Changelog](CHANGELOG.md)
 
 ## Downloads
 
 | Release | Includes |
 | :--- | :--- |
+| [**ProsperoCraft 01.000.120**](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.120) | Approved ProsperoCraft Microsoft application and app-bound saved logins. A fresh sign-in is required after updating. |
 | [**ProsperoCraft 01.000.119**](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.119) | 26.4 snapshots 1–6, snapshot 6 native startup repair, and snapshots hidden by default. |
 | [**ProsperoCraft 01.000.117**](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.117) | Instance duplication, consistent animated controls, default Controlify, world-handle repair and improved dependency queues. |
 | [**ProsperoCraft 01.000.108**](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.108) | Fabric, Modrinth content, dependency repair, input controls, larger icons and Uninstall. |
@@ -30,7 +31,7 @@ Release119 adds 26.4 snapshots 1–6 and the native startup repair for snapshot 
 ## Current status
 
 - **26.3 is the accepted playable baseline.** Snapshots 1–5 have functional PS5 feedback on 118, and the user confirms 119 works after the snapshot 6 native JNA repair. Snapshots are off by default. Other versions remain download-only; see [snapshot test notes](docs/client-snapshots-118.md).
-- **Login and gameplay are console-tested in published builds.** Authentication development now uses the approved ProsperoCraft application and requires a fresh sign-in instead of reusing legacy refresh credentials; [migration and validation](docs/client-auth-approved-2026-10-29.md). A valid Java Edition entitlement/profile is required.
+- **Login and gameplay are console-tested in published builds.** Build 120 uses the approved ProsperoCraft application and requires a fresh sign-in instead of reusing legacy refresh credentials; [migration and validation](docs/client-auth-approved-2026-10-29.md). A valid Java Edition entitlement/profile is required.
 - **High-refresh gameplay:** up to 120 Hz output on compatible displays, with 119 FPS reported on build097. Release100 has accepted PS5 feedback for much smoother gameplay; sustained frame-time and long-session testing remain incomplete.
 - **Native GUI:** animated backgrounds, instance icons, clear active tabs, state-aware account actions, dropdown resolution and optional vibration. Successful sign-in opens Instances; new libraries hide snapshots by default.
 - **Controls:** temporary DualSense keyboard/mouse mapping, cursor-only game menus, in-game keyboard and PLAY/OPTIONS guides. Full Controlify support remains planned.
