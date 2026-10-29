@@ -1498,3 +1498,14 @@ Hostdirectheaderfailure/concurrency +actualdisabledJNItests/targetbasebuildpass;
 PS5Fabricstartup/world/nativecleanup/endurancepending;noallmodsfitclaim. See
  docs/client-fabric-native-scratch-125.md. Preserve124Vanillafeedback and121Store;
 noStore/frozenpass. Rawreportslocal,reusablesourceonlyinJava repo.
+
+##126 Fabric26.2 verifier pressure — 2026-10-29
+
+Failed125run1793273838-5548144 reachesMatrix4f then verifier4221/ENOMEM;native
+reportshows24/26byte allocations failing after many16KiBsmallallocation mappings.
+App126 explicitly enables runtime128 default-off16384x256byte verifier reserve
+beforeJVM, keeps125core policy, rebuilds resident check_code.o and stagedlibverify.so
+with pin/hash audits. Runtime source eb8b8cc published separately;no gameJAR,
+heap/GC or instance edits. Host allocation/ownership/concurrency+targetbuild pass;
+PS5Fabric startup/world/save/endurancepending. See docs/client-fabric-verifier-126.md.
+Preserve125/accepted124Vanilla/public121;noStore/frozenpass;rawreportslocal.

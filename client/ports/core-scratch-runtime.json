@@ -4,5 +4,11 @@
   "patch": "0127-opt-in-core-direct-scratch.patch",
   "patch_sha256": "19ad299722ba04c2f88f53444a6b9be07caf1609a354a284ff6b050082ccbc96",
   "default": "Disabled;consumer125explicitly enables bounded temporary-buffer fallback",
-  "documentation": "Development/docs/java25-core-direct-scratch.md"
+  "documentation": "Development/docs/java25-core-direct-scratch.md",
+  "verifier_reserve": {
+    "commit": "eb8b8ccc4e6a32a3a39a146e063a3d371c8501b1",
+    "patch": "0128-opt-in-verifier-small-allocation-reserve.patch",
+    "patch_sha256": "8337c48306d71c4cf20a1f266f968e4a4359c132834a3a4562c8f5252baece10",
+    "documentation": "Development/docs/java25-verifier-small-reserve.md"
+  }
 }

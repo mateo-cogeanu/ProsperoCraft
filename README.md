@@ -100,3 +100,7 @@ milestones; each game/loader version needs its own validation.
 Original ProsperoCraft code is **GPL-3.0-or-later**. Copyright © 2026 mateo-cogeanu — ProsperoCraft. Preserve applicable notices and provide corresponding source when redistributing covered work. Upstream components and artwork keep their own licenses. Releases include matching OpenAL source/relink materials and checksums.
 
 Minecraft files and third-party trademarks are not relicensed by this project. ProsperoCraft is unofficial and is not affiliated with Mojang, Microsoft or Sony.
+
+App126 [Fabric26.2 verifier allocation candidate](docs/client-fabric-verifier-126.md)
+reduces native page waste observed in125's launch failure. Console Fabric
+startup and world validation remain pending; vanilla26.2 was accepted on124.

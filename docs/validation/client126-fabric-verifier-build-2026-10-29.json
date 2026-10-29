@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-29",
+  "build": "01.000.126",
+  "title_id": "PPSA99874",
+  "package_sha256": "43b0e75898bd2cd428a6d6d1b8f9443dfcc5d3c4197a4f87d74bd4d668419fd1",
+  "failed_run": "client-01.000.125-1793273838-5548144",
+  "observed_failure": "Matrix4f verifier site4221 errno12; tiny24/26byte native allocations failed after16KiB-per-small-allocation anonymous fallbacks. Underlying libc refusal/quota unproven.",
+  "change": "Runtime128 default-off independent4MiB verifier small reserve explicitly enabled byconsumer126;libc first;larger/exhausted fallback unchanged;retains125corebufferpolicy",
+  "runtime_integration": {
+    "runtime": {
+      "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
+      "commit": "e92cdce6595e35a77085f74e10ae1fd969d288b7",
+      "patch": "0127-opt-in-core-direct-scratch.patch",
+      "patch_sha256": "19ad299722ba04c2f88f53444a6b9be07caf1609a354a284ff6b050082ccbc96",
+      "default": "Disabled;consumer125explicitly enables bounded temporary-buffer fallback",
+      "documentation": "Development/docs/java25-core-direct-scratch.md",
+      "verifier_reserve": {
+        "commit": "eb8b8ccc4e6a32a3a39a146e063a3d371c8501b1",
+        "patch": "0128-opt-in-verifier-small-allocation-reserve.patch",
+        "patch_sha256": "8337c48306d71c4cf20a1f266f968e4a4359c132834a3a4562c8f5252baece10",
+        "documentation": "Development/docs/java25-verifier-small-reserve.md"
+      }
+    },
+    "objects_sha256": {
+      "jni_util.o": "a8a935fa8ca61e910bcc87b156fe9dc618950510033d5e8805a132b766a95ac9",
+      "ClassLoader.o": "bd58cf6df7b7987c416337f0ac442e66d079e2dde22f65e1280e6089e7edc59a"
+    },
+    "libjava_sha256": "440663424e6fb4b7b0c35f580f6ec3ddb186e11ef8e9eb9083f06c3d82dca00d",
+    "libverify_sha256": "48452eac46129a8d3d4cfa255dbfe0b259a1cd9f2d81c82ff85d5892351ac18f",
+    "verifier_object_sha256": "a8eeccd9e8eb55d34da8518515f7e4b1cf744546e144171e2d2e716d2c3895f7",
+    "consumer_policy": "Explicitly enabled beforeJVM;normal allocators first;platform-string/ClassLoader temporary buffers plus independent verifier reserve;16384 slots of256bytes;64slots/8MiBperCunit,16MiBaggregate;Javaheap/GCunchanged",
+    "console": "PendingFabric26.2startup/world/nativecleanup,endurance"
+  },
+  "checks": [
+    "Actual verifier reserve ASan/UBSan: disabled,bounds,16384slot exhaustion,zeroing,overflow,reuse,80000concurrent allocation/free cycles",
+    "Existing actual verifier pool,Matrix4f legacy verifier (defaultoff),OOM diagnostics,signed bytecode decoding",
+    "Genuine target java.base-libs build",
+    "Target126 build/signing and actual staged libverify/libjava +residentobjects/source/pin/export audit",
+    "Launcher startup host regression",
+    "Full package CRC/signatures/source/licenses/frozen-history and toolkit checks"
+  ],
+  "console": "Pending Fabric26.2 launch,worldentry,input/audio,save/reload,cleanexit,endurance",
+  "preservation": "125andpriorcandidates preserved;124vanilla26.2accepted;officialgame/modJARs and heap/GC/instances/auth/defaultsnapshotvisibility unchanged",
+  "publication": "Javaandconsumer source;testcandidateonly,noStoreorfrozenmilestone"
+}
