@@ -31,7 +31,7 @@ Release 120 switches from Mojang's application client ID to ProsperoCraft's own 
 
 ## Current status
 
-- **26.3 is the accepted playable baseline.** Snapshots 1–5 have functional PS5 feedback on 118, and the user confirms 119 works after the snapshot 6 native JNA repair. Snapshots are off by default. Other versions remain download-only; see [snapshot test notes](docs/client-snapshots-118.md).
+- **26.3 is the accepted playable baseline.** The user confirms all six supported 26.4 snapshots work after the snapshot 6 native JNA repair. Their experimental labels are removed in source for the next build. Snapshots remain off by default. Other versions remain download-only; see [snapshot test notes](docs/client-snapshots-118.md).
 - **Login and gameplay are console-tested in published builds.** Build 120 uses the approved ProsperoCraft application and requires a fresh sign-in instead of reusing legacy refresh credentials; [migration and validation](docs/client-auth-approved-2026-10-29.md). A valid Java Edition entitlement/profile is required.
 - **High-refresh gameplay:** up to 120 Hz output on compatible displays, with 119 FPS reported on build097. Release100 has accepted PS5 feedback for much smoother gameplay; sustained frame-time and long-session testing remain incomplete.
 - **Native GUI:** animated backgrounds, instance icons, clear active tabs, state-aware account actions, dropdown resolution and optional vibration. Successful sign-in opens Instances; new libraries hide snapshots by default.

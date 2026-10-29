@@ -1451,3 +1451,13 @@ unavailabledesktopdialogs and returnscancel/null; neverfakeaccepted/path/upstrea
 version. See docs/client-26.2-glfw-122.md. Host/publisher/buildchecks arenotPS5pass.
 Provide122testapp,publishconsumer source;noStore/frozenmilestone/runtimechanges.
 Preserve121andpriorpackages,26.3/snapshotpaths/themes/cursor/auth/defaultsoff.
+
+
+## Accepted26.4snapshot presentation — 2026-10-29
+
+User explicitly requests removing Experimental labels because all six26.4snapshots
+work. Remove the list annotation, EXPERIMENTAL status and stale pending-testing
+text for the existing bounded1–6support set. Preserve [snapshot] type labels,
+default visibility off, saved choices and future-version Coming soon gate. Source
+change applies to next build; exact122candidate remains preserved/unchanged. No
+new binary/Store release or runtime source changes.
