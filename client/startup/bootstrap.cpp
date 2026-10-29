@@ -49,6 +49,7 @@ extern "C" Initializer __jvm_init_array_start[],__jvm_init_array_end[];
 #include <time.h>
 #include <unistd.h>
 extern "C" std::uint64_t sceKernelGetProcessTime();
+extern "C" void JNU_PS5SetDirectScratchEnabled(int);
 extern "C" int sceKernelUsleep(std::uint32_t);
 // File-open diagnostics specific to this probe; the real platform API is used.
 static char native_open_error[192]{};
@@ -487,6 +488,8 @@ int main(int argc,char** argv) {
  (void)sceSystemServiceHideSplashScreen();
  // Native UI owns VideoOut/controller on its thread before creating Java.
  // Core constructors and early AudioOut init stay on the original startup thread.
+ JNU_PS5SetDirectScratchEnabled(1);
+ log_stage("PS5 core direct scratch fallback enabled: two8MiB/64slot temporary-buffer budgets;normal allocators first");
  run_test(0);
  if(resume_library)log_stage("PS5_SESSION RESUME_LIBRARY fresh process; saved notice preference retained");
  if(status[0]!=1){notify("Client083 runtime initialization failed; inspect logs.");for(;;)(void)sceKernelUsleep(1000000);}

@@ -1,0 +1,8 @@
+{
+  "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
+  "commit": "e92cdce6595e35a77085f74e10ae1fd969d288b7",
+  "patch": "0127-opt-in-core-direct-scratch.patch",
+  "patch_sha256": "19ad299722ba04c2f88f53444a6b9be07caf1609a354a284ff6b050082ccbc96",
+  "default": "Disabled;consumer125explicitly enables bounded temporary-buffer fallback",
+  "documentation": "Development/docs/java25-core-direct-scratch.md"
+}

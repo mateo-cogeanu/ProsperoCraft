@@ -1485,3 +1485,16 @@ Host actualoriginal26.2bootstrap + realLavapipe demonstrates initownership/dupli
 reproducer/cleanup. See docs/client-26.2-vulkan-handoff-124.md;rawreportslocal.
 PS5menu/render/world/input/audio/save/cleanquit pending; preserve123/122/public121.
 Consumer source/testapp only;no runtime/Store/frozenmilestone changes.
+
+##125Fabric26.2native-buffer pressure — 2026-10-29
+
+UserconfirmsVanilla12426.2works,Fabricfails. Run1793272719-47498832loadsControlify/
+API then157byteplatformstring malloc+anonymous16KiBENOMEMduringZipFilereopen;
+~210MiBheapused/1176committed and132FDs,nativequota/ownerunproven. Java runtime127
+defaultoffboundedcore temporarydirectscratchpublished separately;e92cdcepin.125
+enablesbeforeJVM,packagesrebuiltlibjava/audit; normal allocatorsfirst;64slots/8MiB
+perCunit(16MiBtotal),uncertaincleanupretainsownership. Noheap/GC/driverpolicychange.
+Hostdirectheaderfailure/concurrency +actualdisabledJNItests/targetbasebuildpass;
+PS5Fabricstartup/world/nativecleanup/endurancepending;noallmodsfitclaim. See
+ docs/client-fabric-native-scratch-125.md. Preserve124Vanillafeedback and121Store;
+noStore/frozenpass. Rawreportslocal,reusablesourceonlyinJava repo.
