@@ -9,6 +9,7 @@ source=r'''
 #include <SDL3/SDL.h>
 #include <assert.h>
 #include <string.h>
+#include <stdlib.h>
 extern void* glfwSetPreeditCallback(GLFWwindow*,void*);
 extern void* glfwSetIMEStatusCallback(GLFWwindow*,void*);
 extern void glfwSetPreeditCursorRectangle(GLFWwindow*,int,int,int,int);
@@ -20,7 +21,12 @@ static void onbutton(GLFWwindow*w,int b,int a,int m){assert(b==GLFW_MOUSE_BUTTON
 static void onscroll(GLFWwindow*w,double x,double y){assert(x==0&&y==2);scrolls++;}
 static void onmotion(GLFWwindow*w,double x,double y){assert(x==111&&y==222);motions++;}
 static void onclose(GLFWwindow*w){closed++;}
+static void* refuse_allocate(size_t size,void* user){(void)size;(void)user;return NULL;}
+static void* refuse_reallocate(void* memory,size_t size,void* user){(void)memory;(void)size;(void)user;return NULL;}
+static void release_allocation(void* memory,void* user){(void)user;free(memory);}
 int main(void){
+ GLFWallocator denied={refuse_allocate,refuse_reallocate,release_allocation,NULL};
+ glfwInitAllocator(&denied);glfwInitHint(GLFW_PLATFORM,GLFW_PLATFORM_NULL);assert(!glfwInit());assert(glfwGetError(NULL)==GLFW_OUT_OF_MEMORY);assert(!(SDL_WasInit(SDL_INIT_VIDEO)&SDL_INIT_VIDEO));glfwInitAllocator(NULL);
  for(int run=0;run<3;run++){
   glfwInitHint(GLFW_PLATFORM,GLFW_PLATFORM_NULL);assert(glfwInit());int count=0;assert(glfwGetMonitors(&count)&&count>0);const GLFWvidmode* mode=glfwGetVideoMode(glfwGetPrimaryMonitor());assert(mode&&mode->width>0&&mode->height>0);
   glfwWindowHint(GLFW_CLIENT_API,GLFW_NO_API);GLFWwindow* w=glfwCreateWindow(640,480,"Real SDL GLFW test",NULL,NULL);assert(w);assert(!strcmp(glfwGetWindowTitle(w),"Real SDL GLFW test"));int x=0,y=0;glfwGetWindowSize(w,&x,&y);assert(x==640&&y==480);glfwSetWindowUserPointer(w,&count);assert(glfwGetWindowUserPointer(w)==&count);
@@ -45,4 +51,4 @@ with tempfile.TemporaryDirectory()as d:
  w=Path(d);(w/'test.c').write_text(source);lib=ROOT/'build/glfw-native/host';includes=lib/'source/include'
  subprocess.run(['clang','-std=c11','-fsanitize=address,undefined','-I'+str(includes),'-I/opt/homebrew/include',str(w/'test.c'),str(lib/'libps5glfw.dylib'),'-L/opt/homebrew/lib','-lSDL3','-o',str(w/'test')],check=True)
  subprocess.run([str(w/'test')],check=True,env=dict(os.environ,SDL_VIDEODRIVER='dummy'),timeout=30)
-print('PASS genuine GLFW core + SDL window/monitor, 3 init/teardown cycles, key state/callbacks, Unicode including emoji, mouse/button/scroll, optional IME ABI/disabled state/rectangle, close callback and explicit OpenGL refusal under ASan/UBSan. Host SDL dummy window only; PS5 and Vulkan pending.')
+print('PASS genuine GLFW core + SDL window/monitor, allocator refusal/monitor cleanup then3 init/teardown cycles, key state/callbacks, Unicode including emoji, mouse/button/scroll, optional IME ABI/disabled state/rectangle, close callback and explicit OpenGL refusal under ASan/UBSan. Host SDL dummy window only; PS5 and Vulkan pending.')

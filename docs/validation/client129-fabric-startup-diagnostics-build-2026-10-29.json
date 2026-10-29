@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-29",
+  "build": "01.000.129",
+  "title_id": "PPSA99874",
+  "package_sha256": "06410ac1c51b3327d9746deff6f4d3057c765614bc92bea2098c033169935f72",
+  "failed_run": "client-01.000.128-1793278503-673552755",
+  "observed_failure": "User reports crash;preserved Java ends Renderthread Settinguser,native last OpenALmetadata;no fatal Java/abort/hs-error. Publickeys DNSwarningnotprovenfatal. Cause unresolved.",
+  "changes": [
+    "Bounded startup GLFW/SDL literal breadcrumbs,allocationfree IO/errnopreservation",
+    "Copy up to64KiB previousVMtrace to markedstartuphistory before livetracetruncation",
+    "Handle backend monitor/video-mode allocation refusal;unchecked upstream monitor helper avoided"
+  ],
+  "checks": [
+    "RealGLFW+SDL ASan/UBSan forcedmonitorOOM/cleanup then3normalwindow/input/Unicode/teardown cycles",
+    "Actual diagnosticwriter ASan/UBSan cap/partialwrite/EINTR/openfailure/close/errno",
+    "ActualpreviousVMretentionblock ASan/UBSan64KiBbound/priorcontext/sourceuntouched/missingfile",
+    "SDLlock ASan/UBSan contention/bounds regression",
+    "Target129build/signing",
+    "Launcherhost originalMain/JARunchanged",
+    "Actual runtime/GLFW/SDLsource+patchpins/nativeobjects/markers/CRC checks",
+    "Fullpackage/signatures/frozenhistory/licenses/toolkit audits"
+  ],
+  "console": "PendingPS5causeidentification,Fabric26.2startup/world/render/audio/input/save/reload/endurance;diagnosticcandidate notconfirmedfix",
+  "runtime": "No changes to Java runtime source/pins/policies",
+  "publication": "ProsperoCraft source/testcandidate only,noStore/frozenmilestone",
+  "preservation": "128andearliercanonicalcandidates,accepted/frozen/publicpackages preserved;noofficialJAR/heap/GC/settings/instance/authchanges"
+}

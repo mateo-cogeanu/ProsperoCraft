@@ -239,6 +239,22 @@ void run_test(int i) {
   startup_log=std::fopen("/download0/java25-startup.log","a");
   if(!startup_log) {result(i,errno,"Cannot open persistent startup log");return;}
   std::fprintf(startup_log,"\n=== CLIENT RUN %s BUILD %s ===\n",run_id,build_version);std::fflush(startup_log);
+  {
+   FILE* prior_vm=std::fopen("/download0/java25-vm-trace.log","rb");
+   if(prior_vm){
+    static char prior_tail[64*1024];
+    if(std::fseek(prior_vm,0,SEEK_END)==0){
+     long end=std::ftell(prior_vm);
+     if(end>0 && std::fseek(prior_vm,end>(long)sizeof(prior_tail)?end-(long)sizeof(prior_tail):0,SEEK_SET)==0){
+      size_t count=std::fread(prior_tail,1,sizeof(prior_tail),prior_vm);
+      std::fputs("\nBEGIN PREVIOUS VM TRACE TAIL (up to64KiB;prior run, not current)\n",startup_log);
+      std::fwrite(prior_tail,1,count,startup_log);
+      std::fputs("\nEND PREVIOUS VM TRACE TAIL\n",startup_log);std::fflush(startup_log);
+     }
+    }
+    std::fclose(prior_vm);
+   }
+  }
   char capture_status[160];std::snprintf(capture_status,sizeof(capture_status),"Native stderr FILE capture status%d;raw descriptor2 unchanged;diagnostic failure is nonfatal",native_stderr_error);log_stage(capture_status);
   log_stage("Prior startup/VM diagnostic tails retained: max512KiB each before new run");
   const auto file_budget=ps5::file_limits::prepare(8192);

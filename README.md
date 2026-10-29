@@ -113,3 +113,8 @@ remains pending.
 App128 [PS5 SDL reader/writer lock candidate](docs/client-fabric-sdl-locks-128.md)
 addresses the GLFW/SDL lock initialization failure seen after127 passed class
 verification. PS5 Fabric startup and gameplay validation remain pending.
+
+App129 [Fabric26.2 startup diagnostic candidate](docs/client-fabric-startup-diagnostics-129.md)
+preserves the previous native trace tail and adds bounded GLFW/SDL startup
+checkpoints. It also handles native monitor allocation failure cleanly. Build128's
+unreported exit remains under investigation; PS5 validation is pending.

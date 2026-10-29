@@ -22,6 +22,7 @@
 #include "ps5_temporary_input.h"
 #include "ps5_usb_input.h"
 #include "ps5_relative_mouse.h"
+#include "ps5_startup_boundary.h"
 
 /* Use the same public resident loader as LWJGL. Minecraft checks pointer identity.
  * The public entry delegates to the real static ICD;all returned commands stay real. */
@@ -135,10 +136,15 @@ done:
 
 static bool PS5_VideoInit(SDL_VideoDevice *_this)
 {
+    PS5_BOUNDARY("PS5 SDL video driver init enter");
     SDL_DisplayMode mode;
     if(!PS5_QueryDisplay(&mode))return false;
+    PS5_BOUNDARY("PS5 SDL display query returned success");
     SDL_GetMouse()->SetRelativeMouseMode=PS5_SetRelativeMouseMode;
-    return SDL_AddBasicVideoDisplay(&mode)!=0;
+    PS5_BOUNDARY("PS5 SDL add display enter");
+    bool added=SDL_AddBasicVideoDisplay(&mode)!=0;
+    PS5_BOUNDARY("PS5 SDL add display returned");
+    return added;
 }
 
 static void PS5_VideoQuit(SDL_VideoDevice *_this)

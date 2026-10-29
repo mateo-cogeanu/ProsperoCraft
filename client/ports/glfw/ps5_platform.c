@@ -10,18 +10,33 @@ extern void ps5glfw_vulkan_unload(void);
 extern int ps5glfw_presentation(void*,void*,uint32_t);
 extern int32_t ps5glfw_surface(void*,SDL_Window*,const void*,uint64_t*);
 #include <string.h>
+#include "../sdl/ps5_startup_boundary.h"
 
 static SDL_Window* native(_GLFWwindow* w){return (SDL_Window*)w->null.ps5_window;}
 static void error(void){_glfwInputError(GLFW_PLATFORM_ERROR,"PS5 SDL: %s",SDL_GetError());}
 static int init(void){
+ PS5_BOUNDARY("GLFW platform init enter");
+ PS5_BOUNDARY("SDL video/events init enter");
  if(!SDL_InitSubSystem(SDL_INIT_VIDEO|SDL_INIT_EVENTS)){error();return GLFW_FALSE;}
+ PS5_BOUNDARY("SDL video/events init returned success");
+ PS5_BOUNDARY("GLFW Vulkan load enter");
  if(!ps5glfw_vulkan_load()){error();SDL_QuitSubSystem(SDL_INIT_VIDEO|SDL_INIT_EVENTS);return GLFW_FALSE;}
+ PS5_BOUNDARY("GLFW Vulkan load returned success");
+ PS5_BOUNDARY("SDL display enumeration enter");
  int count=0;SDL_DisplayID* displays=SDL_GetDisplays(&count);
+ PS5_BOUNDARY("SDL display enumeration returned");
  if(!displays||!count){SDL_free(displays);error();ps5glfw_vulkan_unload();SDL_QuitSubSystem(SDL_INIT_VIDEO|SDL_INIT_EVENTS);return GLFW_FALSE;}
  for(int i=0;i<count;i++){
-  _GLFWmonitor* monitor=_glfwAllocMonitor(SDL_GetDisplayName(displays[i]),0,0);
+  PS5_BOUNDARY("GLFW monitor allocation enter");
+  _GLFWmonitor* monitor=_glfw_calloc(1,sizeof(*monitor));
+  if(!monitor){PS5_BOUNDARY("GLFW monitor allocation failed");SDL_free(displays);ps5glfw_vulkan_unload();SDL_QuitSubSystem(SDL_INIT_VIDEO|SDL_INIT_EVENTS);return GLFW_FALSE;}
+  const char* display_name=SDL_GetDisplayName(displays[i]);
+  if(!display_name)display_name="PS5 display";
+  strncpy(monitor->name,display_name,sizeof(monitor->name)-1);
+  PS5_BOUNDARY("GLFW monitor allocation returned");
   monitor->null.ps5_display=displays[i];_glfwInputMonitor(monitor,GLFW_CONNECTED,_GLFW_INSERT_LAST);
  }
+ PS5_BOUNDARY("GLFW platform init complete");
  SDL_free(displays);return GLFW_TRUE;
 }
 static void terminate(void){ps5glfw_vulkan_unload();SDL_free(_glfw.null.clipboardString);_glfw.null.clipboardString=NULL;SDL_QuitSubSystem(SDL_INIT_VIDEO|SDL_INIT_EVENTS);}
@@ -31,7 +46,7 @@ static GLFWbool mode(_GLFWmonitor* m,GLFWvidmode* out){
  *out=(GLFWvidmode){value->w,value->h,8,8,8,(int)(value->refresh_rate+0.5f)};return GLFW_TRUE;
 }
 static GLFWvidmode* modes(_GLFWmonitor* m,int* count){
- GLFWvidmode* result=_glfw_calloc(1,sizeof(*result));if(!mode(m,result)){_glfw_free(result);*count=0;return NULL;}*count=1;return result;
+ GLFWvidmode* result=_glfw_calloc(1,sizeof(*result));if(!result){*count=0;return NULL;}if(!mode(m,result)){_glfw_free(result);*count=0;return NULL;}*count=1;return result;
 }
 static void monitorPos(_GLFWmonitor* m,int* x,int* y){SDL_Rect r={0};if(!SDL_GetDisplayBounds(m->null.ps5_display,&r))error();if(x)*x=r.x;if(y)*y=r.y;}
 static void workarea(_GLFWmonitor* m,int* x,int* y,int* width,int* height){SDL_Rect r={0};if(!SDL_GetDisplayUsableBounds(m->null.ps5_display,&r))error();if(x)*x=r.x;if(y)*y=r.y;if(width)*width=r.w;if(height)*height=r.h;}
@@ -46,7 +61,9 @@ static GLFWbool create(_GLFWwindow* w,const _GLFWwndconfig* cfg,const _GLFWctxco
 #ifdef PS5_GLFW_HOST_TEST
  flags&=~SDL_WINDOW_VULKAN; /* Real SDL dummy window for host event/lifecycle tests only. */
 #endif
+ PS5_BOUNDARY("SDL window create enter");
  SDL_Window* s=SDL_CreateWindow(cfg->title,cfg->width,cfg->height,flags);if(!s){error();return GLFW_FALSE;}
+ PS5_BOUNDARY("SDL window create returned success");
  w->null.ps5_window=s;w->null.width=cfg->width;w->null.height=cfg->height;w->null.opacity=1;
  if(w->monitor)_glfwInputMonitorWindow(w->monitor,w);
  SDL_StartTextInput(s);return GLFW_TRUE;

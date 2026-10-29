@@ -10,6 +10,7 @@
 #include "SDL_internal.h"
 #endif
 #include <limits.h>
+#include "ps5_startup_boundary.h"
 #include <stdint.h>
 extern int sceKernelUsleep(uint32_t);
 struct SDL_RWLock { int state; unsigned leased; };
@@ -26,11 +27,13 @@ static void wait_lock(unsigned *spins)
 }
 SDL_RWLock *SDL_CreateRWLock(void)
 {
+    PS5_BOUNDARY("PS5 SDL rwlock create enter");
     for (unsigned i = 0; i < 256; ++i) {
         unsigned expected = 0;
         if (__atomic_compare_exchange_n(&locks[i].leased, &expected, 1, false,
                                         __ATOMIC_ACQUIRE, __ATOMIC_RELAXED)) {
             __atomic_store_n(&locks[i].state, 0, __ATOMIC_RELAXED);
+            PS5_BOUNDARY("PS5 SDL rwlock create returned success");
             return &locks[i];
         }
     }

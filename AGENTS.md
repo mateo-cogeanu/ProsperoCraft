@@ -1530,3 +1530,13 @@ PS5CMakepatch only;otherSDLthreads unchanged;targetresident mustnotimport
 pthread_rwlock. HostrealbackendASan/UBSan/contention/bounds passed;targetpackage
 andPS5world validation explicit. See docs/client-fabric-sdl-locks-128.md. Keep
 runtime129pins/candidates127/accepted124/public121;noStore/frozenpass.
+
+##129 Fabric26.2 unreported native exit — 2026-10-29
+
+Reproduced128run1793278503-673552755 endsrenderthreadSettinguser;nofatalJava,
+abort/hs-error. DNSpublickeywarningnotprovenfatal.129consumerdiagnosticcandidate
+addsboundedallocation-freeGLFW/SDLstartupbreadcrumbs andcopies64KiBpriorVMtail
+intomarkedstartuphistbeforetruncation. Alsohandlesuncheckedbackendmonitor/mode
+allocationfailure;actualhostforcedmonitorOOMcleanup+3normalcyclespass. Do not
+claim128causefixed. See docs/client-fabric-startup-diagnostics-129.md. Runtime
+pinsunchanged;preserve128/accepted124/Store121;PS5cause/worldvalidationpending.
