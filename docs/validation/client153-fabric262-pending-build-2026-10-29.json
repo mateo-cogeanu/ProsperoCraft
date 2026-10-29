@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-29",
+  "build": "01.000.153",
+  "title_id": "PPSA99874",
+  "package_sha256": "07f3e3b2bed254ffd3c6b42cefca66892f6f48d61d2f2ba512944e959b4ce4b0",
+  "symbols_sha256": "c9a062bdae0c55cf30151ac84465fdfd08700655eb22aca3935d0d608bfb5b34",
+  "change": "Loader-specific support gate: Fabric26.2 Coming soon on cards/detail/creation version and loader choices;online/offline/final launch preparation guarded. Vanilla26.2,26.3 and six26.4 snapshots retain support. Downloads remain allowed.",
+  "checks": [
+    "PASS actual launcher model cards/detail/X launch refusal/final preparation/version and loader labels",
+    "PASS Vanilla26.2 and other supported Fabric versions remain available",
+    "PASS library JSON unchanged,world/mod/cache fixture contents and ready instances retained after reopen",
+    "PASS original26.2 install/dependency/method resolution/argument policy tests;original JARs unchanged",
+    "PASS target build/link/sign/package/toolkit/frozen-history checks",
+    "PASS exact native ELF LGPL relink reproduction"
+  ],
+  "preservation": "No removal/reversion of26.2 GLFW/callback/native/OpenAL/runtime fixes. No world/mod/download/auth/settings migration.152 and previous canonical packages/symbols retained.",
+  "console": "Pending exact153 PS5 Coming soon labels/launch prevention and Vanilla regression. Fabric26.2 remains unvalidated and unavailable to launch.",
+  "publication": "ProsperoCraft source/local app only;no Store release or merge"
+}
