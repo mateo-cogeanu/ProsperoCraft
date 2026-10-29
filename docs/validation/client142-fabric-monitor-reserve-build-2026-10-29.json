@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-29",
+  "build": "01.000.142",
+  "title_id": "PPSA99874",
+  "package_sha256": "fe420a1c6a11ee2d0053e527ffa65689c25ae7eca8e312896bf28821da540f09",
+  "symbols_sha256": "f00774daf986e3b6be1ab9730e31af75b1aea2f45586bdd96832af188b365b24",
+  "failed_run": "client-01.000.141-1793294262-958074280",
+  "observed_failure": {
+    "fatal": "ps5PthreadChecks.hpp:monitor mutex_init ENOMEM12",
+    "reserve": "4096initialized/4096leased,configuration2,attributeMatch1",
+    "java_stack": "Controlify SDL FFM downcall initialization generating hidden Java classes",
+    "progress": "User reports loading near completion;Java report records texture atlases and Controlify initialization;not world acceptance"
+  },
+  "change": "Runtime-owned optional extended HotSpot pools;consumer bootstrap explicitly checks setter and requests8192mutex/8192relative/2048absolute before JVM;actual initialized counts authoritative",
+  "integration": {
+    "runtime": {
+      "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
+      "commit": "2dde94e0de525043378a6e6276be127eb3f90a17",
+      "patch": "0131-opt-in-extended-synchronization-reserve.patch",
+      "patch_sha256": "eba704c62e51e27a63a52aab0bf32352d5f0671ab8e43b812c14a2560e49f8ff",
+      "documentation": "Development/docs/java25-extended-sync-reserve.md",
+      "default": "Disabled;consumer142 explicitly requests8192mutex/8192relative/2048absolute before JVM"
+    },
+    "os_posix_object_sha256": "8dee7ac6be4fb9a0bec36db9108c8e63c3c749bb1ff8cf5a800b7096a370b397",
+    "libjvm_sha256": "1094351ae815082261f8a4a303860ce56e31968cd54d3d558b98b9d3d5c1529e",
+    "consumer_policy": "BeforeJVM requests8192mutex/8192relative/2048absolute,checks setter result;actual native initialized counts remain authoritative;no heap/GC change",
+    "console": "Pending actual prime capacity/late FFM class creation/Fabric startup/world/regression"
+  },
+  "checks": [
+    "PASS actual native default+extended synchronization pools under ASan/UBSan,late native init refused,full capacity/exhaustion/reuse,attribute domains,busy destroy,wait/signal/timeout,8000concurrent lease lifetimes/final native cleanup",
+    "PASS policy default/explicit enable/post-prime rejection;targetIR noallocator/compilerTLS/lazyguard inlease metadata",
+    "PASS actual HotSpot rebuild/export/os_posix object+libjvm hashes andpublished runtime patch pin",
+    "PASS consumer startup host policy/bootstrap/observer/GC andofficial game JAR unchanged",
+    "PASS actual target build/link/signing,pre-JVM policy/object/library pin audits",
+    "PASS final CRC/signatures/version/runtime/source/licenses/frozenhistory/toolkit package checks"
+  ],
+  "runtime_publication": "2dde94e0de525043378a6e6276be127eb3f90a17 pushed andremote main verified",
+  "console": "Pending exact142 native priming counts,ControlifyFFM,Fabric26.2menu/presentation/world/input/audio/save/reload/endurance and workingvanilla26.2/26.3/26.4snapshot regression;not a console pass",
+  "unresolved": "141OpenAL device failure/diagnostic mutex exceptions remain unclaimed;resource leak/total native peak not established",
+  "publication": "Consumer source andlocal app only;no Store release/branch merge/frozenmilestone",
+  "preservation": "141andpriorcanonicalcandidates/symbols,accepted124vanilla,Store121,frozenmilestones retained;instances/worlds/auth/settings/upstreamgame/modJARs unchanged"
+}

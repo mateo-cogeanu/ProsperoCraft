@@ -1,0 +1,8 @@
+{
+  "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
+  "commit": "2dde94e0de525043378a6e6276be127eb3f90a17",
+  "patch": "0131-opt-in-extended-synchronization-reserve.patch",
+  "patch_sha256": "eba704c62e51e27a63a52aab0bf32352d5f0671ab8e43b812c14a2560e49f8ff",
+  "documentation": "Development/docs/java25-extended-sync-reserve.md",
+  "default": "Disabled;consumer142 explicitly requests8192mutex/8192relative/2048absolute before JVM"
+}

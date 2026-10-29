@@ -173,3 +173,9 @@ integrates an opt-in Java runtime repair after140 reported native allocation
 failure during an account-service DNS lookup. Host allocation/ownership and
 target runtime checks pass; PS5 Fabric26.2 startup/gameplay and working-version
 regression remain pending. Store121 and earlier canonical candidates remain intact.
+
+App142 [optional extended HotSpot synchronization reserve](docs/client-fabric-monitor-reserve-142.md)
+addresses141's exhausted4096monitor-mutex reserve during Controlify FFM class
+generation near loading-screen completion. Native pool host tests pass in
+default and extended modes; PS5 priming/startup/gameplay/audio/regression remain
+pending. Earlier candidates and Store121 remain preserved.

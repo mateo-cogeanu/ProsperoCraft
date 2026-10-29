@@ -1686,3 +1686,17 @@ cleanup andtargetjava.base-libschecks;PS5lookup/Fabricpresentation/world/audio/s
 regressionpending;OpenALdiagnosticmutexfailuresnotclaimedfixed. See
  docs/client-fabric-network-scratch-141.md. Preserve140/accepted124/Store121;
 noStore/frozenpass,reusablesourceonlyinJavarepo,rawreportslocal.
+
+##142 opt-in expanded HotSpot synchronization integration — 2026-10-29
+
+141failedrun1793294262-958074280 getsloading/atlases/ControlifyFFM thenfatal
+monitor mutex_init ENOMEM12;priorVMtail4096initialized+4096leased,matchingattrs.
+Runtime0131publishedseparately;142pinsandchecksbootstrapsetter,requests8192mutex/
+8192relative/2048absolute,embedsrebuiltHotSpot+matching.so/audits. Defaultsremain
+4096/4096/2048;fixedmaxmetadataexpands,nativeextrasopt-in,actualprimecountsdecide,
+post-primepolicyEBUSY/nativefallback/checks/clockownershipretained.Noheap/GC/
+globalSDKpolicy/gameJARchange. Actualhostdefault+extendedpools/exhaustion/reuse/
+wait/8kconcurrency/cleanup andtargetIR/buildchecked;PS5primecounts/FFM/world/audio/
+save/regressionpending;141OpenALdevicefailureunresolved. See
+ docs/client-fabric-monitor-reserve-142.md. Preserve141/accepted124/Store121,
+noStore/frozenpass;reusablesourceinJavarepo/rawreportslocal.

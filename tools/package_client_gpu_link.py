@@ -26,6 +26,9 @@ def finish(runtime,java_home,work,assets,spec,gpu_support,gpu_audit,variant="gpu
   shutil.copy2(runtime/'.tools/java25/openjdk/build/ps5-bootstrap/support/modules_libs/java.base/libjava.so',java/'lib/libjava.so')
   shutil.copy2(runtime/'.tools/java25/openjdk/build/ps5-bootstrap/support/modules_libs/java.base/libverify.so',java/'lib/libverify.so')
   shutil.copy2(runtime/'.tools/java25/openjdk/build/ps5-bootstrap/support/modules_libs/java.base/libnet.so',java/'lib/libnet.so')
+  shutil.copy2(runtime/'.tools/java25/openjdk/build/ps5-bootstrap/support/modules_libs/java.base/server/libjvm.so',java/'lib/server/libjvm.so')
+  from audit_extended_sync import audit as extended_sync_audit
+  (java/'extended-sync-runtime-audit.json').write_text(json.dumps(extended_sync_audit(runtime),indent=2)+'\n')
   from audit_network_scratch import audit as network_scratch_audit
   (java/'network-scratch-runtime-audit.json').write_text(json.dumps(network_scratch_audit(runtime),indent=2)+'\n')
   from audit_core_scratch import audit as core_scratch_audit
