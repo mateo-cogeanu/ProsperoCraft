@@ -1,0 +1,202 @@
+{
+  "date": "2026-10-29",
+  "build": "01.000.139",
+  "title_id": "PPSA99874",
+  "package_sha256": "1b376d913cc0b82ac0ce423b0d9f4f83bdb093ed6786aa396508d2c05fcf9258",
+  "symbols_sha256": "0bdb11ebde2a55ecafc3ed404aa07c5ae63d3b211d15a605c53976a015499e8a",
+  "failed_run": "client-01.000.138-1793291798-491183604",
+  "observed_failure": {
+    "original_message": "mutex lock failed: Cannot allocate memory",
+    "native_code": 12,
+    "load_adjustment": "0x400000",
+    "shared_mutex_caller": "0x2e19860",
+    "native_mutex_caller": "0x2dcb26a",
+    "secondary_fallback_malloc_mutex_caller": "0x2df65e7",
+    "last_vm_native_entry": "org/lwjgl/util/vma/Vma.nvmaCreateBuffer(JJJJJJ)I",
+    "diagnosis": "Shared mutex SDK lazy allocation failed in the GPU buffer allocation path; secondary exception fallback allocation/unwind failures obscure original error"
+  },
+  "change": "Consumer VMA custom mutex/read-write hooks with inline atomic state, original critical sections retained; allocation-free/nonrecursive, writer preference, 64 spins then 50us native nanosleep contention backoff; no global lease cap",
+  "integration": {
+    "sources": {
+      "repository": "https://github.com/LWJGL/lwjgl3",
+      "commit": "30fac9b95f99cda97312232be25ba55297bf9951",
+      "version": "LWJGL3.4.3/VMA3.4.0",
+      "files": [
+        {
+          "file": "org_lwjgl_util_vma_Vma.cpp",
+          "path": "modules/lwjgl/vma/src/generated/c/org_lwjgl_util_vma_Vma.cpp",
+          "url": "https://raw.githubusercontent.com/LWJGL/lwjgl3/30fac9b95f99cda97312232be25ba55297bf9951/modules/lwjgl/vma/src/generated/c/org_lwjgl_util_vma_Vma.cpp",
+          "size": 41962,
+          "sha256": "09f3b3943b1d53185be1caeec7dfe67c5f049fdf4d3c93d3b3d30377a58656ba"
+        },
+        {
+          "file": "org_lwjgl_util_vma_LibVma.cpp",
+          "path": "modules/lwjgl/vma/src/generated/c/org_lwjgl_util_vma_LibVma.cpp",
+          "url": "https://raw.githubusercontent.com/LWJGL/lwjgl3/30fac9b95f99cda97312232be25ba55297bf9951/modules/lwjgl/vma/src/generated/c/org_lwjgl_util_vma_LibVma.cpp",
+          "size": 238,
+          "sha256": "e25ff5758e4d69f53dacb3897eb435c66095a3e948706a1af37a76fd152bd8a3"
+        },
+        {
+          "file": "vk_mem_alloc.h",
+          "path": "modules/lwjgl/vma/src/main/c/vk_mem_alloc.h",
+          "url": "https://raw.githubusercontent.com/LWJGL/lwjgl3/30fac9b95f99cda97312232be25ba55297bf9951/modules/lwjgl/vma/src/main/c/vk_mem_alloc.h",
+          "size": 771977,
+          "sha256": "8487b7995ad3b263eb73bc5b9a77d71aa69b6bef5d58a715c02d2663afd81f1a"
+        },
+        {
+          "file": "common_tools.h",
+          "path": "modules/lwjgl/core/src/main/c/common_tools.h",
+          "url": "https://raw.githubusercontent.com/LWJGL/lwjgl3/30fac9b95f99cda97312232be25ba55297bf9951/modules/lwjgl/core/src/main/c/common_tools.h",
+          "size": 2379,
+          "sha256": "2a37d331c8bfc89fb87eb52546a092639f2c6159dec74467bd73d69a6f47c313"
+        },
+        {
+          "file": "macOSConfig.h",
+          "path": "modules/lwjgl/core/src/main/c/macos/macOSConfig.h",
+          "url": "https://raw.githubusercontent.com/LWJGL/lwjgl3/30fac9b95f99cda97312232be25ba55297bf9951/modules/lwjgl/core/src/main/c/macos/macOSConfig.h",
+          "size": 553,
+          "sha256": "6ed2bb82e1ccdfd50cf84a8e924ca93003adc0ed7f2501fc36cb9b4c2d9ebc95"
+        },
+        {
+          "file": "lwjgl_malloc.h",
+          "path": "modules/lwjgl/core/src/main/c/lwjgl_malloc.h",
+          "url": "https://raw.githubusercontent.com/LWJGL/lwjgl3/30fac9b95f99cda97312232be25ba55297bf9951/modules/lwjgl/core/src/main/c/lwjgl_malloc.h",
+          "size": 1900,
+          "sha256": "f8f93778642d2e6796fd225396aef7ba6315dc4833a2020275737d9c5348573f"
+        },
+        {
+          "file": "vulkan/vulkan.h",
+          "path": "modules/lwjgl/vulkan/src/main/c/vulkan/vulkan.h",
+          "url": "https://raw.githubusercontent.com/LWJGL/lwjgl3/30fac9b95f99cda97312232be25ba55297bf9951/modules/lwjgl/vulkan/src/main/c/vulkan/vulkan.h",
+          "size": 1620,
+          "sha256": "096f50152d0b298d8df84a561a37d8190c8a60af34dff0e2cc8328b24491a640"
+        },
+        {
+          "file": "vulkan/vulkan_core.h",
+          "path": "modules/lwjgl/vulkan/src/main/c/vulkan/vulkan_core.h",
+          "url": "https://raw.githubusercontent.com/LWJGL/lwjgl3/30fac9b95f99cda97312232be25ba55297bf9951/modules/lwjgl/vulkan/src/main/c/vulkan/vulkan_core.h",
+          "size": 1359427,
+          "sha256": "eb573394fb407be7111731dc431f000206113c9cf649266edd73d1794f79623d"
+        },
+        {
+          "file": "vulkan/vk_platform.h",
+          "path": "modules/lwjgl/vulkan/src/main/c/vulkan/vk_platform.h",
+          "url": "https://raw.githubusercontent.com/LWJGL/lwjgl3/30fac9b95f99cda97312232be25ba55297bf9951/modules/lwjgl/vulkan/src/main/c/vulkan/vk_platform.h",
+          "size": 2832,
+          "sha256": "a2cd9085c66776845d2524c3b0e73ccf4827ba046aa6f676c4b8ddbed47d6552"
+        },
+        {
+          "file": "vulkan/vk_video/vulkan_video_codec_vp9std_decode.h",
+          "path": "modules/lwjgl/vulkan/src/main/c/vk_video/vulkan_video_codec_vp9std_decode.h",
+          "url": "https://raw.githubusercontent.com/LWJGL/lwjgl3/30fac9b95f99cda97312232be25ba55297bf9951/modules/lwjgl/vulkan/src/main/c/vk_video/vulkan_video_codec_vp9std_decode.h",
+          "size": 2378,
+          "sha256": "1ceb1a8d0e3370e508cf688a6e57dc314cd82186b60f3cef420ea4b1b483865d"
+        },
+        {
+          "file": "vulkan/vk_video/vulkan_video_codec_vp9std.h",
+          "path": "modules/lwjgl/vulkan/src/main/c/vk_video/vulkan_video_codec_vp9std.h",
+          "url": "https://raw.githubusercontent.com/LWJGL/lwjgl3/30fac9b95f99cda97312232be25ba55297bf9951/modules/lwjgl/vulkan/src/main/c/vk_video/vulkan_video_codec_vp9std.h",
+          "size": 5391,
+          "sha256": "0a47125865376a3fe7014b69ff6db9d04e30ebf8c4d15664f1d894649ad5c09d"
+        },
+        {
+          "file": "vulkan/vk_video/vulkan_video_codecs_common.h",
+          "path": "modules/lwjgl/vulkan/src/main/c/vk_video/vulkan_video_codecs_common.h",
+          "url": "https://raw.githubusercontent.com/LWJGL/lwjgl3/30fac9b95f99cda97312232be25ba55297bf9951/modules/lwjgl/vulkan/src/main/c/vk_video/vulkan_video_codecs_common.h",
+          "size": 667,
+          "sha256": "d2e7caa396c521d03d491a269572b1d31b925b5127d22fda14199951ebae89f8"
+        },
+        {
+          "file": "vulkan/vk_video/vulkan_video_codec_av1std_encode.h",
+          "path": "modules/lwjgl/vulkan/src/main/c/vk_video/vulkan_video_codec_av1std_encode.h",
+          "url": "https://raw.githubusercontent.com/LWJGL/lwjgl3/30fac9b95f99cda97312232be25ba55297bf9951/modules/lwjgl/vulkan/src/main/c/vk_video/vulkan_video_codec_av1std_encode.h",
+          "size": 5986,
+          "sha256": "8d166b4543260a38347860443b1a59c7a5e86cdb0d0facaf4c704f667de030e3"
+        },
+        {
+          "file": "vulkan/vk_video/vulkan_video_codec_av1std.h",
+          "path": "modules/lwjgl/vulkan/src/main/c/vk_video/vulkan_video_codec_av1std.h",
+          "url": "https://raw.githubusercontent.com/LWJGL/lwjgl3/30fac9b95f99cda97312232be25ba55297bf9951/modules/lwjgl/vulkan/src/main/c/vk_video/vulkan_video_codec_av1std.h",
+          "size": 16694,
+          "sha256": "c75c1d324b97d247aef0008024bc7f3adb98c741ab7f66c882ec38fdacc7ee33"
+        },
+        {
+          "file": "vulkan/vk_video/vulkan_video_codec_av1std_decode.h",
+          "path": "modules/lwjgl/vulkan/src/main/c/vk_video/vulkan_video_codec_av1std_decode.h",
+          "url": "https://raw.githubusercontent.com/LWJGL/lwjgl3/30fac9b95f99cda97312232be25ba55297bf9951/modules/lwjgl/vulkan/src/main/c/vk_video/vulkan_video_codec_av1std_decode.h",
+          "size": 4257,
+          "sha256": "7e3a1ce177c12546d410f3179ce1b81f2da7a8eba4f525b29cd563ab4099c0e5"
+        },
+        {
+          "file": "vulkan/vk_video/vulkan_video_codec_h265std_decode.h",
+          "path": "modules/lwjgl/vulkan/src/main/c/vk_video/vulkan_video_codec_h265std_decode.h",
+          "url": "https://raw.githubusercontent.com/LWJGL/lwjgl3/30fac9b95f99cda97312232be25ba55297bf9951/modules/lwjgl/vulkan/src/main/c/vk_video/vulkan_video_codec_h265std_decode.h",
+          "size": 2436,
+          "sha256": "879a0dd370a1b1ad184638906c52bdfe7d80d639fbc5a5baa8b02d7c5b60b147"
+        },
+        {
+          "file": "vulkan/vk_video/vulkan_video_codec_h265std.h",
+          "path": "modules/lwjgl/vulkan/src/main/c/vk_video/vulkan_video_codec_h265std.h",
+          "url": "https://raw.githubusercontent.com/LWJGL/lwjgl3/30fac9b95f99cda97312232be25ba55297bf9951/modules/lwjgl/vulkan/src/main/c/vk_video/vulkan_video_codec_h265std.h",
+          "size": 23446,
+          "sha256": "0b81f8986ada015ef2e127449eff9d9634899bb59a0a9277a4054e9ec4416c12"
+        },
+        {
+          "file": "vulkan/vk_video/vulkan_video_codec_h264std_decode.h",
+          "path": "modules/lwjgl/vulkan/src/main/c/vk_video/vulkan_video_codec_h264std_decode.h",
+          "url": "https://raw.githubusercontent.com/LWJGL/lwjgl3/30fac9b95f99cda97312232be25ba55297bf9951/modules/lwjgl/vulkan/src/main/c/vk_video/vulkan_video_codec_h264std_decode.h",
+          "size": 2730,
+          "sha256": "37b970c3d80536ad1ac074cfe19b58ee03c3075378e02179e1dc5e4351266821"
+        },
+        {
+          "file": "vulkan/vk_video/vulkan_video_codec_h264std.h",
+          "path": "modules/lwjgl/vulkan/src/main/c/vk_video/vulkan_video_codec_h264std.h",
+          "url": "https://raw.githubusercontent.com/LWJGL/lwjgl3/30fac9b95f99cda97312232be25ba55297bf9951/modules/lwjgl/vulkan/src/main/c/vk_video/vulkan_video_codec_h264std.h",
+          "size": 13961,
+          "sha256": "fded484cef9f90fbbd089e0647268f36e5f4292179fbc5428a2c9e8d7709bbe9"
+        },
+        {
+          "file": "vulkan/vk_video/vulkan_video_codec_h265std_encode.h",
+          "path": "modules/lwjgl/vulkan/src/main/c/vk_video/vulkan_video_codec_h265std_encode.h",
+          "url": "https://raw.githubusercontent.com/LWJGL/lwjgl3/30fac9b95f99cda97312232be25ba55297bf9951/modules/lwjgl/vulkan/src/main/c/vk_video/vulkan_video_codec_h265std_encode.h",
+          "size": 7469,
+          "sha256": "abb3e72af22e4e0a3dbe5dff7be1b275949388809fb3987830341e8f495ea1c7"
+        },
+        {
+          "file": "vulkan/vk_video/vulkan_video_codec_h264std_encode.h",
+          "path": "modules/lwjgl/vulkan/src/main/c/vk_video/vulkan_video_codec_h264std_encode.h",
+          "url": "https://raw.githubusercontent.com/LWJGL/lwjgl3/30fac9b95f99cda97312232be25ba55297bf9951/modules/lwjgl/vulkan/src/main/c/vk_video/vulkan_video_codec_h264std_encode.h",
+          "size": 6885,
+          "sha256": "227e092b53c4e7ca1a948ed021704511c1ed16040cd6188ff6703e5ae66db64d"
+        }
+      ]
+    },
+    "compile_units": 2,
+    "jni_exports": 73,
+    "object_sha256": "d9039e8ddf1f7bae0038091e7e9d0b96c3efade7266af4d7f8b559aeaff2e3d5",
+    "allocator": "Private clientvma_org_lwjgl_* slots initialized by original LibVma.setupMalloc;existing scoped graphics C++/thread providers;JVM/core globals unchanged",
+    "implementation": "Original VMA3.4.0 and original generated LWJGL3.4.3 JNI;explicit Vulkan function table,no static/dynamic loader lookup",
+    "locks": {
+      "hooks": [
+        "VMA_MUTEX",
+        "VMA_RW_MUTEX"
+      ],
+      "source_sha256": "630fbc78eb1e8541190e88ceebd21047b305db738526201b769978f4245b9f55",
+      "policy": "Inline allocation-free nonrecursive mutex/read-write state;acquire/release,writer preference,64spin/50us native sleep contention;no global lease limit"
+    },
+    "tls": "Compiler emulated TLS;no native TLS segments",
+    "scope": "Actual allocator/JNI compiled;PS5 GPU allocation/map/flush/transfer/free acceptance pending"
+  },
+  "checks": [
+    "ASan/UBSan actual pinned VMA RAII guards: try/exclusion/shared readers/waiting writer;80000 contended operations;10000 live locks and repeated address reuse",
+    "Original pinned VMA/LWJGL JNI rebuilt on host with exact custom hooks;24 real MoltenVK GPU transfers across6 allocator/device lifecycles, original and PS5 enum dispatch, map/flush/invalidate/free/guards/NEVER_ALLOCATE and loader cleanup",
+    "Actual launcher host policy/bootstrap/observer/GC checks and original client JAR unchanged",
+    "Target build/signing;actual VMA object no SDK mutex/pthread references;custom source/object/hash/packaging audits",
+    "Toolkit package CRC/identity/font/source/license/renderer/constructor checks",
+    "PASS full package signatures/source/licenses/runtime/frozen-history checks; frozen VMA035 exact package hash preserved, development VMA audit allows only checked custom hooks/object hash"
+  ],
+  "console": "Pending PS5 Fabric26.2 startup/menu/world/input/audio/save/reload/endurance and accepted vanilla26.2/working26.3/26.4snapshot regression. Not a console pass or confirmed repair.",
+  "runtime": "No reusable Java runtime source/pin, heap/GC or global SDK pthread policy changes",
+  "publication": "ProsperoCraft source and local test candidate only;no Store release or frozen milestone",
+  "preservation": "Exact138 and older canonical packages/symbols, accepted124 vanilla, Store121 and all frozen milestones retained;upstream game/mod JARs and instance/world/auth/settings behavior unchanged"
+}

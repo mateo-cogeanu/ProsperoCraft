@@ -291,6 +291,8 @@ if args.vma_bootstrap or args.startup:
  vma_object=build_vma(runtime,args.java_home,offline=args.offline)
  spec['resident_libraries'].append({'name':'lwjgl_vma','objects':[str(vma_object)]})
  shutil.copyfile(ROOT/'build/lwjgl-vma-ps5/audit.json',java/'vma-audit.json')
+ locksdir=java/'vma-source';locksdir.mkdir()
+ shutil.copyfile(ROOT/'client/ports/vma/ps5_mutex.hpp',locksdir/'ps5_mutex.hpp')
  licenses=java/'vma-licenses';licenses.mkdir()
  shutil.copyfile(ROOT/'client/ports/lwjgl/LICENSE.md',licenses/'LWJGL-LICENSE.txt')
  for row in json.loads((ROOT/'client/ports/vma/native-sources.json').read_text())['files']:

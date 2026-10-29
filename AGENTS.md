@@ -1642,3 +1642,16 @@ Weaklifecyclehookkeepsotherprobesunrequired. Actualhostblocking/throw/cap/IO/err
 andC++ABIregressionspass,targetcallrouteaudits. See
  docs/client-fabric-mutex-caller-138.md. Diagnosticnotconfirmedfix;PS5caller/world/
 regressionpending. Runtimepolicyunchanged,preserve137/Store121,noStore/frozenpass.
+
+##139 VMA inline native lock hooks — 2026-10-29
+
+138failedrun1793291798-491183604 records shared_mutex_base::lock ->nativeENOMEM12,
+originalwhat mutex lock failed, thenexceptionfallbackheapmutexfailure;lastVMnative
+entryVma.nvmaCreateBuffer.139consumerVMA supportedVMA_MUTEX/VMA_RW_MUTEXhooks use
+inlineallocation-free atomicstate,parallelreaders/exclusivewriters,writerpreference,
+64spin/50usnativebackoff,nonrecursive/noFIFO/noleasecap. Preserveoriginalpinned
+VMA/JNI/gameJARs;noSDKglobal/runtime/heap/GCchange. ActualpinnedVMAguardsASan/UBSan
+80kcontention/10klivelocks+reuse andactualMoltenVKGPU/JNI/customhooks hostpass;
+targetobjectmusthavenoSDKmutex/pthreadrefs,packagedheader/audit hasheschecked.
+See docs/client-fabric-vma-locks-139.md. PS5Fabricstartup/world/save/enduranceand
+working-versionregressionpending;preserve138/accepted124/Store121,noStore/frozenpass.

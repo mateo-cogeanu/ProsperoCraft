@@ -155,3 +155,9 @@ shader compiler. PS5 semaphore creation and gameplay validation remain pending.
 App138 [native mutex caller diagnostic](docs/client-fabric-mutex-caller-138.md)
 adds bounded call-site tracing after137 passed shader compiler initialization
 but encountered another native resource exception. PS5 diagnosis remains pending.
+
+App139 [VMA lock allocation candidate](docs/client-fabric-vma-locks-139.md)
+uses VMA's supported custom lock hooks after138 recorded an allocation failure
+in the shared-mutex path during GPU buffer creation. Host concurrency and real
+GPU allocation/transfer checks pass; PS5 Fabric26.2 startup/world/save and
+working-version regression remain pending. Store121 is preserved.
