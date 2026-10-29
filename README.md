@@ -139,3 +139,7 @@ remain pending.
 App134 [RADV queue condition reserve](docs/client-fabric-radv-conditions-134.md)
 addresses the explicit native condition-initialization error during Vulkan
 device creation on133. PS5 launch/gameplay validation remains pending.
+
+App135 [native C++ exception diagnostic candidate](docs/client-fabric-native-throw-135.md)
+records the original throw before low-memory exception formatting can hide its
+cause. Build134's original exception remains unresolved; PS5 testing is pending.

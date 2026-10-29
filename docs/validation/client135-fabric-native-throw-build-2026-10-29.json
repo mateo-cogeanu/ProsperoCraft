@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-29",
+  "build": "01.000.135",
+  "title_id": "PPSA99874",
+  "package_sha256": "6b8512b44e0babe46e6e7fe0032de013f160fc7b183de11d62c7ec61e8576274",
+  "failed_run": "client-01.000.134-1793286316-41038613",
+  "observed_failure": "Reaches shaderc_compiler_initialize;nativeabort2de365c/priorrealloc2de362cNULL995bytes resolveexact134ELF29e365c/29e362c Itanium demangleNameTypeprintLeft outputbuffer failure with400000loadadjustment. libunwindRWlockwarnings. Mayobscureoriginalthrow;originalcauseunresolved.",
+  "change": "Diagnostic-onlyfinalstartup__cxa_throwwrap;128boundedrawtype/caller/anchor/exactSDKsystem_errorcode records;unchangedobject/type/destructor forwarded,errnopreserved,nocatch/suppression/messageformatting",
+  "integration": {
+    "source_sha256": "e740dcbcc61ec5685c5bd5720e599398ef1fea1734740f1f0bacbf3885cf07da",
+    "object_sha256": "8c511ba5aa13d90a1d9eaca08f146a25a0c4f28a69ca29b277ff877c4ed29b9b",
+    "policy": "Diagnostic only;128records max,exactSDKsystem_error code,original__cxa_throw forwarded,errno preserved;no message formatting/demangling",
+    "console": "Pending original exception identification"
+  },
+  "checks": [
+    "ActualC++ABI ASan/UBSan catches forwarded system_error+integerobjects;originaltype/code/message/destructors unchanged;128cap,partialwrites/EINTR/openfailure/errno",
+    "Target135build/signing",
+    "ActualELFdisassembly libc++system_errorthrowcallsto__wrap___cxa_throw andwrapperforwardstoreal__cxa_throw",
+    "Packagedrecorder/source+objecthashes/marker/linkflag;existingruntime/GLFW/SDL/Mesa audits",
+    "LauncherhostoriginalMain/JARunchanged",
+    "FullpackageCRC/signatures/source/licenses/frozenhistory/toolkit checks"
+  ],
+  "console": "PendingPS5originalC++exceptioncapture/causeidentification,Fabric26.2launch/world/lifecycle/enduranceandworking-versionregression;diagnosticbuildnotconfirmedfix",
+  "runtime": "NoJavasource/pins/allocation/synchronization/heap/GCchanges;priorfixesretained",
+  "publication": "ProsperoCraftsource/testcandidateonly;noStore/frozenmilestone",
+  "preservation": "134andpriorcanonicalcandidates/accepted124vanilla/public121preserved;officialJARs/instances/auth/settingsunchanged"
+}

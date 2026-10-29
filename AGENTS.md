@@ -1595,3 +1595,14 @@ foreignattributes/staticobjectsretainnativefallback. ActualMesaC11+adapterhost
 failure/bounds/wake/reacquisition/10000reusepass. See docs/client-fabric-radv-conditions-134.md.
 Runtimeunchanged;PS5device/world/endurance/working-versionregressionpending;
 preserve133/accepted124/Store121,noStore/frozenpass.
+
+##135 original native C++ throw capture — 2026-10-29
+
+Failed134run1793286316-41038613reaches shadercinit thenlibc++abidemangleOutputBuffer
+realloc995bytesNULLabort;exact134symbols+400000loadadjustresolve29e365c/29e362c.
+MayobscureoriginalC++exception;libunwindRWlockwarningsalsopresent.135diagnostic
+consumerfinal__cxa_throwwraprecordsrawtype/caller/anchor/exactlibc++system_errorcode,
+128cap/fixedbuffer/errnopreserve,forwardssameABIobject/type/destructor. No
+caught/suppressedthrows/newruntime/gamepolicyfixclaim. See
+ docs/client-fabric-native-throw-135.md;actualhostC++ABI/cap/IO tests,targetroute
+andpackageaudits;PS5originalcause/startup/worldpending. Preserve134/Store121.

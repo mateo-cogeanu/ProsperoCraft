@@ -44,7 +44,7 @@ def finish(runtime,java_home,work,assets,spec,gpu_support,gpu_audit,variant="gpu
  flags=[p for p in inputs if p.startswith('-')]
  backends=[p for p in inputs if not p.startswith('-')and not p.endswith('.a')]
  archives=[p for p in inputs if p.endswith('.a')]
- inputs=[*flags,'--wrap=close',str(build/'embedded-jvm.o'),*old_objects,str(gpu_support),*backends,*archives,'--defsym=__cxa_thread_atexit_impl=clientgpu_ps5___cxa_thread_atexit_impl']
+ inputs=[*flags,'--wrap=close',*(['--wrap=__cxa_throw'] if variant=='startup' else []),str(build/'embedded-jvm.o'),*old_objects,str(gpu_support),*backends,*archives,'--defsym=__cxa_thread_atexit_impl=clientgpu_ps5___cxa_thread_atexit_impl']
  layout=work/'gpu-probe.ld';s=(build/'jni-probe.ld').read_text();needle='        *(.data.rel.ro .data.rel.ro.*)';assert needle in s
  s=s.replace(needle,'''        PROVIDE_HIDDEN(__client_gl_init_start = .);
         KEEP(*(SORT(.data.rel.ro.clientgl.init_array.*)))
@@ -91,6 +91,11 @@ def finish(runtime,java_home,work,assets,spec,gpu_support,gpu_audit,variant="gpu
          'bindings':bindings,'raw_object_sha256':hashlib.sha256(raw_cpp.read_bytes()).hexdigest(),
          'scoped_object_sha256':hashlib.sha256(cpp.read_bytes()).hexdigest(),'console':'pending'}
   (java/'cpp-allocation-audit.json').write_text(json.dumps(audit,indent=2)+'\n')
+ if variant=='startup':
+  exception_obj=work/'native-exception-trace.o'
+  run(LLVM/'clang++','-target','x86_64-sie-ps5','-fvisibility-nodllstorageclass=default','-isysroot',sdk,'-isystem',sdk/'target/include/c++/v1','-isystem',sdk/'target/include','-std=c++20','-O2','-Wall','-Wextra','-Werror','-fno-exceptions','-fno-rtti','-fno-stack-protector','-c',ROOT/'client/gpu/exception_trace.cpp','-o',exception_obj)
+  objects.append(exception_obj)
+  (java/'native-exception-trace-audit.json').write_text(json.dumps({'source_sha256':hashlib.sha256((ROOT/'client/gpu/exception_trace.cpp').read_bytes()).hexdigest(),'object_sha256':hashlib.sha256(exception_obj.read_bytes()).hexdigest(),'policy':'Diagnostic only;128records max,exactSDKsystem_error code,original__cxa_throw forwarded,errno preserved;no message formatting/demangling','console':'Pending original exception identification'},indent=2)+'\n')
  stubs=[]
  for name in ['libSceAgc','libSceAgcDriver']:
   # Real native003 import declaration files, never executable implementations.
