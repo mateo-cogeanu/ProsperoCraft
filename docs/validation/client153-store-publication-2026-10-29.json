@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-29",
+  "version": "01.000.153",
+  "release_url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.153",
+  "release_tag_commit": "2da97fb5ca1345e9acbce8d1992d3665fe4b1035",
+  "candidate_source_commit": "90fd126253c22df62c98145c66a0b89e9ba868bf",
+  "package_sha256": "07f3e3b2bed254ffd3c6b42cefca66892f6f48d61d2f2ba512944e959b4ce4b0",
+  "assets": [
+    {
+      "name": "PPSA99874.zip",
+      "bytes": 123155910,
+      "sha256": "07f3e3b2bed254ffd3c6b42cefca66892f6f48d61d2f2ba512944e959b4ce4b0"
+    },
+    {
+      "name": "SHA256SUMS",
+      "bytes": 379,
+      "sha256": "e5a62713296a02af97e90493424179b4afd9cf7bcfe3ce881c9f3b827469db09"
+    },
+    {
+      "name": "client153-build-validation.json",
+      "bytes": 1483,
+      "sha256": "1bace6b03ae50c5dbd78811124aa5ad45a137afdc7ea5a5d1aa89472d1bda535"
+    },
+    {
+      "name": "client153-console-validation.json",
+      "bytes": 739,
+      "sha256": "4f9c65590c77de3823eaeb18fc974803e73cedd73150793427b6e51a0c8fe2cd"
+    },
+    {
+      "name": "client153-openal-source-relink.zip",
+      "bytes": 90342408,
+      "sha256": "bc668e3d651395941d49b50a9016a15d8e7436112c84ab755422d7437d33e6a0"
+    }
+  ],
+  "verification": "All five public asset downloads match local hashes/sizes. Exact native normal/replacement ELF relinks,package checks and shipped snapshot defaults pass. Catalog233tests/2skipped,156records offline valid,online record0errors/0warnings.",
+  "catalog_pr": "https://github.com/darkxex/ps5-homebrew-catalog/pull/934",
+  "catalog_head": "62a60f307c0e0c174adcac99b88405ee69709af2",
+  "catalog_status": "Submitted;no PR/check/merge/deployment/liveStore monitoring after creation per user preference",
+  "metadata": "Store description/credits/icon unchanged;only version/artifact/digest and public release changelog updated",
+  "console": "Explicit release authorization,not formal ALL PASS. Exact153 visual/input/audio/lifecycle/Vanilla regression and endurance remain pending. Fabric26.2 launch blocked Coming soon;fixes and data preserved.",
+  "preservation": "Exact153candidate published without rebuild;121 and all previous release/candidate/frozen assets retained",
+  "runtime": "No runtime source changes this release turn"
+}

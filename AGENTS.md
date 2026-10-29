@@ -1816,3 +1816,9 @@ remains available,all native fixes retained. Include matching OpenAL source/
 relink,checksums and honest pending-console validation. Submit catalog PR and
 attach it,do not monitor afterward. Explicit release is not formal ALL PASS.
 Preserve121 and all prior release/candidate/frozen assets,no branch merge.
+
+153 publication complete:five public asset downloads/hash verified,exact normal/
+replacement OpenAL relinks and shipped default-off snapshot checks pass. Catalog
+PR934 submitted;description/credits/icon unchanged. No monitoring after creation.
+See docs/validation/client153-store-publication-2026-10-29.json. Exact153 PS5
+regression/audio/lifecycle/endurance remain pending;Fabric26.2 remains held.
