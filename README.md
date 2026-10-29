@@ -118,3 +118,7 @@ App129 [Fabric26.2 startup diagnostic candidate](docs/client-fabric-startup-diag
 preserves the previous native trace tail and adds bounded GLFW/SDL startup
 checkpoints. It also handles native monitor allocation failure cleanly. Build128's
 unreported exit remains under investigation; PS5 validation is pending.
+
+App130 [Fabric26.2 compiler-TLS allocation repair](docs/client-fabric-emutls-130.md)
+addresses the native abort identified in129's retained trace. PS5 launch,
+world and sustained-operation validation remain pending.

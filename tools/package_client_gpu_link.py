@@ -33,6 +33,8 @@ def finish(runtime,java_home,work,assets,spec,gpu_support,gpu_audit,variant="gpu
  shutil.copyfile(ROOT/'build/client-ports/lwjgl-native/ps5/audit.json',java/'lwjgl-native-audit.json')
  (java/'gpu-integration-audit.json').write_text(json.dumps(gpu_audit,indent=2)+'\n')
  # Reuse only generated actual objects and wrap flags from runtime embedding.
+ from build_runtime_emutls import build as build_runtime_emutls
+ (java/'emutls-runtime-audit.json').write_text(json.dumps(build_runtime_emutls(runtime),indent=2)+'\n')
  original=[json.loads(line)for line in (build/'jni-link.rsp').read_text().splitlines()]
  old_objects=json.loads((build/'builtin-link-inputs.json').read_text())
  # The regenerated registry adds the real GPU JNI library. Other input lists

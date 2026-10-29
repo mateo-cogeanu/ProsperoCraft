@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-29",
+  "build": "01.000.130",
+  "title_id": "PPSA99874",
+  "package_sha256": "20dbbed93bd29e1ebbfcd244137118234503c5d3b95f859ab130011ed119c265",
+  "failed_run": "client-01.000.129-1793280668-685575193",
+  "cause": "Identifiednativeabort inSDKcompiler-rt__emutls_get_address after scopedTLSallocator48byte malloc+anonymousfailure;notJavaexception/DNS/shader-specificdiagnosis. Underlying ordinaryallocation/quota pressure stillunproven.",
+  "symbol_evidence": {
+    "recorded_anchor": "0x42beb0",
+    "elf_anchor": "0x2beb0",
+    "load_adjustment": "0x400000",
+    "recorded_abort_caller": "0x2dffbc9",
+    "resolved_abort_return": "0x29ffbc9",
+    "recorded_malloc_return": "0x2dfe551",
+    "resolved_malloc_return": "0x29fe551",
+    "requested_bytes": 48
+  },
+  "runtime_integration": {
+    "runtime": {
+      "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
+      "commit": "d668c642e1d8d0eeb52447e8a92a3c59387f1345",
+      "documentation": "Development/docs/java25-emutls-direct-fallback.md",
+      "source_sha256": {
+        "java25/probe/emutls_alloc.hpp": "3db11f5e2d81725bca7125c0b3bbd74c4158867dc369a25ff6bfcf402331457c",
+        "java25/probe/emutls_alloc.cpp": "8f59b9248ee56a32cdbe0f5a61cd746dbb44975c5942134749de3a0f88b1df3a",
+        ".tools/java25/openjdk/src/hotspot/share/runtime/ps5NativeDirectMemory.hpp": "39243856f9fc49d6dc63c168a2c54a7e20f29971d20796e8829b927dd3fa7c72"
+      },
+      "policy": "Runtime default off;consumer130enables beforeJVM;existing shared256MiB native-direct budget/2048entries;noheapchange"
+    },
+    "object_sha256": "831871cc6addca0cca495bcdd190b5a48bf2784e42b9240ff03e5d11bc9aea14",
+    "console": "PendingPS5compilerTLS/nativeabort repair/startup/world/lifecycle/endurance"
+  },
+  "change": "ExplicitpreJVM optinSDKemutlsfallback through existing sharednative256MiB/2048entrydirectledger onlyafteranonymousENOMEM;libc+anonymousfirst;failedgrowth/ownershippreserved;noheap/GCchange",
+  "checks": [
+    "ActualemutlsallocatorASan/UBSan observed16payload/48prefixedrequestwithlibc+anonymousdenied,defaultoff,optin,resizepreservation,failedgrowth,800concurrentdirectlifetimes,matchingcleanup",
+    "Existing1600ordinary/maplifetimes and targetLLVMIR noemulatedTLS/lazyguard",
+    "Actualkey/destructor/join lifecycle and existingdirectledger kernelrollback/unmap/releasefailure/budgets/slots/4000concurrentlifetimes",
+    "Targetadapter-Wall-Wextra-Werror and130appbuild/signing",
+    "Packagedruntime-sourcepins/exactadapterobject/exportchecks;singlelinkednativedirectledgerstate",
+    "Launcherhost originalMain/JARunchanged",
+    "Fullpackage CRC/signatures/source/licenses/frozenhistory andtoolkit audits"
+  ],
+  "console": "PendingPS5Fabric26.2launch/world/render/input/audio/save/reload,compilerTLScleanup/endurance",
+  "publication": "Bothsource repositories;testcandidateonly,noStoreorfrozenmilestone",
+  "preservation": "129andpriorcandidates/accepted124vanilla/public121preserved;officialJARs/instances/auth/settingsunchanged"
+}

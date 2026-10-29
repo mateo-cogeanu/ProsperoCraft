@@ -39,7 +39,7 @@ def without_build_id(blob):
    result[start+16:start+32]=bytes(16);found+=1
  assert found==1
  return bytes(result)
-elf=work/'bootstrap-01.000.129-symbols.elf';text=subprocess.check_output([str(LLVM/'llvm-nm'),'--defined-only',str(elf)],text=True);symbols={l.split()[-1]:int(l.split()[0],16)for l in text.splitlines()if len(l.split())==3}
+elf=work/'bootstrap-01.000.130-symbols.elf';text=subprocess.check_output([str(LLVM/'llvm-nm'),'--defined-only',str(elf)],text=True);symbols={l.split()[-1]:int(l.split()[0],16)for l in text.splitlines()if len(l.split())==3}
 assert symbols.get('client_ps5_audio_early_init_result') and symbols.get('client_ps5_audio_early_port')
 imports=subprocess.check_output([str(LLVM/'llvm-nm'),'--undefined-only',str(elf)],text=True)
 for jna in ['Java_com_sun_jna_Native_getLastError','Java_com_sun_jna_Native_setLastError','Java_com_sun_jna_Native_sizeof','Java_com_sun_jna_Native_initIDs','ps5_builtin_load_jnidispatch']:assert symbols.get(jna),jna
@@ -71,7 +71,7 @@ with zipfile.ZipFile(package)as z,zipfile.ZipFile(ROOT/'dist/milestones/Client_C
  for name in ['awt','lcms']:
   assert sha(z.read('PPSA99874/assets/java25/lib/lib'+name+'.so'))==sha((runtime/'build/java25/imageio-target'/('lib'+name+'.so')).read_bytes())
   assert imageio['groups'][name]['output_sha256']==sha((runtime/'build/java25/imageio-target'/('lib'+name+'.o')).read_bytes())
- assert z.testzip()is None;prefix='PPSA99874/';param=json.loads(z.read(prefix+'sce_sys/param.json'));assert param['attribute3']&0x40;old=json.loads(baseline.read(prefix+'sce_sys/param.json'));assert param['contentVersion']=='01.000.129';assert param['downloadDataSize']==4096
+ assert z.testzip()is None;prefix='PPSA99874/';param=json.loads(z.read(prefix+'sce_sys/param.json'));assert param['attribute3']&0x40;old=json.loads(baseline.read(prefix+'sce_sys/param.json'));assert param['contentVersion']=='01.000.130';assert param['downloadDataSize']==4096
  assert param['localizedParameters']['en-US']['titleName']=='ProsperoCraft'
  assert z.read(prefix+'sce_sys/icon0.png')==(ROOT/'assets/branding/icon0.png').read_bytes()
  from apply_branding import presentation_assets,validate_background
@@ -79,7 +79,7 @@ with zipfile.ZipFile(package)as z,zipfile.ZipFile(ROOT/'dist/milestones/Client_C
   assert z.read(prefix+'sce_sys/'+name)==pixels;validate_background(pixels)
  assert prefix+'sce_sys/prosperocraft_title.png'not in z.namelist()
  for k in ['titleId','contentId','conceptId']:assert param[k]==old[k]
- assert b'-Xmx1536m'in z.read(prefix+'eboot.bin') and b'Minecraft Original Client Startup 01.000.129'in z.read(prefix+'eboot.bin')
+ assert b'-Xmx1536m'in z.read(prefix+'eboot.bin') and b'Minecraft Original Client Startup 01.000.130'in z.read(prefix+'eboot.bin')
  for flag in [b'-Xmixed',b'-XX:TieredStopAtLevel=1',b'-XX:CICompilerCount=1',b'-XX:CompileThresholdScaling=4.0',b'-XX:CompileCommand=MemLimit,*.*,2M',b'-XX:ReservedCodeCacheSize=96m',b'-XX:MetaspaceSize=128m',b'-XX:+ExplicitGCInvokesConcurrent',b'-Djava.awt.headless=true',b'java25-jit.log']:
   assert flag in z.read(prefix+'eboot.bin'),flag
  assert b'-XX:+UseG1GC' in z.read(prefix+'eboot.bin') and b'-XX:NewRatio=' not in z.read(prefix+'eboot.bin')
@@ -382,7 +382,7 @@ with (ROOT/'dist/accepted/Client_Auth_Errors-01.000.078/PPSA99874-full-local.zip
 
 with (ROOT/'dist/accepted/Client_Instances-01.000.079/PPSA99874-full-local.zip').open('rb')as stream:assert hashlib.file_digest(stream,'sha256').hexdigest()=='ee4238389de4c454d7b19173fa2613a4515d9c6e685ee083e3e70772b3deb6bf'
 
-print('PASS129 actual package/CRC/signatures,launcher-only dependencies/zero bundled game JARs or asset objects,exact0126coreimage/rebuilt0125libnio/unchanged023otherlibrarybytes except verifiedGNUbuildIDs plus exact0121HotSpot,359+4+5+15+1staged constructors/19real resident groups/actual036 SPIRV-Cross+035 VMA+033 FreeType+031 STB+029 OSMesa/OpenGL+026 libffi+OpenAL+module overlay/paired C++ allocator/actual Main invocation bytecode/workdir/log config and preserved022/023 packages. Menu confirmation recorded separately;gameplay/stability validation pending. SHA256',sha(package.read_bytes()))
+print('PASS130 actual package/CRC/signatures,launcher-only dependencies/zero bundled game JARs or asset objects,exact0126coreimage/rebuilt0125libnio/unchanged023otherlibrarybytes except verifiedGNUbuildIDs plus exact0121HotSpot,359+4+5+15+1staged constructors/19real resident groups/actual036 SPIRV-Cross+035 VMA+033 FreeType+031 STB+029 OSMesa/OpenGL+026 libffi+OpenAL+module overlay/paired C++ allocator/actual Main invocation bytecode/workdir/log config and preserved022/023 packages. Menu confirmation recorded separately;gameplay/stability validation pending. SHA256',sha(package.read_bytes()))
 
 with (ROOT/'dist/published/ProsperoCraft-01.000.082/PPSA99874.zip').open('rb') as frozen082:
  assert hashlib.file_digest(frozen082,'sha256').hexdigest()=='ab49cad8977736be2be72230743232a270dba9bd17fa70a66b64a93c48230820'

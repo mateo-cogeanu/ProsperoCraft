@@ -1,0 +1,11 @@
+{
+  "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
+  "commit": "d668c642e1d8d0eeb52447e8a92a3c59387f1345",
+  "documentation": "Development/docs/java25-emutls-direct-fallback.md",
+  "source_sha256": {
+    "java25/probe/emutls_alloc.hpp": "3db11f5e2d81725bca7125c0b3bbd74c4158867dc369a25ff6bfcf402331457c",
+    "java25/probe/emutls_alloc.cpp": "8f59b9248ee56a32cdbe0f5a61cd746dbb44975c5942134749de3a0f88b1df3a",
+    ".tools/java25/openjdk/src/hotspot/share/runtime/ps5NativeDirectMemory.hpp": "39243856f9fc49d6dc63c168a2c54a7e20f29971d20796e8829b927dd3fa7c72"
+  },
+  "policy": "Runtime default off;consumer130enables beforeJVM;existing shared256MiB native-direct budget/2048entries;noheapchange"
+}

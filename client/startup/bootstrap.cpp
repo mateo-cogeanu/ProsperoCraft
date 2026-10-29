@@ -51,6 +51,7 @@ extern "C" Initializer __jvm_init_array_start[],__jvm_init_array_end[];
 extern "C" std::uint64_t sceKernelGetProcessTime();
 extern "C" void JNU_PS5SetDirectScratchEnabled(int);
 extern "C" void JNU_PS5SetVerifierSmallReserveEnabled(int);
+extern "C" void ps5_emutls_enable_direct(int);
 extern "C" int sceKernelUsleep(std::uint32_t);
 // File-open diagnostics specific to this probe; the real platform API is used.
 static char native_open_error[192]{};
@@ -505,6 +506,8 @@ int main(int argc,char** argv) {
  (void)sceSystemServiceHideSplashScreen();
  // Native UI owns VideoOut/controller on its thread before creating Java.
  // Core constructors and early AudioOut init stay on the original startup thread.
+ ps5_emutls_enable_direct(1);
+ log_stage("PS5 compiler TLS direct fallback enabled after libc/anonymous ENOMEM; shared native-data ledger");
  JNU_PS5SetDirectScratchEnabled(1);
  JNU_PS5SetVerifierSmallReserveEnabled(1);
  log_stage("PS5 verifier variable reserve enabled: 4MiB contiguous 256-byte units after libc refusal");

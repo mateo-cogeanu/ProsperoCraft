@@ -1540,3 +1540,14 @@ intomarkedstartuphistbeforetruncation. Alsohandlesuncheckedbackendmonitor/mode
 allocationfailure;actualhostforcedmonitorOOMcleanup+3normalcyclespass. Do not
 claim128causefixed. See docs/client-fabric-startup-diagnostics-129.md. Runtime
 pinsunchanged;preserve128/accepted124/Store121;PS5cause/worldvalidationpending.
+
+##130 identified compiler-TLS abort — 2026-10-29
+
+129failedrun1793280668-685575193 copiednative tail hasabortcaller2dffbc9,
+anchor42beb0,prior48bytemalloccaller2dfe551NULL. Exact129symbolanchor2beb0gives
+loadadjust400000;resolved29ffbc9compiler-rt__emutls_get_addressabort and29fe551
+emutls_alloc::allocate. Runtime d668c642 defaultoffdirectledgerfallbackpublished
+separately.130pins/recompilesruntimeownedadapterandexplicitlyenablesbeforeJVM;
+existingnative256MiB/2048entrybudgetshared,normalallocatorsfirst,heap/GCunchanged.
+See docs/client-fabric-emutls-130.md;hostfailure/lifecycle/targetchecks andPS5
+startup/world/endurancepending. Preserve129/accepted124/Store121;noStore/frozenpass.
