@@ -1437,3 +1437,17 @@ exact normal/replacement OpenAL relinks and shipped snapshot-default checks.
 CatalogPR924submitted; description/credits/icon unchanged. No PR/checks/deployment/
 liveStore monitoring. See docs/validation/client121-store-publication-2026-10-29.json.
 PS5 theme persistence/input/lifecycle/endurance remain pending; no frozen pass.
+
+## Development122 original26.2 GLFW integration — 2026-10-29
+
+User requests26.2after reporting all26.4snapshots work.26.2publisher usesGLFW/
+LWJGL3.4.1andasset32,notSDLJava. Consumer genuine pinnedGLFW3.4core gets explicit
+SDLPS5window/input/monitor/Vulkan backend viaNullselector; actualheadlesswindow/
+monitor implementation is replaced in dispatch. RequireVulkan/NO_API,existing
+residentICD, no arbitraryloader/OpenGLclaim/gameJARrewrite. Parent3.4.3nativeABI
+936game-methodrefs/118GLFWsymbolschecked,notbroadcompatibility. OptionalIMEABI
+retained with nativecompositiondisabled. EagerTinyFDJNI explicitly identifies
+unavailabledesktopdialogs and returnscancel/null; neverfakeaccepted/path/upstream
+version. See docs/client-26.2-glfw-122.md. Host/publisher/buildchecks arenotPS5pass.
+Provide122testapp,publishconsumer source;noStore/frozenmilestone/runtimechanges.
+Preserve121andpriorpackages,26.3/snapshotpaths/themes/cursor/auth/defaultsoff.

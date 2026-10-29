@@ -1,0 +1,34 @@
+{
+  "scope": "Explicit26.2 original release candidate using genuine GLFW with PS5 SDL backend and parent3.4.3native dispatch; console validation pending",
+  "versions": [
+    {
+      "id": "26.2",
+      "type": "release",
+      "metadata": {
+        "url": "https://piston-meta.mojang.com/v1/packages/ea228cdd1379853393fd73ad0a562c3f5eb7fd9d/26.2.json",
+        "sha1": "ea228cdd1379853393fd73ad0a562c3f5eb7fd9d"
+      },
+      "javaMajor": 25,
+      "assetIndex": "32",
+      "client": {
+        "sha1": "2dc72797acbc1b63fc16a11c4ac393605f453754",
+        "size": 39193383,
+        "url": "https://piston-data.mojang.com/v1/objects/2dc72797acbc1b63fc16a11c4ac393605f453754/client.jar"
+      },
+      "lwjgl": [
+        "org.lwjgl:lwjgl-freetype:3.4.1",
+        "org.lwjgl:lwjgl-glfw:3.4.1",
+        "org.lwjgl:lwjgl-jemalloc:3.4.1",
+        "org.lwjgl:lwjgl-openal:3.4.1",
+        "org.lwjgl:lwjgl-opengl:3.4.1",
+        "org.lwjgl:lwjgl-shaderc:3.4.1",
+        "org.lwjgl:lwjgl-spvc:3.4.1",
+        "org.lwjgl:lwjgl-stb:3.4.1",
+        "org.lwjgl:lwjgl-tinyfd:3.4.1",
+        "org.lwjgl:lwjgl-vma:3.4.1",
+        "org.lwjgl:lwjgl-vulkan:3.4.1",
+        "org.lwjgl:lwjgl:3.4.1:unsafe"
+      ]
+    }
+  ]
+}

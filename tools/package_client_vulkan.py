@@ -183,6 +183,18 @@ if args.sdl or args.runtime_shader:
  spec['resident_libraries'].append({'name':'ps5sdl','objects':[str(scoped)]})
  sdl_audit=json.loads((ROOT/'build/sdl3-native/audit.json').read_text());sdl_audit['scoped_object_sha256']=hashlib.sha256(scoped.read_bytes()).hexdigest();sdl_audit['binding_scope']='Existing graphics provider binding map; JVM global providers unchanged'
  (java/'sdl-audit.json').write_text(json.dumps(sdl_audit,indent=2)+'\n')
+ if args.startup:
+  from build_glfw_native import build as build_glfw
+  glfw=build_glfw(runtime,offline=args.offline);glfw_scoped=work/'resident-glfw.o'
+  subprocess.run(['/opt/homebrew/opt/llvm/bin/llvm-objcopy','--redefine-syms='+str(mapping),str(glfw),str(glfw_scoped)],check=True)
+  spec['resident_libraries'].append({'name':'ps5glfw','objects':[str(glfw_scoped)]})
+  dialogs=work/'ps5-dialogs.o';headers=runtime/'.tools/java25/openjdk/build/ps5-bootstrap/support/modules_include/java.base'
+  subprocess.run(['/opt/homebrew/opt/llvm/bin/clang','-std=c11','-O2','-fPIC','-target','x86_64-sie-ps5','-march=x86-64','-mno-avx','-mno-avx2','-mno-fma','-fvisibility-nodllstorageclass=default','-isysroot',str(runtime/'.tools/native-sdk/ps5-payload-sdk'),'-I'+str(headers),'-I'+str(headers/'freebsd'),'-c',str(ROOT/'client/ports/tinyfd/ps5_dialogs.c'),'-o',str(dialogs)],check=True)
+  spec['resident_libraries'].append({'name':'lwjgl_tinyfd','objects':[str(dialogs)]})
+  shutil.copytree(ROOT/'client/ports/tinyfd',java/'tinyfd-source',dirs_exist_ok=True)
+
+  shutil.copy2(ROOT/'build/glfw-native/ps5/audit.json',java/'glfw-audit.json')
+  shutil.copytree(ROOT/'client/ports/glfw',java/'glfw-source',dirs_exist_ok=True)
  licenses=java/'sdl-licenses';licenses.mkdir()
  for name in ['Zlib.txt','MIT.txt']:shutil.copyfile(ROOT/'client/ports/sdl'/name,licenses/name)
  shutil.copyfile(ROOT/'build/sdl-src/LICENSE.txt',licenses/'SDL-LICENSE.txt')

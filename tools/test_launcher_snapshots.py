@@ -81,7 +81,7 @@ public class SnapshotCheck {
    List<String> args=List.of(model.arguments(null,null));check(args.get(args.indexOf("--version")+1).equals(id)&&args.get(args.indexOf("--versionType")+1).equals("snapshot")&&args.get(args.indexOf("--assetIndex")+1).equals(receipt.assetIndex)&&args.contains("vulkan"),"snapshot original arguments");
    System.out.println("PASS "+id+" publisher install/assets/hash verification; isolated original Main; native dispatch/provider/argument/runtime policy");
   }
-  check(!ProsperoLauncher.supported("26.4-snapshot-7")&&!ProsperoLauncher.supported("26.4-snapshot-999")&&!ProsperoLauncher.supported("26.2")&&ProsperoLauncher.supported("26.3"),"bounded support list");
+  check(!ProsperoLauncher.supported("26.4-snapshot-7")&&!ProsperoLauncher.supported("26.4-snapshot-999")&&!ProsperoLauncher.supported("26.1")&&ProsperoLauncher.supported("26.3"),"bounded support list");
  }
 }
 '''

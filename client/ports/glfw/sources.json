@@ -1,0 +1,10 @@
+{
+  "upstream": {
+    "repository": "https://github.com/glfw/glfw",
+    "commit": "a74efa0d5628b74adc0426af4c5710e287fa7c2c",
+    "version": "3.4",
+    "archive_url": "https://codeload.github.com/glfw/glfw/tar.gz/refs/tags/3.4",
+    "archive_sha256": "c038d34200234d071fae9345bc455e4a8f2f544ab60150765d7704e08f3dac01"
+  },
+  "scope": "Genuine GLFW core with explicit SDL3 PS5 window/input/Vulkan backend selected via GLFW_PLATFORM_NULL; no original game or GLFW Java class replacements; no OpenGL or arbitrary loader"
+}

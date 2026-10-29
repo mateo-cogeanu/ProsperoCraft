@@ -233,6 +233,15 @@ public final class ClientStartup25 {
    org.lwjgl.sdl.SDLHints.SDL_SetHint("PS5_CONTROLLER_BINDINGS",ProsperoLauncher.controllerBindings());
    boolean controls=org.lwjgl.sdl.SDLHints.SDL_SetHint("PS5_TEMPORARY_CONTROLS",System.getProperty("ps5.temporaryControls","1"));
    stage("Temporary SDL controls hint="+org.lwjgl.sdl.SDLHints.SDL_GetHint("PS5_TEMPORARY_CONTROLS")+" accepted="+controls+";D-pad/left stick=menu arrows,X=select,Circle=back,Triangle=Tab,Square=Backspace;gamepad subsystem hands off to future mods");
+   if(ProsperoLauncher.selectedGlfw()){
+    Configuration.GLFW_LIBRARY_NAME.set(System.mapLibraryName("ps5glfw"));System.loadLibrary("ps5glfw");
+    ClassLoader game=ProsperoLauncher.gameLoader();
+    Class<?> glfw=Class.forName("org.lwjgl.glfw.GLFW",true,game);
+    glfw.getMethod("glfwInitHint",int.class,int.class).invoke(null,0x00050003,0x00060005);
+    Class<?> bridge=Class.forName("org.lwjgl.glfw.GLFWVulkan",true,game);
+    bridge.getMethod("glfwInitVulkanLoader",long.class).invoke(null,org.lwjgl.vulkan.VK.getFunctionProvider().getFunctionAddress("vkGetInstanceProcAddr"));
+    stage("26.2 genuine GLFW with SDL PS5 backend; resident Vulkan loader configured; original game JAR unchanged");
+   }
    stage("Menu inactivity FPS policy=minimized;other options retained,original backed up when migrated");
    stage("Guarded C1 warmup:checking actual level1 compiled integer kernel before original Main");
    ps5probe.JitWarmup25.check();

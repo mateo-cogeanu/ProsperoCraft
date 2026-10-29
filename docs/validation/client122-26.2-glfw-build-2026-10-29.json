@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-29",
+  "build": "01.000.122",
+  "title_id": "PPSA99874",
+  "package_sha256": "ff2733422ac4f5d0128a63f38f520713a298122ea7a56dec4125e4ed33975d61",
+  "minecraft_version": "26.2",
+  "publisher_metadata": {
+    "url": "https://piston-meta.mojang.com/v1/packages/ea228cdd1379853393fd73ad0a562c3f5eb7fd9d/26.2.json",
+    "sha1": "ea228cdd1379853393fd73ad0a562c3f5eb7fd9d"
+  },
+  "integration": "Genuine GLFW3.4core with explicit SDL PS5 window/input/monitor/Vulkan backend and existing resident ICD; original game and LWJGL GLFW JAR intact",
+  "host_checks": [
+    "Original26.2publisher install/assets/hashes/CPU provider/launch arguments and bounded version gate",
+    "All936game LWJGL method descriptors resolve against actual parent/instance dependencies",
+    "GenuineGLFW + realSDLdummy window underASan/UBSan:3lifecycle cycles,key state/Unicode/mouse/buttons/scroll/close/IMEABI and explicit OpenGLrefusal",
+    "OriginalTinyFDJNI explicitly unavailable version and canceled/null desktop dialog outcomes;custom host native hash warning retained in local log",
+    "Original26.2Main reaches expected absent host native bootstrap,not a menu pass",
+    "All six existing snapshot install/loader/provider/ABI/argument/Main regression tests",
+    "Startup host policy/observer/original JAR checks",
+    "Target build/signing/CRC/native/packaged source audit:118requiredGLFW APIs,Vulkan/IME bridge and TinyFD JNI groups",
+    "Native toolkit package/defaults/source/licensing/frozen-history checks"
+  ],
+  "console": "Pending newVanilla26.2title/menu/controller/keyboard/mouse/world/audio/save/quit/reopen; Fabric/Controlify/mod26.2and endurance separate pending checks",
+  "limitations": [
+    "No nativeIMEcomposition service; ordinary Unicode input and used optional callback/rectangle ABI only",
+    "No desktop TinyFD dialog service; explicit unavailable/cancel/null, no invented UI/filename/confirmation",
+    "GLFW joystick API unsupported;Controlify uses existing SDL API;26.2mod interaction unvalidated",
+    "No new OpenGL/native loader or whole LWJGL compatibility claim"
+  ],
+  "preservation": "Public121and earlier candidates/frozen artifacts unchanged; no game/server bytecode transformations",
+  "runtime": "No runtime source changes",
+  "publication": "Consumer source only; installable122test candidate, no Store/binary release or frozen milestone"
+}
