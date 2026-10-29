@@ -1,5 +1,13 @@
 # Changelog
 
+## Release 01.000.121
+
+- Add six saved launcher color themes: Forest, Ocean, Amethyst, Rose, Amber and Graphite.
+- Make all seven Settings bars uniform in size, spacing, corners and focus/press behavior.
+- Redesign the fallback in-game cursor with a vector polygon, antialiased edges, thin outline and shadow; retain its click hotspot.
+- Keep backgrounds separate from theme selection, original artwork/skins and snapshots off by default.
+- Publish exact121 with corresponding OpenAL source/relink materials and verified checksums. Host/render/package checks pass; broader PS5 theme persistence/input/lifecycle checks remain pending.
+
 ## Release 01.000.120
 
 - Earlier builds used Mojang's application client ID. ProsperoCraft now uses its own approved Microsoft application; everyone must sign in again once after updating.

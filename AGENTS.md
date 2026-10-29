@@ -1431,3 +1431,9 @@ relink materials, checksums/validation and verify all uploaded asset downloads.
 Submit catalog PR and do not monitor afterward. Release authorization does not
 establish formal ALL PASS; theme reopen/input/endurance remain pending. Preserve
 120 and older release/frozen assets; no runtime source changes.
+
+121publicationcomplete: full release with five downloaded/hash-verified assets,
+exact normal/replacement OpenAL relinks and shipped snapshot-default checks.
+CatalogPR924submitted; description/credits/icon unchanged. No PR/checks/deployment/
+liveStore monitoring. See docs/validation/client121-store-publication-2026-10-29.json.
+PS5 theme persistence/input/lifecycle/endurance remain pending; no frozen pass.

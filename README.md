@@ -6,13 +6,14 @@
 
 Download Minecraft on your console, manage separate instances and play with DualSense controls, native graphics and game audio. Minecraft gameplay and account login have been tested on PS5. The high-refresh update reached 119 FPS in console testing; extended endurance remains under testing.
 
-**[Download 01.000.120](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.121)** · [Install and release notes](docs/releases/client-approved-auth-120.md) · [Changelog](CHANGELOG.md)
+**[Download 01.000.121](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.121)** · [Install and release notes](docs/releases/client-themes-cursor-121.md) · [Changelog](CHANGELOG.md)
 
 ## Downloads
 
 | Release | Includes |
 | :--- | :--- |
-| [**ProsperoCraft 01.000.120**](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.121) | Approved ProsperoCraft Microsoft application and app-bound saved logins. A fresh sign-in is required after updating. |
+| [**ProsperoCraft 01.000.121**](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.121) | Six saved color themes, uniform Settings bars and a smooth vector-based fallback cursor. |
+| [**ProsperoCraft 01.000.120**](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.120) | Approved ProsperoCraft Microsoft application and app-bound saved logins. A fresh sign-in is required after updating. |
 | [**ProsperoCraft 01.000.119**](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.119) | 26.4 snapshots 1–6, snapshot 6 native startup repair, and snapshots hidden by default. |
 | [**ProsperoCraft 01.000.117**](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.117) | Instance duplication, consistent animated controls, default Controlify, world-handle repair and improved dependency queues. |
 | [**ProsperoCraft 01.000.108**](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.108) | Fabric, Modrinth content, dependency repair, input controls, larger icons and Uninstall. |
@@ -37,7 +38,7 @@ Release 120 switches from Mojang's application client ID to ProsperoCraft's own 
 - **Controls:** temporary DualSense keyboard/mouse mapping, cursor-only game menus, in-game keyboard and PLAY/OPTIONS guides. Full Controlify support remains planned.
 - **Known limits:** LAN hosting is deferred; save/reload, resolution combinations, reconnect/lifecycle regressions and extended endurance still need broader testing. Earlier server joining was confirmed.
 
-Development 121 adds six saved launcher color themes in Settings, uniform Settings bars, and an outlined fallback in-game pointer. See [the change and test notes](docs/client-themes-cursor-121.md). Physical PS5 validation is pending.
+Release 121 adds six saved launcher color themes in Settings, uniform Settings bars, and an antialiased vector-based fallback in-game pointer. The Store update is submitted in [PR924](https://github.com/darkxex/ps5-homebrew-catalog/pull/924); deployment has not been checked. See [the change and test notes](docs/client-themes-cursor-121.md). Physical PS5 validation is pending.
 
 Development continues on `main`, which contains the merged authenticated game-test work. The merged `Temp_gametest` and `codex/demo` branches have been retired. Release101 retains the existing `temp_gametest` package channel. The exact096 and097 packages remain preserved. Older Demo history, all frozen validation snapshots and public releases remain intact. Home/favorites are deferred; this release opens Instances, with Settings and Account beside it.
 

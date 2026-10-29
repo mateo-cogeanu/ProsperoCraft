@@ -248,3 +248,23 @@ Exact120 is public with five downloaded/hash-verified release assets and matchin
 Catalog PR: https://github.com/darkxex/ps5-homebrew-catalog/pull/923
 
 No PR/check/merge/deployment/liveStore monitoring is performed per preference. No new live120auth/restore result or ALL PASS is inferred from release authorization. See validation/client120-store-publication-2026-10-29.json.
+
+
+## 01.000.121 themes and cursor release — 2026-10-29
+
+Published the exact121 candidate with five downloaded/hash-verified assets,
+matching OpenAL corresponding source/relink kit, checksums and validation.
+Normal and replacement relinks reproduce the native ELF. Catalog157records and
+232tests (2skipped) pass; online record verification reports0errors/0warnings.
+
+Release: https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.121
+
+Catalog submission: https://github.com/darkxex/ps5-homebrew-catalog/pull/924
+
+Main description, credits and icon are unchanged. Changelog covers six saved
+themes, uniform Settings bars and the antialiased vector-based fallback cursor.
+Snapshots stay off by default. PR submitted; do not monitor its checks, merge,
+deployment or live availability per user preference. Console theme persistence,
+input/lifecycle checklist and endurance remain pending; no formal ALL PASS or
+new frozen milestone inferred. Runtime source unchanged. See the publication
+record in docs/validation/client121-store-publication-2026-10-29.json.

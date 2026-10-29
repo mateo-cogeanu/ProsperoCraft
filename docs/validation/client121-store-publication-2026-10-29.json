@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-29",
+  "version": "01.000.121",
+  "release_url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.121",
+  "release_tag_commit": "8e4ce400bbf45bf1c9da715311937aed85efd22e",
+  "candidate_source_commit": "cd86552bbcc518d80f48c6a554e7c22eae79d33f",
+  "package_sha256": "3ae5d35308bc84119ed0285869630153b2ee9c8ce054e098ce58d0c6851dafaf",
+  "assets": [
+    {
+      "name": "PPSA99874.zip",
+      "bytes": 122940501,
+      "sha256": "3ae5d35308bc84119ed0285869630153b2ee9c8ce054e098ce58d0c6851dafaf"
+    },
+    {
+      "name": "client121-openal-source-relink.zip",
+      "bytes": 90229039,
+      "sha256": "f110fc5b45366b2dc5146f805f969bba806170219cec1e8b6626ff3156c713e2"
+    },
+    {
+      "name": "client121-build-validation.json",
+      "bytes": 1910,
+      "sha256": "0443f413b1ea5f6d0b5ae63a330048f1dfae22a3e95bb34123230d9d955b3ec0"
+    },
+    {
+      "name": "client121-console-validation.json",
+      "bytes": 780,
+      "sha256": "b0701cfcf197751948367f40c0a0d87645a7b16a63bc5b3b1bef570aec186802"
+    },
+    {
+      "name": "SHA256SUMS",
+      "bytes": 379,
+      "sha256": "656636fd7855b407b3b22cad6beadff2f49a3c55a0d8490a75a29c34259cf940"
+    }
+  ],
+  "verification": "All five public asset downloads match local hashes/sizes; ZIP CRC and all relink inputs verified; normal/replacement native ELF exact; shipped snapshot defaults pass;157 catalog records valid;232 tests/2skipped; online record0errors/0warnings",
+  "catalog_pr": "https://github.com/darkxex/ps5-homebrew-catalog/pull/924",
+  "catalog_head": "e3feb96a4ee3e6ece45c1e823baffb74a992e419",
+  "catalog_status": "Submitted. No monitoring after PR creation per user preference; checks/merge/deployment/liveStore availability uninspected",
+  "metadata": "Main release introduction, Store description/credits/icon unchanged; only required version/artifact/digest and release changelog updated",
+  "console": "Release explicitly authorized after user cursor/theme feedback; formal complete PS5 theme persistence/input/lifecycle checklist and endurance remain pending",
+  "preservation": "Exact121candidate published without rebuild;120 and earlier release/frozen assets preserved",
+  "runtime": "No runtime source changes"
+}
