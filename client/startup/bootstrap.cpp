@@ -21,6 +21,7 @@ extern "C" int sceAudioOutOpen(int,int,int,unsigned,unsigned,unsigned);
 #include "jni.h"
 #include "native_trace.hpp"
 #include "shader_stage_budget.hpp"
+#include "input_present_trace.hpp"
 #include "native_stderr.hpp"
 #include "observer_native.hpp"
 #define PROSPERO_TOOLKIT 1
@@ -506,6 +507,16 @@ void run_test(int i) {
  }
 }
 
+}
+static InputPresentBudget input_present_budget;
+extern "C" void client_input_change(unsigned mask){
+ int saved=errno;unsigned id=input_present_budget.input(mask);
+ if(id){char text[128];std::snprintf(text,sizeof(text),"INPUT_PRESENT change=%u mask=0x%x trace_next8presents",id,mask);log_stage(text);}
+ errno=saved;
+}
+extern "C" int client_input_present_trace(int consume){return input_present_budget.probe(consume!=0);}
+extern "C" void client_input_present_note(const char*phase,unsigned index,long long value){
+ int saved=errno;char text[160];std::snprintf(text,sizeof(text),"INPUT_PRESENT phase=%s image=%u value=%lld",phase,index,value);log_stage(text);errno=saved;
 }
 extern "C" void client_sdl_diagnostic(const char* text) {log_stage(text);}
 extern "C" void client_gpu_stage(const char *name,int code) {

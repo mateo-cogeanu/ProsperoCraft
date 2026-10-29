@@ -11,6 +11,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <mutex>
+#include "ps5_audio_mutex.hpp"
 #include <thread>
 #include "althrd_setname.h"
 #include "core/device.h"
@@ -33,7 +34,7 @@ void report(const char* stage,int result)
     std::fflush(stderr);
 }
 constexpr std::uint32_t AudioBusy=0x80260002u,AudioAlreadyInit=0x8026000eu,AudioNotInit=0x8026000fu;
-struct AudioState {std::mutex mutex;bool ready=false;};
+struct AudioState {ps5audio::Mutex mutex;bool ready=false;};
 AudioState& audioState(){static AudioState state;return state;}
 int initialize()
 {

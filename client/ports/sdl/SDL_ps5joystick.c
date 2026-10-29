@@ -174,6 +174,7 @@ static Sint16 PS5_Trigger(float value)
     return (Sint16)(value * 65535.0f - 32768.0f);
 }
 
+extern void client_input_change(unsigned) __attribute__((weak));
 static void PS5_JoystickUpdate(SDL_Joystick *joystick)
 {
     const Uint64 timestamp = SDL_GetTicksNS();
@@ -183,6 +184,7 @@ static void PS5_JoystickUpdate(SDL_Joystick *joystick)
     if (!pad_player((int)joystick->instance_id - 1, &pad) || (pad.held & PAD_INTERCEPTED)) {
         return;
     }
+    if(client_input_change)client_input_change(pad.held);
     for (int i = 0; i < PS5_BUTTONS; i++) {
         SDL_SendJoystickButton(timestamp, joystick, (Uint8)i, (pad.held & ps5_buttons[i]) != 0);
     }

@@ -1,0 +1,108 @@
+{
+  "date": "2026-10-29",
+  "build": "01.000.145",
+  "title_id": "PPSA99874",
+  "package_sha256": "d22d4af81e490086f73d2add63699e1c05766aa4133ff6fb8d124a6387057ffa",
+  "symbols_sha256": "0d3503e10684e6a60d17b0461210c65f40b2025894b32042ebfc53fa0ca44a87",
+  "observed_run": "client-01.000.144-1793296414-601953825",
+  "observation": {
+    "controlify": "UserinputupdatesGUI;log confirmsSDLControlify connectsDualSense",
+    "exit": "Hardexitafterinput;lastsampleGUITextureSetup equality/meshstate;no matchingfreshfatalreport,retrievable141HSreportexcluded;not proofofControlifycause",
+    "audio": "NativealcOpenDevice catchesmutexlockENOMEM,PS5AudioState/logcallbackpaths"
+  },
+  "change": "Scoped inobjectallocation-free audioMutex foronlyloggingcallback/PS5AudioState/retainedport;nativeOpenALmixer/worker/port/errors unchanged;inputstateobservationfirst8maskchanges arms8queuepresents withoriginalfence/flipresults,doesnotalterinput/presentationresults",
+  "audio_integration": {
+    "pin": {
+      "repository": "https://github.com/kcat/openal-soft.git",
+      "tag": "1.25.2",
+      "commit": "b2c48f7718ef3fcf67921a8b6534c4914e328970",
+      "scope": "PinnedOpenALmixer;originalnull/loopback retained. Startup067privatePS5AudioOutbackend addsreal48kHz/stereoS16speakeroutput;actualconsoleaudio pending.",
+      "license": "LGPL-2.0-or-later with bundled BSD/MIT components;retain source/relink inputs for distribution"
+    },
+    "original_source_sha256": "12846e8c1bce29aa157b562540c73f446f8fa7fc64255faae8e26c46f416c41e",
+    "patched_source_sha256": "c18ea3d8667ba53782afc79ace34eb98735a0a8a12e46e5c9889d435e40434aa",
+    "header_sha256": "21036974a51f491894a5b3af3130b43f4d884ddef6b5f54a5809b012fd46737e",
+    "unit_object_sha256": "d94afadabdf9c25ac76febbe1b1f8fb8a8698bb72356c63bed01bd49a6662237",
+    "functions": [
+      "alcGetError",
+      "alcGetString",
+      "alcGetIntegerv",
+      "alcCreateContext",
+      "alcMakeContextCurrent"
+    ],
+    "scope": "At most128native API body scopes/256records,errno preserved;scope-exit includes exception unwinding,not success/return proof",
+    "game_jar_modified": false,
+    "cwd_discovery_repair": {
+      "original_source_sha256": "3abcbd9c7b21257c144934e7de78b37d7ee6fbb2533d81a1c45217cbbb7ed040",
+      "patched_source_sha256": "a9cb62fe9e64b04ecd4d15b7fe7c9a1db3738819424f97d5a2a9def136e7f5f5",
+      "unit_object_sha256": "9f3b32a83fe20f60be9eedc25e4c876f464beb93db43a2a6fe4ca3d861f34164",
+      "behavior": "Nonthrowing current_path(error_code);skip unavailable app-local search with warning,retain configured/local-valid/global/default HRTF discovery",
+      "console": "Host missing-cwd abort reproduced;PS5 cause/resolution unverified"
+    },
+    "original_archive_sha256": "c51312806793e0a505b94c82d7bb939370b57373e2ab566ccdca50fa1f405ca9",
+    "private_archive_sha256": "2df8044d6559c7b7a90798dc2fdbb287084eb77bcbc46abf72842d4bee452ecf",
+    "original_archive_unchanged": true,
+    "constructor_sections": [
+      ".ctors"
+    ],
+    "replaced_members": [
+      "alc.cpp.o",
+      "helpers.cpp.o",
+      "logging.cpp.o"
+    ],
+    "audio_mutex": {
+      "source_sha256": "4ecdd18872724a2f9bcfad961d4aa374824a393cbc81ecf2a5d4db3b2f6c044f",
+      "logging_original_sha256": "539ceccdb0a03fce25f4283603d2752c911ebbc53ad31fd67b62924941898fcd",
+      "logging_patched_sha256": "8cd5231e2d51ab270f6e6906138ea778bf40b9f8ab40ceacf8f0620b830d98d2",
+      "logging_object_sha256": "979d6bed55a89930b7012ba4bd4aa9a73c538b8e18675e4298d5c8fcd601c20d",
+      "scope": "Only OpenAL logging callback and PS5 AudioState/retained-port locks;normal nonrecursive acquire/release;64spin/50usbackoff;SDK/global/JVM locks unchanged"
+    },
+    "speaker_backend": {
+      "source_sha256": "ea6ddb67565fb7517e685477c4aa5c6bfa97da0bed0b980671bdbbb1c5dba681",
+      "header_sha256": "17682abae06397cfb76087dc007b8eded74f9292c5eeae1eea4fb60db399c210",
+      "port_pool_header_sha256": "4c1c4ce283fb658ca29252c3b46c2a257ffc6da3415922b241400760548c555c",
+      "object_sha256": "0ab27dec0e42b309a532c30583d5c20fb2324b3425c3821acb80fabd8ae86064",
+      "name": "ps5/PS5 Speakers",
+      "format": "ActualOpenALmixer->AudioOutSYSTEM/main,48kHz,stereoS16,256frames;outputpacedworker,joinbeforeclose",
+      "console": "PendingactualPS5sound"
+    },
+    "output_sha256": "343b097aa7ebecdb67e73cc6b129147f9925c98e17b4fac29bb326a912803edc"
+  },
+  "wsi_integration": {
+    "scope": "Early initialization of same WSI-owned output;native checkpoints and one delayed pre-resource VideoOut retry;max2 OS opens,success handle retained,negative results remain failure;read-only before/after kernel memory queries;first8 present/fence/flip progress and errors;64events/384byte formatting",
+    "mesa_commit": "1ba9874f478657ccf6da72ce55f0260164cc0bd0",
+    "original_source_sha256": "a8347cdbd73959b7c5cccf4dd3047434933c44250964306c42f1b776f6dbcea3",
+    "patch_sha256": "eaffa2404a54d754d37d546a54fc9a6ecd9d660890a68697da452bb6dbb7e532",
+    "retry_patch_sha256": "1cdf5f8cd0a3f9ecf61090fcdb427b0273a4f81daf28f4bf85c2fd5bd0f36e5f",
+    "resources_patch_sha256": "c93b1df5f9ff53f8a2e8429881498feef792e065adf5260ff6eb6df011a43989",
+    "early_owner_patch_sha256": "222f9e031ad9e46a12e5debdff25582030d31a4b29903ac92887c6caf5c10f58",
+    "present_progress_patch_sha256": "928b61ba90d44ec211731fb07f98f436630bccd32b14f362407186424940e53e",
+    "cursor_patch_sha256": "bfeb7369e10058012e7b5f01d05825ab524ba901f6e82f98fcad68248d46d640",
+    "keyboard_patch_sha256": "39097a71051b177d60145d4b8eb45031e4f18780dc6d29a80e0c4c171c3b929d",
+    "reserved_worker_patch_sha256": "78f928ddddb46e8f95298fae804134c8d51a569ed05c7deedf87b03291245636",
+    "input_present_patch_sha256": "2b707106265425c5a2b3a7823e9c47a2040d8f2d0fdd0c715b1c0775fcb4ec33",
+    "keyboard_headers_sha256": {
+      "keyboard_overlay.h": "f6dae4aca85869281847020c220de5ba473d6d40cf93bd7291b3839c8d94e603",
+      "keyboard_layout.h": "48febc79283be384ec5e0b491ce6cc85820b437a52f08078bf21ea5ebfacc10f"
+    },
+    "patched_source_sha256": "b1dff8f08daad07a29cc67ecbec62afc346d51c5b2c2e957ae1a0a3752036852",
+    "object_sha256": "e64194ca55d3b33470b23fba2aafaddb188ab455b151a5d9dc88612b1b28a2d8",
+    "original_archive_sha256": "4fc549f1f0cc4f0270b91e3447f16defdef50e582b03bba2257aaff88ee1e924",
+    "private_archive_sha256": "c4c5682f30cdc86f32e93242851b1008d6fabbe044ecb8a8301ad6c7c7efed3e",
+    "replaced_member": "wsi_common_videoout.c.o",
+    "original_archive_unchanged": true,
+    "console": "PENDING PS5 rejection checkpoint/crash investigation"
+  },
+  "checks": [
+    "PASS actualaudioMutex standardguards/try/blocking/80000contendedincrements/datavisibility ASan/UBSan;retainedportreload/concurrency controls",
+    "PASS actualpinnedOpenAL+PS5backend+patchedlogging hostrealresample/nonzeroPCM,pause/resume/join/portretention/nativefailure/busycontrols;AudioOutfixture not audiblesPS5",
+    "PASS inputbudgetdedup/8x8/saturation/concurrentduplicate/sharedconsumption ASan/UBSan",
+    "PASS targetbuild/link/signing,actualaudioobjectsnoSDKstdmutexlockrefs,packagedsource/object/sourcehashes/runtimepins",
+    "PASS launcherhost/officialgameJARunchanged,fullpackageCRC/signatures/version/source/licenses/frozenhistory/toolkit checks",
+    "PASS LGPLsource-relinkkit includesaudioheader/modifiedlogging/nativeexception+mutexrecorders;unmodified145ELFreproduced exactly"
+  ],
+  "console": "Pending exact145audibleaudio/workerstart,Controlifyinputscreenchanges/nativeexitlocalization,Fabric26.2worldcreation/save/reopen/endurance/workingversionregression;notconsolepass/crashrepairclaim",
+  "runtime": "NoJavaruntime source/pin/heap/GC/globalSDK synchronization changes",
+  "publication": "ProsperoCraftconsumer source/localcandidateonly,noStore/frozenmilestone/branchmerge",
+  "preservation": "144andpriorcanonicalpackages/symbols,accepted124,Store121,frozenmilestones retained;game/modJARs/instances/worlds/auth/settingsunchanged"
+}

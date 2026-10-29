@@ -101,19 +101,27 @@ def build(host=False,speakers=False,host_objects=()):
   speaker_source=ROOT/'client/ports/openal/ps5_backend.cpp'
   compile_copy(base,'CMakeFiles/OpenAL.dir/alc/backends/null.cpp.o',source/'alc/backends/null.cpp',speaker_source,speaker_obj,extra_flags=['-fsanitize=address,undefined'] if host else [])
 
+ logging_obj=None
+ if speakers:
+  logging_original=source/'core/logging.cpp';logging=out/'logging.cpp';logging_obj=out/'logging.cpp.o'
+  text=logging_original.read_text();assert text.count('auto LogCallbackMutex = std::mutex{};')==1
+  text=text.replace('auto LogCallbackMutex = std::mutex{};','auto LogCallbackMutex = ps5audio::Mutex{};')
+  logging.write_text(text)
+  compile_copy(base,'CMakeFiles/OpenAL.dir/core/logging.cpp.o',logging_original,logging,logging_obj,ROOT/'client/ports/openal/ps5_audio_mutex.hpp')
  audit={'pin':pin,'original_source_sha256':sha(original),'patched_source_sha256':sha(patched),'header_sha256':sha(header),'unit_object_sha256':sha(obj),'functions':[x[0]for x in ANCHORS],'scope':'At most128native API body scopes/256records,errno preserved;scope-exit includes exception unwinding,not success/return proof','game_jar_modified':False}
  audit['cwd_discovery_repair']={'original_source_sha256':sha(helpers_original),'patched_source_sha256':sha(helpers),'unit_object_sha256':sha(helpers_obj),'behavior':'Nonthrowing current_path(error_code);skip unavailable app-local search with warning,retain configured/local-valid/global/default HRTF discovery','console':'Host missing-cwd abort reproduced;PS5 cause/resolution unverified'}
  if host:
   lines=subprocess.check_output(['ninja','-C',str(base),'-t','commands','OpenAL'],text=True).splitlines()
   args=command(next(line for line in lines if '-dynamiclib'in line));library=out/'libopenal-boundary.dylib'
   args[args.index('-o')+1]=str(library);args[args.index(MEMBER)]=str(obj);args[args.index(HELPERS_MEMBER)]=str(helpers_obj)
+  if speakers:args[args.index('CMakeFiles/OpenAL.dir/core/logging.cpp.o')]=str(logging_obj)
   if speakers:args += [str(speaker_obj),*[str(p)for p in host_objects],'-fsanitize=address,undefined']
   subprocess.run(args,cwd=base,check=True);result=library
  else:
   original_archive=base/'libopenal.a';before=sha(original_archive);archive=out/'libopenal-boundary.a';shutil.copy2(original_archive,archive)
   assert subprocess.check_output([str(LLVM/'llvm-ar'),'t',str(archive)],text=True).splitlines().count('alc.cpp.o')==1
   assert subprocess.check_output([str(LLVM/'llvm-ar'),'t',str(archive)],text=True).splitlines().count('helpers.cpp.o')==1
-  subprocess.run([str(LLVM/'llvm-ar'),'r',str(archive),str(obj),str(helpers_obj),*([str(speaker_obj)]if speakers else [])],check=True)
+  subprocess.run([str(LLVM/'llvm-ar'),'r',str(archive),str(obj),str(helpers_obj),*([str(speaker_obj),str(logging_obj)]if speakers else [])],check=True)
   raw=out/'openal-raw.o';subprocess.run([str(LLD),'-r','--whole-archive',str(archive),'--no-whole-archive','-o',str(raw)],check=True)
   result=out/'openal.o';subprocess.run([str(LLVM/'llvm-objcopy'),'--redefine-syms='+str(base/'provider-bindings.txt'),str(raw),str(result)],check=True)
   sections=subprocess.check_output([str(LLVM/'llvm-readelf'),'-SW',str(result)],text=True);ctors=sorted(set(re.findall(r'\]\s+(\.(?:init_array|ctors)(?:\.\S+)?)\s',sections)));opts=[]
@@ -122,8 +130,9 @@ def build(host=False,speakers=False,host_objects=()):
    opts+=['--rename-section',name+'=.data.rel.ro.clientopenal.init_array.'+f'{priority:05d}'+name]
   if opts:subprocess.run([str(LLVM/'llvm-objcopy'),*opts,str(result)],check=True)
   assert sha(original_archive)==before
-  audit.update(original_archive_sha256=before,private_archive_sha256=sha(archive),original_archive_unchanged=True,constructor_sections=ctors,replaced_members=['alc.cpp.o','helpers.cpp.o'])
+  audit.update(original_archive_sha256=before,private_archive_sha256=sha(archive),original_archive_unchanged=True,constructor_sections=ctors,replaced_members=['alc.cpp.o','helpers.cpp.o']+(['logging.cpp.o']if speakers else []))
  if speakers:
+  audit['audio_mutex']={'source_sha256':sha(ROOT/'client/ports/openal/ps5_audio_mutex.hpp'),'logging_original_sha256':sha(logging_original),'logging_patched_sha256':sha(logging),'logging_object_sha256':sha(logging_obj),'scope':'Only OpenAL logging callback and PS5 AudioState/retained-port locks;normal nonrecursive acquire/release;64spin/50usbackoff;SDK/global/JVM locks unchanged'}
   audit['speaker_backend']={'source_sha256':sha(ROOT/'client/ports/openal/ps5_backend.cpp'),'header_sha256':sha(ROOT/'client/ports/openal/ps5_backend.h'),'port_pool_header_sha256':sha(ROOT/'client/ports/openal/ps5_port_pool.hpp'),'object_sha256':sha(speaker_obj),'name':'ps5/PS5 Speakers','format':'ActualOpenALmixer->AudioOutSYSTEM/main,48kHz,stereoS16,256frames;outputpacedworker,joinbeforeclose','console':'PendingactualPS5sound'}
  audit['output_sha256']=sha(result);(out/'audit.json').write_text(json.dumps(audit,indent=2)+'\n')
  return result,audit

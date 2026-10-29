@@ -1727,3 +1727,18 @@ HostactualJNIlookup/direct/refusal/cleanup controls+targetbuild/nativehashchecks
 PS5Controlify/FFM/compression/world/save/regressionpending;OpenALaudioerrorunresolved.
 See docs/client-fabric-library-names-144.md. Preserve143/accepted124/Store121,
 noStore/frozenpass,reusablesourceonlyJava/rawreportslocal;143diagnosticsretained.
+
+##145 audio lock pressure and bounded input/present observations — 2026-10-29
+
+144run1793296414-601953825 Controlify loads/connectsDualSense;userbuttonupdatesGUI
+thenappcloses,nofreshfatal,lastGUIstacknotcausalproof.NativeOpenALalcOpenDevice
+catchesmutexENOMEMinPS5state;logcallbackalsolockfails.145scopedinobjectatomic
+nonrecursiveaudioMutexforonlylogcallback+PS5AudioState/retainedport,64spin/50us
+backoff,actualmixer/port/worker/errorsretained.PrivateOpenALloggingobject+relink
+sources/auditsupdated,pinnedoriginalarchiveunchanged. HostactualOpenALPCM/lifecycle/
+failures +80kmutexcontention/retention pass;audiblePS5pending. OptionalSDLinput
+observationarmsfirst8changesx8queuepresents;originalqueue/fence/flipresultsnoted,
+noinputstate/order/resultchange,fixedatomicbudget. Hostdedup/concurrency/bounds
+checked;PS5exitcause/world/save/regressionpending. See
+ docs/client-fabric-audio-input-145.md. Runtimepins/heap/GC/gameJARsunchanged,
+preserve144/accepted124/Store121,noStore/frozenpass/rawreportpublication.

@@ -22,7 +22,7 @@ def build(runtime,output,variant="native_bootstrap",version="01.000.026",tested_
    obj=work/name
    assert sha(obj)==digest,'Toolkit relink input mismatch: '+name
    args.append(keep(obj))
- for name in ['main.o','renderer.o','crt.o','cpp_runtime.o']:args.append(keep(work/name))
+ for name in ['main.o','renderer.o','crt.o','cpp_runtime.o',*(['native-exception-trace.o','native-mutex-trace.o']if variant=='startup' else [])]:args.append(keep(work/name))
  args+=[keep(ROOT/'build/client-graphics/libSceAgc.so'),keep(ROOT/'build/client-graphics/libSceAgcDriver.so')]
  if variant=='startup' and (work/'libSceMouse.so').exists():args.append(keep(work/'libSceMouse.so'))
  for token in flags:args.append(token if token.startswith('-')else keep(token))
@@ -53,12 +53,14 @@ def build(runtime,output,variant="native_bootstrap",version="01.000.026",tested_
   patched=kit/'openal-startup-source/alc/alc.cpp'
   patched.write_text('#include "startup_boundary.hpp"\n'+patched.read_text())
   if json.loads((ROOT/'build/openal-startup-boundary-ps5/audit.json').read_text()).get('speaker_backend'):
-   for name in ['ps5_backend.cpp','ps5_backend.h','ps5_port_pool.hpp']:
+   for name in ['ps5_backend.cpp','ps5_backend.h','ps5_port_pool.hpp','ps5_audio_mutex.hpp']:
     shutil.copyfile(ROOT/'client/ports/openal'/name,kit/'openal-startup-source/alc/backends'/name)
     dest=kit/'consumer-source/client/ports/openal'/name;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(ROOT/'client/ports/openal'/name,dest)
    cmake=kit/'openal-startup-source/CMakeLists.txt'
    cmake.write_text(cmake.read_text()+'\ntarget_sources(OpenAL PRIVATE alc/backends/ps5_backend.cpp)\ntarget_include_directories(OpenAL PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/alc/backends")\n')
    patched.write_text(patched.read_text().replace('#include "ps5_backend.h"','#include "backends/ps5_backend.h"'))
+   logging=kit/'openal-startup-source/core/logging.cpp'
+   logging.write_text('#include "ps5_audio_mutex.hpp"\n'+(ROOT/'build/openal-startup-boundary-ps5/logging.cpp').read_text())
   shutil.copyfile(work/'startup-openal.o',kit/'accepted-startup-openal.o')
   records=kit/'build-record';records.mkdir(exist_ok=True)
   for name in ['config.h','version.h','CMakeCache.txt','toolchain.cmake']:

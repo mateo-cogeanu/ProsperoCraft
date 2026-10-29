@@ -1,0 +1,51 @@
+--- a/wsi_common_videoout.c
++++ b/wsi_common_videoout.c
+@@ -596,6 +596,8 @@
+ #include "keyboard_overlay.h"
+ 
+ /* The flip thread: each present's flip once its frame is done, in order. */
++extern int client_input_present_trace(int);
++extern void client_input_present_note(const char*,unsigned,long long);
+ static unsigned videoout_flip_probe_count;
+ static unsigned videoout_present_probe_count;
+ static int
+@@ -607,12 +609,14 @@
+       while (out->queue_count == 0)
+          cnd_wait(&out->changed, &out->lock);
+       const struct wsi_videoout_present present = out->queue[out->queue_head];
++      const bool input_probe=client_input_present_trace(0);
+       mtx_unlock(&out->lock);
+ 
+       struct wsi_videoout_swapchain *chain = present.chain;
+       const struct wsi_device *wsi = chain->base.wsi;
+       const unsigned probe = ++videoout_flip_probe_count;
+       if (probe <= 8)videoout_probe("WSI flip%u fence begin buffer%u",probe,present.buffer);
++      if(input_probe)client_input_present_note("fence-begin",present.buffer,0);
+       const VkResult wait_result = wsi->WaitForFences(chain->base.device, 1, &present.fence, VK_TRUE, UINT64_MAX);
+       if (probe <= 8 || wait_result != VK_SUCCESS)
+          videoout_probe("WSI flip%u fence result%d buffer%u",probe,wait_result,present.buffer);
+@@ -626,6 +630,7 @@
+                                                argument);
+       if (probe <= 8 || result != 0)
+          videoout_probe("WSI flip%u submit result0x%08x buffer%u argument%lld",probe,(unsigned)result,present.buffer,(long long)argument);
++      if(input_probe)client_input_present_note("flip-return",present.buffer,result);
+       if (result == 0) {
+          out->flip_argument = argument;
+          out->buffer[present.buffer].argument = argument;
+@@ -1153,6 +1158,8 @@
+ {
+    struct wsi_videoout_swapchain *chain = (struct wsi_videoout_swapchain *)wsi_chain;
+    struct wsi_videoout_output *out = &videoout_output;
++   const bool input_probe=client_input_present_trace(1);
++   if(input_probe)client_input_present_note("queue-enter",image_index,0);
+ 
+    const uint32_t buffer = chain->first + image_index;
+    mtx_lock(&out->lock);
+@@ -1184,6 +1191,7 @@
+    if (probe <= 8)videoout_probe("WSI present%u enqueue buffer%u inFlight%u",probe,buffer,chain->in_flight);
+    cnd_broadcast(&out->changed);
+    mtx_unlock(&out->lock);
++   if(input_probe)client_input_present_note("queue-return",image_index,0);
+    return VK_SUCCESS;
+ }
+ 

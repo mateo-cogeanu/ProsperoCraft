@@ -191,3 +191,8 @@ by a native library-name allocation failure during compression initialization;
 Controlify records the same loader error. App144 [integrates the runtime repair](docs/client-fabric-library-names-144.md).
 PS5 world/save/Controlify/audio/regression checks remain pending; menu startup
 is not ALL PASS. Store121 and previous candidates remain preserved.
+
+144Controlify connects and responds to the controller, but a later native exit
+remains unresolved. App145 [repairs scoped audio mutex allocation failures and adds bounded input/presentation observations](docs/client-fabric-audio-input-145.md).
+Host OpenAL mixer/locking checks pass; audible PS5 audio, screen transitions,
+world/save and working-version regression remain pending. Store121 is preserved.
