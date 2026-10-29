@@ -251,6 +251,6 @@ with zipfile.ZipFile(ROOT/'dist/client-startup/PPSA99874.zip')as package:
  table={l.split()[-1]:int(l.split()[0],16)for l in names.splitlines()if len(l.split())==3}
  start=table['alcGetString'];stop=min(v for v in table.values()if v>start)
  dis=subprocess.check_output(['/opt/homebrew/opt/llvm/bin/llvm-objdump','-d','--start-address='+hex(start),'--stop-address='+hex(stop),str(ROOT/'build/client-startup-probe/bootstrap-01.000.146-symbols.elf')],text=True)
- assert '<__wrap__ZNSt3__15mutex4lockEv>' not in dis,'DeviceStateLock must not route SDK lazy mutex' 
+ assert '<__wrap__ZNSt3__15mutex4lockEv>' not in dis,'DeviceStateLock must not route SDK lazy mutex'
  assert expected['mutex_header_sha256']==hashlib.sha256((ROOT/'client/ports/openal/ps5_audio_mutex.hpp').read_bytes()).hexdigest()
 print('PASS146 all OpenAL units share privately rebuilt Device layout with allocation-free StateLock;PS5 startup/audio pending')
