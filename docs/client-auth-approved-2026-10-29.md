@@ -29,3 +29,12 @@ After a fresh sign-in, saved restoration uses the approved application's refresh
 - Real local HTTPS transport regression: buffered OAuth errors, redirect refusal, body bounds, TLS certificate/hostname validation and sanitized diagnostics.
 
 The account UI fixture's obsolete exact mailbox-size assertion was narrowed to the account fields it exercises; no UI shape or behavior changed. All relevant checks pass with synthetic credentials/local fixtures. No live Microsoft account was used. Actual PS5 fresh sign-in, Minecraft authorization/profile/skin, and saved restoration after reopening still require validation with the approved app. No Java runtime change is needed.
+
+
+## Test app 120
+
+The user subsequently requested an installable test app. Candidate 01.000.120 packages the approved authentication changes from e23a091 with its own in-app version. No additional authentication or game behavior changes were made for this build. Accepted119 and all existing instances/worlds/downloads/settings are preserved. No Store or GitHub binary release is requested.
+
+Install the complete PPSA99874 folder from the120ZIP, then select Sign in and complete a fresh Microsoft device-code login. The previous unbound saved credential is deliberately not refreshed under this app ID. Check owned Minecraft launch and the profile/skin, then quit/reopen and confirm the new app's saved login restores without another code. Console results remain pending.
+
+Candidate120ZIP SHA-256: `7977a4ba179dc28109bd837b9b4c357cc5e7a04199c0b39e1898bf6e9820e699`.

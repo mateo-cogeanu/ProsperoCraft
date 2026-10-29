@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-29",
+  "build": "01.000.120",
+  "title_id": "PPSA99874",
+  "package_sha256": "7977a4ba179dc28109bd837b9b4c357cc5e7a04199c0b39e1898bf6e9820e699",
+  "auth_implementation_commit": "e23a0915274ffdb6d50aaaeeb00b45331490215a",
+  "client_id": "f0c7635e-8d50-4d7e-afa3-d15db4a0a3d3",
+  "scope": "Installable test app at user request; same approved authentication implementation, version/package checks only",
+  "checks": [
+    "Existing scripted auth/HTTPS/migration/account/instance checks pass",
+    "Startup host source/policy/JAR integrity checks pass",
+    "Target app build/signing pass",
+    "Package audit checks actual approved ID, consumer v2 endpoints, scope and client-bound cache classes",
+    "Native toolkit package audit",
+    "Exact119candidate and released ZIP checksums unchanged"
+  ],
+  "console": "Pending fresh approved-app device sign-in, ownership/profile/skin/game launch, reopen/restore with newly issued refresh credential",
+  "publication": "Source only; no branch merge, Store release or GitHub binary release",
+  "runtime": "No runtime source changes"
+}

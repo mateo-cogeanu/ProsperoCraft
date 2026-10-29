@@ -1395,3 +1395,8 @@ User reports119all good and explicitly requests Store release; snapshots remain 
 ## Approved application authentication — 2026-10-29
 
 User authorizes auth-only replacement with approved public client f0c7635e-8d50-4d7e-afa3-d15db4a0a3d3. Use Microsoft consumers OAuth v2 device/token endpoints, XboxLive.signin offline_access and d=RPS ticket. Preserve Xbox/XSTS/Minecraft entitlement/profile checks. Legacy unbound refresh files and other-client v2headers must request fresh sign-in without any token network request; never migrate/relabel their credentials. New v2AES-GCM header authenticates the client ID; fresh-app rotation/restoration remain. Preserve instances/worlds/cache/settings and all unrelated behavior. Relevant host/HTTPS/migration tests pass; live PS5 approved-app sign-in/reopen restore pending. Source-only publication; no branch merge, new app build/version/binary release or Store update authorized in this task. See docs/client-auth-approved-2026-10-29.md. Java runtime unchanged.
+
+
+##120 approved-auth test app — 2026-10-29
+
+User subsequently requests installable app for e23a091auth migration.120packages it with next in-app version; no further auth/game changes. Preserve119release and candidates. Packaged class audits must check approvedID/v2endpoint/scope/client-bound cache and absence of legacyID/scope; host checks are not console sign-in acceptance. Fresh Microsoft sign-in then owned launch/profile/skin and reopen/restore remain pending. No Store/binary release or branch merge. See docs/validation/client120-approved-auth-build-2026-10-29.json. Runtime source unchanged.
