@@ -43,11 +43,11 @@ namespace ps5::demo {
 extern "C" void sceVideoOutSetBufferAttribute2(VideoAttribute*,uint64_t,uint32_t,uint32_t,uint32_t,uint64_t,uint32_t,uint64_t){}
 extern "C" int sceVideoOutRegisterBuffers2(int32_t,int32_t,int32_t,VideoBuffer*,int32_t,VideoAttribute*,int32_t,void*){return 0;}
 }
-static pthread_t jni_owner{};static std::string ui_strings[104];static unsigned java_calls=0;
+static pthread_t jni_owner{};static std::string ui_strings[105];static unsigned java_calls=0;
 static void check_jni(){assert(pthread_equal(jni_owner,pthread_self()));}
 static jmethodID method_id(JNIEnv*,jclass,const char*,const char*){check_jni();return reinterpret_cast<jmethodID>(1);}
 static jobject java_tick(JNIEnv*,jclass,jmethodID,va_list args){check_jni();++java_calls;unsigned buttons=va_arg(args,jint);if(buttons&0x4000)ui_strings[10]="LAUNCH";return reinterpret_cast<jobject>(1);}
-static jsize array_length(JNIEnv*,jarray){check_jni();return 104;}
+static jsize array_length(JNIEnv*,jarray){check_jni();return 105;}
 static jobject array_element(JNIEnv*,jobjectArray,jsize index){check_jni();return reinterpret_cast<jobject>(uintptr_t(index+10));}
 static const char* utf_chars(JNIEnv*,jstring value,jboolean*){check_jni();return ui_strings[reinterpret_cast<uintptr_t>(value)-10].c_str();}
 static void release_chars(JNIEnv*,jstring,const char*){check_jni();}
@@ -123,7 +123,7 @@ int main(int argc,char**argv){assert(argc==2);
  prospero_menu::exit_requested=true;pthread_join(prospero_menu::ui_thread,nullptr);
  assert(prospero_menu::display_done.load()&&prospero_menu::display_ok.load());assert(!storage);assert((operations==std::vector<std::string>{"close","unmap","release"}));
  operations.clear();notifications_before=notifications;assert(prospero_menu::start_frontend());assert(notifications==notifications_before);jni_owner=pthread_self();
- for(int i=0;i<104;++i)ui_strings[i]=i<12?values[i]:"";
+ for(int i=0;i<105;++i)ui_strings[i]=i<12?values[i]:"";
  JNINativeInterface_ functions{};functions.GetStaticMethodID=method_id;functions.CallStaticObjectMethodV=java_tick;
  functions.GetArrayLength=array_length;functions.GetObjectArrayElement=array_element;functions.GetStringUTFChars=utf_chars;functions.ReleaseStringUTFChars=release_chars;functions.DeleteLocalRef=delete_ref;functions.ExceptionCheck=exception_check;
  JNIEnv environment{&functions};prospero_menu::push_input(0x4000);

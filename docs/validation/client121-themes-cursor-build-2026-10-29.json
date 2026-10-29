@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-29",
+  "build": "01.000.121",
+  "title_id": "PPSA99874",
+  "package_sha256": "3ae5d35308bc84119ed0285869630153b2ee9c8ce054e098ce58d0c6851dafaf",
+  "themes": [
+    "Forest",
+    "Ocean",
+    "Amethyst",
+    "Rose",
+    "Amber",
+    "Graphite"
+  ],
+  "settings_bars": {
+    "count": 7,
+    "width": 1080,
+    "height": 86,
+    "gap": 10
+  },
+  "cursor": "Vector polygon rasterized at 4x4 subpixel samples with thin outline and shadow; original hotspot/WSI lifecycle preserved",
+  "checks": [
+    "Actual Java theme Settings selection/persistence/cancel/legacy/invalid fallback and world preservation",
+    "All six actual Vulkan palettes rendered; seven equal Settings control geometries asserted; visual inspection",
+    "Native JNI/mailbox/display lifecycle fixture",
+    "WSI cursor ASan/UBSan, antialiasing/fill/outline/stem image and lifecycle checks",
+    "Actual target WSI compile/private archive; original Mesa archive preserved",
+    "Target app build/signing and package CRC/identity/source match",
+    "Original Main/startup host policy and observers",
+    "Storage and account/skin/resolution/snapshot regression checks",
+    "Startup package and native toolkit dependency/source/pin audits"
+  ],
+  "console": "Pending PS5 theme selection/reopen, uniform Settings appearance/focus/animations and fallback cursor appearance/click alignment without Controlify",
+  "publication": "ProsperoCraft development source only; no Store release or GitHub binary release",
+  "runtime": "No runtime source changes",
+  "preserved120_sha256": "7977a4ba179dc28109bd837b9b4c357cc5e7a04199c0b39e1898bf6e9820e699"
+}

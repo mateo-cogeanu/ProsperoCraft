@@ -26,7 +26,7 @@ Install the release's **PPSA99874.zip** using your normal homebrew workflow. The
 
 The client and server share **PPSA99874**: installing one replaces the other. Back up your worlds and preserve `/download0/ProsperoCraft` when updating. Storage remains 4 GiB; existing instances and cache are retained. Instance deletion is permanent after confirmation, including that instance's worlds—there is no Undo for new deletions.
 
-Release 120 switches from Mojang's application client ID to ProsperoCraft's own approved Microsoft application. **Everyone must sign in again once after updating.** Instances, worlds, downloads and settings are preserved; snapshots stay off by default. The Store update is submitted in [PR923](https://github.com/darkxex/ps5-homebrew-catalog/pull/923); deployment has not been checked.
+Release 120 switches from Mojang's application client ID to ProsperoCraft's own approved Microsoft application. **Everyone must sign in again once after updating.** Instances, worlds, downloads and settings are preserved; snapshots stay off by default. The user confirmed release 120 is available on ProsperoStore after [PR923](https://github.com/darkxex/ps5-homebrew-catalog/pull/923).
 
 ## Current status
 
@@ -36,6 +36,8 @@ Release 120 switches from Mojang's application client ID to ProsperoCraft's own 
 - **Native GUI:** animated backgrounds, instance icons, clear active tabs, state-aware account actions, dropdown resolution and optional vibration. Successful sign-in opens Instances; new libraries hide snapshots by default.
 - **Controls:** temporary DualSense keyboard/mouse mapping, cursor-only game menus, in-game keyboard and PLAY/OPTIONS guides. Full Controlify support remains planned.
 - **Known limits:** LAN hosting is deferred; save/reload, resolution combinations, reconnect/lifecycle regressions and extended endurance still need broader testing. Earlier server joining was confirmed.
+
+Development 121 adds six saved launcher color themes in Settings, uniform Settings bars, and an outlined fallback in-game pointer. See [the change and test notes](docs/client-themes-cursor-121.md). Physical PS5 validation is pending.
 
 Development continues on `main`, which contains the merged authenticated game-test work. The merged `Temp_gametest` and `codex/demo` branches have been retired. Release101 retains the existing `temp_gametest` package channel. The exact096 and097 packages remain preserved. Older Demo history, all frozen validation snapshots and public releases remain intact. Home/favorites are deferred; this release opens Instances, with Settings and Account beside it.
 

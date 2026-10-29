@@ -1,6 +1,6 @@
 --- a/wsi_common_videoout.c
 +++ b/wsi_common_videoout.c
-@@ -1331,3 +1331,105 @@
+@@ -1331,3 +1331,130 @@
  wsi_display_setup_syncobj_fd(struct wsi_device *wsi_device, int fd)
  {
  }
@@ -47,9 +47,34 @@
 +      uint32_t *pixels = image + (slot ^ 1) * 4096;
 +      memset(pixels, 0, 16384);
 +      if (!character) {
-+         for (unsigned row = 0; row < 30; ++row)
-+            for (unsigned col = 0; col <= row / 2; ++col)
-+               pixels[row * 64 + col] = col == 0 || col == row / 2 || row == 29 ? 0xff102018 : 0xfff5fff5;
++         /* Vector arrow path, rasterized at 4x4 samples per display pixel.
++          * Only image changes do this work; moving the cursor stays an OS call.
++          * The path's tip is (0,0), preserving the existing click hotspot. */
++         static const float path[][2] = {
++            {0,0},{2,29},{8.5f,22.5f},{14,34},{19,31.5f},{13.5f,20},{23,20}};
++         for (unsigned row = 0; row < 38; ++row) for (unsigned col = 0; col < 28; ++col) {
++            float alpha = 0, light = 0;
++            for (unsigned sy = 0; sy < 4; ++sy) for (unsigned sx = 0; sx < 4; ++sx) {
++               float x = col + (sx + 0.5f)/4, y = row + (sy + 0.5f)/4;
++               bool inside = false, shadow = false;
++               float distance2 = 10000;
++               for (unsigned i = 0, j = 6; i < 7; j = i++) {
++                  float ax = path[j][0], ay = path[j][1], bx = path[i][0], by = path[i][1];
++                  if ((ay > y) != (by > y) && x < (bx-ax)*(y-ay)/(by-ay)+ax) inside = !inside;
++                  float dx = bx-ax, dy = by-ay, t = CLAMP(((x-ax)*dx+(y-ay)*dy)/(dx*dx+dy*dy),0.0f,1.0f);
++                  float ex = x-ax-t*dx, ey = y-ay-t*dy, d = ex*ex+ey*ey;
++                  if (d < distance2) distance2 = d;
++                  float px = x-1.25f, py = y-1.75f;
++                  if ((ay > py) != (by > py) && px < (bx-ax)*(py-ay)/(by-ay)+ax) shadow = !shadow;
++               }
++               if (inside) { alpha += 1; light += distance2 < 1.21f ? 0.08f : 0.98f; }
++               else if (shadow) { alpha += 0.22f; light += 0.01f; }
++            }
++            if (alpha > 0) {
++               unsigned a = (unsigned)(alpha*255/16+0.5f), c = (unsigned)(light*255/alpha+0.5f);
++               pixels[row*64+col] = (a<<24)|(c<<16)|(c<<8)|c;
++            }
++         }
 +      } else {
 +         /* Compact controller text picker: selected glyph at the pointer.
 +          * Original5x7 glyph rows, A-Z then0-9 and punctuation. */

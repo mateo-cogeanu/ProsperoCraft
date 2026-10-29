@@ -76,6 +76,19 @@ if a.motion:
   set_field(30,"OFF");
 '''
     source=source.replace(' for(failure=1;failure<=3;failure++)',motion+'\n for(failure=1;failure<=3;failure++)')
+# Render each actual color palette through the production Settings paint path.
+theme_preview=r'''
+  snprintf(prospero_menu::fields[11].data(),512,"2");snprintf(prospero_menu::fields[15].data(),512,"6");snprintf(prospero_menu::fields[30].data(),512,"ON");
+  for(int theme=0;theme<6;theme++){
+   snprintf(prospero_menu::fields[104].data(),512,"%d",theme);settle_preview();assert(prospero_ui::surface->render());
+   for(int bar=0;bar<7;bar++){const auto& b=(*prospero_ui::buttons)[bar];assert(b.w==1080&&b.h==86&&b.x==760&&b.y==300+96*bar);}
+   auto* px=static_cast<const unsigned char*>(prospero_ui::surface->pixels);std::ofstream f(std::string(argv[1])+"/theme-"+std::to_string(theme)+".ppm",std::ios::binary);f<<"P6\n1920 1080\n255\n";
+   for(int pixel=0;pixel<1920*1080;pixel++)f.write(reinterpret_cast<const char*>(px+pixel*4),3);
+  }
+  puts("PASS all six palettes rendered through actual Vulkan Settings controls and backdrop");
+  snprintf(prospero_menu::fields[104].data(),512,"0");
+'''
+source=source.replace(' for(failure=1;failure<=3;failure++)',theme_preview+'\n for(failure=1;failure<=3;failure++)')
 source=source.replace('static void animation_check(ps5::demo::Canvas& c) noexcept {','static void animation_check(ps5::demo::Canvas&) noexcept {prospero_ui::Canvas c;')
 # The legacy discrete interpolation assertion has its own fixture. Here dt
 # and the toolkit spring are exercised by the rendered controller transitions.

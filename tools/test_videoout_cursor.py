@@ -38,6 +38,11 @@ int main(void){
  assert(client_wsi_cursor(true,.5,.5,0)<0&&!allocations); /* no swapchain yet */
  struct size size={{1920,1080}};struct set set={&size};struct chain chain={&set};videoout_output.current=&chain;
  assert(!client_wsi_cursor(true,.5,.5,0)&&allocations==1&&enables==1&&last_x==959&&last_y==539);
+ uint32_t* arrow=(uint32_t*)memory+4096;
+ unsigned soft=0,fill=0,outline=0;
+ for(unsigned p=0;p<4096;p++){unsigned a=arrow[p]>>24,c=arrow[p]&255;if(a>0&&a<255)soft++;if(a==255&&c>240)fill++;if(a==255&&c<30)outline++;}
+ assert(soft>30&&fill>100&&outline>20); /* smooth vector edges, white fill, thin outline */
+ assert(arrow[30*64+16]&&!arrow[28*64+23]); /* stem and open notch outside silhouette */
  int before=images;assert(!client_wsi_cursor(true,2,-1,0)&&images==before&&last_x==1919&&last_y==0);
  const char* chars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ._-/:!?@()+=";
  for(const char*p=chars;*p;p++)assert(!client_wsi_cursor(true,.25,.75,*p));

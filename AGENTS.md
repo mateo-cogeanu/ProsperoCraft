@@ -1407,3 +1407,15 @@ User subsequently requests installable app for e23a091auth migration.120packages
 User explicitly requests ProsperoStore120release with public changelog explaining previous Mojang applicationID, new approved ProsperoCraftID and mandatory fresh sign-in. This supersedes earlier auth-task no-release hold for exact120, not branch merges or console ALL PASS. Publish exact7977a4ba179dc28109bd837b9b4c357cc5e7a04199c0b39e1898bf6e9820e699 with matching source/relink/checksum/validation. Keep Store description/credits/icon unchanged and snapshot defaults off. No explicit live120auth/restore feedback is supplied; record pending validation honestly. Submit catalogPR without monitoring afterward per preference. Preserve119and all prior artifacts.
 
 120publicationcomplete: all five public assets downloaded/hash-verified, both OpenAL relinks exact, live release body verified to explain Mojang-to-own-ID migration and required fresh sign-in. CatalogPR923submitted with description/credits/icon unchanged. No monitoring afterward; no new console auth/restore pass inferred. See docs/validation/client120-store-publication-2026-10-29.json.
+
+## Development121 color themes and uniform Settings — 2026-10-29
+
+User requests actual launcher color themes and a recognizable fallback game
+pointer, then explicitly requests uniform Settings bars. Consumer-owned palette
+and saved theme index provide Forest/Ocean/Amethyst/Rose/Amber/Graphite; retain
+old defaults, independent backdrops, original textures/skins and positive Done
+color. Main Settings uses seven identical1080x86bars with10pxgaps and shared
+controls. Native/Java mailbox expands together to105fields. Cursor uses a vector polygon rasterized with4x4samples and a thin outline/shadow; retain WSI ownership/hotspot/lifecycle and
+keyboard overlay. See docs/client-themes-cursor-121.md. Build/host checks do not
+establish PS5 acceptance. Preserve120Store/older candidates/frozen snapshots;
+no runtime source or Store publication change.

@@ -4,6 +4,7 @@
 #define PROSPERO_APP_VERSION "Development"
 #endif
 #include "demo_renderer.hpp"
+#include "palette.hpp"
 #include "branding_logo.hpp"
 #include "instance_icons.hpp"
 #include "login_qr.hpp"
@@ -27,16 +28,16 @@ using prospero_ui::Canvas;
 #else
 using ps5::demo::Canvas;
 #endif
-constexpr std::uint32_t ink(std::uint32_t rgb){return 0xff000000u|((rgb&255)<<16)|(rgb&0xff00)|((rgb>>16)&255);}
+inline std::uint32_t ink(std::uint32_t rgb){return prospero_palette::raw_ink(prospero_palette::rgb(rgb));}
 // Text stays small; only the seven thumbnail slots need larger buffers.
 // Inline aggregate storage preserves constructor-free startup and bounded stacks.
 struct Fields {
  bool operator==(const Fields&)const noexcept=default;
- std::array<std::array<char,512>,97> text{};
+ std::array<std::array<char,512>,98> text{};
  std::array<std::array<char,8192>,7> images{};
  template<class Char>struct Slot {Char* p;size_t length;Char* data()const noexcept{return p;}size_t size()const noexcept{return length;}Char& operator[](size_t i)const noexcept{return p[i];}};
- Slot<char> operator[](size_t i)noexcept {if(i>=96&&i<=102)return {images[i-96].data(),8192};return {text[i==103?96:i].data(),512};}
- Slot<const char> operator[](size_t i)const noexcept {if(i>=96&&i<=102)return {images[i-96].data(),8192};return {text[i==103?96:i].data(),512};}
+ Slot<char> operator[](size_t i)noexcept {if(i>=96&&i<=102)return {images[i-96].data(),8192};return {text[i>=103?i-7:i].data(),512};}
+ Slot<const char> operator[](size_t i)const noexcept {if(i>=96&&i<=102)return {images[i-96].data(),8192};return {text[i>=103?i-7:i].data(),512};}
 };
 // Only the native UI thread draws/reads the controller. JNI stays on the JVM
 // startup thread. A bounded mailbox exchanges public UI text and button edges.
@@ -152,17 +153,17 @@ inline void action(Canvas& c,int x,int y,int w,const char* text,bool active,bool
 #endif
  if(active)selection(c,x,y,w,76);c.rounded(x,y,w,76,18,ink(primary?0xb6f2be:0x244438));label(c,x+28,y+22,text,30,primary?0x102c1b:0xeaf0e8);
 }
-inline void row_control(Canvas& c,int y,const char* name,const char* value,bool active,bool editable=true){
- if(active)selection(c,760,y,1080,96);
+inline void row_control(Canvas& c,int y,const char* name,const char* value,bool active,bool editable=true,int height=96){
+ if(active)selection(c,760,y,1080,height);
 #ifdef PROSPERO_TOOLKIT
- c.control(760,y,1080,96,active,std::strcmp(fields[30].data(),"ON")!=0&&pressed_at&&now_ms()-pressed_at<110);
+ c.control(760,y,1080,height,active,std::strcmp(fields[30].data(),"ON")!=0&&pressed_at&&now_ms()-pressed_at<110);
 #else
- c.rounded(760,y,1080,96,20,ink(active?0x1e3c30:0x142b24));
+ c.rounded(760,y,1080,height,20,ink(active?0x1e3c30:0x142b24));
 #endif
- label(c,792,y+16,name,24,0x8fae9d);title(c,792,y+47,value,30,960);if(editable){
+ label(c,792,y+(height-96)/2+16,name,24,0x8fae9d);title(c,792,y+(height-96)/2+47,value,30,960);if(editable){
 #ifdef PROSPERO_TOOLKIT
  bool toggle=std::strcmp(name,"REDUCED MOTION")==0||std::strcmp(name,"SHOW SNAPSHOTS")==0||std::strcmp(name,"STARTUP NOTICE")==0;
- if(toggle)c.toggle(std::strcmp(name,"REDUCED MOTION")==0?0:std::strcmp(name,"SHOW SNAPSHOTS")==0?1:2,1728,y+27,std::strcmp(value,"ON")==0,active);
+ if(toggle)c.toggle(std::strcmp(name,"REDUCED MOTION")==0?0:std::strcmp(name,"SHOW SNAPSHOTS")==0?1:2,1728,y+(height-40)/2,std::strcmp(value,"ON")==0,active);
  else
 #endif
  label(c,1779,y+43,">",30,0xa9eab6);
@@ -170,11 +171,11 @@ inline void row_control(Canvas& c,int y,const char* name,const char* value,bool 
 }
 inline void player_head(Canvas& c,int x,int y,int size){
  const char* hex=fields[80].data();if(std::strlen(hex)!=384){c.rounded(x,y,size,size,6,ink(0x568b72));label(c,x+size/4,y+size/5,"?",unsigned(size/2),0xeaf0e8);return;}
- for(int py=0;py<8;py++)for(int px=0;px<8;px++){char rgb[7]{};std::memcpy(rgb,hex+(py*8+px)*6,6);c.rectangle(x+px*size/8,y+py*size/8,(size+7)/8,(size+7)/8,static_cast<ps5::demo::Color>(ink(unsigned(std::strtoul(rgb,nullptr,16)))));}
+ for(int py=0;py<8;py++)for(int px=0;px<8;px++){char rgb[7]{};std::memcpy(rgb,hex+(py*8+px)*6,6);c.rectangle(x+px*size/8,y+py*size/8,(size+7)/8,(size+7)/8,static_cast<ps5::demo::Color>(prospero_palette::raw_ink(unsigned(std::strtoul(rgb,nullptr,16)))));}
 }
 inline void login_qr(Canvas& c,int x,int y,int scale){c.rounded(x,y,prospero_qr::size*scale,prospero_qr::size*scale,0,ink(0xffffff));for(int py=0;py<prospero_qr::size;py++)for(int px=0;px<prospero_qr::size;px++)if(prospero_qr::modules[py*prospero_qr::size+px]=='1')c.rectangle(x+px*scale,y+py*scale,scale,scale,static_cast<ps5::demo::Color>(ink(0x000000)));}
 inline void compose(Canvas& c) noexcept {
- animating=false;last_draw_time=now_ms();
+ animating=false;last_draw_time=now_ms();prospero_palette::selected=std::clamp(number(104),0,5);
 #ifdef PROSPERO_TOOLKIT
  c.context(fields,pressed_at);
 #endif
@@ -235,7 +236,10 @@ inline void compose(Canvas& c) noexcept {
  }else if(page==2){
   label(c,70,185+slide,"Settle in.",64);label(c,75,270+slide,"A few thoughtful defaults. You're in control.",24,0x91ad9b);
   c.rounded(70,340+slide,620,548,28,ink(0x10221c));label(c,112,391+slide,"YOUR SETUP",24,0x8fbb9b);label(c,112,459+slide,"Native Java 25",42);wrap(c,114,545+slide,"Choose your game window size. The pointer uses logical coordinates; the native display reports its actual framebuffer size. Video and audio options stay with each instance.",520,5);label(c,114,714+slide,"SQUARE  Change background",24,0xa9eab6);title(c,114,753+slide,fields[76][0]?fields[76].data():"Waves",30,510);label(c,114,804+slide,std::strcmp(fields[79].data(),"OFF")==0?"TRIANGLE  Vibration: OFF":"TRIANGLE  Vibration: ON",24,0xa9eab6);title(c,114,851+slide,fields[67].data(),18,510,0x83a58d);
-  row_control(c,300+slide,"GAME RESOLUTION",fields[25].data(),row==0,true);row_control(c,410+slide,"PARALLEL DOWNLOADS",fields[26].data(),row==1);row_control(c,520+slide,"REDUCED MOTION",fields[30].data(),row==2);row_control(c,630+slide,"SHOW SNAPSHOTS",fields[27].data(),row==3);row_control(c,740+slide,"STARTUP NOTICE",fields[68].data(),row==4);action(c,760,850+slide,1080,"INPUT & CONTROLLER KEYBINDS",row==5);
+  const char* themes[]={"Forest","Ocean","Amethyst","Rose","Amber","Graphite"};
+  const char* names[]={"GAME RESOLUTION","PARALLEL DOWNLOADS","REDUCED MOTION","SHOW SNAPSHOTS","STARTUP NOTICE","INPUT & CONTROLLER KEYBINDS","COLOR THEME"};
+  const char* values[]={fields[25].data(),fields[26].data(),fields[30].data(),fields[27].data(),fields[68].data(),"Configure controls",themes[prospero_palette::selected]};
+  for(int i=0;i<7;i++)row_control(c,300+i*96+slide,names[i],values[i],row==i,true,86);
  }else if(page==3){
   label(c,70,185+slide,"Your account. Your adventure.",64);label(c,75,270+slide,"Sign in on your phone. Your password stays with Microsoft.",24,0x91ad9b);
   c.rounded(70,340+slide,1000,548,28,ink(0x10221c));label(c,116,391+slide,"MICROSOFT ACCOUNT",24,0x8fbb9b);title(c,116,447+slide,fields[5].data(),42,750);if(signed_in)player_head(c,929,389+slide,96);
@@ -426,8 +430,8 @@ inline jboolean menu(JNIEnv* env,jclass owner){
   auto array=static_cast<jobjectArray>(env->CallStaticObjectMethod(owner,tick,static_cast<jint>(take_input())));
   if(env->ExceptionCheck()||!array){failed=true;break;}
   Fields next{};
-  if(env->GetArrayLength(array)!=104){env->DeleteLocalRef(array);failed=true;break;}
-  for(int i=0;i<104;++i){auto value=static_cast<jstring>(env->GetObjectArrayElement(array,i));if(!value){failed=true;break;}const char* bytes=env->GetStringUTFChars(value,nullptr);if(!bytes){env->DeleteLocalRef(value);failed=true;break;}std::snprintf(next[i].data(),next[i].size(),"%s",bytes);env->ReleaseStringUTFChars(value,bytes);env->DeleteLocalRef(value);}
+  if(env->GetArrayLength(array)!=105){env->DeleteLocalRef(array);failed=true;break;}
+  for(int i=0;i<105;++i){auto value=static_cast<jstring>(env->GetObjectArrayElement(array,i));if(!value){failed=true;break;}const char* bytes=env->GetStringUTFChars(value,nullptr);if(!bytes){env->DeleteLocalRef(value);failed=true;break;}std::snprintf(next[i].data(),next[i].size(),"%s",bytes);env->ReleaseStringUTFChars(value,bytes);env->DeleteLocalRef(value);}
   env->DeleteLocalRef(array);if(failed)break;
   publish(next);online.store(true,std::memory_order_release);
   launch=std::strcmp(next[10].data(),"LAUNCH")==0;

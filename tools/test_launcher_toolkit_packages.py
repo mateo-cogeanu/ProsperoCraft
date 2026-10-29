@@ -14,7 +14,7 @@ for channel in ('temp_gametest',):
         prefix='PPSA99874/';java=prefix+'assets/java25/'
         param=json.loads(z.read(prefix+'sce_sys/param.json'))
         assert param['attribute3']&0x40
-        assert param['contentVersion']=='01.000.120' and param['titleId']=='PPSA99874' and param['downloadDataSize']==4096
+        assert param['contentVersion']=='01.000.121' and param['titleId']=='PPSA99874' and param['downloadDataSize']==4096
         with zipfile.ZipFile(io.BytesIO(z.read(java+'client-probe.jar'))) as jar:
             assert jar.read('prosperocraft-channel.txt').decode().strip()==channel
             assert ('offline-import-public-key.der' in jar.namelist())==(channel=='offline')
@@ -24,7 +24,7 @@ for channel in ('temp_gametest',):
         pin=json.loads(z.read(java+'launcher-toolkit/upstream.json'))
         assert pin==json.loads((KIT/'upstream.json').read_text())
         for name,digest in pin['sha256'].items():assert sha(z.read(java+'launcher-toolkit/'+name))==digest
-        for name in ('toolkit_surface.hpp','toolkit_canvas.hpp','toolkit_effects.hpp','native_menu.hpp','navigation.hpp','haptics.hpp'):
+        for name in ('toolkit_surface.hpp','toolkit_canvas.hpp','toolkit_effects.hpp','palette.hpp','native_menu.hpp','navigation.hpp','haptics.hpp'):
             assert z.read(java+'launcher-toolkit/'+name)==(ROOT/'client/launcher'/name).read_bytes()
         audit=json.loads(z.read(java+'launcher-toolkit-audit.json'))
         assert audit['backend']=='hui::gfx::VkRenderer' and audit['frames_in_flight']==1 and audit['automatic_constructors'] is False
@@ -55,4 +55,4 @@ for name,digest in audit['objects_sha256'].items():
     obj=work/name;assert sha(obj.read_bytes())==digest
     refs=subprocess.check_output([str(LLVM/'llvm-nm'),'--undefined-only',str(obj)],text=True)
     assert not {l.split()[-1] for l in refs.splitlines() if l.split()}.intersection({'malloc','calloc','realloc','free','posix_memalign'})
-print('PASS Temp_gametest120 package/CRC/identity/key exclusion and retention,toolkit pin/source/font/license hashes,real linked renderer/components/blit,explicit glyph constructor and no automatic constructors,paired C++ allocation,OSHI retained;console pending')
+print('PASS Temp_gametest121 package/CRC/identity/key exclusion and retention,toolkit pin/source/font/license hashes,real linked renderer/components/blit,explicit glyph constructor and no automatic constructors,paired C++ allocation,OSHI retained;console pending')
