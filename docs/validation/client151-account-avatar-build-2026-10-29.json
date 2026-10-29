@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-29",
+  "build": "01.000.151",
+  "change": "Shared player_head adds neutral light mat, dark inner keyline and outer edge in top account tab and account screen;original skin RGB and rendered size preserved, including fallback head frame",
+  "source": "client/launcher/native_menu.hpp",
+  "checks": [
+    "Actual native software preview",
+    "Actual Vulkan toolkit preview using nearly black skin at 40px and96px across all six color themes",
+    "Target package/link/CRC/signature/frozen-history/toolkit checks",
+    "Exact LGPL native relink reproduction"
+  ],
+  "console": "Pending exact151 PS5 visual confirmation in top account button and account page;150 Fabric26.2 stability remains pending",
+  "publication": "ProsperoCraft source/local app only;no Store release or merge",
+  "preservation": "No Java/auth/skin decoding/runtime/graphics/audio policy changes;150 and previous canonical packages/symbols retained",
+  "title_id": "PPSA99874",
+  "package_sha256": "58aabd7140483d48ae1e5fba3603cb7954e59fec5d82fc453c0510f891dc105d",
+  "symbols_sha256": "775bf23dfa91ad75bcc596139f633021d83672f5f56873838daabd9d06014489",
+  "source_sha256": "608b32a1e840b6eb34a4c11e2db453016a8fda237226fcc785ba7ac344791511"
+}

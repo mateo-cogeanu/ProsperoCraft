@@ -170,6 +170,12 @@ inline void row_control(Canvas& c,int y,const char* name,const char* value,bool 
  }
 }
 inline void player_head(Canvas& c,int x,int y,int size){
+ // A neutral light mat and dark inner keyline separate every skin from any theme.
+ // Keep the original face pixels and size; the shared frame covers both account views.
+ const int padding=std::max(3,size/12);
+ c.rounded(x-padding-1,y-padding-1,size+2*padding+2,size+2*padding+2,padding+4,prospero_palette::raw_ink(0x10151c));
+ c.rounded(x-padding,y-padding,size+2*padding,size+2*padding,padding+3,prospero_palette::raw_ink(0xc1c9d2));
+ c.rectangle(x-1,y-1,size+2,size+2,static_cast<ps5::demo::Color>(prospero_palette::raw_ink(0x303943)));
  const char* hex=fields[80].data();if(std::strlen(hex)!=384){c.rounded(x,y,size,size,6,ink(0x568b72));label(c,x+size/4,y+size/5,"?",unsigned(size/2),0xeaf0e8);return;}
  for(int py=0;py<8;py++)for(int px=0;px<8;px++){char rgb[7]{};std::memcpy(rgb,hex+(py*8+px)*6,6);c.rectangle(x+px*size/8,y+py*size/8,(size+7)/8,(size+7)/8,static_cast<ps5::demo::Color>(prospero_palette::raw_ink(unsigned(std::strtoul(rgb,nullptr,16)))));}
 }
