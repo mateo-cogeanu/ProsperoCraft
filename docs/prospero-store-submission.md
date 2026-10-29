@@ -239,3 +239,12 @@ Exact accepted119is public with five downloaded/hash-verified release assets and
 Catalog PR: https://github.com/darkxex/ps5-homebrew-catalog/pull/907
 
 No monitoring of CI/merge/deployment/liveStore is performed, per user preference. See validation/client119-store-publication-2026-10-28.json. Functional feedback is recorded without inferring full JNA/endurance coverage or a new Java milestone.
+
+
+##120 approved-app authentication release — 2026-10-29
+
+Exact120 is public with five downloaded/hash-verified release assets and matching OpenAL source/relink materials. Changelog explains the switch from Mojang's application ID to ProsperoCraft's own approved app and the required one-time fresh sign-in. Store description/credits/icon remain unchanged; snapshots stay off by default.
+
+Catalog PR: https://github.com/darkxex/ps5-homebrew-catalog/pull/923
+
+No PR/check/merge/deployment/liveStore monitoring is performed per preference. No new live120auth/restore result or ALL PASS is inferred from release authorization. See validation/client120-store-publication-2026-10-29.json.

@@ -1,5 +1,12 @@
 # Changelog
 
+## Release 01.000.120
+
+- Earlier builds used Mojang's application client ID. ProsperoCraft now uses its own approved Microsoft application; everyone must sign in again once after updating.
+- Bind encrypted saved refresh credentials to ProsperoCraft's client ID, preserving fresh-app restoration and rotation. Old-app refresh tokens are not reused.
+- Preserve Microsoft/Xbox/XSTS/Minecraft ownership/profile checks, instances, worlds, downloads and settings. Snapshots remain off by default.
+- Host/auth/HTTPS/migration/package and exact native relink checks pass. Live120authentication/restore remains unconfirmed in the publication record.
+
 ## Development 01.000.119
 
 - Integrate genuine native JNA dispatch for snapshot6early bootstrap using the existing resident library mechanism and supported JNA loader settings. Keep original game/dependency JARs intact.

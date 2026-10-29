@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-29",
+  "version": "01.000.120",
+  "release_url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.120",
+  "release_tag_commit": "931fd19ea7a96e5ec78677967f11ac3c8a7cc337",
+  "candidate_source_commit": "5f5b3f840625c531374e0f3a4847b2dff357a160",
+  "authentication_commit": "e23a0915274ffdb6d50aaaeeb00b45331490215a",
+  "package_sha256": "7977a4ba179dc28109bd837b9b4c357cc5e7a04199c0b39e1898bf6e9820e699",
+  "assets": [
+    {
+      "name": "PPSA99874.zip",
+      "bytes": 122939146,
+      "sha256": "7977a4ba179dc28109bd837b9b4c357cc5e7a04199c0b39e1898bf6e9820e699"
+    },
+    {
+      "name": "SHA256SUMS",
+      "bytes": 379,
+      "sha256": "84a4d76122cae8bfae1b1082b274a8c0d1a9bfb2897a37fb08dc106c2429185b"
+    },
+    {
+      "name": "client120-build-validation.json",
+      "bytes": 1324,
+      "sha256": "6f8d7910117e2c79fa2362a4d5b06ce67065104d1a997ac7ac8cbab9bee7feb3"
+    },
+    {
+      "name": "client120-console-validation.json",
+      "bytes": 756,
+      "sha256": "431b87f166b20d14a12ce1ce54f0d4b6a299af5f183f66ca7af0befcc9adcdbb"
+    },
+    {
+      "name": "client120-openal-source-relink.zip",
+      "bytes": 90230912,
+      "sha256": "7ec8c681586226e72f8d299b1749bf9e22ae92d35028253c34f8973aeb31abfd"
+    }
+  ],
+  "verification": "All five public asset downloads match local hashes/sizes. Relink kit CRC/every input verified; normal/replacement native ELF exact.157records valid;232tests pass/2skipped; online record0errors/0warnings.",
+  "catalog_pr": "https://github.com/darkxex/ps5-homebrew-catalog/pull/923",
+  "catalog_head": "7e5940e",
+  "catalog_status": "Submitted. No monitoring after PR creation per user preference; checks/merge/deployment/live availability uninspected.",
+  "changelog": "Public release explicitly explains previous Mojang application ID, own approved ProsperoCraft app and mandatory fresh sign-in after updating. Verified from published release body.",
+  "description": "Minecraft Java runs natively on PS5 with a Native Java 25 Runtime. Java ownership required. GUI: mihawk-99/PS5_VKHomebrewUI; icons: MultiMC/Prism.",
+  "metadata": "Description/credits/icon unchanged; only version/artifact/digest update. Snapshots stay off by default.",
+  "console": "Publication authorized; no explicit new120live PS5 auth/restore result supplied. Host auth/migration/account/HTTPS/package checks pass, live sign-in/restoration pending.",
+  "preservation": "119and previous assets/frozen milestones preserved; exact120candidate published without rebuild.",
+  "runtime": "No new runtime source change in120"
+}

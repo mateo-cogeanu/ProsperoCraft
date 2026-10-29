@@ -26,7 +26,7 @@ Install the release's **PPSA99874.zip** using your normal homebrew workflow. The
 
 The client and server share **PPSA99874**: installing one replaces the other. Back up your worlds and preserve `/download0/ProsperoCraft` when updating. Storage remains 4 GiB; existing instances and cache are retained. Instance deletion is permanent after confirmation, including that instance's worlds—there is no Undo for new deletions.
 
-Release119 adds 26.4 snapshots 1–6 and the native startup repair for snapshot 6. Snapshots stay off by default; existing saved preferences are retained. The user confirms it works. The Store update is submitted in [PR907](https://github.com/darkxex/ps5-homebrew-catalog/pull/907); deployment has not been checked.
+Release 120 switches from Mojang's application client ID to ProsperoCraft's own approved Microsoft application. **Everyone must sign in again once after updating.** Instances, worlds, downloads and settings are preserved; snapshots stay off by default. The Store update is submitted in [PR923](https://github.com/darkxex/ps5-homebrew-catalog/pull/923); deployment has not been checked.
 
 ## Current status
 
