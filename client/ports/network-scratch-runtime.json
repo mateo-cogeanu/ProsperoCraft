@@ -1,0 +1,8 @@
+{
+  "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
+  "commit": "ee5f2561c30ee493e6a96628a888aa62ff6fac66",
+  "patch": "0130-opt-in-network-node-direct-scratch.patch",
+  "patch_sha256": "8c0ba5e9e12f0c3c9e2073d5b767632e60541a98b4f48531798472662ee6f51b",
+  "documentation": "Development/docs/java25-network-direct-scratch.md",
+  "default": "Disabled;consumer141 explicitly enables before JVM creation"
+}

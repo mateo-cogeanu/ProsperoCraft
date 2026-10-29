@@ -50,6 +50,7 @@ extern "C" Initializer __jvm_init_array_start[],__jvm_init_array_end[];
 #include <unistd.h>
 extern "C" std::uint64_t sceKernelGetProcessTime();
 extern "C" void JNU_PS5SetDirectScratchEnabled(int);
+extern "C" void JNU_PS5SetNetworkScratchEnabled(int);
 extern "C" void JNU_PS5SetVerifierSmallReserveEnabled(int);
 extern "C" void ps5_emutls_enable_direct(int);
 extern "C" int prospero_sdl_mutex_preinit();
@@ -528,6 +529,8 @@ int main(int argc,char** argv) {
  ps5_emutls_enable_direct(1);
  log_stage("PS5 compiler TLS direct fallback enabled after libc/anonymous ENOMEM; shared native-data ledger");
  JNU_PS5SetDirectScratchEnabled(1);
+ JNU_PS5SetNetworkScratchEnabled(1);
+ ps5_vm_trace("PS5 libnet node scratch enabled:three8MiB/64slot budgets;normal allocators first");
  JNU_PS5SetVerifierSmallReserveEnabled(1);
  log_stage("PS5 verifier variable reserve enabled: 4MiB contiguous 256-byte units after libc refusal");
  log_stage("PS5 core direct scratch fallback enabled: two8MiB/64slot temporary-buffer budgets;normal allocators first");

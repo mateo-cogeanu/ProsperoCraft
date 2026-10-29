@@ -1672,3 +1672,17 @@ hostchecks;macOStimedmutexfixtureonly,PS5nativeAPI. See
  docs/client-fabric-present-reserve-140.md. Targethashes/routes/packagedsources
 checked;PS5presentation/world/audio/save/regressionpending. NoJavaruntime/pin/
 heap/GC/globalpthread/gameJARchange;preserve139/accepted124/Store121,noStore/pass.
+
+##141 runtime network conversion scratch integration — 2026-10-29
+
+140failedrun1793293545-800526367 reservesworker/RADVsyncsuccessfully;originalMC
+InitializinggameOOM Nativeheapallocationfailed inInet4lookup accountHTTPS.
+Runtimeee5f256 patch0130publishedseparately;consumerpins/hashesauditsit,enables
+independentdefaultoffJNU_PS5SetNetworkScratchEnabledbeforeJVM,embedsrebuiltlibnet
+objects+matching.so. DNS/interface nodes libc/anonymousfirst,64slots/8MiBper3Cunits,
+24MiBaggregate,pairedrelease/retainedcleanupfailureownership. NoDNSanswers/auth/
+heap/GC/globalallocator/gameJARchanges. Hostactualnode/mapper/policy/dns/conversion/
+cleanup andtargetjava.base-libschecks;PS5lookup/Fabricpresentation/world/audio/save/
+regressionpending;OpenALdiagnosticmutexfailuresnotclaimedfixed. See
+ docs/client-fabric-network-scratch-141.md. Preserve140/accepted124/Store121;
+noStore/frozenpass,reusablesourceonlyinJavarepo,rawreportslocal.

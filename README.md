@@ -167,3 +167,9 @@ addresses139's failed first VideoOut worker creation after VMA/shader/swapchain
 startup. It reserves that native worker and RADV mutexes before JVM startup;
 PS5 presentation, Fabric26.2 gameplay/audio/save and working-version regression
 remain pending. Store121 and all prior canonical candidates are preserved.
+
+App141 [native DNS conversion scratch](docs/client-fabric-network-scratch-141.md)
+integrates an opt-in Java runtime repair after140 reported native allocation
+failure during an account-service DNS lookup. Host allocation/ownership and
+target runtime checks pass; PS5 Fabric26.2 startup/gameplay and working-version
+regression remain pending. Store121 and earlier canonical candidates remain intact.

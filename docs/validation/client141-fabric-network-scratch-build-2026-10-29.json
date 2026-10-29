@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-29",
+  "build": "01.000.141",
+  "title_id": "PPSA99874",
+  "package_sha256": "261d36a8f141d7304cc1937a623ab6f4e77fb6a5e4dd97e1a83561c47a588dce",
+  "symbols_sha256": "34f85a7179ed15f52b384d4a43ad609b56f6ac7f6b81627943c825873fa5a213",
+  "failed_run": "client-01.000.140-1793293545-800526367",
+  "observed_failure": "Original Minecraft26.2 Initializing game:OutOfMemoryError Native heap allocation failed in Inet4AddressImpl.lookupAllHostAddr during account-service HTTPS.140worker/mutex/condition reserves report success;not proof of frame presentation or world pass.",
+  "change": "Independent opt-in runtime-owned libnet DNS/interface conversion-node scratch fallback after libc/anonymous ENOMEM;enabled beforeJVM;matching rebuilt native objects and libnet.so packaged",
+  "integration": {
+    "runtime": {
+      "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
+      "commit": "ee5f2561c30ee493e6a96628a888aa62ff6fac66",
+      "patch": "0130-opt-in-network-node-direct-scratch.patch",
+      "patch_sha256": "8c0ba5e9e12f0c3c9e2073d5b767632e60541a98b4f48531798472662ee6f51b",
+      "documentation": "Development/docs/java25-network-direct-scratch.md",
+      "default": "Disabled;consumer141 explicitly enables before JVM creation"
+    },
+    "libnet_sha256": "65f009f8f3605b58a1602d4071232f9ac276bd2dd77a516dddabe2d5867a3ee9",
+    "objects_sha256": {
+      "Inet4AddressImpl.o": "f0fb74942713dbf8a5e9ba8adabea2ee3785ec2bb8630d29263f2e2ff3d1ffaf",
+      "Inet6AddressImpl.o": "428f6c695d9d9546591cc0754dc3cc9d2eb5d830e69a1a72afd8e6accc1facbb",
+      "NetworkInterface.o": "cd168644a7a581a90862c4f703680a3c3829dace759335746fc6e27b2a2f5920",
+      "net_util_md.o": "08846b69850c416fd6c3565c71fdc4ec9b8b34a69184c1c30be4b7025588c92d"
+    },
+    "consumer_policy": "Enabled beforeJVM;libc/anonymous-first,independent64slot/8MiB perInet4/Inet6/NetworkInterfaceCunit,24MiBaggregate;paired release,failed cleanup retains ownership;no heap/GC/auth/DNSanswer changes",
+    "console": "Pending DNS/HTTPS/Fabric startup/world/save/endurance"
+  },
+  "checks": [
+    "PASS runtime actual node/header/mapper/policy getter+setter ASan/UBSan default-off/libc/anonymous-first,forced allocation refusal,data/errno/overflow/64slot bounds/rollback/8000concurrent allocations/paired release",
+    "PASS existing runtime SDK DNS/result/ownership/conversion and direct scratch budget/cleanup-failure regressions",
+    "PASS target java.base-libs,policy exports and all3 genuine native conversion objects reference new policy+direct boundary",
+    "PASS consumer target compilation/link/signing,exact runtime patch/source/object/library audits,explicit pre-JVM enablement",
+    "PASS actual launcher host bootstrap/policy/observer/GC and original game JAR unchanged",
+    "PASS actual final package CRC/signatures/version/source/licenses/runtime/frozen-history and toolkit checks"
+  ],
+  "runtime_publication": "ee5f2561c30ee493e6a96628a888aa62ff6fac66 pushed and remote main verified;reusable implementation only in ps5-java25-homebrew",
+  "console": "Pending exact141 PS5 DNS/HTTPS,Fabric26.2startup/menu/presentation/world/input/audio/save/reload/endurance and workingvanilla26.2/26.3/26.4snapshots regression;not a console pass",
+  "unresolved": "OpenAL diagnostic mutex failures observed on140 remain unclaimed;overall native memory peak/ownership not established",
+  "publication": "Consumer source and local test app only;no Store release/frozenmilestone/branch merge",
+  "preservation": "140andpreviouscanonicalpackages/symbols,accepted124vanilla,Store121,frozenmilestones retained;upstreamgame/modJARs,instances/worlds/downloads/settings/auth unchanged"
+}

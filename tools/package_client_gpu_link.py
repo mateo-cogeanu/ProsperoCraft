@@ -25,6 +25,9 @@ def finish(runtime,java_home,work,assets,spec,gpu_support,gpu_audit,variant="gpu
   shutil.copy2(runtime/'.tools/java25/openjdk/build/ps5-bootstrap/support/modules_libs/java.base/libnio.so',java/'lib/libnio.so')
   shutil.copy2(runtime/'.tools/java25/openjdk/build/ps5-bootstrap/support/modules_libs/java.base/libjava.so',java/'lib/libjava.so')
   shutil.copy2(runtime/'.tools/java25/openjdk/build/ps5-bootstrap/support/modules_libs/java.base/libverify.so',java/'lib/libverify.so')
+  shutil.copy2(runtime/'.tools/java25/openjdk/build/ps5-bootstrap/support/modules_libs/java.base/libnet.so',java/'lib/libnet.so')
+  from audit_network_scratch import audit as network_scratch_audit
+  (java/'network-scratch-runtime-audit.json').write_text(json.dumps(network_scratch_audit(runtime),indent=2)+'\n')
   from audit_core_scratch import audit as core_scratch_audit
   (java/'core-scratch-runtime-audit.json').write_text(json.dumps(core_scratch_audit(runtime),indent=2)+'\n')
   for name in ['awt','lcms']:shutil.copy2(build/'imageio-target'/('lib'+name+'.so'),java/'lib'/('lib'+name+'.so'))
