@@ -63,7 +63,7 @@ with tempfile.TemporaryDirectory(prefix='hardware-display-')as temp:
   subprocess.run(['clang++','-std=c++20','-Wall','-Wextra','-Werror','-fsanitize=address,undefined',*(['-DRADV_PS5']if target else []),str(w/'gpu.cpp'),'-o',str(w/'gpu')],check=True)
   subprocess.run([str(w/'gpu')],check=True)
  labels=subprocess.check_output([str(w/'check')],text=True).splitlines();assert len(labels)==6
- assert labels==['AMD Zen 2, 8 cores/16 threads (PlayStation 5)','AMD RDNA 2, 36 CUs (PlayStation 5)','AMD Zen 2, 8 cores/16 threads (PlayStation 5 Pro)','AMD Radeon RDNA (PlayStation 5 Pro)','AMD CPU (PlayStation 5; model unknown)','AMD Radeon RDNA (PlayStation 5; model unknown)']
+ assert labels==['AMD Zen 2, 8C16T (PS5)','AMD RDNA 2, 36 CUs (PS5)','AMD Zen 2, 8C16T (PS5 Pro)','AMD RDNA 2.x, 60 CUs (PS5 Pro)','AMD CPU (PS5; model unknown)','AMD RDNA (PS5; model unknown)']
  (w/'HardwareDebugCheck.java').write_text(java)
  subprocess.run([str(jdk/'bin/javac'),'--release','25','-cp',str(ports[0])+':'+str(ROOT/'.tools/client/oshi-core-6.9.0.jar'),'-d',str(w),str(w/'HardwareDebugCheck.java')],check=True)
  research=[ROOT/'build/version122-research',ROOT/'build/snapshot118-research',ROOT/'.tools/client']

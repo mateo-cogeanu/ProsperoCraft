@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-30",
+  "version": "01.000.155",
+  "title_id": "PPSA99874",
+  "channel": "temp_gametest development compact hardware test",
+  "package_sha256": "c8bd803ed3a30aaa94916ca0df1c4843bcba74c96dbe72fcadf248e87b74e9ce",
+  "symbols_sha256": "dba81c795adfc22ef9b4c768efe1087a41d2971594166853cd78fc572de648a8",
+  "runtime": "Unchanged model helper db3048febe846abd30a7ae7e3315a517a0910e16; no reusable runtime source change",
+  "changes": [
+    "Compact CPU names: AMD Zen 2, 8C16T (PS5) or (PS5 Pro); existing actual logical prefix preserved",
+    "GPU names: AMD RDNA 2, 36 CUs (PS5); AMD RDNA 2.x, 60 CUs (PS5 Pro)",
+    "Unknown model remains explicit; included hardware_labels.hpp matches executable build source"
+  ],
+  "architecture_evidence": {
+    "primary_announcement": "https://blog.playstation.com/?p=399740",
+    "primary_presentation": "https://www.youtube.com/watch?v=lXMwXJsMfIQ&t=166s",
+    "interpretation": "Sony describes18/30WGPs and hybrid RDNA2.x base architecture;2CUs/WGP gives36/60CUs. Static specification,not driver resource or live-activity measurement. RDNA3 request corrected to published RDNA2.x."
+  },
+  "checks": {
+    "native_labels": "PASS actual labels/ASCII/bounds,PS5/non-PS5 property sentinel/explicit override fixtures,CPUID/JVM count preservation",
+    "supported_game_paths": "PASS original26.2/26.3/snapshots1-6 F3 CPU entries through OSHI6/7 and Vulkan name/driver bytecode checks;counts16/7,missing/malformed data;official JARs unchanged",
+    "target": "PASS actual155 bootstrap native compile/link/sign with current header and unchanged checked runtime/graphics inputs",
+    "package": "PASS full test_client_startup_package.py:155metadata,source/helper/main/RADV object hashes,wiring,all6labels,matching packaged header,signatures/CRC/runtime/dependencies/resident groups/constructors and frozen historical package checks"
+  },
+  "standard_ps5": {
+    "status": "PENDING",
+    "checks": "Real model query,36CUs/compact CPU labels,F3 fit/driver/logical prefix/rendering/input/save for exact155"
+  },
+  "ps5_pro": {
+    "status": "PENDING",
+    "checks": "Real Pro query,60CUs/RDNA2.x/compact CPU labels,F3 fit/driver/logical prefix/rendering/input/save for exact155"
+  },
+  "host_only": "Synthetic standard/Pro fixtures are not physical Pro detection or gameplay acceptance.",
+  "preservation": "154 test release and all earlier assets/frozen snapshots preserved;stable/Store153 unchanged;Fabric26.2 held;no official game/mod JAR transform or performance change",
+  "hardware_audit": {
+    "runtime": {
+      "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
+      "commit": "db3048febe846abd30a7ae7e3315a517a0910e16",
+      "path": "java25/platform/console_model.hpp",
+      "sha256": "f9568543f2260e74d6b44787e094d72e85b2ddfd5b39f05c5304d8bc7aaa6b25",
+      "console": "Standard PS5 and PS5 Pro native query/output pending;host fixtures only"
+    },
+    "source_sha256": {
+      "client/startup/bootstrap.cpp": "74179121d7ca4ca48cde0a455a7193d357bcb747d24251aa17df1b42545f2081",
+      "client/ports/oshi/hardware_labels.hpp": "9259b7823a43da5cb7fcf91b2f91a011e230b99f9c15a324ec03043ea7ea07b5",
+      "client/ports/mesa/0010-ps5-device-display-name.patch": "bcb646a63b579990133e9fda55c3df9b61876e3d91922b00fa04893f64d9b811"
+    },
+    "main_object_sha256": "186af7f98aeb0a29dc56161a60b087e6ec2a4b73eb38e2cf8972770dbf9ca1cb",
+    "gpu_property_object": {
+      "patch_sha256": "bcb646a63b579990133e9fda55c3df9b61876e3d91922b00fa04893f64d9b811",
+      "original_source_sha256": "6f2ac2b9793cb9162c84df475f1f4586e612df419047b274a14b198cd31d4744",
+      "patched_source_sha256": "f6a9d94bbc33342f3461790286e584411a1838d4853525f3527cbc155b77894f",
+      "object_sha256": "9afba092f74e61e8bc5415dc61f0e524656b91437ce59df661b6cdb2f1c459c1",
+      "replaced_member": "radv_physical_device.c.o",
+      "scope": "PS5 deviceName only; IDs/features/limits/extensions/driver properties unchanged"
+    },
+    "console": "Standard PS5 and PS5 Pro pending; fixtures only"
+  }
+}
