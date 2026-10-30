@@ -1,5 +1,9 @@
 # Changelog
 
+## 01.000.157 — local model-resolution candidate
+
+Try the model export directly by name/NID in already-loaded handles; remove the unrelated self-export prerequisite and accept bounded spaced retail suffixes. Add per-attempt status diagnostics. No new module load or release; console identification remains pending. [Details](docs/client-model-resolution-157.md).
+
 ## 01.000.156 — optional hardware query startup repair
 
 Remove the mandatory libkernel_sys/model-query import added in154/155. Resolve an optional query from the loaded kernel after logging starts; missing exports use model unknown. New gates require the same library dependency set as153. Console launch recovery remains pending. [Evidence](docs/client-hardware-startup-156.md).

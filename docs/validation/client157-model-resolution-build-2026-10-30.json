@@ -1,0 +1,62 @@
+{
+  "date": "2026-10-30",
+  "version": "01.000.157",
+  "title_id": "PPSA99874",
+  "publication": "Source only;local test app. No GitHub release until user confirms exact build works.",
+  "package_sha256": "4fe9070c70ca9ae6c7caa7c64a01f32f540f0ce984a384b3fc6892b9688434af",
+  "symbols_sha256": "7d32e41f0f5a124dd827ca5762ffba464bc327c9f83ae14290adcb22aa8e5875",
+  "runtime": {
+    "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
+    "commit": "1e3066411ccd779cdfa010cca0778bc9dacab33e",
+    "path": "java25/platform/console_model.hpp",
+    "sha256": "70e5398bd155d2772c5847407203031c0d88e9dc59b4095927e2ca81abbe5a25",
+    "console": "Standard PS5 and PS5 Pro native query/output pending;host fixtures only",
+    "resolution": "Direct model-name/NID lookups in fixed kernel and enumerated already-loaded handles;no self-export gate,no new module load;bounded diagnostic records"
+  },
+  "trigger": "156 user reports F3 model unknown;live156build endpoint status0/resolver-1 confirms no query callback selected,not a parser rejection.",
+  "fixes": [
+    "Remove self-export gate:try model name/NID directly,then bounded enumerated already-loaded module handles",
+    "Accept bounded spaced retail revision suffix CFI-2014 A01X",
+    "Retain8numeric per-attempt records plus total/list/selected spelling;no raw model or pointers"
+  ],
+  "checks": [
+    "PASS actual runtime header ASan/UBSan plain/NID/fixed/enumerated/missing/failed/null/poisoned output/list-overflow/duplicate/bounds/malformed parser fixtures",
+    "PASS SDK NID SHA1/salt/reversed8bytes/base64 independent fixture",
+    "PASS actual consumer bootstrap report block ASan/UBSan 514attempts/8records,integer extremes,success/unknown,ASCII/bounds/no raw model/address",
+    "PASS actual original26.2/26.3/snapshots1-6 OSHI6/7 F3 CPU/Vulkan name paths,logical16/7 and processor invariance",
+    "PASS target157 native compile/link/sign/new module-list import and exact source/helper/main/RADV hashes",
+    "PASS full package/runtime/identity/signatures/CRC/dependency/constructors/19resident groups/frozen history regressions;DT_NEEDED exactly153;no libkernel_sys or direct model-query import",
+    "PASS exact native ELF relink from local matching OpenAL source/relink kit"
+  ],
+  "console": {
+    "standard_ps5_slim": "PENDING exact157 export resolution/model query/F3/readability/startup/world/save",
+    "ps5_pro": "PENDING exact157 real Pro query/60CUs/F3/readability/startup/world/save"
+  },
+  "limits": "No claim of native model export availability or actual console success. Unknown remains truthful if no usable export. Spaced model sample is external standard-console format evidence only.",
+  "hardware_audit": {
+    "runtime": {
+      "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
+      "commit": "1e3066411ccd779cdfa010cca0778bc9dacab33e",
+      "path": "java25/platform/console_model.hpp",
+      "sha256": "70e5398bd155d2772c5847407203031c0d88e9dc59b4095927e2ca81abbe5a25",
+      "console": "Standard PS5 and PS5 Pro native query/output pending;host fixtures only",
+      "resolution": "Direct model-name/NID lookups in fixed kernel and enumerated already-loaded handles;no self-export gate,no new module load;bounded diagnostic records"
+    },
+    "source_sha256": {
+      "client/startup/bootstrap.cpp": "554b14e915f296581db2aaab0db91e860adc2aa091e026a8ae30f0ba3ab0332a",
+      "client/ports/oshi/hardware_labels.hpp": "9259b7823a43da5cb7fcf91b2f91a011e230b99f9c15a324ec03043ea7ea07b5",
+      "client/ports/mesa/0010-ps5-device-display-name.patch": "bcb646a63b579990133e9fda55c3df9b61876e3d91922b00fa04893f64d9b811"
+    },
+    "main_object_sha256": "a87738009aa7ae639de2b19a793f023dbcf40ba38f1e9feb120311357f6b5a9b",
+    "gpu_property_object": {
+      "patch_sha256": "bcb646a63b579990133e9fda55c3df9b61876e3d91922b00fa04893f64d9b811",
+      "original_source_sha256": "6f2ac2b9793cb9162c84df475f1f4586e612df419047b274a14b198cd31d4744",
+      "patched_source_sha256": "f6a9d94bbc33342f3461790286e584411a1838d4853525f3527cbc155b77894f",
+      "object_sha256": "9afba092f74e61e8bc5415dc61f0e524656b91437ce59df661b6cdb2f1c459c1",
+      "replaced_member": "radv_physical_device.c.o",
+      "scope": "PS5 deviceName only; IDs/features/limits/extensions/driver properties unchanged"
+    },
+    "console": "Standard PS5 and PS5 Pro pending; fixtures only"
+  },
+  "preserved": "156and earlier packages/source tags retained;38existing releases including153unchanged;Fabric26.2hold retained;no new release/milestone"
+}
