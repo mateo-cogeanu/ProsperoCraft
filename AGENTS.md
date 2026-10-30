@@ -1883,3 +1883,15 @@ close before game display/input handoff. Original game/mod JARs and runtime pins
 unchanged. Preserve166 package/symbols/relink;167 console tests pending, user
 explicitly holds release/Store until testing and satisfaction. See
 docs/client-launcher-desktop-167.md.
+
+## Exact167 release authorization — 2026-10-30
+
+User accepts the delivered167 ("Im Happy!, lets release!!! its so polished!")
+and explicitly authorizes GitHub and ProsperoStore publication. Publish exact
+3480ab817659c43e954ce89ba5933cb5181f2fe2f396b1321bfae51d274171de
+without rebuilding, with matching source/relink/checksums and honest console
+acceptance. Keep Store description/credits/icon unchanged; update version, URL,
+digest and release changelog. Submit catalog PR and attach it; do not monitor
+after creation per established preference. Preserve older releases/candidates.
+This lifts the hold for exact167 only; no invented formal per-feature matrix
+or endurance duration.

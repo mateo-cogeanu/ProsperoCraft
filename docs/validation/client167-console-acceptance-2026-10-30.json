@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-30",
+  "version": "01.000.167",
+  "title_id": "PPSA99874",
+  "package_sha256": "3480ab817659c43e954ce89ba5933cb5181f2fe2f396b1321bfae51d274171de",
+  "candidate_source_commit": "f875f1c1580e2881712c8c6501601f6a0203c778",
+  "user_report": "Im Happy!, lets release!!! its so polished!",
+  "result": "User accepts exact167 after delivery and explicitly authorizes GitHub/ProsperoStore release. Functional acceptance supersedes release hold for this exact candidate.",
+  "baseline": "User accepted166 controller/Controlify input handoff and Fabric26.2 functionality.167 promotes support labels and adds launcher keyboard/mouse + rounded two-color cursor.",
+  "limits": "No new individual measurements, formal full regression matrix, per-device/per-theme checklist, save/reload/endurance duration or PS5 Pro validation inferred.",
+  "publication": "Publish exact tested package unchanged. Preserve description/credits/icon in existing Store listing; update version/artifact/digest and release changelog."
+}

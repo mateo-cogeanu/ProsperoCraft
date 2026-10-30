@@ -6,24 +6,22 @@
 
 Download Minecraft on your console, keep separate instances for worlds and mods, and play with DualSense controls, native Vulkan graphics and game audio. ProsperoCraft includes Microsoft sign-in, a Modrinth content browser, controller remapping and six saved launcher themes.
 
-**[Download 01.000.158](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.158)** · [Latest release](https://github.com/mateo-cogeanu/ProsperoCraft/releases/latest) · [Changelog](CHANGELOG.md) · [Report an issue](https://github.com/mateo-cogeanu/ProsperoCraft/issues/new/choose)
+**[Download 01.000.167](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.167)** · [Latest release](https://github.com/mateo-cogeanu/ProsperoCraft/releases/latest) · [Changelog](CHANGELOG.md) · [Report an issue](https://github.com/mateo-cogeanu/ProsperoCraft/issues/new/choose)
 
 ProsperoCraft handles Minecraft installation, accounts, input and game integration. Its [Native Java 25 Runtime](https://github.com/mateo-cogeanu/ps5-java25-homebrew) is maintained separately. Official Minecraft game JARs and asset objects are downloaded and verified from the publisher, rather than bundled with the app.
 
 ## What can I play?
 
-Release **01.000.158** queries PS5/Pro hardware once in the native launcher and passes the cached model to the unchanged compact F3 CPU/GPU labels. [Implementation and pending console checks](docs/client-launcher-hardware-158.md). Published at the user’s explicit request; exact-console detection and regression checks remain pending.
-
-The latest public release is **01.000.158**. Earlier builds have positive PS5 playtests; exact158 hardware detection, regression, audio and long-session checks remain pending.
+Release **01.000.167** adds supported Minecraft26.2 Fabric, controller/keyboard/mouse handoff fixes, launcher mouse and keyboard controls, and a rounded vector cursor that follows the saved theme. The user accepts this exact build and explicitly requests release. [Release notes](docs/releases/client-input-fabric-167.md) · [Console acceptance](docs/validation/client167-console-acceptance-2026-10-30.json). Broader device coverage and long-session endurance remain unmeasured.
 
 | Minecraft version | Vanilla | Fabric |
 | --- | --- | --- |
 | **26.3** | Established playable PS5 baseline, including game audio and server joining. | Released, with positive console feedback. Mods still need individual compatibility checks. |
-| **26.2** | Available in 158; working Vanilla play reported on development 124. | Supported in development167 after user acceptance of exact166, including Controlify handoff. Published158 still blocks this combination. |
+| **26.2** | Released; positive console play and keyboard feedback. | Supported in167, following user acceptance of Fabric26.2 and Controlify controller/keyboard/mouse handoff. |
 | **26.4 snapshots 1–6** | Available; positive console feedback on 118/119. Use separate test worlds. | Selectable when matching loader/mod versions exist; snapshot-specific Fabric, Controlify and mod compatibility is not established. |
 | **Other versions** | Downloadable 26.x entries may appear, but Play is blocked for versions outside the set above. | No additional compatibility claim. NeoForge is not enabled. |
 
-The user reports all working on exact166 after the scoped Controlify SDL lookup and event repair. Development167 enables normal Fabric26.2 labels and adds launcher USB keyboard/mouse controls with a themed vector cursor. Exact167 console validation is pending. Published158 is unchanged; GitHub/Store release stays on hold until the user tests and approves167. [Launcher input details](docs/client-launcher-desktop-167.md).
+The user accepted166’s Controlify controller detection and physical input handoff repair, then accepted167’s launcher keyboard/mouse and cursor work.167 removes the Fabric26.2 development labels. Mod compatibility still depends on the exact game/mod versions; no universal compatibility or endurance claim is made. [Launcher input details](docs/client-launcher-desktop-167.md).
 
 Snapshots are **hidden by default**. Enable **Settings → Show Snapshots** to list them; explicit saved preferences are retained. Future snapshots are not enabled automatically. See the [snapshot guide](docs/client-snapshots-118.md) and [119 console acceptance](docs/validation/client119-console-acceptance-2026-10-28.json).
 
@@ -121,6 +119,7 @@ The table links each capability to its first public release. Initial development
 | Six supported 26.4 snapshots | [Development 118](docs/client-snapshots-118.md) → [01.000.119](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.119) | Snapshots 1–5 worked on 118; 119 repaired snapshot 6. Visibility stays off by default. |
 | Approved ProsperoCraft sign-in | [01.000.120](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.120) | Own approved Microsoft application and app-bound saved credentials; requires fresh sign-in from older builds. |
 | Six color themes | [01.000.121](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.121) | Six saved palettes and a smoother fallback pointer; broader PS5 persistence/input checks remain pending. |
+| Fabric26.2 and launcher input | [01.000.167](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.167) | User accepted exact167; supported Fabric26.2, Controlify handoff and launcher keyboard/mouse. |
 | Vanilla 26.2 | [Development 124](docs/client-26.2-vulkan-handoff-124.md) → [01.000.153](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.153) | Vanilla 26.2 play; Fabric 26.2 remains held. |
 
 ## Credits and license
