@@ -1,5 +1,13 @@
 # Changelog
 
+## Release 01.000.158
+
+- Detect PS5 or PS5 Pro once in the native launcher and share the cached hardware identity with Minecraft’s F3 CPU/GPU display.
+- Show compact CPU labels using 8C16T and PS5/PS5 Pro, with 36 CUs for PS5/Slim and 60 CUs for PS5 Pro. Preserve real logical processor counts and graphics driver information.
+- Replace the unavailable model-name lookup with the native SoC query; preserve the existing F3 wording and report the launcher’s detection result for diagnostics.
+
+Exact existing158 candidate published without rebuilding, at the user’s explicit request. Standard PS5/Slim/Pro detection and gameplay regression remain console-pending. Existing Store description, credits and icon are preserved.
+
 ## 01.000.157 — local model-resolution candidate
 
 Try the model export directly by name/NID in already-loaded handles; remove the unrelated self-export prerequisite and accept bounded spaced retail suffixes. Add per-attempt status diagnostics. No new module load or release; console identification remains pending. [Details](docs/client-model-resolution-157.md).

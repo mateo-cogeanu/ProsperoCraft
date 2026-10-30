@@ -11,3 +11,7 @@ F3 strings are unchanged: `AMD Zen 2, 8C16T (PS5)` / `(PS5 Pro)` and `AMD RDNA 2
 Runtime ASan/UBSan tests cover Pro, base-family and error/invalid native values. Consumer tests exercise the actual launcher header, one-time snapshot, unchanged CPU/GPU strings and actual short report. Original unmodified Minecraft CPU formatting tests cover 26.2/26.3 and snapshots 1–6 with OSHI6/7. The full packaged binary gate checks signatures, source/object pins, the exact153 DT_NEEDED set, no old model-name/dlsym imports, the new native query import and initialization before the frontend. Build/check outcomes and checksum are recorded in the matching validation record.
 
 No release/prerelease or Store update is authorized until the user confirms this exact build works. Existing releases, frozen snapshots and earlier local candidates remain preserved. Install the local158 package, confirm launcher startup, then check Vanilla F3 and world/input/audio/save behavior. Standard PS5/Slim and Pro physical detection remain pending; no console pass is claimed.
+
+## Publication authorization
+
+On2026-10-30 the user explicitly requested publishing this exact build on GitHub and updating the existing ProsperoStore entry, with its description unchanged. That request authorizes158 publication without changing its recorded console-pending status. The existing ZIP is preserved without rebuilding; matching source/relink,checksums and build/console records accompany the release. Future releases retain the approval gate.

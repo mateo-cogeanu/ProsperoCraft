@@ -1,0 +1,8 @@
+{
+  "version": "01.000.158",
+  "package_sha256": "22d2c4864e7d797d066337a973f7560e7e4e7f003f9b19991b6816d7e982a954",
+  "authorization": "Explicit user request on 2026-10-30 to publish this exact build on GitHub and update existing ProsperoStore listing",
+  "console": "No new physical-console result supplied in publication request;actual startup/PS5/Slim/Pro identification/F3/world/input/audio/save/endurance remain pending.Authorization is not formal ALL PASS.",
+  "preservation": "No rebuild;existing releases/frozen snapshots retained;Fabric26.2 remains held",
+  "store": "Only version/artifact/digest and changelog;description/credits/icon preserved"
+}

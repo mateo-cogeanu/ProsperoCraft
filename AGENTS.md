@@ -1830,3 +1830,7 @@ Frozen top-level milestone sources now live in https://github.com/mateo-cogeanu/
 ## Explicit release approval gate — 2026-10-30
 
 The user requires physical-console confirmation that the exact build works before creating any further GitHub release, including development prereleases. Continue authorized source commits/pushes and local test builds, but do not create a release until the user confirms that build works. This supersedes earlier practice of publishing unvalidated hardware-test prereleases. Remove only the three specifically identified 154/155/156 hardware-test releases; all other releases/assets, including 153, remain preserved. Local test artifacts and source tags for the withdrawn releases stay retained.
+
+## Exact158 publication authorization — 2026-10-30
+
+The user explicitly requests a GitHub release and update of the existing ProsperoStore listing for exact158, package22d2c4864e7d797d066337a973f7560e7e4e7f003f9b19991b6816d7e982a954. Publish that existing candidate without rebuilding; retain matching OpenAL source/relink/checksums and honest pending-console validation. Change only Store version/artifact/digest and changelog; preserve its description, credits and icon. This is explicit publication authorization for158, not formal ALL PASS or authorization for future builds. Existing release gate otherwise remains.
