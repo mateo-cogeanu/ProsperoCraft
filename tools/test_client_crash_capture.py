@@ -7,6 +7,7 @@ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--source-cache',t
 text=scoped_source((a.source_cache/'payload/main.c').read_text())
 watch=text[text.index('static bool watch_policy('):];watch=watch[:watch.index('\nstatic ',1)]
 serve=text[text.index('static void serve(int fd)'):text.index('\nint main(void)')]
+stop=text[text.index('        if (sig == SIGSTOP) {'):text.index('        pt(PT_CONTINUE, pid, (caddr_t)1, sig);',text.index('        if (sig == SIGSTOP) {'))]
 fixture=r'''
 #include <sys/socket.h>
 #include <sys/time.h>
@@ -48,3 +49,30 @@ with tempfile.TemporaryDirectory() as d:
  w=Path(d);(w/'check.c').write_text(fixture+watch+serve+driver)
  subprocess.run(['clang','-std=gnu11','-fsanitize=address,undefined','-Wno-unused-function',str(w/'check.c'),'-o',str(w/'check')],check=True)
  subprocess.run([str(w/'check')],check=True)
+
+stop_fixture=r'''
+#include <assert.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <string.h>
+#include <signal.h>
+#include <pthread.h>
+#include <time.h>
+#include <sys/types.h>
+typedef char* caddr_t;
+#define PT_DETACH 11
+struct title {char*title_id;char*name;char*last_crash;int reports;bool traced;time_t retry_after;};
+static pthread_mutex_t g_lock=PTHREAD_MUTEX_INITIALIZER;
+static int order=0;
+static void capture(struct title*t,int pid,int sig,char*id,size_t n){assert(++order==1&&sig==SIGSTOP&&pid==125);snprintf(id,n,"fixture");}
+static void finish_report(char*id,char*outcome,char*name,char*where){assert(++order==2&&!strcmp(outcome,"stop-observed"));}
+static void say(const char*format,...){ }
+static void pt(int request,int pid,caddr_t address,int sig){assert(++order==3&&request==PT_DETACH&&sig==SIGSTOP);}
+'''
+stop_driver=r'''
+int main(void){struct title state={"PPSA99874","Fixture","Unknown",0,true,0};observe(&state,125,SIGSTOP);assert(order==3&&state.reports==1&&!state.traced&&state.retry_after>time(NULL));puts("PASS actual stop branch:capture->stop-observed->detach with unchanged SIGSTOP;no fabricated fatal status");}
+'''
+with tempfile.TemporaryDirectory() as d:
+ w=Path(d);(w/'stop.c').write_text(stop_fixture+'static void* observe(struct title*t,int pid,int sig){'+stop+'return NULL;}'+stop_driver)
+ subprocess.run(['clang','-std=gnu11','-fsanitize=address,undefined',str(w/'stop.c'),'-o',str(w/'stop')],check=True)
+ subprocess.run([str(w/'stop')],check=True)

@@ -161,3 +161,26 @@ reproducing. Do not run competing debuggers. Stop through quit/detach rather tha
 killing an attached debugger. Registers/backtrace and an ELF code-hash match are
 required before attributing a fatal native address. No160 game build or release
 is created just to guess at the failure. Fabric26.2 remains development-only.
+
+## Menu/button failure and capture v2
+
+The next exact159 run `client-01.000.159-1793369974-74848792` reaches the menu
+according to the user, then completely crashes after a button press. Reopened
+run `client-01.000.159-1793370265-227547332` is at the library. Native/Java reports
+show real PCM submission, completed HRTF enumeration and Controlify connecting
+DualSense. These do not prove audible sound, physical effects or world stability.
+No matching VM abort is recorded. Raw reports remain local.
+
+The companion actually attached to PID125 at14:23:00, then received SIGSTOP at
+14:24:05. Upstream's SIGSTOP branch detached without writing a report; the crash
+API is empty. PID128 attached after reopening. Thus confirmed attachment alone
+was insufficient to capture this system-managed termination.
+
+Capture v2 saves the register/thread snapshot at an externally delivered SIGSTOP
+before retaining upstream's detach and original SIGSTOP delivery. It marks the
+record **stop-observed**, not a proven fatal signal, and keeps normal quit from
+creating a stop record. An actual extracted-branch host fixture verifies capture,
+marking and unchanged detach order; HTTP/title-policy checks also pass ASan/UBSan.
+The separate target payload compiles. Old capture quit/detach returned quit:true.
+The game package/symbols remain exact159. v1 artifacts are retained;v2 is separate.
+The faulting instruction remains unproven until a correlated snapshot is obtained.

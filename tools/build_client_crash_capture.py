@@ -38,6 +38,19 @@ static bool watch_policy(const char *title_id)
         return;
     }
 '''+before)
+ # System crash reporting may stop a title before a POSIX fatal signal arrives.
+ # Capture that stop as evidence, then preserve upstream SIGSTOP/detach behavior.
+ before='''            say("%s pid %d: stop requested, detaching", t->title_id, pid);'''
+ after='''            char stopped_id[96];
+            capture(t, pid, SIGSTOP, stopped_id, sizeof stopped_id);
+            finish_report(stopped_id, "stop-observed", t->name, t->last_crash);
+            pthread_mutex_lock(&g_lock);
+            t->reports++;
+            pthread_mutex_unlock(&g_lock);
+            say("%s pid %d: stop snapshot saved; SIGSTOP is not proof of a crash", t->title_id, pid);
+            say("%s pid %d: stop requested, detaching", t->title_id, pid);'''
+ assert text.count(before)==1
+ text=text.replace(before,after)
  text=text.replace('POST /api/test/fault:', 'Unused upstream test state:')
  assert '/api/test/fault' not in text and 'api_crash(fd, target + 11, false);' in text
  return text
@@ -51,12 +64,14 @@ def build(runtime,source,llvm):
  for name,digest in pin['files'].items():assert hashlib.sha256((source/name).read_bytes()).hexdigest()==digest,name
  private=ROOT/'build/client-crash-capture';(private/'payload').mkdir(parents=True,exist_ok=True);(private/'web').mkdir(exist_ok=True)
  for name in ['payload/Makefile','web/dashboard.html','LICENSE']:shutil.copy2(source/name,private/name)
+ dashboard=private/'web/dashboard.html'
+ dashboard.write_text(dashboard.read_text()+'''<button onclick="fetch('/api/quit',{method:'POST'}).then(r=>r.json()).then(v=>{this.textContent=v.still_attached?'Detach pending':'Capture stopped; detached';this.disabled=true})">Stop capture and detach</button>''')
  patched=scoped_source((source/'payload/main.c').read_text());(private/'payload/main.c').write_text(patched)
  sdk=runtime/'.tools/ps5-payload-sdk'
  env=dict(os.environ,PS5_PAYLOAD_SDK=str(sdk),LLVM_CONFIG=str(llvm/'llvm-config'))
  subprocess.run(['make','-C',str(private/'payload')],env=env,check=True)
  elf=private/'build/ps5devtools.elf';assert elf.read_bytes()[:6]==b'\x7fELF\x02\x01'
- audit={'upstream':pin,'adaptations':['Only PPSA99874 is sampled or attached;watch.txt cannot broaden scope','HTTP crash deletion,all-title error history and deliberate test-fault requests disabled','GET diagnostics and POST quit/detach retained;normal upstream crash forwarding unchanged'],'source_sha256':hashlib.sha256(patched.encode()).hexdigest(),'elf_sha256':hashlib.sha256(elf.read_bytes()).hexdigest(),'firmware':'Upstream tested13.60;actual crash history reports13.60','console':'Pending payload load,successful attach and repeat exact159 capture','not_a_game_build':True}
+ audit={'upstream':pin,'adaptations':['Only PPSA99874 is sampled or attached;watch.txt cannot broaden scope','HTTP crash deletion,all-title error history and deliberate test-fault requests disabled','GET diagnostics and POST quit/detach retained;normal upstream crash forwarding unchanged','Save SIGSTOP register/thread snapshot as stop-observed before existing detach;not a proven fatal signal'],'source_sha256':hashlib.sha256(patched.encode()).hexdigest(),'elf_sha256':hashlib.sha256(elf.read_bytes()).hexdigest(),'firmware':'Upstream tested13.60;actual crash history reports13.60','console':'Pending payload load,successful attach and repeat exact159 capture','not_a_game_build':True}
  (private/'audit.json').write_text(json.dumps(audit,indent=2)+'\n')
  print('Built title-scoped diagnostic payload:',elf)
  print('SHA256',audit['elf_sha256'],';not loaded;PS5 capture pending')

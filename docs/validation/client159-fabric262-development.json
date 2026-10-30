@@ -86,5 +86,17 @@
     "scope": "OnlyPPSA99874;remotecrashtrigger/deletion/alltitleerrorhistorydisabled;GETdiagnostics/POSTquitretained",
     "checks": "PASS targetcompile and actualadaptedHTTPhandler/policyASanUBSan",
     "console": "Notyetreachable;payloadload/attach/repeatcapturepending"
+  },
+  "menu_followup": {
+    "failed_run": "client-01.000.159-1793369974-74848792",
+    "reopened_run": "client-01.000.159-1793370265-227547332",
+    "human": "Reached menu,crashed when pressing a button",
+    "native_progress": "RealPCM submitted;HRTF enumeration now completes;Controlify connects DualSense;no VM abort captured",
+    "debugger": "PID125 attached14:23:00;SIGSTOP14:24:05 caused upstream detach without capture;crash API empty;PID128 attached14:24:28",
+    "repair": "v2capturesSIGSTOP register/thread snapshot as stop-observed before unchanged upstream detach;does not label stop a fatal fault",
+    "v2_sha256": "42e5e31e65b124eb8a4b65671a86b3ab150d649c6227bc30819527d33f8665fa",
+    "checks": "PASS actual adapted HTTP/titlepolicy and actual stopbranch capture->mark->detach ordering underASanUBSan;targetcompile",
+    "old_capture_shutdown": "POSTquit returnedquit:true;safe detach verified",
+    "console": "Newv2load/attach/reproductionpending;gamepackage159unchanged"
   }
 }
