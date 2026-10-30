@@ -41,10 +41,11 @@
     "relinks": "PASS ordinary and replacement OpenAL paths reproduce exact654b4de6823bc8ccfd5a8fdc4ec0c047c74ba4f1eb2c7337dd0df31b645cf977 ELF"
   },
   "console": {
-    "Controlify263_Del_and_shortcut": "PENDING exact162",
-    "263physicalkeyboard_WASD_text_backspace": "PENDING exact162",
-    "263physicalmouse_with_Controlify_click_flicker": "PENDING exact162",
-    "262_keyboard_gameplay_regression": "PENDING exact162"
+    "Controlify263_Del_and_shortcut": "No separate confirmation supplied in latest report;physicalhandoffblocksacceptance",
+    "263physicalkeyboard_WASD_text_backspace": "USER:26.3Vanilla keyboard+mouse work flawlessly",
+    "263physicalmouse_with_Controlify_click_flicker": "FAILED:userphysicalkeyboard/mouse overriddenbyControlify;automaticinputhandoffnotworking",
+    "262_keyboard_gameplay_regression": "FAILED:sameControlifyhandoffissue;26.2Vanilla typingcrash",
+    "262Vanilla_typing": "FAILED:actualSIGABRT captured20261030-182800-PPSA99874-103;exact162_glfwInputKey assertion;see163"
   },
   "publication": "Source/localtestapp only;GitHubrelease/Store on user hold",
   "preservation": "Originalgame/modJARs,userworlds/instances,accepted161package/symbols/source-relink,priorreleases/archive preserved",

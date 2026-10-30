@@ -1,5 +1,12 @@
 # Changelog
 
+## 01.000.163 — local GLFW held-key repeat repair and handoff diagnostics
+
+- Record162 physical-console results:26.3 Vanilla keyboard/mouse work;Controlify automatic handoff fails on both26.2 and26.3;26.2 Vanilla aborts while typing.
+- Exact162 native capture identifies GLFW's press/release assertion. Forward repeated SDL key-downs as internal GLFW_PRESS so GLFW itself generates public GLFW_REPEAT callbacks. Preserve key state, releases and text events.
+- Add read-only controller buttons/axes and SDL visibility/capture snapshots after physical input, throttled to16records, to investigate unresolved Controlify handoff. No controller disconnect, forced mode or artificial input is introduced.
+- Real GLFW sanitizer checks cover150held-key repeats across3window lifecycles. Host input and diagnostic controls pass; exact163 hardware regression and Controlify cause remain pending. No release/Store update. [Evidence](docs/client-input-repeat-handoff-163.md).
+
 ## 01.000.162 — local Controlify26.3 keyboard delete repair
 
 - Record the user’s all-working report for exact161 Fabric26.2, including keyboard deletion. Preserve161 and keep release/Store publication on hold.

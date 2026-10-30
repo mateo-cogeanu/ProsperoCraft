@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-30",
+  "version": "01.000.163",
+  "title_id": "PPSA99874",
+  "runtime_commit": "47a5fa702b45ac249d44046d2cf75831a0f7d350",
+  "runtime_changes": "None;consumerGLFW/inputdiagnostics only",
+  "prior162_console": {
+    "263Vanilla": "USERCONFIRMED keyboard/mouse flawless",
+    "263Fabric": "FAILED automaticControlify physicalinputhandoff",
+    "262Fabric": "FAILED samehandoff",
+    "262Vanilla": "FAILED typingSIGABRT"
+  },
+  "capture": {
+    "id": "20261030-182800-PPSA99874-103",
+    "signal": "SIGABRT6 code65543 outcomecrashed",
+    "thread": "Renderthread100658",
+    "uptime_seconds": 44,
+    "failed_run": "client-01.000.162-1793384836-508511676",
+    "launch": "26.2 Vanilla GLFW",
+    "loadbase": "0x400000",
+    "text_fnv64": "ee6ebfa9d2af4b43 exact162match",
+    "symbols_sha256": "654b4de6823bc8ccfd5a8fdc4ec0c047c74ba4f1eb2c7337dd0df31b645cf977",
+    "frames": [
+      "0x2beac __wrap_abort",
+      "0x29c351c clientgpu_ps5___assert",
+      "0xfe3208 _glfwInputKey",
+      "0xfef958 poll"
+    ],
+    "assertion": "disassemblyline277 action==GLFW_PRESS||action==GLFW_RELEASE;adapter suppliedGLFW_REPEAT",
+    "stale_report": "Previoushs_err datedOctober29 excluded;othercapturesSIGSTOP17stop-observedexcludedasfatalproof",
+    "raw": "Localonly"
+  },
+  "repair": "SDLrepeatkeydown ->internalGLFW_PRESS;upstreamderivespublicREPEAT;keyup ->RELEASE;assertions/state/text/gamemodJARs retained",
+  "handoff": "UNRESOLVED;originalmodrequestsKEYBOARD_MOUSEatphysicaleventbutcontrollertickcanrequestCONTROLLERwhenactive;exactstateunknown",
+  "diagnostics": "Read-onlyactualSDLopenedgamepadbuttons/6axes,cursorvisible/relative afteractualphysicalinput;coalescedsources/1secondthrottle/16recordcap;no keys/text/modewrites/syntheticactivity/disconnect",
+  "checks": {
+    "GLFW_asan_ubsan": "PASS actualpinnedcore/adapter withrealSDLdummy:150repeats/3lifecycles plus existingkey/release/Unicode/mouse/window/allocator/IME/closechecks",
+    "handoff_trace_asan_ubsan": "PASS actualheader idle/coalesce/throttle/cap/nullfocus/readcontracts",
+    "USB_asan_ubsan": "PASS actualheader routing/lifecycle/diagnosticbounds",
+    "cursor_asan_ubsan": "PASS actualheaders combinedpump/handoff/visibility/capture/clicks/idle/focus;117negativecontrol",
+    "native_HID": "PASS actualimports/lookup/optionalAPI/user/index/open/read/closeASanUBSan",
+    "temporary_input": "PASS actualfallback lifecycle,modes,heldrearm,repeats,gamepadownership,focus/disconnect/idleASanUBSan",
+    "launcher": "PASS exactdevelopmentmarker/channel/publichold/entrypoint/identity/instancepreservation",
+    "target": "PASS compile/link/sign;exactfinalGLFWplatform/SDLinputtrace/headerhashaudits;residentgroups/runtimepinsretained",
+    "package": "PASS full actual163 CRC/signatures/version/marker/pairedclasses/GLFW+SDLhashes/nativegroups/runtimepins/constructorcounts/frozenchecksums;zero bundledgameJARs",
+    "relinks": "PASS ordinaryandreplacementOpenAL relinks bothreproduceexactdcda387c4af7a82542db11cdb69e631eb66845040780554f5654c8a65550bd5aELF"
+  },
+  "console": {
+    "262Vanilla_held_typing_repeat": "PENDING exact163",
+    "263Fabric_handoff_trace": "PENDING exact163",
+    "262Fabric_handoff": "PENDING exact163",
+    "263Controlify_onscreenDel": "Separateconfirmationstillpending"
+  },
+  "release": "GitHubrelease/Storeheld;source/localtestapponly",
+  "preservation": "Exact161/162packages/symbols/source-relink,originalgame/modJARs,userworlds/instances/archive/releasespreserved",
+  "package_sha256": "0d7f8f80fd3acc29a2a451494ca8370dc163508bf295938e7e45213c317bdeba",
+  "symbols_sha256": "dcda387c4af7a82542db11cdb69e631eb66845040780554f5654c8a65550bd5a",
+  "symbols_text_fnv64": "7b12ef210f5728fd"
+}

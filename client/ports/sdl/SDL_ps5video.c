@@ -19,6 +19,7 @@
 #include "events/SDL_events_c.h"
 #include "events/SDL_keyboard_c.h"
 #include "events/SDL_mouse_c.h"
+#include "ps5_input_handoff.h"
 #include "ps5_temporary_input.h"
 #include "ps5_usb_input.h"
 #include "ps5_relative_mouse.h"
@@ -157,6 +158,7 @@ static void PS5_PumpEvents(SDL_VideoDevice *_this)
 {
     PS5_PumpTemporaryInput(SDL_GetKeyboardFocus());
     PS5_PumpUSBInput(SDL_GetKeyboardFocus());
+    PS5_TraceInputHandoff(SDL_GetKeyboardFocus());
 }
 
 static bool PS5_CreateWindow(SDL_VideoDevice *_this, SDL_Window *window, SDL_PropertiesID props)

@@ -14,8 +14,8 @@ extern void* glfwSetPreeditCallback(GLFWwindow*,void*);
 extern void* glfwSetIMEStatusCallback(GLFWwindow*,void*);
 extern void glfwSetPreeditCursorRectangle(GLFWwindow*,int,int,int,int);
 extern void glfwGetPreeditCursorRectangle(GLFWwindow*,int*,int*,int*,int*);
-static int presses,releases,characters,button,scrolls,motions,closed;static unsigned last;
-static void onkey(GLFWwindow*w,int key,int scan,int action,int mods){assert(key==GLFW_KEY_W&&scan==SDL_SCANCODE_W);if(action==GLFW_PRESS)presses++;if(action==GLFW_RELEASE)releases++;}
+static int presses,repeats,releases,characters,button,scrolls,motions,closed;static unsigned last;
+static void onkey(GLFWwindow*w,int key,int scan,int action,int mods){assert(key==GLFW_KEY_W&&scan==SDL_SCANCODE_W);if(action==GLFW_PRESS)presses++;if(action==GLFW_REPEAT)repeats++;if(action==GLFW_RELEASE)releases++;}
 static void onchar(GLFWwindow*w,unsigned c){characters++;last=c;}
 static void onbutton(GLFWwindow*w,int b,int a,int m){assert(b==GLFW_MOUSE_BUTTON_RIGHT&&a==GLFW_PRESS);button++;}
 static void onscroll(GLFWwindow*w,double x,double y){assert(x==0&&y==2);scrolls++;}
@@ -33,6 +33,8 @@ int main(void){
   glfwPollEvents();glfwSetKeyCallback(w,onkey);glfwSetCharCallback(w,onchar);glfwSetMouseButtonCallback(w,onbutton);glfwSetScrollCallback(w,onscroll);glfwSetCursorPosCallback(w,onmotion);glfwSetWindowCloseCallback(w,onclose);
   SDL_Window* s=SDL_GetKeyboardFocus();if(!s){int n=0;SDL_Window** windows=SDL_GetWindows(&n);assert(n==1);s=windows[0];SDL_free(windows);}SDL_WindowID id=SDL_GetWindowID(s);
   SDL_Event e={0};e.key.type=SDL_EVENT_KEY_DOWN;e.key.windowID=id;e.key.scancode=SDL_SCANCODE_W;e.key.down=true;assert(SDL_PushEvent(&e));glfwPollEvents();assert(glfwGetKey(w,GLFW_KEY_W)==GLFW_PRESS);
+  e.key.repeat=true;for(int n=0;n<50;n++)assert(SDL_PushEvent(&e));glfwPollEvents();assert(repeats==(run+1)*50&&glfwGetKey(w,GLFW_KEY_W)==GLFW_PRESS);
+  e.key.repeat=false;
   e.key.type=SDL_EVENT_KEY_UP;e.key.down=false;SDL_PushEvent(&e);
   memset(&e,0,sizeof(e));e.text.type=SDL_EVENT_TEXT_INPUT;e.text.windowID=id;e.text.text="A\xc3\xa4\xf0\x9f\x98\x80";SDL_PushEvent(&e);
   memset(&e,0,sizeof(e));e.button.type=SDL_EVENT_MOUSE_BUTTON_DOWN;e.button.windowID=id;e.button.button=SDL_BUTTON_RIGHT;SDL_PushEvent(&e);
@@ -51,4 +53,4 @@ with tempfile.TemporaryDirectory()as d:
  w=Path(d);(w/'test.c').write_text(source);lib=ROOT/'build/glfw-native/host';includes=lib/'source/include'
  subprocess.run(['clang','-std=c11','-fsanitize=address,undefined','-I'+str(includes),'-I/opt/homebrew/include',str(w/'test.c'),str(lib/'libps5glfw.dylib'),'-L/opt/homebrew/lib','-lSDL3','-o',str(w/'test')],check=True)
  subprocess.run([str(w/'test')],check=True,env=dict(os.environ,SDL_VIDEODRIVER='dummy'),timeout=30)
-print('PASS genuine GLFW core + SDL window/monitor, allocator refusal/monitor cleanup then3 init/teardown cycles, key state/callbacks, Unicode including emoji, mouse/button/scroll, optional IME ABI/disabled state/rectangle, close callback and explicit OpenGL refusal under ASan/UBSan. Host SDL dummy window only; PS5 and Vulkan pending.')
+print('PASS genuine GLFW core + SDL window/monitor, allocator refusal/monitor cleanup then3 init/teardown cycles, key state/150held-repeat callbacks across3lifecycles/releases, Unicode including emoji, mouse/button/scroll, optional IME ABI/disabled state/rectangle, close callback and explicit OpenGL refusal under ASan/UBSan. Host SDL dummy window only; PS5 and Vulkan pending.')

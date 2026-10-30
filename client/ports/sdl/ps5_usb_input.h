@@ -13,6 +13,7 @@ static struct {
 /* Record routing outcome once per result/port, never the key or typed text. */
 static void PS5_USBKey(Uint64 now,int index,int key,bool down){
  bool posted=SDL_SendKeyboardKey(now,ps5_usb.keys[index].id,0,(SDL_Scancode)key,down);
+ if(posted&&down)PS5_TracePhysicalInput(1);
  unsigned bit=posted?1u:2u;
  if(!(ps5_usb.keys[index].delivery_mask&bit)){
   fprintf(stderr,"PS5_HID keyboard index=%d key_event_posted=%d\n",index,posted);
@@ -90,6 +91,7 @@ static void PS5_PumpUSBInput(SDL_Window *window){
    const struct prospero_mouse_packet *p=&mice[i];if(p->connected&&!ps5_usb.mice[n].id){ps5_usb.mice[n].id=SDL_GetNextObjectID();SDL_AddMouse(ps5_usb.mice[n].id,"PS5 physical mouse");}bool usable=p->connected&&!(p->buttons&0x80000000u);unsigned buttons=usable?(p->buttons&31):0;
    if(!ps5_usb.mice[n].primed){ps5_usb.mice[n].blocked=buttons;ps5_usb.mice[n].primed=true;}ps5_usb.mice[n].blocked&=buttons;buttons&=~ps5_usb.mice[n].blocked;
    for(int b=0;b<5;b++)if((buttons^ps5_usb.mice[n].buttons)&(1u<<b))SDL_SendMouseButton(now,window,ps5_usb.mice[n].id,(Uint8)(b==1?SDL_BUTTON_RIGHT:b==2?SDL_BUTTON_MIDDLE:b+1),(buttons&(1u<<b))!=0);ps5_usb.mice[n].buttons=buttons;
+   if(usable&&(p->x||p->y||p->wheel||p->tilt||buttons))PS5_TracePhysicalInput(2);
    if(!usable){ps5_usb.mice[n].primed=false;if(!p->connected&&ps5_usb.mice[n].id){SDL_RemoveMouse(ps5_usb.mice[n].id);ps5_usb.mice[n].id=0;}continue;}
    if(p->wheel||p->tilt)SDL_SendMouseWheel(now,window,ps5_usb.mice[n].id,(float)p->tilt,(float)p->wheel,SDL_MOUSEWHEEL_NORMAL);
    if(SDL_GetWindowRelativeMouseMode(window)){if(p->x||p->y)SDL_SendMouseMotion(now,window,ps5_usb.mice[n].id,true,(float)p->x,(float)p->y);ps5_usb.position=false;}

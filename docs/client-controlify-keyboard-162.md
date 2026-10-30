@@ -133,3 +133,12 @@ and replacement-object OpenAL relinks reproduce the exact executable.
 
 Matching package, symbols, OpenAL source/relink and checksums are retained in
 the ignored local candidate directory. Console results remain pending.
+
+## Console follow-up
+
+The user reports162 physical keyboard/mouse work flawlessly on26.3 Vanilla.
+Controlify still overrides keyboard/mouse on both26.3 and26.2 Fabric.26.2
+Vanilla aborts while typing; exact162 external evidence identifies an internal
+GLFW repeat-action assertion. See [163 repair and handoff investigation](client-input-repeat-handoff-163.md).
+The on-screen Del repair has no separate acceptance result in this feedback.
+Do not treat the162 cursor fix or host tests as automatic-handoff acceptance.

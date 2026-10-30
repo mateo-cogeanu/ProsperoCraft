@@ -38,6 +38,7 @@ void prospero_hid_preload(void){}
 int prospero_hid_open(int mouse,int index){return index==0?(mouse?20:10):-1;}
 int prospero_hid_read(int mouse,int handle,void*p,int n){if(mouse){int count=mousecount;if(count>0)memcpy(p,mousepack,(size_t)count*sizeof(mousepack[0]));mousecount=0;return count;}int count=keycount;if(count>0)memcpy(p,keypack,(size_t)count*sizeof(keypack[0]));keycount=0;return count;}
 void prospero_hid_close(int mouse,int handle){assert(handle==10||handle==20);closes++;}
+static void PS5_TracePhysicalInput(unsigned source){assert(source==1||source==2);}
 #include "ps5_usb_input.h"
 static void pump(void){tick+=16000000;PS5_PumpUSBInput(win);}
 static void key(unsigned code,unsigned modifiers){memset(keypack,0,sizeof(keypack));keypack[0].connected=1;keypack[0].keys[0]=(uint16_t)code;keypack[0].modifiers=modifiers;keycount=1;}

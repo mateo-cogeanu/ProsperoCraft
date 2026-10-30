@@ -140,7 +140,7 @@ static void dispatch(const SDL_Event* e){
  if(e->type==SDL_EVENT_QUIT){for(_GLFWwindow* w=_glfw.windowListHead;w;){_GLFWwindow* next=w->next;_glfwInputWindowCloseRequest(w);w=next;}return;}
  _GLFWwindow* w=find(e->window.windowID);if(!w)return;
  switch(e->type){
- case SDL_EVENT_KEY_DOWN:case SDL_EVENT_KEY_UP:_glfwInputKey(w,key(e->key.scancode),e->key.scancode,e->type==SDL_EVENT_KEY_UP?GLFW_RELEASE:e->key.repeat?GLFW_REPEAT:GLFW_PRESS,mods(e->key.mod));break;
+ case SDL_EVENT_KEY_DOWN:case SDL_EVENT_KEY_UP:_glfwInputKey(w,key(e->key.scancode),e->key.scancode,e->type==SDL_EVENT_KEY_UP?GLFW_RELEASE:GLFW_PRESS,mods(e->key.mod));break;
  case SDL_EVENT_TEXT_INPUT:{const char* text=e->text.text;while(text&&*text){Uint32 c=SDL_StepUTF8(&text,NULL);if(c)_glfwInputChar(w,c,mods(SDL_GetModState()),GLFW_TRUE);}break;}
  case SDL_EVENT_MOUSE_MOTION:_glfwInputCursorPos(w,w->cursorMode==GLFW_CURSOR_DISABLED?w->virtualCursorPosX+e->motion.xrel:e->motion.x,w->cursorMode==GLFW_CURSOR_DISABLED?w->virtualCursorPosY+e->motion.yrel:e->motion.y);break;
  case SDL_EVENT_MOUSE_BUTTON_DOWN:case SDL_EVENT_MOUSE_BUTTON_UP:{int b=e->button.button==SDL_BUTTON_LEFT?GLFW_MOUSE_BUTTON_LEFT:e->button.button==SDL_BUTTON_RIGHT?GLFW_MOUSE_BUTTON_RIGHT:e->button.button==SDL_BUTTON_MIDDLE?GLFW_MOUSE_BUTTON_MIDDLE:e->button.button-1;_glfwInputMouseClick(w,b,e->type==SDL_EVENT_MOUSE_BUTTON_DOWN?GLFW_PRESS:GLFW_RELEASE,mods(SDL_GetModState()));break;}
