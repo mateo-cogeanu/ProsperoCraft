@@ -1,13 +1,15 @@
 --- a/radv_physical_device.c
 +++ b/radv_physical_device.c
-@@ -2465,6 +2465,11 @@
+@@ -2465,6 +2465,13 @@
     } else {
        strcpy(p->deviceName, pdev->marketing_name);
     }
 +#ifdef RADV_PS5
-+   /* Consumer presentation only: all IDs, capabilities and driver strings stay real. */
-+   extern const char *prospero_gpu_display_name(void);
-+   snprintf(p->deviceName, sizeof(p->deviceName), "%s", prospero_gpu_display_name());
++   /* Keep explicit driver compatibility overrides; improve only the default name. */
++   if (!instance->drirc.debug.force_vk_devicename[0]) {
++      extern const char *prospero_gpu_display_name(void);
++      snprintf(p->deviceName, sizeof(p->deviceName), "%s", prospero_gpu_display_name());
++   }
 +#endif
     memcpy(p->pipelineCacheUUID, pdev->cache_uuid, VK_UUID_SIZE);
  

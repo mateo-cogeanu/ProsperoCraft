@@ -1,5 +1,6 @@
 # Blank unified-diff context lines require their literal leading space.
 client/ports/oshi/*.patch whitespace=-blank-at-eol
+client/ports/mesa/*.patch whitespace=-blank-at-eol
 # Preserve the pinned upstream bytes, including original font-license spacing.
 client/launcher/toolkit/** -whitespace
 
