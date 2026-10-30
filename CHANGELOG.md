@@ -1,5 +1,11 @@
 # Changelog
 
+## 01.000.166 — local Controlify library-path repair
+
+- Record165 controller initialization failure: the explicit `/app0/libSDL3.so` path does not exist, and OpenJDK RawNativeLibraries.load(Path) returns null when toRealPath fails before reaching the resident loader.
+- Package a genuine SDL ELF sidecar generated from the exact resident SDL object at `assets/java25/lib/libSDL3.so`, and use that existing path in the original FFM backend’s supported setting. The runtime still resolves the known resident alias; it does not dynamically execute sidecar code.
+- Extend the original-backend FFM test to reproduce the missing-path error as well as the loader-lookup event loss and successful existing-file scoped route. Package gates require the sidecar’s ELF type, symbols and matching object/hash audit. Exact166 controller detection/handoff/regressions remain pending. [Evidence](docs/client-controlify-path-166.md). No release/Store update.
+
 ## 01.000.165 — local handle-specific Controlify FFM lookup
 
 - Record continued164 handoff failure on26.3/26.2 Fabric. The scoped frontend initialized but its filter was never called; physical events were still rejected with neutral controller state.

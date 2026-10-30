@@ -10,9 +10,7 @@ int prospero_controlify_events_preinit(void);
 void prospero_controlify_SetEventFilter(SDL_EventFilter,void*);
 bool prospero_controlify_GetEventFilter(SDL_EventFilter*,void**);
 bool prospero_controlify_PollEvent(SDL_Event*);
-void SDL_SetEventFilter(SDL_EventFilter f,void*u){prospero_controlify_SetEventFilter(f,u);}
-bool SDL_GetEventFilter(SDL_EventFilter*f,void**u){return prospero_controlify_GetEventFilter(f,u);}
-bool SDL_PollEvent(SDL_Event*e){return prospero_controlify_PollEvent(e);}
+
 int TestInit(void){return prospero_controlify_events_preinit();}
 int TestPush(int type){SDL_Event e;SDL_zero(e);e.type=type;e.jdevice.which=7;return SDL_PushEvent(&e);}
 int TestGameHas(int type){
@@ -28,11 +26,20 @@ public class LookupCheck {
  static byte filter(MemorySegment data,MemorySegment event){int type=event.reinterpret(128).get(ValueLayout.JAVA_INT,0);return(byte)(type==1541||type==1542?1:0);}
  static MethodHandle call(SymbolLookup lookup,String name,FunctionDescriptor desc){return LINKER.downcallHandle(lookup.find(name).orElseThrow(),desc);}
  public static void main(String[]a)throws Throwable{
-  ClientStartup25.configureControlifyNative();if(!System.getProperty("dev.isxander.sdl.library").equals("/app0/libSDL3.so"))throw new AssertionError("launcher path");
+  ClientStartup25.configureControlifyNative();if(!System.getProperty("dev.isxander.sdl.library").equals("/app0/assets/java25/lib/libSDL3.so"))throw new AssertionError("launcher path");
   System.load("/opt/homebrew/lib/libSDL3.dylib");
   var facade=SymbolLookup.libraryLookup(java.nio.file.Path.of(a[0]),Arena.global());
   if((int)call(facade,"TestInit",FunctionDescriptor.of(ValueLayout.JAVA_INT)).invokeExact()!=0)throw new AssertionError("init");
+  if(a[1].equals("missing")){
+   System.setProperty("dev.isxander.sdl.library",a[0]+"-absent");
+   var configure=Class.forName("dev.isxander.sdl.ffm.SdlNativeLibrary").getDeclaredMethod("configure");configure.setAccessible(true);
+   try{configure.invoke(null);throw new AssertionError("missing path accepted");}catch(java.lang.reflect.InvocationTargetException expected){if(!(expected.getCause() instanceof IllegalArgumentException))throw expected;}
+   System.out.println("PASS originalFFM missinglibrarypath:Cannotopenlibrary failure reproduced beforebinding");return;
+  }
   boolean fixed=Boolean.parseBoolean(a[1]);
+  if(!fixed){System.setProperty("dev.isxander.sdl.library","/opt/homebrew/lib/libSDL3.dylib");try{ClientStartup25.verifyControlifyLookup();throw new AssertionError("unscoped preflight accepted");}catch(java.util.NoSuchElementException|IllegalStateException expected){}}
+
+  if(fixed){System.setProperty("dev.isxander.sdl.library",a[0]);ClientStartup25.verifyControlifyLookup();}
   if(fixed)System.setProperty("dev.isxander.sdl.library",a[0]);else{System.clearProperty("dev.isxander.sdl.library");System.setProperty("dev.isxander.sdl.libraryName","SDL3");}
   var configure=Class.forName("dev.isxander.sdl.ffm.SdlNativeLibrary").getDeclaredMethod("configure");configure.setAccessible(true);configure.invoke(null);
   var setter=SdlFfmNative.downcall("SDL_SetEventFilter",FunctionDescriptor.ofVoid(ValueLayout.ADDRESS,ValueLayout.ADDRESS));
@@ -57,8 +64,8 @@ with tempfile.TemporaryDirectory(prefix='controlify-ffm-lookup-')as d:
   for part in ['sdl-api-','sdl-backend-ffm-']:
    name=next(n for n in z.namelist()if part in n and n.endswith('.jar'));dest=w/(part+'.jar');dest.write_bytes(z.read(name));cp+=':'+str(dest)
  (w/'bridge.c').write_text(code);lib=w/'libscopedSDL.dylib'
- subprocess.run(['clang','-dynamiclib','-std=c11','-fsanitize=undefined','-I/opt/homebrew/include',str(w/'bridge.c'),str(r/'client/ports/sdl/ps5_controlify_events.c'),'-L/opt/homebrew/lib','-lSDL3','-o',str(lib)],check=True)
+ subprocess.run(['clang','-dynamiclib','-std=c11','-fsanitize=undefined','-I/opt/homebrew/include',str(w/'bridge.c'),str(r/'client/ports/sdl/ps5_controlify_events.c'),'-L/opt/homebrew/lib','-lSDL3',*[flag for name in ['SetEventFilter','GetEventFilter','PollEvent'] for flag in ['-Wl,-alias,_prospero_controlify_'+name+',_SDL_'+name]],'-o',str(lib)],check=True)
  (w/'LookupCheck.java').write_text(java);cp=str(r/'build/startup-host-096')+':'+cp
  subprocess.run([str(jdk/'bin/javac'),'--release','25','-cp',cp,'-d',str(w),str(w/'LookupCheck.java')],check=True)
- for mode in ['false','true']:
+ for mode in ['false','missing','true']:
   subprocess.run([str(jdk/'bin/java'),'--enable-native-access=ALL-UNNAMED','-Xverify:all','-Djava.library.path=/opt/homebrew/lib','-cp',str(w)+':'+cp,'LookupCheck',str(lib),mode],check=True,env=dict(os.environ,SDL_VIDEODRIVER='dummy',UBSAN_OPTIONS='halt_on_error=1'),timeout=40)

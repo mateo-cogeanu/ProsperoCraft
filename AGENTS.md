@@ -1859,3 +1859,15 @@ Actualoriginalbackendnegative/positive configure+downcall/upcall+nativefacade
 checkscovermissing164integration;PS5handoffpending. See
  docs/client-controlify-lookup-165.md. Preserve164frontend/163Vanillatypingand
 prioracceptance/candidates;noGitHubreleaseorStoreuntilrequestedafterconsolepass.
+
+##166 existing FFM path and target preflight — 2026-10-30
+
+165ControlifyinitializationfailsCannotopenlibrary/app0/libSDL3.so:RawNativeLibraries
+load(Path) firsttoRealPath;165nofileassumptionincorrect.166packagesgenuineET_DYN
+SDLsidecarfromexactscopedresidentobjectatassets/java25/lib/libSDL3.so,configures
+thatpath;contentsnotdynamicallyexecuted,knownresidentSDL3aliasstillused.
+BeforeMainactualpathlookupmustmatchall3facadeaddresses;successverified_events=3,
+otherwiseexplicitfailure. HostoriginalFFMmissingpath/unscopednegative+existingpath/
+preflight/downcall/upcallpositiveandpackageELF/symbol/object/hashgates;PS5controller
+detection/handoffpending. See docs/client-controlify-path-166.md. NoJAR/runtime/
+publicgatechange,noGitHubrelease/Store;preservepriorcandidates/acceptance.

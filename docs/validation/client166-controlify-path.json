@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-30",
+  "version": "01.000.166",
+  "title_id": "PPSA99874",
+  "runtime_commit": "abccf72189bc5547e08aab28a923e6d55d13fc33",
+  "runtime_changes": "None;consumerexistingpathsidecar+launchlookup/preflightonly",
+  "failed165": {
+    "user": "Controllernotworking/Controlifynotdetecting",
+    "native_game_evidence": "Exact165PS5_CONTROLIFY_LOOKUPhandle_scopedmarker;Controlifymanagerinitialize ->IllegalArgumentException Cannotopenlibrary/app0/libSDL3.so",
+    "cause": "OriginalRawNativeLibraries.load(Path) calls toRealPath;missingfileIOExceptionreturnsnullbefore residentdlopen.165claimthatnofileneededwasincorrect",
+    "raw": "Localignored",
+    "run": "client-01.000.165-1793387437-49532330"
+  },
+  "repair": {
+    "property": "dev.isxander.sdl.library=/app0/assets/java25/lib/libSDL3.so",
+    "sidecar": "GenuineET_DYNSDL ELFgeneratedfrom exactscopedresident-sdl.o;SONAMElibSDL3.so;sourceobject/hashrecorded;realpathcanonicalizationthenknownresidentaliaslookup;sidecarcodenotdynamicallyloaded",
+    "preflight": "ActualPathlibraryLookup beforeMain;all3SDLfunctionaddressesmustequalscopedfacadeexportaddresses;temporaryarenaclosed;successmarkerverified_events=3;explicitfailurebeforegamestartotherwise",
+    "preserved": "164eventfacade/aliasregistry/realcontrollerAPIs/gamemodJARs/heapGC/UI/publicsupportgate"
+  },
+  "checks": {
+    "original_FFM_negative_loader": "PASS actualunchangedbackendloaderLookupphysicaldropnegative",
+    "original_FFM_negative_missingpath": "PASS actualunchangedbackendCannotopenlibrarybeforebindingnegative",
+    "original_FFM_positive": "PASS actualunchangedbackendexistingnativepath/downcall/upcall;physicalgamereceipt+connectionmodreceipt;nativeUBSan/JavaXverifyall",
+    "actual_preflight": "PASS actuallauncherproperty+preflight;rejectsunscopedbaseSDL;passescorrectexacthostsymbolaliases",
+    "startup_host": "PASS policy,cpu/nativeallocation/observer/originalMainunchangedgamechecks",
+    "launcher": "PASS exactmarker/channel/publichold/entrypoint/identity/instancepreservation",
+    "actual_linked_tables": "PASS ELF1942base+aliasentries;exactly3aliaspointerredirects/baseand1939otherspreserved",
+    "target": "PASS compile/link/sign;pairedSDLsidecargeneratedfromexactresidentobjectandpackagedatconfiguredpath;actualstartupclasspreflight+verified_events3marker",
+    "package": "PASS fullactual166CRC/signatures/version/marker/pairedstartupclass/preflight+path+verifiedevents3strings,packagedSDLsidecarET_DYN/actualexports/objecthash/audithash,pinnedregistry/facade/basegroups/frozenchecksums",
+    "relinks": "PASS ordinaryandreplacementOpenAL paths reproduceexact5fa0e00ac8d4680117dfc6a6322241788a508236e71b9e5a5d82dd2a256b50aeELF",
+    "local_storage_recovery": "Initialchecksinterruptedbydiskfull;removedonlyduplicatetemporaryrelinkELFsandexpandedoldkitsaftercompressedarchiveCRCverification;canonicalpackages/symbols/sourcearchivespreserved;interruptedchecksretriedandpass"
+  },
+  "console": {
+    "preflight_verified_events3": "PENDING exact166",
+    "Controlifycontroller_detection_input": "PENDING exact166",
+    "263Fabric_bidirectionalhandoff": "PENDING exact166",
+    "262Fabric_bidirectionalhandoff": "PENDING exact166",
+    "repeatedtransitions_keyboard_mouse_clicks_typing": "PENDING exact166",
+    "onscreenDel_gameplaylook_inventory": "PENDING exact166",
+    "rumble_triggers_gyro_audio_regression": "PENDING exact166",
+    "Vanilla_typing_physicalregression": "PENDING exact166"
+  },
+  "publication": "Consumersource/localapp only;noGitHubreleaseorStore;runtimeunchangedfrompublishedabccf72",
+  "preservation": "Priorcandidates/symbols/source-relink/frozenarchive/releases/originalgamemodJARs/userworldsretained",
+  "package_sha256": "695f534ad545799acb3236cc30cd6a470d8a9669b591fac559c9b02f27fbef3e",
+  "symbols_sha256": "5fa0e00ac8d4680117dfc6a6322241788a508236e71b9e5a5d82dd2a256b50ae",
+  "symbols_text_fnv64": "430d63147b87210f",
+  "sidecar_audit": {
+    "path": "lib/libSDL3.so",
+    "sha256": "58747b6e3fe174fe7db023067e5208364a43ae5801a03092c02c82f84b9041f8",
+    "resident_object_sha256": "e9d1e382d5a0c6aed3215b2363d4298010b7ebe2ff4db8a512807bc8911e500f",
+    "policy": "Genuine paired SDL ELF for RawNativeLibraries Path.toRealPath; runtime opens known resident SDL3 alias, not sidecar code"
+  }
+}

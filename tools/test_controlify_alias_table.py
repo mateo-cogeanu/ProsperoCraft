@@ -3,7 +3,7 @@
 from pathlib import Path
 import argparse,re,struct,subprocess
 r=Path(__file__).resolve().parents[1];p=argparse.ArgumentParser(description=__doc__);p.add_argument('--runtime-workspace',type=Path,required=True);a=p.parse_args()
-elf=r/'build/client-startup-probe/bootstrap-01.000.165-symbols.elf';data=elf.read_bytes()
+elf=r/'build/client-startup-probe/bootstrap-01.000.166-symbols.elf';data=elf.read_bytes()
 nm=subprocess.check_output(['/opt/homebrew/opt/llvm/bin/llvm-nm',str(elf)],text=True)
 symbols={f[2]:int(f[0],16)for l in nm.splitlines()if len(f:=l.split())==3}
 source=(a.runtime_workspace/'build/java25/builtin-libraries.cpp').read_text()
@@ -41,4 +41,4 @@ assert different==set(expected),(different,expected)
 for name,replacement in expected.items():
  assert base[name]==symbols[name]
  assert scoped[name]==symbols[replacement]
-print('PASS actual linked165 ELF:baseps5sdl+SDL3alias same',len(base),'exports;exactly3alias event pointers redirected to realfacade;allother/basepointersunchanged')
+print('PASS actual linked166 ELF:baseps5sdl+SDL3alias same',len(base),'exports;exactly3alias event pointers redirected to realfacade;allother/basepointersunchanged')

@@ -86,3 +86,12 @@ Matching local source/relink, symbols, package and checksums are preserved.
 - Code FNV64: `7eabfcc1abc33826`
 
 Console handoff acceptance remains pending.
+
+## Console follow-up: missing path
+
+165 fails controller initialization with `Cannot open library: /app0/libSDL3.so`.
+The earlier statement that no existing file was needed was incorrect:
+RawNativeLibraries.load(Path) calls toRealPath before delegating to its string
+load method. The non-existent path therefore never reaches the resident
+loader.166 supplies a real paired SDL ELF at the configured package path and
+adds the missing-path negative control. See [166 repair](client-controlify-path-166.md).

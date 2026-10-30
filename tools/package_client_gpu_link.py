@@ -25,6 +25,14 @@ def finish(runtime,java_home,work,assets,spec,gpu_support,gpu_audit,variant="gpu
  run('python3',runtime/'tools/java25_builtin_runtime.py','--management',*(['--imageio','--library-alias','SDL3=ps5sdl','--alias-symbol','SDL3:SDL_SetEventFilter=prospero_controlify_SetEventFilter','--alias-symbol','SDL3:SDL_GetEventFilter=prospero_controlify_GetEventFilter','--alias-symbol','SDL3:SDL_PollEvent=prospero_controlify_PollEvent','--library-alias','libzstd-jni_dh-1.5.7-12=ps5zstddh','--library-alias','zstd-jni_dh-1.5.7-12=ps5zstddh','--library-alias','sqlitejdbc=ps5sqlitedh'] if variant=='startup' else []),'--external-libraries',manifest)
  shutil.copyfile(build/'builtin-resident-audit.json',java/'resident-libraries-audit.json')
  if variant=='startup':
+  # Path-based FFM lookup canonicalizes the library before opening a resident
+  # handle. Retain a genuine ELF sidecar built from the exact resident object.
+  # Its contents are not dynamically loaded; basename resolves the SDL3 alias.
+  sdl_sidecar=java/'lib/libSDL3.so'
+  run('/opt/homebrew/opt/lld/bin/ld.lld','-shared','--hash-style=gnu','-soname','libSDL3.so',work/'resident-sdl.o','-o',sdl_sidecar)
+  sdl_audit=json.loads((java/'sdl-audit.json').read_text())
+  sdl_audit['path_sidecar']={'path':'lib/libSDL3.so','sha256':hashlib.sha256(sdl_sidecar.read_bytes()).hexdigest(),'resident_object_sha256':hashlib.sha256((work/'resident-sdl.o').read_bytes()).hexdigest(),'policy':'Genuine paired SDL ELF for RawNativeLibraries Path.toRealPath; runtime opens known resident SDL3 alias, not sidecar code'}
+  (java/'sdl-audit.json').write_text(json.dumps(sdl_audit,indent=2)+'\n')
   shutil.copy2(runtime/'build/java25/boot-image/lib/modules',java/'lib/modules')
   shutil.copy2(runtime/'build/java25/boot-image-audit.json',java/'boot-image-audit.json')
   shutil.copy2(runtime/'.tools/java25/openjdk/build/ps5-bootstrap/support/modules_libs/java.base/libnio.so',java/'lib/libnio.so')

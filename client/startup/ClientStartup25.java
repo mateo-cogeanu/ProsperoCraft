@@ -205,7 +205,17 @@ public final class ClientStartup25 {
  static void configureControlifyNative(){
   // The original FFM backend's supported path option uses libraryLookup(path),
   // avoiding loaderLookup's class-loader-wide first matching SDL export.
-  System.setProperty("dev.isxander.sdl.library","/app0/libSDL3.so");
+  System.setProperty("dev.isxander.sdl.library","/app0/assets/java25/lib/libSDL3.so");
+ }
+ static void verifyControlifyLookup(){
+  try(var arena=java.lang.foreign.Arena.ofConfined()){
+   var lookup=java.lang.foreign.SymbolLookup.libraryLookup(Path.of(System.getProperty("dev.isxander.sdl.library")),arena);
+   for(String name:new String[]{"PollEvent","SetEventFilter","GetEventFilter"}){
+    long actual=lookup.find("SDL_"+name).orElseThrow().address();
+    long expected=lookup.find("prospero_controlify_"+name).orElseThrow().address();
+    if(actual!=expected)throw new IllegalStateException("Controlify resident event lookup is not scoped");
+   }
+  }
  }
  static void configureJna(boolean resident){
   System.setProperty("jna.nosys",resident?"false":"true");
@@ -230,7 +240,7 @@ public final class ClientStartup25 {
    System.setProperty("user.dir",work.toString());System.setProperty("user.home",work.toString());System.setProperty("java.io.tmpdir",work.resolve("native-cache").toString());
    for(String key:new String[]{"jna.tmpdir","io.netty.native.workdir"})System.setProperty(key,work.resolve("native-cache").toString());
    configureJna(ProsperoLauncher.selectedResidentJna());
-   configureControlifyNative();console.println("PS5_CONTROLIFY_LOOKUP handle_scoped=SDL3");
+   configureControlifyNative();verifyControlifyLookup();console.println("PS5_CONTROLIFY_LOOKUP handle_scoped=SDL3 verified_events=3");
    prepareCpuInformation();ProsperoNetwork.check();
    stage("PS5_LAUNCH phase=CONFIGURE_BINDINGS");
    Configuration.OPENGL_CONTEXT_API.set("OSMesa");Configuration.OPENGL_OSMESA_LIBRARY_NAME.set(System.mapLibraryName("ps5clientgl"));
