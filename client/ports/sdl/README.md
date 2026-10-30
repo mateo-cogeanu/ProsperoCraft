@@ -1,5 +1,14 @@
 # SDL3 public PS5 dependency port
 
+Current integration includes native gyro, compatible rumble, actuator audio and
+Controlify trigger translation. Per-zone trigger fallback approximates rejected
+native effects; physical feel and broader device/lifecycle coverage remain under
+testing. Standalone SDL sensors, impulse trigger rumble and LEDs are unsupported.
+See the [project compatibility overview](../../../README.md#controls).
+
+The build notes below describe successive changes, including earlier limitations
+that later builds addressed. They are not separate current support claims.
+
 SDL3 release3.4.2 source is pinned in sources.json. PS5 video/joystick and input
 platform code derive from griches/PS5_Dusklight at the recorded commit, under
 Zlib/MIT. Original author notices and license texts are preserved. Altered files
@@ -18,10 +27,10 @@ channels2/3 to the actual type10 stereo haptic port. Main game speaker audio
 remains OpenAL. One silent actuator output is reserved before the JVM and retained
 across logical audio reloads. Capabilities require successful native probes.
 Hardware motion values/axis signs,HD haptic feel,hotplug and simultaneous sound
-remain pending PS5 checks. Standalone SDL sensors,standard rumble,adaptive
-triggers and LEDs remain unsupported;controller identity alone is not acceptance.
+remain pending PS5 checks. At build 112, standalone SDL sensors,standard rumble,adaptive
+triggers and LEDs were unsupported;controller identity alone is not acceptance.
 
-Development113 adds native compatible two-motor rumble after a successful zero-output capability probe. SDL owns duration/stop timing. HD audio selects advanced mode only for actual nonzero actuator samples, sharing mode state with compatible rumble. LED/adaptive triggers remain unsupported. Physical effects and mode arbitration require PS5 validation.
+Development113 adds native compatible two-motor rumble after a successful zero-output capability probe. SDL owns duration/stop timing. HD audio selects advanced mode only for actual nonzero actuator samples, sharing mode state with compatible rumble. At build 113, LED/adaptive triggers remained unsupported. Physical effects and mode arbitration require PS5 validation.
 
 Development116 translates Controlify47-byte raw DualSense packets to real native120-byte trigger commands after an OFF capability probe. Supports OFF,uniform/per-zone feedback,weapon and uniform/per-zone vibration;Controlify slope effects use feedback zones. Unknown/calibration modes are rejected. Close,disconnect and interception reset active effects. Impulse trigger rumble and LEDs remain unsupported. Hardware effect feel/coexistence remain pending.
 

@@ -1,5 +1,28 @@
 # Changelog
 
+Detailed client and server release history, console results, known failures and
+frozen milestones. Older entries describe evidence available at that time and
+may be superseded by later records. Client and server version counters differ.
+
+[Project overview](README.md) · [Current roadmap](README.md#roadmap) ·
+[Latest release](https://github.com/mateo-cogeanu/ProsperoCraft/releases/latest)
+
+## Documentation update: 2026-10-30
+
+- Reorganize the README around compatibility, installation, first launch, controls,
+  content and troubleshooting; link completed milestones to first public releases.
+- Remove released themes/input/content features from upcoming work and distinguish
+  available Vanilla 26.2 from held Fabric 26.2. CPU reporting is already implemented
+  using real hardware data, not a planned fixed marketing string.
+- Retire the old crafting-table icon request: later supplied app artwork and
+  Prism/MultiMC instance icons superseded the original launcher artwork. Preserve
+  its provenance in assets/branding/README.md and docs/client-account-ui-091.md.
+- Preserve removed 122–150 development notes below in descending build order; their
+  pending tests describe each historical stage. Add publication summaries for 119
+  and 117 without rewriting their original development evidence.
+- Refresh the README banner's stale 074 playtest label while retaining its artwork.
+  No app build, binary release, Store update or new console validation.
+
 ## Release 01.000.153
 
 - Add Minecraft 26.2 Vanilla support through the native GLFW/SDL Vulkan integration. Fabric for 26.2 is marked Coming soon in instance creation, existing instances and launch controls while compatibility work continues. Existing worlds, mods and downloads are kept.
@@ -7,6 +30,209 @@
 - Reserve audio mixer and event workers before Java starts and improve OpenAL context/device synchronization. Broader audio and gameplay endurance testing continues.
 - Separate the account name and player head in the top bar. Heads now sit centered in their own theme-colored tiles on both the top bar and account screen, keeping their original size and position.
 - Remove the Experimental label from the supported 26.4 snapshots. Snapshots remain off by default; explicitly saved choices are retained.
+
+## Development builds 122–152: preserved pre-release notes
+
+Moved from the README on 2026-10-30. These entries retain the console evidence
+and pending tests recorded at each stage, rather than claiming that later fixes
+were present earlier. Release 153 above is the public delivery point; earlier
+public 121 and frozen snapshots remained preserved during this work.
+
+### Development 152 and 151
+
+Account heads gained separate framed tiles and then theme-colored backgrounds,
+with the account name separated from the avatar. These visual changes are now
+included in 153; exact 153 console appearance remains pending. See the verified
+[151 commit](https://github.com/mateo-cogeanu/ProsperoCraft/commit/7a5b9be) and
+[152 commit](https://github.com/mateo-cogeanu/ProsperoCraft/commit/79c6b0c).
+
+### Development 150
+
+Build 150 repairs the OpenAL context property/debug locks identified in 149's
+loading crash and reserves async event workers before Java starts. The mixer
+submitted real audio in 149; audible output and stable gameplay still require
+PS5 validation. See [build notes](docs/client-fabric-context-locks-150.md).
+
+### Development 149
+
+Build 149 reserves OpenAL mixer workers before Java starts, addressing the
+confirmed mixer-thread creation failure in 148. The later menu exit after Down
+has no fatal report and remains unproven. Console audio, input and world tests
+are pending; see [validation notes](docs/client-fabric-audio-workers-149.md).
+
+### Development 148
+
+App148 [OpenAL data-discovery lock repair](docs/client-fabric-data-search-148.md)
+addresses147's recorded SearchDataFiles mutex allocation failure while retaining
+audio/HRTF discovery. Host discovery/mixer checks and target packaging do not
+establish PS5 startup/audio/world acceptance. Store121 remains preserved.
+
+### Development 147
+
+App147 [OpenAL HRTF lock repair](docs/client-fabric-hrtf-locks-147.md)
+addresses146's recorded mutex allocation failure during spatialization-data
+discovery. Native HRTF behavior remains enabled. PS5 startup/audio, Controlify,
+world/save and regression checks remain pending; Store121 is preserved.
+
+### Development 146
+
+App146 [OpenAL device-state lock repair](docs/client-fabric-device-state-146.md)
+addresses145's recorded native mutex failure inside alcGetString. The complete
+native audio library is rebuilt with a consistent device layout. PS5 startup,
+audio, Controlify/input and world/save regression remain pending; Store121 stays
+preserved.
+
+### Development 145
+
+144Controlify connects and responds to the controller, but a later native exit
+remains unresolved. App145 [repairs scoped audio mutex allocation failures and adds bounded input/presentation observations](docs/client-fabric-audio-input-145.md).
+Host OpenAL mixer/locking checks pass; audible PS5 audio, screen transitions,
+world/save and working-version regression remain pending. Store121 is preserved.
+
+### Development 144
+
+The user confirms143reaches the Fabric26.2menu. World creation remains blocked
+by a native library-name allocation failure during compression initialization;
+Controlify records the same loader error. App144 [integrates the runtime repair](docs/client-fabric-library-names-144.md).
+PS5 world/save/Controlify/audio/regression checks remain pending; menu startup
+is not ALL PASS. Store121 and previous candidates remain preserved.
+
+### Development 143
+
+App143 [native exit diagnostics](docs/client-fabric-native-exit-diagnostics-143.md)
+improves signal recording, enables bounded stack/resource sampling and limits
+repetitive shader trace detail after142closed without a fresh fatal report.
+The cause remains unproven; PS5 retesting is needed. Earlier candidates and
+Store121 remain preserved.
+
+### Development 142
+
+App142 [optional extended HotSpot synchronization reserve](docs/client-fabric-monitor-reserve-142.md)
+addresses141's exhausted4096monitor-mutex reserve during Controlify FFM class
+generation near loading-screen completion. Native pool host tests pass in
+default and extended modes; PS5 priming/startup/gameplay/audio/regression remain
+pending. Earlier candidates and Store121 remain preserved.
+
+### Development 141
+
+App141 [native DNS conversion scratch](docs/client-fabric-network-scratch-141.md)
+integrates an opt-in Java runtime repair after140 reported native allocation
+failure during an account-service DNS lookup. Host allocation/ownership and
+target runtime checks pass; PS5 Fabric26.2 startup/gameplay and working-version
+regression remain pending. Store121 and earlier canonical candidates remain intact.
+
+### Development 140
+
+App140 [native presentation reserves](docs/client-fabric-present-reserve-140.md)
+addresses139's failed first VideoOut worker creation after VMA/shader/swapchain
+startup. It reserves that native worker and RADV mutexes before JVM startup;
+PS5 presentation, Fabric26.2 gameplay/audio/save and working-version regression
+remain pending. Store121 and all prior canonical candidates are preserved.
+
+### Development 139
+
+App139 [VMA lock allocation candidate](docs/client-fabric-vma-locks-139.md)
+uses VMA's supported custom lock hooks after138 recorded an allocation failure
+in the shared-mutex path during GPU buffer creation. Host concurrency and real
+GPU allocation/transfer checks pass; PS5 Fabric26.2 startup/world/save and
+working-version regression remain pending. Store121 is preserved.
+
+### Development 138
+
+App138 [native mutex caller diagnostic](docs/client-fabric-mutex-caller-138.md)
+adds bounded call-site tracing after137 passed shader compiler initialization
+but encountered another native resource exception. PS5 diagnosis remains pending.
+
+### Development 137
+
+App137 [RADV timeline condition clock integration](docs/client-fabric-monotonic-137.md)
+adds reserved native monotonic conditions after136 successfully created the
+shader compiler. PS5 semaphore creation and gameplay validation remain pending.
+
+### Development 136
+
+App136 [shader compiler initialization lock candidate](docs/client-fabric-shaderc-locks-136.md)
+uses reserved native SDL mutexes for targeted shaderc/glslang initialization
+locks after135 captured native system_error12. PS5 validation remains pending.
+
+### Development 135
+
+App135 [native C++ exception diagnostic candidate](docs/client-fabric-native-throw-135.md)
+records the original throw before low-memory exception formatting can hide its
+cause. Build134's original exception remains unresolved; PS5 testing is pending.
+
+### Development 134
+
+App134 [RADV queue condition reserve](docs/client-fabric-radv-conditions-134.md)
+addresses the explicit native condition-initialization error during Vulkan
+device creation on133. PS5 launch/gameplay validation remains pending.
+
+### Development 133
+
+App133 [26.2 GLFW native mutex integration](docs/client-fabric-glfw-mutex-133.md)
+uses the existing reserved SDL native mutex pool after132 progressed through
+display initialization. PS5 launch/gameplay and working-version regressions
+remain pending.
+
+### Development 132
+
+App132 [Mesa option-string allocator integration](docs/client-fabric-mesa-strings-132.md)
+addresses the identified display-initialization abort after131's native lock
+reservation succeeded. PS5 Fabric launch and gameplay validation remain pending.
+
+### Development 131
+
+App131 [PS5 SDL native synchronization reserve](docs/client-fabric-sdl-sync-131.md)
+addresses130's explicit mutex-initialization failure by reserving native SDL
+mutex and condition objects before JVM startup. Console validation is pending.
+
+### Development 130
+
+App130 [Fabric26.2 compiler-TLS allocation repair](docs/client-fabric-emutls-130.md)
+addresses the native abort identified in129's retained trace. PS5 launch,
+world and sustained-operation validation remain pending.
+
+### Development 129
+
+App129 [Fabric26.2 startup diagnostic candidate](docs/client-fabric-startup-diagnostics-129.md)
+preserves the previous native trace tail and adds bounded GLFW/SDL startup
+checkpoints. It also handles native monitor allocation failure cleanly. Build128's
+unreported exit remains under investigation; PS5 validation is pending.
+
+### Development 128
+
+App128 [PS5 SDL reader/writer lock candidate](docs/client-fabric-sdl-locks-128.md)
+addresses the GLFW/SDL lock initialization failure seen after127 passed class
+verification. PS5 Fabric startup and gameplay validation remain pending.
+
+### Development 127
+
+App127 [Fabric26.2 variable-buffer verifier candidate](docs/client-fabric-verifier-127.md)
+addresses the larger allocations that still failed on126. The actual failing
+class passes host verification with ordinary allocators denied; PS5 validation
+remains pending.
+
+### Development 126
+
+App126 [Fabric26.2 verifier allocation candidate](docs/client-fabric-verifier-126.md)
+reduces native page waste observed in125's launch failure. Console Fabric
+startup and world validation remain pending; vanilla26.2 was accepted on124.
+
+### Development 125
+
+The user confirms Vanilla 26.2 works on build 124. Development 125 addresses the native temporary-buffer allocation failure seen in Fabric 26.2; [diagnosis and pending validation](docs/client-fabric-native-scratch-125.md). Fabric retesting is pending.
+
+### Development 124
+
+Development 124 fixes early Vulkan-loader initialization on 26.2 after build 123 reached backend selection; [diagnosis and test notes](docs/client-26.2-vulkan-handoff-124.md). PS5 startup and gameplay retesting remain pending.
+
+### Development 123
+
+Development 123 repairs the 26.2 GLFW callback ABI failure observed on build 122; [crash and repair notes](docs/client-26.2-callbacks-123.md). PS5 retesting is pending.
+
+### Development 122
+
+Development 122 adds a Minecraft 26.2 test candidate using a genuine GLFW core with the existing PS5 SDL/Vulkan backend. The original game JAR stays intact. [Integration and test notes](docs/client-26.2-glfw-122.md); PS5 menu/world/input/save validation is pending. Public release 121 is preserved.
 
 ## Release 01.000.121
 
@@ -23,6 +249,15 @@
 - Preserve Microsoft/Xbox/XSTS/Minecraft ownership/profile checks, instances, worlds, downloads and settings. Snapshots remain off by default.
 - Host/auth/HTTPS/migration/package and exact native relink checks pass. Live120authentication/restore remains unconfirmed in the publication record.
 
+## Release 01.000.119
+
+Publish the exact119 candidate after positive console feedback, carrying118's
+snapshot1–6 choices and the snapshot6 JNA repair. Snapshots stay off by default;
+existing explicit choices are retained. This is functional console acceptance,
+not exhaustive mod/JNA/endurance validation. The earlier development entries
+below retain their original pending-test scope. [Release notes](docs/releases/client-snapshots-119.md) ·
+[Console acceptance](docs/validation/client119-console-acceptance-2026-10-28.json).
+
 ## Development 01.000.119
 
 - Integrate genuine native JNA dispatch for snapshot6early bootstrap using the existing resident library mechanism and supported JNA loader settings. Keep original game/dependency JARs intact.
@@ -33,6 +268,15 @@
 - Enable explicit experimental launch candidates for26.4snapshots1–6 with correct snapshot arguments and asset indexes; reject newer Java requirements and unreviewed versions.
 - Select the existing PS5 CPU provider by dependency and add a separate OSHI7SPI provider for snapshot6, preserving original game/library JARs.
 - Original publisher install/bootstrap/CPU and26.3regression checks pass. PS5 rendering/world tests remain pending; public/Store117preserved. See [details](docs/client-snapshots-118.md).
+
+## Release 01.000.117
+
+Publish the exact117 candidate with default Controlify setup, instance duplication,
+world-handle repair, managed dependency updates and native input/haptic integration.
+Earlier keyboard, haptic and114 world play/reload feedback is positive; adaptive
+trigger feel and broader lifecycle/endurance checks remain pending. Later Store117
+reinstall and second-tester success are recorded in the [performance review](docs/client-performance-investigation-117.md).
+Microphone capture remains deferred. [Release notes](docs/releases/client-controls-worlds-117.md).
 
 ## Development 01.000.117
 
@@ -110,12 +354,6 @@
 - Add actual Installed inventories for mods, shaders and resource packs, notice-style checkboxes and cached project/download thumbnails.
 - Add an optional reversible Vitrail shadow-map scale control, preserving other settings. Shader FPS improvements are not yet measured.
 
-
-Detailed development history for **ProsperoCraft**, including client and server
-builds, console results, fixes, known failures and frozen milestones.
-
-[← Project overview](README.md) · [Current roadmap](README.md#roadmap) ·
-[All releases](https://github.com/mateo-cogeanu/ProsperoCraft/releases)
 
 ## 2026-10-27 — Fabric recovery and input105
 

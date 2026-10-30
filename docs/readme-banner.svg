@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="310" viewBox="0 0 1200 310" role="img" aria-labelledby="title description">
-  <title id="title">ProsperoCraft — Minecraft Java on PS5</title>
-  <desc id="description">Native Java25 on PS5. The human confirms very good game audio and buttery-smooth gameplay on exact01.000.074. This is playtest feedback; measured FPS, save-reload and endurance remain pending.</desc>
+  <title id="title">ProsperoCraft: Minecraft Java on PS5</title>
+  <desc id="description">Minecraft Java Edition on PS5 through a Native Java 25 Runtime. Instances, accounts and mods; game and loader compatibility varies. See the README for console validation limits.</desc>
   <defs>
     <linearGradient id="background" x2="1" y2="1"><stop stop-color="#122720"/><stop offset="1" stop-color="#081610"/></linearGradient>
     <linearGradient id="grass"><stop stop-color="#a5e1a2"/><stop offset="1" stop-color="#5ba783"/></linearGradient>
@@ -17,9 +17,9 @@
   <g font-family="Inter,Segoe UI,Arial,sans-serif">
     <text x="69" y="63" font-size="15" font-weight="600" letter-spacing="3" fill="#b0ccb9">JAVA EDITION · NATIVE PS5 HOMEBREW</text>
     <text x="48" y="142" font-size="65" font-weight="700" letter-spacing="-2" fill="#f1f7f2">Prospero<tspan fill="#a5dfb5">Craft</tspan></text>
-    <text x="51" y="182" font-size="21" fill="#b3ccbc">Native Java 25. Game audio works. Smooth gameplay confirmed.</text>
+    <text x="51" y="182" font-size="21" fill="#b3ccbc">Minecraft Java on PS5. Instances, accounts and mods.</text>
     <rect x="50" y="225" width="230" height="35" rx="17" fill="#243e30" stroke="#3d634c"/>
-    <text x="72" y="247" font-size="14" font-weight="600" fill="#bbdfc1">PLAYTEST · 01.000.074</text>
+    <text x="72" y="247" font-size="14" font-weight="600" fill="#bbdfc1">NATIVE JAVA 25</text>
     <text x="307" y="247" font-size="16" fill="#92b09d">Built on the separate PS5 Java 25 runtime port</text>
   </g>
 </svg>
