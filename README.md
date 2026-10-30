@@ -23,6 +23,8 @@ The latest public release is **01.000.158**. Earlier builds have positive PS5 pl
 | **26.4 snapshots 1–6** | Available; positive console feedback on 118/119. Use separate test worlds. | Selectable when matching loader/mod versions exist; snapshot-specific Fabric, Controlify and mod compatibility is not established. |
 | **Other versions** | Downloadable 26.x entries may appear, but Play is blocked for versions outside the set above. | No additional compatibility claim. NeoForge is not enabled. |
 
+Local development build **159** offers an explicitly labeled Fabric 26.2 test path and a scoped OpenAL discovery repair. It is **not a public support change or release**; console sound, Controlify features and world save/reload remain pending. [Development evidence and console test sequence](docs/client-fabric262-development-159.md).
+
 Snapshots are **hidden by default**. Enable **Settings → Show Snapshots** to list them; explicit saved preferences are retained. Future snapshots are not enabled automatically. See the [snapshot guide](docs/client-snapshots-118.md) and [119 console acceptance](docs/validation/client119-console-acceptance-2026-10-28.json).
 
 Compatible displays can use output up to 120 Hz, with a 60 Hz fallback. A tester reported 119 FPS on build 097; release 100 received positive smoothness feedback. This is not a constant 120 FPS guarantee or fully uncapped presentation. [High-refresh details](docs/client-high-refresh-097.md).

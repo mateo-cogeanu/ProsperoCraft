@@ -258,6 +258,7 @@ public final class ClientStartup25 {
    Thread.currentThread().setContextClassLoader(ProsperoLauncher.gameLoader());
    ProsperoLauncher.configureGameLaunch();
    Class<?> main=Class.forName(ProsperoLauncher.gameMain(),false,ProsperoLauncher.gameLoader());Method method=main.getMethod("main",String[].class);
+   stage(ProsperoLauncher.launchIdentity());
    stage("ENTER "+ProsperoLauncher.gameMain()+"; selected loader, PS5 gameplay validation pending");
    console.println("Original selected Minecraft Main entry;launcher-selected mode. Credentials are not logged.");
    if(startupObserverEnabled()){

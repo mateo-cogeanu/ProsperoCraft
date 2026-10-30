@@ -93,8 +93,12 @@ def build(host=False,speakers=False,host_objects=()):
  assert text.count(before)==1;text=text.replace(before,after)
  before='''        for(auto&& dirent : fs::directory_iterator{fpath})'''
  after='''        TRACE("Data directory iteration begin");
-        for(auto&& dirent : fs::directory_iterator{fpath})'''
+        ps5audio::Directory directory{fpath.c_str()};
+        while(auto* item = directory.next())'''
  assert text.count(before)==1;text=text.replace(before,after)
+ before='            auto&& entrypath = dirent.path();'
+ assert text.count(before)==1;text=text.replace(before,'            const auto entrypath = fpath / item->d_name;')
+ text='#include "ps5_directory.hpp"\n'+text
  before='''    const auto newlist = std::span{*results}.subspan(base);'''
  assert text.count(before)==1;text=text.replace(before,'    TRACE("Data directory iteration scope complete");\n'+before)
  helpers.write_text(text);compile_copy(base,HELPERS_MEMBER,helpers_original,helpers,helpers_obj)
@@ -111,6 +115,7 @@ def build(host=False,speakers=False,host_objects=()):
   logging.write_text(text)
   compile_copy(base,'CMakeFiles/OpenAL.dir/core/logging.cpp.o',logging_original,logging,logging_obj,ROOT/'client/ports/openal/ps5_audio_mutex.hpp')
  audit={'pin':pin,'original_source_sha256':sha(original),'patched_source_sha256':sha(patched),'header_sha256':sha(header),'unit_object_sha256':sha(obj),'functions':[x[0]for x in ANCHORS],'scope':'At most128native API body scopes/256records,errno preserved;scope-exit includes exception unwinding,not success/return proof','game_jar_modified':False}
+ audit['directory_discovery']={'header_sha256':sha(ROOT/'client/ports/openal/ps5_directory.hpp'),'policy':'Explicit opendir/readdir/closedir bind to scoped resident directory provider;retain status/extension filtering,sorting,paths and error reporting;RAII closes on exceptions','console':'Pending exact159 HRTF enumeration;158 EPERM caught,not fatal'}
  audit['cwd_discovery_repair']={'original_source_sha256':sha(helpers_original),'patched_source_sha256':sha(helpers),'unit_object_sha256':sha(helpers_obj),'behavior':'Nonthrowing current_path(error_code);skip unavailable app-local search with warning,retain configured/local-valid/global/default HRTF discovery','console':'Host missing-cwd abort reproduced;PS5 cause/resolution unverified'}
  if host:
   lines=subprocess.check_output(['ninja','-C',str(base),'-t','commands','OpenAL'],text=True).splitlines()

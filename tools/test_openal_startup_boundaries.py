@@ -113,6 +113,16 @@ int main(int argc,char**argv){
    assert 'App-local data search explicit path selected'in result.stderr
    assert 'Data directory iteration scope complete'in result.stderr
    assert 'App-local data search current_path begin'not in result.stderr
+ # Preserve the upstream filename/type/case/symlink policy and sorted results.
+ (valid/'second.MHR').write_bytes(b'filename fixture')
+ (valid/'ignored.txt').write_text('not an HRTF')
+ (valid/'directory.mhr').mkdir()
+ (valid/'linked.mhr').symlink_to(valid/'enumeration-control.mhr')
+ (valid/'directory-link.mhr').symlink_to(valid/'directory.mhr',target_is_directory=True)
+ for lib in [ROOT/'build/openal-host/libopenal.dylib',library]:
+  result=subprocess.run([str(root/'hrtf'),str(lib),str(valid),'valid'],env=env,capture_output=True,text=True,check=True,timeout=30)
+  assert 'count=3 error=0'in result.stdout
+ print('PASS original/private discovery agree on case-insensitive extension,regular-file symlink inclusion and directory/other-extension exclusion')
  print('PASS actual explicit local-data path:original and private OpenAL enumerate1filename/error0 even with currentdirectory removed;private path skips current_path and records real filesystem stages. No HRTF decoding/mixing or PS5 pass.')
  print('PASS actual HRTF count regression:original pinned library aborts on missing cwd;private repair returns0/error0 and creates context;valid local .mhr filename enumeration remains1 on both. Fixture does not validate HRTF decoding/mixing or PS5 cause.')
  print('PASS actual private pinned OpenAL ALC unit:all5body scope pairs,baseline device/error/name/version/context/current/close results unchanged;actual helper128scope cap,4threads,exception unwinding,errno under ASan/UBSan. PS5 behavior pending.')

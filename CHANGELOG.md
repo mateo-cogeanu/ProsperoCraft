@@ -1,5 +1,11 @@
 # Changelog
 
+## 01.000.159 — local Fabric 26.2 development test
+
+- Add an explicit package-only Fabric 26.2 test path with development labels; ordinary builds retain Coming soon and the genuine Fabric entrypoint/dependency checks.
+- Route OpenAL HRTF enumeration through the existing resident directory provider, with scoped cleanup and preserved filtering/error reporting, after build158 Fabric26.3 recorded a caught EPERM.
+- Record game/loader/window identity before Main. Preserve all existing runtime, audio, controller, UI and supported-version work. Host/target checks pass; exact159 console sound, Controlify features, world persistence and regression remain pending. No release or Store submission. [Evidence and test sequence](docs/client-fabric262-development-159.md).
+
 ## Release 01.000.158
 
 - Detect PS5 or PS5 Pro once in the native launcher and share the cached hardware identity with Minecraft’s F3 CPU/GPU display.

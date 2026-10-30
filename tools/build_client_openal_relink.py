@@ -43,7 +43,7 @@ def build(runtime,output,variant="native_bootstrap",version="01.000.026",tested_
  with tarfile.open(kit/'ps5-sdk-headers.tar','w')as tar:tar.add(ROOT/'.tools/graphics-sdk/target/include',arcname='target/include')
  if variant=='startup':
   # Preserve the actual modified library, not just the historical pristine026 recipe.
-  for path in ['client/startup/openal_trace_env.c','client/ports/openal/startup_boundary.hpp','tools/build_openal_startup_boundaries.py']:
+  for path in ['client/startup/openal_trace_env.c','client/ports/openal/startup_boundary.hpp','client/ports/openal/ps5_directory.hpp','tools/build_openal_startup_boundaries.py']:
    dest=kit/'consumer-source'/path;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(ROOT/path,dest)
   with tarfile.open(fileobj=io.BytesIO(data))as tar:tar.extractall(kit/'openal-startup-source',filter='data')
   for unit in ['alc/alc.cpp','core/helpers.cpp']:
@@ -65,6 +65,7 @@ def build(runtime,output,variant="native_bootstrap",version="01.000.026",tested_
    shutil.copyfile(ROOT/'client/ports/openal/ps5_audio_mutex.hpp',kit/'openal-startup-source/alc/ps5_audio_mutex.hpp')
    shutil.copyfile(ROOT/'build/openal-ps5/source/core/hrtf.cpp',kit/'openal-startup-source/core/hrtf.cpp')
    shutil.copyfile(ROOT/'client/ports/openal/ps5_audio_mutex.hpp',kit/'openal-startup-source/core/ps5_audio_mutex.hpp')
+   shutil.copyfile(ROOT/'client/ports/openal/ps5_directory.hpp',kit/'openal-startup-source/core/ps5_directory.hpp')
    logging=kit/'openal-startup-source/core/logging.cpp'
    logging.write_text('#include "ps5_audio_mutex.hpp"\n'+(ROOT/'build/openal-startup-boundary-ps5/logging.cpp').read_text())
   shutil.copyfile(work/'startup-openal.o',kit/'accepted-startup-openal.o')

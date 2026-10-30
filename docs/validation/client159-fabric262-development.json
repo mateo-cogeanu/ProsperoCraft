@@ -1,0 +1,69 @@
+{
+  "date": "2026-10-30",
+  "version": "01.000.159",
+  "title_id": "PPSA99874",
+  "package_sha256": "2e8d5b7523376f4231fc843e9b2e67feaefdde1655b9ff271c3907a3fc4c1686",
+  "symbols_sha256": "899b93f34e0f9910707f9664776a6f244ba826190a7d62831b33496fb318f602",
+  "channel": "temp_gametest;explicit fabric262-test marker",
+  "fabric262_public_support": false,
+  "runtime_commit": "47a5fa702b45ac249d44046d2cf75831a0f7d350",
+  "runtime_changes": "None;existing runtime policies/pins retained",
+  "diagnostics": {
+    "method": "Safari computer use;15read-only downloads;raw reports ignored/local",
+    "open_run": "client-01.000.158-1793368545-389412510",
+    "open_state": "Launcher/library;no current abort captured;descriptor snapshot50open/30regular/4socket",
+    "previous_run": "client-01.000.158-1793367551-443154304",
+    "previous_game": "Fabric26.3;explicit user identification on2026-10-30;not26.2",
+    "previous_evidence": "FirstPCM submission,drain,retained port and matching clean shutdown/process replacement;not audibility/persistence acceptance",
+    "caught_discovery_error": "HRTF directory_iterator EPERM on existing local data directory;context creation/PCM continue",
+    "stale_fatal": "PreviousHS timestamp2026-10-29 18:18:19/elapsed36.117181/native monitor mutex_initENOMEM;excluded from current158 failure claims"
+  },
+  "changes": [
+    "Package-only explicitly labeled Fabric26.2 development launch permission;public support remains false;real Knot/auth/verification/dependency checks retained",
+    "Private OpenAL directory calls bind to existing resident provider instead of out-of-line libc++ directory_iterator;RAII cleanup/error/filter/sort/path policy preserved",
+    "Selected game/loader/window/development flag/verifiedFabricLoader startup identity without account/instance/private paths"
+  ],
+  "checks": {
+    "development_gate_matrix": "PASS exact/missing/malformed marker,temp/demo/offline,property cannot enable,public support held,labels,genuine entrypoint,instance/library preservation",
+    "public_gate_regression": "PASS cards/detail/X/final preparation/creation labels;world/mod/cache/settings preservation",
+    "directory_owner_asan_ubsan": "PASS1000EOF/stale_errno/open_denial/read_error/allocation_unwind cycles;no stream leak",
+    "actual_openal_discovery": "PASS baseline/private missingcwd/explicitpath;regular_file/case/symlink/directory/extension policies agree;no HRTF decode claim",
+    "actual_openal_audio": "PASS16success/error modes;actualPCM,resampling,debug/propertyAPI,asyncevent callbacks,pause/resume,3device transitions,completion/retainedport/failure controls;hostAudioOutfixture",
+    "reserved_workers_asan_ubsan": "PASS initialization/failure/idempotence,two concurrentleases,exhaustion,completion/reuse1000,latecreationdenial",
+    "controlify_serialization_asan_ubsan": "PASS original3.5.3FFM47bytepacket->native120byteeffectABI;OFF/resistance/weapon/vibration/perzone/slope/masks and malformed rejection;physicalpending",
+    "native_pad_platform": "PASS actualplatformadapter/gyro/rumble/triggerfallback/interception/disconnect underhostOSfixtures;physicalpending",
+    "original26_2_launcher": "PASS936LWJGLreferences,publisherinstall/assets/hashverification,argument/nativepolicy,originalMainexpectedhostnativefailure;JARsunchanged",
+    "fabric_dependencies": "PASS actualupstreamversionpredicates/nestedproviders/hashpinnedAPIinstall/repair/offline/conflict/failurepreservation",
+    "startup_host": "PASS originalMainentry/JARintegrity/CPUhandoff/launchpolicy/observer/nativebootstrapcontrols;notmenuacceptance",
+    "target_build": "PASS compile/link/sign/package;requirednativecomponents/runtimepinsintegrated",
+    "actual_package": "PASSCRC/signatures/source/objecthashes/runtimepins/residentsymbols/developmentmarker;originalfrozenpackagehashes;noofficialgameJARs",
+    "directory_target_dispatch": "PASS groupedimportsclientgpu_ps5_opendir/readdir/closedir;helperhasnolibc++directory_iteratorimports",
+    "exact_relinks": "PASS ordinaryandreplacement-objectELFSHA256equalcandidate899b93f34e0f9910707f9664776a6f244ba826190a7d62831b33496fb318f602"
+  },
+  "console": {
+    "menu_reliability": "PENDING exact159",
+    "audible_menu_and_game_audio": "PENDING exact159",
+    "controlify_detection_and_input": "PENDING exact159",
+    "rumble": "PENDING exact159",
+    "adaptive_triggers": "PENDING exact159",
+    "gyro_calibration_and_input": "PENDING exact159",
+    "hd_haptics_regression": "PENDING exact159",
+    "fresh_and_existing_disposable_world_load": "PENDING exact159",
+    "chunk_access_gameplay_inventory_entities": "PENDING exact159",
+    "save_and_sameprocess_reload_marker": "PENDING exact159",
+    "application_restart_reload_marker": "PENDING exact159",
+    "repeated_world_audio_input_transitions": "PENDING exact159",
+    "recorded_endurance_duration": "PENDING exact159",
+    "vanilla26_2_and26_3_and_supported26_4_regression": "PENDING exact159",
+    "hrtf_discovery": "PENDING exact159"
+  },
+  "known_limitations": [
+    "Underlying native allocation/synchronization resource ownership and quotas unproven;no heap/GC/budget increases",
+    "Historical148laterexit has no conclusive fatalstack",
+    "Event/mixer reserves remain2each;no unbounded context/FIFO scheduling claim",
+    "ZIP64budget is not a universal descriptor cap or unlinkedinode guarantee",
+    "No current26.2Fabricconsolepass;158run was26.3Fabric"
+  ],
+  "publication": "ProsperoCraft source/local development candidate only;no GitHub release/Store submission;runtime source unchanged",
+  "preservation": "Existing worlds,mods,accounts,downloads/UI,originalgame/modJARs,frozenarchive,releaseassets preserved"
+}

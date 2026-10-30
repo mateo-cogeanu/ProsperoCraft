@@ -10,5 +10,13 @@ final class ProsperoChannel {
  static boolean tempGameTest(){
   try(var in=ProsperoChannel.class.getResourceAsStream("/prosperocraft-channel.txt")){return in!=null&&new String(in.readNBytes(32),StandardCharsets.US_ASCII).strip().equals("temp_gametest");}catch(Exception ignored){return false;}
  }
- static String label(){return tempGameTest()?"TEMP GAMETEST":offline()?"OFFLINE BRANCH":"DEMO BRANCH";}
+ private static final boolean FABRIC262_TEST=readFabric262Test();
+ static boolean fabric262Test(){return FABRIC262_TEST;}
+ private static boolean readFabric262Test(){
+  if(!tempGameTest())return false;
+  try(var in=ProsperoChannel.class.getResourceAsStream("/prosperocraft-development.txt")){
+   return in!=null&&new String(in.readNBytes(64),StandardCharsets.US_ASCII).equals("fabric-26.2-test-v1\n");
+  }catch(Exception unavailable){return false;}
+ }
+ static String label(){return fabric262Test()?"DEV FABRIC 26.2":tempGameTest()?"TEMP GAMETEST":offline()?"OFFLINE BRANCH":"DEMO BRANCH";}
 }
