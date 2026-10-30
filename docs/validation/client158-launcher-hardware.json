@@ -1,0 +1,15 @@
+{
+  "version": "01.000.158",
+  "sha256": "22d2c4864e7d797d066337a973f7560e7e4e7f003f9b19991b6816d7e982a954",
+  "console_validation": "Pending: actual app import,launcher,standard/Slim/Pro detection,F3,world/input/audio/save",
+  "release": "None;user confirmation required",
+  "runtime_commit": "47a5fa702b45ac249d44046d2cf75831a0f7d350",
+  "checks": {
+    "runtime_model_asan_ubsan": "PASS",
+    "actual_launcher_cache_and_report_asan_ubsan": "PASS",
+    "original_minecraft_cpu_labels_26_2_26_3_snapshots_1_6_oshi6_7": "PASS",
+    "target_compile_link_sign_package": "PASS",
+    "full_actual_package_regressions": "PASS",
+    "exact_dt_needed_vs153": "PASS"
+  }
+}

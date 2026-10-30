@@ -12,7 +12,7 @@ ProsperoCraft handles Minecraft installation, accounts, input and game integrati
 
 ## What can I play?
 
-Local development **01.000.157** fixes the model-lookup self-export gate and bounded native CFI suffix parsing after156 reported model unknown. [Implementation and pending console checks](docs/client-model-resolution-157.md). No test release is published; release requires confirmation that the exact build works.
+Local development **01.000.158** queries PS5/Pro hardware once in the native launcher and passes the cached model to the unchanged compact F3 CPU/GPU labels. [Implementation and pending console checks](docs/client-launcher-hardware-158.md). No test release is published; release requires confirmation that the exact build works.
 
 The latest public release is **01.000.153**. Availability and console validation are different: earlier builds have positive PS5 playtests, while exact 153 regression, audio and long-session checks remain pending.
 

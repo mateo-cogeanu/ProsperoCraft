@@ -40,10 +40,8 @@ void initialize_toolkit_graphics(){pthread_once(&toolkit_once,initialize_toolkit
 #include "session_restart.hpp"
 #include "../ports/oshi/native_cpu.hpp"
 #include "../ports/oshi/hardware_labels.hpp"
-extern "C" int sceKernelDlsym(int,const char*,void**);
-extern "C" int sceKernelGetModuleList(int*,std::size_t,std::size_t*);
-static ps5::console::Result console_identity;
-extern "C" const char* prospero_gpu_display_name(void) {return prospero_hardware::gpu(console_identity.model);}
+#include "../launcher/hardware_identity.hpp"
+extern "C" const char* prospero_gpu_display_name(void) {return prospero_hardware::gpu(prospero_menu::hardware::identity().model);}
 #include <sys/sysctl.h>
 static void notify(const char* text);
 extern "C" int sceAudioOutInit();
@@ -153,14 +151,14 @@ void native_snapshot(JNIEnv *env,jclass,jlong elapsed,jint phase) {
  }
 }
 jobjectArray cpu_information(JNIEnv *env,jclass) {
- char detection[160];std::snprintf(detection,sizeof(detection),"PS5_HARDWARE model=%s status=%u native_result=%d",ps5::console::name(console_identity.model),static_cast<unsigned>(console_identity.status),console_identity.native_result);log_stage(detection);
+ char detection[160];std::snprintf(detection,sizeof(detection),"PS5_HARDWARE model=%s source=launcher_soc soc_id=0x%llx",ps5::console::name(prospero_menu::hardware::identity().model),prospero_menu::hardware::identity().id);log_stage(detection);
  int logical=0;size_t size=sizeof(logical);if(sysctlbyname("hw.ncpu",&logical,&size,nullptr,0)!=0||size!=sizeof(logical))logical=0;
  auto info=prospero_cpu::read(prospero_cpu::cpuid,logical);
  if(!info.valid)return nullptr;
  jclass strings=env->FindClass("java/lang/String");if(!strings)return nullptr;
  jobjectArray result=env->NewObjectArray(8,strings,nullptr);env->DeleteLocalRef(strings);if(!result)return nullptr;
  char family[16],model[16],stepping[16],count[16];std::snprintf(family,sizeof(family),"%u",info.family);std::snprintf(model,sizeof(model),"%u",info.model);std::snprintf(stepping,sizeof(stepping),"%u",info.stepping);std::snprintf(count,sizeof(count),"%d",info.logical);
- const char* values[]={prospero_hardware::cpu(console_identity.model),info.vendor,info.signature,family,model,stepping,count,info.kernel_count?"kernel.hw.ncpu":"CPUID"};
+ const char* values[]={prospero_hardware::cpu(prospero_menu::hardware::identity().model),info.vendor,info.signature,family,model,stepping,count,info.kernel_count?"kernel.hw.ncpu":"CPUID"};
  for(int n=0;n<8;n++){jstring value=env->NewStringUTF(values[n]);if(!value||env->ExceptionCheck())return nullptr;env->SetObjectArrayElement(result,n,value);env->DeleteLocalRef(value);if(env->ExceptionCheck())return nullptr;}return result;
 }
 int vm_print(FILE *requested,const char *format,va_list arguments) {
@@ -550,17 +548,8 @@ int main(int argc,char** argv) {
  ps5::log_share::write_note("/download0/probe-build.txt","Minecraft Original Client Startup " PROSPERO_APP_VERSION " / PPSA99874\n");
  ps5::log_share::start();
  read_previous_log();
- ps5::log_share::write_note("/download0/probe-build.txt","Minecraft Original Client Startup " PROSPERO_APP_VERSION " / PPSA99874\nOptional loaded-kernel model query starting;log sharing already started\n");
- const auto model_query=ps5::console::resolve_loaded_query(sceKernelDlsym,sceKernelGetModuleList);
- console_identity=ps5::console::read(model_query.query);
- char model_status[2048];int written=std::snprintf(model_status,sizeof(model_status),"Minecraft Original Client Startup %s / PPSA99874\nPS5_HARDWARE model=%s status=%u native_result=%d resolver_handle=%d resolver_result=%d by_nid=%d list_result=%d module_count=%zu attempts=%zu\n",PROSPERO_APP_VERSION,ps5::console::name(console_identity.model),static_cast<unsigned>(console_identity.status),console_identity.native_result,model_query.handle,model_query.native_result,model_query.by_nid,model_query.list_result,model_query.module_count,model_query.attempt_count);
- std::size_t used=written>0&&static_cast<std::size_t>(written)<sizeof(model_status)?static_cast<std::size_t>(written):sizeof(model_status)-1;
- for(std::size_t i=0;i<model_query.record_count;i++){
-  const auto& row=model_query.records[i];
-  written=std::snprintf(model_status+used,sizeof(model_status)-used,"PS5_MODEL_LOOKUP handle=%d name_rc=%d name_ptr=%d nid_rc=%d nid_ptr=%d\n",row.handle,row.name_result,row.name_pointer,row.nid_result,row.nid_pointer);
-  if(written<0||static_cast<std::size_t>(written)>=sizeof(model_status)-used)break;
-  used+=static_cast<std::size_t>(written);
- }
+ prospero_menu::hardware::initialize();
+ char model_status[320];std::snprintf(model_status,sizeof(model_status),"Minecraft Original Client Startup %s / PPSA99874\nPS5_HARDWARE model=%s source=launcher_soc soc_id=0x%llx\n",PROSPERO_APP_VERSION,ps5::console::name(prospero_menu::hardware::identity().model),prospero_menu::hardware::identity().id);
  ps5::log_share::write_note("/download0/probe-build.txt",model_status);
 
  sceUserServiceInitialize(nullptr);std::int32_t user=-1;

@@ -1,35 +1,34 @@
 #!/usr/bin/env python3
-"""Compile actual startup lookup-report formatting with real bounded resolver fixtures."""
+"""Exercise the actual launcher snapshot, shared display labels and short report."""
 from pathlib import Path
 import argparse,subprocess,tempfile
 r=Path(__file__).resolve().parents[1]
 p=argparse.ArgumentParser();p.add_argument('--runtime-workspace',type=Path,required=True);a=p.parse_args()
-s=(r/'client/startup/bootstrap.cpp').read_text();start=s.index(' char model_status[2048];');end=s.index('\n\n sceUserServiceInitialize',start);actual=s[start:end]
+s=(r/'client/startup/bootstrap.cpp').read_text();start=s.index(' char model_status[320];');end=s.index('\n\n sceUserServiceInitialize',start);actual=s[start:end]
 code=r'''
 #include <cassert>
 #include <cstdio>
 #include <cstring>
-#include <climits>
-#include "console_model.hpp"
-#define PROSPERO_APP_VERSION "01.000.157"
-static char captured[2048];
+#include "client/launcher/hardware_identity.hpp"
+#include "client/ports/oshi/hardware_labels.hpp"
+#define PROSPERO_APP_VERSION "01.000.158"
+static char captured[512];static unsigned calls=0;static unsigned long long answer=0x840fd0;
+extern "C" unsigned long long sceKernelGetMainSocId(){calls++;return answer;}
 namespace ps5::log_share {static void write_note(const char*,const char* p){assert(std::strlen(p)<sizeof(captured));std::strcpy(captured,p);}}
-static int list(int* p,std::size_t size,std::size_t* n){assert(size==512);*n=512;for(int i=0;i<512;i++)p[i]=100+i;return 0;}
-static int query(char* p){std::strcpy(p,"CFI-2014 A01X");return 0;}
-static bool hit=false;
-static int resolver(int handle,const char* name,void** out){*out=nullptr;if(hit&&handle==611&&!std::strcmp(name,"JC7I7J1bllQ")){*out=reinterpret_cast<void*>(query);return 0;}return INT_MIN;}
-static void run(){auto model_query=ps5::console::resolve_loaded_query(resolver,list);auto console_identity=ps5::console::read(model_query.query);
+int main(){
+ prospero_menu::hardware::initialize();answer=0;prospero_menu::hardware::initialize();assert(calls==1);
+ assert(prospero_menu::hardware::identity().model==ps5::console::Model::pro);
+ assert(!std::strcmp(prospero_hardware::cpu(prospero_menu::hardware::identity().model),"AMD Zen 2, 8C16T (PS5 Pro)"));
+ assert(!std::strcmp(prospero_hardware::gpu(prospero_menu::hardware::identity().model),"AMD RDNA 2.x, 60 CUs (PS5 Pro)"));
 '''+actual+r'''
- assert(std::strstr(captured,"PS5_HARDWARE"));assert(std::strstr(captured,"attempts=514"));
- assert(std::strstr(captured,"PS5_MODEL_LOOKUP handle=1 "));assert(std::strstr(captured,"name_rc=-2147483648"));
- const char* pos=captured;int records=0;while((pos=std::strstr(pos,"PS5_MODEL_LOOKUP"))){records++;pos++;}assert(records==8);
- if(hit)assert(std::strstr(captured,"status=4")&&std::strstr(captured,"resolver_handle=611")&&std::strstr(captured,"by_nid=1"));
- else assert(std::strstr(captured,"status=0")&&std::strstr(captured,"model unknown"));
- assert(!std::strstr(captured,"CFI-")&&!std::strstr(captured,"0x"));
+ assert(std::strstr(captured,"source=launcher_soc soc_id=0x840fd0"));assert(std::strlen(captured)<320);
+ prospero_menu::hardware::Identity base;answer=0x840f00;base.initialize(sceKernelGetMainSocId);assert(base.value().model==ps5::console::Model::standard);
+ assert(!std::strcmp(prospero_hardware::gpu(base.value().model),"AMD RDNA 2, 36 CUs (PS5)"));
+ prospero_menu::hardware::Identity error;answer=0x80020003;error.initialize(sceKernelGetMainSocId);assert(error.value().model==ps5::console::Model::unknown);
+ puts("PASS actual launcher snapshot:query once,cached Pro/base/error models,unchanged labels,real report fits512-byte writer");
 }
-int main(){run();hit=true;run();puts("PASS actual native lookup report:514attempts/8records,success/unknown,spaced model,NID path,integer extremes,bounded ASCII/no raw model or pointers");}
 '''
-with tempfile.TemporaryDirectory(prefix='model-report-')as t:
+with tempfile.TemporaryDirectory(prefix='model-launcher-')as t:
  w=Path(t);(w/'check.cpp').write_text(code)
- subprocess.run(['clang++','-std=c++20','-Wall','-Wextra','-Werror','-fsanitize=address,undefined','-I'+str(a.runtime_workspace/'java25/platform'),str(w/'check.cpp'),'-o',str(w/'check')],check=True)
+ subprocess.run(['clang++','-std=c++20','-Wall','-Wextra','-Werror','-fsanitize=address,undefined','-I'+str(r),'-I'+str(a.runtime_workspace/'java25/platform'),str(w/'check.cpp'),'-o',str(w/'check')],check=True)
  subprocess.run([str(w/'check')],check=True)

@@ -1,8 +1,8 @@
 {
   "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
-  "commit": "1e3066411ccd779cdfa010cca0778bc9dacab33e",
+  "commit": "47a5fa702b45ac249d44046d2cf75831a0f7d350",
   "path": "java25/platform/console_model.hpp",
-  "sha256": "70e5398bd155d2772c5847407203031c0d88e9dc59b4095927e2ca81abbe5a25",
+  "sha256": "e35013b2594959245b886cc009e6eaea035461578e6b59ee8c459b9bbde01eaf",
   "console": "Standard PS5 and PS5 Pro native query/output pending;host fixtures only",
-  "resolution": "Direct model-name/NID lookups in fixed kernel and enumerated already-loaded handles;no self-export gate,no new module load;bounded diagnostic records"
+  "resolution": "Launcher directly queries ordinary libkernel sceKernelGetMainSocId once before UI/JVM;cached model enum feeds existing CPU/GPU labels;no dlsym/model-name query"
 }
