@@ -1848,3 +1848,14 @@ relinkchecks;PS5bidirectionalhandoff/controllers/featurespending. See
  docs/client-controlify-event-isolation-164.md. Preserve163Vanillatypingacceptance,
 161acceptance/priorcandidates;release/Storehold. ReusableregistrytoolsinJava repo,
 consumerfacade/policy/validationhere;rawreportslocal.
+
+##165 Controlify explicit FFM handle — 2026-10-30
+
+164alias-tablechecks passbutphysicalhandofffails:scopedfilternevercalled.
+OriginalFFMdefaultSystem.loadLibrary+loaderLookupusesbuiltinprocHandle/global
+exports.165sets supportedev.isxander.sdl.library=/app0/libSDL3.so beforeMain;
+originalconfigure(Path) useshandle-specificlibraryLookup. NoJAR/runtimechange.
+Actualoriginalbackendnegative/positive configure+downcall/upcall+nativefacade
+checkscovermissing164integration;PS5handoffpending. See
+ docs/client-controlify-lookup-165.md. Preserve164frontend/163Vanillatypingand
+prioracceptance/candidates;noGitHubreleaseorStoreuntilrequestedafterconsolepass.

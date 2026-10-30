@@ -42,9 +42,9 @@
     "relinks": "PASS ordinaryandreplacementOpenAL pathsreproduceexact682da77ccf8e5fab89bc7039c633d13bb1eb72656a0066ca642a3496b2a71170ELF"
   },
   "console": {
-    "263Fabric_controller_to_physical_handoff": "PENDING exact164",
+    "263Fabric_controller_to_physical_handoff": "FAILED user;runclient-01.000.164-1793386587-330541175",
     "263Fabric_physical_to_controller_return": "PENDING exact164",
-    "262Fabric_bidirectional_handoff": "PENDING exact164",
+    "262Fabric_bidirectional_handoff": "FAILED user;runclient-01.000.164-1793386771-762069120",
     "onscreen_Del_and_shortcut": "PENDING exact164",
     "repeatedtransitions_chat_inventory_gameplaylook": "PENDING exact164",
     "controller_connect_disconnect": "PENDING exact164",
@@ -52,5 +52,6 @@
     "Vanilla262typing_263physicalregression": "PENDING exact164"
   },
   "publication": "Bothsource repositories;localtestapp only;GitHubrelease/Storeheld",
-  "preservation": "Accepted161+163Vanillareports;exactpriorcandidates/symbols/source-relinks/frozenarchive/releases/userworlds retained"
+  "preservation": "Accepted161+163Vanillareports;exactpriorcandidates/symbols/source-relinks/frozenarchive/releases/userworlds retained",
+  "followup165": "Bothrunsstillkey_event_posted0/neutralcontroller;no scoped_filter markerdespitepreinitsuccess.Targettablescorrectbut originalFFM default loaderLookup bypassesalias:uses classloader/globalexport.Systempropertydev.isxander.sdl.library selects supportedhandle-specificlibraryLookup(Path).Actualbackendnegative+positivecontrolscover165."
 }

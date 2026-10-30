@@ -92,3 +92,12 @@ while the base table and every other alias entry stay unchanged.
 
 Matching local package/symbols/corresponding-source/relink/checksums are retained.
 Console acceptance remains pending; no release or Store publication follows.
+
+## Console follow-up
+
+164 fails handoff on both tested Fabric versions. The scoped-events preinit
+succeeds, but the filter marker never appears and physical keys still fail to
+post with neutral controller state. The compiled alias tables were correct;
+the actual FFM backend's default loaderLookup bypassed the handle-specific alias.
+165 selects its supported explicit-path lookup and tests that original backend
+route end to end. See [165 integration](client-controlify-lookup-165.md).

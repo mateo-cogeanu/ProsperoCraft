@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-30",
+  "version": "01.000.165",
+  "title_id": "PPSA99874",
+  "runtime_commit": "abccf72189bc5547e08aab28a923e6d55d13fc33",
+  "runtime_changes": "Nonefor165;retains164alias-symbolintegration;consumerlaunchpropertyonly",
+  "failed164": {
+    "263_run": "client-01.000.164-1793386587-330541175",
+    "262_run": "client-01.000.164-1793386771-762069120",
+    "evidence": "preinitsuccessbutno scoped_filter marker;physicalkeypost0;neutralcontroller;bothuserhandoffFAILED",
+    "missing_integration": "OriginalFFMdefaultconfigureusesSystem.loadLibrary+loaderLookup.or(defaultLookup);classloadersearchfindsbaseSDL;tablepointertestdidnotexercisethatpath",
+    "raw": "Localignored",
+    "backend_selection": "Bothoriginalgamelogs:LoadedSDLfromsystem;FFM3.4.14-7backendwithresidentSDL3.4.2",
+    "builtin_handle_detail": "OpenJDKNativeLibraries.c usesprocHandleforisBuiltin.System.loadLibrarySDL3builtinlookupthereforesearchesprocessregistry;RawNativeLibrariespathusesrealresidentaliashandle."
+  },
+  "repair": {
+    "property": "dev.isxander.sdl.library=/app0/libSDL3.so",
+    "route": "OriginalSdlNativeLibrary.configure ->configure(Path) ->SymbolLookup.libraryLookup(path,Arena.global);explicitresidentSDL3handle;no loader/globalordering/mod/gameJARchange",
+    "startup_marker": "PS5_CONTROLIFY_LOOKUP handle_scoped=SDL3",
+    "expected_native_marker": "PS5_CONTROLIFY_EVENTS scoped_filter=1 shared_game_queue=preserved"
+  },
+  "checks": {
+    "actual_FFM_negative": "PASS exactoriginalverifiedControlifyembeddedFFM/APIclasses,actualconfigure/downcall/upcall,preloadedbaseSDL;defaultloaderLookupdropsphysicalevent/gamehasnone",
+    "actual_FFM_positive": "PASS supportedpathconfigurewithactualnativefacade;physicaleventposted+gamereceives;modconnectionreturnedthroughoriginalFFMPollEvent;nativeUBSan/JavaXverifyall;processisolatedbindings",
+    "actual_launcher_property": "PASS actualClientStartup25.configureControlifyNative assignsresidentpath",
+    "startup_host": "PASS policy/cpusnapshot/nativeallocation/observer/originalMainchecks",
+    "launcher_gate": "PASS channel/marker/publicsupporthold/labels/originalentrypoint/identity/instancepreservation",
+    "actual_linked_tables": "PASSactualELF1942entrybase+aliaspointertables;exactly3SDL3aliasoverridepointers/baseand1939otherspreserved",
+    "target": "PASS compile/link/sign;unchanged164nativefacade/runtimepin;newlaunchsetting+markerembedded",
+    "package": "PASS fullactual165CRC/signatures/version/devmarker,newproperty/path/logmarker andexacthostclassbytes,pinnedruntimealiasdigests/exactoverrideaudit/facadeexports/sourcehashes/residentgroups/frozenchecksums",
+    "relinks": "PASS ordinaryandreplacementOpenAL pathsbothreproduceexact0858da5123b4117f91e5071a954e90099f642a7347a9cbeea343313f69683d6bELF"
+  },
+  "console": {
+    "263Fabric_physicalhandoff_controllerreturn": "PENDING exact165",
+    "262Fabric_physicalhandoff_controllerreturn": "PENDING exact165",
+    "repeatedtransitions_typing_clicks_gameplaylook": "PENDING exact165",
+    "onscreenDel_shortcut": "PENDING exact165",
+    "controller_rumble_triggers_gyro_audio_regression": "PENDING exact165",
+    "Vanilla_typing_physicalinputregression": "PENDING exact165"
+  },
+  "limits": "HostFFMtestusesnormalhostdynamiclibraryhandleproxy;PS5residentlookup/coreFFMpathandphysicalhandoffstillneedexact165consolevalidation;164frontendlimitsunchanged",
+  "publication": "Consumersource/localapp only;runtimeunchangedfromverifiedpublishedabccf72;noGitHubrelease/Store",
+  "preservation": "Priorpackages/symbols/source-relinks/archive/releases/Vanillaacceptance/originalgameandmodJARs/userinstances/worldsretained",
+  "package_sha256": "23b73bbcfb3ed6b4bbe649f68aa24832e57b4b01f6f4dbdad603c01e332a40d7",
+  "symbols_sha256": "0858da5123b4117f91e5071a954e90099f642a7347a9cbeea343313f69683d6b",
+  "symbols_text_fnv64": "7eabfcc1abc33826"
+}

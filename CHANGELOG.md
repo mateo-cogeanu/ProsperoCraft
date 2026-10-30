@@ -1,5 +1,11 @@
 # Changelog
 
+## 01.000.165 — local handle-specific Controlify FFM lookup
+
+- Record continued164 handoff failure on26.3/26.2 Fabric. The scoped frontend initialized but its filter was never called; physical events were still rejected with neutral controller state.
+- Set the original FFM backend’s supported `dev.isxander.sdl.library` path to the resident SDL3 alias before Main. This selects `SymbolLookup.libraryLookup(Path)` instead of class-loader-wide `loaderLookup()`, so the existing three alias overrides are actually used. No backend/mod/game JAR is changed.
+- Add an integration test using the exact unchanged FFM backend, real downcalls/upcall and native facade: old loader lookup reproduces dropped physical input; the handle path delivers game input and mod connection events independently.165 console handoff/regressions remain pending. [Evidence](docs/client-controlify-lookup-165.md). No release/Store update.
+
 ## 01.000.164 — local Controlify event isolation
 
 - Record16326.2 Vanilla typing acceptance and continued Fabric handoff failure. Live163 trace shows neutral controller axes/buttons while physical keyboard events are rejected.

@@ -202,6 +202,11 @@ public final class ClientStartup25 {
   }
   public void close(){synchronized(console){running=false;}worker.interrupt();}
  }
+ static void configureControlifyNative(){
+  // The original FFM backend's supported path option uses libraryLookup(path),
+  // avoiding loaderLookup's class-loader-wide first matching SDL export.
+  System.setProperty("dev.isxander.sdl.library","/app0/libSDL3.so");
+ }
  static void configureJna(boolean resident){
   System.setProperty("jna.nosys",resident?"false":"true");
   if(resident){System.setProperty("jna.boot.library.name","jnidispatch");System.setProperty("jna.noclasspath","true");System.setProperty("jna.nounpack","true");}
@@ -225,6 +230,7 @@ public final class ClientStartup25 {
    System.setProperty("user.dir",work.toString());System.setProperty("user.home",work.toString());System.setProperty("java.io.tmpdir",work.resolve("native-cache").toString());
    for(String key:new String[]{"jna.tmpdir","io.netty.native.workdir"})System.setProperty(key,work.resolve("native-cache").toString());
    configureJna(ProsperoLauncher.selectedResidentJna());
+   configureControlifyNative();console.println("PS5_CONTROLIFY_LOOKUP handle_scoped=SDL3");
    prepareCpuInformation();ProsperoNetwork.check();
    stage("PS5_LAUNCH phase=CONFIGURE_BINDINGS");
    Configuration.OPENGL_CONTEXT_API.set("OSMesa");Configuration.OPENGL_OSMESA_LIBRARY_NAME.set(System.mapLibraryName("ps5clientgl"));
