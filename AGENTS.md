@@ -1895,3 +1895,9 @@ digest and release changelog. Submit catalog PR and attach it; do not monitor
 after creation per established preference. Preserve older releases/candidates.
 This lifts the hold for exact167 only; no invented formal per-feature matrix
 or endurance duration.
+
+167publication complete:all five public assets downloaded/hash-verified,exact
+normal/replacement native relinks and shipped supported-policy checks pass.
+Catalog233tests(2skipped)/161records/online0errors0warnings pass;PR954 submitted.
+No monitoring after creation;Store not claimed live. Description/credits/icon
+preserved,exact app unchanged. See docs/validation/client167-store-publication-2026-10-30.json.

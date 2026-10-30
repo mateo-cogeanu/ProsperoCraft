@@ -41,3 +41,12 @@ Physical167 checks still required: six-theme cursor visibility, click/scroll,
 name/search typing/edit/save/cancel, keyboard-only navigation, controller/mouse
 switching, USB reconnect, then Vanilla26.2/26.3 and Fabric26.2/26.3 Controlify input
 handoff after launch. No release or Store update until the user approves this build.
+
+
+## Acceptance and publication
+
+The user subsequently accepted exact167 ("Im Happy!, lets release!!! its so polished!")
+and requested release. The exact tested ZIP was published without rebuilding.
+[Publication record](validation/client167-store-publication-2026-10-30.json).
+This supersedes the release hold above for exact167; individual measurements and
+long-session endurance were not supplied.

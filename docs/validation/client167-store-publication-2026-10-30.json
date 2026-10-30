@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-30",
+  "version": "01.000.167",
+  "release_url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.167",
+  "release_tag_commit": "916a4e4c5de7868405eefe55794911fa526810b8",
+  "candidate_source_commit": "f875f1c1580e2881712c8c6501601f6a0203c778",
+  "package_sha256": "3480ab817659c43e954ce89ba5933cb5181f2fe2f396b1321bfae51d274171de",
+  "assets": [
+    {
+      "name": "PPSA99874.zip",
+      "bytes": 123870351,
+      "sha256": "3480ab817659c43e954ce89ba5933cb5181f2fe2f396b1321bfae51d274171de"
+    },
+    {
+      "name": "SHA256SUMS",
+      "bytes": 379,
+      "sha256": "d7f36212fe567f7404b91fcd408e2c91a6b75b4e73a8811ecaf2577f30f60aef"
+    },
+    {
+      "name": "client167-build-validation.json",
+      "bytes": 3721,
+      "sha256": "4a65b5773de4d2c20f8b690cac5ce6bcb05ba0b9f024f189c80e20283696931c"
+    },
+    {
+      "name": "client167-console-validation.json",
+      "bytes": 1022,
+      "sha256": "e1dc7e756e9adc1ab670fe051ca8e3674b571412fe21ddab94ea66398a90fcc8"
+    },
+    {
+      "name": "client167-openal-source-relink.zip",
+      "bytes": 90371607,
+      "sha256": "a15c1ff209491a318b4031eae78b47639422a3533b96aa368a471145864ea802"
+    }
+  ],
+  "verification": "Public full release,not draft/prerelease.All five uploaded assets downloaded and matched exact local hashes/sizes.Release app unchanged from user-tested candidate;shipped policy/classes/identity/dependency/privacy/source hashes pass;normal+replacement native relinks reproduce exact ELF.Catalog233tests pass(2skipped),161records offline valid,online record0errors/0warnings.",
+  "catalog_pr": "https://github.com/darkxex/ps5-homebrew-catalog/pull/954",
+  "catalog_head": "244c99e86e6f0aae67bf65474cea9aa2cc000ec2",
+  "catalog_status": "Submitted;no PR/check/merge/deployment/liveStore monitoring after creation,per established user preference.Store availability requires catalog approval and deployment.",
+  "metadata": "Description,credits,icon and other metadata unchanged;only version/artifact URL/SHA256 changed.Release notes supply changelog.",
+  "console": "User accepts exact167 and explicitly requests release following166 acceptance.No invented per-feature matrix,device coverage,endurance duration or new named frozen milestone.Build-validation asset preserves pre-test snapshot;separate console-validation records subsequent acceptance.",
+  "preservation": "Older releases/assets/source tags/candidates/frozen archive remain unchanged.Exact167 source/relink archive retains tested f875f1c provenance.No app rebuild for publication.",
+  "runtime": "No runtime source changes during publication;no runtime commit needed.",
+  "tooling": "GitHub connector release upload unavailable;CLI used.Connector PR creation denied403 Resource not accessible by integration;authenticated CLI successfully created PR954."
+}

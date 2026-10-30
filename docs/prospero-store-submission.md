@@ -268,3 +268,21 @@ deployment or live availability per user preference. Console theme persistence,
 input/lifecycle checklist and endurance remain pending; no formal ALL PASS or
 new frozen milestone inferred. Runtime source unchanged. See the publication
 record in docs/validation/client121-store-publication-2026-10-29.json.
+
+
+##167 accepted Fabric and launcher input release — 2026-10-30
+
+Exact user-tested167 is public, with five downloaded/hash-verified assets and
+matching OpenAL corresponding source/relink materials. Both native relink routes
+reproduce the exact executable. The user accepts its functionality/polish and
+explicitly authorizes release; no measured endurance or per-device matrix is inferred.
+
+Release: https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.167
+
+Catalog update: https://github.com/darkxex/ps5-homebrew-catalog/pull/954
+
+233catalog tests pass (2skipped),161records pass offline validation,and the online
+record verifies with0errors/0warnings. Description,credits and icon remain unchanged;
+only version/artifact/digest change,with release changelog. No monitoring after
+submission per established preference; Store availability requires approval and
+deployment. See validation/client167-store-publication-2026-10-30.json.
