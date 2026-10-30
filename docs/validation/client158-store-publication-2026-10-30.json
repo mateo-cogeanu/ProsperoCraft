@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-30",
+  "version": "01.000.158",
+  "release_url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.158",
+  "release_tag_commit": "fa9815b3747f9b63df65022c192d244d75cac225",
+  "candidate_source_commit": "88c00804d75d1ea99de23ba0188d110341f60953",
+  "package_sha256": "22d2c4864e7d797d066337a973f7560e7e4e7f003f9b19991b6816d7e982a954",
+  "assets": [
+    {
+      "name": "PPSA99874.zip",
+      "bytes": 123159171,
+      "sha256": "22d2c4864e7d797d066337a973f7560e7e4e7f003f9b19991b6816d7e982a954"
+    },
+    {
+      "name": "SHA256SUMS",
+      "bytes": 379,
+      "sha256": "21d382cfb6196c86b0fc363187b0838f7ca5116966cb02b3d5c7812d59128b0c"
+    },
+    {
+      "name": "client158-build-validation.json",
+      "bytes": 1074,
+      "sha256": "1bb5478e287125e91d90fcfb90e2c616511f380d6fcdede5c2fdaf2da4d61c7e"
+    },
+    {
+      "name": "client158-console-validation.json",
+      "bytes": 659,
+      "sha256": "ed074a4c82079ab4d8364ea2a4dfdabb9d85f34da68ab1874dc588132fd3d6a0"
+    },
+    {
+      "name": "client158-openal-source-relink.zip",
+      "bytes": 90341058,
+      "sha256": "105a60ae242edba3e642b642f57d13d4d0a53a9ddee7e7a6c92d715523ade8e0"
+    }
+  ],
+  "verification": "All five uploaded assets downloaded and matched local hashes/sizes.Existing exact158 candidate preserved without rebuild;OpenAL source/object manifest and exact native ELF reproduction pass.Catalog233tests/2skipped,158records offline valid,online record0errors/0warnings.",
+  "catalog_pr": "https://github.com/darkxex/ps5-homebrew-catalog/pull/945",
+  "catalog_head": "901245b5d9b9d65e6549bf528b40bbcfe902eded",
+  "catalog_status": "Submitted;no PR/check/merge/deployment/liveStore monitoring after creation",
+  "metadata": "Store description,credits,icon and all other metadata unchanged;only version,artifact URL,SHA256 updated.Changelog comes from new release notes.",
+  "console": "Explicit publication authorization,not formal ALL PASS.Exact158 startup,PS5/Slim/Pro detection,F3,world/input/audio/save/endurance remain pending.Fabric26.2 remains held.",
+  "preservation": "Prior releases/assets and frozen snapshots preserved;no existing release was replaced",
+  "runtime": "No runtime source changes during this publication turn"
+}

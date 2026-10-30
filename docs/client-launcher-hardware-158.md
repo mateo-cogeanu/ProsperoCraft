@@ -15,3 +15,5 @@ No release/prerelease or Store update is authorized until the user confirms this
 ## Publication authorization
 
 On2026-10-30 the user explicitly requested publishing this exact build on GitHub and updating the existing ProsperoStore entry, with its description unchanged. That request authorizes158 publication without changing its recorded console-pending status. The existing ZIP is preserved without rebuilding; matching source/relink,checksums and build/console records accompany the release. Future releases retain the approval gate.
+
+Publication complete: [GitHub158](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.158) contains the unchanged candidate and matching OpenAL source/relink,checksums and validation. All five downloaded assets match local hashes. [CatalogPR945](https://github.com/darkxex/ps5-homebrew-catalog/pull/945) submits only version/artifact/digest changes;description,credits and icon remain unchanged. Catalog tests(233,2skipped),offline158records and online record verification pass. Catalog approval/deployment are external and not monitored. See `docs/validation/client158-store-publication-2026-10-30.json`.
