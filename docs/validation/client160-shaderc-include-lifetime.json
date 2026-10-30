@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-30",
+  "version": "01.000.160",
+  "title_id": "PPSA99874",
+  "package_sha256": "cb7e730ad7ef5d71cfad24892b3d6698069d2e69cbf51da88017d87ad06f6cb6",
+  "symbols_sha256": "bec7f3d20a2be1f4b477ee58a19773260ff39303fbf94547096da7a4287f7347",
+  "runtime_commit": "47a5fa702b45ac249d44046d2cf75831a0f7d350",
+  "runtime_changes": "None;consumer shaderc only",
+  "fabric262": "Explicit development marker;public support held",
+  "failed_build": "01.000.159",
+  "capture": {
+    "id": "20261030-143031-PPSA99874-128",
+    "time": "2026-10-30T14:30:31Z",
+    "pid": 128,
+    "thread": "Render thread100651",
+    "signal": "SIGSEGV/code2,outcomecrashed",
+    "pc": "libkernel.sprx+0x3d910",
+    "fault_address": "0x72e6b8",
+    "title_loadbase": "0x400000",
+    "title_code_fnv64": "d8f875f125c39199;exact159ELFmatch",
+    "title_symbols_sha256": "899b93f34e0f9910707f9664776a6f244ba826190a7d62831b33496fb318f602",
+    "callers": [
+      "0x18e9c67 ->0x14e9c67 CompileToSpecifiedOutputType",
+      "call0x14e9c62 ->PLT0x2a6b6a0 ->GOT0x4d27070 pthread_mutex_destroy",
+      "0x18e9584 ->0x14e9584 shaderc_compile_into_spv"
+    ],
+    "stack": "RDIhandle slot0x7eeff6ef0 contains0x72e690==RBX;fault=handle+0x28;pointsintotitlecode",
+    "scope": "ActualnativeSIGSEGVcaptured;notonlystop-observed.Originalinitreturnnotcaptured;ENOMEMatthatexactcallinferred,notdirectlymeasured.Rawreportlocal."
+  },
+  "repair": "TargetCountingIncluder per-instance atomic lock withRAIIcallbackguards;no lazySDKinit/nativeobject/destroy.No default runtime,heap/GC,budget,game/modJAR,globalSDKchange.Originalinclude/shaderresultsretained.",
+  "checks": {
+    "original_refusal_control": "PASS1000poisonedstorageactualpinnedCountingIncluder;forcedpthreadinitENOMEMstilllock/destroyoriginal",
+    "patched_lifecycle_asan_ubsan": "PASS1000poisonedstorage/delegateexception/unwind/reusecycles;zeroSDKmutexcalls",
+    "patched_concurrency": "PASS8threads/80000actualincludes;exclusivecallbackaccess/correctcount",
+    "existing_initializers": "PASS8000concurrentcompilerlifetimes/1000reinitialize/80000contendedincrements;no latenativeinit",
+    "diagnostics": "PASSactualfaultregistration/delegation/restoration/ownership/scopedconcurrencycontrols",
+    "launcher": "PASSdevelopmentgate matrix/publicsupporthold/realFabricentrypoint/instancepreservation",
+    "target": "PASScompile/link/sign;actualshaderc.cc.o lacks pthread_mutex_init/destroy;headerandpatchhashaudited",
+    "actual_package": "PASSCRC/signatures/runtimepins/nativegroups/constructorcounts/headerpatchhashes/developmentmarker/frozenpackagehashes/noofficialgameJARs",
+    "exact_relinks": "PASSordinaryandreplacement-objectrelinksreproducebec7f3d20a2be1f4b477ee58a19773260ff39303fbf94547096da7a4287f7347"
+  },
+  "console": {
+    "loading_and_repeated_menu_buttons": "PENDING exact160",
+    "audible_sound": "PENDING exact160",
+    "Controlify_input": "PENDING exact160",
+    "physical_rumble": "PENDING exact160",
+    "adaptive_triggers": "PENDING exact160",
+    "gyro": "PENDING exact160",
+    "world_creation_loading_chunks_gameplay": "PENDING exact160",
+    "save_sameprocess_reload_marker": "PENDING exact160",
+    "application_restart_persistence": "PENDING exact160",
+    "repeated_audio_input_world_transitions": "PENDING exact160",
+    "recorded_endurance": "PENDING exact160",
+    "Vanilla26_2_26_3_supported26_4_regression": "PENDING exact160"
+  },
+  "known_limitations": [
+    "No console pass for160;othernativefailurespossible",
+    "Underlyingnativeallocation/synchronizationquotaownerunproven",
+    "In-objectlockisnonrecursive/noFIFOguarantee;destroyonlyaftercallerscomplete",
+    "Existing microphone/narrator/fullAWTlimitsunchanged"
+  ],
+  "preservation": "159package/symbols/capturev1v2/frozenarchive/allreleases/UI/originalgameandmodJARs/instances/worldsretained",
+  "publication": "Source/localtestapponly;noGitHubrelease/Store"
+}

@@ -1,0 +1,49 @@
+--- a/libshaderc_util/include/libshaderc_util/counting_includer.h
++++ b/libshaderc_util/include/libshaderc_util/counting_includer.h
+@@ -16,6 +16,10 @@
+ #define LIBSHADERC_UTIL_COUNTING_INCLUDER_H
+ 
+ #include <atomic>
++#include <mutex>
++#ifdef __PROSPERO__
++#include "ps5_include_mutex.hpp"
++#endif
+ 
+ #include "glslang/Public/ShaderLang.h"
+ 
+@@ -51,10 +55,9 @@
+       const char* requested_source, const char* requesting_source,
+       size_t include_depth) final {
+     ++num_include_directives_;
+-    include_mutex_.lock();
++    const std::lock_guard<decltype(include_mutex_)> include_lock(include_mutex_);
+     auto result = include_delegate(requested_source, requesting_source,
+                                    IncludeType::System, include_depth);
+-    include_mutex_.unlock();
+     return result;
+   }
+ 
+@@ -63,10 +66,9 @@
+       const char* requested_source, const char* requesting_source,
+       size_t include_depth) final {
+     ++num_include_directives_;
+-    include_mutex_.lock();
++    const std::lock_guard<decltype(include_mutex_)> include_lock(include_mutex_);
+     auto result = include_delegate(requested_source, requesting_source,
+                                    IncludeType::Local, include_depth);
+-    include_mutex_.unlock();
+     return result;
+   }
+ 
+@@ -94,7 +96,11 @@
+ 
+   // A mutex to protect against concurrent inclusions.  We can't trust
+   // our delegates to be safe for concurrent inclusions.
++#ifdef __PROSPERO__
++  PS5ShaderIncludeMutex include_mutex_;
++#else
+   shaderc_util::mutex include_mutex_;
++#endif
+ };
+ }
+ 

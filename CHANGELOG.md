@@ -1,5 +1,10 @@
 # Changelog
 
+## 01.000.160 — local shader include lifetime repair
+
+- Repair shaderc’s per-compilation include mutex after exact159 registers identify pthread_mutex_destroy with a code address in its handle slot. Use target-only in-object exclusion and scoped callback unlocking; preserve shader/include results and existing initializer reserves.
+- Actual pinned-header forced-init-failure, lifecycle/concurrency and target/package checks are recorded separately from pending PS5 loading/menu/audio/Controlify/world validation. Fabric26.2 remains development-only; no release or Store submission. [Evidence](docs/client-shaderc-include-lifetime-160.md).
+
 ## 01.000.159 — local Fabric 26.2 development test
 
 - Add an explicit package-only Fabric 26.2 test path with development labels; ordinary builds retain Coming soon and the genuine Fabric entrypoint/dependency checks.
