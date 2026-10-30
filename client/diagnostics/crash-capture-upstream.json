@@ -1,0 +1,11 @@
+{
+  "repository": "https://github.com/griches/PS5_DevTools.git",
+  "commit": "e225e022565ae43afacfecdd272037f1752d2803",
+  "license": "GPL-3.0-or-later",
+  "files": {
+    "payload/main.c": "2bd506fe79ce8e38b83b5e28cd068edfb733bd1a861bf449636ed6c7f24d3f0e",
+    "payload/Makefile": "b9ef41431038244911cde112f8b041e3bc69d6797398ef3271616ae51e01f2b1",
+    "web/dashboard.html": "6de4d9a362ce9a99a0613e3f99ca53546d1acf43e0f0434026a6578143d9a1bc",
+    "LICENSE": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+  }
+}

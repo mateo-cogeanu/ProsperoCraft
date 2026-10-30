@@ -16,7 +16,20 @@
     "previous_game": "Fabric26.3;explicit user identification on2026-10-30;not26.2",
     "previous_evidence": "FirstPCM submission,drain,retained port and matching clean shutdown/process replacement;not audibility/persistence acceptance",
     "caught_discovery_error": "HRTF directory_iterator EPERM on existing local data directory;context creation/PCM continue",
-    "stale_fatal": "PreviousHS timestamp2026-10-29 18:18:19/elapsed36.117181/native monitor mutex_initENOMEM;excluded from current158 failure claims"
+    "stale_fatal": "PreviousHS timestamp2026-10-29 18:18:19/elapsed36.117181/native monitor mutex_initENOMEM;excluded from current158 failure claims",
+    "failed_159_run": "client-01.000.159-1793369122-102204771",
+    "failed_159_versions": {
+      "game": "26.2",
+      "fabric_loader": "0.20.1",
+      "controlify": "3.5.3+mc26.2",
+      "fabric_api": "0.161.0+26.2",
+      "yacl": "3.9.7+26.2-fabric",
+      "sdl_java": "release-3.4.14-7"
+    },
+    "shadowmount": "CyberduckFTP download confirmed:15:06:02 consolelog,PID121,Renderthread,0xa0020328 SYSTEM_XO_VIOLATION;relaunch15:06:11 matches next run;noPC/backtrace",
+    "system_error": "FTP errorhistory00000127.json confirmsPPSA99874/CE-108255-1;private fields remain local",
+    "timing_correction": "LastJava/nativeobserver sample~17s afterMain;GC/JIT continue~39.9s afterVMstartup.Not proof process died at17s.Outerlaunch14:05:22UTC;crash14:06:02UTC.",
+    "failure_scope": "No matchingJVMabort/signal/nativeCppthrow recorded;lastshadercheckpoint and recoverabletelemetry/OSHIwarnings do not establish cause"
   },
   "changes": [
     "Package-only explicitly labeled Fabric26.2 development launch permission;public support remains false;real Knot/auth/verification/dependency checks retained",
@@ -41,7 +54,7 @@
     "exact_relinks": "PASS ordinaryandreplacement-objectELFSHA256equalcandidate899b93f34e0f9910707f9664776a6f244ba826190a7d62831b33496fb318f602"
   },
   "console": {
-    "menu_reliability": "PENDING exact159",
+    "menu_reliability": "FAILED:user reports completePS5crash during26.2Fabricloading",
     "audible_menu_and_game_audio": "PENDING exact159",
     "controlify_detection_and_input": "PENDING exact159",
     "rumble": "PENDING exact159",
@@ -62,8 +75,16 @@
     "Historical148laterexit has no conclusive fatalstack",
     "Event/mixer reserves remain2each;no unbounded context/FIFO scheduling claim",
     "ZIP64budget is not a universal descriptor cap or unlinkedinode guarantee",
-    "No current26.2Fabricconsolepass;158run was26.3Fabric"
+    "No current26.2Fabricconsolepass;158run was26.3Fabric",
+    "Confirmed159RenderthreadXOviolation;faultaddress/instructionunknown;notrepaired"
   ],
   "publication": "ProsperoCraft source/local development candidate only;no GitHub release/Store submission;runtime source unchanged",
-  "preservation": "Existing worlds,mods,accounts,downloads/UI,originalgame/modJARs,frozenarchive,releaseassets preserved"
+  "preservation": "Existing worlds,mods,accounts,downloads/UI,originalgame/modJARs,frozenarchive,releaseassets preserved",
+  "next_capture": {
+    "upstream": "e225e022565ae43afacfecdd272037f1752d2803",
+    "payload_sha256": "8b07af768305bce148185807a1a80f5d9278a1f5dc503c0886602aa51c5a74d3",
+    "scope": "OnlyPPSA99874;remotecrashtrigger/deletion/alltitleerrorhistorydisabled;GETdiagnostics/POSTquitretained",
+    "checks": "PASS targetcompile and actualadaptedHTTPhandler/policyASanUBSan",
+    "console": "Notyetreachable;payloadload/attach/repeatcapturepending"
+  }
 }

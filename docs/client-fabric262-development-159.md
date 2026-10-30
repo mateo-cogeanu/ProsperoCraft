@@ -122,3 +122,42 @@ Both ordinary and replacement-object relinks reproduce the candidate ELF.
 No menu-only, host build, native output success or single world entry establishes
 completion. Public support stays held until the requested console lifecycle is
 accepted. Release/Store publication still requires the user's explicit request.
+
+## Exact159 console failure follow-up
+
+The user reports a complete application crash during Fabric26.2 loading. Failed
+run `client-01.000.159-1793369122-102204771` explicitly identifies Minecraft26.2,
+Fabric Loader0.20.1, Controlify3.5.3+mc26.2, Fabric API0.161.0+26.2,
+YACL3.9.7+26.2-fabric and SDL Java release-3.4.14-7. The next run is
+`client-01.000.159-1793369171-829600882`, reopened at the library.
+
+Cyberduck FTP retrieved ShadowMount's updated debug log. Its15:06:02 console-log
+entry records PID121, **Render thread**, **0xa0020328 SYSTEM_XO_VIOLATION**.
+The15:06:11 relaunch matches the next run. The system error-history record
+00000127.json confirms PPSA99874 and **CE-108255-1**. These reports contain no
+fault PC/backtrace. Raw logs/system-history private fields remain ignored/local.
+
+The last Java/native observer sample is around17seconds after Main; GC/JIT
+continue until39.9seconds after VM startup. The early progress update's17seconds
+was the last stack sample, not an established crash time. No matching VM abort,
+C++ throw or signal context was captured. Recoverable OSHI/storage/telemetry
+warnings and the final shader checkpoint do not identify the fatal instruction.
+Static disassembly found no direct RIP-relative data read into the candidate's
+executable segment; indirect accesses and loaded-module code remain unproven.
+No allocation-budget/heap/GC/JIT change is justified by these observations.
+
+A separate title-scoped diagnostic payload is built with
+`tools/build_client_crash_capture.py`, from pinned GPL
+[PS5 DevTools](https://github.com/griches/PS5_DevTools/tree/e225e022565ae43afacfecdd272037f1752d2803).
+It samples/attaches only PPSA99874, regardless of watch.txt. Deliberate fault,
+HTTP deletion and all-title error-history routes are disabled. GET diagnostic
+reports and POST quit/detach remain. Target compilation and the actual adapted
+HTTP handler/title policy pass ASan/UBSan host controls. It is not loaded by the
+build script and is not an application repair or console-validated capture.
+
+The user must load `ps5devtools-prosperocraft.elf` through the existing ELF loader,
+open unchanged159 at the library, and wait for confirmed attachment before
+reproducing. Do not run competing debuggers. Stop through quit/detach rather than
+killing an attached debugger. Registers/backtrace and an ELF code-hash match are
+required before attributing a fatal native address. No160 game build or release
+is created just to guess at the failure. Fabric26.2 remains development-only.

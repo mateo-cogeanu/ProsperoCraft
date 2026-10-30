@@ -4,7 +4,7 @@
 
 - Add an explicit package-only Fabric 26.2 test path with development labels; ordinary builds retain Coming soon and the genuine Fabric entrypoint/dependency checks.
 - Route OpenAL HRTF enumeration through the existing resident directory provider, with scoped cleanup and preserved filtering/error reporting, after build158 Fabric26.3 recorded a caught EPERM.
-- Record game/loader/window identity before Main. Preserve all existing runtime, audio, controller, UI and supported-version work. Host/target checks pass; exact159 console sound, Controlify features, world persistence and regression remain pending. No release or Store submission. [Evidence and test sequence](docs/client-fabric262-development-159.md).
+- Record game/loader/window identity before Main. Preserve all existing runtime, audio, controller, UI and supported-version work. Host/target checks pass; exact159 console sound, Controlify features, world persistence and regression remain pending. The first exact159 PS5 run fails during loading; FTP ShadowMount confirms a Render-thread SYSTEM_XO_VIOLATION, with no fault address yet. Add a pinned title-only diagnostic capture builder; host handler/policy and target checks pass, actual capture pending. No release or Store submission. [Evidence and test sequence](docs/client-fabric262-development-159.md).
 
 ## Release 01.000.158
 
