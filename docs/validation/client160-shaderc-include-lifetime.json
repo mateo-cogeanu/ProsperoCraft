@@ -40,9 +40,9 @@
     "exact_relinks": "PASSordinaryandreplacement-objectrelinksreproducebec7f3d20a2be1f4b477ee58a19773260ff39303fbf94547096da7a4287f7347"
   },
   "console": {
-    "loading_and_repeated_menu_buttons": "PENDING exact160",
-    "audible_sound": "PENDING exact160",
-    "Controlify_input": "PENDING exact160",
+    "loading_and_repeated_menu_buttons": "FAILED: reached menu; selection changed on button, then app crashed",
+    "audible_sound": "USER CONFIRMED menu music on160",
+    "Controlify_input": "Visible menu response reported; repeated/held/physical-feature validation remains pending",
     "physical_rumble": "PENDING exact160",
     "adaptive_triggers": "PENDING exact160",
     "gyro": "PENDING exact160",
@@ -51,7 +51,8 @@
     "application_restart_persistence": "PENDING exact160",
     "repeated_audio_input_world_transitions": "PENDING exact160",
     "recorded_endurance": "PENDING exact160",
-    "Vanilla26_2_26_3_supported26_4_regression": "PENDING exact160"
+    "Vanilla26_2_26_3_supported26_4_regression": "PENDING exact160",
+    "followup": "Exact160 stop snapshot20261030-162943-PPSA99874-92 shows SDL TLS/error recursion; see161 investigation. SIGSTOP is not a captured fatal signal."
   },
   "known_limitations": [
     "No console pass for160;othernativefailurespossible",

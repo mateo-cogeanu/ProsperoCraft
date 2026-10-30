@@ -1,5 +1,11 @@
 # Changelog
 
+## 01.000.161 — local SDL thread-storage repair
+
+- Exact160 reached the 26.2 Fabric menu with audible music and a visible selection change, then crashed. Its external stop snapshot shows repeated SDL error-buffer/TLS calls; exact symbols identify failed SDK pthread_setspecific recursively reporting through the same TLS path.
+- Use SDL's existing generic thread-ID storage on PS5 with one bootstrap-reserved mutex. Handle error-buffer/storage/string allocation refusal without recursion, leaks or a shared writable error fallback. Retain normal error/failure returns and quit/reinit behavior.
+- Actual SDL code passes allocation-failure and eight-thread lifecycle/isolation tests under ASan/UBSan. Target/package checks and exact161 console validation are recorded separately. No release or Store submission. [Evidence](docs/client-sdl-thread-storage-161.md).
+
 ## 01.000.160 — local shader include lifetime repair
 
 - Repair shaderc’s per-compilation include mutex after exact159 registers identify pthread_mutex_destroy with a code address in its handle slot. Use target-only in-object exclusion and scoped callback unlocking; preserve shader/include results and existing initializer reserves.

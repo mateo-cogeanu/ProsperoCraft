@@ -23,7 +23,7 @@ The latest public release is **01.000.158**. Earlier builds have positive PS5 pl
 | **26.4 snapshots 1–6** | Available; positive console feedback on 118/119. Use separate test worlds. | Selectable when matching loader/mod versions exist; snapshot-specific Fabric, Controlify and mod compatibility is not established. |
 | **Other versions** | Downloadable 26.x entries may appear, but Play is blocked for versions outside the set above. | No additional compatibility claim. NeoForge is not enabled. |
 
-Local development build **160** retains the explicitly labeled Fabric 26.2 test path and repairs the shaderc include-mutex lifetime identified by exact159 crash registers. Fabric26.2 remains **development-only**; console sound, Controlify features and world save/reload are unvalidated. [Crash evidence and next tests](docs/client-shaderc-include-lifetime-160.md).
+Local development build **161** retains the explicitly labeled Fabric 26.2 test path and repairs an SDL thread-storage error recursion captured in exact160. The user heard menu music and saw a button change the selection on160, followed by a crash. Fabric26.2 remains **development-only**; repeated input, Controlify features and world save/reload still need console validation. [Evidence and next tests](docs/client-sdl-thread-storage-161.md).
 
 Snapshots are **hidden by default**. Enable **Settings → Show Snapshots** to list them; explicit saved preferences are retained. Future snapshots are not enabled automatically. See the [snapshot guide](docs/client-snapshots-118.md) and [119 console acceptance](docs/validation/client119-console-acceptance-2026-10-28.json).
 

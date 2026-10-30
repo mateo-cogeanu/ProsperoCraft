@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-30",
+  "version": "01.000.161",
+  "title_id": "PPSA99874",
+  "runtime_commit": "47a5fa702b45ac249d44046d2cf75831a0f7d350",
+  "runtime_changes": "None; consumer SDL platform integration only",
+  "fabric262": "Explicit development marker; public support held",
+  "failed_build": "01.000.160",
+  "evidence": {
+    "user": "Audible menu music; selected option visibly changed on button, immediately followed by crash",
+    "launcher": "game26.2 loaderfabric fabric_loader0.20.1;failed runclient-01.000.160-1793377739-75158716",
+    "capture": "20261030-162943-PPSA99874-92",
+    "outcome": "stop-observed,SIGSTOP17/code0;not a captured fatal signal",
+    "thread": "Download-4,id101939",
+    "sp": "0x1066240000",
+    "code_fnv64": "b2ffd59b34da92ea;independent exact160 ELF match",
+    "symbols_sha256": "bec7f3d20a2be1f4b477ee58a19773260ff39303fbf94547096da7a4287f7347",
+    "recursion": [
+      "SDL_SetTLS@0xf4a283 ->SDL_SYS_SetTLSData",
+      "SDL_GetErrBuf@0xf4a691",
+      "SDL_SetError@0xee4d7d"
+    ],
+    "disassembly": "0xfdb940 SDL_SYS_SetTLSData;nonzero pthread_setspecific tailcalls SDL_SetError at0xfdb971",
+    "limits": "SDK error value/underlying quota owner not captured;button timing does not prove button caused Download-4 failure;raw reports local"
+  },
+  "repair": "PS5 only uses existing generic thread-ID keyed SDL storage;one bootstrap-reserved mutex retained across quit/reinit;TLS-only silent configured allocator/counters;error storage refusal frees uninstalled buffer/returns failure;no shared writable fallback/null error string;live store accounting corrected after growth",
+  "checks": {
+    "original_refusal": "PASS actual pinned SDL pthread/error/allocator routines reproduce32 recursive refused pthread_setspecific attempts",
+    "actual_tls_errors_allocator_asan_ubsan": "PASS4refusedallocation sites/rollback,failedgrowthretainsstore,8threads/8000lifetimes/160000destructors,errorisolation,counters,quit/reinit",
+    "existing_sync": "PASS actual SDL256mutex/128condition reserves,refusal/bounds/recursive/timeout/signal/broadcast/10000reusecycles",
+    "existing_rwlock": "PASS bounded256,parallelreaders/exclusivewriters/try/block/24000contendedops",
+    "launcher_gate": "PASSexactmarker/channel/publichold/labels/originalFabricentrypoint/identity/instancepreservation",
+    "target": "PASS exact final patch audited;PS5 preinit+TLS-only allocator exports;SDL_systls undefined symbols only generic storage;compile/link/sign completed",
+    "package": "PASS full actual package:CRC/signatures,version/marker,patchhash,symbols/actualbackend,constructorcounts/nativegroups/runtimepins,originalfixtures/archives,zero bundled gameJARs,retained frozen hashes",
+    "relinks": "PASS ordinary and replacement OpenAL relinks both reproduce exactf768a4dccfb42e0f4a882a224d4d0b210de7f8d98320847490761dce6a7575b8 ELF",
+    "default_allocation_errors": "PASS actual ordinary SDL_malloc/realloc refusal still reports Out of memory on existing per-thread error buffer"
+  },
+  "console": {
+    "loading_and_repeated_held_menu_buttons": "PENDING exact161",
+    "audible_sound": "PENDING exact161",
+    "Controlify_input": "PENDING exact161",
+    "physical_rumble": "PENDING exact161",
+    "adaptive_triggers": "PENDING exact161",
+    "gyro": "PENDING exact161",
+    "world_create_load_chunk_gameplay": "PENDING exact161",
+    "save_and_sameprocess_marker_reload": "PENDING exact161",
+    "app_restart_marker_persistence": "PENDING exact161",
+    "audio_input_world_transitions": "PENDING exact161",
+    "recorded_endurance": "PENDING exact161",
+    "Vanilla26_2_26_3_supported26_4_regressions": "PENDING exact161"
+  },
+  "known_limitations": [
+    "Native SDK failure reason/owner unproven",
+    "Generic lookup linear in active thread stores;foreign threads still need SDL_CleanupTLS;PS5 endurance/retention pending",
+    "160audiblemenu/onevisibleinputresponse does not prove stable gameplay or requested physical features"
+  ],
+  "preservation": "Exact160 package/symbols and earlier candidates/releases/archive/UI/game/modJARs/instances/worlds retained",
+  "publication": "Source and localtestapponly;no GitHubrelease/Store",
+  "package_sha256": "a34f95fd19f08a6d51485eeac7117172da95e9ea7ed4b9022abe6e0780d2e59f",
+  "symbols_sha256": "f768a4dccfb42e0f4a882a224d4d0b210de7f8d98320847490761dce6a7575b8"
+}

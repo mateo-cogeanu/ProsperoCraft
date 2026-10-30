@@ -1,0 +1,200 @@
+--- a/src/thread/pthread/SDL_systls.c
++++ b/src/thread/pthread/SDL_systls.c
+@@ -22,6 +22,15 @@
+ #include "../SDL_systhread.h"
+ #include "../SDL_thread_c.h"
+ 
++/* ProsperoCraft PS5 alteration: use SDL's existing thread-ID storage.
++ * The launcher primes its native mutex before starting JVM threads. No late
++ * SDK pthread_setspecific allocation is needed on foreign JNI threads. */
++#ifdef __PROSPERO__
++void SDL_SYS_InitTLSData(void) {}
++SDL_TLSData *SDL_SYS_GetTLSData(void) { return SDL_Generic_GetTLSData(); }
++bool SDL_SYS_SetTLSData(SDL_TLSData *data) { return SDL_Generic_SetTLSData(data); }
++void SDL_SYS_QuitTLSData(void) { SDL_Generic_QuitTLSData(); }
++#else
+ #include <pthread.h>
+ 
+ #define INVALID_PTHREAD_KEY ((pthread_key_t)-1)
+@@ -76,3 +85,5 @@
+         }
+     }
+ }
++
++#endif /* __PROSPERO__ */
+--- a/src/thread/SDL_thread.c
++++ b/src/thread/SDL_thread.c
+@@ -26,6 +26,13 @@
+ #include "SDL_systhread.h"
+ #include "../SDL_error_c.h"
+ 
++#ifdef __PROSPERO__
++/* TLS bootstrap must not report allocation errors through itself. These retain
++ * SDL's configured memory functions and allocation accounting, without OOM. */
++extern void *SDL_PS5TLSMalloc(size_t size);
++extern void *SDL_PS5TLSRealloc(void *ptr, size_t size);
++#endif
++
+ // The storage is local to the thread, but the IDs are global for the process
+ 
+ static SDL_AtomicInt SDL_tls_allocated;
+@@ -99,7 +106,11 @@
+ 
+         oldlimit = storage ? storage->limit : 0;
+         newlimit = (storage_index + TLS_ALLOC_CHUNKSIZE);
++#ifdef __PROSPERO__
++        new_storage = (SDL_TLSData *)SDL_PS5TLSRealloc(storage, sizeof(*storage) + newlimit * sizeof(storage->array[0]));
++#else
+         new_storage = (SDL_TLSData *)SDL_realloc(storage, sizeof(*storage) + newlimit * sizeof(storage->array[0]));
++#endif
+         if (!new_storage) {
+             return false;
+         }
+@@ -113,7 +124,11 @@
+             SDL_free(storage);
+             return false;
+         }
++#ifdef __PROSPERO__
++        if (!oldlimit) SDL_AtomicIncRef(&SDL_tls_allocated);
++#else
+         SDL_AtomicIncRef(&SDL_tls_allocated);
++#endif
+     }
+ 
+     storage->array[storage_index].data = SDL_const_cast(void *, value);
+@@ -169,6 +184,15 @@
+ static SDL_Mutex *SDL_generic_TLS_mutex;
+ static SDL_TLSEntry *SDL_generic_TLS;
+ 
++#ifdef __PROSPERO__
++/* Bootstrap-thread only, after the native mutex reserve, before JVM launch. */
++int prospero_sdl_tls_preinit(void)
++{
++    if (!SDL_generic_TLS_mutex) SDL_generic_TLS_mutex = SDL_CreateMutex();
++    return SDL_generic_TLS_mutex ? 0 : -1;
++}
++#endif
++
+ void SDL_Generic_InitTLSData(void)
+ {
+     if (!SDL_generic_TLS_mutex) {
+@@ -182,6 +206,9 @@
+     SDL_TLSEntry *entry;
+     SDL_TLSData *storage = NULL;
+ 
++#ifdef __PROSPERO__
++    if (!SDL_generic_TLS_mutex) return NULL;
++#endif
+     SDL_LockMutex(SDL_generic_TLS_mutex);
+     for (entry = SDL_generic_TLS; entry; entry = entry->next) {
+         if (entry->thread == thread) {
+@@ -200,6 +227,9 @@
+     SDL_TLSEntry *prev, *entry;
+     bool result = true;
+ 
++#ifdef __PROSPERO__
++    if (!SDL_generic_TLS_mutex) return false;
++#endif
+     SDL_LockMutex(SDL_generic_TLS_mutex);
+     prev = NULL;
+     for (entry = SDL_generic_TLS; entry; entry = entry->next) {
+@@ -219,7 +249,11 @@
+         prev = entry;
+     }
+     if (!entry && data) {
++#ifdef __PROSPERO__
++        entry = (SDL_TLSEntry *)SDL_PS5TLSMalloc(sizeof(*entry));
++#else
+         entry = (SDL_TLSEntry *)SDL_malloc(sizeof(*entry));
++#endif
+         if (entry) {
+             entry->thread = thread;
+             entry->storage = data;
+@@ -252,10 +286,12 @@
+         SDL_UnlockMutex(SDL_generic_TLS_mutex);
+     }
+ 
++#ifndef __PROSPERO__
+     if (SDL_generic_TLS_mutex) {
+         SDL_DestroyMutex(SDL_generic_TLS_mutex);
+         SDL_generic_TLS_mutex = NULL;
+     }
++#endif /* PS5 retains one bootstrap mutex across SDL quit/reinit. */
+ }
+ 
+ // Non-thread-safe global error variable
+@@ -304,12 +340,24 @@
+ 
+         errbuf = (SDL_error *)realloc_func(NULL, sizeof(*errbuf));
+         if (!errbuf) {
++#ifdef __PROSPERO__
++            /* No shared writable fallback or recursive error creation. */
++            return NULL;
++#else
+             return SDL_GetStaticErrBuf();
++#endif
+         }
+         SDL_zerop(errbuf);
+         errbuf->realloc_func = realloc_func;
+         errbuf->free_func = free_func;
++#ifdef __PROSPERO__
++        if (!SDL_SetTLS(&tls_errbuf, errbuf, SDL_FreeErrBuf)) {
++            free_func(errbuf);
++            return NULL;
++        }
++#else
+         SDL_SetTLS(&tls_errbuf, errbuf, SDL_FreeErrBuf);
++#endif
+     }
+     return errbuf;
+ #endif // SDL_THREADS_DISABLED
+--- a/src/SDL_error.c
++++ b/src/SDL_error.c
+@@ -44,6 +44,9 @@
+         int result;
+         SDL_error *error = SDL_GetErrBuf(true);
+         va_list ap2;
++#ifdef __PROSPERO__
++        if (!error) return false; /* Error storage itself can fail. */
++#endif
+ 
+         error->error = SDL_ErrorCodeGeneric;
+ 
+@@ -84,7 +87,11 @@
+ 
+     switch (error->error) {
+     case SDL_ErrorCodeGeneric:
++#ifdef __PROSPERO__
++        return error->str ? error->str : "";
++#else
+         return error->str;
++#endif
+     case SDL_ErrorCodeOutOfMemory:
+         return "Out of memory";
+     default:
+--- a/src/stdlib/SDL_malloc.c
++++ b/src/stdlib/SDL_malloc.c
+@@ -6448,6 +6448,23 @@
+ #endif
+ }
+ 
++#ifdef __PROSPERO__
++/* ProsperoCraft alteration: only SDL TLS bootstrap uses these non-reporting
++ * allocations. Keep configured allocator/counters and normal SDL_free pairing. */
++void *SDL_PS5TLSMalloc(size_t size)
++{
++    void *mem = s_mem.malloc_func(size ? size : 1);
++    if (mem) INCREMENT_ALLOCATION_COUNT();
++    return mem;
++}
++void *SDL_PS5TLSRealloc(void *ptr, size_t size)
++{
++    void *mem = s_mem.realloc_func(ptr, size ? size : 1);
++    if (mem && !ptr) INCREMENT_ALLOCATION_COUNT();
++    return mem;
++}
++#endif
++
+ void *SDL_malloc(size_t size)
+ {
+     void *mem;

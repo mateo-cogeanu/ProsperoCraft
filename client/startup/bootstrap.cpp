@@ -66,6 +66,7 @@ extern "C" int clientgpu_condition_preinit();
 extern "C" int clientgpu_mutex_preinit();
 extern "C" int clientgpu_present_worker_preinit();
 extern "C" int prospero_sdl_condition_preinit();
+extern "C" int prospero_sdl_tls_preinit();
 extern "C" int sceKernelUsleep(std::uint32_t);
 // File-open diagnostics specific to this probe; the real platform API is used.
 static char native_open_error[192]{};
@@ -296,6 +297,10 @@ void run_test(int i) {
   int condition_rc=mutex_rc?0:prospero_sdl_condition_preinit();
   char sync_note[160];std::snprintf(sync_note,sizeof(sync_note),"PS5 SDL native sync reserve: mutex=%d condition=%d capacities256/128;before JVM",mutex_rc,condition_rc);log_stage(sync_note);
   if(mutex_rc||condition_rc){result(i,mutex_rc?mutex_rc:condition_rc,"Cannot reserve SDL native sync before JVM");return;}
+
+  int tls_rc=prospero_sdl_tls_preinit();
+  char tls_note[128];std::snprintf(tls_note,sizeof(tls_note),"PS5 SDL thread-ID TLS preinit result=%d;before JVM",tls_rc);log_stage(tls_note);
+  if(tls_rc){result(i,tls_rc,"Cannot initialize SDL thread-ID TLS before JVM");return;}
 
   const int mixer_worker_rc=client_ps5_audio_worker_preinit();
   char mixer_worker_note[128];std::snprintf(mixer_worker_note,sizeof(mixer_worker_note),"PS5 OpenAL pre-JVM mixer workers result=%d capacity2",mixer_worker_rc);log_stage(mixer_worker_note);

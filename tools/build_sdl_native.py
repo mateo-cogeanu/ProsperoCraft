@@ -15,6 +15,7 @@ def build(runtime):
     subprocess.run(['git','apply','--unsafe-paths','--directory='+str(source),str(port/'0001-register-ps5.patch')],check=True)
     subprocess.run(['git','apply','--unsafe-paths','--directory='+str(source),str(port/'0002-ps5-rwlock.patch')],check=True)
     subprocess.run(['git','apply','--unsafe-paths','--directory='+str(source),str(port/'0003-ps5-native-sync-reserve.patch')],check=True)
+    subprocess.run(['git','apply','--unsafe-paths','--directory='+str(source),str(port/'0004-ps5-thread-error-storage.patch')],check=True)
     sdk=ROOT/'.tools/graphics-sdk';out.mkdir(exist_ok=True)
     toolchain=out/'ps5.cmake';toolchain.write_text('set(CMAKE_SYSTEM_NAME FreeBSD)\nset(CMAKE_SYSTEM_VERSION 9)\nset(CMAKE_SYSTEM_PROCESSOR x86_64)\nset(CMAKE_CROSSCOMPILING TRUE)\nset(PS5 TRUE)\nset(CMAKE_C_COMPILER '+str(LLVM/'clang')+')\nset(CMAKE_C_COMPILER_TARGET x86_64-sie-ps5)\nset(CMAKE_AR '+str(LLVM/'llvm-ar')+')\nset(CMAKE_RANLIB '+str(LLVM/'llvm-ranlib')+')\nset(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)\n')
     flags='-isysroot '+str(sdk)+' -isystem '+str(sdk/'target/include')+' -fvisibility-nodllstorageclass=default -march=x86-64 -mno-avx -mno-avx2 -mno-fma -fno-stack-protector'
@@ -28,6 +29,8 @@ def build(runtime):
     platform=out/'platform-input.o';subprocess.run([str(LLVM/'clang'),'-target','x86_64-sie-ps5','-O2','-fPIC','-fno-stack-protector','-fvisibility-nodllstorageclass=default','-isysroot',str(sdk),'-isystem',str(sdk/'target/include'),'-I'+str(port),'-c',str(port/'platform-input.c'),'-o',str(platform)],check=True)
     hid=out/'physical-hid.o';subprocess.run([str(LLVM/'clang'),'-target','x86_64-sie-ps5','-O2','-fPIC','-fno-stack-protector','-fvisibility-nodllstorageclass=default','-isysroot',str(sdk),'-isystem',str(sdk/'target/include'),'-I'+str(port),'-c',str(port/'ps5_hid_native.c'),'-o',str(hid)],check=True)
     obj=out/'resident-sdl.o';subprocess.run(['/opt/homebrew/opt/lld/bin/ld.lld','-r','--whole-archive',str(out/'libSDL3.a'),'--no-whole-archive',str(platform),str(hid),'-o',str(obj)],check=True)
+    tls_symbols=subprocess.check_output([str(LLVM/'llvm-nm'),str(obj)],text=True)
+    assert ' T prospero_sdl_tls_preinit' in tls_symbols,'PS5 TLS guard inactive'
     sections=subprocess.check_output([str(LLVM/'llvm-readelf'),'-SW',str(obj)],text=True);assert '.init_array'not in sections and '.ctors'not in sections,'Unexpected automatic SDL constructors'
     audit={'sdl':lock['sdl'],'reference':lock['reference'],'profile':lock['profile'],'port_sha256':{p.name:hashlib.sha256(p.read_bytes()).hexdigest()for p in sorted(port.iterdir())if p.is_file()},'object_sha256':hashlib.sha256(obj.read_bytes()).hexdigest(),'scope':'Actual SDL3 core/events/PS5 video/Vulkan/joystick driver; primary DualSense actuator-only SDL audio and native joystick gyro; game speaker audio remains OpenAL; native compatible rumble and translated Controlify adaptive-trigger effects;LED/impulse-trigger-rumble/process spawn unsupported; no game modifications','console':'pending'}
     (out/'audit.json').write_text(json.dumps(audit,indent=2)+'\n');return obj

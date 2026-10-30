@@ -83,3 +83,13 @@ on160: requested physical rumble/adaptive triggers/gyro, fresh world/chunks,
 recorded gameplay, marker save/reload, application restart persistence, repeated
 audio/input transitions and relevant working-version regressions. None is yet
 accepted for160. A menu pass alone does not complete Fabric26.2 support.
+
+## Console follow-up
+
+The user reports audible menu music and a visible selection change after a
+button, immediately followed by a crash. Launcher logs confirm26.2/Fabric0.20.1
+on160. An exact160 external stop snapshot shows SDL TLS/error recursion; it
+does not carry a fatal signal. See [161 investigation](client-sdl-thread-storage-161.md).
+Shaderc no longer blocks this run from reaching the menu, but this is not full
+shader/gameplay acceptance. Repeated input, physical features and worlds remain
+unvalidated.
