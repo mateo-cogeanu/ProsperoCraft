@@ -10,6 +10,9 @@ source+=r'''
 static std::atomic<unsigned> fake_buttons{0},pad_reads{0},flips{0},motor_large{0},motor_small{0};
 static void* storage=nullptr;static std::vector<std::string> operations;static int notifications=0,failure=0;static std::string output;
 extern "C" {
+int prospero_hid_open(int,int){return -1;}
+int prospero_hid_read(int,int,void*,int){return 0;}
+void prospero_hid_close(int,int){}
 bool ps5ObserveOwnedAllocation(const void* p) noexcept{return p!=nullptr;}
 size_t sceKernelGetDirectMemorySize(){return 256*1024*1024;}
 int sceKernelAllocateDirectMemory(int64_t,int64_t,size_t n,size_t alignment,int,int64_t*physical){assert(!storage);assert(!posix_memalign(&storage,alignment,n));*physical=0;return 0;}

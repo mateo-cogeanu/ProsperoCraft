@@ -11,7 +11,7 @@ final class ProsperoChannel {
   try(var in=ProsperoChannel.class.getResourceAsStream("/prosperocraft-channel.txt")){return in!=null&&new String(in.readNBytes(32),StandardCharsets.US_ASCII).strip().equals("temp_gametest");}catch(Exception ignored){return false;}
  }
  private static final boolean FABRIC262_TEST=readFabric262Test();
- static boolean fabric262Test(){return FABRIC262_TEST;}
+ static boolean fabric262Test(){return false;}
  private static boolean readFabric262Test(){
   if(!tempGameTest())return false;
   try(var in=ProsperoChannel.class.getResourceAsStream("/prosperocraft-development.txt")){

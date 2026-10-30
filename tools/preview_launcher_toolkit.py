@@ -89,6 +89,18 @@ theme_preview=r'''
   snprintf(prospero_menu::fields[104].data(),512,"0");
 '''
 source=source.replace(' for(failure=1;failure<=3;failure++)',theme_preview+'\n for(failure=1;failure<=3;failure++)')
+cursor_preview=r'''
+  prospero_menu::desktop.cursor=true;prospero_menu::desktop.x=1120;prospero_menu::desktop.y=465;
+  for(int theme=0;theme<6;theme++){
+   snprintf(prospero_menu::fields[104].data(),512,"%d",theme);settle_preview();prospero_menu::draw_cursor();assert(prospero_ui::surface->render());
+   auto* px=static_cast<const unsigned char*>(prospero_ui::surface->pixels);std::ofstream f(std::string(argv[1])+"/cursor-"+std::to_string(theme)+".ppm",std::ios::binary);f<<"P6\n1920 1080\n255\n";
+   for(int pixel=0;pixel<1920*1080;pixel++)f.write(reinterpret_cast<const char*>(px+pixel*4),3);
+  }
+  prospero_menu::desktop.cursor=false;
+  puts("PASS themed vector cursor rendered through production Vulkan draw in all six palettes");
+'''
+source=source.replace(' for(failure=1;failure<=3;failure++)',cursor_preview+'\n for(failure=1;failure<=3;failure++)')
+
 source=source.replace('static void animation_check(ps5::demo::Canvas& c) noexcept {','static void animation_check(ps5::demo::Canvas&) noexcept {prospero_ui::Canvas c;')
 # The legacy discrete interpolation assertion has its own fixture. Here dt
 # and the toolkit spring are exercised by the rendered controller transitions.

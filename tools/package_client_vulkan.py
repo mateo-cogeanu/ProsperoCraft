@@ -20,7 +20,7 @@ parser.add_argument('--present', action='store_true', help='Build client011 stan
 parser.add_argument('--sdl', action='store_true', help='Build client014 SDL window/input candidate')
 parser.add_argument('--runtime-shader', action='store_true', help='Build client023 runtime GLSL compiler candidate')
 parser.add_argument('--launcher-channel',choices=['demo','offline','temp_gametest'],help='Release channel; defaults to client/launcher/channel.txt; unrelated to dependency --offline')
-parser.add_argument('--fabric262-test',action='store_true',help='Package-only development Fabric26.2 launch gate; requires --startup --launcher-channel temp_gametest')
+parser.add_argument('--fabric262-test',action='store_true',help='Deprecated compatibility flag; Fabric26.2 is now supported')
 parser.add_argument('--startup',action='store_true',help='Build097 high-refresh game-test launcher and original Minecraft Main startup with all accepted native components')
 parser.add_argument('--native-bootstrap',action='store_true',help='Build026 genuine libffi/OpenAL native acceptance')
 parser.add_argument('--opengl-bootstrap',action='store_true',help='Build029 genuine Mesa/OpenGL acceptance')
@@ -142,7 +142,7 @@ with zipfile.ZipFile(java/'client-probe.jar','w',zipfile.ZIP_DEFLATED)as output:
   info=zipfile.ZipInfo(str(path.relative_to(classes)));info.compress_type=zipfile.ZIP_DEFLATED;output.writestr(info,path.read_bytes())
  if args.startup:
   output.writestr('prosperocraft-channel.txt',launcher_channel+'\n')
-  if args.fabric262_test:output.writestr('prosperocraft-development.txt','fabric-26.2-test-v1\n')
+  # Fabric26.2 is supported; no development marker is packaged.
   if launcher_channel=='offline':output.writestr('offline-import-public-key.der',(ROOT/'client/launcher/offline-import-public-key.der').read_bytes())
 modules=json.loads((ROOT/'server/26.3.lock.json').read_text())['modules']
 spec={'menu_audio':False,'source':str(ROOT/'client'/variant/'bootstrap.cpp'),'param':str(ROOT/'client'/variant/'param.json'),'asset_dir':str(assets),'java_sources':[str(p)for p in sources],'modules':modules,'java_compile_classpath':[str(port),*[str(ROOT/'.tools/client'/row['file'])for row in lock['artifacts']if not row['id'].startswith('org.lwjgl:lwjgl:')]],'include_dirs':[str(work),str(ROOT/'client/native'),str(runtime/'java25/probe')]}
@@ -333,5 +333,5 @@ if args.startup:
  channel_dest=ROOT/('dist/client-startup-'+launcher_channel);channel_dest.mkdir(parents=True,exist_ok=True)
  shutil.copy2(ROOT/'dist/client-startup/PPSA99874.zip',channel_dest/'PPSA99874.zip')
  shutil.copy2(work/('bootstrap-'+version+'-symbols.elf'),channel_dest/'bootstrap-symbols.elf')
- (channel_dest/'channel.json').write_text(json.dumps({'channel':launcher_channel,'fabric262_test':args.fabric262_test,'version':version,'package_sha256':hashlib.sha256((channel_dest/'PPSA99874.zip').read_bytes()).hexdigest(),'console':'pending'},indent=2)+'\n')
+ (channel_dest/'channel.json').write_text(json.dumps({'channel':launcher_channel,'fabric262_test':False,'version':version,'package_sha256':hashlib.sha256((channel_dest/'PPSA99874.zip').read_bytes()).hexdigest(),'console':'pending'},indent=2)+'\n')
  print('Preserved '+launcher_channel+' channel candidate: '+str(channel_dest/'PPSA99874.zip'))

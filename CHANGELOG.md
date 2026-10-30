@@ -1,5 +1,12 @@
 # Changelog
 
+## 01.000.167 — launcher keyboard and mouse (console test pending)
+
+- Enable normal Fabric26.2 support after user acceptance of exact166.
+- Add launcher physical keyboard navigation and text editing, mouse selection/clicks, scrolling and right-click Back.
+- Add a rounded vector cursor matching the supplied silhouette, with theme fill and a single light outline; controller navigation hides it until mouse use.
+- Preserve the accepted166 candidate. New launcher input and game handoff need physical-console validation before release/Store publication.
+
 ## 01.000.166 — local Controlify library-path repair
 
 - Record165 controller initialization failure: the explicit `/app0/libSDL3.so` path does not exist, and OpenJDK RawNativeLibraries.load(Path) returns null when toRealPath fails before reaching the resident loader.

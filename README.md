@@ -19,11 +19,11 @@ The latest public release is **01.000.158**. Earlier builds have positive PS5 pl
 | Minecraft version | Vanilla | Fabric |
 | --- | --- | --- |
 | **26.3** | Established playable PS5 baseline, including game audio and server joining. | Released, with positive console feedback. Mods still need individual compatibility checks. |
-| **26.2** | Available in 158; working Vanilla play reported on development 124. | **Coming soon. Launch is blocked in 158.** The user reports all requested functionality working on exact161; public support remains held while the next input repair is tested. |
+| **26.2** | Available in 158; working Vanilla play reported on development 124. | Supported in development167 after user acceptance of exact166, including Controlify handoff. Published158 still blocks this combination. |
 | **26.4 snapshots 1–6** | Available; positive console feedback on 118/119. Use separate test worlds. | Selectable when matching loader/mod versions exist; snapshot-specific Fabric, Controlify and mod compatibility is not established. |
 | **Other versions** | Downloadable 26.x entries may appear, but Play is blocked for versions outside the set above. | No additional compatibility claim. NeoForge is not enabled. |
 
-The user accepted Fabric26.2 functionality on161 and26.2 Vanilla held-key typing on163. Later physical-input tests expose a shared-SDL event filter conflict with Controlify on26.2/26.3 Fabric. Local166 packages the real library path required by handle-specific FFM lookup after165 failed controller initialization on a missing path. Exact-console controller detection and handoff validation are pending. Public158 still holds Fabric26.2. GitHub/Store releases remain paused. [Current evidence](docs/client-controlify-path-166.md).
+The user reports all working on exact166 after the scoped Controlify SDL lookup and event repair. Development167 enables normal Fabric26.2 labels and adds launcher USB keyboard/mouse controls with a themed vector cursor. Exact167 console validation is pending. Published158 is unchanged; GitHub/Store release stays on hold until the user tests and approves167. [Launcher input details](docs/client-launcher-desktop-167.md).
 
 Snapshots are **hidden by default**. Enable **Settings → Show Snapshots** to list them; explicit saved preferences are retained. Future snapshots are not enabled automatically. See the [snapshot guide](docs/client-snapshots-118.md) and [119 console acceptance](docs/validation/client119-console-acceptance-2026-10-28.json).
 

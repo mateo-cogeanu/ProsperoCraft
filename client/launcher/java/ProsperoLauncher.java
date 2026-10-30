@@ -97,11 +97,11 @@ public final class ProsperoLauncher {
   installer.verify(installed);receipt=installed;loader=installer.loader(installed);if("fabric".equals(instance.loader)){var f=fabric.read(instance.version);loader=fabric.loader(f,loader);fabricLoaderVersion=f.loader;}detail=instance;offlineLaunch=offline;launchPrepared=true;launch=!awaitingTutorial;message="Starting "+instance.name;
  }
  static boolean supported(String version){return "26.2".equals(version)||"26.3".equals(version)||snapshot(version);}
- static boolean supported(String version,String loader){return supported(version)&&!("26.2".equals(version)&&"fabric".equals(loader));}
- static boolean developmentTest(String version,String loader){return "26.2".equals(version)&&"fabric".equals(loader)&&ProsperoChannel.fabric262Test();}
+ static boolean supported(String version,String loader){return supported(version);}
+ static boolean developmentTest(String version,String loader){return false;}
  static boolean launchable(String version,String loader){return supported(version,loader)||developmentTest(version,loader);}
  private boolean draftSupported(String version){return launchable(version,draftLoader==1?"fabric":"vanilla");}
- private String fabricLabel(){return !versions.isEmpty()&&"26.2".equals(versions.get(versionChoice).id())?(ProsperoChannel.fabric262Test()?"Fabric  [Development test]":"Fabric  [Coming soon]"):"Fabric";}
+ private String fabricLabel(){return "Fabric";}
  static boolean selectedGlfw(){return current.receipt!=null&&"26.2".equals(current.receipt.version)&&"GLFW".equals(current.receipt.window);}
  static boolean snapshot(String version){return java.util.Set.of("26.4-snapshot-1","26.4-snapshot-2","26.4-snapshot-3","26.4-snapshot-4","26.4-snapshot-5","26.4-snapshot-6").contains(version==null?"":version);}
  private void play(){if(detail==null||busy)return;if(!launchable(detail.version,detail.loader)){message="26.2".equals(detail.version)&&"fabric".equals(detail.loader)?"Fabric for Minecraft 26.2 is coming soon. Your downloads and worlds are kept.":"Coming soon. This build launches 26.2 Vanilla, 26.3 and 26.4 snapshots 1–6.";feedback("error");return;}if(ProsperoChannel.tempGameTest()&&(session==null||!session.valid(System.currentTimeMillis()))){page=3;tab=2;top=false;row=0;signIn();return;}awaitingTutorial=ProsperoChannel.tempGameTest()&&library.settings().showControls;if(awaitingTutorial){page=11;row=1;top=false;launchPrepared=false;}if(!detail.ready){install(true);return;}var instance=detail;runTask("VERIFY",attempt->{var installed=installer.receipt(instance.version);installer.verify(installed);repairDependencies(instance,attempt,false);synchronized(this){if(!cancelled(attempt))prepareLaunch(instance,installed);}});}
@@ -187,7 +187,26 @@ public final class ProsperoLauncher {
   if(row<4||row-4>=contentHits.size())return;
   var hit=contentHits.get(row-4);if(localContent.stream().anyMatch(i->i.project().equals(hit.id()))){message="Already installed. Open Installed to see the file.";return;}modrinth.toggle(library.game(detail),new ProsperoModrinth.Selection(hit.id(),hit.title(),contentKind));contentQueue=modrinth.queue(library.game(detail));
  }
+ private String[] desktopInput(int command){
+  int tag=command>>>28;
+  if(tag==1){
+   int expected=(command>>>20)&255,kind=(command>>>16)&15,target=command&0x7fff;
+   if(expected!=page)return state();
+   boolean click=(command&0x8000)!=0;
+   if(kind==0){if(click&&page!=6&&!(page>=7&&page<=11)&&page!=14)selectTab(target);}
+   else if(kind==1&&page==0&&target>=0&&target<=library.instances().size()){selected=target;top=false;if(click)return tickModel(0x4000);}
+   else if(kind==2&&page==6&&target<40){key=target;if(click)return tickModel(0x4000);}
+   else if(kind==4&&click){int[] actions={0x1000,0x200,0x100,0x2000,0x8000,0x80,0x20,0x8000,0x1000};if(target<actions.length)return tickModel(actions[target]);}
+   else if(kind==3&&target<32){row=target;top=false;if(click)return tickModel(0x4000);}
+  }else if(tag==2){int key=command&255;
+   if(key==1)return tickModel(page==6?0x8000:0x4000);
+   if(key==2&&page==6){if(!keyboard.isEmpty())keyboard=keyboard.substring(0,keyboard.offsetByCodePoints(keyboard.length(),-1));}
+   if(key==3||key==4){if(page==6)return state();if(page==7||page==9||page==11||page==14)row=1-row;else if(page==10||page==13)return tickModel(key==3?0x40:0x10);else return tickModel(key==3?0x800:0x400);}
+  }else if(tag==3&&page==6&&!busy){char ch=(char)(command&127);if(ch>=32&&ch<127&&keyboard.length()<40)keyboard+=ch;}
+  cached=null;return state();
+ }
  private String[] tickModel(int buttons){
+  if((buttons>>>28)!=0)return desktopInput(buttons);
   try{
    if(page==14){
     if(busy)return state();

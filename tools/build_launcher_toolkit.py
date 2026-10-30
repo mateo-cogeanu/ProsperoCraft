@@ -58,7 +58,7 @@ def build(work,runtime=None,bindings=None):
 
 def package_sources(java):
     dest=java/'launcher-toolkit';shutil.copytree(KIT,dest,dirs_exist_ok=True)
-    for name in ['toolkit_surface.hpp','toolkit_canvas.hpp','toolkit_effects.hpp','palette.hpp','native_menu.hpp','navigation.hpp','haptics.hpp','branding_logo.hpp','instance_icons.hpp','login_qr.hpp']:
+    for name in ['toolkit_surface.hpp','toolkit_canvas.hpp','toolkit_effects.hpp','palette.hpp','native_menu.hpp','desktop_input.hpp','cursor_shape.hpp','navigation.hpp','haptics.hpp','branding_logo.hpp','instance_icons.hpp','login_qr.hpp']:
         shutil.copyfile(ROOT/'client/launcher'/name,dest/name)
     for name in ['build_launcher_toolkit.py','prepare_launcher_toolkit.py']:
         shutil.copyfile(ROOT/'tools'/name,dest/name)

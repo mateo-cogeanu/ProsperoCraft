@@ -1871,3 +1871,15 @@ otherwiseexplicitfailure. HostoriginalFFMmissingpath/unscopednegative+existingpa
 preflight/downcall/upcallpositiveandpackageELF/symbol/object/hashgates;PS5controller
 detection/handoffpending. See docs/client-controlify-path-166.md. NoJAR/runtime/
 publicgatechange,noGitHubrelease/Store;preservepriorcandidates/acceptance.
+
+##167 launcher desktop input — 2026-10-30
+
+User accepts exact166: "nice 👌, all works"; controller/handoff functional acceptance,
+no invented per-feature measurements/endurance.167 marks Fabric26.2 supported
+without development marker, adds native PS5 keyboard/mouse launcher input, bounded
+mailbox commands with expected-page click guard, text/keyboard navigation, modal
+selection and cursor with theme fill/single light outline. Launcher HID handles
+close before game display/input handoff. Original game/mod JARs and runtime pins
+unchanged. Preserve166 package/symbols/relink;167 console tests pending, user
+explicitly holds release/Store until testing and satisfaction. See
+docs/client-launcher-desktop-167.md.

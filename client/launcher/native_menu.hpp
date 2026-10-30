@@ -9,6 +9,8 @@
 #include "instance_icons.hpp"
 #include "login_qr.hpp"
 #include "navigation.hpp"
+#include "desktop_input.hpp"
+#include "cursor_shape.hpp"
 #include "haptics.hpp"
 #include "fonts.hpp"
 #ifdef PROSPERO_TOOLKIT
@@ -19,6 +21,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <atomic>
+#include <cmath>
 #include <pthread.h>
 extern "C" int sceKernelUsleep(std::uint32_t);
 extern "C" std::uint64_t sceKernelGetProcessTime();
@@ -48,6 +51,8 @@ inline unsigned events[64]{},event_read=0,event_write=0;
 inline std::atomic<bool> visible{false},online{false},exit_requested{false},display_done{false},display_ok{false};
 inline int controller=-1;inline Haptics haptics;inline bool pad_connected=false;inline unsigned pad_generation=0;
 inline unsigned updates=0;
+inline DesktopInput desktop{};inline int layout_slide=0;
+inline int pointer_kind=-1,pointer_target=-1,pointer_page=-1;
 inline Navigation navigation{};inline std::uint64_t pressed_at=0;
 inline void publish(const Fields& values) noexcept {
  pthread_mutex_lock(&mailbox);published=values;pthread_mutex_unlock(&mailbox);
@@ -185,7 +190,7 @@ inline void compose(Canvas& c) noexcept {
  c.gradient(ink(0x0b1815),ink(0x08120f));c.disc(1760,850,380,ink(0x0c211a));
  const int page=number(11),row=number(15),selected=number(9),tab=number(12);const bool top=std::strcmp(fields[28].data(),"TOP")==0;(void)selected;
  float elapsed=float(now_ms()-transition_start)/180.0f;if(elapsed<0)elapsed=0;if(elapsed>1)elapsed=1;
- const int slide=std::strcmp(fields[30].data(),"ON")==0?0:int(16*(1-elapsed)*(1-elapsed));if(slide>0)animating=true;
+ const int slide=std::strcmp(fields[30].data(),"ON")==0?0:int(16*(1-elapsed)*(1-elapsed));layout_slide=slide;if(slide>0)animating=true;
  c.rounded(40,32,1840,108,24,ink(0x10221c));block(c,66,53,64,0);label(c,149,66,"ProsperoCraft",30);label(c,405,72,"NATIVE JAVA 25",24,0x718d7b);
  const bool signed_in=fields[81][0]&&std::strcmp(fields[5].data(),"Not signed in")!=0;
  const char* tabs[]={"Instances","Settings",signed_in?fields[81].data():"Sign in"};const int tx[]={865,1245,1555},tw[]={350,280,280};
@@ -298,13 +303,13 @@ inline void compose(Canvas& c) noexcept {
    label(c,490,871,std::strcmp(fields[94].data(),"OFF")==0?"[X]":"[ ]",30);
 #endif
    label(c,555,872,"Don't show again",30);
-  }else{char counter[48];std::snprintf(counter,sizeof(counter),"%d / 5",section+1);label(c,1740,850,counter,30,0x94b69f);control_label(c,78,850,"LEFT / RIGHT  Change section",30,0x94b69f);}
+  }else{char counter[48];std::snprintf(counter,sizeof(counter),"%d / 5",section+1);label(c,1740,850,counter,30,0x94b69f);action(c,78,825,700,"PREVIOUS SECTION",false);action(c,1050,825,700,"NEXT SECTION",false);}
  }else if(page==7){
   c.rounded(170,190,1580,745,32,ink(0x142e23));
   label(c,235,240,"Welcome to ProsperoCraft",64);
   wrap(c,240,347,"Your Minecraft Java library, right here on your console. Create an instance, choose an icon and make yourself at home.",1390,3);
   wrap(c,240,468,"Sign in with your Microsoft account, download 26.3, then choose PLAY. Your account, worlds and verified downloads are saved for future launches.",1390,3);
-  wrap(c,240,570,"Use the shoulder buttons to explore Instances, Settings and your account. Press OPTIONS for the controller guide. All 26.x releases and snapshots are available to download; versions beyond the current 26.3 support are coming soon.",1390,5);
+  wrap(c,240,570,"Use the shoulder buttons to explore Instances, Settings and your account. Press OPTIONS for the controller guide. All 26.x releases and snapshots are available to download; 26.2 and 26.3 Vanilla and Fabric are supported, alongside snapshots 1-6.",1390,5);
   action(c,240,773,330,"OK",row==1,true);
   if(row==0)selection(c,680,773,430,76);
   c.rounded(680,773,430,76,18,ink(0x142e23));
@@ -324,7 +329,7 @@ inline void compose(Canvas& c) noexcept {
   label(c,70,185,"Enter text.",64);c.rounded(70,300,1770,116,22,ink(0x183c2a));title(c,103,330,fields[29].data(),42,1650);
   const char* chars=std::strcmp(fields[66].data(),"LOWER")==0?"1234567890qwertyuiopasdfghjkl_zxcvbnm .-":"1234567890QWERTYUIOPASDFGHJKL_ZXCVBNM .-";int chosen=number(31);
   for(int i=0;i<40;i++){int x=80+(i%10)*176,y=465+(i/10)*91;if(i==chosen)selection(c,x,y,152,73);c.rounded(x,y,152,73,16,ink(i==chosen?0x356647:0x172e24));char letter[2]={chars[i],0};label(c,x+61,y+21,letter,30);}
-  label(c,100,873,"X  Add     TRIANGLE  Backspace     L2  Case     R2  Space     OPTIONS  Clear     SQUARE  Done",24,0x8daf99);
+  const char* edits[]={"BACKSPACE","SPACE","CASE","CANCEL","DONE"};for(int i=0;i<5;i++)action(c,70+i*360,855,330,edits[i],false,i==4);
  }
 #ifdef PROSPERO_TOOLKIT
  c.end_content();
@@ -337,15 +342,27 @@ inline void compose(Canvas& c) noexcept {
   c.rounded(72,982,1770,5,2,ink(0x233c2c));if(number(20)>0)c.rounded(72,982,unsigned(1770*number(20)/1000),5,2,ink(0xa9eab6));
 #endif
  }else if(page!=3)title(c,78,949,fields[2].data(),24,1760,0x83a58d);
- control_label(c,76,1020,fields[7].data(),20,0x7d9f89);label(c,1650,1020,PROSPERO_APP_VERSION,24,0x7d9f89);
+ control_label(c,76,1020,desktop.cursor?"Click Select    Right click / Esc Back    Arrows Navigate    Enter Confirm    Tab Pages    F1 Controls":fields[7].data(),20,0x7d9f89);label(c,1650,1020,PROSPERO_APP_VERSION,24,0x7d9f89);
 }
 #ifdef PROSPERO_TOOLKIT
+inline void draw_cursor(){
+  if(desktop.cursor){
+   // Same rounded Bezier silhouette at every layer; no sharp points.
+   static const CursorShape shape;
+   float xy[256];for(int i=0;i<shape.count;i++){xy[i*2]=desktop.x+shape.xy[i*2]-6;xy[i*2+1]=desktop.y+shape.xy[i*2+1];}
+   auto& list=prospero_ui::surface->list;list.polygon(xy,shape.count,prospero_ui::themed(0x81e6af));
+   // The kit's antialiased capsule strokes make one continuous rounded rim.
+   // Exactly two design colors: theme fill and light outline, with no shadow.
+   for(int i=0;i<shape.count;i++){int next=(i+1)%shape.count;list.line(xy[i*2],xy[i*2+1],xy[next*2],xy[next*2+1],3,prospero_ui::themed(0xeaf0e8));}
+  }
+}
 inline std::uint64_t toolkit_frame_time=0;
 inline void draw(ps5::demo::Canvas& output) noexcept {
  if(prospero_ui::healthy){
   auto time=now_ms();prospero_ui::dt=toolkit_frame_time?std::clamp(float(time-toolkit_frame_time)/1000.0f,0.001f,0.05f):1.0f/60;toolkit_frame_time=time;
   prospero_ui::reduced=std::strcmp(fields[30].data(),"ON")==0;
   prospero_ui::surface->list.clear();Canvas canvas;compose(canvas);
+  draw_cursor();
   prospero_ui::healthy=prospero_ui::surface->render();
   if(prospero_ui::healthy){auto* pixels=static_cast<const std::uint32_t*>(prospero_ui::surface->pixels);
    prospero_ui::healthy=output.blit_rgba({pixels,1920*1080});
@@ -363,16 +380,27 @@ inline bool update() noexcept {
  if(++updates>=2)visible.store(true,std::memory_order_release);
  unsigned pressed=0;PadSample batch[64]{};const int count=scePadRead(controller,batch,64);
  const auto current_time=now_ms();bool connection_changed=false;
- if(count<0||count>64){pad_connected=false;navigation.clear();discard_input();}
+ if(count<0||count>64){pad_connected=false;navigation.clear();}
  else for(int i=0;i<count;++i){
   pad_connected=batch[i].connected&&!(batch[i].buttons&0x80000000u);
   if(pad_generation!=batch[i].connection_generation){connection_changed=true;haptics.control(false,current_time);pad_generation=batch[i].connection_generation;}
-  if(!pad_connected){pressed=0;discard_input();}
+  if(!pad_connected)pressed=0;
   pressed|=navigation.sample(batch[i].buttons,batch[i].lx,batch[i].ly,batch[i].connected,current_time);
  }
  pressed|=navigation.repeat(current_time);
  if(pressed&0x4000)pressed_at=current_time;
+ if(pressed){desktop.cursor=false;pointer_kind=-1;}
  push_input(pressed);
+ bool desktop_changed=desktop.poll(current_time,[](unsigned command){push_input(command);},[](int x,int y,bool click){
+  int page=number(11);auto hit=desktop_hit(page,x,y,page==0?number(14):number(84),page==0?number(13):page==12?number(93):number(83),layout_slide,std::strcmp(fields[71].data(),"OFFLINE")==0,std::strcmp(fields[103].data(),"INSTALLED")==0,std::strcmp(fields[82].data(),"Shaders")==0);
+#ifdef PROSPERO_TOOLKIT
+  if(page==9&&prospero_ui::healthy){hui::ui::Canvas c{prospero_ui::surface->list,prospero_ui::surface->fonts,prospero_ui::surface->renderer.glass_texture(),prospero_ui::effects->clock};auto& dialog=prospero_ui::effects->dialog;auto r=dialog.panel_rect(c);float left=r.x+dialog.style.padding,yy=r.y+r.h-dialog.style.padding-dialog.style.button_height;float width=(r.w-2*dialog.style.padding-dialog.style.button_gap)/2;for(int i=0;i<2;i++)if(x>=left+i*(width+dialog.style.button_gap)&&x<left+i*(width+dialog.style.button_gap)+width&&y>=yy&&y<yy+dialog.style.button_height)hit={3,i};}
+#else
+  if(page==9&&y>=710+layout_slide&&y<786+layout_slide){if(x>=116&&x<896)hit={3,0};if(x>=970&&x<1750)hit={3,1};}
+#endif
+  if(hit.kind>=0&&(click||hit.kind!=pointer_kind||hit.target!=pointer_target||page!=pointer_page))push_input(pointer_command(page,hit.kind,hit.target,click));
+  pointer_kind=hit.kind;pointer_target=hit.target;pointer_page=page;
+ });
  bool changed=false;
  if(!online.load(std::memory_order_acquire)){
   if(pressed&0x400){std::snprintf(fields[12].data(),512,"%d",(number(12)+2)%3);std::snprintf(fields[28].data(),512,"TOP");changed=true;}
@@ -384,7 +412,7 @@ inline bool update() noexcept {
  }
  bool vibration=online.load(std::memory_order_acquire)&&pad_connected&&!connection_changed&&current_time-navigation.last_sample<=250&&std::strcmp(fields[79].data(),"ON")==0&&!exit_requested.load();
  haptics.control(vibration,current_time);haptics.observe(unsigned(number(77)),fields[78].data(),vibration,current_time);
- if(changed||(pressed&0x4000)){component_motion_until=now_ms()+700;return true;}
+ if(changed||desktop_changed||(pressed&0x4000)){component_motion_until=now_ms()+700;return true;}
 #ifdef PROSPERO_TOOLKIT
  if(!prospero_ui::reduced&&prospero_ui::healthy)return now_ms()-last_draw_time>=33;
 #endif
@@ -407,12 +435,13 @@ inline void* ui_main(void*) noexcept {
 #else
  const bool gpu_closed=true;
 #endif
- haptics.close();scePadClose(controller);controller=-1;
+ desktop.close();haptics.close();scePadClose(controller);controller=-1;
  std::fprintf(stderr,"PS5_UI handoff display_closed=%d gpu_closed=%d\n",int(closed),int(gpu_closed));
  display_ok.store(closed&&gpu_closed,std::memory_order_release);display_done.store(true,std::memory_order_release);return nullptr;
 }
 inline bool start_frontend() noexcept {
  visible=false;online=false;exit_requested=false;display_done=false;display_ok=false;
+ desktop=DesktopInput{};pointer_kind=pointer_target=pointer_page=-1;
  updates=0;navigation.clear();pressed_at=0;focus={};transition_start=now_ms();animating=false;event_read=event_write=0;fields={};published={};
  const char* boot[]={"Instances","","Opening your library...","","","Not signed in","PLAY DEMO","L1 / R1  Top bar     X  Select","PREPARING","0","WAIT","0"};
  for(int i=0;i<12;++i)std::snprintf(fields[i].data(),512,"%s",boot[i]);

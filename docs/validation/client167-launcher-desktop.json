@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-30",
+  "version": "01.000.167",
+  "title_id": "PPSA99874",
+  "baseline": {
+    "version": "01.000.166",
+    "package_sha256": "695f534ad545799acb3236cc30cd6a470d8a9669b591fac559c9b02f27fbef3e",
+    "user_report": "nice \ud83d\udc4c, all works",
+    "scope": "User accepts controller and keyboard/mouse handoff repairs; no invented individual feature metrics or endurance duration"
+  },
+  "changes": [
+    "Fabric26.2 supported with ordinary labels, no dev marker",
+    "Native launcher USB keyboard/mouse with bounded mailbox and expected-page pointer commands",
+    "Physical ASCII text/edit/commit/cancel, keyboard navigation, clickable controls/modal choices, scroll and right-click Back",
+    "Reference-shaped rounded cubic Bezier cursor with theme fill, uniform one continuous light outline; two colors only; no sharp points",
+    "Launcher HID handles closed before game handoff; held-on-attach/intercept/reconnect blocking and fresh-packet repeat policy"
+  ],
+  "checks": {
+    "desktop_model_native": "PASS actual Java model and native HID packets under ASan/UBSan; hovering editing buttons never activates them; stale page command rejection, rounded curve continuity",
+    "controller_navigation": "PASS existing native timing/intercept/disconnect/hysteresis policy",
+    "themes": "PASS all six actual model theme selection/save/reopen and Vulkan visual renders",
+    "visual_cursor": "PASS production Vulkan draw in all six themes; rounded reference silhouette, theme fill and one antialiased light outline only. User clarifies earlier complaint was an old render; exact167 console appearance still pending.",
+    "frontend": "PASS existing host JNI-thread ownership/bounded input/display cleanup fixtures; not target handoff proof",
+    "delete": "PASS default No/permanent deletion, rollback/journal, shared data and symlink guards",
+    "Fabric": "PASS genuine unchanged Fabric Knot26.3 discovery/dependency/Mixin/original classloader fixture before graphics",
+    "startup": "PASS existing actual startup/CPU snapshot/allocation/observer/original Main policy host checks",
+    "target_package": "PASS final target compile/link/sign and full package CRC/identity/source/header/paired Java classes/native pins/SDL sidecar/original JAR/frozen checksum checks; SHA256 3480ab817659c43e954ce89ba5933cb5181f2fe2f396b1321bfae51d274171de",
+    "alias_tables": "PASS actual final ELF1942exports:exactly3SDL3alias redirects,baseSDL and1939others unchanged",
+    "relinks": "PASS both ordinary and replacement routes reproduce exact final executable using retained startup-scoped object; plain/unscoped OpenAL objects are incompatible with the explicit speaker worker/getenv integration"
+  },
+  "console": {
+    "launcher_cursor_six_themes": "PENDING exact167",
+    "mouse_click_scroll_modal_choices": "PENDING exact167",
+    "physical_keyboard_name_search_edit_commit_cancel": "PENDING exact167",
+    "keyboard_controller_mouse_switch_reconnect": "PENDING exact167",
+    "Vanilla262_263_and_FabricControlify262_263_after_launcher_HID_close": "PENDING exact167"
+  },
+  "publication": "Consumer source only; exact167 local candidate for user test. No GitHub release or ProsperoStore update until user tests and approves. Runtime unchanged; sync reports Everything up-to-date.",
+  "preservation": "166 canonical package/symbols/verified compressed source-relink preserved; prior candidates/releases/frozen archive intact; only redundant166 expanded relink kit and verified temporary relink ELF removed for local space.",
+  "package_sha256": "3480ab817659c43e954ce89ba5933cb5181f2fe2f396b1321bfae51d274171de",
+  "symbols_sha256": "5f0fc1b8ad448e04115f97d3979a07a6957ef79524c56aa2c80d103a436f43c7"
+}

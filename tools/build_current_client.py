@@ -17,7 +17,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--runtime-workspace', type=Path, required=True)
     parser.add_argument('--java-home', type=Path, required=True)
-    parser.add_argument('--fabric262-test', action='store_true', help='Enable explicitly labeled development Fabric26.2 testing')
+    parser.add_argument('--fabric262-test', action='store_true', help='Deprecated compatibility flag; Fabric26.2 is supported')
     args = parser.parse_args()
     runtime = args.runtime_workspace.resolve()
     common = ['--runtime-workspace', str(runtime)]

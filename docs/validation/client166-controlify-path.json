@@ -31,16 +31,17 @@
     "local_storage_recovery": "Initialchecksinterruptedbydiskfull;removedonlyduplicatetemporaryrelinkELFsandexpandedoldkitsaftercompressedarchiveCRCverification;canonicalpackages/symbols/sourcearchivespreserved;interruptedchecksretriedandpass"
   },
   "console": {
-    "preflight_verified_events3": "PENDING exact166",
-    "Controlifycontroller_detection_input": "PENDING exact166",
-    "263Fabric_bidirectionalhandoff": "PENDING exact166",
-    "262Fabric_bidirectionalhandoff": "PENDING exact166",
+    "preflight_verified_events3": "Not retrieved; user functional acceptance, no fresh log claim",
+    "Controlifycontroller_detection_input": "PASS user functional report on exact166; no new log assertion",
+    "263Fabric_bidirectionalhandoff": "PASS user functional report on exact166; no new log assertion",
+    "262Fabric_bidirectionalhandoff": "PASS user functional report on exact166; no new log assertion",
     "repeatedtransitions_keyboard_mouse_clicks_typing": "PENDING exact166",
     "onscreenDel_gameplaylook_inventory": "PENDING exact166",
     "rumble_triggers_gyro_audio_regression": "PENDING exact166",
-    "Vanilla_typing_physicalregression": "PENDING exact166"
+    "Vanilla_typing_physicalregression": "PENDING exact166",
+    "user_acceptance_2026_10_30": "User reports \"nice \ud83d\udc4c, all works\" after exact166 delivery, accepts controller detection and bidirectional handoff repair on26.2/26.3 Fabric; no per-feature measurements or endurance duration supplied."
   },
-  "publication": "Consumersource/localapp only;noGitHubreleaseorStore;runtimeunchangedfrompublishedabccf72",
+  "publication": "Source/local candidate preserved; user requests launcher changes before testing next build and approving release/Store",
   "preservation": "Priorcandidates/symbols/source-relink/frozenarchive/releases/originalgamemodJARs/userworldsretained",
   "package_sha256": "695f534ad545799acb3236cc30cd6a470d8a9669b591fac559c9b02f27fbef3e",
   "symbols_sha256": "5fa0e00ac8d4680117dfc6a6322241788a508236e71b9e5a5d82dd2a256b50ae",
