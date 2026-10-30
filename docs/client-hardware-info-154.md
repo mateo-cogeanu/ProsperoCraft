@@ -1,5 +1,7 @@
 # 01.000.154 hardware information development test
 
+**Release withdrawn 2026-10-30 at the user’s request.** The test package and source tag are preserved locally/in source history. Do not use the historical release-download links below; future releases require user confirmation that the exact build works. All other releases, including 153, remain preserved.
+
 This test improves the two F3 hardware names. It is not a Store release or a passing milestone. Standard PS5/Slim and PS5 Pro console validation are both pending. Fabric 26.2 remains held. Install [the development test app](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/client154-hardware-info-test); it uses the existing PPSA99874 identity and replaces the installed client/server app. The unchanged public release remains 153.
 
 | Detected family | CPU name (Minecraft adds its logical count) | Vulkan GPU name |

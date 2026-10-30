@@ -12,7 +12,7 @@ ProsperoCraft handles Minecraft installation, accounts, input and game integrati
 
 ## What can I play?
 
-Development **01.000.156** removes the mandatory kernel-library dependency introduced by the F3 hardware query after an immediate155 launch-crash report. [Startup repair test and evidence](docs/client-hardware-startup-156.md). Console recovery and model/F3 checks remain pending.
+Development **01.000.156** removes the mandatory kernel-library dependency introduced by the F3 hardware query after an immediate155 launch-crash report. [Startup repair test and evidence](docs/client-hardware-startup-156.md). Console recovery and model/F3 checks remain pending. Hardware-test releases 154–156 were withdrawn at the user’s request; future releases require confirmation that the exact build works.
 
 The latest public release is **01.000.153**. Availability and console validation are different: earlier builds have positive PS5 playtests, while exact 153 regression, audio and long-session checks remain pending.
 

@@ -1,5 +1,7 @@
 # 01.000.155 compact F3 hardware labels
 
+**Release withdrawn 2026-10-30 at the user’s request.** The test package and source tag are preserved locally/in source history. Do not use the historical release-download links below; future releases require user confirmation that the exact build works. All other releases, including 153, remain preserved.
+
 Development test 155 shortens the hardware names from 154 and makes the GPU compute-unit difference explicit. Detection, logical CPU counts, the OSHI 6/7 providers and the PS5 Vulkan name-only integration remain unchanged. No new game/mod JAR change, renderer capability/driver/ID change, performance policy or Store release is included. All prior packages and frozen history remain preserved.
 
 | Console | CPU name, after Minecraft's logical-count prefix | GPU name |
