@@ -78,6 +78,14 @@ def prepare(runtime):
         run(LLVM/'llvm-ar','rcs',sdk/'target/lib/libps5platform.a',*objects)
         shutil.copytree(source/'platform/include/ps5platform',sdk/'target/include/ps5platform',dirs_exist_ok=True)
         stamp.write_text(json.dumps(record,indent=2)+'\n')
+    # The cached SDK can be shared by a fresh build directory. Keep its exact
+    # fork source/attribution inputs available even when the binary SDK stamp
+    # avoids recompilation; current packaging consumes these notices.
+    if not source.exists():
+        source.mkdir()
+        exported=subprocess.check_output(['git','-C',str(fork),'archive',LOCK['sdk']['commit']])
+        import io,tarfile
+        with tarfile.open(fileobj=io.BytesIO(exported))as t:t.extractall(source,filter='data')
     venv=ROOT/'.tools/graphics-python'
     if not (venv/'bin/meson').exists():
         run('python3','-m','venv',venv)

@@ -1,0 +1,50 @@
+{
+  "archive_commit": "aa7db35ee9aa5cc6515f49b23ebda6d1ecfcf91d",
+  "fixtures": [
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "7254777e4004e10985578186acb0fd98a8a18035",
+      "original_path": "Client_FreeType_Fonts/validation.json",
+      "destination": "prosperocraft/Client_FreeType_Fonts/validation.json",
+      "sha256": "30321a220c52fb0fd227624291914bb39f9607f9f38fe2c9a0af8c2060231b9f",
+      "bytes": 45256,
+      "git_mode": "100644"
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "7254777e4004e10985578186acb0fd98a8a18035",
+      "original_path": "Client_OpenGL_Provider/validation.json",
+      "destination": "prosperocraft/Client_OpenGL_Provider/validation.json",
+      "sha256": "4c4c8c63df7a8ee622a3af8c594312ce4f24253815f73d749b0d974454637da4",
+      "bytes": 1172284,
+      "git_mode": "100644"
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "7254777e4004e10985578186acb0fd98a8a18035",
+      "original_path": "Client_SPIRV_Cross/validation.json",
+      "destination": "prosperocraft/Client_SPIRV_Cross/validation.json",
+      "sha256": "3bf3a534c047909b69c88e2ebc626e1eaf489bc37a8a1a531ca50782ecab913b",
+      "bytes": 38298,
+      "git_mode": "100644"
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "7254777e4004e10985578186acb0fd98a8a18035",
+      "original_path": "Client_STB_Codecs/validation.json",
+      "destination": "prosperocraft/Client_STB_Codecs/validation.json",
+      "sha256": "591298837f15bef0718800eb28038e72671d8a5d8c2380c95c886868aeca50c6",
+      "bytes": 50371,
+      "git_mode": "100644"
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "7254777e4004e10985578186acb0fd98a8a18035",
+      "original_path": "Client_VMA_Allocator/validation.json",
+      "destination": "prosperocraft/Client_VMA_Allocator/validation.json",
+      "sha256": "9e3207472166856ae6a40bd1469b083e69ba2814666fb758fd369ca644c700e8",
+      "bytes": 50654,
+      "git_mode": "100644"
+    }
+  ]
+}

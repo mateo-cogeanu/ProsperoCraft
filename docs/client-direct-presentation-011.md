@@ -76,4 +76,4 @@ confirmation remain pending. Exact package/hash/checks are recorded in
 
 ## Console acceptance
 
-On2026-10-24 the user explicitly reports “PASS by notification and pass by my eyes.” Retrieved session confirms ALL12 PASS; every present frame0–89/sample+guard record is verified, followed by DestroyJavaVM complete. The native display remains retained by design. Exact tested source/package and evidence are frozen in [Client_Direct_Presentation](../Client_Direct_Presentation/README.md).
+On2026-10-24 the user explicitly reports “PASS by notification and pass by my eyes.” Retrieved session confirms ALL12 PASS; every present frame0–89/sample+guard record is verified, followed by DestroyJavaVM complete. The native display remains retained by design. Exact tested source/package and evidence are frozen in [Client_Direct_Presentation](https://github.com/mateo-cogeanu/ps5-homebrew-history/tree/aa7db35ee9aa5cc6515f49b23ebda6d1ecfcf91d/prosperocraft/Client_Direct_Presentation/README.md).

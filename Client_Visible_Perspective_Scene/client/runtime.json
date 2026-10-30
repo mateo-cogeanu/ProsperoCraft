@@ -1,7 +1,0 @@
-{
-  "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
-  "commit": "db3ac845fa090c64e2a737d6c4222dd37867d7fe",
-  "scope": "Existing resident-library/LWJGL adapter plus opt-in diagnostic tail retention helper. Client008 uses the helper before starting a new run to recover space from old startup/VM logs. JVM implementation and SDK unchanged; game JAR intact.",
-  "java_mode": "Interpreter128MiB/compact headers; no claimed game rendering",
-  "console": "Client008 ALL PASS: tested Java25/LWJGL/RADV command path, diagnostic storage recovery and VM shutdown. Complete Vulkan coverage, SDL/window/shader/game integration not established by008."
-}

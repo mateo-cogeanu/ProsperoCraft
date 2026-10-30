@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN">
- <Appenders><RollingFile name="Startup" fileName="/download0/mc-client/logs/latest.log" filePattern="/download0/mc-client/logs/previous-%i.log">
-  <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level]: %msg%n%throwable"/>
-  <Policies><SizeBasedTriggeringPolicy size="2 MB"/></Policies><DefaultRolloverStrategy max="2"/>
- </RollingFile><Console name="Console"><PatternLayout pattern="[%t/%level]: %msg%n%throwable"/></Console></Appenders>
- <Loggers><Root level="info"><AppenderRef ref="Startup"/><AppenderRef ref="Console"/></Root></Loggers>
-</Configuration>

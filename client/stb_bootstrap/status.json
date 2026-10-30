@@ -206,5 +206,5 @@
   "reported_date": "2026-10-25",
   "milestone": "Client_STB_Codecs",
   "run": "client-01.000.031-1792921801-581678467",
-  "log_evidence": "Client_STB_Codecs/validation.json"
+  "log_evidence": "tests/fixtures/historical-validation/Client_STB_Codecs/validation.json"
 }

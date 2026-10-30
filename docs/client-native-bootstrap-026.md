@@ -85,7 +85,7 @@ Target/package checks pass;actual PS5 result remains pending.
 Console follow-up2026-10-24:human ALL5 PASS is corroborated by saved run
 client-01.000.026-1792852721-557017669.192callbacks,3loopback mixer/context
 lifecycles with peak5957/crossings43/guards+silence,and DestroyJavaVM pass.
-[Client_Callbacks_OpenAL](../Client_Callbacks_OpenAL) preserves exact tested
+[Client_Callbacks_OpenAL](https://github.com/mateo-cogeanu/ps5-homebrew-history/tree/aa7db35ee9aa5cc6515f49b23ebda6d1ecfcf91d/prosperocraft/Client_Callbacks_OpenAL) preserves exact tested
 source/package/symbols/validation. The release includes OpenAL source/relink
 materials;both exact ELF reproduction and edited-source library relinking pass.
 Speaker output,remaining native coverage and Minecraft startup stay unvalidated.

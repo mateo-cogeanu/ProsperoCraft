@@ -1822,3 +1822,7 @@ replacement OpenAL relinks and shipped default-off snapshot checks pass. Catalog
 PR934 submitted;description/credits/icon unchanged. No monitoring after creation.
 See docs/validation/client153-store-publication-2026-10-29.json. Exact153 PS5
 regression/audio/lifecycle/endurance remain pending;Fabric26.2 remains held.
+
+## Source history migration — 2026-10-30
+
+Frozen top-level milestone sources now live in https://github.com/mateo-cogeanu/ps5-homebrew-history at commit aa7db35ee9aa5cc6515f49b23ebda6d1ecfcf91d, separated into runtime/ and prosperocraft/. This supersedes earlier instructions requiring frozen folders in the active tree: preserve their bytes in the archive, existing tags and original release assets. Do not recreate historical folders during sync or new development. New passing snapshots belong in the archive with provenance, checksums and original validation. Compatibility implementations, unfinished features, active regression fixtures and licensing/relink tooling stay in their canonical active project. Do not remove an implementation because its feature is disabled or awaiting console acceptance. See docs/source-organization.md (Development/docs/source-organization.md in the published runtime layout).

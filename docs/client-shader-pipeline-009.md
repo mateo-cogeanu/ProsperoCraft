@@ -61,4 +61,4 @@ until this exact build passes on PS5.
 
 ## Console acceptance
 
-All eleven009 rows pass on2026-10-24, confirmed by the user and retrieved current-run reports. Logs verify18 shader dispatches, full output/guard checks,3 lifecycles and DestroyJavaVM. Exact tested bytes are frozen in [Client_Shader_Pipeline](../Client_Shader_Pipeline/README.md).
+All eleven009 rows pass on2026-10-24, confirmed by the user and retrieved current-run reports. Logs verify18 shader dispatches, full output/guard checks,3 lifecycles and DestroyJavaVM. Exact tested bytes are frozen in [Client_Shader_Pipeline](https://github.com/mateo-cogeanu/ps5-homebrew-history/tree/aa7db35ee9aa5cc6515f49b23ebda6d1ecfcf91d/prosperocraft/Client_Shader_Pipeline/README.md).

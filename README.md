@@ -128,3 +128,5 @@ The table links each capability to its first public release. Initial development
 Original ProsperoCraft code is **GPL-3.0-or-later**, copyright © 2026 mateo-cogeanu, ProsperoCraft. See [LICENSE](LICENSE) and [NOTICE](NOTICE) for redistribution, source and upstream notices. Upstream components and artwork retain their own terms. Releases include matching OpenAL corresponding source/relink materials and checksums.
 
 Minecraft files and third-party trademarks are not relicensed by this project. ProsperoCraft is unofficial and is not affiliated with Mojang, Microsoft or Sony.
+
+Frozen source snapshots now live in the [source history archive](https://github.com/mateo-cogeanu/ps5-homebrew-history). Active builds stay here; original release downloads and tags are unchanged. See [source organization and build verification](docs/source-organization.md).

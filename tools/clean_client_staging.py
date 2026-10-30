@@ -15,7 +15,7 @@ def sha(path):
 def main():
  parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--apply',action='store_true');args=parser.parse_args();total=0
  for variant,milestone in FROZEN.items():
-  record=json.loads((ROOT/milestone/'validation.json').read_text());preserved=ROOT/'dist/milestones'/(milestone+'-'+record['app_version'])/'PPSA99874-full-local.zip'
+  record=json.loads((ROOT/'tests/fixtures/historical-validation'/milestone/'validation.json').read_text());preserved=ROOT/'dist/milestones'/(milestone+'-'+record['app_version'])/'PPSA99874-full-local.zip'
   if not preserved.is_file()or sha(preserved)!=record['tested_full_package_sha256']:raise ValueError('Missing/corrupt preserved package: '+str(preserved))
   work=ROOT/('build/client-'+variant+'-probe');candidates=[]
   with zipfile.ZipFile(preserved)as package:

@@ -12,4 +12,4 @@ Host checks use a real JVM with XcheckJNI/UBSan and an actual host shared librar
 
 Local package and hash are in `client/build-status.json` and `dist/client/SHA256SUMS`. Raw logs remain local. Keep the app open after the rows for reports. Actual LWJGL native core/function-provider integration, GPU presentation and SDL/Vulkan remain next; server two-hour endurance remains deferred.
 
-The matching source/package and public provisioning record are preserved in [Client_Native_Loading](../Client_Native_Loading/README.md). The exact tested full package SHA-256 is `abc6aef0f162d9d134dec298742f27dfdb91a80345bb81ac54498239d34fd890`.
+The matching source/package and public provisioning record are preserved in [Client_Native_Loading](https://github.com/mateo-cogeanu/ps5-homebrew-history/tree/aa7db35ee9aa5cc6515f49b23ebda6d1ecfcf91d/prosperocraft/Client_Native_Loading/README.md). The exact tested full package SHA-256 is `abc6aef0f162d9d134dec298742f27dfdb91a80345bb81ac54498239d34fd890`.

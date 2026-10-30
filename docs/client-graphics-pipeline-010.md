@@ -66,4 +66,4 @@ before acceptance on the actual PS5 for this exact package.
 
 ## Console acceptance
 
-The user reported ALL PASS on2026-10-24 after instructions to run all twelve rows and confirm the colored preview remains after JVM shutdown. Retrieved current-run reports confirm9 draws/all pixels+guards/3lifecycles/readback publish/DestroyJavaVM. Visual acceptance is the user response to that combined checklist, not an inference from logs alone. Exact tested bytes and scope are frozen in [Client_Graphics_Pipeline](../Client_Graphics_Pipeline/README.md).
+The user reported ALL PASS on2026-10-24 after instructions to run all twelve rows and confirm the colored preview remains after JVM shutdown. Retrieved current-run reports confirm9 draws/all pixels+guards/3lifecycles/readback publish/DestroyJavaVM. Visual acceptance is the user response to that combined checklist, not an inference from logs alone. Exact tested bytes and scope are frozen in [Client_Graphics_Pipeline](https://github.com/mateo-cogeanu/ps5-homebrew-history/tree/aa7db35ee9aa5cc6515f49b23ebda6d1ecfcf91d/prosperocraft/Client_Graphics_Pipeline/README.md).

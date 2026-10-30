@@ -72,11 +72,11 @@ The packaging flow currently uses the runtime workspace's macOS toolchain. Nativ
 
 The user reports **ALL PASS** after the exact shared-title000 package on2026-10-22. All six foundation rows are accepted on the actual PS5. The tested package hash is `e2eb90a727fc670418437937b292b152c5177e3e02077aa114049bc6c9c11fbf`.
 
-The frozen [Client_Foundation source/validation](../Client_Foundation/README.md) and [release](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/Client_Foundation-v01.000.000) preserve this milestone. Public packaging excludes54 original upstream JARs without rebuilding retained binaries; the attached helper restores all tested bytes from hash-verified local preparation. Native LWJGL loading, GPU/SDL/Vulkan presentation, audio, controller gameplay and actual Minecraft startup remain unvalidated. Continue future development outside the frozen folder. Server endurance remains deferred.
+The frozen [Client_Foundation source/validation](https://github.com/mateo-cogeanu/ps5-homebrew-history/tree/aa7db35ee9aa5cc6515f49b23ebda6d1ecfcf91d/prosperocraft/Client_Foundation/README.md) and [release](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/Client_Foundation-v01.000.000) preserve this milestone. Public packaging excludes54 original upstream JARs without rebuilding retained binaries; the attached helper restores all tested bytes from hash-verified local preparation. Native LWJGL loading, GPU/SDL/Vulkan presentation, audio, controller gameplay and actual Minecraft startup remain unvalidated. Continue future development outside the frozen folder. Server endurance remains deferred.
 
 ## Development001: resident JNI loading
 
-[Client Native Loading001](client-native-loading-001.md) is the next seven-row milestone, reported ALL PASS on the PS5 on2026-10-22. It adds actual JVM library/native symbol discovery and scoped function calls through a consumer-owned resident library. Frozen000 is retained;001 is now frozen as [Client_Native_Loading](../Client_Native_Loading/README.md). This advances native-loading infrastructure without claiming full LWJGL native bindings, arbitrary ELF loading or GPU rendering.
+[Client Native Loading001](client-native-loading-001.md) is the next seven-row milestone, reported ALL PASS on the PS5 on2026-10-22. It adds actual JVM library/native symbol discovery and scoped function calls through a consumer-owned resident library. Frozen000 is retained;001 is now frozen as [Client_Native_Loading](https://github.com/mateo-cogeanu/ps5-homebrew-history/tree/aa7db35ee9aa5cc6515f49b23ebda6d1ecfcf91d/prosperocraft/Client_Native_Loading/README.md). This advances native-loading infrastructure without claiming full LWJGL native bindings, arbitrary ELF loading or GPU rendering.
 
 ## Development002: actual LWJGL core and resident provider
 
@@ -84,7 +84,7 @@ The frozen [Client_Foundation source/validation](../Client_Foundation/README.md)
 
 ## Client002 console acceptance — 2026-10-23
 
-The human tester reports ALL PASS for all eight rows of PPSA99874 client01.000.002. The actual LWJGL native memory/JNI subset and resident provider are frozen as [Client_LWJGL_Core](../Client_LWJGL_Core/README.md), with the exact package hash and source/runtime pins. GPU presentation, SDL/Vulkan, complete native coverage and Minecraft main remain unvalidated. Server endurance remains deferred.
+The human tester reports ALL PASS for all eight rows of PPSA99874 client01.000.002. The actual LWJGL native memory/JNI subset and resident provider are frozen as [Client_LWJGL_Core](https://github.com/mateo-cogeanu/ps5-homebrew-history/tree/aa7db35ee9aa5cc6515f49b23ebda6d1ecfcf91d/prosperocraft/Client_LWJGL_Core/README.md), with the exact package hash and source/runtime pins. GPU presentation, SDL/Vulkan, complete native coverage and Minecraft main remain unvalidated. Server endurance remains deferred.
 
 ## Native Graphics003 — console pending
 

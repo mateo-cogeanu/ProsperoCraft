@@ -1,7 +1,0 @@
-{
-  "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
-  "commit": "af85edc2f22edab590971adbedee415bfdc1521f",
-  "scope": "Existing external resident-library adapter embeds the actual LWJGL native core subset and PS5 SharedLibrary exports. No new Java runtime source patch; game JAR intact.",
-  "java_mode": "Interpreter128MiB/compact headers; no claimed game rendering",
-  "console": "Client002 ALL PASS: actual upstream LWJGL memory/JNI core and PS5 resident provider; arbitrary ELF/graphics not validated"
-}

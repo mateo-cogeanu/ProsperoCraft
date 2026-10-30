@@ -36,4 +36,4 @@ Package SHA256 and completed host/package checks are recorded in
 
 ## Console acceptance
 
-All ten008 rows pass on2026-10-24, confirmed directly by the user. Retrieved logs corroborate12 standard GPU submissions,3 lifecycles/loader cleanup and final DestroyJavaVM. Frozen source, exact tested package and scope are recorded in [Client_Vulkan_Bindings](../Client_Vulkan_Bindings/README.md).
+All ten008 rows pass on2026-10-24, confirmed directly by the user. Retrieved logs corroborate12 standard GPU submissions,3 lifecycles/loader cleanup and final DestroyJavaVM. Frozen source, exact tested package and scope are recorded in [Client_Vulkan_Bindings](https://github.com/mateo-cogeanu/ps5-homebrew-history/tree/aa7db35ee9aa5cc6515f49b23ebda6d1ecfcf91d/prosperocraft/Client_Vulkan_Bindings/README.md).

@@ -30,5 +30,5 @@
   "run": "client-01.000.036-1792927908-979234410",
   "reported_date": "2026-10-25",
   "milestone": "Client_SPIRV_Cross",
-  "validation": "Client_SPIRV_Cross/validation.json"
+  "validation": "tests/fixtures/historical-validation/Client_SPIRV_Cross/validation.json"
 }

@@ -40,4 +40,4 @@ recovery/audio/callbacks/gameplay and server two-hour endurance remain unvalidat
 
 ## Console acceptance
 
-The user confirms “tiles nice, inputs all accepted” on2026-10-24. Retrieved session ALL12 PASS and logs verify eventMask15/stateMask15,537 graphics/sample/guard/FIFO frames and DestroyJavaVM complete. Exact tested source/package and evidence are frozen in [Client_SDL_Window_Input](../Client_SDL_Window_Input/README.md).
+The user confirms “tiles nice, inputs all accepted” on2026-10-24. Retrieved session ALL12 PASS and logs verify eventMask15/stateMask15,537 graphics/sample/guard/FIFO frames and DestroyJavaVM complete. Exact tested source/package and evidence are frozen in [Client_SDL_Window_Input](https://github.com/mateo-cogeanu/ps5-homebrew-history/tree/aa7db35ee9aa5cc6515f49b23ebda6d1ecfcf91d/prosperocraft/Client_SDL_Window_Input/README.md).

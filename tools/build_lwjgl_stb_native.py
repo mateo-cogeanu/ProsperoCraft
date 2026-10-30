@@ -4,7 +4,9 @@ from pathlib import Path
 import argparse,json,hashlib,subprocess,urllib.request,concurrent.futures,shutil
 ROOT=Path(__file__).resolve().parents[1];LLVM=Path('/opt/homebrew/opt/llvm/bin')
 def build(runtime,java_home,host=False,offline=False):
- lock=json.loads((ROOT/'client/ports/stb/native-sources.json').read_text());cache=ROOT/'.tools/lwjgl-stb-src';cache.mkdir(exist_ok=True);out=ROOT/('build/lwjgl-stb-host'if host else'build/lwjgl-stb-ps5');out.mkdir(exist_ok=True)
+ # Canonicalize a shared verified source cache so its __FILE__ assertion strings
+ # do not change when the same dependency is reached through a checkout symlink.
+ lock=json.loads((ROOT/'client/ports/stb/native-sources.json').read_text());cache=(ROOT/'.tools/lwjgl-stb-src').resolve();cache.mkdir(exist_ok=True);out=ROOT/('build/lwjgl-stb-host'if host else'build/lwjgl-stb-ps5');out.mkdir(exist_ok=True)
  for row in lock['files']:
   p=cache/row['file']
   if not p.exists():

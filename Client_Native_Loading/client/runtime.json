@@ -1,7 +1,0 @@
-{
-  "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
-  "commit": "e55f93383d11177ff8c65291ebf77bddf482fd5b",
-  "scope": "Consumer-owned resident JNI object groups via external probe-spec; ordinary System.loadLibrary and JNI symbol lookup plus scoped real-function registry. No HotSpot/game source change; arbitrary ELF loading unported.",
-  "java_mode": "Interpreter128MiB/compact headers; no claimed game rendering",
-  "console": "Client001 ALL PASS: external resident System.loadLibrary/JNI_OnLoad/native lookup and scoped real-function calls; arbitrary ELF/graphics not validated"
-}

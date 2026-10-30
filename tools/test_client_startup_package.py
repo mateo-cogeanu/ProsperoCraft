@@ -282,7 +282,7 @@ assert package.read_bytes()==(runtime/'dist/PPSA99874.zip').read_bytes()
 for folder,digest in [('Client_Continuous_Direct_Scene-01.000.023','846cd9adea6f9e6b04f80df461424c26b1fec6aa080ed641c35e7cfb16488ea4'),('Client_Visible_Perspective_Scene-01.000.022','9d49135a4dcbd66e93ef496e442c7845964e08aa6664c9dc26546a94196e450e')]:assert sha((ROOT/'dist/milestones'/folder/'PPSA99874-full-local.zip').read_bytes())==digest
 with zipfile.ZipFile(package)as z:
  assert z.read('PPSA99874/assets/java25/ports/lwjgl-3.4.3-ps5-modules.jar')==(ROOT/'build/client-ports/lwjgl-modules/lwjgl-3.4.3-ps5-modules.jar').read_bytes()
- validation=json.loads((ROOT/'Client_OpenGL_Provider/validation.json').read_text())
+ validation=json.loads((ROOT/'tests/fixtures/historical-validation/Client_OpenGL_Provider/validation.json').read_text())
  current_gl=json.loads(z.read('PPSA99874/assets/java25/opengl-provider-audit.json'));old_gl=validation['opengl_provider_audit']
  assert current_gl['renames']=={**old_gl['renames'],'strdup':'clientgpu_strdup','strndup':'clientgpu_strndup'}
  for key,value in old_gl.items():
@@ -307,7 +307,7 @@ with zipfile.ZipFile(package)as z:
  assert b'OSMesa'in z.read('PPSA99874/assets/java25/classes/ClientStartup25.class')
  assert b'ps5clientgl'in z.read('PPSA99874/assets/java25/classes/ClientStartup25.class')
  assert sha((ROOT/'dist/milestones/Client_OpenGL_Provider-01.000.029/PPSA99874-full-local.zip').read_bytes())=='ed0cc6f49528b44b6d131c800e3c6359d01e009ae52524b7e96262a71491b685'
- stb_validation=json.loads((ROOT/'Client_STB_Codecs/validation.json').read_text())
+ stb_validation=json.loads((ROOT/'tests/fixtures/historical-validation/Client_STB_Codecs/validation.json').read_text())
  with zipfile.ZipFile(ROOT/'dist/milestones/Client_STB_Codecs-01.000.031/PPSA99874-full-local.zip')as stb_baseline:
   assert z.read(prefix+'assets/java25/stb-audit.json')==stb_baseline.read(prefix+'assets/java25/stb-audit.json')
   assert next(g for g in groups if g['name']=='lwjgl_stb')==json.loads(stb_baseline.read(prefix+'assets/java25/resident-libraries-audit.json'))['external_resident_libraries'][-1]
@@ -327,7 +327,7 @@ with zipfile.ZipFile(package)as z:
  assert sha((ROOT/'dist/milestones/Client_FreeType_Fonts-01.000.033/PPSA99874-full-local.zip').read_bytes())=='e7666f17dedda986507f9ba19fa11183bf89baf07971044659dcee2416022afc'
  assert failure_hash(ROOT/'dist/failures/Client_Original_Startup-01.000.032/PPSA99874-full-local.zip')=='5d6fb33084876e0d0b08e5b020c6de196b98508d31b983a6f33cd9028635e434'
  for milestone,version,group,audit in [('Client_VMA_Allocator','01.000.035','lwjgl_vma','vma'),('Client_SPIRV_Cross','01.000.036','ps5spvc','spvc')]:
-  record=json.loads((ROOT/milestone/'validation.json').read_text());frozen=ROOT/'dist/milestones'/(milestone+'-'+version)/'PPSA99874-full-local.zip'
+  record=json.loads((ROOT/'tests/fixtures/historical-validation'/milestone/'validation.json').read_text());frozen=ROOT/'dist/milestones'/(milestone+'-'+version)/'PPSA99874-full-local.zip'
   assert sha(frozen.read_bytes())==record['tested_full_package_sha256']
   with zipfile.ZipFile(frozen)as accepted:
    current_audit=json.loads(z.read(prefix+'assets/java25/'+audit+'-audit.json'))

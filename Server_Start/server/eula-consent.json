@@ -1,8 +1,0 @@
-{
-  "date": "2026-10-14",
-  "eula_url": "https://aka.ms/MinecraftEULA",
-  "source": "Direct human response in project chat",
-  "response": "Yes, I agree\u2014enable this server test",
-  "scope": "This PS5 Minecraft server test",
-  "implementation": "ServerStart25 checks explicit ps5.mc.eulaAccepted=true before writing eula.txt in the isolated test directory"
-}

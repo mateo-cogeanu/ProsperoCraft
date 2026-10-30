@@ -1,7 +1,0 @@
-{
-  "file": "org_lwjgl_system_macosx_DynamicLinkLoader.c",
-  "url": "https://raw.githubusercontent.com/LWJGL/lwjgl3/30fac9b95f99cda97312232be25ba55297bf9951/modules/lwjgl/core/src/generated/c/macos/org_lwjgl_system_macosx_DynamicLinkLoader.c",
-  "size": 1283,
-  "sha256": "1b066e0489f9da953d6345b0f0597e1739790b2088c795585fbef99f44db7ebd",
-  "scope": "Upstream macOS dlopen/dlsym bindings for host SDL tests only; never linked on PS5"
-}

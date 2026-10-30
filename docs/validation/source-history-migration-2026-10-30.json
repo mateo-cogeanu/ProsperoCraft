@@ -1,0 +1,394 @@
+{
+  "date": "2026-10-30",
+  "scope": "Source-history migration and host/target build checks only; no release or Store publication",
+  "baseline": {
+    "runtime_repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
+    "runtime_commit": "b1df916944e53dee39ee41f6681f1af3f7dc32a1",
+    "consumer_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+    "consumer_commit": "7254777e4004e10985578186acb0fd98a8a18035",
+    "publication_checkouts": "Both clean on main and equal to fetched origin/main. Runtime enclosing workspace source was untracked in its separate local Git repository; no reset/discard performed.",
+    "runtime_build": "PASS gmake CONF=ps5-bootstrap hotspot java.base-java java.base-libs against existing configured cache",
+    "runtime_jni_regression": "PASS actual NativeLibraries JNI normal/refusal/direct scratch paths, paired cleanup, Xcheck:jni and UBSan",
+    "consumer_build": "PASS package_client_vulkan.py --startup --launcher-channel temp_gametest --offline, using existing native prerequisites",
+    "consumer_package": "PASS full test_client_startup_package.py",
+    "consumer_build_check_package_sha256": "4ad6424bbf943b471b4718192351c58f60c12584e1ac09fb57e9f1d4c5911103",
+    "pre_existing_limitations": [
+      "java25_source.py incremental check rejects patch0009 in a fully patched source cache because later patches overlap. Clean pinned source applies the complete series and builds successfully. No cache reset was used.",
+      "Direct consumer packager required prior native graphics outputs. Fresh checkout exposed missing RADV compile_commands/link recipe/license inputs. New build_current_client.py explicitly runs pinned preparation and native graphics prerequisite packaging first.",
+      "test_client153_release.py initially lacked local reproduced.elf prerequisites; reconstructed exact normal/replacement relinks from unchanged released kit and reran successfully.",
+      "Consumer startup host test requires a host LWJGL JNI library. Built it with existing --host tooling and reran successfully.",
+      "Frozen STB object hash embeds an absolute __FILE__ assertion path. Canonicalizing the same verified dependency-cache path through a checkout symlink restores the exact original object hash; strict tests unchanged. Arbitrary different cache locations may still change legacy diagnostic strings."
+    ]
+  },
+  "archive": {
+    "repository": "https://github.com/mateo-cogeanu/ps5-homebrew-history",
+    "source_snapshot_commit": "aa7db35ee9aa5cc6515f49b23ebda6d1ecfcf91d",
+    "index_follow_up_commit": "6f0aa7e63b76153d07e222b1d1a6d5f293725d94",
+    "manifest_sha256": "ce9c4641f9864ffd969fe8d44f82bdb42de536e4e4d2c0ba6d790786c6e4ddcd",
+    "snapshots": 32,
+    "preserved_files": 3055,
+    "preserved_bytes": 218924094,
+    "independent_verification": "PASS independent clone from GitHub; all manifest bytes, lengths, modes, source-tree inventories and original validation records verified, then every original local source byte compared before removal.",
+    "integrity_scope": "Original per-file SHA256, modes, source repository/commit and original paths are in manifest.json; source/validation/licensing bytes remain unchanged.",
+    "archive_whitespace": "Initial git diff --check reports whitespace already present in frozen source and patch text. Original bytes intentionally preserved. Archive index follow-up and active migration diffs are checked separately.",
+    "license_scope": "Per-snapshot notices plus original root licensing context preserved. Original release assets/tags and OpenAL source/relink materials retained in their existing repositories."
+  },
+  "active_preservation": {
+    "runtime_snapshots_removed": 9,
+    "consumer_snapshots_removed": 23,
+    "retained_test_fixtures": 5,
+    "fixture_integrity": "PASS byte-identical to archived validation records; local provenance index retained.",
+    "compatibility": "All active runtime patches, fixtures, native adapters, optional/default-off features, consumer client/server implementations and unfinished work retained. Only publication/build orchestration, evidence paths and documentation changed.",
+    "privacy": "Archive input selected exclusively from previously tracked public source snapshots and license/context files. No compiled packages, game/mod JARs, dependency caches, raw console reports or credentials added.",
+    "local_recovery": "Independent archive clone, original Git histories and local tested packages retained. One untracked historical Python cache was moved into ignored local recovery before runtime retirement."
+  },
+  "checks": {
+    "fresh_runtime": "PASS new checkout of pinned b219cdec88ca2e165711f63b8158ab78303facc8; all132 active patches applied, fresh configure/HotSpot/java.base native+classes builds completed successfully.",
+    "target_audit": "PASS 11 target libraries, JNI exports and Java25 class formats.",
+    "host_runtime_regressions": "PASS NativeLibraries JNI scratch, core direct scratch ASan/UBSan, network-node scratch ASan/UBSan/concurrency, default/extended sync pool exhaustion/reuse/waits/8000leases and target IR checks.",
+    "publication_guard": "PASS seven real local Git-remote tests: verified retirement/repeat, changed source bytes, changed executable mode, extra local file, missing original, corrupt manifest pin and unsafe path. Refusals preserve originals.",
+    "consumer_startup_host": "PASS CPU property handoff, launch policy, observer/transition sampling, bytecode sequencing, GC logging, real LWJGL allocator and unchanged original host Main reaching expected missing-host-native exit253. No host menu pass.",
+    "original_release153": "PASS original package CRC/identity/privacy/dependency/notices, exact normal/replacement OpenAL native relinks and shipped snapshot defaults; unchanged release package SHA256 07f3e3b2bed254ffd3c6b42cefca66892f6f48d61d2f2ba512944e959b4ce4b0.",
+    "fresh_consumer": "PASS isolated full build_current_client.py pipeline: pinned native preparation, graphics prerequisites, current Java/runtime/native integration, metadata153 and signing/package container checks. Final STB cache-path canonicalization repackage succeeds.",
+    "cleaned_consumer_package": "PASS full unchanged strict package suite in both cleaned canonical checkout and isolated rebuilt checkout. CRC/signatures,identity,deps,19resident groups,symbol/constructor policy,original JAR hashes,all frozen regression inputs and required notices checked.",
+    "documentation_links": "PASS all maintained first-party Markdown targets,59 archive links in independent clone,HTTP200 archive/runtime release/consumer153 release. Original hash-pinned toolkit documentation retains 81 pre-existing links to omitted upstream sample/runtime files; unchanged from baseline,listed separately.",
+    "publication_idempotence": "PASS runtime sync pushed6ab44034fd2b0c6e5184cfdbd5b0df72fee393c0; immediate repeat sync created no commit, working tree clean, all9 archived runtime folders remain absent.",
+    "active_git_diff_check": "PASS runtime sync staged git diff --check gate and consumer staged/unstaged git diff --check.",
+    "fresh_build_check_package_sha256": "bb9c4bbf38f037d480590dcfe3a9881281b92528acf571a68598e5854d0720fd",
+    "release_preservation": "PASS complete runtime and consumer GitHub release metadata/asset inventories compare unchanged before/after source migration.",
+    "pre_existing_vendored_links": [
+      {
+        "document": "client/launcher/toolkit/docs/COMPONENTS.md",
+        "relative_target": "../src/concepts/components/lists_page.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/COMPONENTS.md",
+        "relative_target": "../src/concepts/components/data_page.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/COMPONENTS.md",
+        "relative_target": "../src/concepts/components/layout_page.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/aurora.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/paper.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/neon.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/editorial.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/carousel.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/radial.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/hud.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/dashboard.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/player.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/keyboard.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/constellation.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/terminal.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/store.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/trophies.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/files.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/inventory.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/boot.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/settings.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/themes.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/components.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/toolbox.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/aurora.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../tests/unit/aurora_test.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/paper.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../tests/unit/paper_test.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/neon.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../tests/unit/neon_test.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/editorial.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../tests/unit/editorial_test.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/carousel.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../tests/unit/carousel_test.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/radial.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../tests/unit/radial_test.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/hud.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../tests/unit/hud_test.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/dashboard.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../tests/unit/dashboard_test.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/player.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../tests/unit/player_test.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/keyboard.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../tests/unit/keyboard_test.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/constellation.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../tests/unit/constellation_test.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/terminal.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../tests/unit/terminal_test.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/store.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../tests/unit/store_test.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/trophies.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../tests/unit/trophies_test.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/files.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../tests/unit/files_test.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/inventory.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../tests/unit/inventory_test.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/boot.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../tests/unit/boot_test.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/settings.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../tests/unit/settings_test.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/themes.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../tests/unit/concepts_test.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/components.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../tests/unit/concepts_test.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../src/concepts/toolbox.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/DESIGNS.md",
+        "relative_target": "../tests/unit/concepts_test.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/components/collections.md",
+        "relative_target": "../../src/concepts/components/collections_page.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/components/collections.md",
+        "relative_target": "../../tests/unit/components_collections_test.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/components/layout.md",
+        "relative_target": "../../src/concepts/components/layout_page.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/components/layout.md",
+        "relative_target": "../../tests/unit/components_layout_test.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/components/lists.md",
+        "relative_target": "../../src/concepts/components/lists_page.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/components/lists.md",
+        "relative_target": "../../tests/unit/components_list_test.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/platform/CONFIGURATION.md",
+        "relative_target": "../../sce_sys/param.json"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/platform/README.md",
+        "relative_target": "../../src/platform/ps5/display_egl.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/platform/RUNTIME_SHIM.md",
+        "relative_target": "../../tooling/native/libc_builder.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/platform/RUNTIME_SHIM.md",
+        "relative_target": "../../tooling/native/runtime/api-surface.txt"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/platform/RUNTIME_SHIM.md",
+        "relative_target": "../../tooling/native/runtime/imports.txt"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/platform/RUNTIME_SHIM.md",
+        "relative_target": "../../tooling/native/self_container.cpp"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/platform/RUNTIME_SHIM.md",
+        "relative_target": "../../tools/rebuild-libc.sh"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/platform/RUNTIME_SHIM.md",
+        "relative_target": "../../tools/rebuild-libc.ps1"
+      },
+      {
+        "document": "client/launcher/toolkit/docs/platform/RUNTIME_SHIM.md",
+        "relative_target": "../../runtime/libc.prx.sha256"
+      }
+    ],
+    "tracked_file_audit": {
+      "runtime_files": 473,
+      "consumer_files": 1483,
+      "result": "PASS no compiled packages/game JARs/caches/raw logs; maintained local Markdown targets resolve. Vendor subset exceptions preserved as exact upstream input."
+    }
+  },
+  "verification_isolation": "Fresh runtime source/configuration/object outputs and fresh consumer checkout/build/dist. Reused revision/hash-checked SDK/source/download caches, not old project source/build outputs. Preserved immutable local milestone ZIPs explicitly linked as regression test inputs; tests check their expected hashes. No removed frozen source folder supplied the clean build.",
+  "console_validation": "No new PS5 acceptance claimed. Exact rebuilt153 runtime/native/audio/input/world/save/lifecycle and endurance regressions remain pending; Fabric26.2 stays held. Previously recorded passing snapshots and release identities are unchanged.",
+  "history": "No force-push or history rewrite. Removing snapshots from the current tree does not shrink historical Git objects in existing clones."
+}

@@ -1,1 +1,0 @@
-{"repository":"https://github.com/kcat/openal-soft.git","tag":"1.25.2","commit":"b2c48f7718ef3fcf67921a8b6534c4914e328970","scope":"Real OpenAL Soft mixer,upstream loopback and null output;no PS5 speaker output yet","license":"LGPL-2.0-or-later with bundled BSD/MIT components;retain source/relink inputs for distribution"}

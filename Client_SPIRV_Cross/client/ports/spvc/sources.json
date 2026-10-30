@@ -1,9 +1,0 @@
-{
-  "repository": "https://github.com/KhronosGroup/SPIRV-Cross",
-  "tag": "vulkan-sdk-1.4.363.0",
-  "commit": "f11ba9f0b21ba8fc15153d50a2a1ae31ab1cf8f7",
-  "file": "spirv-cross-source.tar.gz",
-  "url": "https://codeload.github.com/KhronosGroup/SPIRV-Cross/tar.gz/f11ba9f0b21ba8fc15153d50a2a1ae31ab1cf8f7",
-  "size": 2027619,
-  "sha256": "92b0458889ed77eac9892b3be5a41e3cf716849fd90f39632e159e555abf3d03"
-}

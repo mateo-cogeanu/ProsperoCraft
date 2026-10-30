@@ -47,5 +47,5 @@
   "reported_date": "2026-10-25",
   "milestone": "Client_OpenGL_Provider",
   "run": "client-01.000.029-1792919308-523542436",
-  "log_evidence": "Client_OpenGL_Provider/validation.json"
+  "log_evidence": "tests/fixtures/historical-validation/Client_OpenGL_Provider/validation.json"
 }

@@ -31,5 +31,5 @@
   "run": "client-01.000.035-1792926499-461213821",
   "reported_date": "2026-10-25",
   "milestone": "Client_VMA_Allocator",
-  "validation": "Client_VMA_Allocator/validation.json"
+  "validation": "tests/fixtures/historical-validation/Client_VMA_Allocator/validation.json"
 }

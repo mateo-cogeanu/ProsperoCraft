@@ -36,5 +36,5 @@
   "run": "client-01.000.033-1792924441-82563672",
   "reported_date": "2026-10-25",
   "milestone": "Client_FreeType_Fonts",
-  "validation": "Client_FreeType_Fonts/validation.json"
+  "validation": "tests/fixtures/historical-validation/Client_FreeType_Fonts/validation.json"
 }

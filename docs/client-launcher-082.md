@@ -2,7 +2,7 @@
 
 PPSA99874 development082 continues consumer commit1a5a996 and runtime9afa03ad.
 [Published release](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.082)
-and [frozen scoped console pass](../Client_Launcher_Lifecycle/README.md). Install the complete folder,
+and [frozen scoped console pass](https://github.com/mateo-cogeanu/ps5-homebrew-history/tree/aa7db35ee9aa5cc6515f49b23ebda6d1ecfcf91d/prosperocraft/Client_Launcher_Lifecycle/README.md). Install the complete folder,
 including sce_sys/param.json. The app still requests4096MiB at
 `/download0/ProsperoCraft`; instances, cache, options and worlds are preserved.
 Only exact26.3 with an SDL receipt can launch in demo mode. Microsoft approval
