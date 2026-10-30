@@ -1834,3 +1834,17 @@ The user requires physical-console confirmation that the exact build works befor
 ## Exact158 publication authorization — 2026-10-30
 
 The user explicitly requests a GitHub release and update of the existing ProsperoStore listing for exact158, package22d2c4864e7d797d066337a973f7560e7e4e7f003f9b19991b6816d7e982a954. Publish that existing candidate without rebuilding; retain matching OpenAL source/relink/checksums and honest pending-console validation. Change only Store version/artifact/digest and changelog; preserve its description, credits and icon. This is explicit publication authorization for158, not formal ALL PASS or authorization for future builds. Existing release gate otherwise remains.
+
+##164 scoped Controlify SDL event frontend — 2026-10-30
+
+163liveFabrictrace hasneutralcontroller+physicalkeypost0;originalControlify
+SDLControllerManager globalfilteracceptsonly1541/1542andpollssharedqueue.
+164usesruntimeabccf72opt-in SDL3alias3eventlookups toconsumerfacade;gamebaseSDL
+queue/filterandallotherAPIsunchanged. PreJVMcheckedprocesslifetimeeventwatch,
+256compactconnectioncopies,mainthreadlocalfilter/poll/peek;overflowexpliciterror,
+notfullSDLinstance/reentrantfilter/generalAPIsandbox. OriginalJARsunchanged.
+Actualmodcallback/realSDLASanUBSan+ELF1942entries/exactly3aliaspointers/package/
+relinkchecks;PS5bidirectionalhandoff/controllers/featurespending. See
+ docs/client-controlify-event-isolation-164.md. Preserve163Vanillatypingacceptance,
+161acceptance/priorcandidates;release/Storehold. ReusableregistrytoolsinJava repo,
+consumerfacade/policy/validationhere;rawreportslocal.

@@ -91,3 +91,11 @@ Matching source/relink, symbols, package and checksums remain local.
 - Code FNV64: `7b12ef210f5728fd`
 
 [Validation record](validation/client163-input-repeat-handoff.json).
+
+## Console follow-up
+
+The user accepts16326.2 Vanilla typing and leaves26.3 Fabric running with
+Controlify handoff still broken (same report on26.2 Fabric). The live trace
+shows neutral controller state and dropped key events.164 identifies and
+repairs the shared SDL filter/queue conflict; see
+[the follow-up](client-controlify-event-isolation-164.md).

@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-30",
+  "version": "01.000.164",
+  "title_id": "PPSA99874",
+  "package_sha256": "1ac6b09c1a812a60b375466debc20dca616aac7d00e66cd52b5611040b52159a",
+  "symbols_sha256": "682da77ccf8e5fab89bc7039c633d13bb1eb72656a0066ca642a3496b2a71170",
+  "symbols_text_fnv64": "bffa0b6cb9da5616",
+  "runtime_commit": "abccf72189bc5547e08aab28a923e6d55d13fc33",
+  "runtime_changes": "Opt-inresidentalias3symbollookups only;HotSpot/corelibraries/heap/GC unchanged",
+  "prior_console": {
+    "163262Vanilla_typing": "USER ACCEPTED satisfied",
+    "163263Fabric_handoff": "FAILED livecaptured;26.2Fabricsameuserreport"
+  },
+  "evidence": {
+    "run": "client-01.000.163-1793385726-499143452",
+    "identity": "26.3 Fabric0.20.1 Controlify3.5.3+mc26.3",
+    "native_trace": "16snapshotsopened1,buttons0,all6axes0,cursorhidden;physicalkeyboardconnected/uninterceptedvalidslotsbutkey_event_posted0",
+    "cause": "OriginalSDLControllerManager globalfilterreturns trueonly1541/1542;sharedresidentSDLqueuephysicaleventsdroppedbeforegamemodecallbacks;modalsoPollsqueue",
+    "original_mod_sha256": "bc759f557d122079bb9078741065935bf3aa9bfd5e60b414e242633c0dded86a",
+    "raw": "Localignoredreports"
+  },
+  "repair": {
+    "alias_only": {
+      "SDL_SetEventFilter": "prospero_controlify_SetEventFilter",
+      "SDL_GetEventFilter": "prospero_controlify_GetEventFilter",
+      "SDL_PollEvent": "prospero_controlify_PollEvent"
+    },
+    "events": "PreJVMchecked SDL eventsreference/watch;256compactconnection-onlycopies underlock;localfiltercallback;mainthreadpump/poll/peek;gamequeue/filterpreserved",
+    "preserved": "Originalgame/modJARs,state/axes/buttons/rumble/triggers/gyro/audioAPIs,baseps5sdl/GLFWlookups,otheraliases/UI/worlds",
+    "limits": "Knownmainthreadcontrollerfrontendonly;queueoverflowexpliciterror/rescan;notfullseparateSDLinstance/reentrantfilter/generalAPIisolation;onegameperprocess"
+  },
+  "checks": {
+    "runtime_schema_tables": "PASS actualtargetobject/schema/constructorguards;knownalias/samegroupexport/duplicates/JNIentrypointrejection;actualgeneratedhosttablecalls ASanUBSan",
+    "exact_original_filter": "PASS actualunchangedJARcallbackwithoriginalembeddedSDLAPI rejectskeyboard/text/mouse,accepts1541/1542",
+    "actual_SDL_facade_asan_ubsan": "PASS originalglobalfilterphysicalrefusal;gamefilter+5physicalcategoriespreserved,independentconnections/order/peek/filterchange/foreignthreadrejection,256bounds/explicitoverflow/1000cycles",
+    "actual_linked_tables": "PASS ELFrelativepointerinspection:both1942exports;exactly3SDL3aliaspointersredirectedtofacade;base/allothersunchanged",
+    "USB_cursor_trace": "PASS actualheader ASanUBSanrouting/lifecycle/ownership/visibility/capture/boundedreadonlytrace",
+    "GLFW_repeat": "PASS actualGLFW/SDL150repeats/3lifecycles andexistingwindow/inputchecks",
+    "launcher": "PASS exactdevelopmentmarker/publichold/originalentrypoint/instancepreservation",
+    "target": "PASS compile/link/sign;facadesourcehash/pinnedruntimegeneratordigests/aliasaudit",
+    "package": "PASS fullactual164packageCRC/signatures/version/devmarker/pinnedruntimealiasdigests/exactoverrideaudit/facadeexports+sourcehashes/pairedclasses/runtimepins/nativegroups/constructorcounts/frozenchecksums/zeroofficialgameJARs",
+    "relinks": "PASS ordinaryandreplacementOpenAL pathsreproduceexact682da77ccf8e5fab89bc7039c633d13bb1eb72656a0066ca642a3496b2a71170ELF"
+  },
+  "console": {
+    "263Fabric_controller_to_physical_handoff": "PENDING exact164",
+    "263Fabric_physical_to_controller_return": "PENDING exact164",
+    "262Fabric_bidirectional_handoff": "PENDING exact164",
+    "onscreen_Del_and_shortcut": "PENDING exact164",
+    "repeatedtransitions_chat_inventory_gameplaylook": "PENDING exact164",
+    "controller_connect_disconnect": "PENDING exact164",
+    "rumble_adaptivetriggers_gyro_audio_regression": "PENDING exact164",
+    "Vanilla262typing_263physicalregression": "PENDING exact164"
+  },
+  "publication": "Bothsource repositories;localtestapp only;GitHubrelease/Storeheld",
+  "preservation": "Accepted161+163Vanillareports;exactpriorcandidates/symbols/source-relinks/frozenarchive/releases/userworlds retained"
+}

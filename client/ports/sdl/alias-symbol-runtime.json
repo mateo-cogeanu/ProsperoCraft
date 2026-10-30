@@ -1,0 +1,9 @@
+{
+  "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
+  "commit": "abccf72189bc5547e08aab28a923e6d55d13fc33",
+  "source_sha256": {
+    "tools/java25_builtin_runtime.py": "492131d00ceb3d3332dd7b832a8197f06e769a466b47960ecaf9d38ddc355c18",
+    "tools/java25_resident_libraries.py": "cb81fd6facd0b96694df5e11c24459fde54c640ce09639217e607db35fe390e3"
+  },
+  "scope": "Opt-in SDL3 alias symbol lookup only;baseps5sdl/globaltablesunchanged;samegroupnativeexports;consumerownsABIs/eventfacade"
+}

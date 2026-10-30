@@ -67,6 +67,7 @@ extern "C" int clientgpu_mutex_preinit();
 extern "C" int clientgpu_present_worker_preinit();
 extern "C" int prospero_sdl_condition_preinit();
 extern "C" int prospero_sdl_tls_preinit();
+extern "C" int prospero_controlify_events_preinit();
 extern "C" int sceKernelUsleep(std::uint32_t);
 // File-open diagnostics specific to this probe; the real platform API is used.
 static char native_open_error[192]{};
@@ -301,6 +302,10 @@ void run_test(int i) {
   int tls_rc=prospero_sdl_tls_preinit();
   char tls_note[128];std::snprintf(tls_note,sizeof(tls_note),"PS5 SDL thread-ID TLS preinit result=%d;before JVM",tls_rc);log_stage(tls_note);
   if(tls_rc){result(i,tls_rc,"Cannot initialize SDL thread-ID TLS before JVM");return;}
+
+  int controlify_events_rc=prospero_controlify_events_preinit();
+  char events_note[128];std::snprintf(events_note,sizeof(events_note),"PS5 Controlify scoped events preinit result=%d capacity256;before JVM",controlify_events_rc);log_stage(events_note);
+  if(controlify_events_rc){result(i,controlify_events_rc,"Cannot prepare scoped Controlify event delivery");return;}
 
   const int mixer_worker_rc=client_ps5_audio_worker_preinit();
   char mixer_worker_note[128];std::snprintf(mixer_worker_note,sizeof(mixer_worker_note),"PS5 OpenAL pre-JVM mixer workers result=%d capacity2",mixer_worker_rc);log_stage(mixer_worker_note);

@@ -31,7 +31,7 @@
     "raw": "Localonly"
   },
   "repair": "SDLrepeatkeydown ->internalGLFW_PRESS;upstreamderivespublicREPEAT;keyup ->RELEASE;assertions/state/text/gamemodJARs retained",
-  "handoff": "UNRESOLVED;originalmodrequestsKEYBOARD_MOUSEatphysicaleventbutcontrollertickcanrequestCONTROLLERwhenactive;exactstateunknown",
+  "handoff": "Rootcauseidentifiedfor164:ControlifySDLControllerManager installs global filter admitting only1541/1542 and polls sharedqueue;resident SDL is shared withgame. Physicaleventsdroppedbeforegamecallbacks;neutralcontrollercaptured.",
   "diagnostics": "Read-onlyactualSDLopenedgamepadbuttons/6axes,cursorvisible/relative afteractualphysicalinput;coalescedsources/1secondthrottle/16recordcap;no keys/text/modewrites/syntheticactivity/disconnect",
   "checks": {
     "GLFW_asan_ubsan": "PASS actualpinnedcore/adapter withrealSDLdummy:150repeats/3lifecycles plus existingkey/release/Unicode/mouse/window/allocator/IME/closechecks",
@@ -46,9 +46,9 @@
     "relinks": "PASS ordinaryandreplacementOpenAL relinks bothreproduceexactdcda387c4af7a82542db11cdb69e631eb66845040780554f5654c8a65550bd5aELF"
   },
   "console": {
-    "262Vanilla_held_typing_repeat": "PENDING exact163",
-    "263Fabric_handoff_trace": "PENDING exact163",
-    "262Fabric_handoff": "PENDING exact163",
+    "262Vanilla_held_typing_repeat": "USER ACCEPTED:satisfied on163",
+    "263Fabric_handoff_trace": "FAILED handoff;runclient-01.000.163-1793385726-499143452 captured;all16snapshotsneutralaxes0/buttons0,cursorhidden,keyboardkey_event_posted0",
+    "262Fabric_handoff": "USER FAILED:sameautomaticphysicalhandoffissue",
     "263Controlify_onscreenDel": "Separateconfirmationstillpending"
   },
   "release": "GitHubrelease/Storeheld;source/localtestapponly",

@@ -23,7 +23,7 @@ The latest public release is **01.000.158**. Earlier builds have positive PS5 pl
 | **26.4 snapshots 1–6** | Available; positive console feedback on 118/119. Use separate test worlds. | Selectable when matching loader/mod versions exist; snapshot-specific Fabric, Controlify and mod compatibility is not established. |
 | **Other versions** | Downloadable 26.x entries may appear, but Play is blocked for versions outside the set above. | No additional compatibility claim. NeoForge is not enabled. |
 
-The user reports **all requested Fabric26.2 functionality working on exact161**. Later keyboard/mouse regression testing on162 confirms26.3 Vanilla physical input works, but finds Controlify handoff failure on26.2/26.3 and a26.2 Vanilla held-key typing crash. Local163 repairs the captured GLFW repeat assertion and adds bounded handoff diagnostics; console checks remain pending. Public158 still holds Fabric26.2. GitHub/Store releases remain paused. [Current evidence](docs/client-input-repeat-handoff-163.md).
+The user accepted Fabric26.2 functionality on161 and26.2 Vanilla held-key typing on163. Later physical-input tests expose a shared-SDL event filter conflict with Controlify on26.2/26.3 Fabric. Local164 isolates the mod’s controller-event frontend; exact-console handoff validation is pending. Public158 still holds Fabric26.2. GitHub/Store releases remain paused. [Current evidence](docs/client-controlify-event-isolation-164.md).
 
 Snapshots are **hidden by default**. Enable **Settings → Show Snapshots** to list them; explicit saved preferences are retained. Future snapshots are not enabled automatically. See the [snapshot guide](docs/client-snapshots-118.md) and [119 console acceptance](docs/validation/client119-console-acceptance-2026-10-28.json).
 

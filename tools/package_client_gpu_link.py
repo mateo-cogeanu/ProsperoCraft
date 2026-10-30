@@ -17,7 +17,12 @@ def finish(runtime,java_home,work,assets,spec,gpu_support,gpu_audit,variant="gpu
   else:shutil.copyfile(path,dest)
  shutil.copytree(work/'classes',java/'classes',dirs_exist_ok=True)
  manifest=work/'resident-libraries.json';manifest.write_text(json.dumps(spec['resident_libraries'],indent=2)+'\n')
- run('python3',runtime/'tools/java25_builtin_runtime.py','--management',*(['--imageio','--library-alias','SDL3=ps5sdl','--library-alias','libzstd-jni_dh-1.5.7-12=ps5zstddh','--library-alias','zstd-jni_dh-1.5.7-12=ps5zstddh','--library-alias','sqlitejdbc=ps5sqlitedh'] if variant=='startup' else []),'--external-libraries',manifest)
+ if variant=='startup':
+  alias_pin=json.loads((ROOT/'client/ports/sdl/alias-symbol-runtime.json').read_text())
+  for path,digest in alias_pin['source_sha256'].items():
+   assert hashlib.sha256((runtime/path).read_bytes()).hexdigest()==digest,'Runtime alias-symbol integration mismatch: '+path
+  (java/'alias-symbol-runtime.json').write_text(json.dumps(alias_pin,indent=2)+'\n')
+ run('python3',runtime/'tools/java25_builtin_runtime.py','--management',*(['--imageio','--library-alias','SDL3=ps5sdl','--alias-symbol','SDL3:SDL_SetEventFilter=prospero_controlify_SetEventFilter','--alias-symbol','SDL3:SDL_GetEventFilter=prospero_controlify_GetEventFilter','--alias-symbol','SDL3:SDL_PollEvent=prospero_controlify_PollEvent','--library-alias','libzstd-jni_dh-1.5.7-12=ps5zstddh','--library-alias','zstd-jni_dh-1.5.7-12=ps5zstddh','--library-alias','sqlitejdbc=ps5sqlitedh'] if variant=='startup' else []),'--external-libraries',manifest)
  shutil.copyfile(build/'builtin-resident-audit.json',java/'resident-libraries-audit.json')
  if variant=='startup':
   shutil.copy2(runtime/'build/java25/boot-image/lib/modules',java/'lib/modules')

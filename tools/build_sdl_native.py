@@ -28,7 +28,8 @@ def build(runtime):
     subprocess.run(args,check=True);subprocess.run(['cmake','--build',str(out),'-j','6'],check=True)
     platform=out/'platform-input.o';subprocess.run([str(LLVM/'clang'),'-target','x86_64-sie-ps5','-O2','-fPIC','-fno-stack-protector','-fvisibility-nodllstorageclass=default','-isysroot',str(sdk),'-isystem',str(sdk/'target/include'),'-I'+str(port),'-c',str(port/'platform-input.c'),'-o',str(platform)],check=True)
     hid=out/'physical-hid.o';subprocess.run([str(LLVM/'clang'),'-target','x86_64-sie-ps5','-O2','-fPIC','-fno-stack-protector','-fvisibility-nodllstorageclass=default','-isysroot',str(sdk),'-isystem',str(sdk/'target/include'),'-I'+str(port),'-c',str(port/'ps5_hid_native.c'),'-o',str(hid)],check=True)
-    obj=out/'resident-sdl.o';subprocess.run(['/opt/homebrew/opt/lld/bin/ld.lld','-r','--whole-archive',str(out/'libSDL3.a'),'--no-whole-archive',str(platform),str(hid),'-o',str(obj)],check=True)
+    events=out/'controlify-events.o';subprocess.run([str(LLVM/'clang'),'-target','x86_64-sie-ps5','-O2','-fPIC','-fno-stack-protector','-fvisibility-nodllstorageclass=default','-isysroot',str(sdk),'-isystem',str(sdk/'target/include'),'-I'+str(source/'include'),'-c',str(port/'ps5_controlify_events.c'),'-o',str(events)],check=True)
+    obj=out/'resident-sdl.o';subprocess.run(['/opt/homebrew/opt/lld/bin/ld.lld','-r','--whole-archive',str(out/'libSDL3.a'),'--no-whole-archive',str(platform),str(hid),str(events),'-o',str(obj)],check=True)
     tls_symbols=subprocess.check_output([str(LLVM/'llvm-nm'),str(obj)],text=True)
     assert ' T prospero_sdl_tls_preinit' in tls_symbols,'PS5 TLS guard inactive'
     sections=subprocess.check_output([str(LLVM/'llvm-readelf'),'-SW',str(obj)],text=True);assert '.init_array'not in sections and '.ctors'not in sections,'Unexpected automatic SDL constructors'

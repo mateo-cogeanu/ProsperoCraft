@@ -1,5 +1,12 @@
 # Changelog
 
+## 01.000.164 — local Controlify event isolation
+
+- Record16326.2 Vanilla typing acceptance and continued Fabric handoff failure. Live163 trace shows neutral controller axes/buttons while physical keyboard events are rejected.
+- Identify unchanged Controlify's SDL-wide filter accepting only controller added/removed events. Minecraft and the mod share resident SDL here, so the filter drops physical events before automatic input-mode callbacks.
+- Use an explicitly scoped SDL3 alias frontend for the mod's filter/get-filter/poll calls. Mirror controller connection records into a bounded process-lifetime queue; preserve the game's real queue/filter and all real controller state/audio APIs. Original mod/game JARs remain intact.
+- Integrate runtime-owned opt-in alias symbol lookup; base SDL lookup/default Java behavior remain unchanged. Exact unchanged mod filter and real SDL queue/lifecycle tests pass; console handoff, clicks, typing, controller return and feature regressions remain pending. No release/Store update. [Evidence](docs/client-controlify-event-isolation-164.md).
+
 ## 01.000.163 — local GLFW held-key repeat repair and handoff diagnostics
 
 - Record162 physical-console results:26.3 Vanilla keyboard/mouse work;Controlify automatic handoff fails on both26.2 and26.3;26.2 Vanilla aborts while typing.
