@@ -40,7 +40,7 @@ void initialize_toolkit_graphics(){pthread_once(&toolkit_once,initialize_toolkit
 #include "session_restart.hpp"
 #include "../ports/oshi/native_cpu.hpp"
 #include "../ports/oshi/hardware_labels.hpp"
-extern "C" int sceKernelGetHwModelName(char*);
+extern "C" int sceKernelDlsym(int,const char*,void**);
 static ps5::console::Result console_identity;
 extern "C" const char* prospero_gpu_display_name(void) {return prospero_hardware::gpu(console_identity.model);}
 #include <sys/sysctl.h>
@@ -545,12 +545,16 @@ static void notify(const char* text) {
  (void)sceKernelSendNotificationRequest(0,&n,sizeof(n),0);
 }
 int main(int argc,char** argv) {
- console_identity=ps5::console::read(sceKernelGetHwModelName);
-
  for(int i=0;i<argc;++i)if(argv[i]&&std::strcmp(argv[i],"--prospero-library")==0)resume_library=true;
  ps5::log_share::write_note("/download0/probe-build.txt","Minecraft Original Client Startup " PROSPERO_APP_VERSION " / PPSA99874\n");
  ps5::log_share::start();
  read_previous_log();
+ ps5::log_share::write_note("/download0/probe-build.txt","Minecraft Original Client Startup " PROSPERO_APP_VERSION " / PPSA99874\nOptional loaded-kernel model query starting;log sharing already started\n");
+ const auto model_query=ps5::console::resolve_loaded_query(sceKernelDlsym);
+ console_identity=ps5::console::read(model_query.query);
+ char model_status[320];std::snprintf(model_status,sizeof(model_status),"Minecraft Original Client Startup %s / PPSA99874\nPS5_HARDWARE model=%s status=%u native_result=%d resolver_handle=%d resolver_result=%d\n",PROSPERO_APP_VERSION,ps5::console::name(console_identity.model),static_cast<unsigned>(console_identity.status),console_identity.native_result,model_query.handle,model_query.native_result);
+ ps5::log_share::write_note("/download0/probe-build.txt",model_status);
+
  sceUserServiceInitialize(nullptr);std::int32_t user=-1;
  if(sceUserServiceGetInitialUser(&user)>=0 && scePadInit()>=0) pad=scePadOpen(user,0,0,nullptr);
 

@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-30",
+  "version": "01.000.156",
+  "title_id": "PPSA99874",
+  "package_sha256": "4ec66a2d93e38f053e9b8dc0a4283d57e9be21b9a7579d736f577934f9894899",
+  "symbols_sha256": "b249f0b1aa27cf90cb1d6bb99c8aae026831616a9b7c65cc46239ae57abf39ef",
+  "runtime": {
+    "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
+    "commit": "897667e525bb247d710f25bf15cab95d2bbcb1ef",
+    "path": "java25/platform/console_model.hpp",
+    "sha256": "4177a390eebb00bb94a9aca498161ab882b7c6468bffc71517caba98c547dfa6",
+    "console": "Standard PS5 and PS5 Pro native query/output pending;host fixtures only",
+    "resolution": "Optional sceKernelDlsym lookup in already-loaded kernel only;no mandatory model-query or libkernel_sys import"
+  },
+  "console_evidence": "User reports155 immediate launch crash. Cyberduck current ShadowMount log downloaded and inspected:two PPSA99874 crashes within approximately1second,before KStuff auto-pause. No faulting function;title sandbox/download volume absent after exit;raw report local.",
+  "finding": "154/155introduced mandatory libkernel_sys.sprx and direct model-query import absent in153. Likely application-loader incompatibility;not proven by console fault trace.",
+  "repair": "Remove direct import/new module dependency. Optional loaded-kernel sceKernelDlsym lookup with checked handle/export/results;logging starts first;missing query gives model unknown.",
+  "checks": [
+    "PASS actual runtime resolver/model header ASan/UBSan fixtures:1/0x2001handles,null/error/poisoned outputs/missing export and model mapping",
+    "PASS actual compact native labels/property sentinels/overrides/CPUID/JVM counts and eight intact original Minecraft CPU/Vulkan name paths OSHI6/7",
+    "PASS target156 native compile/link/sign and source/helper/main/RADV object pin audit",
+    "PASS full startup package signatures/CRC/runtime/dependency/constructors/19groups/historical regression checks",
+    "PASS156 DT_NEEDED exactly equals153;no libkernel_sys or direct model-query import;log-sharing precedes lookup"
+  ],
+  "standard_ps5": "PENDING physical launch recovery/query/F3/readability/gameplay for exact156",
+  "ps5_pro": "PENDING physical launch recovery/query/F3/readability/gameplay for exact156",
+  "host_only": "Resolver/model fixtures do not establish real console query or launch recovery",
+  "preservation": "155crashing package/prior assets/frozen history preserved;stable/Store153 and Fabric26.2hold unchanged",
+  "hardware_audit": {
+    "runtime": {
+      "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
+      "commit": "897667e525bb247d710f25bf15cab95d2bbcb1ef",
+      "path": "java25/platform/console_model.hpp",
+      "sha256": "4177a390eebb00bb94a9aca498161ab882b7c6468bffc71517caba98c547dfa6",
+      "console": "Standard PS5 and PS5 Pro native query/output pending;host fixtures only",
+      "resolution": "Optional sceKernelDlsym lookup in already-loaded kernel only;no mandatory model-query or libkernel_sys import"
+    },
+    "source_sha256": {
+      "client/startup/bootstrap.cpp": "84c71482aa318507c94b7b68be82ae00714221791777f48104f5b88fbda71eca",
+      "client/ports/oshi/hardware_labels.hpp": "9259b7823a43da5cb7fcf91b2f91a011e230b99f9c15a324ec03043ea7ea07b5",
+      "client/ports/mesa/0010-ps5-device-display-name.patch": "bcb646a63b579990133e9fda55c3df9b61876e3d91922b00fa04893f64d9b811"
+    },
+    "main_object_sha256": "2078903341beef626bef823792fffa8607bf9bed3c73a33ebac24ccab4fa179d",
+    "gpu_property_object": {
+      "patch_sha256": "bcb646a63b579990133e9fda55c3df9b61876e3d91922b00fa04893f64d9b811",
+      "original_source_sha256": "6f2ac2b9793cb9162c84df475f1f4586e612df419047b274a14b198cd31d4744",
+      "patched_source_sha256": "f6a9d94bbc33342f3461790286e584411a1838d4853525f3527cbc155b77894f",
+      "object_sha256": "9afba092f74e61e8bc5415dc61f0e524656b91437ce59df661b6cdb2f1c459c1",
+      "replaced_member": "radv_physical_device.c.o",
+      "scope": "PS5 deviceName only; IDs/features/limits/extensions/driver properties unchanged"
+    },
+    "console": "Standard PS5 and PS5 Pro pending; fixtures only"
+  }
+}

@@ -1,7 +1,8 @@
 {
   "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
-  "commit": "db3048febe846abd30a7ae7e3315a517a0910e16",
+  "commit": "897667e525bb247d710f25bf15cab95d2bbcb1ef",
   "path": "java25/platform/console_model.hpp",
-  "sha256": "f9568543f2260e74d6b44787e094d72e85b2ddfd5b39f05c5304d8bc7aaa6b25",
-  "console": "Standard PS5 and PS5 Pro native query/output pending;host fixtures only"
+  "sha256": "4177a390eebb00bb94a9aca498161ab882b7c6468bffc71517caba98c547dfa6",
+  "console": "Standard PS5 and PS5 Pro native query/output pending;host fixtures only",
+  "resolution": "Optional sceKernelDlsym lookup in already-loaded kernel only;no mandatory model-query or libkernel_sys import"
 }

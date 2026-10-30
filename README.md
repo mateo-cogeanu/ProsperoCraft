@@ -12,7 +12,7 @@ ProsperoCraft handles Minecraft installation, accounts, input and game integrati
 
 ## What can I play?
 
-Development hardware-information test **01.000.155** uses compact F3 labels with explicit 36 CUs versus 60 CUs and a checked native console-model query; standard PS5 and PS5 Pro console checks remain pending. [Details and test download](docs/client-hardware-info-155.md).
+Development **01.000.156** removes the mandatory kernel-library dependency introduced by the F3 hardware query after an immediate155 launch-crash report. [Startup repair test and evidence](docs/client-hardware-startup-156.md). Console recovery and model/F3 checks remain pending.
 
 The latest public release is **01.000.153**. Availability and console validation are different: earlier builds have positive PS5 playtests, while exact 153 regression, audio and long-session checks remain pending.
 

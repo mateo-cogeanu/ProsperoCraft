@@ -1,5 +1,9 @@
 # Changelog
 
+## 01.000.156 — optional hardware query startup repair
+
+Remove the mandatory libkernel_sys/model-query import added in154/155. Resolve an optional query from the loaded kernel after logging starts; missing exports use model unknown. New gates require the same library dependency set as153. Console launch recovery remains pending. [Evidence](docs/client-hardware-startup-156.md).
+
 ## 01.000.155 — compact F3 hardware labels
 
 Use 8C16T and PS5/PS5 Pro names, and show 36 CUs versus 60 CUs. Pro architecture follows Sony’s hybrid RDNA 2.x description. Detection, logical processor counts and graphics behavior stay unchanged. Physical-console readability and model checks remain pending. [Details](docs/client-hardware-info-155.md).
