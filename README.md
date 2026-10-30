@@ -19,11 +19,11 @@ The latest public release is **01.000.158**. Earlier builds have positive PS5 pl
 | Minecraft version | Vanilla | Fabric |
 | --- | --- | --- |
 | **26.3** | Established playable PS5 baseline, including game audio and server joining. | Released, with positive console feedback. Mods still need individual compatibility checks. |
-| **26.2** | Available in 158; working Vanilla play reported on development 124. | **Coming soon. Launch is blocked in 158.** Development reached the menu and Controlify input, but world, audio and stability validation is incomplete. |
+| **26.2** | Available in 158; working Vanilla play reported on development 124. | **Coming soon. Launch is blocked in 158.** The user reports all requested functionality working on exact161; public support remains held while the next input repair is tested. |
 | **26.4 snapshots 1–6** | Available; positive console feedback on 118/119. Use separate test worlds. | Selectable when matching loader/mod versions exist; snapshot-specific Fabric, Controlify and mod compatibility is not established. |
 | **Other versions** | Downloadable 26.x entries may appear, but Play is blocked for versions outside the set above. | No additional compatibility claim. NeoForge is not enabled. |
 
-Local development build **161** retains the explicitly labeled Fabric 26.2 test path and repairs an SDL thread-storage error recursion captured in exact160. The user heard menu music and saw a button change the selection on160, followed by a crash. Fabric26.2 remains **development-only**; repeated input, Controlify features and world save/reload still need console validation. [Evidence and next tests](docs/client-sdl-thread-storage-161.md).
+The user reports **all requested Fabric26.2 functionality working on exact161**. Local development build **162** adds a scoped Controlify26.3 keyboard-delete repair, a reproduced pointer-ownership fix, and physical-keyboard diagnostics for issue11. Console checks are next. Public158 still holds Fabric26.2; GitHub/Store releases remain paused at the user’s request. [161 acceptance and 162 evidence](docs/client-controlify-keyboard-162.md).
 
 Snapshots are **hidden by default**. Enable **Settings → Show Snapshots** to list them; explicit saved preferences are retained. Future snapshots are not enabled automatically. See the [snapshot guide](docs/client-snapshots-118.md) and [119 console acceptance](docs/validation/client119-console-acceptance-2026-10-28.json).
 

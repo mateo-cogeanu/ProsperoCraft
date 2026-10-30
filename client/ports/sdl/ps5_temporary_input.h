@@ -13,7 +13,7 @@ static struct {
     Uint8 buttons;
     Uint64 repeat_at[30], last_pump;
     Uint32 held;float cursor_x,cursor_y;bool cursor_ready,typing,lower,mode_known,captured;int character;
-    bool primed, devices,symbols;Uint32 keyboard_direction;Uint64 keyboard_repeat;char preview[129];unsigned preview_length;
+    bool active,primed, devices,symbols;Uint32 keyboard_direction;Uint64 keyboard_repeat;char preview[129];unsigned preview_length;
 } ps5_temp;
 static unsigned short ps5_temp_keys[30];
 static bool ps5_temp_bindings_ready;
@@ -54,8 +54,10 @@ static void PS5_PumpTemporaryInput(SDL_Window *window)
      * Future Controlify integration must also turn this hint off explicitly. */
     if(!window || SDL_GetKeyboardFocus()!=window ||
        !SDL_GetHintBoolean("PS5_TEMPORARY_CONTROLS",false) || PS5_GamepadOwned()) {
-        PS5_TempRelease(window,now);return;
+        if(ps5_temp.active){PS5_TempRelease(window,now);ps5_temp.active=false;}
+        return;
     }
+    ps5_temp.active=true;
     if(!ps5_temp.devices) {
         ps5_temp.keyboard=SDL_GetNextObjectID();ps5_temp.mouse=SDL_GetNextObjectID();
         SDL_AddKeyboard(ps5_temp.keyboard,"PS5 temporary controller keys");

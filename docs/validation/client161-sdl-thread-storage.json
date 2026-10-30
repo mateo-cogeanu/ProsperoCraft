@@ -36,23 +36,25 @@
     "default_allocation_errors": "PASS actual ordinary SDL_malloc/realloc refusal still reports Out of memory on existing per-thread error buffer"
   },
   "console": {
-    "loading_and_repeated_held_menu_buttons": "PENDING exact161",
-    "audible_sound": "PENDING exact161",
-    "Controlify_input": "PENDING exact161",
-    "physical_rumble": "PENDING exact161",
-    "adaptive_triggers": "PENDING exact161",
-    "gyro": "PENDING exact161",
-    "world_create_load_chunk_gameplay": "PENDING exact161",
-    "save_and_sameprocess_marker_reload": "PENDING exact161",
-    "app_restart_marker_persistence": "PENDING exact161",
-    "audio_input_world_transitions": "PENDING exact161",
-    "recorded_endurance": "PENDING exact161",
-    "Vanilla26_2_26_3_supported26_4_regressions": "PENDING exact161"
+    "loading_and_repeated_held_menu_buttons": "USER REPORT: all works/everything on exact161; not independently instrumented per feature",
+    "audible_sound": "USER REPORT: all works/everything on exact161; not independently instrumented per feature",
+    "Controlify_input": "USER REPORT: all works/everything on exact161; not independently instrumented per feature",
+    "physical_rumble": "USER REPORT: all works/everything on exact161; not independently instrumented per feature",
+    "adaptive_triggers": "USER REPORT: all works/everything on exact161; not independently instrumented per feature",
+    "gyro": "USER REPORT: all works/everything on exact161; not independently instrumented per feature",
+    "world_create_load_chunk_gameplay": "USER REPORT: all works/everything on exact161; not independently instrumented per feature",
+    "save_and_sameprocess_marker_reload": "USER REPORT: all works/everything on exact161; not independently instrumented per feature",
+    "app_restart_marker_persistence": "USER REPORT: all works/everything on exact161; not independently instrumented per feature",
+    "audio_input_world_transitions": "USER REPORT: all works/everything on exact161; not independently instrumented per feature",
+    "recorded_endurance": "USER REPORT: all works/everything on exact161; not independently instrumented per feature",
+    "Vanilla26_2_26_3_supported26_4_regressions": "USER REPORT: all works/everything on exact161; not independently instrumented per feature",
+    "report": "User: amazing, all works! everything i mean!! Before releases, fix Controlify keyboard deletion on26.3;works on26.2.",
+    "measurement_limits": "No session duration, marker coordinates or per-feature measurements supplied; do not invent measured endurance or coverage.",
+    "remaining_regression": "26.3 Controlify keyboard delete no-op, separate162 repair"
   },
   "known_limitations": [
     "Native SDK failure reason/owner unproven",
-    "Generic lookup linear in active thread stores;foreign threads still need SDL_CleanupTLS;PS5 endurance/retention pending",
-    "160audiblemenu/onevisibleinputresponse does not prove stable gameplay or requested physical features"
+    "Generic lookup linear in active thread stores;foreign threads still need SDL_CleanupTLS;PS5 endurance/retention pending"
   ],
   "preservation": "Exact160 package/symbols and earlier candidates/releases/archive/UI/game/modJARs/instances/worlds retained",
   "publication": "Source and localtestapponly;no GitHubrelease/Store",

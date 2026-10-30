@@ -31,6 +31,7 @@ public final class ProsperoLauncher {
   synchronized(current){if(!current.launch)throw new IllegalStateException("No launch selected");}
   return current.arguments(null,null);
  }
+ static String prepareControlifyKeyboard()throws java.io.IOException{return ProsperoControlifyKeyboard.prepare(selectedWork(),current.detail.version,current.detail.loader);}
  static Path selectedWork(){return current.library.game(current.detail);}
  static String controllerBindings(){return ProsperoInput.hint(current.library.settings().controllerKeys);}
  static ClassLoader gameLoader(){return current.loader;}

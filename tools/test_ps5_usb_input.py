@@ -20,6 +20,7 @@ Uint64 SDL_GetTicksNS(void){return tick;}
 SDL_Window* SDL_GetKeyboardFocus(void){return focus;}
 bool SDL_GetWindowRelativeMouseMode(SDL_Window*w){return captured;}
 bool SDL_TextInputActive(SDL_Window*w){return textactive;}
+bool SDL_CursorVisible(void){return true;}
 Uint32 SDL_GetNextObjectID(void){static Uint32 n;return ++n;}
 void SDL_AddKeyboard(SDL_KeyboardID id,const char*name){keyboard_count++;}
 void SDL_AddMouse(SDL_MouseID id,const char*name){mouse_count++;}
@@ -52,6 +53,7 @@ int main(void){
  focus=win;key(26,0);mouse(1,0,0);pump();assert(!keys[26]&&!buttons[1]);key(0,0);mouse(0,0,0);pump();key(26,0);pump();assert(keys[26]);
  key(0,0);keypack[0].intercepted=1;pump();assert(!keys[26]);key(26,0);pump();assert(!keys[26]);key(0,0);pump();
  key(7,0);pump();keycount=-1;pump();assert(!keys[7]&&closes==1);tick+=3000000000ull;key(0,0);pump();
+ for(int i=0;i<1000;i++){key(4,0);pump();key(0,0);pump();}assert(ps5_usb.keys[0].trace_count<=12&&ps5_usb.keys[0].delivery_mask<=3);
  PS5_USBClose(win);assert(closes==3&&removed>=2);
  puts("PASS actual USB packet adapter: device discovery,modifiers/US text/caps,short taps,mouse buttons/relative and menu motion/wheel,focus loss/held-input rearm/interception/read failure/close under ASan+UBSan;PS5 hardware pending");
 }

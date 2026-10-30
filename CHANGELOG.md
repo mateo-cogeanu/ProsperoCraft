@@ -1,5 +1,13 @@
 # Changelog
 
+## 01.000.162 — local Controlify26.3 keyboard delete repair
+
+- Record the user’s all-working report for exact161 Fabric26.2, including keyboard deletion. Preserve161 and keep release/Store publication on hold.
+- Controlify3.5.3+mc26.3 supplies `(42,0,0)` for Backspace, while Minecraft26.3 checks the second key value for8. Use the supported layout codec to supply `(42,8,0)` in a normal resource pack, preserving the shortcut, localized label and other layout entries. Original game/mod JARs stay intact.
+- Apply only to the exact pinned26.3 Fabric mod; preserve resource-pack order/options backups, respect disablement and remove the owned override after a mod update.26.2, Vanilla and snapshots are outside this repair.
+- Fix a reproduced fallback/USB cursor hide-show conflict by handing off once and respecting SDL visibility/capture. Add bounded physical-keyboard read/routing diagnostics for issue11; its hardware root cause remains unproven.
+- Real Controlify/layout/pack codecs and Minecraft EditBox reproduce the no-op and pass deletion, selection, Unicode, repeat and installation-lifecycle checks. Exact162 PS5 deletion/regression is pending. [Evidence](docs/client-controlify-keyboard-162.md).
+
 ## 01.000.161 — local SDL thread-storage repair
 
 - Exact160 reached the 26.2 Fabric menu with audible music and a visible selection change, then crashed. Its external stop snapshot shows repeated SDL error-buffer/TLS calls; exact symbols identify failed SDK pthread_setspecific recursively reporting through the same TLS path.

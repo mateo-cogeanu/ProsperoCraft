@@ -90,3 +90,12 @@ chunk movement, save/reload with a marker, app-restart persistence, audio/input
 transitions and recorded endurance. Check existing Vanilla26.2/26.3 and supported
 26.4 regressions. Leave the app available at the first failure for retrieval.
 No world or physical-controller feature pass follows from the160 menu report.
+
+## Physical-console feedback
+
+The user reports exact161: “all works! everything i mean!!”, including deletion
+on26.2. This is user acceptance of the requested Fabric26.2 functionality. No
+session duration, marker coordinates or per-feature measurements were supplied,
+so no measured endurance claim is added. The user requests fixing a separate
+26.3 Controlify keyboard delete regression before any GitHub/Store release.
+Candidate161, its symbols and corresponding source/relink are preserved.

@@ -218,6 +218,8 @@ public final class ClientStartup25 {
    if(!gamePreflight())throw new IllegalStateException("Original artifact preflight failed; inspect startup logs");
    stage("PS5_LAUNCH phase=PREPARE_INSTANCE");
    Path work=ProsperoLauncher.selectedWork();prepareWork(work);prepareAudio(work);
+   try{console.println("PS5_CONTROLIFY_KEYBOARD "+ProsperoLauncher.prepareControlifyKeyboard());}
+   catch(IOException|RuntimeException failure){console.println("PS5_CONTROLIFY_KEYBOARD SKIPPED reason="+failure.getClass().getSimpleName());}
    stage("PS5_LAUNCH phase=INSTANCE_READY");
    console.println(configurationSummary(work));
    System.setProperty("user.dir",work.toString());System.setProperty("user.home",work.toString());System.setProperty("java.io.tmpdir",work.resolve("native-cache").toString());
