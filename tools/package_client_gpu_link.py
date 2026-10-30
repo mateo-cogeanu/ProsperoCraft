@@ -79,11 +79,17 @@ def finish(runtime,java_home,work,assets,spec,gpu_support,gpu_audit,variant="gpu
   shutil.copytree(ROOT/'assets/launcher-icons',java/'launcher-icons',dirs_exist_ok=True)
   shutil.copyfile(work/'launcher-toolkit-audit.json',java/'launcher-toolkit-audit.json')
 
+ if variant=='startup':
+  model_pin=json.loads((ROOT/'client/ports/console-model-runtime.json').read_text())
+  model_header=runtime/model_pin['path'];assert hashlib.sha256(model_header.read_bytes()).hexdigest()==model_pin['sha256'],'Runtime model helper pin mismatch'
  # Compile application/UI against the original runtime SDK. Only the isolated
  # graphics dependency/bridge uses the fork headers. Both use the same SDK ABI.
  for name,source in [('main',consumer/'bootstrap.cpp'),('renderer',runtime/'native/renderer/demo_renderer.cpp'),('crt',native/'app_crt.cpp'),('cpp_runtime',native/'app_cpp_runtime.cpp')]:
   obj=work/(name+'.o')
-  run(LLVM/'clang++','-DPROSPERO_APP_VERSION="'+version+'"','-target','x86_64-sie-ps5','-fvisibility-nodllstorageclass=default','-isysroot',sdk,'-isystem',sdk/'target/include/c++/v1','-isystem',sdk/'target/include','-I'+str(runtime/'native/renderer'),'-I'+str(runtime/'build/native'),'-I'+str(runtime/'src'),'-I'+str(runtime/'native'),'-I'+str(work),'-I'+str(ROOT/'client/native'),'-I'+str(ROOT/'client/launcher/toolkit/src'),'-I'+str(ROOT/'.tools/PS5_Mesa/include'),'-I'+str(runtime/'java25/probe'),'-std=c++20','-O2','-Wall','-Wextra','-Werror','-fno-stack-protector','-fno-plt','-femulated-tls','-fno-exceptions','-fno-rtti','-ffunction-sections','-fdata-sections','-c',source,'-o',obj);objects.append(obj)
+  run(LLVM/'clang++','-DPROSPERO_APP_VERSION="'+version+'"','-target','x86_64-sie-ps5','-fvisibility-nodllstorageclass=default','-isysroot',sdk,'-isystem',sdk/'target/include/c++/v1','-isystem',sdk/'target/include','-I'+str(runtime/'native/renderer'),'-I'+str(runtime/'build/native'),'-I'+str(runtime/'src'),'-I'+str(runtime/'native'),'-I'+str(work),'-I'+str(ROOT/'client/native'),'-I'+str(ROOT/'client/launcher/toolkit/src'),'-I'+str(ROOT/'.tools/PS5_Mesa/include'),'-I'+str(runtime/'java25/probe'),'-I'+str(runtime/'java25/platform'),'-std=c++20','-O2','-Wall','-Wextra','-Werror','-fno-stack-protector','-fno-plt','-femulated-tls','-fno-exceptions','-fno-rtti','-ffunction-sections','-fdata-sections','-c',source,'-o',obj);objects.append(obj)
+ if variant=='startup':
+  hardware_audit={'runtime':model_pin,'source_sha256':{str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest()for p in [consumer/'bootstrap.cpp',ROOT/'client/ports/oshi/hardware_labels.hpp',ROOT/'client/ports/mesa/0010-ps5-device-display-name.patch']},'main_object_sha256':hashlib.sha256((work/'main.o').read_bytes()).hexdigest(),'gpu_property_object':gpu_audit['wsi_diagnostics']['hardware_display'],'console':'Standard PS5 and PS5 Pro pending; fixtures only'}
+  (java/'hardware-display-audit.json').write_text(json.dumps(hardware_audit,indent=2)+'\n')
  if variant in {'runtime_shader','startup','native_bootstrap','opengl_bootstrap','stb_bootstrap','freetype_bootstrap','vma_bootstrap','spvc_bootstrap'}:
   # Only this consumer title's C++ allocation operators need the existing
   # graphics heap. Pair new/delete (including aligned/nothrow/sized variants)

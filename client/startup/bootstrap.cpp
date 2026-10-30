@@ -39,6 +39,10 @@ void initialize_toolkit_graphics(){pthread_once(&toolkit_once,initialize_toolkit
 }
 #include "session_restart.hpp"
 #include "../ports/oshi/native_cpu.hpp"
+#include "../ports/oshi/hardware_labels.hpp"
+extern "C" int sceKernelGetHwModelName(char*);
+static ps5::console::Result console_identity;
+extern "C" const char* prospero_gpu_display_name(void) {return prospero_hardware::gpu(console_identity.model);}
 #include <sys/sysctl.h>
 static void notify(const char* text);
 extern "C" int sceAudioOutInit();
@@ -148,13 +152,14 @@ void native_snapshot(JNIEnv *env,jclass,jlong elapsed,jint phase) {
  }
 }
 jobjectArray cpu_information(JNIEnv *env,jclass) {
+ char detection[160];std::snprintf(detection,sizeof(detection),"PS5_HARDWARE model=%s status=%u native_result=%d",ps5::console::name(console_identity.model),static_cast<unsigned>(console_identity.status),console_identity.native_result);log_stage(detection);
  int logical=0;size_t size=sizeof(logical);if(sysctlbyname("hw.ncpu",&logical,&size,nullptr,0)!=0||size!=sizeof(logical))logical=0;
  auto info=prospero_cpu::read(prospero_cpu::cpuid,logical);
  if(!info.valid)return nullptr;
  jclass strings=env->FindClass("java/lang/String");if(!strings)return nullptr;
  jobjectArray result=env->NewObjectArray(8,strings,nullptr);env->DeleteLocalRef(strings);if(!result)return nullptr;
  char family[16],model[16],stepping[16],count[16];std::snprintf(family,sizeof(family),"%u",info.family);std::snprintf(model,sizeof(model),"%u",info.model);std::snprintf(stepping,sizeof(stepping),"%u",info.stepping);std::snprintf(count,sizeof(count),"%d",info.logical);
- const char* values[]={info.brand,info.vendor,info.signature,family,model,stepping,count,info.kernel_count?"kernel.hw.ncpu":"CPUID"};
+ const char* values[]={prospero_hardware::cpu(console_identity.model),info.vendor,info.signature,family,model,stepping,count,info.kernel_count?"kernel.hw.ncpu":"CPUID"};
  for(int n=0;n<8;n++){jstring value=env->NewStringUTF(values[n]);if(!value||env->ExceptionCheck())return nullptr;env->SetObjectArrayElement(result,n,value);env->DeleteLocalRef(value);if(env->ExceptionCheck())return nullptr;}return result;
 }
 int vm_print(FILE *requested,const char *format,va_list arguments) {
@@ -540,6 +545,8 @@ static void notify(const char* text) {
  (void)sceKernelSendNotificationRequest(0,&n,sizeof(n),0);
 }
 int main(int argc,char** argv) {
+ console_identity=ps5::console::read(sceKernelGetHwModelName);
+
  for(int i=0;i<argc;++i)if(argv[i]&&std::strcmp(argv[i],"--prospero-library")==0)resume_library=true;
  ps5::log_share::write_note("/download0/probe-build.txt","Minecraft Original Client Startup " PROSPERO_APP_VERSION " / PPSA99874\n");
  ps5::log_share::start();

@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-30",
+  "version": "01.000.154",
+  "title_id": "PPSA99874",
+  "channel": "temp_gametest development hardware test",
+  "package_sha256": "f51c18713b492f7902e81588d0eb94c149e44a9923725a301cdd3740d8fe6c6d",
+  "symbols_sha256": "bab89e22339a9a143e1a500f4087180bb1c29ea876f79f9d5bcd831e32a021f5",
+  "runtime": {
+    "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
+    "commit": "db3048febe846abd30a7ae7e3315a517a0910e16",
+    "path": "java25/platform/console_model.hpp",
+    "sha256": "f9568543f2260e74d6b44787e094d72e85b2ddfd5b39f05c5304d8bc7aaa6b25",
+    "console": "Standard PS5 and PS5 Pro native query/output pending;host fixtures only"
+  },
+  "checks": {
+    "runtime_model": "PASS actual header ASan/UBSan known standard/Pro/future/null/error/nontermination fixtures",
+    "runtime_regression": "PASS java25_audit.py 11 target libraries/JNI/Java25 classes",
+    "hardware_labels": "PASS native label/query/ASCII/bounds and actual patch statement sentinel tests for PS5/non-PS5; eight intact publisher F3 CPU entries and Vulkan name/driver bytecode paths; OSHI6/7; logical16/7,partial/malformed fields,JVM counts unchanged",
+    "cpu_regression": "PASS test_cpu_identity.py actual CPUID decode,OSHI6 CPU entry/missing/desktop unchanged",
+    "startup_host": "PASS test_client_startup_host.py CPU handoff,launcher/observer/GC logging,LWJGL allocator and original Main expected missing-host-native exit253; no host menu claim",
+    "version262": "PASS test_launcher_262.py pinned publisher metadata/JARs/assets,936 LWJGL signatures,actual original Main expected host native failure",
+    "snapshots": "PASS test_launcher_snapshots.py all six pinned snapshots,provider selection,original Main expected host native failure",
+    "target": "PASS full startup target build; final native relink includes moved family/status diagnostic",
+    "package": "PASS full test_client_startup_package.py including new hardware source/helper/main/RADV object/archive hashes,real query import/no serial import,all six labels,154metadata/signatures/CRC/19resident groups/staged constructors/runtime/original dependencies/historical preservation"
+  },
+  "standard_ps5": {
+    "status": "PENDING",
+    "native_model_query": "not run on physical standard/Slim for154",
+    "F3": "pending CPU/GPU readability/count/driver fields and normal rendering/input/save"
+  },
+  "ps5_pro": {
+    "status": "PENDING",
+    "native_model_query": "not run on physical Pro",
+    "F3": "pending CPU/GPU Pro labels/readability/count/driver fields and normal rendering/input/save"
+  },
+  "host_only": "All standard/Pro detection cases are synthetic fixtures; no physical detection or gameplay pass implied.",
+  "preservation": "153 release/Store metadata and all frozen/archive/release assets unchanged;Fabric26.2 held;no game/mod JAR transforms;no performance/graphics capability/runtime CPU-count policy change",
+  "limitations": [
+    "Community SDK unsized model API uses pinned sample1000byte buffer convention;reads bounded and unterminated response rejected;no guarantee against broken native implementation overwriting its ABI buffer.",
+    "Future/devkit/unrecognized CFI family or query failure uses model unknown;no firmware/CPUID/GPU-codename inference.",
+    "Pro GPU RDNA3/optional clocks omitted;Pro CU count and bandwidth inference not displayed."
+  ],
+  "hardware_audit": {
+    "runtime": {
+      "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
+      "commit": "db3048febe846abd30a7ae7e3315a517a0910e16",
+      "path": "java25/platform/console_model.hpp",
+      "sha256": "f9568543f2260e74d6b44787e094d72e85b2ddfd5b39f05c5304d8bc7aaa6b25",
+      "console": "Standard PS5 and PS5 Pro native query/output pending;host fixtures only"
+    },
+    "source_sha256": {
+      "client/startup/bootstrap.cpp": "74179121d7ca4ca48cde0a455a7193d357bcb747d24251aa17df1b42545f2081",
+      "client/ports/oshi/hardware_labels.hpp": "710fdd14075e1cd30c846d64cb72d7bf81dd06b34d92a85ba09de840e772b299",
+      "client/ports/mesa/0010-ps5-device-display-name.patch": "698cd35912f77749a749f1547073b99a482171b302877d1a0e762ddfb08fb662"
+    },
+    "main_object_sha256": "35b33ac2b6605cdcfa16c916f888bf82d9e0c458168fa9f05340c82dba4cb181",
+    "gpu_property_object": {
+      "patch_sha256": "698cd35912f77749a749f1547073b99a482171b302877d1a0e762ddfb08fb662",
+      "original_source_sha256": "6f2ac2b9793cb9162c84df475f1f4586e612df419047b274a14b198cd31d4744",
+      "patched_source_sha256": "c961e1e4cacb6f62a7a68a453e4454e99b204808952bddcd0968cc44339c7851",
+      "object_sha256": "e1f050c9191e42ce8194b916c39abbaec11e86efa0d1344e8887c22c64cd9328",
+      "replaced_member": "radv_physical_device.c.o",
+      "scope": "PS5 deviceName only; IDs/features/limits/extensions/driver properties unchanged"
+    },
+    "console": "Standard PS5 and PS5 Pro pending; fixtures only"
+  }
+}

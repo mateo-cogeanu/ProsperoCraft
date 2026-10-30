@@ -34,6 +34,22 @@ def build():
  members=subprocess.check_output([str(LLVM/'llvm-ar'),'t',str(archive)],text=True).splitlines();assert members.count(obj.name)==1
  subprocess.run([str(LLVM/'llvm-ar'),'r',str(archive),str(obj)],check=True);assert sha(original_archive)==before
  assert subprocess.check_output([str(LLVM/'llvm-ar'),'p',str(archive),obj.name])==obj.read_bytes()
+ # Compile only the changed property source into the private archive. Pinned Mesa remains pristine.
+ relative_device='src/amd/vulkan/radv_physical_device.c'
+ original_device=subprocess.check_output(['git','-C',str(mesa),'show',pin+':'+relative_device])
+ assert (mesa/relative_device).read_bytes()==original_device,'Dirty pinned physical-device input'
+ device_source=out/'radv_physical_device.c';device_source.write_bytes(original_device)
+ device_patch=ROOT/'client/ports/mesa/0010-ps5-device-display-name.patch'
+ subprocess.run(['git','apply','--unsafe-paths','--directory='+str(out),str(device_patch)],check=True)
+ rows=[r for r in database if r['file'].endswith('/radv_physical_device.c')];assert len(rows)==1
+ row=rows[0];arguments=shlex.split(row['command']);device_obj=out/'radv_physical_device.c.o'
+ for key,value in [('-o',str(device_obj)),('-MF',str(device_obj)+'.d'),('-MQ',str(device_obj)),('-c',str(device_source))]:arguments[arguments.index(key)+1]=value
+ subprocess.run(arguments,cwd=row['directory'],env=dict(os.environ,LLVM_CONFIG=str(LLVM/'llvm-config'),PATH=str(LLVM)+':'+os.environ['PATH']),check=True)
+ assert members.count(device_obj.name)==1
+ subprocess.run([str(LLVM/'llvm-ar'),'r',str(archive),str(device_obj)],check=True)
+ assert subprocess.check_output([str(LLVM/'llvm-ar'),'p',str(archive),device_obj.name])==device_obj.read_bytes()
+ assert sha(original_archive)==before
  audit={'scope':'Early initialization of same WSI-owned output;native checkpoints and one delayed pre-resource VideoOut retry;max2 OS opens,success handle retained,negative results remain failure;read-only before/after kernel memory queries;first8 present/fence/flip progress and errors;64events/384byte formatting','mesa_commit':pin,'original_source_sha256':hashlib.sha256(original).hexdigest(),'patch_sha256':sha(patch),'retry_patch_sha256':sha(retry),'resources_patch_sha256':sha(resources),'early_owner_patch_sha256':sha(early),'present_progress_patch_sha256':sha(present),'cursor_patch_sha256':sha(cursor),'keyboard_patch_sha256':sha(keyboard),'reserved_worker_patch_sha256':sha(worker),'input_present_patch_sha256':sha(input_trace),'keyboard_headers_sha256':{name:sha(ROOT/'client/ports/mesa'/name)for name in ['keyboard_overlay.h','keyboard_layout.h']},'patched_source_sha256':sha(source),'object_sha256':sha(obj),'original_archive_sha256':before,'private_archive_sha256':sha(archive),'replaced_member':obj.name,'original_archive_unchanged':True,'console':'PENDING PS5 rejection checkpoint/crash investigation'}
+ audit['hardware_display']={'patch_sha256':sha(device_patch),'original_source_sha256':hashlib.sha256(original_device).hexdigest(),'patched_source_sha256':sha(device_source),'object_sha256':sha(device_obj),'replaced_member':device_obj.name,'scope':'PS5 deviceName only; IDs/features/limits/extensions/driver properties unchanged'}
  (out/'audit.json').write_text(json.dumps(audit,indent=2)+'\n');print('PASS diagnostic WSI target compile/private archive member substitution;original archive retained');return archive,audit
 if __name__=='__main__':build()

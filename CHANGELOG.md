@@ -1,5 +1,9 @@
 # Changelog
 
+## 01.000.154 — development hardware information test
+
+Readable F3 CPU/GPU names use checked CFI model families from the native SDK query. Preserve the logical CPU prefix, Vulkan IDs/capabilities and driver information. Unknown models remain explicit. Host fixtures and target/package verification are recorded separately from pending standard PS5 and PS5 Pro tests. No Store release or new accepted milestone. [Details](docs/client-hardware-info-154.md).
+
 Detailed client and server release history, console results, known failures and
 frozen milestones. Older entries describe evidence available at that time and
 may be superseded by later records. Client and server version counters differ.

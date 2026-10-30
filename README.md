@@ -12,6 +12,8 @@ ProsperoCraft handles Minecraft installation, accounts, input and game integrati
 
 ## What can I play?
 
+Development hardware-information test **01.000.154** improves the F3 CPU/GPU names using a checked native console-model query; standard PS5 and PS5 Pro console checks remain pending. [Details and test download](docs/client-hardware-info-154.md).
+
 The latest public release is **01.000.153**. Availability and console validation are different: earlier builds have positive PS5 playtests, while exact 153 regression, audio and long-session checks remain pending.
 
 | Minecraft version | Vanilla | Fabric |
