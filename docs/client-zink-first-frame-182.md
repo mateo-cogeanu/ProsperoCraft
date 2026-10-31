@@ -61,4 +61,12 @@ arguments follow the181 tools. Outputs use `dist/candidates/zink-present-182`, n
 overwriting181 or180. Host tests execute exact182 rendering on actual GLFW/Zink
 lavapipe with SDL dummy offscreen, ASan/UBSan on frontend/GLFW/driver; no positive
 VideoOut execution is implied. Target compile/link/converter and one-copy checks
-pass. Exact checksum/source and verification results are recorded after packaging.
+pass. The [182 validation record](validation/client182-zink-diagnostics-2026-10-31.json)
+records clean build sourcef34251a and exact checksums. ZIP SHA-256:
+`f00b87e1bd1676238e1f1fbfdb427c04955ff7b7548fd87e0d88e94929af2635`.
+The [181 crash receipt](validation/client181-console-crash-2026-10-31.json) keeps
+the observed failure separate from182 pending console work.
+
+Local16fast and7native checks pass, alongside actual host rendering and native
+signal-recorder delegation/restoration tests. [Ubuntu/macOS CI](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41237946079)
+passes16fast checks for sourcef34251a; it executes no graphics or PS5 code.
