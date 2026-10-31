@@ -263,3 +263,6 @@ The manual native lane instead tests scoped native implementations against fixtu
 | --- | --- |
 | `test_zink_host.py` | Manual `zink` research lane; macOS, explicit actual Zink/lavapipe/GLFW/LWJGL/OSHI builds, verified original publisher cache and matching Clang sanitizers; offscreen GL and original capability boundary, no PS5 or full game |
 | `test_client180_package.py` | Exact local native180 ZIP, matching symbols/build tree, SDK converter and LLVM; digest/identity/licenses/source/one-copy/signature audit, no console execution |
+
+| `test_zink_present_host.py` | Manual macOS research tool; explicit actual rebuilt GLFW/Zink and headers/Clang; exact181 animation triple lifecycle on lavapipe/SDL dummy offscreen, no VideoOut/launcher |
+| `test_client181_package.py` | Exact local native181 ZIP/symbols/source/dependency/license/signature checks; SDK converter and LLVM, no console execution |

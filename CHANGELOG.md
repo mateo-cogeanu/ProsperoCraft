@@ -9,6 +9,8 @@
 
 - User reports exact180 **Stage1 PASS**: native Zink/RADV contexts, guarded readback and destruction. Presentation, JVM integration and full game acceptance remain pending; preserve the tested ZIP unchanged.
 
+- Local181 adds the next [native presentation checkpoint](docs/client-26.1-zink-present-181.md): real GLFW/SDL kopper RGB/moving-bar cycles and repeated teardown/reacquisition. Host offscreen lifecycle and target checks pass; physical visibility/refresh, actual launcher handoff and JVM/game integration remain pending. No release/Store change.
+
 ## 01.000.179 — automatic microphone and simpler instance settings
 
 - Prepare the working system microphone automatically before every supported game launch; remove the launcher Microphone button, toggle and test page. Existing saved microphoneEnabled:false no longer blocks preparation. Use the controller's physical microphone mute button or PS5 system mute.
