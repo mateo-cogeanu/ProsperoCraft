@@ -45,14 +45,16 @@ cleanup errors propagate. No recovery success is invented.
 If launcher preparation fails, log PS5 AudioIn prepare stage and returned code;
 SVC can make a genuine later attempt, with the normal stage diagnostics. The ON
 setting is permission to try, not proof of availability. A competing preparation
-cannot steal an active/pinned lease. Turning OFF after a failed close and then ON
+cannot steal an active/pinned lease. Enable-state changes and the release decision
+are serialized: OFF cannot miss a just-parked port, and ON during a native close
+waits and prepares a replacement after that close completes. Turning OFF after a failed close and then ON
 does not reset uncertain ownership or fabricate a device.
 
 ## Verification
 
 The actual capture core tests park/reclaim20times without another native open or
 close, clears queued samples, and checks final explicit close. Real upstream
-OpenAL + backend tests retain all prior23modes and add two actual-boundary modes:
+OpenAL + backend tests retain all prior23modes and add three actual-boundary modes:
 
 - Enable ON prepares exactly one real input port with zero reads. Force all
   subsequent native opens to0x8026010b. Five SVC-style read/stop/close/reopen cycles
@@ -62,6 +64,10 @@ OpenAL + backend tests retain all prior23modes and add two actual-boundary modes
 - Force native close failure on OFF. Ownership stays pinned; a new open/probe/
   enumeration cannot read, reopen or retry that close. This is conservative
   failure ownership, not a cleanup-success claim.
+
+- Block a native close during OFF and concurrently request ON. ON waits until the
+  close completes, then prepares exactly one replacement with zero reads; final
+  OFF closes that replacement. The setting cannot silently miss preparation.
 
 Target package audit requires the new preparation diagnostics and matching source
 hashes, in addition to177 early-service order and176 exclusion of host-only join

@@ -43,7 +43,10 @@ extern "C" int test_capture_blocked(){return input_entered;}
 extern "C" int test_capture_closes(){return capture_closes;}
 extern "C" void test_capture_release_and_reap(){input_release=true;assert(pthread_join(unjoined,nullptr)==0);}
 extern "C" int sceAudioInInput(int h,void* out){++capture_reads;if(mode==102){input_entered=true;while(!input_release)usleep(1000);return -85;}assert(h==31);auto* p=static_cast<std::int16_t*>(out);for(int i=0;i<256;i++)p[i]=i%2?12000:-12000;usleep(16000);return 256;}
-extern "C" int sceAudioInClose(int){++capture_closes;return mode==108?-86:0;}
+static std::atomic<bool> close_entered{false},close_release{false};
+extern "C" int test_capture_closing(){return close_entered;}
+extern "C" void test_capture_close_release(){close_release=true;}
+extern "C" int sceAudioInClose(int){++capture_closes;if(mode==109){close_entered=true;while(!close_release)usleep(1000);}return mode==108?-86:0;}
 extern "C" int sceAudioInGetSilentState(int){return 0;}
 extern "C" int sceAudioInGetRerouteCount(int){return 0;}
 extern "C" int sceAudioOutInit(){int n=++init;if(mode==1)return -41;if((mode==4&&n<=2)||mode==5||mode==6||mode==8||mode==9)return static_cast<int>(0x80260002u);if(mode==7)return static_cast<int>(0x8026000eu);return 0;}
@@ -58,8 +61,9 @@ subprocess.run(['clang++','-std=c++17','-fsanitize=address,undefined','-fPIC','-
 library,audit=build(host=True,speakers=True,host_objects=[w/'sink.o'],host_capture_join=True)
 subprocess.run(['install_name_tool','-id',str(library),str(library)],check=True)
 (w/'driver.cpp').write_text(r'''
-extern "C" {int client_ps5_capture_service_preinit();int test_capture_opens();int test_capture_reads();void test_capture_pressure();int test_capture_inits();int test_capture_blocked();int test_capture_closes();void test_capture_release_and_reap();}
+extern "C" {int test_capture_closing();void test_capture_close_release();int client_ps5_capture_service_preinit();int test_capture_opens();int test_capture_reads();void test_capture_pressure();int test_capture_inits();int test_capture_blocked();int test_capture_closes();void test_capture_release_and_reap();}
 #define AL_ALEXT_PROTOTYPES
+#include <thread>
 #include <AL/al.h>
 #include <AL/alc.h>
 #include <AL/alext.h>
@@ -125,6 +129,15 @@ int main(int argc,char**argv){assert(client_ps5_audio_event_preinit()==0);assert
   client_ps5_capture_enable(1);assert(!alcCaptureOpenDevice(nullptr,48000,AL_FORMAT_MONO_FLOAT32,960));
   const char* names=alcGetString(nullptr,ALC_CAPTURE_DEVICE_SPECIFIER);assert(names&&!*names&&test_capture_closes()==1&&test_capture_opens()>=3);
   puts("PASS opt-in prepares1realport/0reads,5SVC sample+close/reopen cycles reuse it despite late open0x8026010b,parked enumeration reads/opens0,OFF closes idle port; failed reprepare never lists a fake device");return 0;
+ }
+ if(mode==109){
+  client_ps5_capture_enable(1);assert(test_capture_opens()==1&&test_capture_reads()==0);std::atomic<bool> on_done{false},on_started{false};
+  std::thread off([]{client_ps5_capture_enable(0);});for(int i=0;i<1000&&!test_capture_closing();++i)usleep(1000);assert(test_capture_closing());
+  std::thread on([&]{on_started=true;client_ps5_capture_enable(1);on_done=true;});while(!on_started)usleep(1000);usleep(30000);assert(!on_done);
+  test_capture_close_release();off.join();on.join();assert(on_done&&test_capture_opens()==2&&test_capture_closes()==1&&test_capture_reads()==0);
+  const char* names=alcGetString(nullptr,ALC_CAPTURE_DEVICE_SPECIFIER);assert(names&&*names&&test_capture_opens()==2);
+  client_ps5_capture_enable(0);assert(test_capture_closes()==2);
+  puts("PASS actual capture policy race: ON waits for blocked OFF native close,then prepares a new real idle port; no missed preparation,read or extra open");return 0;
  }
  if(mode==108){
   client_ps5_capture_enable(1);assert(test_capture_opens()==1&&test_capture_reads()==0);client_ps5_capture_enable(0);assert(test_capture_closes()==1);
@@ -215,7 +228,7 @@ int main(int argc,char**argv){assert(client_ps5_audio_event_preinit()==0);assert
 ''')
 source=ROOT/'.tools/openal-soft-src'
 subprocess.run(['clang++','-std=c++17','-fsanitize=address,undefined','-I'+str(source/'include'),str(w/'driver.cpp'),str(library),'-Wl,-rpath,'+str(library.parent),'-o',str(w/'check')],check=True)
-for mode in [1,2,0,3,4,5,6,7,8,9,10,11,12,13,14,15,16,100,101,102,103,104,105,106,108]:
+for mode in [1,2,0,3,4,5,6,7,8,9,10,11,12,13,14,15,16,100,101,102,103,104,105,106,108,109]:
  result=subprocess.run([str(w/'check'),str(mode)],env=dict(os.environ,ALSOFT_DRIVERS='ps5',ALSOFT_LOGLEVEL='2',ALSOFT_LOCAL_PATH=str(w)),capture_output=True,text=True,timeout=30)
  (w/('mode'+str(mode)+'.log')).write_text(result.stdout+result.stderr)
  if result.returncode:print(result.stdout+result.stderr)

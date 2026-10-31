@@ -152,6 +152,9 @@ struct Ps5Backend final : BackendBase {
 namespace {
 constexpr auto CaptureName="PS5 system microphone (select DualSense in PS5 settings)";
 std::atomic<bool> captureEnabled{false},captureLeased{false};
+// Serialize enable changes with the release decision. OFF must not miss a
+// just-parked port; ON during close must prepare again after that close ends.
+ps5audio::Mutex capturePolicyMutex;
 ps5audio::Capture capture;
 // Both core and producer state outlive every logical OpenAL device. A failed
 // join pins this state/port; it must not retain the destroyed backend or device.
@@ -160,9 +163,9 @@ std::atomic<bool> captureWorkerPinned{false};
 ps5audio::CaptureApi captureApi(){return {sceUserServiceGetInitialUser,sceAudioInInit,sceAudioInOpen,sceAudioInInput,sceAudioInGetSilentState,sceAudioInGetRerouteCount,sceAudioInClose};}
 struct CaptureLease {
  bool owned=false;
- bool acquire(){bool expected=false;owned=captureLeased.compare_exchange_strong(expected,true,std::memory_order_acq_rel);return owned;}
+ bool acquire(){const auto lock=std::lock_guard{capturePolicyMutex};bool expected=false;owned=captureLeased.compare_exchange_strong(expected,true,std::memory_order_acq_rel);return owned;}
  void release(){
-  if(!owned)return;
+  const auto lock=std::lock_guard{capturePolicyMutex};if(!owned)return;
   // A healthy opted-in port stays ready without a producer or queued audio.
   // Otherwise use the actual close result; uncertain cleanup pins the lease.
   if((captureEnabled.load(std::memory_order_acquire)&&capture.park())||capture.close()){
@@ -218,7 +221,7 @@ extern "C" __attribute__((visibility("default"))) int client_ps5_capture_service
  std::fprintf(stderr,"PS5 AudioIn pre-JVM service init result=0x%x; no port opened or input read\n",unsigned(rc));std::fflush(stderr);return rc;
 }
 extern "C" __attribute__((visibility("default"))) void client_ps5_capture_enable(int enabled){
- captureEnabled.store(enabled!=0,std::memory_order_release);CaptureLease preparation;
+ {const auto lock=std::lock_guard{capturePolicyMutex};captureEnabled.store(enabled!=0,std::memory_order_release);}CaptureLease preparation;
  if(!preparation.acquire())return; // Never close/reuse a live or uncertain worker's port.
  if(enabled&&!capture.open(captureApi())){
   std::fprintf(stderr,"PS5 AudioIn prepare stage=%s result=0x%x\n",capture.errorStage,unsigned(capture.error));std::fflush(stderr);
