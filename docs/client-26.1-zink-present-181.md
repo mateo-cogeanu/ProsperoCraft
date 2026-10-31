@@ -61,7 +61,9 @@ visibility map prevents application exports unsupported by this converter. This
 removes unused desktop SDL dependencies rather than adding success stubs. Mouse
 imports use the same real system-library declarations as the existing app; import
 stub bodies are never shipped. One-copy GL/RADV/NIR and GLFW/SDL exports are checked
-in the symbols ELF. Target compile/link/converter checks pass.
+in the symbols ELF. Target compile/link/converter checks pass. Local16fast and7native checks pass;
+[actual Ubuntu/macOS CI](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41237287945)
+passes16fast checks for source22d8ff1. Hosted CI executes no graphics or PS5 code.
 
 `tools/test_zink_present_host.py` compiles the exact animation/lifecycle source
 with a120ms test interval, actual rebuilt GLFW and Zink on macOS lavapipe. All
@@ -85,7 +87,10 @@ python3 tools/test_client181_package.py \
 ```
 
 Local output is `dist/candidates/zink-present-181`; existing candidate ZIPs are
-never overwritten. Its matching validation record is added after packaging.
+never overwritten. The [matching validation record](validation/client181-zink-presentation-2026-10-31.json)
+records clean source22d8ff1, exact package/symbol hashes and separate host/console
+scope. ZIP SHA-256:
+`338c94149f54ea801283dcb0fd58097390104f439b053088cb94b76f5a9e4112`.
 Preserve029 OSMesa, adapted GLFW callbacks, runtime allocation/TLS/sync/stack
 fallbacks, original game JARs, frozen history and release/Store gates. Minecraft
 launcher integration, all three26.1 release title/world/save cycles and existing
