@@ -1,0 +1,53 @@
+# Local179: microphone enabled for play, no launcher microphone menu
+
+The user confirms178 microphone/SVC functionality and explicitly asks for GitHub
+and ProsperoStore publication with the launcher microphone menu removed and input
+available by default. See [exact178 functional acceptance](validation/client178-console-acceptance-2026-10-31.json).
+No full per-device/mute/route/endurance matrix is inferred from that report.
+
+179 removes the instance-management Microphone action, its toggle/test page and
+its native hit targets. Browser uploads fills that action row; Done/Delete stay
+at the bottom. Controller/keyboard navigation has no invisible microphone focus
+stop. No other page numbers or instance/world/account data are migrated.
+
+The production launcher now always calls the same proven178 enable/preparation
+path before starting supported gameplay. It does not consult the old saved
+microphoneEnabled key. Gson ignores that obsolete key while preserving all other
+settings, instances and worlds; later ordinary saves omit it. No native AudioIn,
+worker, input-format, port-retention or hardware-mute implementation changes.
+The app never calls an unmute or routing/gain setter. SVC activation/PTT/mute
+configuration is not overwritten. Native capture remains unavailable until the
+launcher prepares it for Play; automatic preparation is a product launch policy.
+
+The underlying microphone probe/JNI and native enable API remain for focused
+host/developer diagnostics. Removing the menu is not permission to discard the
+working implementation or its lifecycle tests. A narrow injected Microphone
+boundary lets deterministic host launch tests verify unconditional preparation
+without using host microphone hardware or faking native PS5 success in production.
+Tests cover legacy false settings and repeated launches plus the updated browser/
+Done/Delete controller and mouse navigation. The target audit checks the actual
+shipped settings/model bytecode and removal of the old native menu captions.
+
+## Release/Store preparation and exact-build gate
+
+178 is accepted for microphone functionality.179 is a modified package and must
+receive its own physical-console confirmation before a release or prerelease is
+created. This follows [AGENTS.md](../AGENTS.md): “No new GitHub release or prerelease
+before the user confirms the exact build works on a physical PS5.” Source pushes,
+local179 packages and prepared catalog metadata are authorized and continue.
+
+A release/Store update is requested for this feature set. Preserve178 and all
+older release assets/tags. Keep current root sce_sys/param.json and published
+README release links at167 until179 is actually approved/published. Prepare exact
+179 package/symbols/OpenAL source-relink materials/checksums and release notes;
+never rebuild accepted179 bytes merely for publication. On approval, update the
+published root identity, create the179 release with matching notices/validation,
+independently download/hash the assets and verify both relink paths. Update only
+the existing PPSA99874 catalog version/artifact URL/SHA; preserve description,
+credits and icon. Release notes supply the changelog. Submit the catalog PR and
+stop; do not monitor its CI/merge/deployment/liveStore after submission.
+
+The smallest179 console check is: instance management has no Microphone page;
+Play prepares input without a toggle, SVC speech still works, the physical
+controller mic button mutes/unmutes correctly, and leaving/rejoining still works.
+These exact modified-build results are pending at preparation time.

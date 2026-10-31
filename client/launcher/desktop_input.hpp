@@ -10,7 +10,7 @@ inline unsigned pointer_command(int page,int kind,int target,bool click){return 
 struct DesktopHit {int kind=-1,target=0;};
 inline DesktopHit desktop_hit(int page,int x,int y,int first,int count,int slide=0,bool offline=false,bool installed=false,bool shader=false){
  auto box=[&](int a,int b,int w,int h){return x>=a&&x<a+w&&y>=b&&y<b+h;};
- bool modal=page==6||(page>=7&&page<=11)||page==14||page==15||page==16;
+ bool modal=page==6||(page>=7&&page<=11)||page==14||page==15;
  if(!modal){int tx[]={865,1245,1555},tw[]={350,280,280};for(int i=0;i<3;i++)if(box(tx[i],52,tw[i],68))return {0,i};}
  if(page==0){for(int i=0;i<8&&first+i<count;i++)if(box(70+i%4*450,342+i/4*272+slide,420,242))return {1,first+i};}
  if(page==6){for(int i=0;i<40;i++)if(box(80+i%10*176,465+i/10*91,152,73))return {2,i};for(int i=0;i<5;i++)if(box(70+i*360,855,330,76))return {4,i};return {};}
@@ -23,8 +23,7 @@ inline DesktopHit desktop_hit(int page,int x,int y,int first,int count,int slide
  if(page==2){for(int i=0;i<7;i++)if(box(760,300+i*96,1080,86))return {3,i};}
  if(page==3&&box(1140,366,700,76))return {3,0};
  if(page==4){for(int i=0;i<(offline?4:3);i++)if(box(760,505+i*100,1080,76))return {3,i};}
- if(page==16){for(int i=0;i<3;i++)if(box(1000,380+i*110,820,86))return {3,i};return {};}
- if(page==5){if(box(760,310,1080,96))return {3,0};if(box(760,420,1080,96))return {3,1};int rows[]={2,3,4,7,8,9,5,6};for(int i=0;i<8;i++)if(box(760+i%2*560,535+i/2*95,520,76))return {3,rows[i]};}
+ if(page==5){if(box(760,310,1080,96))return {3,0};if(box(760,420,1080,96))return {3,1};int rows[]={2,3,4,7};for(int i=0;i<4;i++)if(box(760+i%2*560,535+i/2*95,520,76))return {3,rows[i]};if(box(760,725,1080,76))return {3,8};if(box(760,820,520,76))return {3,5};if(box(1320,820,520,76))return {3,6};}
  if(page==7){if(box(240,773,330,76))return {3,1};if(box(680,773,430,76))return {3,0};}
  if(page==11){if(box(78,850,330,76))return {3,1};if(box(470,850,610,76))return {3,0};}
  if(page==14){if(box(760,740,520,76))return {3,0};if(box(1320,740,520,76))return {3,1};}

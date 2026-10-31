@@ -5,13 +5,14 @@ import java.util.*;
 public final class ProsperoLauncher {
  static final int FIELD_COUNT=111;
  private boolean physicalEditing=false,desktopDispatch=false;
- private String microphoneResult="Select DualSense microphone in PS5 system settings. No recording is saved.";
  private ProsperoWeb web;private boolean webMutating;private int webAddress;private long webStateAt;private String webError="Stopped";
  private int feedbackSerial;private String feedbackCue="";
  private void feedback(String cue){feedbackCue=cue;feedbackSerial=feedbackSerial==Integer.MAX_VALUE?1:feedbackSerial+1;cached=null;}
  static final String[] THEMES=ProsperoTheme.NAMES;
  static final String[] BACKGROUNDS={"Gradient","Aurora","Grid","Stars","Waves","Bokeh","Phosphor","Paper","Dots","Vista"};
  interface Menu {boolean show();}
+ interface Microphone {void prepare()throws java.io.IOException;}
+ private final Microphone microphone;
  private static ProsperoLauncher current;
  private final ProsperoAuth auth;private final ProsperoLibrary library;private final ProsperoInstall installer;
  private final ProsperoFabric fabric;private final ProsperoModrinth modrinth=new ProsperoModrinth();
@@ -27,7 +28,8 @@ public final class ProsperoLauncher {
  private ProsperoAuth.Session session;private Thread worker;private long completed,total,lastProgress;private String[] cached;
  private ProsperoInstall.Receipt receipt;private java.net.URLClassLoader loader;
  ProsperoLauncher(ProsperoAuth auth)throws Exception{this(auth,Path.of(System.getProperty("ps5.launcher.root","/download0/ProsperoCraft")),null);}
- ProsperoLauncher(ProsperoAuth auth,Path root,ProsperoInstall.Source source)throws Exception{this.auth=auth;library=new ProsperoLibrary(root);accounts=new ProsperoAccountStore(root);offlineAccount=ProsperoOfflineAccount.load(root,System.currentTimeMillis());fabric=new ProsperoFabric(root.resolve("cache"));installer=source==null?new ProsperoInstall(root.resolve("cache")):new ProsperoInstall(root.resolve("cache"),source);if(library.settings().showIntro&&!Boolean.getBoolean("ps5.launcher.resume")){page=7;row=1;}if(ProsperoChannel.tempGameTest()&&accounts.exists())restoreAccount();}
+ ProsperoLauncher(ProsperoAuth auth,Path root,ProsperoInstall.Source source)throws Exception{this(auth,root,source,()->ProsperoMicrophone.enable(true));}
+ ProsperoLauncher(ProsperoAuth auth,Path root,ProsperoInstall.Source source,Microphone microphone)throws Exception{this.microphone=Objects.requireNonNull(microphone);this.auth=auth;library=new ProsperoLibrary(root);accounts=new ProsperoAccountStore(root);offlineAccount=ProsperoOfflineAccount.load(root,System.currentTimeMillis());fabric=new ProsperoFabric(root.resolve("cache"));installer=source==null?new ProsperoInstall(root.resolve("cache")):new ProsperoInstall(root.resolve("cache"),source);if(library.settings().showIntro&&!Boolean.getBoolean("ps5.launcher.resume")){page=7;row=1;}if(ProsperoChannel.tempGameTest()&&accounts.exists())restoreAccount();}
  static String[] run(Menu menu)throws Exception {
   current=new ProsperoLauncher(new ProsperoAuth());
   try{if(!menu.show()){current.cancel();throw new IllegalStateException("Launcher display handoff failed;game not started");}}finally{synchronized(current){current.stopWeb();}}
@@ -97,7 +99,7 @@ public final class ProsperoLauncher {
   if(installed.javaMajor>Runtime.version().feature())throw new java.io.IOException("This instance requires Java "+installed.javaMajor+"; this app includes Java "+Runtime.version().feature());
   if(!launchable(instance.version,instance.loader)||!("SDL".equals(installed.window)||("26.2".equals(instance.version)&&"GLFW".equals(installed.window)))){message="Coming soon for this version. Downloads are kept.";return;}
 
-  if(library.settings().microphoneEnabled)ProsperoMicrophone.enable(true);
+  microphone.prepare(); // Automatic system input; physical controller/system mute remains authoritative.
   installer.verify(installed);receipt=installed;loader=installer.loader(installed);if("fabric".equals(instance.loader)){var f=fabric.read(instance.version);loader=fabric.loader(f,loader);fabricLoaderVersion=f.loader;}detail=instance;offlineLaunch=offline;launchPrepared=true;launch=!awaitingTutorial;message="Starting "+instance.name;
  }
  static boolean supported(String version){return "26.2".equals(version)||"26.3".equals(version)||snapshot(version);}
@@ -230,13 +232,6 @@ public final class ProsperoLauncher {
   if((buttons>>>28)!=0){boolean before=desktopDispatch;desktopDispatch=true;try{return desktopInput(buttons);}finally{desktopDispatch=before;}}
   if(buttons!=0&&!desktopDispatch)physicalEditing=false;
   try{
-   if(page==16){
-    if(busy){if((buttons&0x2000)!=0)message="Wait for the bounded microphone test to finish.";return state();}
-    if((buttons&0x2000)!=0){page=5;row=9;}else{
-     if((buttons&0x10)!=0)row=Math.max(0,row-1);if((buttons&0x40)!=0)row=Math.min(2,row+1);
-     if((buttons&0x4000)!=0){if(row==2){page=5;row=9;}else if(row==0){boolean next=!library.settings().microphoneEnabled;ProsperoMicrophone.enable(next);library.settings().microphoneEnabled=next;library.save();}else runTask("MICROPHONE",attempt->{String result=ProsperoMicrophone.probe();synchronized(this){microphoneResult=result;cached=null;}});}
-    }if(buttons!=0)cached=null;return state();
-   }
    if(page==15){
     if((buttons&0x2000)!=0){stopWeb();page=5;row=8;}
     else if(!webMutating&&web!=null){var status=web.status();if(!status.addresses().isEmpty()&&(buttons&0xa0)!=0)webAddress=Math.floorMod(webAddress+((buttons&0x20)!=0?1:-1),status.addresses().size());}
@@ -283,10 +278,10 @@ public final class ProsperoLauncher {
     if(buttons!=0)cached=null;return state();
    }
    if(page==5){
-    if((buttons&0x80)!=0){if(row==9)row=8;else if(row==3)row=2;else if(row==7)row=4;else if(row==6)row=5;}
-    if((buttons&0x20)!=0){if(row==8)row=9;else if(row==2)row=3;else if(row==4)row=7;else if(row==5)row=6;}
-    if((buttons&0x10)!=0){if(row==0)top=true;else row=switch(row){case 1->0;case 2,3->1;case 4->2;case 7->3;case 5->8;case 6->9;case 8->4;default->7;};}
-    if((buttons&0x40)!=0)row=switch(row){case 0->1;case 1->2;case 2->4;case 3->7;case 4->8;case 7->9;case 8->5;case 9->6;default->row;};
+    if((buttons&0x80)!=0){if(row==3)row=2;else if(row==7)row=4;else if(row==6)row=5;}
+    if((buttons&0x20)!=0){if(row==2)row=3;else if(row==4)row=7;else if(row==5)row=6;}
+    if((buttons&0x10)!=0){if(row==0)top=true;else row=switch(row){case 1->0;case 2,3->1;case 4->2;case 7->3;case 5->8;case 6->8;case 8->4;default->7;};}
+    if((buttons&0x40)!=0)row=switch(row){case 0->1;case 1->2;case 2->4;case 3->7;case 4->8;case 7->8;case 8->5;default->row;};
    }else if((buttons&0x10)!=0){if(row==0)top=true;else row--;}
    if(page!=5&&(buttons&0x40)!=0)row=Math.min(page==1?4:page==2?6:page==3?0:page==4?(ProsperoChannel.offline()&&offlineAccount!=null?3:2):page==5?6:2,row+1);
    int direction=(buttons&0x80)!=0?-1:(buttons&0x20)!=0?1:0;
@@ -300,7 +295,7 @@ public final class ProsperoLauncher {
     else if(page==2){if(row==6){dropdown(8,library.settings().theme);cached=null;return state();}if(row==5){page=13;row=0;cached=null;return state();}var settings=library.settings();if(row==0){dropdown(3,settings.resolution);cached=null;return state();}if(row==1){dropdown(4,settings.workers-1);cached=null;return state();}if(row==2)settings.reducedMotion=!settings.reducedMotion;if(row==3){settings.snapshots=!settings.snapshots;versions=List.of();}if(row==4)settings.showIntro=!settings.showIntro;library.save();}
     else if(page==3&&row==0){if(session==null)signIn();else{cancel();session=null;avatar="";accounts.clear();message="Signed out. Saved account removed from this console.";}}
     else if(!top&&page==4){if(row==0){play();cached=null;return state();}else if(row==1){page=5;row=0;}else if(row==2)install(false);else if(row==3)playOffline();}
-    else if(page==5){if(row==9){page=16;row=0;cached=null;return state();}if(row==8){openWeb();return state();}if(row==7){duplicateInstance();cached=null;return state();}if(row>=2&&row<=4&&!busy){openContent(ProsperoModrinth.Kind.values()[row-2]);cached=null;return state();}if(row==0)beginName(5);if(row==1){dropdown(2,detail.icon);cached=null;return state();}if(row==5){page=4;row=0;}if(row==6){if(busy){message="Wait for the current task before deleting an instance.";feedback("error");}else{page=9;row=0;}}}
+    else if(page==5){if(row==8){openWeb();return state();}if(row==7){duplicateInstance();cached=null;return state();}if(row>=2&&row<=4&&!busy){openContent(ProsperoModrinth.Kind.values()[row-2]);cached=null;return state();}if(row==0)beginName(5);if(row==1){dropdown(2,detail.icon);cached=null;return state();}if(row==5){page=4;row=0;}if(row==6){if(busy){message="Wait for the current task before deleting an instance.";feedback("error");}else{page=9;row=0;}}}
    }
    if(buttons!=0)cached=null;
   }catch(Exception error){message=friendly(error);feedback("error");}
@@ -323,7 +318,6 @@ public final class ProsperoLauncher {
 
   f[80]=avatar;f[81]=session==null?"Sign in":session.name;f[94]=library.settings().showControls?"ON":"OFF";f[95]=page==12?"SHADOWS: "+shadowScale+"%":launchPrepared?"READY":"WAIT";
   f[77]=""+feedbackSerial;f[78]=feedbackCue;f[79]=library.settings().vibration?"ON":"OFF";
-  if(page==16){f[82]=library.settings().microphoneEnabled?"ON":"OFF";f[85]=microphoneResult;}
   if(page==15){
    f[7]="CIRCLE  Close browser management";f[107]=web==null?webError:web.status().state();f[108]="";f[109]="";f[110]="";
    if(web!=null){var status=web.status();if(!status.addresses().isEmpty()&&status.state().equals("Ready")){

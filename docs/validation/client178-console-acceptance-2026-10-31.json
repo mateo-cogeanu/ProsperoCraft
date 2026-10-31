@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-31",
+  "version": "01.000.178",
+  "title_id": "PPSA99874",
+  "package_sha256": "2c83a759221108693a8342eb230ee776839c5790301015b6cb471364262403b0",
+  "candidate_source_commit": "7ba83f538c645326132f401b1c7c4f6abb8c17da",
+  "user_report": "mic is amazingly amazing! alls good, i want a github push and prosperostore update! but remove the microphone menu, its on by default and if you dont want it, you press the mute mic button on the controller.",
+  "result": "User confirms microphone functionality on exact delivered178 and requests release/Store update with launcher microphone menu removed and automatic microphone preparation.",
+  "scope": "Positive microphone/SVC functional report; prior176 user-reported leaving/rejoining success remains separately scoped. No independent per-device/route/mute/endurance or full regression matrix inferred.",
+  "next_build": "179 implements requested menu/default changes; exact179 physical confirmation still required before any release/prerelease or Store submission. No transfer of178 binary acceptance to modified179."
+}

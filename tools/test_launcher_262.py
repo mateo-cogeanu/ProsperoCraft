@@ -103,7 +103,7 @@ public class Release262Check {
 
    }
    var library=new ProsperoLibrary(work.resolve(id));var instance=library.add("26.2 Test",id,1);library.ready(instance,true);
-   var model=new ProsperoLauncher(new ProsperoAuth(),library.root,url->{throw new java.io.IOException("No network in launch policy test");});
+   var model=new ProsperoLauncher(new ProsperoAuth(),library.root,url->{throw new java.io.IOException("No network in launch policy test");},()->{});
    var prepare=ProsperoLauncher.class.getDeclaredMethod("prepareLaunch",ProsperoLibrary.Instance.class,ProsperoInstall.Receipt.class);prepare.setAccessible(true);
    var copy=installer.receipt(id);copy.javaMajor=26;
    try{prepare.invoke(model,instance,copy);throw new AssertionError("future Java accepted");}catch(InvocationTargetException expected){check(expected.getCause() instanceof java.io.IOException&&expected.getCause().getMessage().contains("requires Java 26"),"future Java error");}

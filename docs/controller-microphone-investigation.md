@@ -1,5 +1,13 @@
 # Experimental PS5 microphone capture — local170, console pending
 
+Current179 product policy: microphone preparation is automatic before Play and
+the launcher microphone menu/toggle/test page has been removed at the user's
+request after successful178 microphone feedback. Use the physical controller or
+system mute. [179 release preparation](client-microphone-default-179.md) tracks
+its exact-build confirmation gate. The170–178 menu/opt-in instructions below are
+historical; native probe and lifecycle implementations remain available for
+focused developer tests.
+
 A real **default-off AudioIn → OpenAL capture path is implemented**. This supersedes
 169's investigation-only state. It has host core/lifecycle coverage and a target
 build; it does **not** establish captured DualSense speech or working multiplayer

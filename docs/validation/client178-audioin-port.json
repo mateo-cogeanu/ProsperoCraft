@@ -24,7 +24,7 @@
     "hosted_policy": "PASS Linux+macOS https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41223507886",
     "hosted_native": "PASS Linux+macOS https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41223517818"
   },
-  "physical178": "PENDING launcher preparation result, actual SVC worker/samples/speech, physical mute/route/input freshness across parked intervals/OS buffering,codec/UDP/two-way voice,stop/reopen/world/server transitions/save/endurance. No unverified native flush,precreated capture worker or fake success.",
+  "physical178": "User confirms microphone works (mic is amazingly amazing; alls good) and requests GitHub/Store publication with menu removal/default-on. Functional acceptance only; no measured mute/route/endurance or full regression matrix inferred. Modified179 needs exact console confirmation before publication.",
   "publication": {
     "source": "Implementationca90f31 and policy7ba83f5 pushed; hosted runs pass. Validation follow-up published separately.",
     "release_store": "No release/prerelease/Store action; exact physical acceptance required"

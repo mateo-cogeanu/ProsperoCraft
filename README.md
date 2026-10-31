@@ -10,7 +10,7 @@ Download Minecraft on your console, keep separate instances for worlds and mods,
 
 ProsperoCraft handles Minecraft installation, accounts, input and game integration. Its [Native Java 25 Runtime](https://github.com/mateo-cogeanu/ps5-java25-homebrew) is maintained separately. Official Minecraft game JARs and asset objects are downloaded and verified from the publisher, rather than bundled with the app.
 
-Local development candidate **01.000.178** prepares the real input port when Voice capture is enabled in the launcher and retains healthy idle input across SVC reopen cycles.177 now initializes AudioIn successfully on PS5 but the later port open fails0x8026010b. Capture remains default-off; OFF releases idle input. Exact178 speech, mute/route and transitions remain pending. [Evidence/test guide](docs/client-audioin-port-178.md). No178 release or Store update.
+The user confirms **01.000.178 microphone functionality** and requests release with automatic microphone preparation and no launcher microphone menu. Local candidate **01.000.179** applies those changes; the physical controller/system mute remains authoritative. Exact179 confirmation is required before its GitHub release and ProsperoStore submission. [Release preparation](docs/client-microphone-default-179.md) · [178 acceptance](docs/validation/client178-console-acceptance-2026-10-31.json).
 
 ## What can I play?
 

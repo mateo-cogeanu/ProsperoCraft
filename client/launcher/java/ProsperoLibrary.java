@@ -11,7 +11,7 @@ public final class ProsperoLibrary {
  static String resolutionLabel(int i){return RESOLUTIONS[i][0]+" x "+RESOLUTIONS[i][1];}
  static final class Instance {String id=UUID.randomUUID().toString(),name,version,loader="vanilla";int icon;boolean ready,defaultContentPending;Instance(String n,String v,int i){name=clean(n);version=v;icon=i;}}
  static final class Favorite {String instance,kind,target,name;Favorite(String i,ProsperoDestinations.Entry e){instance=i;kind=e.kind();target=e.target();name=e.name();}}
- static final class Settings {int[] controllerKeys=ProsperoInput.DEFAULT.clone();int resolution=LOCKED_RESOLUTION,workers=4,theme=0,background=5,backgroundDefaultsRevision=0;boolean microphoneEnabled=false,vibration=true,reducedMotion=false,snapshots=false,showIntro=true,showControls=true;}
+ static final class Settings {int[] controllerKeys=ProsperoInput.DEFAULT.clone();int resolution=LOCKED_RESOLUTION,workers=4,theme=0,background=5,backgroundDefaultsRevision=0;boolean vibration=true,reducedMotion=false,snapshots=false,showIntro=true,showControls=true;}
  static final class State {int schema=1;ArrayList<Instance> instances=new ArrayList<>();Settings settings=new Settings();ArrayList<Favorite> favorites=new ArrayList<>();}
  final Path root;private State state;
  ProsperoLibrary(Path root)throws Exception {

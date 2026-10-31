@@ -62,21 +62,23 @@ var store=new ProsperoLibrary(root.resolve("store"));if(!store.instances().isEmp
   byte[] metadata=files.get(META);String catalog="{\"versions\":[{\"id\":\"26.3\",\"type\":\"release\",\"url\":\""+META+"\",\"sha1\":\""+hash(metadata)+"\"}]}";files.put(ProsperoInstall.MANIFEST,bytes(catalog));
   Path supportedRoot=root.resolve("supported");var supportedLibrary=new ProsperoLibrary(supportedRoot);var supportedInstance=supportedLibrary.add("Playable","26.3",1);supportedLibrary.settings().showIntro=false;supportedLibrary.save();var supportedInstaller=new ProsperoInstall(supportedRoot.resolve("cache"),InstanceCheck::open);var supportedReceipt=supportedInstaller.install(supportedInstaller.catalog(false,()->false).get(0),1,(t,d,n)->{},()->false);supportedLibrary.ready(supportedInstance,true);
   Files.writeString(supportedLibrary.game(supportedInstance).resolve("keep-world.txt"),"world");
-  var supportedModel=new ProsperoLauncher(new ProsperoAuth(),supportedRoot,InstanceCheck::open);supportedModel.tick(0x4000);supportedModel.tick(0x4000);waitFor(supportedModel);if(!supportedModel.tick(0)[10].equals("LAUNCH"))throw new AssertionError("supported launch "+supportedModel.tick(0)[2]);List<String> launch=List.of(supportedModel.arguments(null,null));if(!launch.contains("--demo")||!launch.contains("26.3")||!launch.contains("--graphicsBackend"))throw new AssertionError("supported original demo arguments");if(!launch.get(launch.indexOf("--width")+1).equals("1920")||!launch.get(launch.indexOf("--height")+1).equals("1080"))throw new AssertionError("launch not1080p");
+  var preparations=new java.util.concurrent.atomic.AtomicInteger();
+  var legacy=JsonParser.parseString(Files.readString(supportedRoot.resolve("library.json"))).getAsJsonObject();legacy.getAsJsonObject("settings").addProperty("microphoneEnabled",false);Files.writeString(supportedRoot.resolve("library.json"),legacy.toString());
+  var supportedModel=new ProsperoLauncher(new ProsperoAuth(),supportedRoot,InstanceCheck::open,()->{preparations.incrementAndGet();});supportedModel.tick(0x4000);supportedModel.tick(0x4000);waitFor(supportedModel);if(!supportedModel.tick(0)[10].equals("LAUNCH"))throw new AssertionError("supported launch "+supportedModel.tick(0)[2]);if(preparations.get()!=1)throw new AssertionError("automatic mic preparation ignored legacyfalse");List<String> launch=List.of(supportedModel.arguments(null,null));if(!launch.contains("--demo")||!launch.contains("26.3")||!launch.contains("--graphicsBackend"))throw new AssertionError("supported original demo arguments");if(!launch.get(launch.indexOf("--width")+1).equals("1920")||!launch.get(launch.indexOf("--height")+1).equals("1080"))throw new AssertionError("launch not1080p");
   // Returning is a fresh process/model; every launch gets a new loader.
   for(int cycle=0;cycle<3;cycle++){
    System.setProperty("ps5.launcher.resume","true");supportedLibrary.settings().showIntro=true;supportedLibrary.save();
-   var next=new ProsperoLauncher(new ProsperoAuth(),supportedRoot,InstanceCheck::open);
+   var next=new ProsperoLauncher(new ProsperoAuth(),supportedRoot,InstanceCheck::open,()->{preparations.incrementAndGet();});
    if(!next.tick(0)[11].equals("0")||!next.tick(0)[68].equals("ON"))throw new AssertionError("return must bypass notice without changing preference");
    next.tick(0x800);if(!next.tick(0)[12].equals("1"))throw new AssertionError("topbar horizontal");next.tick(0x400);
    next.tick(0x4000);next.tick(0x4000);waitFor(next);if(!next.tick(0)[10].equals("LAUNCH"))throw new AssertionError("repeat selection/launch");
    if(!Files.readString(supportedLibrary.game(supportedInstance).resolve("keep-world.txt")).equals("world"))throw new AssertionError("cycle lost world");
-  }System.clearProperty("ps5.launcher.resume");
+  }if(preparations.get()!=4)throw new AssertionError("mic not prepared on every relaunch");System.clearProperty("ps5.launcher.resume");
   // Temporary channel requires an unexpired, entitlement-checked Session.
   Path channel=Path.of(args[1]).resolve("prosperocraft-channel.txt");Files.writeString(channel,"temp_gametest");
   supportedLibrary.settings().showIntro=false;supportedLibrary.save();
   var authRequests=new java.util.concurrent.atomic.AtomicInteger();var testAuth=new ProsperoAuth((e,m,t,b,a)->{authRequests.incrementAndGet();throw new ProsperoAuth.Failure("NETWORK");},new ProsperoAuth.Clock(){public long millis(){return System.currentTimeMillis();}public void sleep(long n){}});
-  var fullModel=new ProsperoLauncher(testAuth,supportedRoot,InstanceCheck::open);fullModel.tick(0x4000);if(!fullModel.tick(0)[6].equals("PLAY - Sign in"))throw new AssertionError("sign-in play wording");fullModel.tick(0x4000);waitFor(fullModel);
+  var fullModel=new ProsperoLauncher(testAuth,supportedRoot,InstanceCheck::open,()->{preparations.incrementAndGet();});fullModel.tick(0x4000);if(!fullModel.tick(0)[6].equals("PLAY - Sign in"))throw new AssertionError("sign-in play wording");fullModel.tick(0x4000);waitFor(fullModel);
   if(!fullModel.tick(0)[10].equals("WAIT")||!fullModel.tick(0)[11].equals("3")||authRequests.get()!=1)throw new AssertionError("unsigned full game accepted");
   var sessionField=ProsperoLauncher.class.getDeclaredField("session");sessionField.setAccessible(true);
   sessionField.set(fullModel,new ProsperoAuth.Session("OwnedPlayer","0123456789abcdef0123456789abcdef","SECRET_TEST_TOKEN",System.currentTimeMillis()+3600000));

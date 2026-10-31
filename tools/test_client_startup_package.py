@@ -339,7 +339,10 @@ with zipfile.ZipFile(package)as z,zipfile.ZipFile(ROOT/'dist/milestones/Client_C
  assert z.read(prefix+'assets/java25/QR-LICENSE.txt')==(ROOT/'client/launcher/QR-LICENSE.txt').read_bytes()
  assert z.read(prefix+'assets/java25/launcher-icon-source/attribution.json')==(ROOT/'assets/launcher-icons/attribution.json').read_bytes()
  with zipfile.ZipFile(io.BytesIO(z.read(prefix+'assets/java25/client-probe.jar'))) as current_jar:
-  for name in ['ProsperoWeb.class','ProsperoWebPage.class','ProsperoWebIcons.class','ProsperoMicrophone.class','ProsperoTheme.class','ProsperoQrCode.class']:assert name in current_jar.namelist(),name
+  for name in ['ProsperoLauncher$Microphone.class','ProsperoWeb.class','ProsperoWebPage.class','ProsperoWebIcons.class','ProsperoMicrophone.class','ProsperoTheme.class','ProsperoQrCode.class']:assert name in current_jar.namelist(),name
+  assert b'microphoneEnabled' not in current_jar.read('ProsperoLibrary$Settings.class')
+  assert b'microphoneResult' not in current_jar.read('ProsperoLauncher.class')
+ for removed in [b'VOICE CAPTURE:',b'TEST INPUT - 5 SECONDS',b'Voice chat microphone']:assert removed not in z.read(prefix+'eboot.bin'),removed
  bootstrap=(ROOT/'client/startup/bootstrap.cpp').read_text();entry=bootstrap[bootstrap.index('int main(int argc,char** argv) {'):]
  assert entry.index('ps5::log_share::start()')<entry.index('prospero_menu::hardware::initialize()')<entry.index('prospero_menu::start_frontend()')
 
