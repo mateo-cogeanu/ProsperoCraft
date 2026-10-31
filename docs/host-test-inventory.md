@@ -269,3 +269,7 @@ The manual native lane instead tests scoped native implementations against fixtu
 
 | `test_zink_present_trace_host.py` | Manual macOS research; exact182 first-frame checkpoints with actual GLFW/Zink/lavapipe offscreen lifecycle and explicit headers/compiler; no PS5 visibility |
 | `test_client182_package.py` | Exact native182ZIP/source/dependency/notices/symbol/signal-recorder/signature audit, SDK converter+LLVM; no hardware execution |
+
+| `test_zink_present_order.py` | Actual frontend callback/present code, modeled pipe boundary ordering and old-code negative control, selected Clang ASan/UBSan; no driver execution |
+| `test_zink_present_fix_host.py` | Manual macOS actual183GLFW/Zink/lavapipe offscreen rendering/lifecycle, explicit inputs; not VideoOut |
+| `test_client183_package.py` | Exact183nativeZIP/source/notices/dependency/symbol/signature audit; LLVM+SDK converter, no console execution |

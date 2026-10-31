@@ -23,6 +23,10 @@ pixels/384guard bytes, final destruction and Stage1 PASS. The original user-repo
 receipt and build record remain unchanged; this is supplemental retrieved evidence.
 No game/full-milestone ALL PASS or release authorization follows.
 
+Retrieved182 captures a fault consistent with a null presentation semaphore.
+[183 diagnosis and fix](client-zink-present-flush-183.md) records the symbol/instruction
+cross-check and missing frontend resource-preparation callback.
+
 ## New local182 diagnostic
 
 PPSA99874 /01.000.182 keeps the same native GL/Zink/RADV object and genuine

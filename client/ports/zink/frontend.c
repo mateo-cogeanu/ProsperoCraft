@@ -109,13 +109,27 @@ static bool validate(struct st_context *st, struct pipe_frontend_drawable *drawa
     return true;
 }
 
+struct present_flush {
+    struct st_context *st;
+    struct pipe_resource *texture;
+};
+/* Match kopper's notify_before_flush_cb: after pending GL vertices are emitted,
+ * mark this drawable for presentation before the batch is ended/submitted. */
+static void prepare_present(void *opaque)
+{
+    struct present_flush *flush = opaque;
+    flush->st->pipe->flush_resource(flush->st->pipe, flush->texture);
+}
+
 static bool present(struct ps5zink_context *c, struct st_context *st, unsigned attachment)
 {
     if (c->flushing) return true;
     c->flushing = true;
     _mesa_glthread_finish(st->ctx);
     struct pipe_resource *texture = c->textures[attachment];
-    st_context_flush(st, ST_FLUSH_END_OF_FRAME, NULL, NULL, NULL);
+    struct present_flush flush = {st, texture};
+    st_context_flush(st, ST_FLUSH_END_OF_FRAME, NULL,
+                     c->window && texture ? prepare_present : NULL, &flush);
     bool success = true;
     if (c->window && texture) {
         frontend.screen->flush_frontbuffer(frontend.screen, st->pipe, texture, 0, 0, c, 0, NULL);

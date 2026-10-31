@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-31",
+  "app_version": "01.000.182",
+  "title_id": "PPSA99874",
+  "package_sha256": "f00b87e1bd1676238e1f1fbfdb427c04955ff7b7548fd87e0d88e94929af2635",
+  "symbols_elf_sha256": "83f4f45aee4ca1e0a3631d9f115a3a60cc8988d289f0eb89dda0a3f5198e5f10",
+  "run_id": "zink-01.000.182-1793478154-873101690",
+  "result": "Captured SIGSEGV; no first-frame completion",
+  "retrieval": "Safari session/native/startup-tail read-only endpoints; direct tool HTTP no route to host; first downloads retained locally",
+  "report_sha256": {
+    "vm-trace.log": "7ba2c3e8aeb184d36e92b55b099a8f86ead34c784ff67b94e79cef107d8f3f08",
+    "startup-tail.log": "c153d1089ce23d193c60955214f2a8fab31cc388b1a8a365f5b039b0069b9b57"
+  },
+  "signal": {
+    "number": 11,
+    "code": 1,
+    "address": "0x48"
+  },
+  "last_main_checkpoint": "First-frame glfwPollEvents enter; does not establish which thread faulted",
+  "handlers": {
+    "legacy": 4,
+    "owned": "0x7f",
+    "query_errors": 0
+  },
+  "symbol_crosscheck": {
+    "anchor_runtime": "0x4020d0",
+    "anchor_elf": "0x20d0",
+    "load_adjustment": "0x400000",
+    "raw_context_word_28": "0x8cfd69",
+    "adjusted_candidate": "0x4cfd69",
+    "function": "vk_device_copy_semaphore_payloads / inlined vk_semaphore_get_active_sync",
+    "instruction": "movq 0x48(%rax),%rcx",
+    "interpretation": "Consistent with null wait semaphore and fault0x48; cross-check raw context candidate with anchor and exact instruction, not assumed universal context layout"
+  },
+  "concrete_contract_omission": "Private frontend omitted pinned Mesa kopper notify_before_flush_cb equivalent: flush_resource after GL vertex emission, before ending batch; required for swapchain/needs_present/layout/signal preparation",
+  "repair": "183 adds genuine preparation callback in st_context_flush; no generic Vulkan null-success guard, event-poll removal, second presenter or CPU copy",
+  "pending": "Physical183repair and positive presentation/lifecycle; full launcher/JVM/game/Vulkanregressions/endurance",
+  "preserved": "Exact180/181/182packages,symbols,originalvalidation;029OSMesa,callbacks,runtimeworkarounds,originalJARs,frozenhistory",
+  "release_store": "No action",
+  "raw_reports": "Local only"
+}
