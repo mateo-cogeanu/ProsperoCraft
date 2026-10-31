@@ -105,3 +105,7 @@ Host CI proves only these assertions on those hosts. PS5 startup, controllers,
 audio, GPU, world/save lifecycle and endurance still require the exact build on
 physical hardware. No application package, runtime pin, game/mod JAR, release or
 Store listing is changed by this workflow.
+
+Measured results: [2026-10-31 validation](validation/host-portability-ci-2026-10-31.json)
+records clean-source verification and successful Ubuntu x86_64/macOS ARM64 Actions
+runs for both lanes, including the repaired initial UBSan fixture failure.

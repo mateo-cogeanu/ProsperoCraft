@@ -1,0 +1,62 @@
+{
+  "date": "2026-10-31",
+  "scope": "Portable ProsperoCraft host policy/native lanes; no production launcher/runtime behavior or application build changed",
+  "tested_source_commit": "904564a415efa0a692684bd5b1505efab824374e",
+  "implementation_commits": [
+    "912bc9406e1e95c6d527705cc1a89c9ecf97e803",
+    "3ba2976bb184437cadd4165a23f702f2d232b659",
+    "904564a415efa0a692684bd5b1505efab824374e"
+  ],
+  "selection": "tests/host-lanes.json: eleven fast entrypoints (including five discovery unit cases), five optional native entrypoints; not an assertion-count or all-tool coverage claim",
+  "local": {
+    "platform": "macOS ARM64; OpenJDK 25.0.4; Python 3.14; Apple Clang",
+    "fast": "PASS 11 required checks",
+    "native": "PASS 5 required checks, UBSan halt_on_error=1 and ASan where selected",
+    "clean_verification": {
+      "source": "Only Git-listed source/unignored new task files copied; no .tools/build/dist or existing dependency caches",
+      "environment": "Fresh HOME, minimal explicit environment, working directory outside checkout, new independent dependency directory",
+      "provisioning": "Downloaded only pinned Gson and Fabric Loader, verified size and SHA-256",
+      "explicit_jdk": "PASS all eleven fast checks",
+      "path_javac_without_java_home": "PASS all eleven fast checks using resolved javac on PATH",
+      "explicit_jdk_cc_cxx": "PASS all five native checks from outside checkout",
+      "final_source_fast": "PASS all eleven checks after diagnostic and fixture fixes"
+    },
+    "failure_controls": [
+      "Invalid JAVA_HOME: nonzero with incomplete-JDK diagnostic",
+      "Missing javac on empty PATH: nonzero with missing-tool diagnostic",
+      "Empty dedicated dependency directory: nonzero; private game cache not searched",
+      "Invalid CXX override: nonzero with selected-executable diagnostic",
+      "Discovery unit tests: explicit/environment/LLVM_HOME/PATH/Homebrew precedence; JDK21/JDK26 rejection; corrupt dependency refusal; Linux/macOS JNI headers and shared-library flags"
+    ],
+    "checks": "Python compilation and git diff --check pass; existing AGENTS.md contents retained byte-for-byte as prefixes in both repositories",
+    "notice": "Local Apple UBSan/OpenJDK JNI execution can emit JVM signal-handler notices; assertions pass. Hosted Temurin JNI runs pass. No PS5 behavior is inferred."
+  },
+  "github_actions": {
+    "fast": {
+      "url": "https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41191965735",
+      "conclusion": "success",
+      "jobs": {"ubuntu-24.04": "PASS 11 checks", "macos-15": "PASS 11 checks"}
+    },
+    "native": {
+      "url": "https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41191965896",
+      "conclusion": "success",
+      "jobs": {"ubuntu-24.04 x86_64": "PASS 5 checks", "macos-15 ARM64": "PASS 5 checks"}
+    },
+    "method": "Read final run/job conclusions and logs, including PASS markers; native dispatched manually, fast triggered by push. No merely local pass is reported as Actions success.",
+    "earlier_failure": "Initial native Ubuntu run found empty-vector null memcpy in the desktop HID fixture. Fixed with count guards, preserving assertions and sanitizer enforcement; final native Linux and macOS runs pass. Intermediate superseded runs were cancelled by configured concurrency."
+  },
+  "boundaries": [
+    "Portable support applies to the explicit documented lanes, not every legacy tooling entrypoint",
+    "Additional SDK/package, downloaded game/mod and graphics/audio integration prerequisites remain documented in host-test-inventory.md",
+    "No RADV, MoltenVK, lavapipe, SDL or OpenAL rendering coverage claimed by the selected native lane",
+    "No Windows or cross-architecture JNI validation",
+    "PS5 startup/input/audio/GPU/world/save/lifecycle/endurance remain exact-build physical-console work",
+    "No release, prerelease, Store update, application package or artifact/runtime pin change",
+    "No historical source migration or modification of original game/mod JARs; raw logs stay local"
+  ],
+  "runtime_publication": {
+    "commit": "f65e1b9",
+    "change": "Append the consumer host verification workflow to existing runtime AGENTS.md",
+    "method": "tools/sync_github.py completed successfully and pushed main"
+  }
+}
