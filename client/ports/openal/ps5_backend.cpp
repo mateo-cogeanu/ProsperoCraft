@@ -153,6 +153,10 @@ namespace {
 constexpr auto CaptureName="PS5 system microphone (select DualSense in PS5 settings)";
 std::atomic<bool> captureEnabled{false},captureLeased{false};
 ps5audio::Capture capture;
+// Both core and producer state outlive every logical OpenAL device. A failed
+// join pins this state/port; it must not retain the destroyed backend or device.
+ps5audio::CaptureWorkerLifetime captureWorkerLifetime;
+std::atomic<bool> captureWorkerPinned{false};
 ps5audio::CaptureApi captureApi(){return {sceUserServiceGetInitialUser,sceAudioInInit,sceAudioInOpen,sceAudioInInput,sceAudioInGetSilentState,sceAudioInGetRerouteCount,sceAudioInClose};}
 struct CaptureLease {
  bool owned=false;
@@ -162,7 +166,7 @@ struct CaptureLease {
 };
 struct Ps5Capture final : BackendBase {
  explicit Ps5Capture(gsl::not_null<DeviceBase*> device) noexcept:BackendBase{device}{}
- CaptureLease lease;std::atomic<bool> kill{true};pthread_t thread{};ps5audio::WorkerOwnership worker;
+ CaptureLease lease;pthread_t thread{};ps5audio::WorkerOwnership worker;
  // Unjoined producer may still use the port: keep the lease pinned, never close.
  // Dropping only this object's claim leaves the global lease held (pinned).
  ~Ps5Capture() override {if(stopWorker())lease.release();else lease.owned=false;}
@@ -173,29 +177,30 @@ struct Ps5Capture final : BackendBase {
   if(!capture.open(captureApi())){std::fprintf(stderr,"PS5 AudioIn stage=%s result=0x%x\n",capture.errorStage,unsigned(capture.error));std::fflush(stderr);lease.release();throw al::backend_exception{al::backend_error::NoDevice,"PS5 microphone {} failed: 0x{:x}",capture.errorStage,unsigned(capture.error)};}
   mDeviceName=CaptureName;mDevice->mBufferSize=ps5audio::Capture::Capacity;
  }
- static void* run(void* opaque) noexcept {
-  auto& self=*static_cast<Ps5Capture*>(opaque);
-  while(!self.kill.load(std::memory_order_acquire)){
-   // Privacy: turning capture off ends delivery; no further reads, queued audio dropped.
-   if(!captureEnabled.load(std::memory_order_acquire)){capture.clear();std::fprintf(stderr,"PS5 AudioIn stage=disabled-during-capture\n");std::fflush(stderr);self.mDevice->handleDisconnect("PS5 microphone capture disabled");break;}
-   if(!capture.pump()){std::fprintf(stderr,"PS5 AudioIn stage=%s result=0x%x\n",capture.errorStage,unsigned(capture.error));std::fflush(stderr);self.mDevice->handleDisconnect("PS5 microphone capture failed");break;}
+ static void disconnect(void* device,const char* message){static_cast<DeviceBase*>(device)->handleDisconnect("{}",message);}
+ static void* run(void*) noexcept {
+  while(!captureWorkerLifetime.kill.load(std::memory_order_acquire)){
+   if(!captureEnabled.load(std::memory_order_acquire)){capture.clear();std::fprintf(stderr,"PS5 AudioIn stage=disabled-during-capture\n");std::fflush(stderr);captureWorkerLifetime.disconnect("PS5 microphone capture disabled");break;}
+   if(!capture.pump()){std::fprintf(stderr,"PS5 AudioIn stage=%s result=0x%x\n",capture.errorStage,unsigned(capture.error));std::fflush(stderr);captureWorkerLifetime.disconnect("PS5 microphone capture failed");break;}
   }
   return nullptr;
  }
  void start() override {
   if(worker.started)return;if(worker.uncertain||!lease.owned||!captureEnabled.load(std::memory_order_acquire))throw al::backend_exception{al::backend_error::DeviceError,"PS5 microphone disabled"};
-  capture.clear();kill.store(false,std::memory_order_release);pthread_attr_t attr;int rc=pthread_attr_init(&attr);
-  if(!rc){rc=pthread_attr_setstacksize(&attr,128*1024);if(!rc)rc=pthread_create(&thread,&attr,run,this);pthread_attr_destroy(&attr);}
-  if(rc){kill.store(true,std::memory_order_release);std::fprintf(stderr,"PS5 AudioIn stage=worker-create result=0x%x\n",unsigned(rc));std::fflush(stderr);throw al::backend_exception{al::backend_error::DeviceError,"PS5 microphone worker unavailable"};}worker.started=true;
+  capture.clear();captureWorkerLifetime.attach(mDevice.get(),disconnect);pthread_attr_t attr;int rc=pthread_attr_init(&attr);
+  if(!rc){rc=pthread_attr_setstacksize(&attr,128*1024);if(!rc)rc=pthread_create(&thread,&attr,run,nullptr);pthread_attr_destroy(&attr);}
+  if(rc){captureWorkerLifetime.detach();std::fprintf(stderr,"PS5 AudioIn stage=worker-create result=0x%x\n",unsigned(rc));std::fflush(stderr);throw al::backend_exception{al::backend_error::DeviceError,"PS5 microphone worker unavailable"};}worker.started=true;
  }
  bool stopWorker(){
-  kill.store(true,std::memory_order_release);const bool was_uncertain=worker.uncertain;
-  if(!worker.stop([this]{return pthread_join(thread,nullptr);})){if(!was_uncertain){std::fprintf(stderr,"PS5 AudioIn stage=worker-join result=0x%x; microphone pinned until restart\n",unsigned(worker.join_error));std::fflush(stderr);}return false;}
-  capture.clear();return true;
+  if(!lease.owned)return true; // A refused competing open must not stop the owner.
+  captureWorkerLifetime.kill.store(true,std::memory_order_release);const bool was_uncertain=worker.uncertain;
+  if(!worker.stop([this]{return pthread_join(thread,nullptr);})){captureWorkerPinned.store(true,std::memory_order_release);captureWorkerLifetime.detach();if(!was_uncertain){std::fprintf(stderr,"PS5 AudioIn stage=worker-join result=0x%x; microphone pinned until restart\n",unsigned(worker.join_error));std::fflush(stderr);}return false;}
+  captureWorkerLifetime.detach();capture.clear();return true;
  }
  void stop() override {stopWorker();}
- auto availableSamples()->std::size_t override{return capture.available();}
+ auto availableSamples()->std::size_t override{return captureWorkerPinned.load(std::memory_order_acquire)?0:capture.available();}
  void captureSamples(std::span<std::byte> out) override {
+  if(captureWorkerPinned.load(std::memory_order_acquire))throw al::backend_exception{al::backend_error::DeviceError,"PS5 microphone worker cleanup uncertain"};
   unsigned frame=mDevice->FmtType==DevFmtFloat?sizeof(float):sizeof(std::int16_t);
   if(out.size()%frame||!capture.take(out.data(),unsigned(out.size()/frame),mDevice->FmtType==DevFmtFloat))throw al::backend_exception{al::backend_error::DeviceError,"Not enough PS5 microphone samples"};
  }
@@ -222,7 +227,7 @@ auto Ps5BackendFactory::enumerate(BackendType type) -> std::vector<std::string> 
             std::fprintf(stderr,"PS5 AudioIn enumeration stage=%s result=0x%x\n",capture.errorStage,unsigned(capture.error));std::fflush(stderr);
         }
         // A live healthy owner proves the device; listing it must not disturb that capture.
-        else if(capture.active())return {CaptureName};
+        else if(!captureWorkerPinned.load(std::memory_order_acquire)&&capture.active())return {CaptureName};
         else {std::fprintf(stderr,"PS5 AudioIn enumeration stage=lease-unavailable\n");std::fflush(stderr);}
     }
     return {};

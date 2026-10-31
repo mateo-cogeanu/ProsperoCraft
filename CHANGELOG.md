@@ -1,5 +1,11 @@
 # Changelog
 
+## 01.000.176 — reviewed capture worker lifetime (console pending)
+
+- Retain175 microphone diagnostics, live enumeration and disable behavior; detach device callbacks and keep producer control in process-lifetime state before backend destruction after failed join. Keep uncertain port/lease pinned and unavailable.
+- A refused competing capture open no longer stops or clears the active owner. Add actual OpenAL blocked-input/destruction/late-error join-failure test;175 fails under ASan with heap-use-after-free,176 passes.
+- [Primary review and checks](docs/client-microphone-review-176.md). Original173 SVC cause and physical176 speech/mute/route/transition acceptance remain pending; no release/Store action.
+
 ## 01.000.175 — local microphone capture lifecycle repair (unvalidated)
 
 - Pin microphone ownership when the capture worker join fails instead of closing a port a producer may still read; report worker create/join return codes.

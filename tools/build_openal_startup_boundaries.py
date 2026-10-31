@@ -33,7 +33,8 @@ def compile_copy(base,member,original,patched,obj,header=None,extra_flags=()):
  args+=list(extra_flags)
  if header:args+=['-include',str(header)]
  subprocess.run(args,cwd=base,check=True)
-def build(host=False,speakers=False,host_objects=()):
+def build(host=False,speakers=False,host_objects=(),host_capture_join=False):
+ if host_capture_join and not host:raise ValueError("Capture join injection is host-only")
  source=ROOT/'.tools/openal-soft-src';pin=json.loads((ROOT/'client/ports/openal/sources.json').read_text())
  assert subprocess.check_output(['git','-C',str(source),'rev-parse','HEAD'],text=True).strip()==pin['commit']
  subprocess.run(['git','-C',str(source),'diff','--exit-code','HEAD'],check=True)
@@ -105,7 +106,7 @@ def build(host=False,speakers=False,host_objects=()):
  speaker_obj=out/'ps5_backend.cpp.o'
  if speakers:
   speaker_source=ROOT/'client/ports/openal/ps5_backend.cpp'
-  compile_copy(base,'CMakeFiles/OpenAL.dir/alc/backends/null.cpp.o',source/'alc/backends/null.cpp',speaker_source,speaker_obj,extra_flags=['-fsanitize=address,undefined'] if host else [])
+  compile_copy(base,'CMakeFiles/OpenAL.dir/alc/backends/null.cpp.o',source/'alc/backends/null.cpp',speaker_source,speaker_obj,extra_flags=(['-fsanitize=address,undefined']+(['-Dpthread_join=client_test_capture_join'] if host_capture_join else [])) if host else [])
 
  logging_obj=None
  if speakers:

@@ -11,6 +11,8 @@ w=ROOT/'build/openal-ps5-audio-host-test';w.mkdir(exist_ok=True)
 #include <cstdint>
 #include <cmath>
 #include <unistd.h>
+#include <pthread.h>
+#include <cerrno>
 extern "C" {int client_ps5_audio_early_init_result=(-2147483647-1);int client_ps5_audio_early_port=-1;int client_ps5_audio_secondary_port=-1;}
 static std::atomic<int> mode{0},opens{0},closes{0},blocks{0},nonzero{0},init{0},open_attempts{0},waits{0};
 static std::atomic<long long> left{0},right{0};static std::atomic<int> primary_pcm{0},secondary_pcm{0};
@@ -30,8 +32,14 @@ static std::atomic<int> capture_inits{0};
 extern "C" int test_capture_inits(){return capture_inits;}
 extern "C" int sceAudioInInit(){return ++capture_inits==1?0:-73;} // second init refuses; not a PS5 error-code claim
 extern "C" int sceAudioInOpen(int,unsigned,unsigned,unsigned,unsigned,unsigned){return mode>=100?31:-99;}
-extern "C" int sceAudioInInput(int h,void* out){assert(h==31);auto* p=static_cast<std::int16_t*>(out);for(int i=0;i<256;i++)p[i]=i%2?12000:-12000;usleep(16000);return 256;}
-extern "C" int sceAudioInClose(int){return 0;}
+static std::atomic<bool> input_entered{false},input_release{false};
+static std::atomic<int> capture_closes{0};static pthread_t unjoined{};
+extern "C" int client_test_capture_join(pthread_t thread,void** result){if(mode==102){unjoined=thread;return EINVAL;}return pthread_join(thread,result);}
+extern "C" int test_capture_blocked(){return input_entered;}
+extern "C" int test_capture_closes(){return capture_closes;}
+extern "C" void test_capture_release_and_reap(){input_release=true;assert(pthread_join(unjoined,nullptr)==0);}
+extern "C" int sceAudioInInput(int h,void* out){if(mode==102){input_entered=true;while(!input_release)usleep(1000);return -85;}assert(h==31);auto* p=static_cast<std::int16_t*>(out);for(int i=0;i<256;i++)p[i]=i%2?12000:-12000;usleep(16000);return 256;}
+extern "C" int sceAudioInClose(int){++capture_closes;return 0;}
 extern "C" int sceAudioInGetSilentState(int){return 0;}
 extern "C" int sceAudioInGetRerouteCount(int){return 0;}
 extern "C" int sceAudioOutInit(){int n=++init;if(mode==1)return -41;if((mode==4&&n<=2)||mode==5||mode==6||mode==8||mode==9)return static_cast<int>(0x80260002u);if(mode==7)return static_cast<int>(0x8026000eu);return 0;}
@@ -43,10 +51,10 @@ extern "C" int sceAudioOutOutput(int port,const void* data){assert(port==17||(mo
 extern "C" int sceAudioOutClose(int port){assert(port==17||(mode==16&&port==18));++closes;return 0;}
 ''')
 subprocess.run(['clang++','-std=c++17','-fsanitize=address,undefined','-fPIC','-c',str(w/'sink.cpp'),'-o',str(w/'sink.o')],check=True)
-library,audit=build(host=True,speakers=True,host_objects=[w/'sink.o'])
+library,audit=build(host=True,speakers=True,host_objects=[w/'sink.o'],host_capture_join=True)
 subprocess.run(['install_name_tool','-id',str(library),str(library)],check=True)
 (w/'driver.cpp').write_text(r'''
-extern "C" int test_capture_inits();
+extern "C" {int test_capture_inits();int test_capture_blocked();int test_capture_closes();void test_capture_release_and_reap();}
 #define AL_ALEXT_PROTOTYPES
 #include <AL/al.h>
 #include <AL/alc.h>
@@ -99,6 +107,19 @@ int main(int argc,char**argv){assert(client_ps5_audio_event_preinit()==0);assert
   }
   assert(test_capture_inits()==1);client_ps5_capture_enable(0);assert(!alcCaptureOpenDevice(nullptr,48000,AL_FORMAT_MONO_FLOAT32,4096));puts("PASS real OpenAL capture path default-off/enable/enumerate/open/start/available/float samples/stop/close x20 with one confirmed init despite repeated-init refusal; host AudioIn source only");return 0;
  }
+ if(mode==102){
+  client_ps5_capture_enable(1);auto* d=alcCaptureOpenDevice(nullptr,48000,AL_FORMAT_MONO_FLOAT32,960);assert(d);alcCaptureStart(d);
+  for(int i=0;i<1000&&!test_capture_blocked();++i)usleep(1000);assert(test_capture_blocked());
+  // The join refuses while actual input is blocked. Destroy the logical device
+  // before input returns an error. No callback/loop state may reference it now.
+  alcCaptureStop(d);assert(alcCaptureCloseDevice(d));assert(test_capture_closes()==0);
+  const char* names=alcGetString(nullptr,ALC_CAPTURE_DEVICE_SPECIFIER);assert(names&&!*names);
+  assert(!alcCaptureOpenDevice(nullptr,48000,AL_FORMAT_MONO_FLOAT32,960));
+  test_capture_release_and_reap();assert(test_capture_closes()==0);
+  names=alcGetString(nullptr,ALC_CAPTURE_DEVICE_SPECIFIER);assert(names&&!*names);
+  assert(!alcCaptureOpenDevice(nullptr,48000,AL_FORMAT_MONO_FLOAT32,960));
+  puts("PASS real OpenAL failed capture join: destroy backend/device during blocked input, late error returns safely, callback detached, port/lease retained and enumeration/reopen refused; ASan/UBSan");return 0;
+ }
  if(mode==101){
   auto samples_at_least=[](ALCdevice* d,ALCint n){ALCint count=0;for(int i=0;i<500&&count<n;i++){usleep(1000);alcGetIntegerv(d,ALC_CAPTURE_SAMPLES,1,&count);}return count>=n;};
   client_ps5_capture_enable(1);char result[512];client_ps5_capture_probe(result,sizeof(result));assert(strstr(result,"Input reads completed")&&test_capture_inits()==1); // launcher test initializes AudioIn first, same process
@@ -107,6 +128,7 @@ int main(int argc,char**argv){assert(client_ps5_audio_event_preinit()==0);assert
    auto* capture=alcCaptureOpenDevice("",48000,AL_FORMAT_MONO_FLOAT32,960);assert(capture);
    alcCaptureStart(capture);assert(samples_at_least(capture,960));float samples[960];alcCaptureSamples(capture,samples,960);assert(alcGetError(capture)==ALC_NO_ERROR);
    const char* names=alcGetString(nullptr,ALC_CAPTURE_DEVICE_SPECIFIER);assert(names&&strstr(names,"PS5 system microphone")); // listing while live
+   assert(!alcCaptureOpenDevice(nullptr,48000,AL_FORMAT_MONO_FLOAT32,960)); // Failed competing backend must not stop live owner.
    assert(samples_at_least(capture,960));ALCint connected=0;alcGetIntegerv(capture,ALC_CONNECTED,1,&connected);assert(connected);
    alcCaptureStop(capture);ALCint left=-1;alcGetIntegerv(capture,ALC_CAPTURE_SAMPLES,1,&left);assert(left==0);alcCaptureSamples(capture,samples,left);assert(alcGetError(capture)==ALC_NO_ERROR);assert(alcCaptureCloseDevice(capture));
   }
@@ -151,7 +173,7 @@ int main(int argc,char**argv){assert(client_ps5_audio_event_preinit()==0);assert
 ''')
 source=ROOT/'.tools/openal-soft-src'
 subprocess.run(['clang++','-std=c++17','-fsanitize=address,undefined','-I'+str(source/'include'),str(w/'driver.cpp'),str(library),'-Wl,-rpath,'+str(library.parent),'-o',str(w/'check')],check=True)
-for mode in [1,2,0,3,4,5,6,7,8,9,10,11,12,13,14,15,16,100,101]:
+for mode in [1,2,0,3,4,5,6,7,8,9,10,11,12,13,14,15,16,100,101,102]:
  result=subprocess.run([str(w/'check'),str(mode)],env=dict(os.environ,ALSOFT_DRIVERS='ps5',ALSOFT_LOGLEVEL='2',ALSOFT_LOCAL_PATH=str(w)),capture_output=True,text=True,timeout=30)
  (w/('mode'+str(mode)+'.log')).write_text(result.stdout+result.stderr)
  if result.returncode:print(result.stdout+result.stderr)

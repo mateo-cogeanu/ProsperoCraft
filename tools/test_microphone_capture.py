@@ -20,6 +20,15 @@ int close(int h){assert(h==9);++closes;return close_rc;}
 int silent(int h){assert(h==9);return mute;}int reroute(int h){assert(h==9);return route;}
 int input(int h,void*p){assert(h==9);++reads;auto* pcm=static_cast<std::int16_t*>(p);for(int i=0;i<256;i++)pcm[i]=i%2?32767:-32768;if(mute_after)mute=1;if(route_after)++route;return input_rc;}
 int main(){
+ // The actual static callback gate must outlive a destroyed target after join refusal.
+ {ps5audio::CaptureWorkerLifetime lifetime;std::atomic<bool> entered{false},release{false},detached{false};
+  struct Target{std::atomic<bool>* entered;std::atomic<bool>* release;int calls=0;};auto* target=new Target{&entered,&release};
+  lifetime.attach(target,[](void* p,const char*){auto& t=*static_cast<Target*>(p);++t.calls;*t.entered=true;while(!t.release->load())std::this_thread::yield();});
+  std::thread producer([&]{lifetime.disconnect("first");});while(!entered)std::this_thread::yield();
+  std::thread cleanup([&]{lifetime.detach();detached=true;});
+  while(!lifetime.kill.load())std::this_thread::yield();assert(!detached);release=true;producer.join();cleanup.join();assert(detached&&target->calls==1);delete target;
+  lifetime.disconnect("late error after target destruction"); // Must not dereference target.
+ }
  Capture c;ps5audio::CaptureApi api{user,init,open,input,silent,reroute,close};
  init_rc=-1;assert(!c.open(api)&&opens==0&&inits==1&&std::string_view(c.errorStage)=="init");init_rc=0;open_rc=-2;assert(!c.open(api)&&inits==2&&std::string_view(c.errorStage)=="open");open_rc=9;
  init_rc=-99; // Successful process initialization must survive enumeration/reopen.

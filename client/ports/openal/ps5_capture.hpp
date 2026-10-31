@@ -60,6 +60,22 @@ struct Capture {
  }
  void clear(){const auto lock=std::lock_guard{mutex};read=count=0;previous_valid=false;}
 };
+// Static-lifetime callback gate. A producer must never retain a backend pointer:
+// even failed join cannot prevent OpenAL from destroying its backend/device.
+// Detach waits for an in-flight callback before its target can be destroyed.
+struct CaptureWorkerLifetime {
+ std::atomic<bool> kill{true};
+ Mutex callback_mutex;void* target=nullptr;void (*callback)(void*,const char*)=nullptr;
+ void attach(void* value,void (*notify)(void*,const char*)){
+  const auto lock=std::lock_guard{callback_mutex};target=value;callback=notify;kill.store(false,std::memory_order_release);
+ }
+ void detach(){
+  kill.store(true,std::memory_order_release);const auto lock=std::lock_guard{callback_mutex};target=nullptr;callback=nullptr;
+ }
+ void disconnect(const char* message){
+  const auto lock=std::lock_guard{callback_mutex};if(target&&callback&&!kill.load(std::memory_order_acquire))callback(target,message);
+ }
+};
 // Producer-thread ownership. A failed join means the producer may still be
 // inside pump(): the port must never be closed or reused (lease stays pinned
 // until app restart). The thread handle is not joined twice.

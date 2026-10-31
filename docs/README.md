@@ -14,6 +14,7 @@ history; a development entry does not imply a public release.
 | Shared bootstrap, current identity and legacy package audits | [Tooling sharing](tooling-sharing.md) |
 | Published 167 scope | [Release notes](releases/client-input-fabric-167.md), [console acceptance](validation/client167-console-acceptance-2026-10-30.json) |
 | Microphone feature handoff for another model | [Start here](handoffs/microphone-174/00-START-HERE.md), [continuation prompt](handoffs/microphone-174/03-CONTINUATION-PROMPT.md) |
+| Local176 — primary review of microphone specialist work | [Review/test guide](client-microphone-review-176.md) |
 | Local174 — microphone diagnostics and SVC disconnect repair; console pending | [Evidence/test guide](client-mic-disconnect-174.md) |
 | Local173 — voice speaker/context repair; console pending | [Evidence/test guide](client-voice-speaker-173.md) |
 | Local172 — terrain stack budget; console pending | [Evidence/test plan](client-terrain-thread-budget-172.md) |
