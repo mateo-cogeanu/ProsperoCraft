@@ -52,6 +52,7 @@ def main():
     for name in ('gson', 'fabric-loader'):
         dependency(name)
     if args.lane == 'native':
+        os.environ['UBSAN_OPTIONS'] = os.environ.get('UBSAN_OPTIONS', '') + ':halt_on_error=1'
         os.environ['CC'] = executable('clang', override=args.cc, env='CC')
         os.environ['CXX'] = executable('clang++', override=args.cxx, env='CXX')
     tests = json.loads((ROOT / 'tests/host-lanes.json').read_text())[args.lane]

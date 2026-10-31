@@ -33,6 +33,7 @@ No real Microsoft/Modrinth request or Minecraft execution is part of assertions.
 The instance test's formerly unsupported 26.2 fixture is now unsupported 26.1;
 26.2/26.3 support remains explicitly checked without changing production policy.
 
+The native runner forces UBSan errors to fail (`halt_on_error=1`), including local runs.
 The five optional native checks exercise actual scoped audio mutex/port/worker
 implementations, desktop HID/model policy and resident-library JNI loading, with
 controlled OS boundaries. They require no external graphics/audio library. They
