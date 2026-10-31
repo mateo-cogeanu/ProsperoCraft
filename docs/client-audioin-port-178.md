@@ -71,8 +71,13 @@ OpenAL + backend tests retain all prior23modes and add three actual-boundary mod
 
 Target package audit requires the new preparation diagnostics and matching source
 hashes, in addition to177 early-service order and176 exclusion of host-only join
-injection. Full host/native/package/relink/hosted results are recorded after actual
-checks. Host OS doubles do not establish the PS5 resource-lifetime behavior.
+injection. Fast15/native7 pass locally and from a source-only/outside-root checkout with
+initially empty dependency cache. All26actual OpenAL modes pass; removing only
+the capture-policy lock guards causes the blocked-close/ON race assertion to fail,
+and restoring the source makes all26pass. Target package/signature/source/import
+checks and both exact relink paths pass. Linux/macOS policy and native Actions
+pass on7ba83f5. [Validation and checksums](validation/client178-audioin-port.json)
+record these separately from pending physical-console tests. Host OS doubles do not establish the PS5 resource-lifetime behavior.
 
 ## Physical acceptance still needed
 

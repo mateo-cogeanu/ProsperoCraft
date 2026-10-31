@@ -1,0 +1,33 @@
+{
+  "app_version": "01.000.178",
+  "title_id": "PPSA99874",
+  "source_commit": "7ba83f538c645326132f401b1c7c4f6abb8c17da",
+  "runtime_commit": "f12c86e4f965ff46d0f5d121cd07ff8f27d7baaf (unchanged)",
+  "artifacts": {
+    "PPSA99874.zip": "2c83a759221108693a8342eb230ee776839c5790301015b6cb471364262403b0",
+    "bootstrap-symbols.elf": "79bceb39fc86f3e09edb404c9d034af74acfff734e8ad635febc640f4d035709",
+    "client178-openal-source-relink.zip": "81bde7c83086d2a17026a1158c37e4e1015a8f218625c45135e59792e192d701"
+  },
+  "evidence": {
+    "177": "Current177 session: actual service init0x0; both SVC48kHz monoFloat32 captures progress to open and fail0x8026010b. Matching Java output shows failed OpenAL opens and Java Sound fallback unavailable. Same UI message does not mean same failing native stage.",
+    "176": "User reports leaving/rejoining works; mic failed init0x80260108 before177. No whole-build pass."
+  },
+  "change": "Voice capture default-off. ON in launcher prepares a real native port without input reads; healthy joined/stopped port is retained across logical capture closes and claimed by next owner. OFF closes idle input, never an unjoined producer; failed close/join pins ownership. Enable/release decisions serialized. Native profile, early service init, worker callback lifetime and runtime0135 retained.",
+  "tests": {
+    "fast": "PASS15 local",
+    "native": "PASS7 ASan/UBSan including actual capture park/reclaim20times without new native opens/closes and final explicit close",
+    "source_only": "PASS native7+fast15 from source-only HEAD archive/outside-root with initially empty dependency cache and pinned fetch",
+    "real_openal": "PASS26modes including1realpreparedport/0reads before use,5SVC cycles despite forced late open0x8026010b,0open/read parked enumeration,OFF close, genuine failed reprepare/no fake enumeration,failed-close pinning/no second close,and concurrent ON waiting for blocked OFF close then replacement preparation; previous service/disable/ASanfailedjoin/output cases retained",
+    "negative_control": "Remove only3capture-policy lock guards,run actual109mode: !on_done assertion fails while native close blocked. Restore exact source and rerun all26modes:PASS",
+    "package": "PASS actual CRC/signatures/identity/runtime/source/header/object/import audits; host-only join hook excluded; new preparation diagnostics linked",
+    "relink": "PASS normal and replacement-OpenAL exact symbol ELF reproduction",
+    "hosted_policy": "PASS Linux+macOS https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41223507886",
+    "hosted_native": "PASS Linux+macOS https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41223517818"
+  },
+  "physical178": "PENDING launcher preparation result, actual SVC worker/samples/speech, physical mute/route/input freshness across parked intervals/OS buffering,codec/UDP/two-way voice,stop/reopen/world/server transitions/save/endurance. No unverified native flush,precreated capture worker or fake success.",
+  "publication": {
+    "source": "Implementationca90f31 and policy7ba83f5 pushed; hosted runs pass. Validation follow-up published separately.",
+    "release_store": "No release/prerelease/Store action; exact physical acceptance required"
+  },
+  "storage": "177/older recovery preserved;178package+symbols+source-relinkZIP retained. New expanded178kit and duplicate relinks removed only after CRC/every-file logical-byte hash verification."
+}
