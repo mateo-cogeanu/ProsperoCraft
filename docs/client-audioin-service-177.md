@@ -58,7 +58,12 @@ The existing20playback/capture/SVC-order/failed-join modes remain required,
 including the176 ASan ownership regression. Host native OS doubles establish
 behavior, not actual speech or PS5 memory availability. The target package audit
 requires the linked service-preinit symbol, its diagnostic and source order before
-JVM entry. Package/relink and hosted results are recorded after actual checks.
+JVM entry. The actual target package audit passes, including runtime/source/import hashes
+and signatures; both normal and replacement-OpenAL relinks reproduce the exact
+native ELF. Fast15/native7 pass locally and from a source-only/outside-root checkout
+with initially empty dependency cache. Linux/macOS hosted policy/native checks
+pass on81dbd7d. [Validation and artifact checksums](validation/client177-audioin-service.json)
+record these separately from pending physical-console results.
 
 ## Exact177 console checks
 

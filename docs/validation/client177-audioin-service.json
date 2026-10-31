@@ -1,0 +1,33 @@
+{
+  "app_version": "01.000.177",
+  "title_id": "PPSA99874",
+  "source_commit": "81dbd7d227d585fa362f3c10b1b233b21809f826",
+  "runtime_commit": "f12c86e4f965ff46d0f5d121cd07ff8f27d7baaf (unchanged)",
+  "artifacts": {
+    "PPSA99874.zip": "631e1877447e40cf43f370c3a02549ce891af0de487862197d2071801af47497",
+    "bootstrap-symbols.elf": "b47f35bc85a106dd18291783862581c789ef3c702b9a0b09d8b5e3410151354a",
+    "client177-openal-source-relink.zip": "4e33639a385488e2c8798d40c2b35f20d495551a9738c96e5198996059da0081"
+  },
+  "evidence": {
+    "176_user_report": "Leaving/rejoining works; SVC still reports microphone unavailable",
+    "176_actual_native": "Current176 session: both monoFloat32/48000 capture attempts fail AudioIn stage=init result=0x80260108 before native port open; no claim about exact PS5 allocator/quota",
+    "prior173_probe": "User reports313blocks/nonzero76876/peak32766; separate evidence, no speech/mute/SVC claim"
+  },
+  "change": "Prepare only actual AudioIn service before JVM/game resources; no user lookup/native port open/input read/opt-in change. Confirmed success retained; negative init remains nonfatal/retryable and never success.177 preserves176 worker ownership and runtime0135 socket behavior.",
+  "tests": {
+    "fast": "PASS15 local",
+    "native": "PASS7 ASan/UBSan; early failed-init retry, confirmed init once, no early user/open/read calls; initial new unit fixture retained prior intentional mute failure, fixture reset and lane rerun passes",
+    "source_only": "PASS native7+fast15 from source-only archive/outside-root with initially empty dependency cache and pinned fetch",
+    "real_openal": "PASS23modes including early-success with forced late0x80260108 and3SVCcycles, failed/absent early-init genuine error controls, default-off0earlyopens/reads, previous two-output/SVC-order/disabled/failed-join/ASan cases; OS doubles only",
+    "target_package": "PASS packageCRC/signature/native source+hash/import/runtime audits; service-preinit linked and ordered before JVM, host-only join hook excluded",
+    "relink": "PASS both normal and replacement-OpenAL paths exactly match symbol ELF hash",
+    "hosted_policy": "PASS Linux+macOS https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41222137981",
+    "hosted_native": "PASS Linux+macOS https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41222146253"
+  },
+  "physical177": "PENDING actual early AudioIn result/open/worker/samples, quiet/speech/mute/route/codec/UDP/two-way voice, world/save/stop/rejoin and endurance. Late native read blocking and worker creation remain unproven.",
+  "publication": {
+    "source": "Implementation81dbd7d pushed and hosted runs pass; matching validation follow-up published separately",
+    "release_store": "No release/prerelease/Store action; exact physical acceptance required"
+  },
+  "storage": "176/older recovery material preserved.177package+symbols+verified source-relinkZIP retained; new expanded kit and duplicate relinks removed only after all hashes/ZIP CRC match."
+}
