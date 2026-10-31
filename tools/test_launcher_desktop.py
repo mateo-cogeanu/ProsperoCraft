@@ -38,7 +38,7 @@ using namespace prospero_menu;
 static std::vector<prospero_keyboard_packet> kp;static std::vector<prospero_mouse_packet> mp;static int closes=0;
 extern "C" int prospero_hid_open(int mouse,int i){return i==0?mouse+10:-1;}
 extern "C" void prospero_hid_close(int,int){closes++;}
-extern "C" int prospero_hid_read(int mouse,int,void* out,int){if(mouse){int n=mp.size();memcpy(out,mp.data(),n*sizeof(prospero_mouse_packet));mp.clear();return n;}int n=kp.size();memcpy(out,kp.data(),n*sizeof(prospero_keyboard_packet));kp.clear();return n;}
+extern "C" int prospero_hid_read(int mouse,int,void* out,int){if(mouse){int n=mp.size();if(n)memcpy(out,mp.data(),n*sizeof(prospero_mouse_packet));mp.clear();return n;}int n=kp.size();if(n)memcpy(out,kp.data(),n*sizeof(prospero_keyboard_packet));kp.clear();return n;}
 int main(){
  CursorShape shape;assert(shape.count>90&&shape.count<128);for(int i=0;i<shape.count;i++){int a=(i+shape.count-1)%shape.count,b=(i+1)%shape.count;float ax=shape.xy[i*2]-shape.xy[a*2],ay=shape.xy[i*2+1]-shape.xy[a*2+1],bx=shape.xy[b*2]-shape.xy[i*2],by=shape.xy[b*2+1]-shape.xy[i*2+1];float lengths=std::sqrt((ax*ax+ay*ay)*(bx*bx+by*by));assert(lengths>0&&(ax*bx+ay*by)/lengths>0.8f);}
  assert(desktop_hit(0,70,342,0,2).target==0);assert(desktop_hit(0,69,342,0,2).kind==-1);assert(desktop_hit(0,520,342,0,2).target==1);assert(desktop_hit(0,491,342,0,2).kind==-1);

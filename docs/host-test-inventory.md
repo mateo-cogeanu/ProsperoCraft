@@ -251,4 +251,3 @@ The manual native lane instead tests scoped native implementations against fixtu
 | `test_spvc_bootstrap_host.py` | Prepared native/JNI libraries and upstream source/JAR caches; backend-specific, not an interchangeable Vulkan test; observed: hardcoded Homebrew |
 | `test_stb_bootstrap_host.py` | Prepared native/JNI libraries and upstream source/JAR caches; backend-specific, not an interchangeable Vulkan test |
 | `test_vma_bootstrap_host.py` | Prepared native/JNI libraries and upstream source/JAR caches; backend-specific, not an interchangeable Vulkan test; observed: hardcoded Homebrew, MoltenVK |
-

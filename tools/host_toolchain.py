@@ -40,7 +40,10 @@ def java_home(override=None):
     if selected:
         home = Path(selected).expanduser().resolve()
     else:
-        javac = Path(executable('javac')).resolve()
+        found = shutil.which('javac')
+        if not found:
+            raise RuntimeError('Missing javac; install JDK 25 on PATH or set JAVA_HOME.')
+        javac = Path(found).resolve()
         home = javac.parent.parent
         # Apple's /usr/bin/javac is a launcher, not a JDK installation.
         if platform.system() == 'Darwin' and javac == Path('/usr/bin/javac'):
