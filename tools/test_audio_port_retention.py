@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Test actual bounded native-port ownership under simulated reopen allocation failure."""
 from pathlib import Path
+from host_toolchain import executable
 import subprocess,tempfile
 ROOT=Path(__file__).resolve().parents[1]
 source=r'''
@@ -15,4 +16,4 @@ int main(){ps5audio::PortPool pool;int native_opens=1,native_closes=0;int port=1
  puts("PASS actual port pool:100 reloads preserve single preallocated port despite later allocation failure;bounded spare ownership,extra close/invalid rejection and concurrent claims");}
 '''
 with tempfile.TemporaryDirectory(prefix='audio-retain-')as folder:
- w=Path(folder);(w/'test.cpp').write_text(source);subprocess.run(['clang++','-std=c++20','-fsanitize=address,undefined','-pthread','-I'+str(ROOT/'client/ports/openal'),str(w/'test.cpp'),'-o',str(w/'test')],check=True);subprocess.run([str(w/'test')],check=True)
+ w=Path(folder);(w/'test.cpp').write_text(source);subprocess.run([executable('clang++', env='CXX'),'-std=c++20','-fsanitize=address,undefined','-pthread','-I'+str(ROOT/'client/ports/openal'),str(w/'test.cpp'),'-o',str(w/'test')],check=True);subprocess.run([str(w/'test')],check=True)

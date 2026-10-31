@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Actual scoped audio mutex with standard C++ lock guards and native contention."""
 from pathlib import Path
+from host_toolchain import executable
 import subprocess,tempfile
 r=Path(__file__).resolve().parents[1]
 code=r'''
@@ -21,4 +22,4 @@ int main(){ps5audio::Mutex mutex;assert(mutex.try_lock());assert(!mutex.try_lock
  puts("PASS actual audio inline mutex:standard guard/unique-lock,try behavior,80000contended increments/blocking/data visibility,trivial lifetime;ASan/UBSan");}
 '''
 with tempfile.TemporaryDirectory()as d:
- d=Path(d);p=d/'test.cpp';p.write_text(code);exe=d/'test';subprocess.run(['clang++','-std=c++17','-O2','-pthread','-fsanitize=address,undefined','-I'+str(r/'client/ports/openal'),str(p),'-o',str(exe)],check=True);subprocess.run([str(exe)],check=True,timeout=30)
+ d=Path(d);p=d/'test.cpp';p.write_text(code);exe=d/'test';subprocess.run([executable('clang++', env='CXX'),'-std=c++17','-O2','-pthread','-fsanitize=address,undefined','-I'+str(r/'client/ports/openal'),str(p),'-o',str(exe)],check=True);subprocess.run([str(exe)],check=True,timeout=30)

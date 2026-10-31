@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Check explicit app-storage reservation and honest OS-write error handling."""
 from pathlib import Path
+from host_toolchain import java_home, launcher_classpath
 import json,tempfile,subprocess
-ROOT=Path(__file__).resolve().parents[1];jdk=Path('/Library/Java/JavaVirtualMachines/openjdk-25.jdk/Contents/Home')
-cp=':'.join(str(ROOT/'.tools/client'/r['file'])for r in json.loads((ROOT/'client/26.3.lock.json').read_text())['artifacts'])
+ROOT=Path(__file__).resolve().parents[1];jdk=java_home()
+cp=launcher_classpath()
 param=json.loads((ROOT/'client/startup/param.json').read_text());assert param['downloadDataSize']==4096 and param['titleId']=='PPSA99874'
 source=r'''
 import java.nio.file.*;import java.io.*;import java.lang.reflect.*;

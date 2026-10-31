@@ -1,0 +1,22 @@
+{
+  "fast": [
+    "test_host_toolchain.py",
+    "test_launcher_auth.py",
+    "test_launcher_auth_migration.py",
+    "test_launcher_https.py",
+    "test_launcher_storage.py",
+    "test_launcher_instances.py",
+    "test_launcher_content.py",
+    "test_fabric_dependencies.py",
+    "test_launcher_offline.py",
+    "test_launcher_delete.py",
+    "test_launcher_duplicate.py"
+  ],
+  "native": [
+    "test_audio_native_mutex.py",
+    "test_audio_port_retention.py",
+    "test_openal_mixer_workers.py",
+    "test_launcher_desktop.py",
+    "test_client_library.py"
+  ]
+}

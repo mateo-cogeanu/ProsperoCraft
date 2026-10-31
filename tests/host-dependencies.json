@@ -1,0 +1,14 @@
+{
+  "gson": {
+    "file": "gson-2.14.0.jar",
+    "url": "https://libraries.minecraft.net/com/google/code/gson/gson/2.14.0/gson-2.14.0.jar",
+    "size": 313604,
+    "sha256": "2cbd119bf1961c28788310963dc80ba65f58cdeec1dd139c8bdb1240faa2c36f"
+  },
+  "fabric-loader": {
+    "file": "fabric-loader-0.20.1.jar",
+    "url": "https://maven.fabricmc.net/net/fabricmc/fabric-loader/0.20.1/fabric-loader-0.20.1.jar",
+    "size": 1988880,
+    "sha256": "d0c5a082e07410aaff9de7ab196aa6b4236002870f9ba3ad5c1260fcce5110ad"
+  }
+}

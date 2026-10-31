@@ -1901,3 +1901,31 @@ normal/replacement native relinks and shipped supported-policy checks pass.
 Catalog233tests(2skipped)/161records/online0errors0warnings pass;PR954 submitted.
 No monitoring after creation;Store not claimed live. Description/credits/icon
 preserved,exact app unchanged. See docs/validation/client167-store-publication-2026-10-30.json.
+
+## Portable host checks and CI workflow — 2026-10-31
+
+Preserve all existing rules above. Before completing launcher/test-tooling changes,
+run `python3 tools/run_host_tests.py` (first use: add `--fetch-deps`). The explicit
+required selection is `tests/host-lanes.json`; update it deliberately, never count
+all test filenames as runnable coverage or silently skip missing dependencies.
+Use Python 3.10+ without optimization and JDK25; discovery and pinned host-only
+libraries are defined in `tools/host_toolchain.py` and `tests/host-dependencies.json`.
+Use explicit runner options, JAVA_HOME, CC/CXX, LLVM_HOME, PATH and HOMEBREW_PREFIX
+per docs/host-testing.md. Do not add developer-specific paths to supported lanes,
+parse arguments in shared imports, or fall back to private game/dependency caches.
+Keep policy assertions deterministic with injected transports and temporary data;
+no accounts/tokens/live services/large game downloads in routine CI assertions.
+
+For affected native code run `python3 tools/run_host_tests.py --lane native` with
+compatible host Clang/JDK architectures and sanitizers. Optional SDL/OpenAL/GPU,
+SDK/package and publisher-artifact checks have separate prerequisites recorded in
+docs/host-test-inventory.md; do not claim one Vulkan backend tests another.
+Keep existing target SDK inputs, native compatibility fixes, original JARs and
+historical regression fixtures intact. Test portability changes in a clean source
+copy with empty dependency cache and outside-root invocation; check explicit
+options, discovery and useful missing/unsupported-tool errors. Keep read-only,
+SHA-pinned, bounded Actions workflows; no secrets or pull_request_target execution.
+Publish completed source changes here, inspect actual GitHub Actions jobs and
+report local versus hosted results separately. Host success is never a PS5 pass;
+retain exact-build physical-console checks and the existing release/Store gate.
+Reusable runtime changes remain in the Java repository and use its sync script.

@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Exercise actual launcher desktop commands and native HID packet policy."""
 from pathlib import Path
+from host_toolchain import java_home, launcher_classpath, executable
 import subprocess,tempfile
 R=Path(__file__).resolve().parents[1]
-J=Path('/Library/Java/JavaVirtualMachines/openjdk-25.jdk/Contents/Home/bin')
+J=(java_home()/'bin')
 java=r'''
 import java.nio.file.*;import java.util.*;
 public class DesktopCheck {
@@ -51,11 +52,11 @@ int main(){
 }
 '''
 with tempfile.TemporaryDirectory() as td:
- w=Path(td);(w/'DesktopCheck.java').write_text(java);cp=str(R/'.tools/client/gson-2.14.0.jar');out=w/'classes';out.mkdir()
+ w=Path(td);(w/'DesktopCheck.java').write_text(java);cp=launcher_classpath();out=w/'classes';out.mkdir()
  subprocess.run([str(J/'javac'),'--release','25','-cp',cp,'-d',str(out),*[str(p)for p in (R/'client/launcher/java').glob('*.java')],str(w/'DesktopCheck.java')],check=True)
  (out/'prosperocraft-channel.txt').write_text('temp_gametest\n')
  subprocess.run([str(J/'java'),'-cp',str(out)+':'+cp,'DesktopCheck',str(w/'data')],check=True)
  (w/'test.cpp').write_text(cpp)
- subprocess.run(['clang++','-std=c++20','-fsanitize=address,undefined','-I'+str(R/'client/launcher'),str(w/'test.cpp'),'-o',str(w/'test')],check=True)
+ subprocess.run([executable('clang++', env='CXX'),'-std=c++20','-fsanitize=address,undefined','-I'+str(R/'client/launcher'),str(w/'test.cpp'),'-o',str(w/'test')],check=True)
  subprocess.run([str(w/'test')],check=True)
 print('PASS native HID packet read/held-on-entry/repeat/intercept/clamp/single-click/close and layout hit boundaries under ASan/UBSan')

@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Exercise actual auth HTTPS transport with a private local TLS fixture, no account."""
 from pathlib import Path
+from host_toolchain import java_home, launcher_classpath
 import subprocess,json,tempfile
-ROOT=Path(__file__).resolve().parents[1];jdk=Path('/Library/Java/JavaVirtualMachines/openjdk-25.jdk/Contents/Home')
-cp=':'.join(str(ROOT/'.tools/client'/r['file'])for r in json.loads((ROOT/'client/26.3.lock.json').read_text())['artifacts'])
+ROOT=Path(__file__).resolve().parents[1];jdk=java_home()
+cp=launcher_classpath()
 source=r'''
 import com.sun.net.httpserver.*;import javax.net.ssl.*;import java.io.*;import java.net.*;import java.nio.file.*;import java.security.*;import java.util.concurrent.atomic.*;
 public class HttpsAuthCheck {

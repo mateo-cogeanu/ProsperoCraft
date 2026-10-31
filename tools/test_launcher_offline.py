@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Exercise signed offline imports and actual launcher arguments without credentials."""
 from pathlib import Path
+from host_toolchain import java_home, launcher_classpath
 import json, subprocess, tempfile
 ROOT=Path(__file__).resolve().parents[1]
-JDK=Path('/Library/Java/JavaVirtualMachines/openjdk-25.jdk/Contents/Home')
+JDK=java_home()
 source=r'''
 import java.nio.file.*;import java.security.*;import java.util.*;import com.google.gson.*;
 public class OfflineCheck {
@@ -42,6 +43,6 @@ public class OfflineCheck {
 }'''
 with tempfile.TemporaryDirectory(prefix='prospero-offline-') as folder:
     w=Path(folder);(w/'OfflineCheck.java').write_text(source)
-    cp=str(ROOT/'.tools/client/gson-2.14.0.jar')
+    cp=launcher_classpath()
     subprocess.run([str(JDK/'bin/javac'),'--release','25','-cp',cp,'-d',str(w),*[str(p) for p in (ROOT/'client/launcher/java').glob('*.java')],str(w/'OfflineCheck.java')],check=True)
     subprocess.run([str(JDK/'bin/java'),'-cp',str(w)+':'+cp,'OfflineCheck',str(w/'data'),str(w)],check=True,timeout=40)

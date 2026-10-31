@@ -1,0 +1,35 @@
+name: Host launcher policy
+on:
+  push:
+    paths: ['client/**', 'tools/**', 'tests/**', '.github/workflows/**', 'AGENTS.md', 'docs/host-testing.md']
+  pull_request:
+    paths: ['client/**', 'tools/**', 'tests/**', '.github/workflows/**', 'AGENTS.md', 'docs/host-testing.md']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: host-policy-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  policy:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-15]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
+        with:
+          distribution: temurin
+          java-version: '25'
+      - name: Required offline policy assertions (only provisioning downloads)
+        env:
+          PROSPERO_HOST_DEPS: ${{ runner.temp }}/prospero-host-deps
+        run: python3 tools/run_host_tests.py --fetch-deps

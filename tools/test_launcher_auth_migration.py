@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Actual saved-login migration and fresh-app refresh restoration without live credentials."""
 from pathlib import Path
+from host_toolchain import java_home, launcher_classpath
 import subprocess,tempfile
-ROOT=Path(__file__).resolve().parents[1];JDK=Path('/Library/Java/JavaVirtualMachines/openjdk-25.jdk/Contents/Home');cp=str(ROOT/'.tools/client/gson-2.14.0.jar')
+ROOT=Path(__file__).resolve().parents[1];JDK=java_home();cp=launcher_classpath()
 source=r'''
 import java.nio.file.*;import java.nio.charset.*;import java.util.*;import java.util.concurrent.atomic.*;import javax.crypto.*;import javax.crypto.spec.*;import com.google.gson.*;
 public final class AuthMigrationCheck {

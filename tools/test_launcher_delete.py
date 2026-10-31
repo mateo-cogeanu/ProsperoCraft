@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Exercise actual delete/undo/confirmation logic, failure rollback and move recovery."""
 from pathlib import Path
+from host_toolchain import java_home, launcher_classpath
 import subprocess,tempfile
 ROOT=Path(__file__).resolve().parents[1]
-JDK=Path('/Library/Java/JavaVirtualMachines/openjdk-25.jdk/Contents/Home')
+JDK=java_home()
 source=r'''
 import java.nio.file.*;import java.util.*;import java.io.*;
 public class DeleteCheck {
@@ -31,6 +32,6 @@ public class DeleteCheck {
  static ProsperoLibrary.Instance getInstance(Object m)throws Exception{var f=m.getClass().getDeclaredField("library");f.setAccessible(true);return ((ProsperoLibrary)f.get(m)).instances().get(0);}
 }'''
 with tempfile.TemporaryDirectory(prefix='prospero-delete-') as folder:
- w=Path(folder);(w/'DeleteCheck.java').write_text(source);cp=str(ROOT/'.tools/client/gson-2.14.0.jar')
+ w=Path(folder);(w/'DeleteCheck.java').write_text(source);cp=launcher_classpath()
  subprocess.run([str(JDK/'bin/javac'),'--release','25','-cp',cp,'-d',str(w),*[str(p) for p in (ROOT/'client/launcher/java').glob('*.java')],str(w/'DeleteCheck.java')],check=True)
  subprocess.run([str(JDK/'bin/java'),'-cp',str(w)+':'+cp,'DeleteCheck',str(w/'data'),str(w)],check=True,timeout=40)

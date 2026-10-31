@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """Actual content transport, dependency resolution, queues, Fabric receipts and UI."""
+import tempfile
 from pathlib import Path
+from host_toolchain import java_home, launcher_classpath
 import json,subprocess
-ROOT=Path(__file__).resolve().parents[1];JDK=Path('/Library/Java/JavaVirtualMachines/openjdk-25.jdk/Contents/Home')
-w=ROOT/'build/content103-test';w.mkdir(exist_ok=True)
-cp=':'.join(str(ROOT/'.tools/client'/r['file'])for r in json.loads((ROOT/'client/26.3.lock.json').read_text())['artifacts'])
+ROOT=Path(__file__).resolve().parents[1];JDK=java_home()
+host_work = tempfile.TemporaryDirectory(prefix='prospero-content-');w=Path(host_work.name).resolve()
+cp=launcher_classpath()
 source=r'''
 import com.google.gson.*;import java.nio.file.*;import java.io.*;import java.util.*;import java.security.*;
 public class ContentCheck {

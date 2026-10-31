@@ -133,3 +133,9 @@ Original ProsperoCraft code is **GPL-3.0-or-later**, copyright © 2026 mateo-cog
 Minecraft files and third-party trademarks are not relicensed by this project. ProsperoCraft is unofficial and is not affiliated with Mojang, Microsoft or Sony.
 
 Frozen source snapshots now live in the [source history archive](https://github.com/mateo-cogeanu/ps5-homebrew-history). Active builds stay here; original release downloads and tags are unchanged. See [source organization and build verification](docs/source-organization.md).
+
+## Contributor host checks
+
+Run `python3 tools/run_host_tests.py --fetch-deps` with Python 3.10+ and JDK 25.
+See [portable host testing](docs/host-testing.md) for the offline fast lane, optional
+native checks, discovery overrides, CI boundaries and tooling inventory.

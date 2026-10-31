@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Exercise real reserved workers, exhausted leases and late thread-creation denial."""
+import tempfile
 from pathlib import Path
+from host_toolchain import executable
 import subprocess
-ROOT=Path(__file__).resolve().parents[1];out=ROOT/'build/openal-worker-host-test';out.mkdir(exist_ok=True)
+ROOT=Path(__file__).resolve().parents[1];host_work=tempfile.TemporaryDirectory(prefix='prospero-workers-');out=Path(host_work.name).resolve()
 (out/'check.cpp').write_text(r'''
 #include <pthread.h>
 #include <atomic>
@@ -26,6 +28,6 @@ int main(int argc,char**){
  std::atomic<int> completed{0};for(int i=0;i<1000;++i){auto* slot=pool.assign(quick,&completed);assert(slot);pool.wait_release(slot);assert(completed==i+1);}assert(creates==2);
 }
 ''')
-subprocess.run(['clang++','-std=c++17','-O2','-fsanitize=address,undefined','-pthread','-I'+str(ROOT/'client/ports/openal'),str(out/'check.cpp'),'-o',str(out/'check')],check=True)
+subprocess.run([executable('clang++', env='CXX'),'-std=c++17','-O2','-fsanitize=address,undefined','-pthread','-I'+str(ROOT/'client/ports/openal'),str(out/'check.cpp'),'-o',str(out/'check')],check=True)
 for args in [[],['fail'],['fail','partial']]:subprocess.run([str(out/'check'),*args],check=True,timeout=20)
 print('PASS reserved real workers: initialization/failure/idempotence, two concurrent leases, exhaustion, completion/reuse x1000 with late creation denied; ASan/UBSan')

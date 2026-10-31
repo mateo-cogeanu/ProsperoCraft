@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Actual upstream predicates plus manifest/nested-module dependency auto downloads."""
+import tempfile
 from pathlib import Path
+from host_toolchain import java_home, launcher_classpath, dependency
 import subprocess,json,shutil
-ROOT=Path(__file__).resolve().parents[1];JDK=Path('/Library/Java/JavaVirtualMachines/openjdk-25.jdk/Contents/Home');w=ROOT/'build/dependencies108-test';w.mkdir(exist_ok=True)
-loader=ROOT/'build/content103-live/cache/fabric/libraries/net/fabricmc/fabric-loader/0.20.1/fabric-loader-0.20.1.jar'
+ROOT=Path(__file__).resolve().parents[1];JDK=java_home();host_work = tempfile.TemporaryDirectory(prefix='prospero-dependencies-');w=Path(host_work.name).resolve()
+loader=dependency('fabric-loader')
 source=r'''
 import com.google.gson.*;import java.nio.file.*;import java.io.*;import java.util.*;import java.util.zip.*;import java.security.*;
 public class DependencyCheck {
@@ -143,7 +145,7 @@ public class DependencyCheck {
  }
 }
 '''
-(w/'DependencyCheck.java').write_text(source);cp=':'.join(str(ROOT/'.tools/client'/r['file'])for r in json.loads((ROOT/'client/26.3.lock.json').read_text())['artifacts'])
+(w/'DependencyCheck.java').write_text(source);cp=launcher_classpath()
 subprocess.run([str(JDK/'bin/javac'),'--release','25','-cp',cp,'-d',str(w),*[str(p)for p in (ROOT/'client/launcher/java').glob('*.java')],str(w/'DependencyCheck.java')],check=True)
 shutil.rmtree(w/'data',ignore_errors=True)
 subprocess.run([str(JDK/'bin/java'),'-Xverify:all','-cp',str(w)+':'+cp,'DependencyCheck',str(w/'data'),str(loader)],check=True)

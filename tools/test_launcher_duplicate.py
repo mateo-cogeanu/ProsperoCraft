@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Exercise actual duplicate data isolation, cancellation, publication failure and UI routing."""
 from pathlib import Path
+from host_toolchain import java_home, launcher_classpath
 import subprocess,tempfile
-r=Path(__file__).resolve().parents[1];jdk=Path('/Library/Java/JavaVirtualMachines/openjdk-25.jdk/Contents/Home')
+r=Path(__file__).resolve().parents[1];jdk=java_home()
 s=r'''
 import java.nio.file.*;import java.io.*;import java.util.*;
 public class DuplicateCheck{
@@ -33,4 +34,4 @@ public class DuplicateCheck{
 }
 '''
 with tempfile.TemporaryDirectory(prefix='prospero-duplicate-')as d:
- w=Path(d);(w/'DuplicateCheck.java').write_text(s);cp=str(r/'.tools/client/gson-2.14.0.jar');subprocess.run([str(jdk/'bin/javac'),'--release','25','-cp',cp,'-d',str(w),*[str(p)for p in (r/'client/launcher/java').glob('*.java')],str(w/'DuplicateCheck.java')],check=True);subprocess.run([str(jdk/'bin/java'),'-Xverify:all','-cp',str(w)+':'+cp,'DuplicateCheck',str(w/'data')],check=True,timeout=60)
+ w=Path(d);(w/'DuplicateCheck.java').write_text(s);cp=launcher_classpath();subprocess.run([str(jdk/'bin/javac'),'--release','25','-cp',cp,'-d',str(w),*[str(p)for p in (r/'client/launcher/java').glob('*.java')],str(w/'DuplicateCheck.java')],check=True);subprocess.run([str(jdk/'bin/java'),'-Xverify:all','-cp',str(w)+':'+cp,'DuplicateCheck',str(w/'data')],check=True,timeout=60)
