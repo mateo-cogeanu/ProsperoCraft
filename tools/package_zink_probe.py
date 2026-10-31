@@ -114,7 +114,7 @@ shift 4
     shutil.copyfile(runtime / 'build/native/libc.prx',app / 'sce_module/libc.prx')
     from apply_branding import apply_app
     apply_app(app)
-    licenses=app / 'licenses';licenses.mkdir()
+    licenses=app / 'licenses';licenses.mkdir(exist_ok=True)
     for source,name in ((ROOT / 'LICENSE','ProsperoCraft-GPL-3.0-or-later.txt'),(driver / 'LICENSE','PS5-Vulkan-GPL-3.0.txt'),
                         (ROOT / 'build/graphics-sdk-source/LICENSE','PS5-PayloadSDK-GPL-3.0.txt'),
                         (ROOT / 'client/ports/zink/LICENSE.txt','Mesa-Zink-MIT.txt'),(ROOT / 'build/graphics-LLVM-LICENSE.txt','LLVM-LICENSE.txt')):

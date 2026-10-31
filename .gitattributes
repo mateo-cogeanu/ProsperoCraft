@@ -7,3 +7,6 @@ client/launcher/toolkit/** -whitespace
 # Preserve original upstream icon SVG bytes.
 assets/launcher-icons/*.svg -whitespace
 assets/launcher-icons/UPSTREAM-COPYING.md -whitespace
+
+# Unified-diff context blank lines in the new Mesa frontend patches.
+client/ports/zink/*.patch whitespace=-blank-at-eol
