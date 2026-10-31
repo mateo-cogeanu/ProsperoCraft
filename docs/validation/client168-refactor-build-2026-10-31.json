@@ -1,0 +1,65 @@
+{
+  "date": "2026-10-31",
+  "app_version": "01.000.168",
+  "title_id": "PPSA99874",
+  "candidate_source_commit": "8d9874ddda9a3c468d8f2dc5b1a64147b76a26f0",
+  "source_tree_at_build": "clean",
+  "purpose": "Local full-SDK/physical-console regression candidate for shared-tooling refactor; not a release",
+  "package_sha256": "f069b642d326624a839b6ea5521e8042eec3d876fd4ceb089abba4af455c41d8",
+  "package_bytes": 123888019,
+  "native_elf_sha256": "428461606ef07d3439e5bc0c26d79310c03d17ed2173878893a83dcbaec819df",
+  "openal_source_relink_sha256": "70ed3637354365f5fd64291ded3b30bc225a77641a7bcc90e83849a3feabed7d",
+  "checks": {
+    "full_build_current_client": "PASS: graphics prerequisites, native ports, embedded Java runtime, current Java/native launcher, link, signatures and packaging",
+    "full_test_client_startup_package": "PASS: every specialized current package assertion plus actual native/JAR/exploded-resource168 identity",
+    "host_lane": "PASS14; existing auth/install policy and new migration/identity negative tests",
+    "native_alias_table": "PASS actual168 ELF:1942 base/SDL3 entries and exactly3 facade redirects",
+    "normal_relink": "PASS exact new native ELF SHA256 reproduced",
+    "replacement_openal_relink": "PASS accepted-startup OpenAL replacement route reproduces the same native ELF SHA256",
+    "corresponding_source": "PASS all source/relink manifest input hashes, archive CRC, source revision and new shared bootstrap header bytes",
+    "167_release_preservation": "PASS unchanged exact release audit; original167 package/symbols and prebuild staging baseline checksum-verified",
+    "comparison_to_167": {
+      "native_main_equivalent_after_version_only_normalization": true,
+      "java_changed": [
+        "ProsperoAuth$Net.class",
+        "ProsperoDownloads.class",
+        "ProsperoInstall.class"
+      ],
+      "java_added": [
+        "ProsperoBuild.class",
+        "prosperocraft-build.properties"
+      ],
+      "java_removed": [],
+      "native_elf_sha256": "428461606ef07d3439e5bc0c26d79310c03d17ed2173878893a83dcbaec819df",
+      "normal_and_replacement_relink_exact": true
+    }
+  },
+  "hosted_ci": {
+    "run": "https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41194570412",
+    "source_commit": "8d9874ddda9a3c468d8f2dc5b1a64147b76a26f0",
+    "ubuntu-24.04": "success",
+    "macos-15": "success"
+  },
+  "identity": "Current native PROSPERO_APP_VERSION, packaging contentVersion, Java resource and generated build-status are01.000.168. Status explicitly records compilation passed and console pending. OAuth identity/endpoints/scopes/token semantics unchanged.",
+  "console": {
+    "status": "pending",
+    "requested": [
+      "Confirm168 launcher label and existing account/instance state",
+      "Controller and keyboard/mouse launcher navigation, click/text/modal behavior",
+      "Network version/content listing and a download; saved sign-in/refresh as needed",
+      "Vanilla26.2 and Fabric26.2 startup, input handoff/game controls/audio; save, quit and reopen"
+    ]
+  },
+  "preservation": "Accepted167 and earlier candidates/releases/frozen snapshots retained. APFS copy-on-write backup of prior consumer/runtime build+dist retained locally for recovery. Original game/mod JARs and runtime/dependency/performance policy unchanged.",
+  "remaining_limits": [
+    "No new physical-console result or endurance measurement",
+    "Build reused verified pinned source/dependency caches; fresh source-only host checks and target object equivalence were performed in the preceding refactor",
+    "Full local package success does not turn missing historical symbol ELFs122\u2013150 into available historical regression inputs"
+  ],
+  "publication": {
+    "source_only": true,
+    "github_release_created": false,
+    "prerelease_created": false,
+    "store_changed": false
+  }
+}

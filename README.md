@@ -141,3 +141,5 @@ See [portable host testing](docs/host-testing.md) for the offline fast lane, opt
 native checks, discovery overrides, CI boundaries and tooling inventory.
 
 Contributor tooling: [shared bootstrap, package audits and current identity](docs/tooling-sharing.md).
+
+Local development: [168 shared-tooling regression candidate](docs/client-shared-tooling-test-168.md) passes host/SDK/package/relink checks; exact PS5 validation remains pending. This is not a public binary release.

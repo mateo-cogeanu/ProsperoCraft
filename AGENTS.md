@@ -1946,3 +1946,15 @@ in docs/tooling-sharing.md. Source publication remains authorized; existing exac
 console/release/Store gates remain in force. Remove only verified disposable
 scratch and obsolete generated copies during cleanup; preserve tested packages,
 symbols, relink kits, dependency inputs and historical snapshots.
+
+##168 shared-tooling console candidate — 2026-10-31
+
+Full SDK/current package/native-Java identity/normal+replacement OpenAL relink
+checks pass for local168, SHA256
+f069b642d326624a839b6ea5521e8042eec3d876fd4ceb089abba4af455c41d8,
+source8d9874ddda9a3c468d8f2dc5b1a64147b76a26f0. The version increment
+separates it from accepted167. Preserve exact candidate/symbols/relink materials
+and original167; local prebuild recovery baseline is retained. No new console
+acceptance, release/prerelease or Store authorization inferred. See
+ docs/client-shared-tooling-test-168.md and matching validation. Current audit
+success labels derive the current version; immutable release facts stay fixed.

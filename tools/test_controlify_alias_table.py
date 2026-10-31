@@ -42,4 +42,4 @@ assert different==set(expected),(different,expected)
 for name,replacement in expected.items():
  assert base[name]==symbols[name]
  assert scoped[name]==symbols[replacement]
-print('PASS actual linked167 ELF:baseps5sdl+SDL3alias same',len(base),'exports;exactly3alias event pointers redirected to realfacade;allother/basepointersunchanged')
+print('PASS actual linked'+current_identity()['app_version']+' ELF:baseps5sdl+SDL3alias same',len(base),'exports;exactly3alias event pointers redirected to realfacade;allother/basepointersunchanged')
