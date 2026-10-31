@@ -11,7 +11,7 @@
 - Pin microphone ownership when the capture worker join fails instead of closing a port a producer may still read; report worker create/join return codes.
 - Turning Voice capture OFF during active capture now stops reads, drops queued samples and disconnects the OpenAL capture device. Capture enumeration while a healthy capture is live lists the device without disturbing it.
 - Keep short-read counts and invalid initial-user state as distinct diagnostic stages. New real-OpenAL test follows original SVC2.6.27 open order (launcher test, then ""/null opens, no prior enumeration).
-- Local-only Claude specialist change; not pushed. Physical174/175 microphone, SVC, mute/route and disconnect results remain pending. No release/Store update.
+- Initially local-only Claude specialist change; subsequently reviewed and source-published with176 after explicit user authorization. Physical174/175 microphone, SVC, mute/route and disconnect results remain pending. No release/Store update.
 
 ## 01.000.173 — local voice speaker/context initialization repair
 

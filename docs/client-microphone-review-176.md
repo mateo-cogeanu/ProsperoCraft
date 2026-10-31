@@ -50,6 +50,7 @@ ASan/UBSan. Physical read blocking/pacing, hardware privacy/mute/route, SVC code
 UDP/two-way speech and console cleanup remain unverified. Original173 cause is
 still unknown. Target package and both exact relink checks pass; checksums and separate
 host/console/publication status are in the [176 validation](validation/client176-microphone-review.json).
+Linux and macOS hosted policy/native lanes pass on85d2689.
 Both host lanes also pass from a source-only checkout with an initially empty
 dependency cache and invocation outside the source root. No release or Store change.
 

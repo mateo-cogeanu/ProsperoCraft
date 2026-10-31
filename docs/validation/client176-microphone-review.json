@@ -20,14 +20,18 @@
     "negative_controls": "175 backend fails pinned enumeration assertion; omitting only enumeration assertions reaches ASan heap-use-after-free in Ps5Capture::run. Source restored and all20modes pass with176",
     "package": "PASS actual package CRC/signatures/source/header/native import/runtime0135hash audit/frozen packages; host-only join hook excluded from target symbol table",
     "relink": "PASS normal+replacement OpenAL paths exactly match symbol ELF hash",
-    "hosted_ci": "Pending source push; no new hosted results claimed"
+    "hosted_ci": {
+      "source_commit": "85d268928e5b0688fe82df42fd6aab5cb826dafe",
+      "policy": "PASS Linux+macOS https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41221082155",
+      "native": "PASS Linux+macOS https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41221082627"
+    }
   },
   "console": {
     "173": "User launcher313blocks/nonzero76876/peak32766; speech/mute/SVC unknown. Native SVC open error stage/code missing",
     "174_175_176": "No exact physical result received; microphone speech/mute/route/codec/UDP/two-way voice/capture stop/reopen and runtime0135disconnect/save/endurance pending"
   },
   "publication": {
-    "source": "User explicitly authorized primary maintainer push after review; push verification pending",
+    "source": "Verified push of all specialist/review source through85d268928e5b0688fe82df42fd6aab5cb826dafe; GitHub main matched local HEAD. User explicitly authorized reviewed source push; original specialist local-only hold superseded.",
     "release_store": "None; physical exact-build gate retained"
   },
   "storage": "175 original artifacts preserved and SHA-verified;176 original ZIP/symbols/source-relink retained. Expanded176relink kit removed only after every entry matches CRC-checked retained ZIP"
