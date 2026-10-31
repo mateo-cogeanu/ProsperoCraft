@@ -28,7 +28,11 @@ def main():
         assert names and all(name.startswith('PPSA99874/') and '..' not in Path(name).parts for name in names)
         assert all(not name.lower().endswith(('.jar','.so','.elf')) and '/objects/' not in name for name in names)
         param=json.loads(archive.read('PPSA99874/sce_sys/param.json'))
-        assert param==json.loads((ROOT / 'client/zink_probe/param.json').read_text())
+        expected_param=json.loads((ROOT / 'client/zink_probe/param.json').read_text())
+        branding=json.loads((ROOT / 'assets/branding/branding.json').read_text())
+        for localized in expected_param['localizedParameters'].values():
+            if isinstance(localized,dict) and 'titleName' in localized:localized['titleName']=branding['name']
+        assert param==expected_param
         embedded=json.loads(archive.read('PPSA99874/assets/zink-audit.json'))
         for key in embedded:assert embedded[key]==record[key],key
         assert embedded['mesa']['commit']==json.loads((ROOT / 'client/graphics/sources.json').read_text())['mesa']['commit']
