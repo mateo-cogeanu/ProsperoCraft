@@ -17,6 +17,9 @@
     "test_launcher_duplicate.py",
     "test_launcher_web.py"
   ],
+  "zink": [
+    "test_zink_host.py"
+  ],
   "native": [
     "test_audio_native_mutex.py",
     "test_audio_port_retention.py",

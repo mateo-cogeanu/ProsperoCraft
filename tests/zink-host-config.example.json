@@ -1,0 +1,11 @@
+{
+  "frontend": "/path/to/rebuilt/host/libprosperozink.dylib",
+  "glfw-library": "/path/to/rebuilt/zink-glfw-host/libps5glfw.dylib",
+  "no-zink-glfw": "/path/to/rebuilt/glfw-without-zink/libps5glfw.dylib",
+  "core-library": "/path/to/rebuilt/libffi-host/liblwjglffi.dylib",
+  "opengl-library": "/path/to/rebuilt/lwjgl-opengl-host/liblwjgl_opengl.dylib",
+  "parent-dir": "/path/to/verified/lwjgl-parent-jars",
+  "publisher-cache": "/path/to/verified/261-publisher-cache",
+  "glfw-binding": "/path/to/rebuilt/lwjgl-glfw-3.4.1-ps5-callback343.jar",
+  "oshi-provider": "/path/to/rebuilt/oshi-6.9.0-ps5-platform.jar"
+}

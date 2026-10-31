@@ -117,3 +117,15 @@ runs for both lanes, including the repaired initial UBSan fixture failure.
 
 See [shared tooling](tooling-sharing.md) for bootstrap equivalence, auditor migration,
 current identity and the separate SDK/physical-console boundaries.
+
+## Optional Zink research lane
+
+`--lane zink --graphics-config /path/to/config.json` runs actual macOS lavapipe
+Zink, rebuilt GLFW/LWJGL and original publisher capability-boundary tests. Copy
+`tests/zink-host-config.example.json` and supply every verified input explicitly.
+This lane requires separately built native libraries, matching Clang sanitizer
+runtime, publisher inputs and overlays; it is outside portable CI and fresh-clone
+fast/native prerequisites. No game/native cache is searched or downloaded by the
+runner. SDL dummy windows are offscreen, so this proves neither kopper presentation
+nor PS5 RADV nor Minecraft Main/title/world. See
+[build instructions and evidence](client-26.1-zink-native-180.md).

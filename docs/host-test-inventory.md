@@ -256,3 +256,10 @@ The manual native lane instead tests scoped native implementations against fixtu
 | `test_spvc_bootstrap_host.py` | Prepared native/JNI libraries and upstream source/JAR caches; backend-specific, not an interchangeable Vulkan test; observed: hardcoded Homebrew |
 | `test_stb_bootstrap_host.py` | Prepared native/JNI libraries and upstream source/JAR caches; backend-specific, not an interchangeable Vulkan test |
 | `test_vma_bootstrap_host.py` | Prepared native/JNI libraries and upstream source/JAR caches; backend-specific, not an interchangeable Vulkan test; observed: hardcoded Homebrew, MoltenVK |
+
+## Opt-in 26.1 Zink implementation checks
+
+| Entrypoint in `tools/` | Dependencies and boundary |
+| --- | --- |
+| `test_zink_host.py` | Manual `zink` research lane; macOS, explicit actual Zink/lavapipe/GLFW/LWJGL/OSHI builds, verified original publisher cache and matching Clang sanitizers; offscreen GL and original capability boundary, no PS5 or full game |
+| `test_client180_package.py` | Exact local native180 ZIP, matching symbols/build tree, SDK converter and LLVM; digest/identity/licenses/source/one-copy/signature audit, no console execution |

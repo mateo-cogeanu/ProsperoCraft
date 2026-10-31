@@ -2,6 +2,15 @@
 #include <vulkan/vulkan.h>
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_vulkan.h>
+#include <string.h>
+int32_t ps5glfw_gl_surface(void *instance,void *window,uint64_t *out){
+ VkSurfaceKHR surface=VK_NULL_HANDLE;
+ if(!out)return VK_ERROR_INITIALIZATION_FAILED;
+ *out=0;
+ if(!SDL_Vulkan_CreateSurface((SDL_Window*)window,(VkInstance)instance,NULL,&surface))return VK_ERROR_INITIALIZATION_FAILED;
+ _Static_assert(sizeof(surface)==sizeof(*out),"64-bit surface ABI required");
+ memcpy(out,&surface,sizeof(surface));return VK_SUCCESS;
+}
 void ps5glfw_extensions(char** out){
  Uint32 count=0;const char*const* names=SDL_Vulkan_GetInstanceExtensions(&count);
  if(!names||count!=2){SDL_SetError("PS5 GLFW requires the two SDL surface extensions");return;}

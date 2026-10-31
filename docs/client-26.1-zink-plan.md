@@ -1,5 +1,7 @@
 # Minecraft 26.1.x through Zink — Phase A, 31 October 2026
 
+Implementation update: [native180 context probe and host evidence](client-26.1-zink-native-180.md). The Phase A receipt below describes the earlier pinning step.
+
 **Research and build design, not implemented support.** 26.1.x remains blocked
 by the launcher. No new app identity, console candidate, release or Store action
 is created by this work. Current identity is 01.000.179; the next available local

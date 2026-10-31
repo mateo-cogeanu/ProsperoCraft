@@ -1,0 +1,22 @@
+--- a/src/util/u_thread.h
++++ b/src/util/u_thread.h
+@@ -45,7 +45,7 @@
+  * still want to use normal TLS (which involves a function call, but not the
+  * expensive pthread_getspecific() or its equivalent).
+  */
+-#if DETECT_OS_APPLE
++#if DETECT_OS_APPLE || defined(PS5_ZINK_EMULATED_TLS)
+ /* Apple Clang emits wrappers when using thread_local that break module linkage,
+  * but not with __thread
+  */
+--- a/src/mesa/glapi/glapi_priv.h
++++ b/src/mesa/glapi/glapi_priv.h
+@@ -12,7 +12,7 @@
+ #include "util/detect_arch.h"
+ 
+ /* REALLY_INITIAL_EXEC implies __GLIBC__ */
+-#if defined(REALLY_INITIAL_EXEC)
++#if defined(REALLY_INITIAL_EXEC) && !defined(PS5_ZINK_EMULATED_TLS)
+ #if DETECT_ARCH_X86 && (MESA_SYSTEM_HAS_KMS_DRM || DETECT_OS_HURD)
+ #define _GLAPI_ENTRY_ARCH_TLS_H "glapi/entry_x86_tls.h"
+ #elif DETECT_ARCH_X86_64 && MESA_SYSTEM_HAS_KMS_DRM

@@ -1,0 +1,125 @@
+--- a/include/kopper_interface.h
++++ b/include/kopper_interface.h
+@@ -99,6 +99,12 @@
+    int initial_swap_interval;
+    bool present_opaque;
+    uint32_t compression;
++#ifdef PS5_ZINK_FRONTEND
++   /* Owned by the private frontend until drawable/resource destruction.
++    * Never squeeze a VkDisplaySurfaceCreateInfoKHR into bos.padding. */
++   void *ps5_window;
++   VkResult (*ps5_create_surface)(VkInstance, void *, VkSurfaceKHR *);
++#endif
+ };
+ 
+ #define __DRI_KOPPER_LOADER "DRI_KopperLoader"
+--- a/src/gallium/drivers/zink/zink_kopper.h
++++ b/src/gallium/drivers/zink/zink_kopper.h
+@@ -74,7 +74,10 @@
+ enum kopper_type {
+    KOPPER_X11,
+    KOPPER_WAYLAND,
+-   KOPPER_WIN32
++   KOPPER_WIN32,
++#ifdef PS5_ZINK_FRONTEND
++   KOPPER_PS5,
++#endif
+ };
+ 
+ struct kopper_displaytarget
+--- a/src/gallium/drivers/zink/zink_instance.py
++++ b/src/gallium/drivers/zink/zink_instance.py
+@@ -44,6 +44,7 @@
+     Extension("VK_MVK_moltenvk",
+         nonstandard=True),
+     Extension("VK_KHR_surface"),
++    Extension("VK_KHR_display"),
+     Extension("VK_EXT_headless_surface"),
+     Extension("VK_KHR_wayland_surface"),
+     Extension("VK_KHR_xcb_surface"),
+--- a/src/gallium/drivers/zink/zink_kopper.c
++++ b/src/gallium/drivers/zink/zink_kopper.c
+@@ -33,6 +33,13 @@
+ static void
+ zink_kopper_set_present_mode_for_interval(struct kopper_displaytarget *cdt, int interval)
+ {
++#ifdef PS5_ZINK_FRONTEND
++   if (cdt->type == KOPPER_PS5) {
++      /* Existing PS5 WSI is FIFO-only, including requested interval zero. */
++      cdt->present_mode = VK_PRESENT_MODE_FIFO_KHR;
++      return;
++   }
++#endif
+ #if DETECT_OS_WINDOWS
+     /* Windows swap intervals are not wired up yet, but the requested mode
+      * must still be one supported by the surface. */
+@@ -67,6 +74,11 @@
+ {
+    VkStructureType type = cdt->info.bos.sType;
+    switch (type) {
++#ifdef PS5_ZINK_FRONTEND
++   case VK_STRUCTURE_TYPE_DISPLAY_SURFACE_CREATE_INFO_KHR:
++      cdt->type = KOPPER_PS5;
++      break;
++#endif
+ #ifdef VK_USE_PLATFORM_XCB_KHR
+    case VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR:
+       cdt->type = KOPPER_X11;
+@@ -96,6 +108,13 @@
+    init_dt_type(cdt);
+    VkStructureType type = cdt->info.bos.sType;
+    switch (type) {
++#ifdef PS5_ZINK_FRONTEND
++   case VK_STRUCTURE_TYPE_DISPLAY_SURFACE_CREATE_INFO_KHR:
++      if (!cdt->info.ps5_create_surface || !cdt->info.ps5_window)
++         return VK_NULL_HANDLE;
++      error = cdt->info.ps5_create_surface(screen->instance, cdt->info.ps5_window, &surface);
++      break;
++#endif
+ #ifdef VK_USE_PLATFORM_XCB_KHR
+    case VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR: {
+ #ifdef GLX_USE_APPLEGL
+@@ -216,6 +235,11 @@
+ {
+    struct hash_entry *he = NULL;
+    switch (cdt->type) {
++#ifdef PS5_ZINK_FRONTEND
++   case KOPPER_PS5:
++      he = _mesa_hash_table_search(&screen->dts, cdt->info.ps5_window);
++      break;
++#endif
+ #ifdef VK_USE_PLATFORM_XCB_KHR
+    case KOPPER_X11: {
+       VkXcbSurfaceCreateInfoKHR *xcb = (VkXcbSurfaceCreateInfoKHR *)&cdt->info.bos;
+@@ -315,6 +339,9 @@
+    switch (cdt->type) {
+    case KOPPER_X11:
+    case KOPPER_WIN32:
++#ifdef PS5_ZINK_FRONTEND
++   case KOPPER_PS5:
++#endif
+       /* With Xcb, minImageExtent, maxImageExtent, and currentExtent must always equal the window size.
+        * ...
+        * Due to above restrictions, it is only possible to create a new swapchain on this
+@@ -446,6 +473,9 @@
+             break;
+          case KOPPER_WAYLAND:
+          case KOPPER_WIN32:
++#ifdef PS5_ZINK_FRONTEND
++         case KOPPER_PS5:
++#endif
+             _mesa_hash_table_init(&screen->dts, screen, _mesa_hash_pointer, _mesa_key_pointer_equal);
+             break;
+          default:
+@@ -497,6 +527,11 @@
+ 
+    simple_mtx_lock(&screen->dt_lock);
+    switch (cdt->type) {
++#ifdef PS5_ZINK_FRONTEND
++   case KOPPER_PS5:
++      _mesa_hash_table_insert(&screen->dts, cdt->info.ps5_window, cdt);
++      break;
++#endif
+ #ifdef VK_USE_PLATFORM_XCB_KHR
+    case KOPPER_X11: {
+       VkXcbSurfaceCreateInfoKHR *xcb = (VkXcbSurfaceCreateInfoKHR *)&cdt->info.bos;

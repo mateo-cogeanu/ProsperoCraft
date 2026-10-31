@@ -11,3 +11,9 @@ JNI initializer. GLFW's original license is retained in LICENSE.md.
 The host-only PS5_GLFW_HOST_TEST switch removes the Vulkan window flag to allow
 real SDL dummy-window/event tests. Production builds never use this switch.
 See docs/client-26.2-glfw-122.md for validation and limitations.
+
+The optional `gl_context.c` delegates core GL context/procedure/swap operations to
+the private Zink frontend. A build without that provider still rejects OpenGL.
+Production GL windows use genuine SDL Vulkan surfaces; no SDL GL backend is
+substituted. The host-only dummy test uses offscreen Zink. See
+[scope and limitations](../../../docs/client-26.1-zink-native-180.md).

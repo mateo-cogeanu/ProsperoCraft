@@ -9,6 +9,9 @@ extern int ps5glfw_vulkan_load(void);
 extern void ps5glfw_vulkan_unload(void);
 extern int ps5glfw_presentation(void*,void*,uint32_t);
 extern int32_t ps5glfw_surface(void*,SDL_Window*,const void*,uint64_t*);
+extern int ps5glfw_gl_available(void);
+extern int ps5glfw_gl_create(_GLFWwindow*,const _GLFWctxconfig*,const _GLFWfbconfig*);
+extern int ps5glfw_gl_destroy(_GLFWwindow*);
 #include <string.h>
 #include "../sdl/ps5_startup_boundary.h"
 
@@ -56,7 +59,7 @@ static void gammaSet(_GLFWmonitor* m,const GLFWgammaramp* r){(void)gammaGet(m,(G
 static void size(_GLFWwindow* w,int* x,int* y){SDL_GetWindowSize(native(w),x,y);}
 static void pixels(_GLFWwindow* w,int* x,int* y){SDL_GetWindowSizeInPixels(native(w),x,y);}
 static GLFWbool create(_GLFWwindow* w,const _GLFWwndconfig* cfg,const _GLFWctxconfig* ctx,const _GLFWfbconfig* fb){
- (void)fb;if(ctx->client!=GLFW_NO_API){_glfwInputError(GLFW_API_UNAVAILABLE,"PS5 GLFW backend requires Vulkan/GLFW_NO_API");return GLFW_FALSE;}
+ if(ctx->client!=GLFW_NO_API&&(ctx->client!=GLFW_OPENGL_API||!ps5glfw_gl_available())){_glfwInputError(GLFW_API_UNAVAILABLE,"PS5 GLFW backend requires Vulkan/GLFW_NO_API or the optional Zink resident group");return GLFW_FALSE;}
  SDL_WindowFlags flags=SDL_WINDOW_VULKAN|(cfg->visible?0:SDL_WINDOW_HIDDEN)|(cfg->resizable?SDL_WINDOW_RESIZABLE:0)|(w->monitor?SDL_WINDOW_FULLSCREEN:0);
 #ifdef PS5_GLFW_HOST_TEST
  flags&=~SDL_WINDOW_VULKAN; /* Real SDL dummy window for host event/lifecycle tests only. */
@@ -66,9 +69,11 @@ static GLFWbool create(_GLFWwindow* w,const _GLFWwndconfig* cfg,const _GLFWctxco
  PS5_BOUNDARY("SDL window create returned success");
  w->null.ps5_window=s;w->null.width=cfg->width;w->null.height=cfg->height;w->null.opacity=1;
  if(w->monitor)_glfwInputMonitorWindow(w->monitor,w);
- SDL_StartTextInput(s);return GLFW_TRUE;
+ SDL_StartTextInput(s);
+ if(ctx->client==GLFW_OPENGL_API&&!ps5glfw_gl_create(w,ctx,fb))return GLFW_FALSE;
+ return GLFW_TRUE;
 }
-static void destroy(_GLFWwindow* w){if(w->monitor)_glfwInputMonitorWindow(w->monitor,NULL);if(native(w)){SDL_StopTextInput(native(w));SDL_DestroyWindow(native(w));w->null.ps5_window=NULL;}}
+static void destroy(_GLFWwindow* w){if(!ps5glfw_gl_destroy(w))return;if(w->monitor)_glfwInputMonitorWindow(w->monitor,NULL);if(native(w)){SDL_StopTextInput(native(w));SDL_DestroyWindow(native(w));w->null.ps5_window=NULL;}}
 static void title(_GLFWwindow* w,const char* s){if(!SDL_SetWindowTitle(native(w),s))error();}
 static void icon(_GLFWwindow* w,int n,const GLFWimage* images){if(n<=0)return;SDL_Surface* s=SDL_CreateSurfaceFrom(images[0].width,images[0].height,SDL_PIXELFORMAT_RGBA32,images[0].pixels,images[0].width*4);if(s){SDL_SetWindowIcon(native(w),s);SDL_DestroySurface(s);}}
 static void pos(_GLFWwindow* w,int* x,int* y){SDL_GetWindowPosition(native(w),x,y);}

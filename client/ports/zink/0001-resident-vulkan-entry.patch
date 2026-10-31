@@ -1,0 +1,48 @@
+--- a/src/gallium/drivers/zink/zink_screen.c
++++ b/src/gallium/drivers/zink/zink_screen.c
+@@ -3422,6 +3422,11 @@
+ 
+    u_trace_state_init();
+ 
++#ifdef PS5_ZINK_STATIC_VULKAN
++   /* Existing layerless resident loader; no second loader or ICD. */
++   extern PFN_vkVoidFunction vkGetInstanceProcAddr(VkInstance, const char *);
++   screen->vk_GetInstanceProcAddr = vkGetInstanceProcAddr;
++#else
+    screen->loader_lib = util_dl_open(VK_LIBNAME);
+    if (!screen->loader_lib) {
+       if (!screen->driver_name_is_inferred)
+@@ -3438,6 +3443,8 @@
+       goto fail;
+    }
+ 
++#endif
++
+    if (config) {
+       driParseConfigFiles(config->options, config->options_info,
+                           &(driConfigFileParseParams) { .driverName = "zink" });
+@@ -3479,6 +3486,15 @@
+    vk_physical_device_uncompacted_dispatch_table_load(&screen->vk.physical_device,
+                                                       screen->vk_GetInstanceProcAddr,
+                                                       screen->instance);
++
++#ifdef PS5_ZINK_STATIC_VULKAN
++   screen->vk_GetDeviceProcAddr = (PFN_vkGetDeviceProcAddr)
++      screen->vk_GetInstanceProcAddr(screen->instance, "vkGetDeviceProcAddr");
++   if (!screen->vk_GetDeviceProcAddr) {
++      mesa_loge("ZINK: resident device resolver unavailable");
++      goto fail;
++   }
++#endif
+ 
+    zink_verify_instance_extensions(screen);
+ 
+@@ -3864,7 +3880,7 @@
+       ret->drm_fd = -1;
+    }
+ 
+-   return &ret->base;
++   return ret ? &ret->base : NULL;
+ }
+ 
+ static inline int

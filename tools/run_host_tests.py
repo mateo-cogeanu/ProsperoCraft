@@ -34,7 +34,8 @@ def fetch_dependencies():
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--lane', choices=('fast', 'native'), default='fast')
+    parser.add_argument('--lane', choices=('fast', 'native', 'zink'), default='fast')
+    parser.add_argument('--graphics-config', type=Path, help='Explicit Zink research input paths; see tests/zink-host-config.example.json')
     parser.add_argument('--java-home', type=Path)
     parser.add_argument('--deps-dir', type=Path)
     parser.add_argument('--cc', help='C compiler executable')
@@ -51,10 +52,24 @@ def main():
         fetch_dependencies()
     for name in ('gson', 'fabric-loader'):
         dependency(name)
-    if args.lane == 'native':
+    if args.lane in ('native', 'zink'):
         os.environ['UBSAN_OPTIONS'] = os.environ.get('UBSAN_OPTIONS', '') + ':halt_on_error=1'
         os.environ['CC'] = executable('clang', override=args.cc, env='CC')
         os.environ['CXX'] = executable('clang++', override=args.cxx, env='CXX')
+    graphics = []
+    if args.lane == 'zink':
+        if args.graphics_config is None:
+            parser.error('--lane zink requires --graphics-config; no game/native cache discovery')
+        config = json.loads(args.graphics_config.read_text())
+        required = {'frontend', 'glfw-library', 'no-zink-glfw', 'core-library', 'opengl-library',
+                    'parent-dir', 'publisher-cache', 'glfw-binding', 'oshi-provider'}
+        if not isinstance(config, dict) or set(config) - (required | {'output-dir'}) or required - set(config):
+            raise RuntimeError('Zink graphics config keys must match tests/zink-host-config.example.json')
+        if any(not isinstance(value, str) or not value for value in config.values()):
+            raise RuntimeError('Zink graphics config values must be explicit nonempty paths')
+        graphics = ['--cc', os.environ['CC']]
+        for key, value in config.items():
+            graphics.extend(['--' + key, str(Path(value).expanduser().resolve())])
     tests = json.loads((ROOT / 'tests/host-lanes.json').read_text())[args.lane]
     if not tests:
         raise RuntimeError('Empty host test lane')
@@ -62,7 +77,7 @@ def main():
     start = time.monotonic()
     for test in tests:
         print(f'\n>>> {test}', flush=True)
-        subprocess.run([sys.executable, str(ROOT / 'tools' / test)], cwd=ROOT,
+        subprocess.run([sys.executable, str(ROOT / 'tools' / test), *graphics], cwd=ROOT,
                        check=True, timeout=180)
     print(f'PASS {len(tests)} checks in {time.monotonic() - start:.1f}s', flush=True)
 

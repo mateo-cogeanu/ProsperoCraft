@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: Zlib
  * No arbitrary module loading. Vulkan uses glfwInitVulkanLoader with the
- * existing resident ICD; OpenGL context creation is explicitly unavailable.
+ * existing resident ICD; optional GL delegates to the private Zink frontend.
  */
 #include "internal.h"
 void* _glfwPlatformLoadModule(const char* path){(void)path;return NULL;}

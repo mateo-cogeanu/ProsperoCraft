@@ -1,14 +1,35 @@
 --- a/org/lwjgl/opengl/GL.java
 +++ b/org/lwjgl/opengl/GL.java
-@@ -150,6 +150,11 @@
+@@ -89,6 +89,11 @@
+
+     /** Loads the OpenGL native library, using the default library name. */
+     public static void create() {
++        if (Platform.get() == Platform.PS5 && "zink".equals(System.getProperty("ps5.opengl.provider"))) {
++            // Explicit consumer opt-in; real resident Mesa GL, no arbitrary loader.
++            create(apiCreateLibrary("ps5zink"));
++            return;
++        }
+         SharedLibrary GL = null;
+
+         String contextAPI = Configuration.OPENGL_CONTEXT_API.get();
+@@ -150,6 +155,10 @@
      }
- 
+
      private static @Nullable SharedLibrary loadOSMesa() {
 +        if (Platform.get() == Platform.PS5) {
-+            // Resident provider has no desktop soname defaults or on-disk ELF.
-+            // Preserve lookup failures;the provider supplies actual GL functions.
++            // Preserve the passing029 bootstrap unless the consumer selects Zink.
 +            return apiCreateLibrary(Configuration.OPENGL_OSMESA_LIBRARY_NAME.get("ps5clientgl"));
 +        }
          try {
              return Library.loadNative(GL.class, "org.lwjgl.opengl", Configuration.OPENGL_OSMESA_LIBRARY_NAME, Configuration.OPENGL_OSMESA_LIBRARY_NAME_DEFAULTS());
          } catch (Throwable ignored) {
+@@ -186,6 +195,9 @@
+                         case WINDOWS:
+                             GetProcAddress = library.getFunctionAddress("wglGetProcAddress");
+                             break;
++                    }
++                    if (Platform.get() == Platform.PS5) {
++                        GetProcAddress = library.getFunctionAddress("ps5zink_get_proc_address");
+                     }
+                     if (GetProcAddress == NULL) {
+                         GetProcAddress = library.getFunctionAddress("eglGetProcAddress");

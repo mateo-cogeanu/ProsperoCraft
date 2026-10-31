@@ -5,6 +5,8 @@
 - Enumerate original 26.1, 26.1.1 and 26.1.2 release metadata in a draft lock; add explicit hash-verified preparation and read-only parent/GLFW/OpenGL JNI linkage audits. Original game JARs/assets remain outside Git and unmodified.
 - Record GL 3.3 core requirements, one-device kopper presentation design, pinned shared Mesa/RADV source, TLS/allocation constraints and outstanding implementation/host/console gates in [Phase A](docs/client-26.1-zink-plan.md). Add deterministic offline input/ABI-parser failure controls to the fast host lane. Launcher support, current179 package and release/Store state are unchanged.
 
+- Implement an opt-in private Mesa state-tracker/Zink frontend, single-copy RADV closure, constant emulated GL TLS, genuine GLFW context hooks and explicit LWJGL procedure dispatch. Actual macOS lavapipe rendering/readback and original 26.1/26.1.1/26.1.2 capability-boundary tests pass;029 OSMesa remains. Local native-only180 tests context/readback/destruction, without presentation/JVM/game. [Test guide](docs/client-26.1-zink-native-180.md). Physical console acceptance and full launcher/game integration remain pending; no release/Store action.
+
 ## 01.000.179 — automatic microphone and simpler instance settings
 
 - Prepare the working system microphone automatically before every supported game launch; remove the launcher Microphone button, toggle and test page. Existing saved microphoneEnabled:false no longer blocks preparation. Use the controller's physical microphone mute button or PS5 system mute.
