@@ -206,6 +206,10 @@ struct Ps5Capture final : BackendBase {
  }
 };
 }
+extern "C" __attribute__((visibility("default"))) int client_ps5_capture_service_preinit(){
+ const bool ready=capture.initialize(captureApi());const int rc=ready?0:capture.error;
+ std::fprintf(stderr,"PS5 AudioIn pre-JVM service init result=0x%x; no port opened or input read\n",unsigned(rc));std::fflush(stderr);return rc;
+}
 extern "C" __attribute__((visibility("default"))) void client_ps5_capture_enable(int enabled){captureEnabled.store(enabled!=0,std::memory_order_release);}
 extern "C" __attribute__((visibility("default"))) void client_ps5_capture_probe(char* result,unsigned size){
  if(!result||!size)return;CaptureLease lease;

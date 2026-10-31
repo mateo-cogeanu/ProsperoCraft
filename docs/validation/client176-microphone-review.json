@@ -28,7 +28,8 @@
   },
   "console": {
     "173": "User launcher313blocks/nonzero76876/peak32766; speech/mute/SVC unknown. Native SVC open error stage/code missing",
-    "174_175_176": "No exact physical result received; microphone speech/mute/route/codec/UDP/two-way voice/capture stop/reopen and runtime0135disconnect/save/endurance pending"
+    "174_175": "No exact physical result received",
+    "176": "User reports leaving/rejoining works; SVC still reports microphone unavailable. Current176 native log shows both capture attempts fail at AudioIn init0x80260108 before port open. Speech/mute/route/codec/UDP/two-way voice/endurance remain unvalidated."
   },
   "publication": {
     "source": "Verified push of all specialist/review source through85d268928e5b0688fe82df42fd6aab5cb826dafe; GitHub main matched local HEAD. User explicitly authorized reviewed source push; original specialist local-only hold superseded.",

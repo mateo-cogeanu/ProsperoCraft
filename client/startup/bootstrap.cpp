@@ -47,6 +47,7 @@ static void notify(const char* text);
 extern "C" int sceAudioOutInit();
 extern "C" int client_ps5_audio_worker_preinit();
 extern "C" int client_ps5_audio_event_preinit();
+extern "C" int client_ps5_capture_service_preinit();
 extern "C" {int client_ps5_audio_early_init_result=INT32_MIN;int client_ps5_audio_early_port=-1;int client_ps5_audio_secondary_port=-1;}
 using Initializer=void (*)();
 extern "C" Initializer __jvm_init_array_start[],__jvm_init_array_end[];
@@ -312,6 +313,10 @@ void run_test(int i) {
   char mixer_worker_note[128];std::snprintf(mixer_worker_note,sizeof(mixer_worker_note),"PS5 OpenAL pre-JVM mixer workers result=%d capacity2",mixer_worker_rc);log_stage(mixer_worker_note);
   const int event_worker_rc=client_ps5_audio_event_preinit();
   char event_worker_note[128];std::snprintf(event_worker_note,sizeof(event_worker_note),"PS5 OpenAL pre-JVM event workers result=%d capacity2",event_worker_rc);log_stage(event_worker_note);
+  // AudioInInit failed with0x80260108 when first called by SVC after world entry.
+  // Prepare only the service now. Opt-in still gates every real capture port/read.
+  const int capture_service_rc=client_ps5_capture_service_preinit();
+  char capture_service_note[176];std::snprintf(capture_service_note,sizeof(capture_service_note),"PS5 AudioIn pre-JVM service init result=0x%08X;no port opened or input read;failure nonfatal",static_cast<unsigned>(capture_service_rc));log_stage(capture_service_note);
   // Prepare the SDK service on the native startup thread before JVM heap/workers.
   client_ps5_audio_early_init_result=sceAudioOutInit();
   char audio_stage[160];std::snprintf(audio_stage,sizeof(audio_stage),"AudioOut pre-JVM init result=%d (0x%08X);failure is nonfatal",client_ps5_audio_early_init_result,static_cast<unsigned>(client_ps5_audio_early_init_result));log_stage(audio_stage);

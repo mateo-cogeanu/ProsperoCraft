@@ -20,13 +20,22 @@ struct Capture {
  std::array<float,Capacity> ring{};unsigned read=0,count=0;
  std::uint64_t blocks=0,nonzero=0,silent_blocks=0,dropped=0;int peak=0;
  alignas(64) std::array<std::int16_t,Grain> pcm{};
+ // Service preparation only: no user lookup, port open, read or capture opt-in.
+ // Startup calls this before JVM/game pressure. Failed init remains retryable.
+ bool initializeLocked(){
+  if(initialized)return true;errorStage="init";error=api.init();if(error<0)return false;
+  initialized=true;error=0;errorStage="none";return true;
+ }
+ bool initialize(CaptureApi calls){
+  const auto lock=std::lock_guard{mutex};if(initialized)return true;api=calls;return initializeLocked();
+ }
  bool open(CaptureApi calls){
   const auto lock=std::lock_guard{mutex};if(handle>=0){errorStage="owned-port";return false;}api=calls;
   int user=-1;errorStage="initial-user";error=api.initialUser(&user);if(error<0)return false;
   if(user<0){errorStage="initial-user-invalid";error=-1;return false;} // No user identifier in diagnostics.
   // AudioIn is process-lifetime. Enumeration/test/open share this owner: once
   // initialization actually succeeds, do not initialize it again per port.
-  if(!initialized){errorStage="init";error=api.init();if(error<0)return false;initialized=true;}
+  if(!initializeLocked())return false;
   errorStage="open";
   handle=api.open(user,1,0,Grain,InputRate,1); // PS5 General, index0, S16 mono profile.
   if(handle<0){error=handle;return false;}

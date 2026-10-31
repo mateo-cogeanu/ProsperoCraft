@@ -1,5 +1,11 @@
 # Changelog
 
+## 01.000.177 — early AudioIn service preparation (console pending)
+
+- Actual176 SVC capture attempts fail at AudioIn init0x80260108 before port open. Prepare only the service before JVM/game resource use and retain confirmed success across later capture opens; negative early results remain nonfatal/retryable errors.
+- Startup initialization opens no microphone port, looks up no user and reads no input. Voice capture remains saved default-off with the same native format, consented test and mute/route checks.
+- Host controls cover successful early init under later refusal, failed/absent early init, zero early port/read calls and repeated SVC capture. [Evidence and console checks](docs/client-audioin-service-177.md). User reports176 leaving/rejoining works; microphone and exact177 console validation remain pending. No release/Store update.
+
 ## 01.000.176 — reviewed capture worker lifetime (console pending)
 
 - Retain175 microphone diagnostics, live enumeration and disable behavior; detach device callbacks and keep producer control in process-lifetime state before backend destruction after failed join. Keep uncertain port/lease pinned and unavailable.

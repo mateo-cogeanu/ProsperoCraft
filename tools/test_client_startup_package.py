@@ -75,6 +75,8 @@ assert 'pthread_' not in sdl_tls_undef,sdl_tls_undef
 assert 'SDL_SetError' not in sdl_tls_undef,sdl_tls_undef
 assert 'SDL_Generic_SetTLSData' in sdl_tls_undef
 
+assert symbols.get('client_ps5_capture_service_preinit')
+assert b'PS5 AudioIn pre-JVM service init result=' in elf.read_bytes()
 assert symbols.get('client_ps5_audio_early_init_result') and symbols.get('client_ps5_audio_early_port') and symbols.get('client_ps5_audio_secondary_port')
 imports=subprocess.check_output([str(LLVM/'llvm-nm'),'--undefined-only',str(elf)],text=True)
 for jna in ['Java_com_sun_jna_Native_getLastError','Java_com_sun_jna_Native_setLastError','Java_com_sun_jna_Native_sizeof','Java_com_sun_jna_Native_initIDs','ps5_builtin_load_jnidispatch']:assert symbols.get(jna),jna
@@ -232,7 +234,7 @@ with zipfile.ZipFile(package)as z,zipfile.ZipFile(ROOT/'dist/milestones/Client_C
   assert z.read(prefix+'assets/java25/classes/'+entry)==(ROOT/'build/startup-host-096'/entry).read_bytes()
  assert b'--prospero-library' in z.read(prefix+'eboot.bin')
  assert b'Original game main returned;inspect exceptions.log' not in fixture
- bootstrap=(ROOT/'client/startup/bootstrap.cpp').read_text();assert bootstrap.index('client_ps5_audio_early_init_result=sceAudioOutInit()')<bootstrap.index('JNI_CreateJavaVM(&');assert 'test_count=4'in bootstrap and 'for(int i:{1,3})'in bootstrap and 'ClientContinuousSDL25'not in bootstrap
+ bootstrap=(ROOT/'client/startup/bootstrap.cpp').read_text();assert bootstrap.index('const int capture_service_rc=client_ps5_capture_service_preinit()')<bootstrap.index('JNI_CreateJavaVM(&');assert bootstrap.index('client_ps5_audio_early_init_result=sceAudioOutInit()')<bootstrap.index('JNI_CreateJavaVM(&');assert 'test_count=4'in bootstrap and 'for(int i:{1,3})'in bootstrap and 'ClientContinuousSDL25'not in bootstrap
  assert not any(n.endswith(('.pcm','.at9'))for n in z.namelist())
  lock=json.loads((ROOT/'client/26.3.lock.json').read_text())
  dependencies=json.loads(z.read(prefix+'assets/java25/launcher-dependencies.json'))

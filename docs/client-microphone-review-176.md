@@ -66,3 +66,13 @@ must make capture unavailable until restart; do not reset a pinned owner to hide
 it. A native input call that never returns can still delay stop: no unsafe close
 from another thread was introduced. The existing runtime0135 title-screen repair
 is retained unchanged and still requires its own console acceptance.
+
+## Subsequent176 physical report
+
+The user reports leaving/rejoining works, but SVC still reports microphone
+unavailable. The current176 run's native stderr identifies both failed capture
+attempts as AudioIn stage=init result=0x80260108 before any microphone port open.
+This narrows the failure beyond earlier repeated-init speculation; it does not
+identify the internal allocator/quota. Original raw reports remain local. The
+next [177 service-initialization change](client-audioin-service-177.md) prepares
+only AudioIn before JVM/game pressure. No full176 pass or release is implied.

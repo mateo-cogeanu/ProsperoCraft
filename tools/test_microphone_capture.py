@@ -12,9 +12,9 @@ source=r'''
 #include <cmath>
 #include <string_view>
 using ps5audio::Capture;
-static int user_id=7,init_rc=0,open_rc=9,close_rc=0,input_rc=256,route=3,mute=0,opens=0,closes=0,reads=0,inits=0;
+static int user_id=7,init_rc=0,open_rc=9,close_rc=0,input_rc=256,route=3,mute=0,opens=0,closes=0,reads=0,inits=0,users=0;
 static bool mute_after=false,route_after=false;
-int user(int*p){*p=user_id;return 0;}int init(){++inits;return init_rc;}
+int user(int*p){++users;*p=user_id;return 0;}int init(){++inits;return init_rc;}
 int open(int u,unsigned t,unsigned i,unsigned n,unsigned r,unsigned f){assert(u==7&&t==1&&i==0&&n==256&&r==16000&&f==1);++opens;return open_rc;}
 int close(int h){assert(h==9);++closes;return close_rc;}
 int silent(int h){assert(h==9);return mute;}int reroute(int h){assert(h==9);return route;}
@@ -48,6 +48,13 @@ int main(){
  assert(c.open(api));std::atomic<bool> done{false};std::thread producer([&]{for(int i=0;i<5000;i++)assert(c.pump());done=true;});std::thread consumer([&]{float out[96];while(!done){unsigned n=std::min(96u,c.available());if(n)assert(c.take(out,n,true));}});producer.join();consumer.join();assert(c.close());
  mute=-7;assert(c.open(api));assert(!c.pump());assert(c.close());
  assert(opens>=202&&closes>=203&&inits==3);
+ {Capture early;mute=0;int before_inits=inits,before_opens=opens,before_reads=reads,before_users=users;
+  init_rc=-8;assert(!early.initialize(api)&&!early.initialized&&early.error==-8&&inits==before_inits+1);
+  init_rc=0;assert(early.initialize(api)&&early.initialized&&inits==before_inits+2);
+  init_rc=-99;assert(early.initialize(api)&&inits==before_inits+2);assert(opens==before_opens&&reads==before_reads&&early.handle==-1&&users==before_users);
+  assert(early.open(api)&&early.pump()&&early.close()&&inits==before_inits+2);
+ }
+
 }
 '''
 with tempfile.TemporaryDirectory() as td:

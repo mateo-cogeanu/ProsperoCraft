@@ -128,3 +128,11 @@ claim.174 retains confirmed process-lifetime AudioIn initialization across probe
 and opens, retries genuine failed initialization and reports native failure stage/
 code. Native profile constants are unchanged. See [174 evidence and console checks](client-mic-disconnect-174.md).
 Speech, mute, route identity and two-way SVC remain pending.
+
+## Local177 service preparation
+
+176 current-run SVC reports AudioIn init0x80260108 before microphone port open.
+177 prepares the service before JVM/game pressure, without user lookup, port open
+or input read. Capture stays default-off. See [177 evidence/test guide](client-audioin-service-177.md).
+The earlier173 nonzero launcher counts remain separate evidence; no177 speech or
+whole-build acceptance is implied.
