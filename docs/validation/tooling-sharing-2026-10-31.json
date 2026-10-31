@@ -35,10 +35,31 @@
     "repository": "mateo-cogeanu/ProsperoCraft",
     "releases_created": false,
     "store_changed": false,
-    "hosted_ci": "pending source push"
+    "hosted_ci": {
+      "run": "https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41193927285",
+      "source_commit": "59ab5bbc2ecc8636465bf757f93b0ab5722ea010",
+      "ubuntu-24.04": {
+        "job": 124516161818,
+        "conclusion": "success",
+        "checks": 14
+      },
+      "macos-15": {
+        "job": 124516162007,
+        "conclusion": "success",
+        "checks": 14
+      },
+      "optional_native": "Five checks passed locally; not dispatched again on hosted runners for this consumer refactor."
+    },
+    "source_commit": "59ab5bbc2ecc8636465bf757f93b0ab5722ea010",
+    "remote_push_verified": true
   },
   "cleanup": {
     "authorization": "Only verified disposable scratch and obsolete generated copies",
-    "planned": "Remove this task isolated source/build verification copy, newly provisioned temporary host caches and temporary compiler/diff/helper files after preserving small local reports. Keep all original inputs/packages/symbols/relink kits and archived snapshots."
+    "completed": true,
+    "removed_paths": 16,
+    "logical_bytes": 77583518,
+    "removed": "Task-created isolated source/build verification copy, two dedicated temporary host dependency caches, comparison objects/disassembly, reconstructed bootstrap copies and refactor helper scripts.",
+    "reports": "Small local test reports preserved under ignored build/refactor-validation-2026-10-31.",
+    "preserved": "All original inputs, dependency caches, packages, symbols, relink kits and archived snapshots; no tracked implementation was proven unused."
   }
 }
