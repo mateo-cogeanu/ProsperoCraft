@@ -62,7 +62,7 @@ public final class ProsperoAuth {
    HttpsURLConnection c=connections.open(URI.create(address).toURL());
    c.setConnectTimeout(15000);c.setReadTimeout(20000);c.setInstanceFollowRedirects(false);c.setAllowUserInteraction(false);c.setUseCaches(false);
    c.setRequestMethod(method);c.setRequestProperty("Accept","application/json");
-   c.setRequestProperty("User-Agent","ProsperoCraft/078");
+   c.setRequestProperty("User-Agent",ProsperoBuild.USER_AGENT);
    if(bearer!=null)c.setRequestProperty("Authorization","Bearer "+bearer);
    try{
     if(body!=null){c.setDoOutput(true);c.setRequestProperty("Content-Type",type);byte[] bytes=body.getBytes(StandardCharsets.UTF_8);if(bytes.length>256*1024)throw new Failure("RESPONSE");

@@ -139,3 +139,5 @@ Frozen source snapshots now live in the [source history archive](https://github.
 Run `python3 tools/run_host_tests.py --fetch-deps` with Python 3.10+ and JDK 25.
 See [portable host testing](docs/host-testing.md) for the offline fast lane, optional
 native checks, discovery overrides, CI boundaries and tooling inventory.
+
+Contributor tooling: [shared bootstrap, package audits and current identity](docs/tooling-sharing.md).

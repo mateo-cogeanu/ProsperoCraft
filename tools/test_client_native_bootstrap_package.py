@@ -26,5 +26,5 @@ for file in ['eboot.bin','sce_module/libc.prx']:
 assert package.read_bytes()==(a.runtime_workspace/'dist/PPSA99874.zip').read_bytes()
 for folder,digest in [('Client_Continuous_Direct_Scene-01.000.023','846cd9adea6f9e6b04f80df461424c26b1fec6aa080ed641c35e7cfb16488ea4'),('Client_Original_Startup-01.000.025','1c61c103fc96ac30a4c7acbdb985888a5cf2dfa848dadf90b74903c052097aee')]:
  root='milestones'if folder.startswith('Client_Continuous')else'failures';assert sha((ROOT/'dist'/root/folder/'PPSA99874-full-local.zip').read_bytes())==digest
-bootstrap=(ROOT/'client/native_bootstrap/bootstrap.cpp').read_text();assert 'test_count=5'in bootstrap and 'DestroyJavaVM'in bootstrap and '192.168.'not in bootstrap
+bootstrap=(ROOT/'client/native_bootstrap/bootstrap.cpp').read_text()+(ROOT/'client/bootstrap/acceptance_impl.hpp').read_text();assert 'test_count=5'in bootstrap and 'DestroyJavaVM'in bootstrap and '192.168.'not in bootstrap
 print('PASS026 CRC/signatures/identity,54 original JARs/exact023 runtime image/native libraries,real libffi/LWJGL upcalls/OpenAL mixer exports,359+4+5+'+str(al_ctors)+' staged constructors/no auto ctors,7resident groups,dependency overlay,128MiB/five-row fixture/no game or speaker success claim,preserved023/failed025 packages. PS5 pending.SHA256',sha(package.read_bytes()))

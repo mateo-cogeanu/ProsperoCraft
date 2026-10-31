@@ -1,0 +1,26 @@
+{
+  "native_bootstrap": {
+    "original_sha256": "686e06ce680fc2e49a00c90676795eaf65ecf904c5cc6ab5590d8f4f6d14224c",
+    "version": "01.000.026"
+  },
+  "opengl_bootstrap": {
+    "original_sha256": "5e91e047006bafe8855e17781007e28e15c66b7c78fb80539b4b7b8f36ebc01e",
+    "version": "01.000.029"
+  },
+  "stb_bootstrap": {
+    "original_sha256": "03df7573aae3a9573fe82bc7562b039c3b7232c8308fad54711661b63c1b9bfb",
+    "version": "01.000.031"
+  },
+  "freetype_bootstrap": {
+    "original_sha256": "a11367374cf41601a32e1fcf9580a778e23b07a575737639c0f09121c4a42a2f",
+    "version": "01.000.033"
+  },
+  "vma_bootstrap": {
+    "original_sha256": "710226c262bad76c2d9c96c5bc0d91603a7fbbdf6177835402dd55cc71d75ac7",
+    "version": "01.000.035"
+  },
+  "spvc_bootstrap": {
+    "original_sha256": "c455dce53385f7d06b5754b10b42f17c905c647b6eb116fa25763223f71d9236",
+    "version": "01.000.036"
+  }
+}

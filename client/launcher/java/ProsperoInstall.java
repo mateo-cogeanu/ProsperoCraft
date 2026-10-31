@@ -25,7 +25,7 @@ public final class ProsperoInstall {
   if(!"https".equals(uri.getScheme())||uri.getUserInfo()!=null||uri.getPort()!=-1||!Set.of("piston-meta.mojang.com","piston-data.mojang.com","libraries.minecraft.net","resources.download.minecraft.net","launchermeta.mojang.com","launcher.mojang.com").contains(uri.getHost()))throw new IOException("Untrusted publisher URL");
  }
  static InputStream network(String url)throws Exception {
-  safeUrl(url);HttpsURLConnection c=(HttpsURLConnection)URI.create(url).toURL().openConnection();c.setConnectTimeout(15000);c.setReadTimeout(20000);c.setInstanceFollowRedirects(false);c.setUseCaches(false);c.setRequestProperty("User-Agent","ProsperoCraft/079");
+  safeUrl(url);HttpsURLConnection c=(HttpsURLConnection)URI.create(url).toURL().openConnection();c.setConnectTimeout(15000);c.setReadTimeout(20000);c.setInstanceFollowRedirects(false);c.setUseCaches(false);c.setRequestProperty("User-Agent",ProsperoBuild.USER_AGENT);
   try{if(c.getResponseCode()!=200)throw new IOException("Publisher download HTTP "+c.getResponseCode());InputStream input=c.getInputStream();return new FilterInputStream(input){public void close()throws IOException{try{super.close();}finally{c.disconnect();}}};}catch(Exception error){c.disconnect();throw error;}
  }
  static void active(BooleanSupplier cancelled)throws IOException {if(Thread.currentThread().isInterrupted()||cancelled.getAsBoolean())throw new IOException("Download cancelled. Verified files are kept for retry.");}

@@ -1929,3 +1929,20 @@ Publish completed source changes here, inspect actual GitHub Actions jobs and
 report local versus hosted results separately. Host success is never a PS5 pass;
 retain exact-build physical-console checks and the existing release/Store gate.
 Reusable runtime changes remain in the Java repository and use its sync script.
+
+## Shared bootstrap/audits and identity — 2026-10-31
+
+Preserve all previous rules. Current application identity comes from
+client/startup/param.json through tools/app_identity.py. Keep runtime/dependency,
+probe/release versions and console acceptance separate. Do not rewrite frozen
+records or infer ALL PASS from build-status.json. Shared acceptance code lives
+in client/bootstrap; preserve explicit per-variant constants and allocation-free
+initialization/lifecycle semantics. Keep legacy122–150 command wrappers and all
+specialized assertions in tools/legacy_package_audit.py; update migration records
+and negative tests deliberately when changing assertions. Include shared headers
+in future corresponding-source/relink exports. Run the three new fast checks
+through the existing host runner; optional SDK object equivalence is documented
+in docs/tooling-sharing.md. Source publication remains authorized; existing exact
+console/release/Store gates remain in force. Remove only verified disposable
+scratch and obsolete generated copies during cleanup; preserve tested packages,
+symbols, relink kits, dependency inputs and historical snapshots.

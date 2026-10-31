@@ -4,6 +4,9 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];LLVM=Path('/opt/homebrew/opt/llvm/bin')
 def finish(runtime,java_home,work,assets,spec,gpu_support,gpu_audit,variant="gpu",version="01.000.004"):
  consumer=ROOT/"client"/variant
+ if variant=='startup':
+  from app_identity import current_identity
+  if version!=current_identity()['app_version']:raise ValueError('Native/current metadata version mismatch')
  def run(*args,**kw):subprocess.run(list(map(str,args)),check=True,env=dict(os.environ,LLVM_CONFIG=str(LLVM/'llvm-config')),**kw)
  build=runtime/'build/java25';sdk=runtime/'.tools/native-sdk/ps5-payload-sdk';graphics_sdk=ROOT/'.tools/graphics-sdk';native=runtime/'.tools/native-app/tooling/native'
  # Keep the runtime's exact module image/configuration/libraries and all54 pinned
@@ -171,4 +174,9 @@ def finish(runtime,java_home,work,assets,spec,gpu_support,gpu_audit,variant="gpu
     info=zipfile.ZipInfo(str(p.relative_to(app.parent)));info.external_attr=0o100777<<16;info.compress_type=zipfile.ZIP_DEFLATED;z.writestr(info,p.read_bytes())
  shutil.copyfile(package,runtime/'dist/PPSA99874.zip')
  digest=hashlib.sha256(package.read_bytes()).hexdigest();(dest/'SHA256SUMS').write_text(digest+'  PPSA99874.zip\n')
+ if variant=='startup':
+  from app_identity import build_status
+  from package_audit import audit_current_identity
+  audit_current_identity(package)
+  (dest/'build-status.json').write_text(json.dumps(build_status(package),indent=2)+'\n')
  print('Client',version,'Java/LWJGL GPU candidate SHA256',digest,'console pending')

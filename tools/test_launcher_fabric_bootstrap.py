@@ -25,7 +25,7 @@ public class KnotCheck {
  }
 }
 ''')
-subprocess.run([str(JDK/'bin/javac'),'--release','25','-cp',str(gson),'-d',str(w),str(ROOT/'client/launcher/java/ProsperoInstall.java'),str(ROOT/'client/launcher/java/ProsperoDownloads.java'),str(ROOT/'client/launcher/java/ProsperoFabric.java'),str(ROOT/'client/launcher/java/ProsperoDependencies.java'),str(w/'KnotCheck.java')],check=True)
+subprocess.run([str(JDK/'bin/javac'),'--release','25','-cp',str(gson),'-d',str(w),str(ROOT/'client/launcher/java/ProsperoBuild.java'),str(ROOT/'client/launcher/java/ProsperoInstall.java'),str(ROOT/'client/launcher/java/ProsperoDownloads.java'),str(ROOT/'client/launcher/java/ProsperoFabric.java'),str(ROOT/'client/launcher/java/ProsperoDependencies.java'),str(w/'KnotCheck.java')],check=True)
 # Client first, then exact upstream non-native libraries. The launcher stays on parent.
 artifacts=[ROOT/'.tools/client'/r['file'] for r in lock['artifacts'] if r['file']!='client-26.3.jar']
 subprocess.run([str(JDK/'bin/java'),'-Xverify:all','-Djava.awt.headless=true','-cp',str(w)+':'+str(gson),'KnotCheck',str(live),str(game),str(gamejar),*map(str,artifacts)],check=True,timeout=90)

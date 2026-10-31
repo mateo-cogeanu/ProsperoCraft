@@ -21,7 +21,7 @@ missing-dependency skips. Each process has a 180-second bound; workflows have
 existing checks use assertions. Imports of `host_toolchain.py` do no discovery,
 argument parsing or downloads. Individual migrated test entrypoints remain usable.
 
-The eleven fast checks include discovery regressions and ten existing launcher
+The fourteen fast checks include three bootstrap/audit/identity checks, discovery regressions and ten existing launcher
 checks: auth state transitions/redaction, saved-login migration/refresh/sign-out,
 local TLS refusal/body/redirect behavior, storage errors, instance persistence and
 verified download/install/launch restrictions, Modrinth queues/recursive dependencies,
@@ -109,3 +109,6 @@ Store listing is changed by this workflow.
 Measured results: [2026-10-31 validation](validation/host-portability-ci-2026-10-31.json)
 records clean-source verification and successful Ubuntu x86_64/macOS ARM64 Actions
 runs for both lanes, including the repaired initial UBSan fixture failure.
+
+See [shared tooling](tooling-sharing.md) for bootstrap equivalence, auditor migration,
+current identity and the separate SDK/physical-console boundaries.

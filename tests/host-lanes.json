@@ -1,6 +1,9 @@
 {
   "fast": [
     "test_host_toolchain.py",
+    "test_app_identity.py",
+    "test_bootstrap_sharing.py",
+    "test_package_audit_shared.py",
     "test_launcher_auth.py",
     "test_launcher_auth_migration.py",
     "test_launcher_https.py",

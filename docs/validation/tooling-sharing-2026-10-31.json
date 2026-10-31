@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-31",
+  "baseline_commit": "c418d9b92026364b61455a96d546f3a179774ddb",
+  "scope": "Consumer-only bootstrap/audit/current-identity refactor; no runtime/dependency/game/mod/performance-policy change",
+  "baseline": {
+    "checkout": "clean main, identical to fetched origin/main",
+    "fast_host_checks": 11,
+    "current167_package_audit": "passed; exact package SHA256 3480ab817659c43e954ce89ba5933cb5181f2fe2f396b1321bfae51d274171de"
+  },
+  "passed": {
+    "fast_host": "14 checks; includes real Java identity/resource/User-Agent and malformed-resource tests, six exact bootstrap source reconstructions and corresponding-source exports, 29 complete audit statement/order fingerprints plus negative manifest/ZIP/identity fixtures",
+    "native_host": "5 existing ASan/UBSan scoped native checks",
+    "target_bootstraps": "All six original/refactored sources compile with LLVM22/PS5 SDK; allocated machine code/data/BSS/unwind, relocations and all symbol binding/visibility match after local string-pool normalization",
+    "clean_source_outside_root": "14 checks pass with fresh source copy and initially empty dedicated host dependency cache, invoked outside repository",
+    "clean_startup": "Fresh build directory: host LWJGL JNI built; current Java launcher/ClientStartup25 compiled and original host Main reached expected unprovided-native boundary; original game JAR unchanged. Not a host menu or PS5 pass.",
+    "preserved167_release_audit": "passed exact existing ZIP, policy/defaults, corresponding-source hashes, existing exact normal/replacement relink evidence and release checksums",
+    "controlify_alias_table": "passed real167 ELF1942 exports/exactly3 redirects",
+    "legacy_assertion_migration": {
+      "profiles": 29,
+      "shared_statements": 113,
+      "expanded_assertion_nodes": 1718,
+      "all_original_source_hashes_and_ordered_AST_digests": "tests/audits/migration.json"
+    }
+  },
+  "preexisting_limits": [
+    "All29 legacy122\u2013150 commands fail before substantive checks because their old symbol ELFs are absent in active build/client-startup-probe. Baseline originals and refactored commands have identical exit status/first diagnostic for every profile.",
+    "All six specialized historical native acceptance package commands similarly lack active build-directory symbol ELFs026/029/031/033/035/036. No frozen binaries were reconstructed or overwritten.",
+    "Full new SDK package build not run: storage preflight initially showed only473MiB free, less than required independent build staging. Target object comparisons and isolated full current Java/host-JNI builds completed instead.",
+    "The new current-build identity audit requires newly generated resource copies. Existing accepted167 bytes predate them and are verified by the unchanged exact release audit.",
+    "Legacy staging auditors intentionally retain original local SDK/JDK paths and mutable-package assumptions; this change does not claim they are portable immutable release auditors."
+  ],
+  "historical_preservation": "No archived source, historical validation fixture, accepted metadata, canonical test package, symbol ELF or release asset modified; runtime/history publication checkouts unchanged.",
+  "console": "pending exact new-build PS5 startup/auth/download/input-display handoff/audio/world/save/lifecycle regression",
+  "publication": {
+    "repository": "mateo-cogeanu/ProsperoCraft",
+    "releases_created": false,
+    "store_changed": false,
+    "hosted_ci": "pending source push"
+  },
+  "cleanup": {
+    "authorization": "Only verified disposable scratch and obsolete generated copies",
+    "planned": "Remove this task isolated source/build verification copy, newly provisioned temporary host caches and temporary compiler/diff/helper files after preserving small local reports. Keep all original inputs/packages/symbols/relink kits and archived snapshots."
+  }
+}

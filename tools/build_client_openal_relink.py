@@ -3,6 +3,12 @@
 from pathlib import Path
 import argparse,json,subprocess,shutil,hashlib,zipfile,tarfile,io
 ROOT=Path(__file__).resolve().parents[1]
+def export_consumer_bootstrap(kit,variant):
+ # Every local include needed by the thin wrapper travels with corresponding source.
+ if variant not in {p.name for p in (ROOT/'client').iterdir() if p.is_dir() and (p/'bootstrap.cpp').is_file()}:raise ValueError('Unknown bootstrap variant')
+ shutil.copytree(ROOT/'client/bootstrap',kit/'consumer-source/client/bootstrap',dirs_exist_ok=True)
+ shutil.copytree(ROOT/'client'/variant,kit/'consumer-source/client'/variant,dirs_exist_ok=True)
+
 def build(runtime,output,variant="native_bootstrap",version="01.000.026",tested_source="4191ea21b7206367fd0749762f4fff89cf6f9e43"):
  number=version.rsplit(".",1)[-1]
  output.mkdir(parents=True,exist_ok=True);work=ROOT/('build/client-'+variant+'-probe');sdk=runtime/'.tools/native-sdk/ps5-payload-sdk';native=runtime/'.tools/native-app/tooling/native';kit=output/'relink-kit';kit.mkdir(exist_ok=True)
@@ -39,6 +45,7 @@ def build(runtime,output,variant="native_bootstrap",version="01.000.026",tested_
  sourcepin=json.loads((ROOT/'client/ports/openal/sources.json').read_text());data=subprocess.check_output(['git','-C',str(ROOT/'.tools/openal-soft-src'),'archive','--format=tar',sourcepin['commit']]);(kit/'openal-soft-1.25.2-source.tar').write_bytes(data)
  for path in ['client/ports/openal/sources.json','client/ports/openal/lifecycle.c','tools/build_openal_native.py']:
   dest=kit/'consumer-source'/path;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(ROOT/path,dest)
+ export_consumer_bootstrap(kit,variant)
  # Include the exact build-time target headers for rebuilding the LGPL library.
  with tarfile.open(kit/'ps5-sdk-headers.tar','w')as tar:tar.add(ROOT/'.tools/graphics-sdk/target/include',arcname='target/include')
  if variant=='startup':

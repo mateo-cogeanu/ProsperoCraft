@@ -9,7 +9,7 @@ import java.util.function.BooleanSupplier;
 
 /** Public content transport: bounded metadata, verified files, no credentials. */
 final class ProsperoDownloads {
- static final String AGENT="mateo-cogeanu/ProsperoCraft/103 (github.com/mateo-cogeanu/ProsperoCraft)";
+ static final String AGENT=ProsperoBuild.USER_AGENT;
  static final Set<String> HOSTS=Set.of("api.modrinth.com","cdn.modrinth.com","meta.fabricmc.net","maven.fabricmc.net");
  final ProsperoInstall.Source source;
  ProsperoDownloads(){this(ProsperoDownloads::network);}

@@ -3,7 +3,8 @@
 from pathlib import Path
 import argparse,re,struct,subprocess
 r=Path(__file__).resolve().parents[1];p=argparse.ArgumentParser(description=__doc__);p.add_argument('--runtime-workspace',type=Path,required=True);a=p.parse_args()
-elf=r/'build/client-startup-probe/bootstrap-01.000.167-symbols.elf';data=elf.read_bytes()
+from app_identity import current_identity
+elf=r/('build/client-startup-probe/bootstrap-'+current_identity()['app_version']+'-symbols.elf');data=elf.read_bytes()
 nm=subprocess.check_output(['/opt/homebrew/opt/llvm/bin/llvm-nm',str(elf)],text=True)
 symbols={f[2]:int(f[0],16)for l in nm.splitlines()if len(f:=l.split())==3}
 source=(a.runtime_workspace/'build/java25/builtin-libraries.cpp').read_text()

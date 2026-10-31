@@ -30,5 +30,5 @@ for folder,digest in [('Client_Continuous_Direct_Scene-01.000.023','846cd9adea6f
  root='milestones'if folder.startswith('Client_Continuous')else'failures';assert sha((ROOT/'dist'/root/folder/'PPSA99874-full-local.zip').read_bytes())==digest
 assert sha((ROOT/'dist/milestones/Client_OpenGL_Provider-01.000.029/PPSA99874-full-local.zip').read_bytes())=='ed0cc6f49528b44b6d131c800e3c6359d01e009ae52524b7e96262a71491b685'
 assert sha((ROOT/'dist/failures/Client_Original_Startup-01.000.030/PPSA99874-full-local.zip').read_bytes())=='1eb5bc45080aa65b9d38817db58e4984ff58668f491598322783c83c41cc8ce1'
-bootstrap=(ROOT/'client/stb_bootstrap/bootstrap.cpp').read_text();assert 'test_count=5'in bootstrap and 'DestroyJavaVM'in bootstrap and '192.168.'not in bootstrap
+bootstrap=(ROOT/'client/stb_bootstrap/bootstrap.cpp').read_text()+(ROOT/'client/bootstrap/acceptance_impl.hpp').read_text();assert 'test_count=5'in bootstrap and 'DestroyJavaVM'in bootstrap and '192.168.'not in bootstrap
 print('PASS031 CRC/signatures/identity,54 original JARs/exact023 runtime image/native libraries,real STB codecs and original JNI plus existing native providers,359+4+5+'+str(al_ctors)+' staged constructors/no auto ctors,8resident groups,dependency overlay,128MiB/five-row fixture/no game or speaker success claim,preserved023/failed025 packages. PS5 pending.SHA256',sha(package.read_bytes()))
