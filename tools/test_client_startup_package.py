@@ -328,6 +328,8 @@ with zipfile.ZipFile(package)as z,zipfile.ZipFile(ROOT/'dist/milestones/Client_C
  for name in ['Java_ProsperoMicrophone_nativeEnable','Java_ProsperoMicrophone_nativeProbe']:assert symbols.get(name),name
  undefined=subprocess.check_output([str(LLVM/'llvm-nm'),'--undefined-only',str(elf)],text=True)
  for name in ['sceAudioInInit','sceAudioInOpen','sceAudioInInput','sceAudioInClose','sceAudioInGetSilentState','sceAudioInGetRerouteCount']:assert ' U '+name in undefined,name
+ # Capture lifecycle diagnostics from the linked backend, not only the source tree.
+ for literal in [b'PS5 AudioIn stage=worker-join',b'PS5 AudioIn stage=disabled-during-capture',b'PS5 AudioIn stage=worker-create',b'input-short',b'stage=lease-unavailable']:assert literal in elf.read_bytes(),literal
  capture_audit=json.loads(z.read(prefix+'assets/java25/openal-audit.json'))['startup_boundaries']['speaker_backend']
  assert capture_audit['thread_error_header_sha256']==sha((ROOT/'client/ports/openal/ps5_thread_error.hpp').read_bytes())
  assert capture_audit['capture_header_sha256']==sha((ROOT/'client/ports/openal/ps5_capture.hpp').read_bytes())

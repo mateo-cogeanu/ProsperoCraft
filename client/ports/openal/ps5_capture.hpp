@@ -22,7 +22,8 @@ struct Capture {
  alignas(64) std::array<std::int16_t,Grain> pcm{};
  bool open(CaptureApi calls){
   const auto lock=std::lock_guard{mutex};if(handle>=0){errorStage="owned-port";return false;}api=calls;
-  int user=-1;errorStage="initial-user";error=api.initialUser(&user);if(error<0||user<0)return false;
+  int user=-1;errorStage="initial-user";error=api.initialUser(&user);if(error<0)return false;
+  if(user<0){errorStage="initial-user-invalid";error=-1;return false;} // No user identifier in diagnostics.
   // AudioIn is process-lifetime. Enumeration/test/open share this owner: once
   // initialization actually succeeds, do not initialize it again per port.
   if(!initialized){errorStage="init";error=api.init();if(error<0)return false;initialized=true;}
@@ -40,7 +41,7 @@ struct Capture {
   if(handle<0||!healthy)return false;int before=api.silent(handle),route_before=api.reroute(handle);
   int result=api.input(handle,pcm.data());int after=api.silent(handle),route_after=api.reroute(handle);
   const auto lock=std::lock_guard{mutex};
-  if(result!=int(Grain)||before<0||after<0||route_before<0||route_after<0){errorStage=result!=int(Grain)?"input":before<0?"silent-before":after<0?"silent-after":route_before<0?"reroute-before":"reroute-after";error=result<0?result:before<0?before:after<0?after:route_before<0?route_before:route_after<0?route_after:-1;healthy=false;read=count=0;return false;}
+  if(result!=int(Grain)||before<0||after<0||route_before<0||route_after<0){errorStage=result<0?"input":result!=int(Grain)?"input-short":before<0?"silent-before":after<0?"silent-after":route_before<0?"reroute-before":"reroute-after";error=result!=int(Grain)?result:before<0?before:after<0?after:route_before<0?route_before:route_after;healthy=false;read=count=0;return false;}
   bool silent=before!=0||after!=0||route_before!=route_after||route_after!=route;
   if(route_after!=route){route=route_after;read=count=0;}++blocks;
   if(silent){++silent_blocks;std::fill(pcm.begin(),pcm.end(),0);previous_valid=false;read=count=0;}
@@ -50,11 +51,20 @@ struct Capture {
   }
   return true;
  }
+ // Device exists and is owned by a live, healthy capture (not a pinned cleanup).
+ bool active(){const auto lock=std::lock_guard{mutex};return handle>=0&&healthy&&!close_uncertain;}
  unsigned available(){const auto lock=std::lock_guard{mutex};return count;}
  bool take(void* output,unsigned frames,bool floating){
   const auto lock=std::lock_guard{mutex};if(frames>count)return false;
   for(unsigned i=0;i<frames;i++){float value=ring[read];if(floating)static_cast<float*>(output)[i]=value;else static_cast<std::int16_t*>(output)[i]=std::int16_t(std::clamp(value*32768.f,-32768.f,32767.f));read=(read+1)%Capacity;}count-=frames;return true;
  }
  void clear(){const auto lock=std::lock_guard{mutex};read=count=0;previous_valid=false;}
+};
+// Producer-thread ownership. A failed join means the producer may still be
+// inside pump(): the port must never be closed or reused (lease stays pinned
+// until app restart). The thread handle is not joined twice.
+struct WorkerOwnership {
+ bool started=false,uncertain=false;int join_error=0;
+ template<class Join> bool stop(Join&& join){if(started){started=false;int rc=join();if(rc){join_error=rc;uncertain=true;}}return !uncertain;}
 };
 }
