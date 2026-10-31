@@ -6,6 +6,9 @@ original build record unchanged.181 is a new independent native-only candidate,
 PPSA99874 /01.000.181. Root/current game launcher remains179. No release or Store
 action is authorized.
 
+User reports181 crashed. [Retrieved evidence and diagnostic182](client-zink-first-frame-182.md)
+identify the matching run and last checkpoints; the cause remains unproven.
+
 ## Physical test
 
 Install the complete181 PPSA99874 folder, replacing the current installed app.

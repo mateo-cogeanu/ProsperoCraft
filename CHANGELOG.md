@@ -11,6 +11,8 @@
 
 - Local181 adds the next [native presentation checkpoint](docs/client-26.1-zink-present-181.md): real GLFW/SDL kopper RGB/moving-bar cycles and repeated teardown/reacquisition. Host offscreen lifecycle and target checks pass; physical visibility/refresh, actual launcher handoff and JVM/game integration remain pending. No release/Store change.
 
+- 181 console crash reaches real GL4.6 Zink context after surface/swapchain registration, without a recorded fault PC. Local182 adds existing forwarding native signal capture and bounded first-frame checkpoints; cause unproven, no fix claimed. [Retrieved evidence/test guide](docs/client-zink-first-frame-182.md).180 pass and exact181 bytes preserved.
+
 ## 01.000.179 — automatic microphone and simpler instance settings
 
 - Prepare the working system microphone automatically before every supported game launch; remove the launcher Microphone button, toggle and test page. Existing saved microphoneEnabled:false no longer blocks preparation. Use the controller's physical microphone mute button or PS5 system mute.

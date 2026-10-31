@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-31",
+  "app_version": "01.000.181",
+  "title_id": "PPSA99874",
+  "package_sha256": "338c94149f54ea801283dcb0fd58097390104f439b053088cb94b76f5a9e4112",
+  "run_id": "zink-01.000.181-1793477720-578006752",
+  "user_result": "Crashed, reopened without X",
+  "retrieval": "Safari read-only report endpoints; direct tool HTTP no route to host. First saved native trace/startup tail preserved locally.",
+  "evidence_sha256": {
+    "vm-trace.log": "77b2531715ed4f2ef49fefd000e70e642911b6a767157b3a4cc65e41e1a7c81b",
+    "startup-tail.log": "7dd0e2ae5bac0c1f466babf6553ea2e3332944c2a4d629b998e71cae47c97a01"
+  },
+  "observed": [
+    "Open app181 and matching181 run in session/native trace/startup",
+    "Actual1920x1080/119.880Hz mode selected, surface result0, framebuffer registration",
+    "Cycle0 actual GL4.6 core Mesa26.2 Zink/RADV renderer",
+    "No completed first-frame readback/swap/animation or teardown checkpoint",
+    "exceptions/hs-error unavailable errno2; no JVM linked"
+  ],
+  "cause": "UNPROVEN: no captured181 fault PC; session last checkpoint predates later startup entry. Old historical SHADERC faults excluded.",
+  "next": "Diagnostic182 uses existing forwarding native fault recorder and first-frame checkpoints; no fix claimed",
+  "supplemental180": {
+    "run_id": "zink-01.000.180-1793476965-942502413",
+    "result": "Independent startup-history confirmation of3contexts,192RGBA pixels,384guards,final destruction and Stage1 PASS",
+    "original_record": "client180-console-stage1-2026-10-31.json",
+    "scope": "No presentation/game result"
+  },
+  "preserved": "Exact180/181packages,symbols,source/build receipts; original downloaded JARs/frozen history",
+  "raw_reports": "Local only",
+  "release_store": "No action"
+}
