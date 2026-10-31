@@ -1,0 +1,45 @@
+{
+  "app_version": "01.000.179",
+  "title_id": "PPSA99874",
+  "source_commit": "25f987f50e3d223011eaf3c528bdd533f8cc44f5",
+  "runtime_commit": "f12c86e4f965ff46d0f5d121cd07ff8f27d7baaf (unchanged)",
+  "artifacts": {
+    "PPSA99874.zip": "7381b0746b178785b303f7486a0533aa6acce3d25167634b9ce849e0546b648a",
+    "bootstrap-symbols.elf": "bdd7876351858e32d8aaf36c9b4684f40010f6dc18ba66b4610b245269f11855",
+    "client179-openal-source-relink.zip": "3d6913b1f9d678faf1fc40bf3cf6771e5fba2c3742e0987aa2c503771a16929c"
+  },
+  "change": "Remove microphone menu/toggle/test page/hit targets and obsolete saved setting. Production launch unconditionally prepares input via178 implementation; physical/system mute stays authoritative. Browser uploads full-width; Done/Delete remain bottom. Native audio implementation unchanged.",
+  "tests": {
+    "fast": "PASS15 including injected preparation on every launch,legacy microphoneEnabled:false ignored,old worlds/settings preserved; initial stale duplicate-nav fixture failed then updated to removed-menu layout and full lane passes",
+    "native": "PASS7 including actual mouse hit areas and unchanged native audio lifecycle",
+    "source_only": "PASS fast15+native7 from source-only HEAD/outside-root/initially empty dep cache",
+    "startup_host": "PASS refreshed actual launcher bytecode/classes and original-game launch policy; absent host native bootstrap expected, no physical pass",
+    "package": "PASS179 identity/CRC/signatures/runtime/source/import/publisher audit; actual shipped Settings lacks obsolete mic flag,Launcher lacks removed page state,new Microphone interface present,removed native menu captions absent. Initial audit saw stale178 startup-host classes; refreshed prerequisite and audit passes",
+    "relink": "PASS normal+replacement OpenAL reproduce exact native ELF",
+    "hosted_policy": "PASS Linux+macOS https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41228754342",
+    "hosted_native": "PASS Linux+macOS https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41228779967"
+  },
+  "acceptance": {
+    "178": "User reports microphone amazingly amazing,alls good; requests release/Store with menu removed and mic default-on. Exact178 functional acceptance recorded separately",
+    "179": "PENDING exact physical package: no mic menu,automatic SVC mic,physical mute,leave/rejoin.178 acceptance does not transfer to modified179."
+  },
+  "publication": {
+    "source": "25f987f pushed; validation follow-up separately published",
+    "release_store": "No release/prerelease/Store PR yet. Release notes and exact catalog3field diff prepared;user requested publication,but AGENTS exact179 physical gate pending."
+  },
+  "catalog_preparation": {
+    "repository": "https://github.com/darkxex/ps5-homebrew-catalog",
+    "base_commit": "a716193",
+    "local_worktree": "/Users/mateocogeanu/Documents/ChatGPT/PS5_Homebrew/.tools/prospero-catalog-179",
+    "branch": "codex/prosperocraft-179",
+    "file": "apps/PPSA99874.json",
+    "changes": [
+      "version",
+      "artifact_url",
+      "sha256"
+    ],
+    "preserved": "Description,author,credits,icon,license,source_repo,titleid,kind,category unchanged",
+    "checks": "PASS233unit tests(2skipped);164offline records valid,0errors/0warnings. Live release verification deferred until actual authorized publication; no catalog PR monitoring."
+  },
+  "storage": "178 and recovery artifacts preserved.179exact ZIP/symbols/source-relink retained;expanded179kit and duplicate relinks removed only after every file/CRC/hash matched."
+}

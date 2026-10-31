@@ -51,3 +51,12 @@ The smallest179 console check is: instance management has no Microphone page;
 Play prepares input without a toggle, SVC speech still works, the physical
 controller mic button mutes/unmutes correctly, and leaving/rejoining still works.
 These exact modified-build results are pending at preparation time.
+
+Fast15/native7, source-only/empty-cache/outside-root lanes, refreshed startup host,
+actual179 package audit and both exact OpenAL relinks pass. Linux/macOS policy and
+native Actions pass on25f987f. [Release preparation/asset checksums](validation/client179-release-preparation.json)
+records these separately from console confirmation. The local catalog179 worktree
+has only the existing app's version/URL/SHA changed;233catalog unit tests(2skipped)
+and164offline records pass. No release, tag, catalog PR or Store availability is
+claimed. All possible local preparation is complete before requesting the final
+exact-build physical check.
