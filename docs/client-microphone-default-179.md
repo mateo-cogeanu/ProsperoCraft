@@ -70,3 +70,14 @@ supersedes the preparation-time gate above for this exact package only. The
 initial build/preparation validation remains an immutable pre-test snapshot.
 Publish accepted bytes unchanged under the existing explicit release/Store
 authorization; no formal ALL PASS/endurance or new milestone is inferred.
+
+## Publication completed
+
+The exact tested179 package is published in the [179 GitHub release](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.179)
+with corresponding-source/relink,build/console validation and checksums. All5assets
+were independently downloaded and verified; both downloaded-kit relink paths match
+the accepted ELF. [Store PR #991](https://github.com/darkxex/ps5-homebrew-catalog/pull/991)
+is submitted with only version/URL/SHA changed and no post-submission monitoring.
+[Publication record](validation/client179-store-publication-2026-10-31.json) preserves
+checks,source provenance and the distinction between submission and live Store
+availability. This supersedes preparation-time pending statements for exact179.

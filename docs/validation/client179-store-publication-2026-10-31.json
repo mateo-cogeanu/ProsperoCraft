@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-31",
+  "version": "01.000.179",
+  "release_url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.179",
+  "release_tag_commit": "c0b4f000599fbecfd34080b500113b0b1181eaf8",
+  "candidate_source_commit": "25f987f50e3d223011eaf3c528bdd533f8cc44f5",
+  "package_sha256": "7381b0746b178785b303f7486a0533aa6acce3d25167634b9ce849e0546b648a",
+  "assets": [
+    {
+      "name": "PPSA99874.zip",
+      "bytes": 124180315,
+      "sha256": "7381b0746b178785b303f7486a0533aa6acce3d25167634b9ce849e0546b648a"
+    },
+    {
+      "name": "client179-openal-source-relink.zip",
+      "bytes": 92355053,
+      "sha256": "3d6913b1f9d678faf1fc40bf3cf6771e5fba2c3742e0987aa2c503771a16929c"
+    },
+    {
+      "name": "client179-build-validation.json",
+      "bytes": 3557,
+      "sha256": "44cc0331dc22bdd59f72f951e610a3b30dd56b9cc491bf35a1ab0c560ef31781"
+    },
+    {
+      "name": "client179-console-validation.json",
+      "bytes": 997,
+      "sha256": "a212ddb054d360ba043a733728720775a9b319f03695962a373ea54b5e7e6db0"
+    },
+    {
+      "name": "SHA256SUMS",
+      "bytes": 379,
+      "sha256": "ed6ffaa7b0ee81948877d518325e26ec0c0ed0152178aa557ebda183f3012585"
+    }
+  ],
+  "verification": "Public full release,not draft/prerelease.All5assets independently downloaded and match exact local hashes/sizes;app unchanged from exact user-confirmed179.Root param equals shipped179;ZIP CRC/identity/privacy/notices/source hashes pass.Downloaded OpenAL corresponding-source kit reproduces exact native ELF via both normal and replacement paths.",
+  "console": "User replies179 works as requested to explicit automatic SVC mic/physical mute/unmute/removed launcher microphone menu/leave-rejoin check. Functional acceptance;no formal ALL PASS,new milestone,per-device/route or endurance matrix inferred.",
+  "catalog_pr": "https://github.com/darkxex/ps5-homebrew-catalog/pull/991",
+  "catalog_head": "db1d75ac477f3baa7fc5d89e76985f2ca92a1d32",
+  "catalog_base": "a716193",
+  "catalog_checks": "233unit tests pass(2skipped),164records offline valid;PPSA99874online verification0errors/0warnings,correct179contentVersion and124180315byte digest.Separate fullassetdownload/hash verification completed before submission.",
+  "catalog_status": "Submitted.No PR/check/merge/deployment/liveStore monitoring after creation.Store availability requires catalog publication/deployment;not claimed live.",
+  "metadata": "Only existingPPSA99874version/artifactURL/SHAchanged.Description,credits,author,icon,license,category and source_repo preserved.Release body supplies changelog.",
+  "preservation": "178,older releases/assets/tags/frozen archive remain unchanged.179testedZIPpublishedwithoutrebuilding;matching symbols and exact source/relink retained locally.",
+  "runtime": "No runtime source changes in179publication;runtimef12c86e integration unchanged;no runtimecommit needed."
+}

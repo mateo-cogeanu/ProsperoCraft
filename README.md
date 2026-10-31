@@ -10,7 +10,7 @@ Download Minecraft on your console, keep separate instances for worlds and mods,
 
 ProsperoCraft handles Minecraft installation, accounts, input and game integration. Its [Native Java 25 Runtime](https://github.com/mateo-cogeanu/ps5-java25-homebrew) is maintained separately. Official Minecraft game JARs and asset objects are downloaded and verified from the publisher, rather than bundled with the app.
 
-Release **01.000.179** adds confirmed Simple Voice Chat microphone input, automatic microphone preparation before Play, and simpler instance management with no microphone menu. Use the controller's physical mic button or PS5 system mute. It also includes launcher-style browser uploads and the runtime/audio fixes developed since167. [Release notes](docs/releases/client-microphone-default-179.md) · [Exact179 console acceptance](docs/validation/client179-console-acceptance-2026-10-31.json). Broad mod/device compatibility and endurance remain unmeasured.
+Release **01.000.179** adds confirmed Simple Voice Chat microphone input, automatic microphone preparation before Play, and simpler instance management with no microphone menu. Use the controller's physical mic button or PS5 system mute. It also includes launcher-style browser uploads and the runtime/audio fixes developed since167. [Release notes](docs/releases/client-microphone-default-179.md) · [Exact179 console acceptance](docs/validation/client179-console-acceptance-2026-10-31.json). Broad mod/device compatibility and endurance remain unmeasured. [ProsperoStore catalog update submitted](https://github.com/darkxex/ps5-homebrew-catalog/pull/991); Store availability follows catalog publication.
 
 ## What can I play?
 

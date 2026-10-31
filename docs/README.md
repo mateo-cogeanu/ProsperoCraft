@@ -14,7 +14,7 @@ history; a development entry does not imply a public release.
 | Shared bootstrap, current identity and legacy package audits | [Tooling sharing](tooling-sharing.md) |
 | Published 167 scope | [Release notes](releases/client-input-fabric-167.md), [console acceptance](validation/client167-console-acceptance-2026-10-30.json) |
 | Microphone feature handoff for another model | [Start here](handoffs/microphone-174/00-START-HERE.md), [continuation prompt](handoffs/microphone-174/03-CONTINUATION-PROMPT.md) |
-| Local179 — automatic microphone/menu removal; release preparation | [Preparation and physical gate](client-microphone-default-179.md) |
+| Released179 — automatic microphone, no launcher mic menu | [Release notes](releases/client-microphone-default-179.md), [console acceptance](validation/client179-console-acceptance-2026-10-31.json), [publication/Store submission](validation/client179-store-publication-2026-10-31.json) |
 | Local178 — opt-in input-port preparation/reuse | [Evidence/test guide](client-audioin-port-178.md) |
 | Local177 — prepare AudioIn service before JVM/game | [Evidence/test guide](client-audioin-service-177.md) |
 | Local176 — primary review of microphone specialist work | [Review/test guide](client-microphone-review-176.md) |
