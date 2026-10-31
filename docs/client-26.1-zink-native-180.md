@@ -135,8 +135,9 @@ Xint/XcheckJNI/full verification. Mesa's remaining code and external lavapipe us
 ordinary builds. Test-only Unsafe deprecation warnings remain explicit. No JNI
 check or sanitizer failure is accepted. Existing actual029 OSMesa dispatch and
 negative control pass, as do existing GLFW/SDL event/allocator/lifecycle/refusal
-regressions and the16 fast/seven native policy checks. Hosted CI is recorded
-separately; no hosted GPU or physical result is inferred.
+regressions and the16 fast/seven native policy checks. [Ubuntu/macOS CI](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41235442939)
+also passes all16 fast checks for source86a7d93; no hosted GPU or physical result
+is inferred.
 
 ## Reproduce the component/candidate
 
@@ -163,8 +164,10 @@ execution uses lavapipe). The test input config requires the rebuilt parent core
 OpenGL JNI, platform/module overlays, adapted GLFW and OSHI provider.
 
 Packages are local under `dist/candidates/zink-context-180`; existing candidate
-ZIPs are never overwritten. Source commits and exact package/ELF checksums belong
-in a new validation record after packaging. No release/prerelease is created.
+ZIPs are never overwritten. The [validation record](validation/client180-zink-native-2026-10-31.json) records
+clean build source13ac084, package/ELF checksums and separate host/console scope.
+The exact local ZIP is18,259,125bytes; SHA-256:
+`0cefa6f5faf8013a1c98b1eff0a2c7621bd523d0c24fd2737526312c919e4881`. No release/prerelease is created.
 
 Remaining work: physical stage1; positive kopper presentation/refresh/teardown;
 JVM scoped one-copy/constructor/resident integration and package audit; ZINK
