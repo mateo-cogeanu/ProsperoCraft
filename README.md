@@ -10,7 +10,7 @@ Download Minecraft on your console, keep separate instances for worlds and mods,
 
 ProsperoCraft handles Minecraft installation, accounts, input and game integration. Its [Native Java 25 Runtime](https://github.com/mateo-cogeanu/ps5-java25-homebrew) is maintained separately. Official Minecraft game JARs and asset objects are downloaded and verified from the publisher, rather than bundled with the app.
 
-Local development candidate **01.000.177** initializes the AudioIn service before JVM/game resource use after176 shows actual `AudioInInit` failure0x80260108. This opens no microphone port and reads no audio; capture stays default-off. The user reports176 leaving/rejoining working, with SVC mic still unavailable. Exact177 microphone/SVC, mute/route and lifecycle checks remain pending. [Evidence/test guide](docs/client-audioin-service-177.md). No177 release or Store update.
+Local development candidate **01.000.178** prepares the real input port when Voice capture is enabled in the launcher and retains healthy idle input across SVC reopen cycles.177 now initializes AudioIn successfully on PS5 but the later port open fails0x8026010b. Capture remains default-off; OFF releases idle input. Exact178 speech, mute/route and transitions remain pending. [Evidence/test guide](docs/client-audioin-port-178.md). No178 release or Store update.
 
 ## What can I play?
 

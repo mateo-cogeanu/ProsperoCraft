@@ -17,8 +17,11 @@ unmute, set gain, change system routing or save a WAV. Counts alone are not form
 success: speech correlation and mute behavior must be observed on this exact build.
 
 **Voice capture: ON** enables OpenAL capture for a matching mod; OFF is the saved
-default. Enabling itself captures nothing. Enumeration probes one native block
-only when opted in; opening/starting a mod's microphone begins actual capture.
+default. In local178, ON prepares a genuine input port in the launcher without reading
+samples, retains a healthy stopped port for later SVC reuse, and OFF closes idle
+input. Enumeration of that prepared port performs no read. The deliberate test
+or mod capture performs input reads. See [178 ownership and console checks](client-audioin-port-178.md).
+Earlier170–177 enumeration/open lifetime descriptions below are historical.
 The native selector is honestly named **PS5 system microphone (select DualSense in
 PS5 settings)**. This API profile opens the initial user's system-selected route,
 so attaching a headset can change it. Automatic built-in/headset identity remains
@@ -136,3 +139,11 @@ Speech, mute, route identity and two-way SVC remain pending.
 or input read. Capture stays default-off. See [177 evidence/test guide](client-audioin-service-177.md).
 The earlier173 nonzero launcher counts remain separate evidence; no177 speech or
 whole-build acceptance is implied.
+
+## Local178 actual port preparation
+
+177 actual service init succeeds; SVC then fails native open0x8026010b.178 adds
+opt-in launcher input-port preparation/reuse, with actual close of idle input on
+OFF and conservative failed cleanup. See [178 evidence](client-audioin-port-178.md).
+A prepared port is open but this code makes no input reads while parked; physical
+freshness/mute/route/speech and exact SVC compatibility still need console checks.

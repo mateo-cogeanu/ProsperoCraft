@@ -16,7 +16,7 @@ struct Capture {
  static constexpr unsigned Grain=256,InputRate=16000,Rate=48000,Capacity=16384;
  ps5audio::Mutex mutex;CaptureApi api{};int handle=-1,route=-1,error=0;
  const char* errorStage="none";bool initialized=false;
- bool healthy=false,close_uncertain=false;float previous=0;bool previous_valid=false;
+ bool healthy=false,close_uncertain=false,parked=false;float previous=0;bool previous_valid=false;
  std::array<float,Capacity> ring{};unsigned read=0,count=0;
  std::uint64_t blocks=0,nonzero=0,silent_blocks=0,dropped=0;int peak=0;
  alignas(64) std::array<std::int16_t,Grain> pcm{};
@@ -29,8 +29,10 @@ struct Capture {
  bool initialize(CaptureApi calls){
   const auto lock=std::lock_guard{mutex};if(initialized)return true;api=calls;return initializeLocked();
  }
+ void resetLocked(){error=0;errorStage="none";read=count=0;previous_valid=false;blocks=nonzero=silent_blocks=dropped=0;peak=0;}
  bool open(CaptureApi calls){
-  const auto lock=std::lock_guard{mutex};if(handle>=0){errorStage="owned-port";return false;}api=calls;
+  const auto lock=std::lock_guard{mutex};
+  if(handle>=0){if(parked&&healthy&&!close_uncertain){parked=false;resetLocked();return true;}errorStage="owned-port";return false;}api=calls;
   int user=-1;errorStage="initial-user";error=api.initialUser(&user);if(error<0)return false;
   if(user<0){errorStage="initial-user-invalid";error=-1;return false;} // No user identifier in diagnostics.
   // AudioIn is process-lifetime. Enumeration/test/open share this owner: once
@@ -40,9 +42,13 @@ struct Capture {
   handle=api.open(user,1,0,Grain,InputRate,1); // PS5 General, index0, S16 mono profile.
   if(handle<0){error=handle;return false;}
   errorStage="reroute";route=api.reroute(handle);if(route<0){error=route;closeLocked();return false;}
-  healthy=true;error=0;errorStage="none";read=count=0;previous_valid=false;blocks=nonzero=silent_blocks=dropped=0;peak=0;return true;
+  healthy=true;parked=false;resetLocked();return true;
  }
- bool closeLocked(){if(handle<0)return true;if(close_uncertain)return false;int rc=api.close(handle);if(rc<0){error=rc;errorStage="close";healthy=false;close_uncertain=true;return false;}handle=-1;healthy=false;read=count=0;previous_valid=false;return true;}
+ // Caller must first join any producer. A parked native port is owned but idle:
+ // the next logical open claims it without a late native allocation.
+ bool park(){const auto lock=std::lock_guard{mutex};if(handle<0||!healthy||close_uncertain)return false;parked=true;read=count=0;previous_valid=false;return true;}
+ bool prepared(){const auto lock=std::lock_guard{mutex};return parked&&handle>=0&&healthy&&!close_uncertain;}
+ bool closeLocked(){if(handle<0)return true;if(close_uncertain)return false;int rc=api.close(handle);if(rc<0){error=rc;errorStage="close";healthy=false;parked=false;close_uncertain=true;return false;}handle=-1;healthy=false;parked=false;read=count=0;previous_valid=false;return true;}
  bool close(){const auto lock=std::lock_guard{mutex};return closeLocked();}
  // One producer. Caller joins it before close. Silence queries before AND after
  // input conservatively discard the complete block during mute/route changes.

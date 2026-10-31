@@ -24,7 +24,7 @@
     "hosted_policy": "PASS Linux+macOS https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41222137981",
     "hosted_native": "PASS Linux+macOS https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41222146253"
   },
-  "physical177": "PENDING actual early AudioIn result/open/worker/samples, quiet/speech/mute/route/codec/UDP/two-way voice, world/save/stop/rejoin and endurance. Late native read blocking and worker creation remain unproven.",
+  "physical177": "User reports same SVC microphone-unavailable message. Actual current177 native log confirms pre-JVM service init0x0; both48kHz monoFloat32 SVC capture attempts progress to native open and fail stage=open0x8026010b. Matching Java log shows failed OpenAL opens and unavailable Java Sound fallback. Speech/mute/route/worker start/two-way voice not established.",
   "publication": {
     "source": "Implementation81dbd7d pushed and hosted runs pass; matching validation follow-up published separately",
     "release_store": "No release/prerelease/Store action; exact physical acceptance required"

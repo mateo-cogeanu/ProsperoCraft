@@ -52,7 +52,13 @@ int main(){
   init_rc=-8;assert(!early.initialize(api)&&!early.initialized&&early.error==-8&&inits==before_inits+1);
   init_rc=0;assert(early.initialize(api)&&early.initialized&&inits==before_inits+2);
   init_rc=-99;assert(early.initialize(api)&&inits==before_inits+2);assert(opens==before_opens&&reads==before_reads&&early.handle==-1&&users==before_users);
-  assert(early.open(api)&&early.pump()&&early.close()&&inits==before_inits+2);
+  assert(early.open(api)&&early.pump());int park_opens=opens,park_closes=closes,park_reads=reads;
+  assert(early.park()&&early.prepared()&&early.available()==0&&early.handle==9);
+  for(int n=0;n<20;++n){assert(early.open(api)&&!early.prepared()&&early.pump()&&early.park());}
+  assert(opens==park_opens&&closes==park_closes&&reads==park_reads+20&&early.prepared());
+  assert(early.close()&&!early.prepared()&&early.handle==-1&&inits==before_inits+2);
+  assert(!early.park());
+
  }
 
 }

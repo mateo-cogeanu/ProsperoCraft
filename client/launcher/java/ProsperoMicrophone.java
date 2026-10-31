@@ -1,5 +1,5 @@
 /* SPDX-License-Identifier: GPL-3.0-or-later */
-/** Explicit opt-in. No capture occurs until a user starts the test or a mod opens it. */
+/** Explicit opt-in prepares the system input port; only a deliberate test/mod reads samples. */
 final class ProsperoMicrophone {
  private static boolean loaded;
  private static void load(){if(!loaded){System.loadLibrary("ps5openal");loaded=true;}}

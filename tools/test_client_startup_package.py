@@ -332,7 +332,7 @@ with zipfile.ZipFile(package)as z,zipfile.ZipFile(ROOT/'dist/milestones/Client_C
  for name in ['sceAudioInInit','sceAudioInOpen','sceAudioInInput','sceAudioInClose','sceAudioInGetSilentState','sceAudioInGetRerouteCount']:assert ' U '+name in undefined,name
  # Capture lifecycle diagnostics from the linked backend, not only the source tree.
  assert not symbols.get('client_test_capture_join'),'Host-only join injection entered target image'
- for literal in [b'PS5 microphone worker cleanup uncertain',b'PS5 AudioIn stage=worker-join',b'PS5 AudioIn stage=disabled-during-capture',b'PS5 AudioIn stage=worker-create',b'input-short',b'stage=lease-unavailable']:assert literal in elf.read_bytes(),literal
+ for literal in [b'PS5 AudioIn prepare port ready; no input read',b'PS5 AudioIn prepare cleanup stage=',b'PS5 microphone worker cleanup uncertain',b'PS5 AudioIn stage=worker-join',b'PS5 AudioIn stage=disabled-during-capture',b'PS5 AudioIn stage=worker-create',b'input-short',b'stage=lease-unavailable']:assert literal in elf.read_bytes(),literal
  capture_audit=json.loads(z.read(prefix+'assets/java25/openal-audit.json'))['startup_boundaries']['speaker_backend']
  assert capture_audit['thread_error_header_sha256']==sha((ROOT/'client/ports/openal/ps5_thread_error.hpp').read_bytes())
  assert capture_audit['capture_header_sha256']==sha((ROOT/'client/ports/openal/ps5_capture.hpp').read_bytes())

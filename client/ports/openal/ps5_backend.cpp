@@ -161,7 +161,14 @@ ps5audio::CaptureApi captureApi(){return {sceUserServiceGetInitialUser,sceAudioI
 struct CaptureLease {
  bool owned=false;
  bool acquire(){bool expected=false;owned=captureLeased.compare_exchange_strong(expected,true,std::memory_order_acq_rel);return owned;}
- void release(){if(owned&&capture.close()){captureLeased.store(false,std::memory_order_release);owned=false;}}
+ void release(){
+  if(!owned)return;
+  // A healthy opted-in port stays ready without a producer or queued audio.
+  // Otherwise use the actual close result; uncertain cleanup pins the lease.
+  if((captureEnabled.load(std::memory_order_acquire)&&capture.park())||capture.close()){
+   captureLeased.store(false,std::memory_order_release);owned=false;
+  }
+ }
  ~CaptureLease(){release();} // Failed close pins ownership; do not orphan a live port.
 };
 struct Ps5Capture final : BackendBase {
@@ -210,14 +217,22 @@ extern "C" __attribute__((visibility("default"))) int client_ps5_capture_service
  const bool ready=capture.initialize(captureApi());const int rc=ready?0:capture.error;
  std::fprintf(stderr,"PS5 AudioIn pre-JVM service init result=0x%x; no port opened or input read\n",unsigned(rc));std::fflush(stderr);return rc;
 }
-extern "C" __attribute__((visibility("default"))) void client_ps5_capture_enable(int enabled){captureEnabled.store(enabled!=0,std::memory_order_release);}
+extern "C" __attribute__((visibility("default"))) void client_ps5_capture_enable(int enabled){
+ captureEnabled.store(enabled!=0,std::memory_order_release);CaptureLease preparation;
+ if(!preparation.acquire())return; // Never close/reuse a live or uncertain worker's port.
+ if(enabled&&!capture.open(captureApi())){
+  std::fprintf(stderr,"PS5 AudioIn prepare stage=%s result=0x%x\n",capture.errorStage,unsigned(capture.error));std::fflush(stderr);
+ }else if(enabled){std::fprintf(stderr,"PS5 AudioIn prepare port ready; no input read\n");std::fflush(stderr);}
+ preparation.release();
+ if(preparation.owned){std::fprintf(stderr,"PS5 AudioIn prepare cleanup stage=%s result=0x%x; ownership retained\n",capture.errorStage,unsigned(capture.error));std::fflush(stderr);}
+}
 extern "C" __attribute__((visibility("default"))) void client_ps5_capture_probe(char* result,unsigned size){
  if(!result||!size)return;CaptureLease lease;
  if(!lease.acquire()){std::snprintf(result,size,"Microphone busy or previous cleanup failed. Restart the app.");return;}
  if(!capture.open(captureApi())){std::snprintf(result,size,"AudioIn %s failed (0x%x). Select your microphone in PS5 settings; capture remains unvalidated.",capture.errorStage,unsigned(capture.error));return;}
  bool good=true;for(unsigned n=0;n<313;n++)if(!capture.pump()){good=false;break;}
  std::snprintf(result,size,"%s: blocks=%llu nonzero=%llu peak=%d silent-blocks=%llu. System-selected route; DualSense identity and mute need console confirmation. No recording saved.",good?"Input reads completed":"Capture failed",(unsigned long long)capture.blocks,(unsigned long long)capture.nonzero,capture.peak,(unsigned long long)capture.silent_blocks);
- if(!capture.close())std::snprintf(result,size,"Microphone close failed (0x%x). Ownership retained; restart the app.",unsigned(capture.error));
+ lease.release();if(lease.owned)std::snprintf(result,size,"Microphone cleanup failed (0x%x). Ownership retained; restart the app.",unsigned(capture.error));
 }
 
 extern "C" __attribute__((visibility("default"))) int client_ps5_audio_worker_preinit() {return mixerWorkers.preinit();}
@@ -226,6 +241,7 @@ auto Ps5BackendFactory::querySupport(BackendType type) -> bool {return type==Bac
 auto Ps5BackendFactory::enumerate(BackendType type) -> std::vector<std::string> {
     if(type==BackendType::Playback)return {DeviceName};
     if(type==BackendType::Capture&&captureEnabled.load(std::memory_order_acquire)){
+        if(!captureWorkerPinned.load(std::memory_order_acquire)&&capture.prepared())return {CaptureName};
         CaptureLease probe;if(probe.acquire()){
             if(capture.open(captureApi())&&capture.pump()){probe.release();if(!probe.owned)return {CaptureName};}
             std::fprintf(stderr,"PS5 AudioIn enumeration stage=%s result=0x%x\n",capture.errorStage,unsigned(capture.error));std::fflush(stderr);

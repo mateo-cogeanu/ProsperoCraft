@@ -32,7 +32,7 @@ static std::atomic<int> capture_inits{0},capture_opens{0},capture_reads{0};
 static std::atomic<bool> late_capture_pressure{false};
 extern "C" int test_capture_inits(){return capture_inits;}
 extern "C" int sceAudioInInit(){int n=++capture_inits;if(mode==104||late_capture_pressure)return static_cast<int>(0x80260108u);return n==1?0:-73;} // second init refuses; not a PS5 error-code claim
-extern "C" int sceAudioInOpen(int,unsigned,unsigned,unsigned,unsigned,unsigned){++capture_opens;return mode>=100?31:-99;}
+extern "C" int sceAudioInOpen(int,unsigned,unsigned,unsigned,unsigned,unsigned){++capture_opens;if(mode==106&&late_capture_pressure)return static_cast<int>(0x8026010bu);return mode>=100?31:-99;}
 extern "C" int test_capture_opens(){return capture_opens;}
 extern "C" int test_capture_reads(){return capture_reads;}
 extern "C" void test_capture_pressure(){late_capture_pressure=true;}
@@ -43,7 +43,7 @@ extern "C" int test_capture_blocked(){return input_entered;}
 extern "C" int test_capture_closes(){return capture_closes;}
 extern "C" void test_capture_release_and_reap(){input_release=true;assert(pthread_join(unjoined,nullptr)==0);}
 extern "C" int sceAudioInInput(int h,void* out){++capture_reads;if(mode==102){input_entered=true;while(!input_release)usleep(1000);return -85;}assert(h==31);auto* p=static_cast<std::int16_t*>(out);for(int i=0;i<256;i++)p[i]=i%2?12000:-12000;usleep(16000);return 256;}
-extern "C" int sceAudioInClose(int){++capture_closes;return 0;}
+extern "C" int sceAudioInClose(int){++capture_closes;return mode==108?-86:0;}
 extern "C" int sceAudioInGetSilentState(int){return 0;}
 extern "C" int sceAudioInGetRerouteCount(int){return 0;}
 extern "C" int sceAudioOutInit(){int n=++init;if(mode==1)return -41;if((mode==4&&n<=2)||mode==5||mode==6||mode==8||mode==9)return static_cast<int>(0x80260002u);if(mode==7)return static_cast<int>(0x8026000eu);return 0;}
@@ -111,6 +111,27 @@ int main(int argc,char**argv){assert(client_ps5_audio_event_preinit()==0);assert
   }
   assert(test_capture_inits()==1);client_ps5_capture_enable(0);assert(!alcCaptureOpenDevice(nullptr,48000,AL_FORMAT_MONO_FLOAT32,4096));puts("PASS real OpenAL capture path default-off/enable/enumerate/open/start/available/float samples/stop/close x20 with one confirmed init despite repeated-init refusal; host AudioIn source only");return 0;
  }
+ if(mode==106){
+  assert(client_ps5_capture_service_preinit()==0);assert(test_capture_opens()==0&&test_capture_reads()==0);
+  client_ps5_capture_enable(1);assert(test_capture_opens()==1&&test_capture_reads()==0&&test_capture_closes()==0);
+  test_capture_pressure();
+  for(int cycle=0;cycle<5;++cycle){
+   auto* d=alcCaptureOpenDevice("",48000,AL_FORMAT_MONO_FLOAT32,960);assert(d);alcCaptureStart(d);
+   ALCint n=0;for(int wait=0;wait<1000&&n<960;++wait){usleep(1000);alcGetIntegerv(d,ALC_CAPTURE_SAMPLES,1,&n);}assert(n>=960);float pcm[960];alcCaptureSamples(d,pcm,960);assert(alcGetError(d)==ALC_NO_ERROR);
+   alcCaptureStop(d);assert(alcCaptureCloseDevice(d));assert(test_capture_opens()==1&&test_capture_closes()==0);
+   int reads=test_capture_reads();const char* names=alcGetString(nullptr,ALC_CAPTURE_DEVICE_SPECIFIER);assert(names&&*names&&test_capture_reads()==reads&&test_capture_opens()==1);
+  }
+  client_ps5_capture_enable(0);assert(test_capture_closes()==1);assert(!alcCaptureOpenDevice(nullptr,48000,AL_FORMAT_MONO_FLOAT32,960));
+  client_ps5_capture_enable(1);assert(!alcCaptureOpenDevice(nullptr,48000,AL_FORMAT_MONO_FLOAT32,960));
+  const char* names=alcGetString(nullptr,ALC_CAPTURE_DEVICE_SPECIFIER);assert(names&&!*names&&test_capture_closes()==1&&test_capture_opens()>=3);
+  puts("PASS opt-in prepares1realport/0reads,5SVC sample+close/reopen cycles reuse it despite late open0x8026010b,parked enumeration reads/opens0,OFF closes idle port; failed reprepare never lists a fake device");return 0;
+ }
+ if(mode==108){
+  client_ps5_capture_enable(1);assert(test_capture_opens()==1&&test_capture_reads()==0);client_ps5_capture_enable(0);assert(test_capture_closes()==1);
+  client_ps5_capture_enable(1);assert(!alcCaptureOpenDevice(nullptr,48000,AL_FORMAT_MONO_FLOAT32,960));const char* names=alcGetString(nullptr,ALC_CAPTURE_DEVICE_SPECIFIER);assert(names&&!*names);
+  char result[512];client_ps5_capture_probe(result,sizeof(result));assert(strstr(result,"busy")&&test_capture_closes()==1&&test_capture_opens()==1&&test_capture_reads()==0);
+  puts("PASS OFF native-close failure pins prepared port/lease;no repeated close,new open,reads,probe or false enumeration");return 0;
+ }
  if(mode==103){
   assert(client_ps5_capture_service_preinit()==0&&test_capture_inits()==1);
   assert(test_capture_opens()==0&&test_capture_reads()==0); // Service preparation never records.
@@ -118,14 +139,14 @@ int main(int argc,char**argv){assert(client_ps5_audio_event_preinit()==0);assert
   assert(test_capture_opens()==0&&test_capture_reads()==0);
   test_capture_pressure();assert(client_ps5_capture_service_preinit()==0&&test_capture_inits()==1);client_ps5_capture_enable(1);
   for(int i=0;i<3;++i){auto* d=alcCaptureOpenDevice("",48000,AL_FORMAT_MONO_FLOAT32,960);assert(d);alcCaptureStart(d);ALCint n=0;for(int wait=0;wait<1000&&n<960;++wait){usleep(1000);alcGetIntegerv(d,ALC_CAPTURE_SAMPLES,1,&n);}assert(n>=960);float pcm[960];alcCaptureSamples(d,pcm,960);assert(alcGetError(d)==ALC_NO_ERROR);alcCaptureStop(d);assert(alcCaptureCloseDevice(d));}
-  assert(test_capture_inits()==1&&test_capture_opens()==3&&test_capture_reads()>0);
+  assert(test_capture_inits()==1&&test_capture_opens()==1&&test_capture_reads()>0);
   puts("PASS early AudioIn service success retained across late init0x80260108 refusal and3 SVC open/read/close cycles; preinit opens/reads0,default-off retained; host only");return 0;
  }
  if(mode==104||mode==105){
   if(mode==104){assert(client_ps5_capture_service_preinit()==static_cast<int>(0x80260108u));assert(test_capture_opens()==0&&test_capture_reads()==0);}
   test_capture_pressure();client_ps5_capture_enable(1);
   for(int i=0;i<2;++i)assert(!alcCaptureOpenDevice(nullptr,48000,AL_FORMAT_MONO_FLOAT32,960));
-  assert(test_capture_opens()==0&&test_capture_reads()==0&&test_capture_inits()==(mode==104?3:2));
+  assert(test_capture_opens()==0&&test_capture_reads()==0&&test_capture_inits()==(mode==104?4:3));
   puts("PASS failed or absent early AudioIn init does not fabricate success: real late0x80260108 errors propagate before any open/read; retry bounded by calls");return 0;
  }
  if(mode==102){
@@ -194,7 +215,7 @@ int main(int argc,char**argv){assert(client_ps5_audio_event_preinit()==0);assert
 ''')
 source=ROOT/'.tools/openal-soft-src'
 subprocess.run(['clang++','-std=c++17','-fsanitize=address,undefined','-I'+str(source/'include'),str(w/'driver.cpp'),str(library),'-Wl,-rpath,'+str(library.parent),'-o',str(w/'check')],check=True)
-for mode in [1,2,0,3,4,5,6,7,8,9,10,11,12,13,14,15,16,100,101,102,103,104,105]:
+for mode in [1,2,0,3,4,5,6,7,8,9,10,11,12,13,14,15,16,100,101,102,103,104,105,106,108]:
  result=subprocess.run([str(w/'check'),str(mode)],env=dict(os.environ,ALSOFT_DRIVERS='ps5',ALSOFT_LOGLEVEL='2',ALSOFT_LOCAL_PATH=str(w)),capture_output=True,text=True,timeout=30)
  (w/('mode'+str(mode)+'.log')).write_text(result.stdout+result.stderr)
  if result.returncode:print(result.stdout+result.stderr)

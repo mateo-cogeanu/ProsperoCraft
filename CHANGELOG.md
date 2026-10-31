@@ -1,5 +1,11 @@
 # Changelog
 
+## 01.000.178 — opt-in input-port preparation (console pending)
+
+- 177 actual pre-JVM AudioIn initialization succeeds; both SVC attempts now fail at native port open0x8026010b. When Voice capture is enabled in the launcher, prepare the genuine input port before game loading and retain a healthy stopped port across logical closes.
+- Default-off creates no microphone port. Preparation performs no input read; tests/mod capture read samples. OFF closes an idle prepared port, while active/uncertain workers retain conservative ownership until safe cleanup. Failed preparation/close never fabricates availability.
+- Keep177 service init and176 worker lifetime repair. [Evidence and tests](docs/client-audioin-port-178.md). Native buffering/mute/route, actual178 speech/SVC and world transitions still need physical validation. No release/Store update.
+
 ## 01.000.177 — early AudioIn service preparation (console pending)
 
 - Actual176 SVC capture attempts fail at AudioIn init0x80260108 before port open. Prepare only the service before JVM/game resource use and retain confirmed success across later capture opens; negative early results remain nonfatal/retryable errors.

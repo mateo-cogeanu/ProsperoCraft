@@ -81,3 +81,13 @@ creation, SVC codec/transport and endurance remain pending. A reserved event-wor
 warning also appeared for a transient loopback context in176; that is separate
 from the established AudioIn init failure and is not repaired/claimed here.
 No release/prerelease/Store publication or whole-build console pass.
+
+## Subsequent177 console result
+
+The user still reports SVC microphone unavailable. The retrieved current177 run
+shows the intended early service init succeeds (0x0). The failure has moved to
+sceAudioInOpen: both actual SVC capture attempts fail stage=open0x8026010b. The
+matching Java console shows OpenAL-open failure followed by unavailable Java
+Sound capture. This establishes progress past the176 failing stage, not microphone
+compatibility. [178](client-audioin-port-178.md) prepares a real input port while
+opted in in the launcher and retains it across healthy stopped capture lifecycles.
