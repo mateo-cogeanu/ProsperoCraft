@@ -1,22 +1,9 @@
 # Launcher branding — candidate076
 
-![Native launcher with supplied corner logo](launcher/home-076.png)
+This is historical development documentation, not the current launcher guide.
+The [original guide and its previews](https://github.com/mateo-cogeanu/ps5-homebrew-history/blob/5b509375924ddf4664be3ab35087ce9f0c6dc96d/prosperocraft/_documentation/2026-10-31/docs/client-launcher-076.md) are preserved byte for byte
+in the verified history archive, with build context, validation and licenses.
 
-Uses the supplied ProsperoCraft2.png for the PS5 app icon and the supplied
-ProsperoCraftTransparent.png for the launcher corner. This image is a host render
-of the actual native UI, not a PS5 screenshot.
-
-Install local `dist/client-startup/PPSA99874.zip`, titlePPSA99874/version01.000.076,
-after finishing the075MSA test. The exact075test package remains preserved at
-`dist/accepted/Client_Launcher-01.000.075/PPSA99874-full-local.zip`.
-
-Controls and login behavior follow the [075guide](client-launcher-075.md).
-MSA implementation, game JARs, assets and074audio/performance settings are unchanged.
-No console appearance or login pass is inferred from host verification.
-
-Artwork sources and checksums are tracked in `assets/branding/branding.json`.
-`tools/prepare_launcher_branding.py` reproducibly resizes the512x512 app icon and
-bakes the72x72 native logo. The source transparency is composited against the
-constant native sidebar color; fully transparent pixels are skipped.
-
-[Build record](validation/client076-branding-build-2026-10-26.json).
+See [current user guidance](../README.md), [documentation index](README.md) and
+[archive provenance and integrity](documentation-history.md). Existing active
+validation records remain in `docs/validation/`; no acceptance scope changed.

@@ -1,0 +1,2566 @@
+{
+  "date": "2026-10-31",
+  "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+  "archive_commit": "5b509375924ddf4664be3ab35087ce9f0c6dc96d",
+  "original_agents_sha256": "fd48c040b7acd34dec89d93491f86b4c1d7920eabb8055d1a7c722ff342cec89",
+  "method": "All original prose paragraphs indexed, reviewed against later instructions and current implementation guides. Historical evidence/expired actions retain original context; technical constraints are preserved by mandatory subsystem guidance, not treated as completed work.",
+  "paragraphs": [
+    {
+      "heading": "Minecraft project scope",
+      "first_line": 3,
+      "last_line": 5,
+      "sha256": "2b7d9d6a30d4e3a7db36ca98db2025072b4c4576af404a98bb78c8e5c63981cc",
+      "disposition": "Current operating policy consolidated; superseded layout/branch instructions resolved",
+      "current_guidance": [
+        "AGENTS.md#scope-and-publication",
+        "AGENTS.md#checks-and-build-discipline"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Minecraft project scope",
+      "first_line": 7,
+      "last_line": 11,
+      "sha256": "d15f15241ee7800efa811c0e2e7777ad6c563e0744d5d3402c780ebc78ae43d4",
+      "disposition": "Current operating policy consolidated; superseded layout/branch instructions resolved",
+      "current_guidance": [
+        "AGENTS.md#scope-and-publication",
+        "AGENTS.md#checks-and-build-discipline"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Minecraft project scope",
+      "first_line": 13,
+      "last_line": 17,
+      "sha256": "ee8004b9953837c95bb02aeb4da57bdf8d8b29d55a8c0ee3485bb22731222c02",
+      "disposition": "Current operating policy consolidated; superseded layout/branch instructions resolved",
+      "current_guidance": [
+        "AGENTS.md#scope-and-publication",
+        "AGENTS.md#checks-and-build-discipline"
+      ],
+      "original_technical_references": [
+        "docs/readme-banner.svg"
+      ]
+    },
+    {
+      "heading": "Minecraft project scope",
+      "first_line": 19,
+      "last_line": 28,
+      "sha256": "f095480c03ba856946821a51332b666d1668cfb9f9c79917f026283265727034",
+      "disposition": "Current operating policy consolidated; superseded layout/branch instructions resolved",
+      "current_guidance": [
+        "AGENTS.md#scope-and-publication",
+        "AGENTS.md#checks-and-build-discipline"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Minecraft project scope",
+      "first_line": 30,
+      "last_line": 35,
+      "sha256": "9598bfa772049cda83bfad3df4b0fb747d6448bd253d959d01831a50b22f665b",
+      "disposition": "Current operating policy consolidated; superseded layout/branch instructions resolved",
+      "current_guidance": [
+        "AGENTS.md#scope-and-publication",
+        "AGENTS.md#checks-and-build-discipline"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Unmodified Minecraft server JAR direction",
+      "first_line": 39,
+      "last_line": 43,
+      "sha256": "aa565791fdf2ecc448f57dbfbffdc9b568b538e859722d9c5ba3908367692011",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Unmodified Minecraft server JAR direction",
+      "first_line": 45,
+      "last_line": 51,
+      "sha256": "5d1969be603bb021066b076d3e80c766925ad9459da0017fb92b6b16e377b4ee",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Work order requested on 2026-10-19",
+      "first_line": 55,
+      "last_line": 61,
+      "sha256": "d5da3b21637d014bcb4cfc2482a035ee6ca4f72d73602fb6d6040546f717f227",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-20",
+      "first_line": 65,
+      "last_line": 75,
+      "sha256": "e56b08fd9838d08e419ae4e6558e7cc67b301a41e5e98d661035e36ef452eb3c",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-21",
+      "first_line": 79,
+      "last_line": 86,
+      "sha256": "5aecd5ba478d63244e15127520da6b50557fa9043cf4c0bb5d3d4aae745c13d0",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 90,
+      "last_line": 98,
+      "sha256": "109efdc75080b61138e3550e36461a138a65991f831975f183f050def9c49257",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 100,
+      "last_line": 103,
+      "sha256": "1d4bcfceaf7866011a30c4d82336d8fc6b91e0a593f379d4975a64ef02077b49",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 105,
+      "last_line": 110,
+      "sha256": "85576f09af45b2209e30709fc7a0867059bf57237e6b2ad84f2e561fd88afb9f",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 112,
+      "last_line": 116,
+      "sha256": "f30b2dddbc3cfac92a1957dc78cd9e641efa5c427ca951458194ee3494c54d5d",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 118,
+      "last_line": 122,
+      "sha256": "6abe7c6d9e71c0e5688b32411446b038af3569d2e325839723eb8f6b794a2702",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 124,
+      "last_line": 129,
+      "sha256": "6ff9a179e27e1c4fd2b8cc1dee40bac61e9a990d2b31c47d9694966ca24b4c9e",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 131,
+      "last_line": 137,
+      "sha256": "238692222bde5acaecffe1ce44a77717b71ef1ecf890ddcd92b9f851723b6a9d",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 139,
+      "last_line": 146,
+      "sha256": "3b5e87102580b9c4fcd89c68322a6ea565d179983877a23175fb90ce76c6b2b5",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 148,
+      "last_line": 155,
+      "sha256": "3d71659e182e9f08f2b603e3b98b3bb46b78c039f5f6a4c79f5d9ba64acdaaad",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 157,
+      "last_line": 163,
+      "sha256": "bdadb38a96a1d2393b7cf7dcc7f357ace4c9065010c635999751030114fba373",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 165,
+      "last_line": 172,
+      "sha256": "5eaecc86b0f41f729992d52d9f91117a779de0a51015d929c4db67dcd13d7c26",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 174,
+      "last_line": 181,
+      "sha256": "7175f621c510403a1ab1669f0d192947cdb3f2aac9461391665526ddc2c6d697",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 183,
+      "last_line": 190,
+      "sha256": "9263e2c50a70510650a270e46d9d23804e730dbf8e44c5f0fbf9b67b74a48e26",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 192,
+      "last_line": 201,
+      "sha256": "4f81261fad53b62319c0816eed8a6cebc5b57627d3942bedd9dd52608801e266",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 203,
+      "last_line": 212,
+      "sha256": "1544ed3420d4f3d7b52afa40b021b9793307c8df97f067c655876e15fbfd0577",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 214,
+      "last_line": 223,
+      "sha256": "efbdfefdca6aaf1cdb1761d95ce8a569da030e7a31cebcc3278315f7f8ead570",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 225,
+      "last_line": 234,
+      "sha256": "ee0c5934864d7bb9b679832baae89fe8d30844b5f02a7342063ca0e99b1d2f5a",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 236,
+      "last_line": 243,
+      "sha256": "95a96bb4c7c297c498e9af1e0f8926aacab81112a55c73262612df125de5f488",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/validation/client023-log-follow-up-2026-10-24.json"
+      ]
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 245,
+      "last_line": 251,
+      "sha256": "4774ee0b5361ff567480216e32c009909137832f4d38a5de0b15793d7273d7aa",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 253,
+      "last_line": 260,
+      "sha256": "6c230157862ecc6141e8a75684c1e1a8cec74c07f5c4e8555a8fc6647512b13f",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 262,
+      "last_line": 272,
+      "sha256": "bbdc1c7583cbcb5542eb0c60b83a768d14b082f1ba76da33c8cfe8154d3fa11e",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 274,
+      "last_line": 283,
+      "sha256": "6ba8a0c8b24f2a5bb42706d77d474af28a61b18a5b0e199f5c0abc6b6137ac4d",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 285,
+      "last_line": 295,
+      "sha256": "3c46494cee9732b55b8175fcdf4dc3a0cb852361bbc4ef8004bb465040adaea2",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 297,
+      "last_line": 308,
+      "sha256": "6b3a3d0ac9f21789ae865ee52e3b5951528506c7477f64502fc322eded4bab38",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 310,
+      "last_line": 322,
+      "sha256": "a19421a693ce426427ef67c05fa880c8ec79147a6d2993edf9be1676839b070b",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 324,
+      "last_line": 339,
+      "sha256": "6e4c3ed2776568802d718e2841fc9d501930ac6fe7af3fab6c24c99dbd6da18b",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 341,
+      "last_line": 347,
+      "sha256": "8434ae91f5e6b451ec2b55834a875978bb58bae4483cad4e16d8ed919ca0e9a2",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 349,
+      "last_line": 357,
+      "sha256": "2013ae2ad48180c775c230572b61cc7f57d43b96f5bada79c34849e6f5a25739",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 359,
+      "last_line": 364,
+      "sha256": "5baa607fd6a846bac8e5ec859cceb8b9a1f49902e472153fec983219d2e1242d",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 366,
+      "last_line": 373,
+      "sha256": "474bf5bc4dcdb75a92a37bf385e2bc752849ef02abe9e38ef342fde17f9fe00c",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 375,
+      "last_line": 382,
+      "sha256": "85642f3f8fafd21b30a51d743ea690e43c82e1a3c03b3a5c0099926581f0638b",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 384,
+      "last_line": 392,
+      "sha256": "9cf231a6f40c8691eb40696c1b2a66490492162d78a0312c1526a221d9997386",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 394,
+      "last_line": 402,
+      "sha256": "9e983f1373957b9d04671ae640bfe501e1778acbae4713504fbbb3d7a205df67",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 404,
+      "last_line": 405,
+      "sha256": "64af569a7a5deef7040b263698cb89f06adaf1487079f541eaef0a8325d493f2",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 407,
+      "last_line": 411,
+      "sha256": "939999073f27794c385bbdeee7094f681c916c2ed27bbf966ad32a62cb2c37c2",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/handoff-prosperocraft-client044.md."
+      ]
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 413,
+      "last_line": 423,
+      "sha256": "9f819a900107b5c5ab9a30ed87336d9a656cbbefd4a9bfabc337d04fa4466640",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-startup-045.md"
+      ]
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 425,
+      "last_line": 434,
+      "sha256": "06eb4b8a4fe7bf22fdda57038e75abc427c56c06e719ce056a1e8512ee2f6ca9",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 436,
+      "last_line": 445,
+      "sha256": "8e7b03a88de52db7220ee03eff3e6cad197c38cdda1573be007d7a60ba69b168",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 447,
+      "last_line": 456,
+      "sha256": "7ea67b66cc286d710310944860f11d0bae5fb42cfcd8fa505a6ec194d96ef8a3",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 458,
+      "last_line": 465,
+      "sha256": "70410e48463c5e0dfd9b6826836db4456ff0ff73b6c2ec9b92a5adef9cbf93fe",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 467,
+      "last_line": 475,
+      "sha256": "c544b96436dd7be9928795c788d702a6fe8f08a023b26c9252c2ceabea800fe3",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 477,
+      "last_line": 481,
+      "sha256": "9cc2dc896021938f7ff054451c740ccaacf62b0fb284e344160498ad5680f547",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/handoff-prosperocraft-client051.md."
+      ]
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 483,
+      "last_line": 492,
+      "sha256": "821990f18f464f14a6565a4651c8ab4a60aa032d5608cd660af3dd380e7f1e34",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-startup-051.md"
+      ]
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 494,
+      "last_line": 503,
+      "sha256": "f598be3631e9cff0f0e4a61c9be0a66a975c9857006f148fcae1dd16454e516e",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/validation/client051-startup-observations-2026-10-25.json"
+      ]
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 505,
+      "last_line": 513,
+      "sha256": "3f5b8811d2337afc6e87c06cdc963a43d92c407c62f07eb09d09a8cd98e4a6e3",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/handoff-prosperocraft-client053.md"
+      ]
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 515,
+      "last_line": 521,
+      "sha256": "ddc9fa008778389c8b95031e4db0925cff48743896acfe258f39787374d51686",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/handoff-prosperocraft-client054.md."
+      ]
+    },
+    {
+      "heading": "User work-order update on 2026-10-22",
+      "first_line": 523,
+      "last_line": 531,
+      "sha256": "791f301a03225f3c08533d6c895675e1e9440399e5d3dfecea215cbd3b1303c6",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/evidence",
+        "docs/fresh-context-prompt-client054.md.",
+        "docs/handoff-prosperocraft-client054.md"
+      ]
+    },
+    {
+      "heading": "Client product goal clarified on2026-10-26",
+      "first_line": 535,
+      "last_line": 539,
+      "sha256": "c39421b3a251fab5111d3f8947dfa717de0ea9a14f20d8fbd4f2d4ff9ec95286",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User menu confirmation and GitHub release authorization \u2014 2026-10-26",
+      "first_line": 543,
+      "last_line": 553,
+      "sha256": "2841fa44a6d7e14f5452aa5bb7daee2c0dafd09b026e9242827a1a11084f6f3c",
+      "disposition": "Historical exact-build authorization/evidence; current release and preservation policies retained",
+      "current_guidance": [
+        "AGENTS.md#acceptance-history-and-releases",
+        "docs/maintainer-constraints.md#current-candidate-and-deferred-goals"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "User control and menu performance direction \u2014 2026-10-26",
+      "first_line": 557,
+      "last_line": 565,
+      "sha256": "dfe65a3ff54ba6e29208ab0ef8a9a72e54c6925c4c74e16cadc368ac5fcab41b",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "First world and performance work \u2014 2026-10-26",
+      "first_line": 569,
+      "last_line": 576,
+      "sha256": "912321bd551a9be13b6fe61988f657069cb99ec94013652bc8c891a2e0da689b",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Playable066release and audio work \u2014 2026-10-26",
+      "first_line": 580,
+      "last_line": 586,
+      "sha256": "5acd34a83c3e2137063ee9739b416c1d7cee90f1ec5e46a6ce42aeb5c2645b25",
+      "disposition": "Historical exact-build authorization/evidence; current release and preservation policies retained",
+      "current_guidance": [
+        "AGENTS.md#acceptance-history-and-releases",
+        "docs/maintainer-constraints.md#current-candidate-and-deferred-goals"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Audio confirmation and intermittent freezes \u2014 2026-10-26",
+      "first_line": 590,
+      "last_line": 595,
+      "sha256": "52866e0f450869c8cc19c10157e0b9a01a494ec6f97976ac3434c82500b77c85",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Audio confirmation and intermittent freezes \u2014 2026-10-26",
+      "first_line": 597,
+      "last_line": 601,
+      "sha256": "27aeb5d8972a454c07be2fef2ab0b4c81da3a3ee9f729d1af75bd0ec7fb6b90f",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/handoff-prosperocraft-client069.md."
+      ]
+    },
+    {
+      "heading": "Audio confirmation and intermittent freezes \u2014 2026-10-26",
+      "first_line": 603,
+      "last_line": 606,
+      "sha256": "250c64dd70cd4bb8ddf98b63615c7f0243778ae8bac5d435f9e1cf82c87fa331",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Audio confirmation and intermittent freezes \u2014 2026-10-26",
+      "first_line": 608,
+      "last_line": 612,
+      "sha256": "5e8962a425db73e5d9145ce204c76b461ec8bda778e168bade7c0ddca4ca63cb",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/handoff-prosperocraft-client071.md."
+      ]
+    },
+    {
+      "heading": "Audio confirmation and intermittent freezes \u2014 2026-10-26",
+      "first_line": 614,
+      "last_line": 617,
+      "sha256": "4ab0ed1ba9f8019dbc02119196d0570e40becdfec985dd953ea77cde869e56ef",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Audio confirmation and intermittent freezes \u2014 2026-10-26",
+      "first_line": 619,
+      "last_line": 622,
+      "sha256": "efd32ed0bba3ebf3c00214ac4cd17f7d99d2c2e2f0b371e2dd983f49835aa03f",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Audio confirmation and intermittent freezes \u2014 2026-10-26",
+      "first_line": 624,
+      "last_line": 627,
+      "sha256": "937c87ee4782273387e36c0f13007c04302f4278bb0e7e1072015377c4eec962",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Audio confirmation and intermittent freezes \u2014 2026-10-26",
+      "first_line": 629,
+      "last_line": 632,
+      "sha256": "d15b31e1e4fff572f1e0eef8fb0c14b4089500af2f7992486ba708f488d5d071",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Native launcher and MSA direction \u2014 2026-10-26",
+      "first_line": 636,
+      "last_line": 642,
+      "sha256": "e6fa2f6d7c6c03be39467f2184ca1c5894d6764ce98d20b5d22be04e85de5f1e",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/handoff-prosperocraft-client075.md."
+      ]
+    },
+    {
+      "heading": "Native launcher and MSA direction \u2014 2026-10-26",
+      "first_line": 644,
+      "last_line": 649,
+      "sha256": "4bb033e967a368422b93460b5f0fbeca799f3024f39a52518ba6e10c1fc0d187",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-launcher-076.md."
+      ]
+    },
+    {
+      "heading": "Launcher startup separation \u2014 2026-10-26",
+      "first_line": 653,
+      "last_line": 659,
+      "sha256": "b336c56c5197d9543a3f2441dc19e2fac7b5910c6147067d8c0025f19fbecebc",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/handoff-prosperocraft-client077.md."
+      ]
+    },
+    {
+      "heading": "Authentication rejection follow-through \u2014 2026-10-26",
+      "first_line": 663,
+      "last_line": 670,
+      "sha256": "ecc0c5e08e219b9356392e47be5b0d4da7ac59511be0def56bab22e1ae9bb5a0",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/handoff-prosperocraft-client078.md."
+      ]
+    },
+    {
+      "heading": "Authentication rejection follow-through \u2014 2026-10-26",
+      "first_line": 672,
+      "last_line": 678,
+      "sha256": "39c59aa6c25a122fb635bd99ed429abe283445e050a4ed2c04c560c5d657268c",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/appid-review-request.md."
+      ]
+    },
+    {
+      "heading": "Authentication rejection follow-through \u2014 2026-10-26",
+      "first_line": 680,
+      "last_line": 683,
+      "sha256": "b7dbe9005fc56c4b037bedb6376fd352b6f5cd2d327c4b12fc4f15e618cb51d5",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Native library/instance redesign \u2014 2026-10-26",
+      "first_line": 687,
+      "last_line": 696,
+      "sha256": "899d3c4a8e510a7d488615da8b3c7543dc4d3281ae05fcf3257698a5d80716ba",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/handoff-prosperocraft-client079.md."
+      ]
+    },
+    {
+      "heading": "Native library/instance redesign \u2014 2026-10-26",
+      "first_line": 698,
+      "last_line": 705,
+      "sha256": "c91ac1c55e6e61a756a7c3e266231421847f7dca50869d7949b0b2197402fec9",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/handoff-prosperocraft-client080.md."
+      ]
+    },
+    {
+      "heading": "Native library/instance redesign \u2014 2026-10-26",
+      "first_line": 707,
+      "last_line": 712,
+      "sha256": "1c713f10de912edb33a558d4d756e68d796e1ccc9979e76c81c733fb6df01465",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-controls-081.md"
+      ]
+    },
+    {
+      "heading": "Native library/instance redesign \u2014 2026-10-26",
+      "first_line": 714,
+      "last_line": 721,
+      "sha256": "1f1ec1e69587371917e73972f0df41b6e3bedfd196f8466e5d11b262f0843591",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-launcher-082.md"
+      ]
+    },
+    {
+      "heading": "Native library/instance redesign \u2014 2026-10-26",
+      "first_line": 723,
+      "last_line": 729,
+      "sha256": "146ab1ec46b959ec5026a46453ab195cc9056b1efd086ff767565d2136a999b2",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Native library/instance redesign \u2014 2026-10-26",
+      "first_line": 731,
+      "last_line": 738,
+      "sha256": "33594dc63da61c6419d06ace58023ab9c5291cdd170969337cf8985a6e633d33",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Native library/instance redesign \u2014 2026-10-26",
+      "first_line": 740,
+      "last_line": 744,
+      "sha256": "05998533e2da11c722338070b76ed1f57f1c9b1c9d90e09abf79be244f605d9e",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Native library/instance redesign \u2014 2026-10-26",
+      "first_line": 746,
+      "last_line": 751,
+      "sha256": "9adadede63ee307bd7b6d56196f4fe95d52df78a9a46d31ea17845e1fbaa6673",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Native library/instance redesign \u2014 2026-10-26",
+      "first_line": 753,
+      "last_line": 760,
+      "sha256": "e138cca439f90b8acd5eac624f5a9eb2317ef79af84f8f029097f442aa65910a",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-resolution-083.md"
+      ]
+    },
+    {
+      "heading": "Native library/instance redesign \u2014 2026-10-26",
+      "first_line": 762,
+      "last_line": 767,
+      "sha256": "bce2bee720ac25460cf9c730807ae2c0506d8d0b94129047f6175e13df2a2200",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Native library/instance redesign \u2014 2026-10-26",
+      "first_line": 769,
+      "last_line": 773,
+      "sha256": "a06268079234e917c346a122d852914fe06b34a0c244036cc762fc41c2de9d5e",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Verified personal offline account test \u2014 2026-10-27",
+      "first_line": 777,
+      "last_line": 787,
+      "sha256": "8a850590c0baa4baea532a1d1029017e736a41169a84c232ae9fe6d5465ec5eb",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-offline-084.md."
+      ]
+    },
+    {
+      "heading": "Verified personal offline account test \u2014 2026-10-27",
+      "first_line": 789,
+      "last_line": 796,
+      "sha256": "de7a6606ea478308554a0f7a4dd8f0637b92a813c347ab491c09af22cc15692d",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Demo / Offline branch split and shared instance deletion \u2014 2026-10-27",
+      "first_line": 800,
+      "last_line": 809,
+      "sha256": "2d2d146100e921b0071c3e90de9de0e3068b6257b36feae99d3e0fa7e888c9a9",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-channels-delete-085.md."
+      ]
+    },
+    {
+      "heading": "Demo / Offline branch split and shared instance deletion \u2014 2026-10-27",
+      "first_line": 811,
+      "last_line": 818,
+      "sha256": "64e9f663fd2729436085421dad587de807e08dc6a245cb5692ef1260211bf15b",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Demo / Offline branch split and shared instance deletion \u2014 2026-10-27",
+      "first_line": 820,
+      "last_line": 822,
+      "sha256": "219266d84de9652d60e06ddeb47dea71927940f612f340296a3196ed00df4f92",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Shared top-bar / debug CPU fixes \u2014 2026-10-27",
+      "first_line": 826,
+      "last_line": 837,
+      "sha256": "e203ddc61f94cd0237434c9fcc6a4d40f75f131c2034128634ac97405c2ee7eb",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-shared-fixes-086.md."
+      ]
+    },
+    {
+      "heading": "Vulkan toolkit launcher migration \u2014 2026-10-27",
+      "first_line": 841,
+      "last_line": 855,
+      "sha256": "44304a1ef5ef991bbce740958b7835f5d2b4a9e7867bd2ae89a83669dd34fb57",
+      "disposition": "Current operating policy consolidated; superseded layout/branch instructions resolved",
+      "current_guidance": [
+        "AGENTS.md#scope-and-publication",
+        "AGENTS.md#checks-and-build-discipline"
+      ],
+      "original_technical_references": [
+        "docs/client-toolkit-087.md"
+      ]
+    },
+    {
+      "heading": "Toolkit visual polish \u2014 2026-10-27",
+      "first_line": 859,
+      "last_line": 871,
+      "sha256": "e788412d16232b2e7158cd68db08f932cd790989687fb03d69dbc18ed040ef87",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-motion-088.md."
+      ]
+    },
+    {
+      "heading": "Launcher vibration \u2014 2026-10-27",
+      "first_line": 875,
+      "last_line": 886,
+      "sha256": "422f2981b063f0c2b380b0548f593bb933f0a5572fa0f3ecac8e638969fd9821",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-vibration-089.md."
+      ]
+    },
+    {
+      "heading": "Temporary authenticated game branch \u2014 2026-10-27",
+      "first_line": 891,
+      "last_line": 907,
+      "sha256": "8bc18fa7066951cb9a544e2fc6724fdbd7c836345e1eb833b6d887c794f544b7",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-temp-gametest-090.md"
+      ]
+    },
+    {
+      "heading": "Account/UI/network work \u2014 2026-10-27",
+      "first_line": 912,
+      "last_line": 930,
+      "sha256": "d9bf8223af336b214601cf9571c417c5232c5ac90418fea330a4debcfaeac53a",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-account-ui-091.md"
+      ]
+    },
+    {
+      "heading": "PLAY launch follow-up and Waves \u2014 2026-10-27",
+      "first_line": 935,
+      "last_line": 948,
+      "sha256": "9e6514957f3216ed610f2685895d07ed182951747dfe31339f6a036c949155aa",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-launch-followup-092.md"
+      ]
+    },
+    {
+      "heading": "PLAY launch follow-up and Waves \u2014 2026-10-27",
+      "first_line": 951,
+      "last_line": 954,
+      "sha256": "0d8028c64620c5993661fe6f4e6e2cc4f00291f8a0e81c8cebc957c638d35898",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "PLAY launch follow-up and Waves \u2014 2026-10-27",
+      "first_line": 957,
+      "last_line": 966,
+      "sha256": "2c9fb62f092ce6cc1f5bbf416d07e86610bff99b22c2673e093b1b7512fb266c",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-keyboard-hosting-093.md"
+      ]
+    },
+    {
+      "heading": "PLAY launch follow-up and Waves \u2014 2026-10-27",
+      "first_line": 969,
+      "last_line": 979,
+      "sha256": "d22f5a752078eaee9a3e098a472daf16d42d530bda207de652ab5a645aa4d3f1",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-home-library-094.md"
+      ]
+    },
+    {
+      "heading": "PLAY launch follow-up and Waves \u2014 2026-10-27",
+      "first_line": 982,
+      "last_line": 990,
+      "sha256": "8d62ed188e5f13b666224cbec47b3acf57cb28fb8e6d1fc4e91f2d179dc45f51",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-instances-only-095.md"
+      ]
+    },
+    {
+      "heading": "PLAY launch follow-up and Waves \u2014 2026-10-27",
+      "first_line": 993,
+      "last_line": 1001,
+      "sha256": "a13b021c78d83a968a9093dbe3fbfee5297d1658a9b4b2942f45ad2c0b33e93c",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-presentation-096.md"
+      ]
+    },
+    {
+      "heading": "Authenticated096 release and merge \u2014 2026-10-27",
+      "first_line": 1005,
+      "last_line": 1016,
+      "sha256": "3bfd72b394d02cda969dbccb4fa895347cf55b87508ec0af3c15340da08825f4",
+      "disposition": "Historical exact-build authorization/evidence; current release and preservation policies retained",
+      "current_guidance": [
+        "AGENTS.md#acceptance-history-and-releases",
+        "docs/maintainer-constraints.md#current-candidate-and-deferred-goals"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Merged branch retirement \u2014 2026-10-27",
+      "first_line": 1020,
+      "last_line": 1026,
+      "sha256": "81dfcf0e9496316bb649b12c843d6d17a9a0895493ab113723930cc40282d5cf",
+      "disposition": "Current operating policy consolidated; superseded layout/branch instructions resolved",
+      "current_guidance": [
+        "AGENTS.md#scope-and-publication",
+        "AGENTS.md#checks-and-build-discipline"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "High-refresh candidate097 \u2014 2026-10-27",
+      "first_line": 1031,
+      "last_line": 1039,
+      "sha256": "d568108320575c0152443c96d55e581a96a8136d33f11a8db50e0fec0552e41f",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-high-refresh-097.md"
+      ]
+    },
+    {
+      "heading": "Visible build identity \u2014 2026-10-27",
+      "first_line": 1044,
+      "last_line": 1050,
+      "sha256": "cef52c9ff6b3d4561b7d7a066319807808fed263d5bee51dfb41da3101b56254",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "0.98 release authorization and119FPS report \u2014 2026-10-27",
+      "first_line": 1055,
+      "last_line": 1063,
+      "sha256": "f3c73d07a96ab3f4aff8f066d00056d51add60b5191f5a7c8c83c02135a1d382",
+      "disposition": "Historical exact-build authorization/evidence; current release and preservation policies retained",
+      "current_guidance": [
+        "AGENTS.md#acceptance-history-and-releases",
+        "docs/maintainer-constraints.md#current-candidate-and-deferred-goals"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "0.98 release authorization and119FPS report \u2014 2026-10-27",
+      "first_line": 1066,
+      "last_line": 1073,
+      "sha256": "85a113b82f571611184fa297595a38e15de4588f0aafb6ad1dba87dae1373e71",
+      "disposition": "Historical exact-build authorization/evidence; current release and preservation policies retained",
+      "current_guidance": [
+        "AGENTS.md#acceptance-history-and-releases",
+        "docs/maintainer-constraints.md#current-candidate-and-deferred-goals"
+      ],
+      "original_technical_references": [
+        "docs/client-stutters-098.md"
+      ]
+    },
+    {
+      "heading": "Explicit release/Store hold \u2014 2026-10-27",
+      "first_line": 1078,
+      "last_line": 1086,
+      "sha256": "8d380bebd6d3b1f9b107597bcb77ab7f0d79381a214600d75b382b894efe2fb9",
+      "disposition": "Historical exact-build authorization/evidence; current release and preservation policies retained",
+      "current_guidance": [
+        "AGENTS.md#acceptance-history-and-releases",
+        "docs/maintainer-constraints.md#current-candidate-and-deferred-goals"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "098still stutters;099GCpolicy candidate \u2014 2026-10-27",
+      "first_line": 1091,
+      "last_line": 1100,
+      "sha256": "53a13a756aa4e3c194d97a49d2df95189aa52d198da4de5736c5ca17e97752e1",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-frame-pauses-099.md"
+      ]
+    },
+    {
+      "heading": "099 partial improvement;100 remark isolation \u2014 2026-10-27",
+      "first_line": 1105,
+      "last_line": 1114,
+      "sha256": "74849aa366c6c515f15fb68a0433fccff9503eac0f88e6b023d0f97c95993cda",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-remark-cleanup-100.md"
+      ]
+    },
+    {
+      "heading": "Repository ownership reminder \u2014 2026-10-27",
+      "first_line": 1119,
+      "last_line": 1127,
+      "sha256": "b3460c4f984029d4d30474305496a19848a5634151d646536859cd0ab507663c",
+      "disposition": "Current operating policy consolidated; superseded layout/branch instructions resolved",
+      "current_guidance": [
+        "AGENTS.md#scope-and-publication",
+        "AGENTS.md#checks-and-build-discipline"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Accepted100 release authorization \u2014 2026-10-27",
+      "first_line": 1132,
+      "last_line": 1142,
+      "sha256": "4cef5c99ec0c83b73c1ed288749ad9c8da84fd06e40c6062cb05386270f267a6",
+      "disposition": "Historical exact-build authorization/evidence; current release and preservation policies retained",
+      "current_guidance": [
+        "AGENTS.md#acceptance-history-and-releases",
+        "docs/maintainer-constraints.md#current-candidate-and-deferred-goals"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Accepted100 release authorization \u2014 2026-10-27",
+      "first_line": 1145,
+      "last_line": 1151,
+      "sha256": "31bc788fc861002dfa0fb70136d4c730a4ad3be7f97d39812a350e0944896a81",
+      "disposition": "Historical exact-build authorization/evidence; current release and preservation policies retained",
+      "current_guidance": [
+        "AGENTS.md#acceptance-history-and-releases",
+        "docs/maintainer-constraints.md#current-candidate-and-deferred-goals"
+      ],
+      "original_technical_references": [
+        "docs/validation/client100-store-publication-2026-10-27.json"
+      ]
+    },
+    {
+      "heading": "Launcher/control/skin101 candidate \u2014 2026-10-27",
+      "first_line": 1156,
+      "last_line": 1165,
+      "sha256": "57e656b35b278cc583103e3591142220dfe06ccf38586d50cec3af8594ad3b50",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-launcher-controls-skins-101.md"
+      ]
+    },
+    {
+      "heading": "Accepted101 publication \u2014 2026-10-27",
+      "first_line": 1170,
+      "last_line": 1178,
+      "sha256": "f8784b3b892a168d49bee71762940899a608055d5de192b73742d4db6b586223",
+      "disposition": "Historical exact-build authorization/evidence; current release and preservation policies retained",
+      "current_guidance": [
+        "AGENTS.md#acceptance-history-and-releases",
+        "docs/maintainer-constraints.md#current-candidate-and-deferred-goals"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Accepted101 publication \u2014 2026-10-27",
+      "first_line": 1181,
+      "last_line": 1187,
+      "sha256": "712e39510bafcb532ac0e6ef57bcc78f38e2ee15e4e8b276654aa4fc39984c52",
+      "disposition": "Historical exact-build authorization/evidence; current release and preservation policies retained",
+      "current_guidance": [
+        "AGENTS.md#acceptance-history-and-releases",
+        "docs/maintainer-constraints.md#current-candidate-and-deferred-goals"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Fabric/Modrinth client direction \u2014 2026-10-27",
+      "first_line": 1192,
+      "last_line": 1202,
+      "sha256": "0415379747781bd5ad3186ba4b688ef0f64066ca434d6f5beaf9958959500447",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-fabric-modrinth-103.md"
+      ]
+    },
+    {
+      "heading": "103 logs and104 repairs \u2014 2026-10-27",
+      "first_line": 1207,
+      "last_line": 1218,
+      "sha256": "0b4f172980b587f547ccd9702d7626bd09830cd1d22b4e3ac8112f1bee97499f",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-stutters-shaders-controls-104.md"
+      ]
+    },
+    {
+      "heading": "105 Fabric recovery and issue3 input \u2014 2026-10-27",
+      "first_line": 1223,
+      "last_line": 1233,
+      "sha256": "935f2a2b7332fbc4b6f33ee894a14884dcf7d9619121273c4807b985676c47fa",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-fabric-input-105.md"
+      ]
+    },
+    {
+      "heading": "106 input/audio/content direction \u2014 2026-10-27",
+      "first_line": 1238,
+      "last_line": 1248,
+      "sha256": "7bc272029aa22c43e958a55bd4462c81a9abd91570816eabb3b3c98d7a7749c3",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-input-audio-installed-106.md."
+      ]
+    },
+    {
+      "heading": "107 content management \u2014 2026-10-27",
+      "first_line": 1253,
+      "last_line": 1261,
+      "sha256": "97c7c10ac9dada84fb64628aa39f5ee267d71101b00f00a78ed6e44a1274adfc",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-content-uninstall-icons-107.md."
+      ]
+    },
+    {
+      "heading": "108 dependency candidate and keyboard feedback \u2014 2026-10-27",
+      "first_line": 1266,
+      "last_line": 1277,
+      "sha256": "787be821e24188b7c9b260f05b57450dd7144e99592a62973f8ada40ab3c8602",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-auto-dependencies-108.md."
+      ]
+    },
+    {
+      "heading": "108 public release authorization \u2014 2026-10-27",
+      "first_line": 1282,
+      "last_line": 1288,
+      "sha256": "d2afa99a6c29c31d0028c7b7d609fae56d973a6b975c63429796abe521895e42",
+      "disposition": "Historical exact-build authorization/evidence; current release and preservation policies retained",
+      "current_guidance": [
+        "AGENTS.md#acceptance-history-and-releases",
+        "docs/maintainer-constraints.md#current-candidate-and-deferred-goals"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "108 public release authorization \u2014 2026-10-27",
+      "first_line": 1291,
+      "last_line": 1297,
+      "sha256": "51c2f96ee53c311209f38211048636b19862d87cd1315f6b38f5d524431099f4",
+      "disposition": "Historical exact-build authorization/evidence; current release and preservation policies retained",
+      "current_guidance": [
+        "AGENTS.md#acceptance-history-and-releases",
+        "docs/maintainer-constraints.md#current-candidate-and-deferred-goals"
+      ],
+      "original_technical_references": [
+        "docs/validation/client108-store-publication-2026-10-27.json."
+      ]
+    },
+    {
+      "heading": "109 Iris queue repair \u2014 2026-10-28",
+      "first_line": 1302,
+      "last_line": 1310,
+      "sha256": "fa8d763c29dadc92b9c6d73325c7e61ca092a81784690511af69d7e1061f8551",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-iris-resolution-109.md."
+      ]
+    },
+    {
+      "heading": "110 observed Iris OpenGL abort \u2014 2026-10-28",
+      "first_line": 1315,
+      "last_line": 1322,
+      "sha256": "bd6cc2e8be4711a2fc94fd8daf66b9e9a6cd590b9616d3973573304d5e2cf872",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-iris-vulkan-110.md."
+      ]
+    },
+    {
+      "heading": "111 explicitly authorized dependency upgrades \u2014 2026-10-28",
+      "first_line": 1327,
+      "last_line": 1338,
+      "sha256": "2c78790cbfede63beba01d61c829ab25c6c977e3e844a8589fbd9a792d609121",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-dependency-updates-111.md."
+      ]
+    },
+    {
+      "heading": "Development112 native integration",
+      "first_line": 1342,
+      "last_line": 1342,
+      "sha256": "3d3b57d36782fff617a0e7951b528d525382128439cf14c744aa64161f453f4e",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "client/ports/distant_horizons/runtime.json.",
+        "docs/client-native-input-storage-112.md."
+      ]
+    },
+    {
+      "heading": "Development113 save and rumble follow-through",
+      "first_line": 1346,
+      "last_line": 1346,
+      "sha256": "7eeba820a938e7cb9d79bd3f048c59adf0310e3fa516a7c1d6f4cc5b5cf1f808",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-save-rumble-113.md."
+      ]
+    },
+    {
+      "heading": "Development114 world handle pressure",
+      "first_line": 1350,
+      "last_line": 1350,
+      "sha256": "59a95242f0fbe951f220eaafcec6401702f8d0e06d5967fde567033e2fa6343e",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-world-handles-114.md."
+      ]
+    },
+    {
+      "heading": "Development115 defaults and Unicode content",
+      "first_line": 1354,
+      "last_line": 1354,
+      "sha256": "3f0059275d17644ac03fe2912abaea26b3482fa5567045be92237f06052901c8",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-default-controlify-unicode-115.md.",
+        "docs/validation/client114-console-feedback-2026-10-28.json.115adds"
+      ]
+    },
+    {
+      "heading": "Development116 duplicate and trigger integration",
+      "first_line": 1358,
+      "last_line": 1358,
+      "sha256": "3e38b8492db01eac9d9de20265c56997d34474613bf7266d567e8c1923126917",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-duplicate-triggers-116.md."
+      ]
+    },
+    {
+      "heading": "Development117 buttons and trigger fallback",
+      "first_line": 1363,
+      "last_line": 1363,
+      "sha256": "92f6b01272867e08e11fe6332d92cb400394b9ed54503f6e3c6aa0ec98217a0e",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-buttons-triggers-117.md."
+      ]
+    },
+    {
+      "heading": "117 release authorization \u2014 2026-10-28",
+      "first_line": 1368,
+      "last_line": 1368,
+      "sha256": "80cd11317dac10ba2df81d427950fda61986e85be37b5931438548a6e2123b20",
+      "disposition": "Historical exact-build authorization/evidence; current release and preservation policies retained",
+      "current_guidance": [
+        "AGENTS.md#acceptance-history-and-releases",
+        "docs/maintainer-constraints.md#current-candidate-and-deferred-goals"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "117 release authorization \u2014 2026-10-28",
+      "first_line": 1370,
+      "last_line": 1370,
+      "sha256": "7c791cd94c1dd876811e4568da8db11a0b2b2bf83fab163dc0c6eecb59b5dd5b",
+      "disposition": "Historical exact-build authorization/evidence; current release and preservation policies retained",
+      "current_guidance": [
+        "AGENTS.md#acceptance-history-and-releases",
+        "docs/maintainer-constraints.md#current-candidate-and-deferred-goals"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "117 acceptance and performance investigation \u2014 2026-10-28",
+      "first_line": 1375,
+      "last_line": 1375,
+      "sha256": "bf7843741b0552ba29fc4f4dcb2ca469073d48ed31f8c92b353fcdfc82e0dd61",
+      "disposition": "Historical exact-build authorization/evidence; current release and preservation policies retained",
+      "current_guidance": [
+        "AGENTS.md#acceptance-history-and-releases",
+        "docs/maintainer-constraints.md#current-candidate-and-deferred-goals"
+      ],
+      "original_technical_references": [
+        "docs/client-performance-investigation-117.md"
+      ]
+    },
+    {
+      "heading": "Development118 snapshot integration \u2014 2026-10-28",
+      "first_line": 1380,
+      "last_line": 1380,
+      "sha256": "62b29993bd8f0bfe1aa26e2c666082b61c31b9c5aa5984c85ba19f04012deb16",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "client/ports/oshi7.",
+        "docs/client-snapshots-118.md"
+      ]
+    },
+    {
+      "heading": "Development119 snapshot6 bootstrap \u2014 2026-10-28",
+      "first_line": 1385,
+      "last_line": 1385,
+      "sha256": "e367f317a4e6fcb92d54319d83e7049122744d85cd032aca44629b62076eb7b6",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-snapshot6-jna-119.md."
+      ]
+    },
+    {
+      "heading": "119 release acceptance \u2014 2026-10-28",
+      "first_line": 1390,
+      "last_line": 1390,
+      "sha256": "b0444a4c510cfb72e12f0c910070a5fdc927492fa6cf43cc7ce6a6baf03cf822",
+      "disposition": "Historical exact-build authorization/evidence; current release and preservation policies retained",
+      "current_guidance": [
+        "AGENTS.md#acceptance-history-and-releases",
+        "docs/maintainer-constraints.md#current-candidate-and-deferred-goals"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "119 release acceptance \u2014 2026-10-28",
+      "first_line": 1392,
+      "last_line": 1392,
+      "sha256": "9363cc041c7115762ad841c862f3354b3434733e8b88fe008a5e26089d15ef55",
+      "disposition": "Historical exact-build authorization/evidence; current release and preservation policies retained",
+      "current_guidance": [
+        "AGENTS.md#acceptance-history-and-releases",
+        "docs/maintainer-constraints.md#current-candidate-and-deferred-goals"
+      ],
+      "original_technical_references": [
+        "docs/validation/client119-store-publication-2026-10-28.json."
+      ]
+    },
+    {
+      "heading": "Approved application authentication \u2014 2026-10-29",
+      "first_line": 1397,
+      "last_line": 1397,
+      "sha256": "082a6d5b105923b8470cb5ccb836d9ea33dea7d741ea23079643748cae719e08",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-auth-approved-2026-10-29.md."
+      ]
+    },
+    {
+      "heading": "120 approved-auth test app \u2014 2026-10-29",
+      "first_line": 1402,
+      "last_line": 1402,
+      "sha256": "63f10ed3e06e5a32d55585e62fb77f32b605f92b7195fb4c72e6e39074e718cd",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/validation/client120-approved-auth-build-2026-10-29.json."
+      ]
+    },
+    {
+      "heading": "120 release authorization \u2014 2026-10-29",
+      "first_line": 1407,
+      "last_line": 1407,
+      "sha256": "a57f4538472bca63c055c2ca821e940e46aeb8eede30950578d7fa067fb06ffd",
+      "disposition": "Historical exact-build authorization/evidence; current release and preservation policies retained",
+      "current_guidance": [
+        "AGENTS.md#acceptance-history-and-releases",
+        "docs/maintainer-constraints.md#current-candidate-and-deferred-goals"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "120 release authorization \u2014 2026-10-29",
+      "first_line": 1409,
+      "last_line": 1409,
+      "sha256": "21913b8f62fe62c579b519d9ff869ef90148968515f99b19a7e9f08e83f87b2d",
+      "disposition": "Historical exact-build authorization/evidence; current release and preservation policies retained",
+      "current_guidance": [
+        "AGENTS.md#acceptance-history-and-releases",
+        "docs/maintainer-constraints.md#current-candidate-and-deferred-goals"
+      ],
+      "original_technical_references": [
+        "docs/validation/client120-store-publication-2026-10-29.json."
+      ]
+    },
+    {
+      "heading": "Development121 color themes and uniform Settings \u2014 2026-10-29",
+      "first_line": 1413,
+      "last_line": 1421,
+      "sha256": "2362c73354189f767853c6b2e9a6d4e86ee2d90a26532ccc6cd120608e24f3bf",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-themes-cursor-121.md."
+      ]
+    },
+    {
+      "heading": "121 release authorization \u2014 2026-10-29",
+      "first_line": 1426,
+      "last_line": 1433,
+      "sha256": "fb7197819b9d1f7ffe0efd80c3008b9974d5ae9ea0c903b121391e9ed23afc08",
+      "disposition": "Historical exact-build authorization/evidence; current release and preservation policies retained",
+      "current_guidance": [
+        "AGENTS.md#acceptance-history-and-releases",
+        "docs/maintainer-constraints.md#current-candidate-and-deferred-goals"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "121 release authorization \u2014 2026-10-29",
+      "first_line": 1435,
+      "last_line": 1439,
+      "sha256": "01b52ebed89922032ab12eb8a02df9a2887e9cef7efe68bd37d40cc1f797e6dd",
+      "disposition": "Historical exact-build authorization/evidence; current release and preservation policies retained",
+      "current_guidance": [
+        "AGENTS.md#acceptance-history-and-releases",
+        "docs/maintainer-constraints.md#current-candidate-and-deferred-goals"
+      ],
+      "original_technical_references": [
+        "docs/validation/client121-store-publication-2026-10-29.json."
+      ]
+    },
+    {
+      "heading": "Development122 original26.2 GLFW integration \u2014 2026-10-29",
+      "first_line": 1443,
+      "last_line": 1453,
+      "sha256": "9c6e7c320b34a9c5016bb68a1fa62d225ea86b029039619784fc5f47f06192f1",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-26.2-glfw-122.md."
+      ]
+    },
+    {
+      "heading": "Accepted26.4snapshot presentation \u2014 2026-10-29",
+      "first_line": 1458,
+      "last_line": 1463,
+      "sha256": "76181568cf7c8de734a5e592cea747dcf916b3ad8453db708b9ca6e313e99f32",
+      "disposition": "Historical exact-build authorization/evidence; current release and preservation policies retained",
+      "current_guidance": [
+        "AGENTS.md#acceptance-history-and-releases",
+        "docs/maintainer-constraints.md#current-candidate-and-deferred-goals"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "123 observed26.2callback repair \u2014 2026-10-29",
+      "first_line": 1467,
+      "last_line": 1475,
+      "sha256": "dbc0abcb9fef5411df1ea0bdc7bb2d9a6fb5e66dfdd0c565eb516a9dcb46b962",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-26.2-callbacks-123.md"
+      ]
+    },
+    {
+      "heading": "124 observed26.2Vulkan ownership repair \u2014 2026-10-29",
+      "first_line": 1479,
+      "last_line": 1487,
+      "sha256": "888221ae186d50e5d8760331d73227761f9ab82d0415cc685c321b64990db9c9",
+      "disposition": "Current operating policy consolidated; superseded layout/branch instructions resolved",
+      "current_guidance": [
+        "AGENTS.md#scope-and-publication",
+        "AGENTS.md#checks-and-build-discipline"
+      ],
+      "original_technical_references": [
+        "docs/client-26.2-vulkan-handoff-124.md"
+      ]
+    },
+    {
+      "heading": "125Fabric26.2native-buffer pressure \u2014 2026-10-29",
+      "first_line": 1491,
+      "last_line": 1500,
+      "sha256": "1c71ce208976ba2d4a6620b613ab334a8e4d9ea66fdb77ea3926f771182382ea",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-fabric-native-scratch-125.md."
+      ]
+    },
+    {
+      "heading": "126 Fabric26.2 verifier pressure \u2014 2026-10-29",
+      "first_line": 1504,
+      "last_line": 1511,
+      "sha256": "cc0a87c9371394b83771d29b826b7589bdb9a6360921c9413d00e23fa8154732",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-fabric-verifier-126.md."
+      ]
+    },
+    {
+      "heading": "127 Fabric26.2 variable verifier buffers \u2014 2026-10-29",
+      "first_line": 1515,
+      "last_line": 1521,
+      "sha256": "566ee9bd254c01c5cff2f05587eacacc39ed34429ed735b5ea49456586ab96c2",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-fabric-verifier-127.md"
+      ]
+    },
+    {
+      "heading": "128 Fabric26.2 SDL lock initialization \u2014 2026-10-29",
+      "first_line": 1525,
+      "last_line": 1532,
+      "sha256": "060d9f0b63d902cac4c4818507ec79ce0ca2e017cb6d8cc777cf2eb774d9f5c8",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-fabric-sdl-locks-128.md."
+      ]
+    },
+    {
+      "heading": "129 Fabric26.2 unreported native exit \u2014 2026-10-29",
+      "first_line": 1536,
+      "last_line": 1542,
+      "sha256": "3963931dbe2f7b8d268c6c4fd2f1c659e396fa4cc3ca38327e1011c3bd80f5df",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-fabric-startup-diagnostics-129.md."
+      ]
+    },
+    {
+      "heading": "130 identified compiler-TLS abort \u2014 2026-10-29",
+      "first_line": 1546,
+      "last_line": 1553,
+      "sha256": "8f5bb2c44e6950502f51aaea3ce5717a5f97c69acaeed1373a9862a219c778c8",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-fabric-emutls-130.md"
+      ]
+    },
+    {
+      "heading": "131 SDL native synchronization reserve \u2014 2026-10-29",
+      "first_line": 1557,
+      "last_line": 1564,
+      "sha256": "6f4f0d6cb72b440fbc34924a5a3f3f3643a586bdd6f9bc616e65298c264492b7",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-fabric-sdl-sync-131.md."
+      ]
+    },
+    {
+      "heading": "132 Mesa option strings \u2014 2026-10-29",
+      "first_line": 1568,
+      "last_line": 1575,
+      "sha256": "99dbd709080ed0136f85e4a58258f83a4000dedfdfea9d83c5738faa49863d33",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-fabric-mesa-strings-132.md."
+      ]
+    },
+    {
+      "heading": "133 GLFW mutex lease \u2014 2026-10-29",
+      "first_line": 1579,
+      "last_line": 1585,
+      "sha256": "bee1f3ce96756bfc2d3cced6a3f09cb5cae2d15faa9d2022eebfc42670d98bd0",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-fabric-glfw-mutex-133.md"
+      ]
+    },
+    {
+      "heading": "134 RADV queue conditions \u2014 2026-10-29",
+      "first_line": 1589,
+      "last_line": 1597,
+      "sha256": "7bc2cffb89afe2f242a2ab037026431602df07705046c3f300551045fc92ead6",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-fabric-radv-conditions-134.md."
+      ]
+    },
+    {
+      "heading": "135 original native C++ throw capture \u2014 2026-10-29",
+      "first_line": 1601,
+      "last_line": 1608,
+      "sha256": "a33c80b7ce308395ae42421e81782f1c51cc3aae8da0907282d2a2fc0b3c544f",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-fabric-native-throw-135.md"
+      ]
+    },
+    {
+      "heading": "136 shader compiler initialization locks \u2014 2026-10-29",
+      "first_line": 1612,
+      "last_line": 1620,
+      "sha256": "162cbe0dfbe1c88c5e2ef71c3ef1e619cd29361d4fe1da691b99af9e2f8c9dfa",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-fabric-shaderc-locks-136.md"
+      ]
+    },
+    {
+      "heading": "137 monotonic RADV timeline conditions \u2014 2026-10-29",
+      "first_line": 1624,
+      "last_line": 1632,
+      "sha256": "ab4b151e95361001dd946176592850ccb0b782e3a05271dda0f7e7b0e310d01c",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-fabric-monotonic-137.md."
+      ]
+    },
+    {
+      "heading": "138 remaining mutex caller diagnostic \u2014 2026-10-29",
+      "first_line": 1636,
+      "last_line": 1644,
+      "sha256": "2e5e97e48809cf1ace974aa5236e8b6b3bd948fcf3a5aa44e8b39ef3a09b94b7",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-fabric-mutex-caller-138.md."
+      ]
+    },
+    {
+      "heading": "139 VMA inline native lock hooks \u2014 2026-10-29",
+      "first_line": 1648,
+      "last_line": 1657,
+      "sha256": "a55941a6aebbc4a8619821912993e4fcd3a590ffc862262b48c01c3a4edbad72",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-fabric-vma-locks-139.md."
+      ]
+    },
+    {
+      "heading": "140 pre-JVM presentation worker and RADV mutex reserve \u2014 2026-10-29",
+      "first_line": 1661,
+      "last_line": 1674,
+      "sha256": "a3de4f4165ba6f99496d593df9635a4ab21cb1d3b53c6a659b635b498f70be4e",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-fabric-present-reserve-140.md."
+      ]
+    },
+    {
+      "heading": "141 runtime network conversion scratch integration \u2014 2026-10-29",
+      "first_line": 1678,
+      "last_line": 1688,
+      "sha256": "733b88ad643dbee5ced36754f10808b1534ae60136a1b0dab18fb35aa066386c",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-fabric-network-scratch-141.md."
+      ]
+    },
+    {
+      "heading": "142 opt-in expanded HotSpot synchronization integration \u2014 2026-10-29",
+      "first_line": 1692,
+      "last_line": 1702,
+      "sha256": "a61644765d7c717c8ca2161512575c56746c1a2f274106eec808b5ba65631dfa",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-fabric-monitor-reserve-142.md."
+      ]
+    },
+    {
+      "heading": "143 unreported native exit diagnostics \u2014 2026-10-29",
+      "first_line": 1706,
+      "last_line": 1715,
+      "sha256": "fb2c5fe004307e1080be5cd16f07ec672436f2225df0a27b13a8a147767aa8a5",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-fabric-native-exit-diagnostics-143.md."
+      ]
+    },
+    {
+      "heading": "144 native library-name pressure integration/menu feedback \u2014 2026-10-29",
+      "first_line": 1719,
+      "last_line": 1729,
+      "sha256": "14b3125d3d5042dda2fa9d4e489054d34b7f21e1713367c2e6919099aa29508f",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-fabric-library-names-144.md."
+      ]
+    },
+    {
+      "heading": "145 audio lock pressure and bounded input/present observations \u2014 2026-10-29",
+      "first_line": 1733,
+      "last_line": 1744,
+      "sha256": "99022962118042c5f0f7dcb9e14a8c300a64a7da405f5a999fc8b86e2343060b",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-fabric-audio-input-145.md."
+      ]
+    },
+    {
+      "heading": "146 OpenAL Device StateLock \u2014 2026-10-29",
+      "first_line": 1748,
+      "last_line": 1757,
+      "sha256": "8e07971f9d5f351b23d2060ccd86b64f36c6fc9fed08df71029a923a4a33583e",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-fabric-device-state-146.md."
+      ]
+    },
+    {
+      "heading": "147 OpenAL HRTF locks \u2014 2026-10-29",
+      "first_line": 1761,
+      "last_line": 1770,
+      "sha256": "412a04f6a7e3b11737e1e638b1bfe72db86ef6af17fbba98fb9b8b88993c02c4",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-fabric-hrtf-locks-147.md."
+      ]
+    },
+    {
+      "heading": "148 OpenAL data discovery lock \u2014 2026-10-29",
+      "first_line": 1774,
+      "last_line": 1782,
+      "sha256": "74861c0208c966448880d97ed703be7377bf9b9e180578b9e161241e6c447d4c",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-fabric-data-search-148.md."
+      ]
+    },
+    {
+      "heading": "149 Reserved OpenAL mixer workers \u2014 2026-10-29",
+      "first_line": 1786,
+      "last_line": 1793,
+      "sha256": "59b7a36646f548774751b3af9f48255966ac0c11c20d0bd20913c3862dc419de",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-fabric-audio-workers-149.md."
+      ]
+    },
+    {
+      "heading": "150 OpenAL Context locks and event workers \u2014 2026-10-29",
+      "first_line": 1797,
+      "last_line": 1807,
+      "sha256": "1044c20711ab438d892cba775426dbe032980d6b4637ef4b2bba1144fe840926",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-fabric-context-locks-150.md."
+      ]
+    },
+    {
+      "heading": "153 release authorization \u2014 2026-10-29",
+      "first_line": 1811,
+      "last_line": 1818,
+      "sha256": "6312149c0cdc9ee964e17681e11b6ecd4a196d0e0fc662518c4b75edc78cc7e1",
+      "disposition": "Historical exact-build authorization/evidence; current release and preservation policies retained",
+      "current_guidance": [
+        "AGENTS.md#acceptance-history-and-releases",
+        "docs/maintainer-constraints.md#current-candidate-and-deferred-goals"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "153 release authorization \u2014 2026-10-29",
+      "first_line": 1820,
+      "last_line": 1824,
+      "sha256": "d3c3323cef71ded1575d5604b65c3a005d82045c068b174694fd6b03809b4ee2",
+      "disposition": "Historical exact-build authorization/evidence; current release and preservation policies retained",
+      "current_guidance": [
+        "AGENTS.md#acceptance-history-and-releases",
+        "docs/maintainer-constraints.md#current-candidate-and-deferred-goals"
+      ],
+      "original_technical_references": [
+        "docs/validation/client153-store-publication-2026-10-29.json."
+      ]
+    },
+    {
+      "heading": "Source history migration \u2014 2026-10-30",
+      "first_line": 1828,
+      "last_line": 1828,
+      "sha256": "e0ba281ca60efa1b2bd3125c3268e4af4b1b956f2fa44fb780da2b4f5b76a550",
+      "disposition": "Current operating policy consolidated; superseded layout/branch instructions resolved",
+      "current_guidance": [
+        "AGENTS.md#scope-and-publication",
+        "AGENTS.md#checks-and-build-discipline"
+      ],
+      "original_technical_references": [
+        "docs/source-organization.md"
+      ]
+    },
+    {
+      "heading": "Explicit release approval gate \u2014 2026-10-30",
+      "first_line": 1832,
+      "last_line": 1832,
+      "sha256": "1429d74f97c828ebcbfc687306cd3fee5c77f379739ca99903b88c866c336c22",
+      "disposition": "Historical exact-build authorization/evidence; current release and preservation policies retained",
+      "current_guidance": [
+        "AGENTS.md#acceptance-history-and-releases",
+        "docs/maintainer-constraints.md#current-candidate-and-deferred-goals"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Exact158 publication authorization \u2014 2026-10-30",
+      "first_line": 1836,
+      "last_line": 1836,
+      "sha256": "cc64fc571a33549a5da61afe4a87308a5dc7bcf7c9659c581f17f34705a57a16",
+      "disposition": "Historical exact-build authorization/evidence; current release and preservation policies retained",
+      "current_guidance": [
+        "AGENTS.md#acceptance-history-and-releases",
+        "docs/maintainer-constraints.md#current-candidate-and-deferred-goals"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "164 scoped Controlify SDL event frontend \u2014 2026-10-30",
+      "first_line": 1840,
+      "last_line": 1850,
+      "sha256": "c62bd51fb75567a29d4da3cf3af763719e4a4ad57a3d163ceb9b83aba80986f3",
+      "disposition": "Current operating policy consolidated; superseded layout/branch instructions resolved",
+      "current_guidance": [
+        "AGENTS.md#scope-and-publication",
+        "AGENTS.md#checks-and-build-discipline"
+      ],
+      "original_technical_references": [
+        "docs/client-controlify-event-isolation-164.md."
+      ]
+    },
+    {
+      "heading": "165 Controlify explicit FFM handle \u2014 2026-10-30",
+      "first_line": 1854,
+      "last_line": 1861,
+      "sha256": "50d67ac95a49338eb266ad1c1948bfdde3987f2184e39bc582c14cb34bde1ca8",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-controlify-lookup-165.md."
+      ]
+    },
+    {
+      "heading": "166 existing FFM path and target preflight \u2014 2026-10-30",
+      "first_line": 1865,
+      "last_line": 1873,
+      "sha256": "b06e940978e55823f021c7fe90e01ace410be382762c43c6820e915a3d91959f",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-controlify-path-166.md."
+      ]
+    },
+    {
+      "heading": "167 launcher desktop input \u2014 2026-10-30",
+      "first_line": 1877,
+      "last_line": 1885,
+      "sha256": "1dae6331c12b3799d345b4154d57f86ca5f751f98939e9a675940357e4e0be09",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-launcher-desktop-167.md."
+      ]
+    },
+    {
+      "heading": "Exact167 release authorization \u2014 2026-10-30",
+      "first_line": 1889,
+      "last_line": 1897,
+      "sha256": "09bd536f4f14d8ca1389a622f9f147f2eae4f1bfdcf1df839c40b2857e94ebe5",
+      "disposition": "Historical exact-build authorization/evidence; current release and preservation policies retained",
+      "current_guidance": [
+        "AGENTS.md#acceptance-history-and-releases",
+        "docs/maintainer-constraints.md#current-candidate-and-deferred-goals"
+      ],
+      "original_technical_references": []
+    },
+    {
+      "heading": "Exact167 release authorization \u2014 2026-10-30",
+      "first_line": 1899,
+      "last_line": 1903,
+      "sha256": "826eddc69097fe815ee53dfdbaaa6cde1424a9cc2efa1f893323c0f749ba635a",
+      "disposition": "Historical exact-build authorization/evidence; current release and preservation policies retained",
+      "current_guidance": [
+        "AGENTS.md#acceptance-history-and-releases",
+        "docs/maintainer-constraints.md#current-candidate-and-deferred-goals"
+      ],
+      "original_technical_references": [
+        "docs/validation/client167-store-publication-2026-10-30.json."
+      ]
+    },
+    {
+      "heading": "Portable host checks and CI workflow \u2014 2026-10-31",
+      "first_line": 1907,
+      "last_line": 1917,
+      "sha256": "2c1d7cec15ca8677192d3b7a354ea57a712e1bc000f4b37c480bb42cd6dffd63",
+      "disposition": "Current operating policy consolidated; superseded layout/branch instructions resolved",
+      "current_guidance": [
+        "AGENTS.md#scope-and-publication",
+        "AGENTS.md#checks-and-build-discipline"
+      ],
+      "original_technical_references": [
+        "docs/host-testing.md."
+      ]
+    },
+    {
+      "heading": "Portable host checks and CI workflow \u2014 2026-10-31",
+      "first_line": 1919,
+      "last_line": 1931,
+      "sha256": "70ba8f023440ce7d41c39daeb86d34ce6407e7734558d78a7287f562b1c40b94",
+      "disposition": "Current operating policy consolidated; superseded layout/branch instructions resolved",
+      "current_guidance": [
+        "AGENTS.md#scope-and-publication",
+        "AGENTS.md#checks-and-build-discipline"
+      ],
+      "original_technical_references": [
+        "docs/host-test-inventory.md"
+      ]
+    },
+    {
+      "heading": "Shared bootstrap/audits and identity \u2014 2026-10-31",
+      "first_line": 1935,
+      "last_line": 1948,
+      "sha256": "52e7aa480a34a84deebaf46c8d855fad1bdc82da2c6d7ffd8fab73cc182b6f43",
+      "disposition": "Current operating policy consolidated; superseded layout/branch instructions resolved",
+      "current_guidance": [
+        "AGENTS.md#scope-and-publication",
+        "AGENTS.md#checks-and-build-discipline"
+      ],
+      "original_technical_references": [
+        "docs/tooling-sharing.md."
+      ]
+    },
+    {
+      "heading": "168 shared-tooling console candidate \u2014 2026-10-31",
+      "first_line": 1952,
+      "last_line": 1960,
+      "sha256": "39201b94baf7dd522eaa67efb88d09f75cb0afdaab126e91dd34a46dd6625999",
+      "disposition": "Historical work order/evidence; still-effective compatibility contracts and unresolved obligations retained",
+      "current_guidance": [
+        "AGENTS.md#compatibility-privacy-and-follow-through",
+        "docs/maintainer-constraints.md"
+      ],
+      "original_technical_references": [
+        "docs/client-shared-tooling-test-168.md"
+      ]
+    }
+  ]
+}

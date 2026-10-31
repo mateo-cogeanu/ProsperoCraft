@@ -143,3 +143,10 @@ native checks, discovery overrides, CI boundaries and tooling inventory.
 Contributor tooling: [shared bootstrap, package audits and current identity](docs/tooling-sharing.md).
 
 Local development: [168 shared-tooling regression candidate](docs/client-shared-tooling-test-168.md) passes host/SDK/package/relink checks; exact PS5 validation remains pending. This is not a public binary release.
+
+## Contributing and security
+
+See [contribution and sanitized bug-reporting guidance](CONTRIBUTING.md),
+[private vulnerability reporting](SECURITY.md) and the [documentation index](docs/README.md).
+Historical launcher previews and maintainer work orders are preserved in the
+[indexed documentation archive](docs/documentation-history.md).

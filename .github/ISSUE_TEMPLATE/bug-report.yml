@@ -91,8 +91,10 @@ body:
   - type: textarea
     id: logs
     attributes:
-      label: Logs
+      label: Sanitized log excerpt
       description: |
+        Keep original reports local. Review and redact them before sharing a minimal excerpt: remove access/refresh tokens, device codes, authorization headers, account-store keys, personal paths and other personal data. Never attach raw report bundles or account/session/key files. For suspected vulnerabilities use the private reporting link in SECURITY.md, not a public issue.
+
         Over FTP, copy `/download0/probe-native-stderr.log`, `/download0/java25-exceptions.log` and `/download0/probe-session.txt`, plus the instance's `logs/latest.log` and any `crash-reports/` file. Collect them right after the problem, before reopening the app. With ProsperoCraft open, you can also download the reports from `http://<PS5-IP>:8765/`; the HTTP filenames are aliases for these files.
       render: shell
   - type: checkboxes
@@ -100,5 +102,5 @@ body:
     attributes:
       label: Privacy
       options:
-        - label: I removed access tokens, account or session files and other personal info from anything I attached.
+        - label: I removed access/refresh credentials, device codes, account-store keys, account/session files and other personal info from anything I attached.
           required: true

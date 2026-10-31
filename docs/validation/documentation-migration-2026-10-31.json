@@ -1,0 +1,1331 @@
+{
+  "date": "2026-10-31",
+  "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+  "archive_commit": "5b509375924ddf4664be3ab35087ce9f0c6dc96d",
+  "archive_manifest_sha256": "cb89ccd82d4a31daf66390f711107e5daffc84c3aec09f146146fea7f30bb5e9",
+  "archive_files": [
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "AGENTS.md",
+      "destination": "prosperocraft/_documentation/2026-10-31/AGENTS.md",
+      "sha256": "fd48c040b7acd34dec89d93491f86b4c1d7920eabb8055d1a7c722ff342cec89",
+      "bytes": 135365,
+      "git_mode": "100644"
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "LICENSE",
+      "destination": "prosperocraft/_documentation/2026-10-31/LICENSE",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "bytes": 35149,
+      "git_mode": "100644"
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "NOTICE",
+      "destination": "prosperocraft/_documentation/2026-10-31/NOTICE",
+      "sha256": "d17976ded413ab95705a32642464fa6e9578d175a1ab490651dbcf45d55a0046",
+      "bytes": 4300,
+      "git_mode": "100644"
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "assets/launcher-icons/UPSTREAM-LICENSE",
+      "destination": "prosperocraft/_documentation/2026-10-31/assets/launcher-icons/UPSTREAM-LICENSE",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "bytes": 35149,
+      "git_mode": "100644"
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/client-controls-081.md",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/client-controls-081.md",
+      "sha256": "e9ebe3dce318309adf243a1d3909ffd15cac74b9bef3a240c02a9208c346f1ac",
+      "bytes": 5950,
+      "git_mode": "100644"
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/client-instances-079.md",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/client-instances-079.md",
+      "sha256": "8eda9c812e7cfc2429ce0f2a195f84c4f254e901b4da654f09d85650b9450935",
+      "bytes": 5791,
+      "git_mode": "100644"
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/client-launcher-075.md",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/client-launcher-075.md",
+      "sha256": "e331a977dc4243d26387ddad27f5ad561b61ae7c43ed6106458eb5738595155f",
+      "bytes": 3575,
+      "git_mode": "100644"
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/client-launcher-076.md",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/client-launcher-076.md",
+      "sha256": "8f45a50d67788d9abb15ca8fef42971e6ea7650ff5b9c8818df1a11a942c6a87",
+      "bytes": 1156,
+      "git_mode": "100644"
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/client-launcher-082.md",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/client-launcher-082.md",
+      "sha256": "8ac4b84d7e4ed2dbdb0ca0513a69d5f0fd29550c0b593399a3f9ad8de1e485f2",
+      "bytes": 8332,
+      "git_mode": "100644"
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/client-motion-088.md",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/client-motion-088.md",
+      "sha256": "89dca68dba759617027a18b1add6d595f45e1f94972781ea58e92d831f9ad6bf",
+      "bytes": 5599,
+      "git_mode": "100644"
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/client-resolution-083.md",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/client-resolution-083.md",
+      "sha256": "d341e728b79deb53b196ce81c2038f3e69964d046330cfeae3286832ebc35824",
+      "bytes": 3325,
+      "git_mode": "100644"
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/client-shared-fixes-086.md",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/client-shared-fixes-086.md",
+      "sha256": "aca66bea8506becf139e3aa9dd4bbafcbed02311ebc89bf2a09d5de45e029ad7",
+      "bytes": 4962,
+      "git_mode": "100644"
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/client-toolkit-087.md",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/client-toolkit-087.md",
+      "sha256": "3e9f31a4484fd3ba68ab4674300e62967b9643e09472c920a16414b315c6fede",
+      "bytes": 10076,
+      "git_mode": "100644"
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/079/create.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/079/create.png",
+      "sha256": "462b6e9097eec061e00e39cdce5ff046ef7f82def7f527ad8f998a5ab269f2d6",
+      "bytes": 104459,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 079; not console evidence",
+      "references": [
+        "docs/client-instances-079.md"
+      ]
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/079/detail.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/079/detail.png",
+      "sha256": "9862d1e4eb5303a03da0e226c7dd13090dbd8ae65850310c94cc687308b0de9e",
+      "bytes": 103701,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 079; not console evidence",
+      "references": [
+        "docs/client-instances-079.md"
+      ]
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/079/edit.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/079/edit.png",
+      "sha256": "53b50849a1a37d7b5761335d4241c23da1a2b99e9c3944f6aab9eb539deeed53",
+      "bytes": 103608,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 079; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/079/empty.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/079/empty.png",
+      "sha256": "266f4b959d17768a26c7c64b88f0086bea3dd1c185d85c9ad5c25a08af019056",
+      "bytes": 96377,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 079; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/079/home.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/079/home.png",
+      "sha256": "a11682af6aa006cb0357077a96df59fd9388048eec70f9b2fa444038a7d18823",
+      "bytes": 118303,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 079; not console evidence",
+      "references": [
+        "docs/client-instances-079.md"
+      ]
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/079/keyboard.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/079/keyboard.png",
+      "sha256": "82a27dcaba227b825b98d71c9917cd1bb05e278229f0c7024c540ce3749daaea",
+      "bytes": 98607,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 079; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/079/settings.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/079/settings.png",
+      "sha256": "303f92fafd757d15e072c7774474cb89eb7521dbbf4b22121ff3729fe25b11a7",
+      "bytes": 115737,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 079; not console evidence",
+      "references": [
+        "docs/client-instances-079.md"
+      ]
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/079/signin.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/079/signin.png",
+      "sha256": "55232804ab946413176930715600305e0f35fe7b3fc1d9758f7c27a6aa0eee59",
+      "bytes": 105762,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 079; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/081/controls.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/081/controls.png",
+      "sha256": "a4d3eab2c98da020ac898dce055e700403cd27b4c750599481c75fa34603c1a8",
+      "bytes": 164330,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 081; not console evidence",
+      "references": [
+        "docs/client-controls-081.md"
+      ]
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/081/home.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/081/home.png",
+      "sha256": "4cf35013618b0e5d06c7fb8e8dda84264e507a32f1599c7b7a9d04d65d20d827",
+      "bytes": 107709,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 081; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/081/intro.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/081/intro.png",
+      "sha256": "d3237a8b06ed612437d27e9084664dd613a42f5f7148cb1b19ceaa3393223884",
+      "bytes": 110905,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 081; not console evidence",
+      "references": [
+        "docs/client-controls-081.md"
+      ]
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/081/pending.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/081/pending.png",
+      "sha256": "c141872e254b02ad14893615a5535cfa7033d385326d44e2f05cb84bec862c24",
+      "bytes": 95293,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 081; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/081/settings.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/081/settings.png",
+      "sha256": "9307274433fa88df8c87f852d894457c0fb1320fa47daf220bed37ab84ffc855",
+      "bytes": 111344,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 081; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/082/home.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/082/home.png",
+      "sha256": "61704354e779025e4cca126c9c5208cbe07b1cc6dd48b3050812dfa6c17c94b4",
+      "bytes": 108087,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 082; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/082/intro-checkbox.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/082/intro-checkbox.png",
+      "sha256": "abd8d39a097e5a72a55aa5cfa40dbd4129e74553f1c9a99df3ff71bf27444e0a",
+      "bytes": 114742,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 082; not console evidence",
+      "references": [
+        "docs/client-launcher-082.md"
+      ]
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/082/intro-unchecked.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/082/intro-unchecked.png",
+      "sha256": "2088b47da7912e646069271a0eb9bb4d08b5cc61640f0c77c2c67e151c5681ff",
+      "bytes": 114579,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 082; not console evidence",
+      "references": [
+        "docs/client-launcher-082.md"
+      ]
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/082/intro.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/082/intro.png",
+      "sha256": "68762080133f0757726b269ffdd200053a42067a963f03b2acf768c46b4a8998",
+      "bytes": 113891,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 082; not console evidence",
+      "references": [
+        "docs/client-launcher-082.md"
+      ]
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/082/settings.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/082/settings.png",
+      "sha256": "9dd09909f65d27a18ba8a8545651364fd88780955daec8bd9ffbe3dde0be67b4",
+      "bytes": 111748,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 082; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/083/settings-locked.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/083/settings-locked.png",
+      "sha256": "a1cfb38b99c9d70b1329ccdce0e05b902d510ef5b4a0f841c3ffcc7fa8342f1e",
+      "bytes": 119163,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 083; not console evidence",
+      "references": [
+        "docs/client-resolution-083.md"
+      ]
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/086/centered-topbar.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/086/centered-topbar.png",
+      "sha256": "4191b028a5018140ee81049439f09ea8ac069856483ab0af85e6663759c3fe50",
+      "bytes": 108728,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 086; not console evidence",
+      "references": [
+        "docs/client-shared-fixes-086.md"
+      ]
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/087/contact-sheet.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/087/contact-sheet.png",
+      "sha256": "bf23f54aa1675a27f233679b73a2458c9424ee4ed17ae0ea7bdbbd0ffd4c2fd2",
+      "bytes": 429780,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 087; not console evidence",
+      "references": [
+        "docs/client-toolkit-087.md"
+      ]
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/087/controls.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/087/controls.png",
+      "sha256": "5445c5ebd48cfe3e2e896b276b6e3efd6cd59bc895e235cf90dda0eaf055e55e",
+      "bytes": 206320,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 087; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/087/create.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/087/create.png",
+      "sha256": "ac8937b1e1aa8d0cfd01877407a7792e800fbda145d5e93bf3330ea87bfe6db6",
+      "bytes": 113925,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 087; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/087/delete-confirm.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/087/delete-confirm.png",
+      "sha256": "898a7b7b3ef6dbc6084697589412b656e2cb05a0e4de00d4faab691ab245f480",
+      "bytes": 105747,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 087; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/087/delete.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/087/delete.png",
+      "sha256": "59f2f4c082611911be3c083aae1bdd83fa7ef9c2671adf73a74cf9a527f0c923",
+      "bytes": 105786,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 087; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/087/detail.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/087/detail.png",
+      "sha256": "95dba3d5c2ceaaffb6399c2ffcb87bb52b1fa9b3b6116a00f2e1083b2dc85df1",
+      "bytes": 118866,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 087; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/087/edit.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/087/edit.png",
+      "sha256": "9b4cd2b0d58b8c6da0b4021b533caa600ff0a7fa12f1d6078b78df5ac76c15ea",
+      "bytes": 119117,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 087; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/087/empty.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/087/empty.png",
+      "sha256": "3167028c04d02832f82dc738c0d0fd1f2858965a572ef56ffd543e01bf926dd3",
+      "bytes": 102669,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 087; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/087/home.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/087/home.png",
+      "sha256": "af881aa6dd0b5c4d252b86081056896995393c4d1f77dcab5619550d1b7c02b4",
+      "bytes": 123753,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 087; not console evidence",
+      "references": [
+        "docs/client-toolkit-087.md"
+      ]
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/087/intro-checkbox.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/087/intro-checkbox.png",
+      "sha256": "e5f0668e2820dfa50fdedcb505c22cef90929aeee0a18060bc6076b41fad4869",
+      "bytes": 158503,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 087; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/087/intro-unchecked.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/087/intro-unchecked.png",
+      "sha256": "d81b53cdc2eee712e5ab6578d4e494f07c29787d9d7559e55518a92d0ba94a34",
+      "bytes": 158318,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 087; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/087/intro.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/087/intro.png",
+      "sha256": "ee572bef58bbe8162f1edfea4dc9e6ec30b6b6802902f21830670eb15d66b2a2",
+      "bytes": 162132,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 087; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/087/keyboard.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/087/keyboard.png",
+      "sha256": "f0adf33e2fdc4690ab46190142e890b49c73ad6dec83637815d283ee7b1ea809",
+      "bytes": 104207,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 087; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/087/offline-edit.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/087/offline-edit.png",
+      "sha256": "845ac1ce75e6ac48d30cf5ac90e4e441cdfc32275a6ce0ff2626c979c7ea5324",
+      "bytes": 123796,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 087; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/087/offline.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/087/offline.png",
+      "sha256": "b8271c4081f5af4c53281ed0c5b2fdd5dd9b397364142ff252a76d7b479a4da5",
+      "bytes": 118609,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 087; not console evidence",
+      "references": [
+        "docs/client-toolkit-087.md"
+      ]
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/087/pending.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/087/pending.png",
+      "sha256": "050da6eb380611750068f24ed7b746f9a3578318c4b639c06764e2ecab224303",
+      "bytes": 119946,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 087; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/087/settings.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/087/settings.png",
+      "sha256": "98191939807b6186afa279b95a70ab358042f23f2b6581127acc34c2cfc68259",
+      "bytes": 138579,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 087; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/087/signin.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/087/signin.png",
+      "sha256": "e8fbbffd249b1fb262e107edb2e3dd7ad2c70e7c3f79fc7fa75475bf3e3074ea",
+      "bytes": 129264,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 087; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/background-Aurora.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/background-Aurora.png",
+      "sha256": "3ff303574fa19de6955f5c9e0ca22b4da1c727976f50dfaa3b794e671b2d9865",
+      "bytes": 880005,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/background-Bokeh.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/background-Bokeh.png",
+      "sha256": "07e41391b103b0f3a46c2e285daa7af281a7fc072513b2be8a956d5288e8e5da",
+      "bytes": 547229,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/background-Dots.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/background-Dots.png",
+      "sha256": "7ecad7f6057e11b754b283b4034d244a4e446f76a15725591c09600da17e1c0c",
+      "bytes": 550013,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/background-Gradient.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/background-Gradient.png",
+      "sha256": "6b32852c943af4bec7b343c61e84d99ce3300b1da47b5a050e6b4d6235b2dba5",
+      "bytes": 854938,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/background-Grid.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/background-Grid.png",
+      "sha256": "d296d9fc448836e0fe424acb3ff6f356cbf0c850f2b98c2f6b59670aff1f7479",
+      "bytes": 677650,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/background-Paper.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/background-Paper.png",
+      "sha256": "55385d6c22d039a5a15c1cc0dae9fd3ad9f51768b66a07d640c029b7d8f1a18c",
+      "bytes": 1600478,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/background-Phosphor.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/background-Phosphor.png",
+      "sha256": "78ac58fc9291ccdfc7bc4f1e7c53e4168e4c044eaf5dfc7dd5cc369d7613f175",
+      "bytes": 942215,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/background-Stars.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/background-Stars.png",
+      "sha256": "35fdb4a7a85772b686c0ca5ba2aa950ef92c75d538228168d05c1c9a03f71729",
+      "bytes": 755012,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/background-Vista.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/background-Vista.png",
+      "sha256": "5d6c29fb6eca7c31005d620ecdfb39c0fd61b08f01437afc0ae83a9206714d6a",
+      "bytes": 613160,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/background-Waves.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/background-Waves.png",
+      "sha256": "76829ba2d0613ca6718d50ccc9ed50e57601ecb7f915c80abc44206d1156eef7",
+      "bytes": 576350,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/backgrounds.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/backgrounds.png",
+      "sha256": "36875bb865083cd021489c02506950ce5768546338ccd5751051bc134ceb65ba",
+      "bytes": 699912,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": [
+        "docs/client-motion-088.md"
+      ]
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/contact-sheet.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/contact-sheet.png",
+      "sha256": "a1a9910b4d071fce6dac973d44d5f5adb33585270a83e796a15198839678fc3b",
+      "bytes": 1293115,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": [
+        "docs/client-motion-088.md"
+      ]
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/controls.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/controls.png",
+      "sha256": "461601eea68c62f42c2c137fc26b81907ffb319865b885fcbaef6f0f48e74afb",
+      "bytes": 1201235,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/create.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/create.png",
+      "sha256": "13d90cdc9f140cf406a344c2809d78144b0ab6d6b0b38a28fd0a519972928b49",
+      "bytes": 834851,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/delete-confirm.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/delete-confirm.png",
+      "sha256": "483fb0e997e0561bd2d24b4aaf71386c03d5bb5bf4ab92cb361f977ac7af4e39",
+      "bytes": 526457,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/delete.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/delete.png",
+      "sha256": "3a591661f11f912322ca0ff685afccc60c9ce8c9c5fbe476f4cc05a3f75e0a2c",
+      "bytes": 524672,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/detail.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/detail.png",
+      "sha256": "e0e29f1a92e2bd25ba667db77d22f67e914a1cdf19abe0245acc9c0f212e4fa3",
+      "bytes": 836214,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/edit.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/edit.png",
+      "sha256": "58da7067116b9a0da788201458cceaac540dac4925e581a23407435d3417882c",
+      "bytes": 833122,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/empty.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/empty.png",
+      "sha256": "1d0e3e853e22f71c284f9143b7ce041b873756538060af2d2c09058d14ad1ec9",
+      "bytes": 734994,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/home.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/home.png",
+      "sha256": "61515677fa16a44a317ab185c920b97d73996a8d7aa7944cb79d18a176da13cd",
+      "bytes": 850736,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": [
+        "docs/client-motion-088.md"
+      ]
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/intro-checkbox.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/intro-checkbox.png",
+      "sha256": "390cdf45acf98f5ab006195f43be67c0808a492f921ec03940b4b84523b3f403",
+      "bytes": 765731,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/intro-unchecked.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/intro-unchecked.png",
+      "sha256": "3083abba85f2158b4b7174d85994df19c3718b9bfc1935ab16bc065d2e3d7b90",
+      "bytes": 765876,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/intro.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/intro.png",
+      "sha256": "f086c560f40fae24ff5272bfd8ef5fcd597ac5fd695c1d9aa1e1b78d07f10221",
+      "bytes": 765098,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/keyboard.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/keyboard.png",
+      "sha256": "71876f690e8d7dd0a3d20af6a97c87d9a093a43e88a22d9df5a377a06974a6a2",
+      "bytes": 779147,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/motion-frames.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/motion-frames.png",
+      "sha256": "5a24eb6dc11c7ceadb85bdc621acdb2c1133461e4eb457ec61f75c92020aa213",
+      "bytes": 676341,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/motion.webp",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/motion.webp",
+      "sha256": "7701e5678b4d70b3f9771df36a8c6ae2ec454a9df01411fbe93d209c4c2abc1f",
+      "bytes": 1137882,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": [
+        "docs/client-motion-088.md"
+      ]
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/offline-edit.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/offline-edit.png",
+      "sha256": "5434e90c90fe0e25a125e4be5fbecc2e62df2b4b02c779da6a2ce7a44e8fe1ec",
+      "bytes": 830195,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/offline.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/offline.png",
+      "sha256": "ebb504ff3bb0c9643680d86380aeca54e0358de8854cae596753f276c2289af9",
+      "bytes": 802249,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/pending.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/pending.png",
+      "sha256": "be0f983d60abbb8f69185db4dfe0941e5abe9af09b63543d078c194a30f23416",
+      "bytes": 853158,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/settings.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/settings.png",
+      "sha256": "6d8f3145721c33e4bcd5d78f9b3a87b9035fc6f445af24e54a80e3fb28a80d36",
+      "bytes": 863853,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/088/signin.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/088/signin.png",
+      "sha256": "453331507eb6cee6b3a278f89ab26ab8f6bafb28e84a960b098ba8bdf1ed9b33",
+      "bytes": 859283,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 088; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/089/settings.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/089/settings.png",
+      "sha256": "d4ff690d240c1900bb062a31b1aa07f718efffc7c1ffab0f4d68f5920b46c93c",
+      "bytes": 868701,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 089; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/091/account-saved.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/091/account-saved.png",
+      "sha256": "7bfe219a60e6acf2002114709a118ad00e021bd0682c14fe9acc39944a20e4b7",
+      "bytes": 878782,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 091; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/091/dropdown-icons.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/091/dropdown-icons.png",
+      "sha256": "d651b4927e8bdc69580849d9794a35889ee58fd6bd7bcdc75aaafc4b726a3765",
+      "bytes": 814843,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 091; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/091/dropdown-resolution.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/091/dropdown-resolution.png",
+      "sha256": "251dc6c0d7d22f31901a95176d68d11b1d4269d5a8d3ef4846d01047a02c4b29",
+      "bytes": 798638,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 091; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/091/dropdown-version.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/091/dropdown-version.png",
+      "sha256": "3859e0996c18b2103286818b83e8dbfe4ef7e0f6d4d63f5e9e043457f0d5fd11",
+      "bytes": 829364,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 091; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/091/home.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/091/home.png",
+      "sha256": "8e1a2475ad85ab8958f808dd2c61ed862742de8eaf2df060a5d5d0fb11d25638",
+      "bytes": 846760,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 091; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/091/settings.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/091/settings.png",
+      "sha256": "ced41d386d0e55cc9adaa1db3871b24bd752e49d54d25c357335c02dbbddd7c4",
+      "bytes": 870642,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 091; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/091/signin.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/091/signin.png",
+      "sha256": "85c40ff5e6a23cbbb7ba4bc12e12cd28e253910617d37c79e76de7a718202d06",
+      "bytes": 848026,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 091; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/092/dropdown-version.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/092/dropdown-version.png",
+      "sha256": "29e5859b537a33f91cdad94ad00403b7915cb137d5932cf8ffe242e033528305",
+      "bytes": 514006,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 092; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/092/home.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/092/home.png",
+      "sha256": "f98d24021273cba213e0ddb432df867900f4ed42d10fa55f0c063cccb00a79f2",
+      "bytes": 585108,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 092; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/092/settings.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/092/settings.png",
+      "sha256": "19cd5aa48b0b4969901015f84d9c18f9b6648c28b06d3631e6af63b2224917c8",
+      "bytes": 568594,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 092; not console evidence",
+      "references": []
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/home-076.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/home-076.png",
+      "sha256": "8f7757f8effd6da4f13af7ffdf256ca5670fec6cd572ae5bc0c68f5171e96840",
+      "bytes": 154869,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 076; not console evidence",
+      "references": [
+        "docs/client-launcher-076.md"
+      ]
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/home.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/home.png",
+      "sha256": "dc5595e92d0d840e59c992ca45ca3decfe9ca5fe42ffc283c021c20175d4a08b",
+      "bytes": 147920,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 075; not console evidence",
+      "references": [
+        "docs/client-launcher-075.md"
+      ]
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/launcher/signin.png",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/launcher/signin.png",
+      "sha256": "f74fe4307550ef4c32ef884884105312a5894ba7ce52337a43b7c6d85558bd0b",
+      "bytes": 147250,
+      "git_mode": "100644",
+      "build_context": "Historical launcher host preview, development 075; not console evidence",
+      "references": [
+        "docs/client-launcher-075.md"
+      ]
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/validation/client075-launcher-build-2026-10-26.json",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/validation/client075-launcher-build-2026-10-26.json",
+      "sha256": "0b75f20629c4f5301d65fcd365ca5f72414233c0df2e7669be1db84113c0c776",
+      "bytes": 1587,
+      "git_mode": "100644"
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/validation/client076-branding-build-2026-10-26.json",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/validation/client076-branding-build-2026-10-26.json",
+      "sha256": "140841956383edc4311fbaf8eff6d1e97a93369eb002c1cdc5eb7726d288ef3d",
+      "bytes": 1612,
+      "git_mode": "100644"
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/validation/client079-instances-build-2026-10-26.json",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/validation/client079-instances-build-2026-10-26.json",
+      "sha256": "c199317788d9a0929461d82e03381b6ae73a963b4c3db9bc9b70d02dde799b5d",
+      "bytes": 3583,
+      "git_mode": "100644"
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/validation/client081-controls-build-2026-10-26.json",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/validation/client081-controls-build-2026-10-26.json",
+      "sha256": "e5280b0983bced6f2a91b46dd3b249ef7a69e3829f84c25fff3b8d6cf9bb26ae",
+      "bytes": 3668,
+      "git_mode": "100644"
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/validation/client082-console-confirmation-2026-10-26.json",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/validation/client082-console-confirmation-2026-10-26.json",
+      "sha256": "8f96b07c6832c7af25e7f7c7a00e725989916d7372110a634296c2623e68e3ac",
+      "bytes": 3136,
+      "git_mode": "100644"
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/validation/client082-launcher-build-2026-10-26.json",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/validation/client082-launcher-build-2026-10-26.json",
+      "sha256": "4142a3a86e0d85e5e10977cd1818e1ace7661d9150729957c714f106b4fe9db6",
+      "bytes": 5429,
+      "git_mode": "100644"
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/validation/client083-1080p-build-2026-10-26.json",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/validation/client083-1080p-build-2026-10-26.json",
+      "sha256": "8f6faeb6a14e2833ffc6660c5cd2f6a1b3904fe7c1d495dbdc9f4d3761326b32",
+      "bytes": 4061,
+      "git_mode": "100644"
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/validation/client087-toolkit-build-2026-10-27.json",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/validation/client087-toolkit-build-2026-10-27.json",
+      "sha256": "117aedcfcb497f45fb6309408a09c7b43acf81521aff2b5c025bbdcf97bf9ac5",
+      "bytes": 7524,
+      "git_mode": "100644"
+    },
+    {
+      "source_repository": "https://github.com/mateo-cogeanu/ProsperoCraft",
+      "source_commit": "2762970c88756c6179f585bf018bf000994d5872",
+      "original_path": "docs/validation/client088-motion-build-2026-10-27.json",
+      "destination": "prosperocraft/_documentation/2026-10-31/docs/validation/client088-motion-build-2026-10-27.json",
+      "sha256": "b0b93fce78edcaaa9915d15b16db7f2a8776ecba15e27ea983fd92d7328e42fb",
+      "bytes": 5284,
+      "git_mode": "100644"
+    }
+  ],
+  "image_references": {
+    "docs/launcher/079/create.png": [
+      "docs/client-instances-079.md"
+    ],
+    "docs/launcher/079/detail.png": [
+      "docs/client-instances-079.md"
+    ],
+    "docs/launcher/079/edit.png": [],
+    "docs/launcher/079/empty.png": [],
+    "docs/launcher/079/home.png": [
+      "docs/client-instances-079.md"
+    ],
+    "docs/launcher/079/keyboard.png": [],
+    "docs/launcher/079/settings.png": [
+      "docs/client-instances-079.md"
+    ],
+    "docs/launcher/079/signin.png": [],
+    "docs/launcher/081/controls.png": [
+      "docs/client-controls-081.md"
+    ],
+    "docs/launcher/081/home.png": [],
+    "docs/launcher/081/intro.png": [
+      "docs/client-controls-081.md"
+    ],
+    "docs/launcher/081/pending.png": [],
+    "docs/launcher/081/settings.png": [],
+    "docs/launcher/082/home.png": [],
+    "docs/launcher/082/intro-checkbox.png": [
+      "docs/client-launcher-082.md"
+    ],
+    "docs/launcher/082/intro-unchecked.png": [
+      "docs/client-launcher-082.md"
+    ],
+    "docs/launcher/082/intro.png": [
+      "docs/client-launcher-082.md"
+    ],
+    "docs/launcher/082/settings.png": [],
+    "docs/launcher/083/settings-locked.png": [
+      "docs/client-resolution-083.md"
+    ],
+    "docs/launcher/086/centered-topbar.png": [
+      "docs/client-shared-fixes-086.md"
+    ],
+    "docs/launcher/087/contact-sheet.png": [
+      "docs/client-toolkit-087.md"
+    ],
+    "docs/launcher/087/controls.png": [],
+    "docs/launcher/087/create.png": [],
+    "docs/launcher/087/delete-confirm.png": [],
+    "docs/launcher/087/delete.png": [],
+    "docs/launcher/087/detail.png": [],
+    "docs/launcher/087/edit.png": [],
+    "docs/launcher/087/empty.png": [],
+    "docs/launcher/087/home.png": [
+      "docs/client-toolkit-087.md"
+    ],
+    "docs/launcher/087/intro-checkbox.png": [],
+    "docs/launcher/087/intro-unchecked.png": [],
+    "docs/launcher/087/intro.png": [],
+    "docs/launcher/087/keyboard.png": [],
+    "docs/launcher/087/offline-edit.png": [],
+    "docs/launcher/087/offline.png": [
+      "docs/client-toolkit-087.md"
+    ],
+    "docs/launcher/087/pending.png": [],
+    "docs/launcher/087/settings.png": [],
+    "docs/launcher/087/signin.png": [],
+    "docs/launcher/088/background-Aurora.png": [],
+    "docs/launcher/088/background-Bokeh.png": [],
+    "docs/launcher/088/background-Dots.png": [],
+    "docs/launcher/088/background-Gradient.png": [],
+    "docs/launcher/088/background-Grid.png": [],
+    "docs/launcher/088/background-Paper.png": [],
+    "docs/launcher/088/background-Phosphor.png": [],
+    "docs/launcher/088/background-Stars.png": [],
+    "docs/launcher/088/background-Vista.png": [],
+    "docs/launcher/088/background-Waves.png": [],
+    "docs/launcher/088/backgrounds.png": [
+      "docs/client-motion-088.md"
+    ],
+    "docs/launcher/088/contact-sheet.png": [
+      "docs/client-motion-088.md"
+    ],
+    "docs/launcher/088/controls.png": [],
+    "docs/launcher/088/create.png": [],
+    "docs/launcher/088/delete-confirm.png": [],
+    "docs/launcher/088/delete.png": [],
+    "docs/launcher/088/detail.png": [],
+    "docs/launcher/088/edit.png": [],
+    "docs/launcher/088/empty.png": [],
+    "docs/launcher/088/home.png": [
+      "docs/client-motion-088.md"
+    ],
+    "docs/launcher/088/intro-checkbox.png": [],
+    "docs/launcher/088/intro-unchecked.png": [],
+    "docs/launcher/088/intro.png": [],
+    "docs/launcher/088/keyboard.png": [],
+    "docs/launcher/088/motion-frames.png": [],
+    "docs/launcher/088/motion.webp": [
+      "docs/client-motion-088.md"
+    ],
+    "docs/launcher/088/offline-edit.png": [],
+    "docs/launcher/088/offline.png": [],
+    "docs/launcher/088/pending.png": [],
+    "docs/launcher/088/settings.png": [],
+    "docs/launcher/088/signin.png": [],
+    "docs/launcher/089/settings.png": [],
+    "docs/launcher/091/account-saved.png": [],
+    "docs/launcher/091/dropdown-icons.png": [],
+    "docs/launcher/091/dropdown-resolution.png": [],
+    "docs/launcher/091/dropdown-version.png": [],
+    "docs/launcher/091/home.png": [],
+    "docs/launcher/091/settings.png": [],
+    "docs/launcher/091/signin.png": [],
+    "docs/launcher/092/dropdown-version.png": [],
+    "docs/launcher/092/home.png": [],
+    "docs/launcher/092/settings.png": [],
+    "docs/launcher/home-076.png": [
+      "docs/client-launcher-076.md"
+    ],
+    "docs/launcher/home.png": [
+      "docs/client-launcher-075.md"
+    ],
+    "docs/launcher/signin.png": [
+      "docs/client-launcher-075.md"
+    ]
+  },
+  "classification": {
+    "historical_previews": 83,
+    "referenced_previews": 21,
+    "guides": 9,
+    "build_or_test_input_images": 0
+  },
+  "independent_verification": "Fresh network clone into a separate directory; complete archive verify.py and comparison of all105 files against original git objects; all83 active images compared before removal.",
+  "privacy_review": "Only tracked blobs from public source commit; visually reviewed all83 previews and metadata. Fixture OwnedPlayer and ABCD-EFGH confirmed in preview generator; no image metadata, personal account files, raw reports, local previews or caches included.",
+  "security_reporting": {
+    "previously_enabled": false,
+    "user_authorized_enablement": true,
+    "verified_enabled": true
+  },
+  "console": "Documentation only; no app rebuild/version, new console acceptance or release/Store action.168 validation remains pending.",
+  "runtime_inspected_commit": "f65e1b990aa1d1619be1c411aa2efae701869b63",
+  "unchanged_changelog_sha256": "35af712579de03fd2f9003f1cd026e120c78a326e84270517a45a6d06dca3e02",
+  "checks": {
+    "archive_independent_full_verifier": "PASS:32 original snapshots/3160 files;105 added files compared to source objects before removal",
+    "links": "PASS:1697 local references including heading fragments;580 exact pre-existing vendored omissions (522 media/58 other)",
+    "retained_frozen_validation_and_fixtures": "unchanged",
+    "changelog": "byte-identical",
+    "runtime_publication": "No runtime changes; source allowlist inspected and cannot recreate consumer docs",
+    "private_reporting": "API enabled:true verified after authorized PUT",
+    "application_build": "not needed; no packaging input/fixture changed",
+    "fast_host_lane": "PASS:14 required checks in13.0s; existing provisioned JDK25 and pinned host dependencies; local result, not console acceptance",
+    "diff_check": "PASS",
+    "removed_path_consumers": "No removed screenshot path in active scripts/tests/site config; no consumer sync generator exists. All83 remaining references in receipt only or pinned archive URLs.",
+    "clean_source_documentation": "PASS: separate source-only consumer clone with staged patch, no local caches; checker invoked from /tmp with independently fetched archive",
+    "checker_negative_controls": "PASS: new broken maintained link, reappearing archived screenshot and changed vendored exception source each rejected; clean rerun passed"
+  },
+  "runtime_security_source": "Development/java25/probe/log_share.hpp;serve/worker/start access and binding inspected",
+  "tracked_measurements": {
+    "scope": "All tracked docs/**, assets/** and root Markdown; excludes application source, caches and Git history",
+    "before_files": 663,
+    "before_bytes": 56858218,
+    "after_files": 589,
+    "after_bytes": 17800155,
+    "agents_before_bytes": 135365,
+    "agents_after_bytes": 8557,
+    "agents_before_lines": 1960,
+    "agents_after_lines": 129,
+    "reduction_bytes": 39058063
+  }
+}

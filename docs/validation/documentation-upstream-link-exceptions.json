@@ -1,0 +1,2351 @@
+{
+  "upstream": "https://github.com/mihawk-99/PS5_VKHomebrewUI/tree/2188642afbcc8d84d36149124f3d9e39dc1b1a05",
+  "baseline_consumer_commit": "2762970c88756c6179f585bf018bf000994d5872",
+  "reason": "Byte-preserved pinned upstream documentation references omitted sample/runtime/media files. No maintained project link is exempt. Media references were not counted by the older81-link audit; this checker includes Markdown and HTML image links.",
+  "source_sha256": {
+    "client/launcher/toolkit/README.md": "b6c2964a8c5fb66b822b215b92cd07579e6efc23c18ba082aa18b003b9b24c86",
+    "client/launcher/toolkit/docs/COMPONENTS.md": "0fa72b0f157b6ccfe94f201b1e42e2fd01082cc4de95e00dd8f154f5dfe4ed21",
+    "client/launcher/toolkit/docs/DESIGNS.md": "1a730ce11391ca8ff4ca179400042a165cb3b82d2b7b2a231c4258c94acbb992",
+    "client/launcher/toolkit/docs/THEMES.md": "c45e8fb406d56da26be70bb3f4450173f7a2c062f6a8f17557553fd8b9f4e421",
+    "client/launcher/toolkit/docs/components/actions.md": "be957323bbf98251912293c6a4e41f5fe208757465c2cbf2f5600e5375bf72d7",
+    "client/launcher/toolkit/docs/components/collections.md": "8f15c4a58c9eeea02c56aa8f4b00863ba345fffcbce6f57115d05f817b05f41a",
+    "client/launcher/toolkit/docs/components/data.md": "c4f299110f63e6dd91ed7260ae3bf552f2d8b2d902146568aaa6d17bcd19a062",
+    "client/launcher/toolkit/docs/components/entry.md": "39ebb6494a563f3196b395781bd117faad564473debcbf3a229405cbe689e6e6",
+    "client/launcher/toolkit/docs/components/forms.md": "b2f66f41851122b8fec3531a73ce3e8e8a2498caa6aafbab74e878c18f2c6545",
+    "client/launcher/toolkit/docs/components/game.md": "ecd1245f59c225331c4daaabbb7b90cfa2c391773685a7274267bcf86120c789",
+    "client/launcher/toolkit/docs/components/indicators.md": "7df35521b8c8ceaae3ee5cb1f2cd2516c1bffb7c4b67b7ce8c5e365488a100be",
+    "client/launcher/toolkit/docs/components/layout.md": "ade1fde420907dc5c54def908da78af8e4e658a08a154b432527b25a077158c3",
+    "client/launcher/toolkit/docs/components/lists.md": "3d9a97f55f5797013df9c2c00b6373cc24773d0d128fd888a26250a4222a2716",
+    "client/launcher/toolkit/docs/components/media.md": "0868d741f4a06732e7008160d88e4f4556015c57bad9a2269ccb5b2afc2f7281",
+    "client/launcher/toolkit/docs/components/navigation.md": "0020c44368387916e09ac39d9ca0bb0b16b64186a1e915fb563f0220824ab762",
+    "client/launcher/toolkit/docs/components/notifications.md": "4ccc5e836eb7f13cce23be1fbfc91083669af14fd6372aac0ab68b19dfe375b2",
+    "client/launcher/toolkit/docs/components/overlays.md": "0bd740b7ebe42a38a79c5c5e9a2ea456251d5e722a348a6bcdfc66c2353411c0",
+    "client/launcher/toolkit/docs/components/pickers.md": "0b41b265f605822cf041a8e30b1cba995b37a1d689a1b14a97751d69ab660e96",
+    "client/launcher/toolkit/docs/components/structure.md": "76d85e82e134d0896e9f2460bcb6b009ee29168f47f37f33604fda506909091c",
+    "client/launcher/toolkit/docs/platform/CONFIGURATION.md": "efab5bb6e8b457f44a5f6a408c2e881aa7eb4381896f39ef982fdf280b7047ab",
+    "client/launcher/toolkit/docs/platform/README.md": "052a27bacbbd2b05c8afab91cb2be7156291f462913193c4c355843ab0003839",
+    "client/launcher/toolkit/docs/platform/RUNTIME_SHIM.md": "8e208d393b5990f2182ec057646bcbc7123593d994a07d4fe51aa26a44d76df6"
+  },
+  "links": [
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/designs/aurora.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/designs/boot.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/designs/carousel.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/designs/components.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/designs/constellation.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/designs/dashboard.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/designs/editorial.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/designs/files.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/designs/hud.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/designs/inventory.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/designs/keyboard.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/designs/neon.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/designs/paper.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/designs/player.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/designs/radial.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/designs/settings.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/designs/store.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/designs/terminal.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/designs/themes.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/designs/toolbox.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/designs/trophies.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/switcher.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/acrylic.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/admin.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/ant.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/blueprint.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/brutal.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/candy.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/chakra.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/classic.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/clay.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/code.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/contrast.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/crisp.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/daisy.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/fresh.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/friendly.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/gloss.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/hazard.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/humane.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/layers.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/light.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/neutral.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/paper.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/pico.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/pill.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/pixel.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/sketch.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/soft.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/standard.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/tiles.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/README.md",
+      "target": "docs/media/themes/utility.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "../src/concepts/components/data_page.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "../src/concepts/components/layout_page.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "../src/concepts/components/lists_page.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-actions-accent.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-actions-compact.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-actions-menu.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-actions-tour.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-actions.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-actions.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-brutal-actions.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-brutal-collections.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-brutal-data.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-brutal-entry.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-brutal-forms.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-brutal-game.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-brutal-indicators.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-brutal-layout.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-brutal-lists.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-brutal-media.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-brutal-navigation.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-brutal-notifications.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-brutal-overlays.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-brutal-pickers.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-brutal-structure.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-classic.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-clay.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-collections-hero.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-collections-paged.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-collections-posters.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-collections-wheel.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-collections.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-collections.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-data-charts.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-data-plain.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-data-range.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-data.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-data.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-entry-flat.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-entry-numeric.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-entry-pin.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-entry-prompt.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-entry.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-entry.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-forms-compact.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-forms-help.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-forms-panel.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-forms-wide.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-forms.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-forms.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-game-inventory.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-game-nodes.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-game-pause.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-game-profiles.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-game.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-game.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-hazard.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-indicators-chunky.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-indicators-loaded.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-indicators-slim.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-indicators-status.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-indicators.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-indicators.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-layout-guides.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-layout-modal.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-layout-panes.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-layout-stacked.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-layout.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-layout.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-lists-bar.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-lists-fill.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-lists-glow.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-lists.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-lists.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-media-compact.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-media-loading.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-media-reader.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-media-zoom.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-media.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-media.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-navigation-boxed.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-navigation-menu.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-navigation-segmented.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-navigation-underline.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-navigation.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-navigation.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-notifications-accent.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-notifications-center.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-notifications-compact.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-notifications-progress.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-notifications-queue.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-notifications.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-notifications.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-overlays-bottom.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-overlays-compact.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-overlays-sheet.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-overlays-toasts.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-overlays.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-overlays.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-paper.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-pickers-compact.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-pickers-hsv.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-pickers-select.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-pickers.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-pickers.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-pico.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-pixel-actions.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-pixel-collections.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-pixel-data.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-pixel-entry.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-pixel-forms.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-pixel-game.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-pixel-indicators.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-pixel-layout.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-pixel-lists.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-pixel-media.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-pixel-navigation.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-pixel-notifications.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-pixel-overlays.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-pixel-pickers.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-pixel-structure.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-sketch-actions.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-sketch-collections.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-sketch-data.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-sketch-entry.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-sketch-forms.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-sketch-game.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-sketch-indicators.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-sketch-layout.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-sketch-lists.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-sketch-media.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-sketch-navigation.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-sketch-notifications.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-sketch-overlays.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-sketch-pickers.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-sketch-structure.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-structure-compact.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-structure-quick.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-structure-radial.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-structure-vertical.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-structure.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components-structure.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/COMPONENTS.md",
+      "target": "media/designs/components.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../src/concepts/aurora.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../src/concepts/boot.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../src/concepts/carousel.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../src/concepts/components.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../src/concepts/constellation.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../src/concepts/dashboard.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../src/concepts/editorial.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../src/concepts/files.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../src/concepts/hud.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../src/concepts/inventory.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../src/concepts/keyboard.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../src/concepts/neon.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../src/concepts/paper.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../src/concepts/player.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../src/concepts/radial.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../src/concepts/settings.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../src/concepts/store.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../src/concepts/terminal.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../src/concepts/themes.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../src/concepts/toolbox.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../src/concepts/trophies.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../tests/unit/aurora_test.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../tests/unit/boot_test.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../tests/unit/carousel_test.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../tests/unit/concepts_test.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../tests/unit/constellation_test.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../tests/unit/dashboard_test.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../tests/unit/editorial_test.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../tests/unit/files_test.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../tests/unit/hud_test.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../tests/unit/inventory_test.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../tests/unit/keyboard_test.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../tests/unit/neon_test.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../tests/unit/paper_test.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../tests/unit/player_test.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../tests/unit/radial_test.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../tests/unit/settings_test.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../tests/unit/store_test.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../tests/unit/terminal_test.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "../tests/unit/trophies_test.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/aurora-details.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/aurora-info.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/aurora-library.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/aurora-shelf.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/aurora.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/aurora.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/boot-ingame.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/boot-loading.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/boot-profiles.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/boot-ready.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/boot-title.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/boot.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/boot.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/carousel-details.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/carousel-end.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/carousel-scrub.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/carousel-settled.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/carousel.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/carousel.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-actions-accent.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-actions-compact.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-actions-menu.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-actions-tour.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-actions.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-brutal-actions.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-brutal-collections.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-brutal-data.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-brutal-entry.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-brutal-forms.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-brutal-game.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-brutal-indicators.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-brutal-layout.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-brutal-lists.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-brutal-media.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-brutal-navigation.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-brutal-notifications.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-brutal-overlays.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-brutal-pickers.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-brutal-structure.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-classic.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-clay.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-collections-hero.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-collections-paged.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-collections-posters.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-collections-wheel.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-collections.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-data-charts.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-data-plain.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-data-range.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-data.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-entry-flat.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-entry-numeric.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-entry-pin.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-entry-prompt.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-entry.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-forms-compact.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-forms-help.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-forms-panel.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-forms-wide.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-forms.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-game-inventory.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-game-nodes.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-game-pause.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-game-profiles.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-game.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-hazard.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-indicators-chunky.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-indicators-loaded.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-indicators-slim.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-indicators-status.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-indicators.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-layout-guides.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-layout-modal.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-layout-panes.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-layout-stacked.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-layout.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-lists-bar.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-lists-fill.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-lists-glow.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-lists.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-media-compact.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-media-loading.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-media-reader.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-media-zoom.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-media.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-navigation-boxed.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-navigation-menu.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-navigation-segmented.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-navigation-underline.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-navigation.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-notifications-accent.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-notifications-center.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-notifications-compact.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-notifications-progress.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-notifications-queue.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-notifications.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-overlays-bottom.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-overlays-compact.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-overlays-sheet.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-overlays-toasts.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-overlays.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-paper.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-pickers-compact.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-pickers-hsv.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-pickers-select.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-pickers.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-pico.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-pixel-actions.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-pixel-collections.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-pixel-data.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-pixel-entry.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-pixel-forms.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-pixel-game.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-pixel-indicators.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-pixel-layout.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-pixel-lists.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-pixel-media.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-pixel-navigation.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-pixel-notifications.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-pixel-overlays.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-pixel-pickers.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-pixel-structure.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-sketch-actions.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-sketch-collections.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-sketch-data.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-sketch-entry.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-sketch-forms.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-sketch-game.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-sketch-indicators.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-sketch-layout.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-sketch-lists.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-sketch-media.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-sketch-navigation.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-sketch-notifications.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-sketch-overlays.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-sketch-pickers.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-sketch-structure.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-structure-compact.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-structure-quick.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-structure-radial.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-structure-vertical.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components-structure.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/components.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/constellation-overview.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/constellation-refund.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/constellation-refusal.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/constellation-unlock.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/constellation.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/constellation.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/dashboard-bars.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/dashboard-expanding.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/dashboard-focus.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/dashboard-frames.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/dashboard-library.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/dashboard.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/dashboard.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/editorial-article.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/editorial-bookmark.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/editorial-continued.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/editorial-list-end.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/editorial-page-turn.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/editorial.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/editorial.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/files-copying.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/files-delete.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/files-details.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/files-menu.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/files-picker.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/files-rename.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/files-selection.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/files.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/files.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/hud-abilities.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/hud-down.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/hud-hit.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/hud-pause.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/hud-quit.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/hud.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/hud.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/inventory-carry.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/inventory-equip.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/inventory-sort.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/inventory-sorted.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/inventory-weapons.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/inventory.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/inventory.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/keyboard-empty.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/keyboard-shift.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/keyboard-summary.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/keyboard-typing.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/keyboard-welcome.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/keyboard.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/keyboard.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/neon-career.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/neon-garage.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/neon-go.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/neon-quit.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/neon-tracks.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/neon.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/neon.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/paper-details.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/paper-empty.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/paper-finished.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/paper-sorted.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/paper-travel.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/paper.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/paper.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/player-paused.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/player-queue.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/player-scrub.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/player-track-change.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/player-wide.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/player.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/player.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/radial-closed.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/radial-empty.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/radial-equip.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/radial-signals.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/radial-stick.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/radial.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/radial.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/settings-about.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/settings-audio.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/settings-controller.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/settings-display.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/settings-reset.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/settings.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/settings.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/store-cart.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/store-confirm.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/store-flight.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/store-product.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/store-purchased.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/store.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/store.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/terminal-archive.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/terminal-diagnostics.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/terminal-library.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/terminal-poweroff.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/terminal-shutdown.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/terminal.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/terminal.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/themes-dialog.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/themes.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/toolbox-board.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/toolbox-glass-set.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/toolbox.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/toolbox.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/trophies-cabinet.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/trophies-detail.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/trophies-earned.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/trophies-rarest.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/trophies-unlock.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/trophies.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/DESIGNS.md",
+      "target": "media/designs/trophies.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/acrylic.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/acrylic.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/admin.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/admin.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/ant.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/ant.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/blueprint.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/blueprint.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/brutal.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/brutal.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/candy.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/candy.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/chakra.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/chakra.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/classic.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/classic.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/clay.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/clay.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/code.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/code.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/contrast.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/contrast.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/crisp.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/crisp.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/daisy.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/daisy.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/fresh.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/fresh.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/friendly.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/friendly.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/gloss.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/gloss.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/hazard.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/hazard.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/humane.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/humane.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/layers.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/layers.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/light.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/light.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/neutral.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/neutral.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/paper.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/paper.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/pico.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/pico.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/pill.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/pill.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/pixel.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/pixel.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/sketch.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/sketch.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/soft.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/soft.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/standard.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/standard.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/tiles.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/tiles.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/utility.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/THEMES.md",
+      "target": "media/themes/utility.webp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/components/actions.md",
+      "target": "../media/designs/components-actions.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/components/collections.md",
+      "target": "../../src/concepts/components/collections_page.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/components/collections.md",
+      "target": "../../tests/unit/components_collections_test.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/components/collections.md",
+      "target": "../media/designs/components-collections.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/components/data.md",
+      "target": "../media/designs/components-data.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/components/entry.md",
+      "target": "../media/designs/components-entry.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/components/forms.md",
+      "target": "../media/designs/components-forms.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/components/game.md",
+      "target": "../media/designs/components-game.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/components/indicators.md",
+      "target": "../media/designs/components-indicators.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/components/layout.md",
+      "target": "../../src/concepts/components/layout_page.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/components/layout.md",
+      "target": "../../tests/unit/components_layout_test.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/components/layout.md",
+      "target": "../media/designs/components-layout.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/components/lists.md",
+      "target": "../../src/concepts/components/lists_page.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/components/lists.md",
+      "target": "../../tests/unit/components_list_test.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/components/lists.md",
+      "target": "../media/designs/components-lists.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/components/media.md",
+      "target": "../media/designs/components-media.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/components/navigation.md",
+      "target": "../media/designs/components-navigation.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/components/notifications.md",
+      "target": "../media/designs/components-notifications.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/components/overlays.md",
+      "target": "../media/designs/components-overlays.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/components/pickers.md",
+      "target": "../media/designs/components-pickers.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/components/structure.md",
+      "target": "../media/designs/components-structure.jpg"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/platform/CONFIGURATION.md",
+      "target": "../../sce_sys/param.json"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/platform/README.md",
+      "target": "../../src/platform/ps5/display_egl.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/platform/RUNTIME_SHIM.md",
+      "target": "../../runtime/libc.prx.sha256"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/platform/RUNTIME_SHIM.md",
+      "target": "../../tooling/native/libc_builder.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/platform/RUNTIME_SHIM.md",
+      "target": "../../tooling/native/runtime/api-surface.txt"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/platform/RUNTIME_SHIM.md",
+      "target": "../../tooling/native/runtime/imports.txt"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/platform/RUNTIME_SHIM.md",
+      "target": "../../tooling/native/self_container.cpp"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/platform/RUNTIME_SHIM.md",
+      "target": "../../tools/rebuild-libc.ps1"
+    },
+    {
+      "source": "client/launcher/toolkit/docs/platform/RUNTIME_SHIM.md",
+      "target": "../../tools/rebuild-libc.sh"
+    }
+  ]
+}
