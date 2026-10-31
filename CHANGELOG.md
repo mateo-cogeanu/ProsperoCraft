@@ -7,6 +7,8 @@
 
 - Implement an opt-in private Mesa state-tracker/Zink frontend, single-copy RADV closure, constant emulated GL TLS, genuine GLFW context hooks and explicit LWJGL procedure dispatch. Actual macOS lavapipe rendering/readback and original 26.1/26.1.1/26.1.2 capability-boundary tests pass;029 OSMesa remains. Local native-only180 tests context/readback/destruction, without presentation/JVM/game. [Test guide](docs/client-26.1-zink-native-180.md). Physical console acceptance and full launcher/game integration remain pending; no release/Store action.
 
+- User reports exact180 **Stage1 PASS**: native Zink/RADV contexts, guarded readback and destruction. Presentation, JVM integration and full game acceptance remain pending; preserve the tested ZIP unchanged.
+
 ## 01.000.179 — automatic microphone and simpler instance settings
 
 - Prepare the working system microphone automatically before every supported game launch; remove the launcher Microphone button, toggle and test page. Existing saved microphoneEnabled:false no longer blocks preparation. Use the controller's physical microphone mute button or PS5 system mute.

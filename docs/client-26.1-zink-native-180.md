@@ -6,6 +6,10 @@ dispatch are now implemented and exercised on the host. **Minecraft 26.1.x is
 still blocked in the production launcher.** No title/world/save or PS5 result
 follows from these component checks. No release or Store update is authorized.
 
+User reports **Stage1 PASS** for exact180. [Console receipt](validation/client180-console-stage1-2026-10-31.json)
+records the scoped result; raw run reports have not been independently retrieved.
+Presentation and JVM/game checks remain pending.
+
 ## First physical checkpoint
 
 Local candidate **PPSA99874 / 01.000.180** is a dedicated native context probe,
@@ -169,7 +173,7 @@ clean build source13ac084, package/ELF checksums and separate host/console scope
 The exact local ZIP is18,259,125bytes; SHA-256:
 `0cefa6f5faf8013a1c98b1eff0a2c7621bd523d0c24fd2737526312c919e4881`. No release/prerelease is created.
 
-Remaining work: physical stage1; positive kopper presentation/refresh/teardown;
+Remaining work: positive kopper presentation/refresh/teardown;
 JVM scoped one-copy/constructor/resident integration and package audit; ZINK
 receipts, Vanilla development labels/arguments and adapted GLFW precedence for
 every locked release, with Fabric26.1 blocked and Iris guarded; then exact-build

@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-31",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.180",
+  "source_commit": "13ac08462747f2cbef06df729f8c94c7f08f438d",
+  "package_sha256": "0cefa6f5faf8013a1c98b1eff0a2c7621bd523d0c24fd2737526312c919e4881",
+  "symbols_elf_sha256": "2030bcdb8591e0e3275421d8122b381a415ff29031a56d8ab70c2eade32bf674",
+  "combined_object_sha256": "e867e35672db13e6fe24b4279d861ba801e92fb18a3301cdda968d8690d96ceb",
+  "mesa_commit": "1ba9874f478657ccf6da72ce55f0260164cc0bd0",
+  "console_result": "USER-REPORTED STAGE1 PASS",
+  "user_statement": "Stage1 PASS",
+  "scope": "Three native GL3.3+ contexts on real Zink/RADV-PS5:192RGBA pixels,384guard bytes,unbind and context/final screen destruction",
+  "evidence": "User report for the exact candidate supplied in this chat; current-run raw reports not independently retrieved",
+  "run_id": null,
+  "runtime": "No JVM linked; native converter/libc/header inputs are pinned by the matching build record",
+  "build_record": "client180-zink-native-2026-10-31.json",
+  "not_established": [
+    "Presentation/refresh or launcher handoff",
+    "JVM/native coexistence or full Minecraft boot",
+    "Title/world/audio/save/reopen/relaunch for any26.1 release",
+    "Existing Vulkan game regressions or endurance"
+  ],
+  "next": "Stage2: genuine GLFW/SDL kopper presentation, visible animation and native ownership handoff; new exact candidate required",
+  "publication": "Source evidence only; no release/prerelease/Store authorization inferred",
+  "preservation": "Exact180ZIP, symbols and original build/host validation unchanged. Scoped probe pass is not formal full-game ALL PASS or archive-freeze authorization."
+}
