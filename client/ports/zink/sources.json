@@ -1,0 +1,13 @@
+{
+  "name": "Mesa Zink and RADV",
+  "version": "26.2.0",
+  "repository": "https://github.com/mihawk-99/PS5_Mesa",
+  "commit": "1ba9874f478657ccf6da72ce55f0260164cc0bd0",
+  "archive": {
+    "url": "https://codeload.github.com/mihawk-99/PS5_Mesa/tar.gz/1ba9874f478657ccf6da72ce55f0260164cc0bd0",
+    "size": 111234269,
+    "sha256": "703b2640316a13ddd7c7955a97cd24860f5e14ec4b891faba7c5ddafc7194b8d"
+  },
+  "license": "MIT for Mesa/Zink; retain each upstream file notice and separate dependency licenses",
+  "scope": "Phase A source pin only. Same Mesa pin as client/graphics/sources.json. No Zink build, resident group, new GL support or console acceptance yet. Preserve separate 029 OSMesa implementation."
+}

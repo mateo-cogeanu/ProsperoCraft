@@ -1,0 +1,294 @@
+{
+  "date": "2026-10-31",
+  "phase": "A: publisher/source/linkage research; native implementation not started",
+  "consumer_base": "719ca096d9fedd065809f983f9f84384d8abeabe",
+  "application_identity_unchanged": "01.000.179",
+  "manifest": {
+    "url": "https://piston-meta.mojang.com/mc/game/version_manifest_v2.json",
+    "sha256": "61ef339c58e297c25b69c67f533a6addc73732751f54b8eec88429c4395148e4",
+    "release_ids": [
+      "26.1",
+      "26.1.1",
+      "26.1.2"
+    ]
+  },
+  "local_host": {
+    "publisher_downloads": "PASS original metadata/client/dependencies/index integrity for each release; asset objects not requested",
+    "linkage_audit": {
+      "scope": "Host read-only linkage audit; no GL/context/PS5 execution",
+      "parent_inputs": [
+        {
+          "id": "org.jspecify:jspecify:1.0.0",
+          "sha256": "1fad6e6be7557781e4d33729d49ae1cdc8fdda6fe477bb0cc68ce351eafdfbab"
+        },
+        {
+          "id": "org.lwjgl:lwjgl-freetype:3.4.3",
+          "sha256": "b331b9d2a29c1b330c3887d33c14dab9d7eed3f763bb8f5ca559eec02d73f075"
+        },
+        {
+          "id": "org.lwjgl:lwjgl-jemalloc:3.4.3",
+          "sha256": "f34062b6489454f7e2c3bf5979e37667e62c7c85cd00f73760f441557cb1978a"
+        },
+        {
+          "id": "org.lwjgl:lwjgl-openal:3.4.3",
+          "sha256": "4a0049c8554d6890718fee76507572f2f9f8f3f6144d25d7d2ea76bccc2d9605"
+        },
+        {
+          "id": "org.lwjgl:lwjgl-opengl:3.4.3",
+          "sha256": "a92cf30f25b6fb6066f3508511f83c5c4fe2a0cff14fc2e7373bc1f6c726374f"
+        },
+        {
+          "id": "org.lwjgl:lwjgl-sdl:3.4.3",
+          "sha256": "dcb33abcbd946553176bb668be80d7adc60cb9d919ab5c71fb01fc51cacc4c8f"
+        },
+        {
+          "id": "org.lwjgl:lwjgl-shaderc:3.4.3",
+          "sha256": "82c7b5270d2c78458f5720c639459710c8f086ca050eea9ab0c44256fee7a626"
+        },
+        {
+          "id": "org.lwjgl:lwjgl-spvc:3.4.3",
+          "sha256": "d737eba8512caa2f53db7a8dbea4c08d9c3d94493bb0a244e6d64af95541f742"
+        },
+        {
+          "id": "org.lwjgl:lwjgl-stb:3.4.3",
+          "sha256": "544753f5e49c53580949b9f1fc341f0e434991303c93d5a428fbaafaacc2cd69"
+        },
+        {
+          "id": "org.lwjgl:lwjgl-vma:3.4.3",
+          "sha256": "254162ef94bd213663a417368902ea916d51e0e0fa3054d07ea0ce9a8b7ac9e6"
+        },
+        {
+          "id": "org.lwjgl:lwjgl-vulkan:3.4.3",
+          "sha256": "acdb40767775ed1223dc3b2a8c9d3ce740c9e3c4af074444ce2dfe2ea9ba62e0"
+        },
+        {
+          "id": "org.lwjgl:lwjgl:3.4.3",
+          "sha256": "46eeca5471833c3cf5da3c1da015b41e3bb3eb16dd3da03f366886da10096751"
+        }
+      ],
+      "glfw_binding_sha256": "1295d959527fe01b59b8b4896f8592c6c050530254a810ab0470a4918b1d6074",
+      "opengl_object_sha256": "f0d2d7cfb2e083a5e6735a5f9ca285ddf074bcb0870cc769a77c033c89cd9d51",
+      "parent_opengl_core_native_methods": 2270,
+      "versions": [
+        {
+          "id": "26.1",
+          "client_sha256": "bc6194c61566b587f196090d730698f2191170f7580adb143e4ff839939d3840",
+          "game_lwjgl_references": 331,
+          "game_and_adapted_glfw_references": 1144,
+          "resolution": "Resolved 820 method and 324 field descriptors; no native initialization",
+          "original_opengl_core_native_methods": 2236,
+          "original_native_descriptors_missing_from_parent": [],
+          "game_capability_fields": [
+            "GL_ARB_buffer_storage",
+            "GL_ARB_debug_output",
+            "GL_ARB_direct_state_access",
+            "GL_ARB_vertex_attrib_binding",
+            "GL_EXT_debug_label",
+            "GL_EXT_texture_filter_anisotropic",
+            "GL_KHR_debug"
+          ],
+          "gl_class_sha256": {
+            "com/mojang/blaze3d/opengl/BufferStorage$Immutable.class": "106031c9a7335594b30a13da060ad9aaa5ad6b2f3f80570d25ee7c9b30141e39",
+            "com/mojang/blaze3d/opengl/BufferStorage.class": "3e786c4ca0a005073a1108bb666bfea0e54324ff09e2752a320f2dd2d711c3da",
+            "com/mojang/blaze3d/opengl/DirectStateAccess$Core.class": "a25f313f46b7d93e66a3d760a0b3c931aaa7a66dff607564cb6471939dc3ff0d",
+            "com/mojang/blaze3d/opengl/DirectStateAccess$Emulated.class": "b1fc8fb34e4601d9c01c578fb763b54389b8fc1911b16772ce41d838504f3e4d",
+            "com/mojang/blaze3d/opengl/DirectStateAccess.class": "b818bb9260651b1183deeff059f3b5a3b7052ec3096f4e2b37ca7488a8295fb1",
+            "com/mojang/blaze3d/opengl/GlBackend.class": "018afc2177964418cf3e96cf2b20e734953f25b11392f6c557e0babfb5da4a09",
+            "com/mojang/blaze3d/opengl/GlCommandEncoder.class": "6b4cf090a6d4212c371533668065b95f3c1c01e1a7a3abed027f86ecbdeac658",
+            "com/mojang/blaze3d/opengl/GlConst.class": "4f060084d247ae452bdf5f2e0c3b84b8b4d9e4fe9c72a9d3769a93edfb81600e",
+            "com/mojang/blaze3d/opengl/GlDebug.class": "b21d981c4338e84b819400bb5405a4764922a3184817eabdbf7be492dc7cdbab",
+            "com/mojang/blaze3d/opengl/GlDebugLabel$Core.class": "952759389657115ab2ca318cfaecf7b7f602cc2664053d42d1ecfffc78691a25",
+            "com/mojang/blaze3d/opengl/GlDebugLabel$Ext.class": "ec5a1218e94de12c80592f0114abc25f92635c5e95550d07dfa9e5043d8cc36e",
+            "com/mojang/blaze3d/opengl/GlDebugLabel.class": "1c6b3792a27f65b33235f299f32c6ecd2bff1edc4bde9409153f082deb359c77",
+            "com/mojang/blaze3d/opengl/GlDevice.class": "bf0a6b036fbe1799ce0db417d5f1cebb742583f788f47c09b975bd2aedf33730",
+            "com/mojang/blaze3d/opengl/GlProgram.class": "3789a748fb8dfe8483e73152b1d72e15cf15cf6236826c296c2fed698fbcf797",
+            "com/mojang/blaze3d/opengl/GlSampler.class": "d6e1ab61e595457fd074863f9edbf80b6f20864787bdba2573fa9660630d70ff",
+            "com/mojang/blaze3d/opengl/GlStateManager$BlendState.class": "2893a35f2fd16b4b2b1a30e3a8a453bb8a40617981a9c547f2d4b2d0f702d33e",
+            "com/mojang/blaze3d/opengl/GlStateManager$BooleanState.class": "9427b5ff64412440291be7df472d83283349a90ac60cb3248de06ecafe1a49b1",
+            "com/mojang/blaze3d/opengl/GlStateManager$ColorLogicState.class": "26ae6036d8debdf66b419990af5968f66976cde0f2c924737c82519062acc0e2",
+            "com/mojang/blaze3d/opengl/GlStateManager$CullState.class": "c2257c6f8eac2a7b268ca5cfe9c521e0a09f5296793b9cd6ab9079f3708420a5",
+            "com/mojang/blaze3d/opengl/GlStateManager$DepthState.class": "3524e598ebcc0b99795d39503f2470ee92a660764568d2caa3de079ed7737ab8",
+            "com/mojang/blaze3d/opengl/GlStateManager$PolygonOffsetState.class": "706d4f3438646625fcdd3b1bfe1954c11ae00a19bae82afbc027e7fff5bef57c",
+            "com/mojang/blaze3d/opengl/GlStateManager$ScissorState.class": "2d8b501b88669f05e0687c0bc16ac75a1cc64c1021d7b3fe6f2db7ad03f10b78",
+            "com/mojang/blaze3d/opengl/GlStateManager.class": "f80bd8ad9468331e23937a43572438a08adf8678cd555a9354d1e1b1b8486759",
+            "com/mojang/blaze3d/opengl/GlTimerQuery.class": "e9f88748dd63f917cd7fad06ae94ec0a6ff49a9490d033f158dc9eb5f7182f6d",
+            "com/mojang/blaze3d/opengl/VertexArrayCache$Separate.class": "bba2dfecee703c3b4bc353a9a051600e8733f7ec6e750fe853fa51473ddb9990",
+            "com/mojang/blaze3d/opengl/VertexArrayCache.class": "5486021f61373d07257f48eb127957f1e9bf3531377ff2a3cf712a02a54c5c9a",
+            "com/mojang/blaze3d/platform/GLX.class": "04cc727bab371b2146bb0554f83f47645bbdd633f359d737e1422f1506fb2ea9",
+            "com/mojang/blaze3d/platform/Window.class": "d7c757f4b101f1d648a65a55d6b1f70bcfcc6cf3d323946fdb390a8cf8923f47"
+          }
+        },
+        {
+          "id": "26.1.1",
+          "client_sha256": "8c109be6177f40d10d0afd820b06542f9609597874242b96e16c5b0dc9e1fef3",
+          "game_lwjgl_references": 331,
+          "game_and_adapted_glfw_references": 1144,
+          "resolution": "Resolved 820 method and 324 field descriptors; no native initialization",
+          "original_opengl_core_native_methods": 2236,
+          "original_native_descriptors_missing_from_parent": [],
+          "game_capability_fields": [
+            "GL_ARB_buffer_storage",
+            "GL_ARB_debug_output",
+            "GL_ARB_direct_state_access",
+            "GL_ARB_vertex_attrib_binding",
+            "GL_EXT_debug_label",
+            "GL_EXT_texture_filter_anisotropic",
+            "GL_KHR_debug"
+          ],
+          "gl_class_sha256": {
+            "com/mojang/blaze3d/opengl/BufferStorage$Immutable.class": "106031c9a7335594b30a13da060ad9aaa5ad6b2f3f80570d25ee7c9b30141e39",
+            "com/mojang/blaze3d/opengl/BufferStorage.class": "3e786c4ca0a005073a1108bb666bfea0e54324ff09e2752a320f2dd2d711c3da",
+            "com/mojang/blaze3d/opengl/DirectStateAccess$Core.class": "a25f313f46b7d93e66a3d760a0b3c931aaa7a66dff607564cb6471939dc3ff0d",
+            "com/mojang/blaze3d/opengl/DirectStateAccess$Emulated.class": "b1fc8fb34e4601d9c01c578fb763b54389b8fc1911b16772ce41d838504f3e4d",
+            "com/mojang/blaze3d/opengl/DirectStateAccess.class": "b818bb9260651b1183deeff059f3b5a3b7052ec3096f4e2b37ca7488a8295fb1",
+            "com/mojang/blaze3d/opengl/GlBackend.class": "018afc2177964418cf3e96cf2b20e734953f25b11392f6c557e0babfb5da4a09",
+            "com/mojang/blaze3d/opengl/GlCommandEncoder.class": "6b4cf090a6d4212c371533668065b95f3c1c01e1a7a3abed027f86ecbdeac658",
+            "com/mojang/blaze3d/opengl/GlConst.class": "4f060084d247ae452bdf5f2e0c3b84b8b4d9e4fe9c72a9d3769a93edfb81600e",
+            "com/mojang/blaze3d/opengl/GlDebug.class": "b21d981c4338e84b819400bb5405a4764922a3184817eabdbf7be492dc7cdbab",
+            "com/mojang/blaze3d/opengl/GlDebugLabel$Core.class": "952759389657115ab2ca318cfaecf7b7f602cc2664053d42d1ecfffc78691a25",
+            "com/mojang/blaze3d/opengl/GlDebugLabel$Ext.class": "ec5a1218e94de12c80592f0114abc25f92635c5e95550d07dfa9e5043d8cc36e",
+            "com/mojang/blaze3d/opengl/GlDebugLabel.class": "1c6b3792a27f65b33235f299f32c6ecd2bff1edc4bde9409153f082deb359c77",
+            "com/mojang/blaze3d/opengl/GlDevice.class": "bf0a6b036fbe1799ce0db417d5f1cebb742583f788f47c09b975bd2aedf33730",
+            "com/mojang/blaze3d/opengl/GlProgram.class": "3789a748fb8dfe8483e73152b1d72e15cf15cf6236826c296c2fed698fbcf797",
+            "com/mojang/blaze3d/opengl/GlSampler.class": "d6e1ab61e595457fd074863f9edbf80b6f20864787bdba2573fa9660630d70ff",
+            "com/mojang/blaze3d/opengl/GlStateManager$BlendState.class": "2893a35f2fd16b4b2b1a30e3a8a453bb8a40617981a9c547f2d4b2d0f702d33e",
+            "com/mojang/blaze3d/opengl/GlStateManager$BooleanState.class": "9427b5ff64412440291be7df472d83283349a90ac60cb3248de06ecafe1a49b1",
+            "com/mojang/blaze3d/opengl/GlStateManager$ColorLogicState.class": "26ae6036d8debdf66b419990af5968f66976cde0f2c924737c82519062acc0e2",
+            "com/mojang/blaze3d/opengl/GlStateManager$CullState.class": "c2257c6f8eac2a7b268ca5cfe9c521e0a09f5296793b9cd6ab9079f3708420a5",
+            "com/mojang/blaze3d/opengl/GlStateManager$DepthState.class": "3524e598ebcc0b99795d39503f2470ee92a660764568d2caa3de079ed7737ab8",
+            "com/mojang/blaze3d/opengl/GlStateManager$PolygonOffsetState.class": "706d4f3438646625fcdd3b1bfe1954c11ae00a19bae82afbc027e7fff5bef57c",
+            "com/mojang/blaze3d/opengl/GlStateManager$ScissorState.class": "2d8b501b88669f05e0687c0bc16ac75a1cc64c1021d7b3fe6f2db7ad03f10b78",
+            "com/mojang/blaze3d/opengl/GlStateManager.class": "f80bd8ad9468331e23937a43572438a08adf8678cd555a9354d1e1b1b8486759",
+            "com/mojang/blaze3d/opengl/GlTimerQuery.class": "e9f88748dd63f917cd7fad06ae94ec0a6ff49a9490d033f158dc9eb5f7182f6d",
+            "com/mojang/blaze3d/opengl/VertexArrayCache$Separate.class": "bba2dfecee703c3b4bc353a9a051600e8733f7ec6e750fe853fa51473ddb9990",
+            "com/mojang/blaze3d/opengl/VertexArrayCache.class": "5486021f61373d07257f48eb127957f1e9bf3531377ff2a3cf712a02a54c5c9a",
+            "com/mojang/blaze3d/platform/GLX.class": "04cc727bab371b2146bb0554f83f47645bbdd633f359d737e1422f1506fb2ea9",
+            "com/mojang/blaze3d/platform/Window.class": "d7c757f4b101f1d648a65a55d6b1f70bcfcc6cf3d323946fdb390a8cf8923f47"
+          }
+        },
+        {
+          "id": "26.1.2",
+          "client_sha256": "b1b3158572666445eff01e82fad8c7de2e4953db6d354f311730d77a8359d0b0",
+          "game_lwjgl_references": 331,
+          "game_and_adapted_glfw_references": 1144,
+          "resolution": "Resolved 820 method and 324 field descriptors; no native initialization",
+          "original_opengl_core_native_methods": 2236,
+          "original_native_descriptors_missing_from_parent": [],
+          "game_capability_fields": [
+            "GL_ARB_buffer_storage",
+            "GL_ARB_debug_output",
+            "GL_ARB_direct_state_access",
+            "GL_ARB_vertex_attrib_binding",
+            "GL_EXT_debug_label",
+            "GL_EXT_texture_filter_anisotropic",
+            "GL_KHR_debug"
+          ],
+          "gl_class_sha256": {
+            "com/mojang/blaze3d/opengl/BufferStorage$Immutable.class": "106031c9a7335594b30a13da060ad9aaa5ad6b2f3f80570d25ee7c9b30141e39",
+            "com/mojang/blaze3d/opengl/BufferStorage.class": "3e786c4ca0a005073a1108bb666bfea0e54324ff09e2752a320f2dd2d711c3da",
+            "com/mojang/blaze3d/opengl/DirectStateAccess$Core.class": "a25f313f46b7d93e66a3d760a0b3c931aaa7a66dff607564cb6471939dc3ff0d",
+            "com/mojang/blaze3d/opengl/DirectStateAccess$Emulated.class": "b1fc8fb34e4601d9c01c578fb763b54389b8fc1911b16772ce41d838504f3e4d",
+            "com/mojang/blaze3d/opengl/DirectStateAccess.class": "b818bb9260651b1183deeff059f3b5a3b7052ec3096f4e2b37ca7488a8295fb1",
+            "com/mojang/blaze3d/opengl/GlBackend.class": "018afc2177964418cf3e96cf2b20e734953f25b11392f6c557e0babfb5da4a09",
+            "com/mojang/blaze3d/opengl/GlCommandEncoder.class": "6b4cf090a6d4212c371533668065b95f3c1c01e1a7a3abed027f86ecbdeac658",
+            "com/mojang/blaze3d/opengl/GlConst.class": "4f060084d247ae452bdf5f2e0c3b84b8b4d9e4fe9c72a9d3769a93edfb81600e",
+            "com/mojang/blaze3d/opengl/GlDebug.class": "b21d981c4338e84b819400bb5405a4764922a3184817eabdbf7be492dc7cdbab",
+            "com/mojang/blaze3d/opengl/GlDebugLabel$Core.class": "952759389657115ab2ca318cfaecf7b7f602cc2664053d42d1ecfffc78691a25",
+            "com/mojang/blaze3d/opengl/GlDebugLabel$Ext.class": "ec5a1218e94de12c80592f0114abc25f92635c5e95550d07dfa9e5043d8cc36e",
+            "com/mojang/blaze3d/opengl/GlDebugLabel.class": "1c6b3792a27f65b33235f299f32c6ecd2bff1edc4bde9409153f082deb359c77",
+            "com/mojang/blaze3d/opengl/GlDevice.class": "bf0a6b036fbe1799ce0db417d5f1cebb742583f788f47c09b975bd2aedf33730",
+            "com/mojang/blaze3d/opengl/GlProgram.class": "3789a748fb8dfe8483e73152b1d72e15cf15cf6236826c296c2fed698fbcf797",
+            "com/mojang/blaze3d/opengl/GlSampler.class": "d6e1ab61e595457fd074863f9edbf80b6f20864787bdba2573fa9660630d70ff",
+            "com/mojang/blaze3d/opengl/GlStateManager$BlendState.class": "2893a35f2fd16b4b2b1a30e3a8a453bb8a40617981a9c547f2d4b2d0f702d33e",
+            "com/mojang/blaze3d/opengl/GlStateManager$BooleanState.class": "9427b5ff64412440291be7df472d83283349a90ac60cb3248de06ecafe1a49b1",
+            "com/mojang/blaze3d/opengl/GlStateManager$ColorLogicState.class": "26ae6036d8debdf66b419990af5968f66976cde0f2c924737c82519062acc0e2",
+            "com/mojang/blaze3d/opengl/GlStateManager$CullState.class": "c2257c6f8eac2a7b268ca5cfe9c521e0a09f5296793b9cd6ab9079f3708420a5",
+            "com/mojang/blaze3d/opengl/GlStateManager$DepthState.class": "3524e598ebcc0b99795d39503f2470ee92a660764568d2caa3de079ed7737ab8",
+            "com/mojang/blaze3d/opengl/GlStateManager$PolygonOffsetState.class": "706d4f3438646625fcdd3b1bfe1954c11ae00a19bae82afbc027e7fff5bef57c",
+            "com/mojang/blaze3d/opengl/GlStateManager$ScissorState.class": "2d8b501b88669f05e0687c0bc16ac75a1cc64c1021d7b3fe6f2db7ad03f10b78",
+            "com/mojang/blaze3d/opengl/GlStateManager.class": "f80bd8ad9468331e23937a43572438a08adf8678cd555a9354d1e1b1b8486759",
+            "com/mojang/blaze3d/opengl/GlTimerQuery.class": "e9f88748dd63f917cd7fad06ae94ec0a6ff49a9490d033f158dc9eb5f7182f6d",
+            "com/mojang/blaze3d/opengl/VertexArrayCache$Separate.class": "bba2dfecee703c3b4bc353a9a051600e8733f7ec6e750fe853fa51473ddb9990",
+            "com/mojang/blaze3d/opengl/VertexArrayCache.class": "5486021f61373d07257f48eb127957f1e9bf3531377ff2a3cf712a02a54c5c9a",
+            "com/mojang/blaze3d/platform/GLX.class": "04cc727bab371b2146bb0554f83f47645bbdd633f359d737e1422f1506fb2ea9",
+            "com/mojang/blaze3d/platform/Window.class": "d7c757f4b101f1d648a65a55d6b1f70bcfcc6cf3d323946fdb390a8cf8923f47"
+          }
+        }
+      ]
+    },
+    "gl_review": {
+      "tool": "JDK25 javap -c -p -constants; read-only original JARs",
+      "minimum": "OpenGL3.3 core; forward compatible; native creation API; no debug-context hint",
+      "gl_class_hashes_identical_between_all_releases": true,
+      "single_glfw_create_call_site_shared_context_zero": true,
+      "capability_fields": [
+        "GL_ARB_buffer_storage",
+        "GL_ARB_debug_output",
+        "GL_ARB_direct_state_access",
+        "GL_ARB_vertex_attrib_binding",
+        "GL_EXT_debug_label",
+        "GL_EXT_texture_filter_anisotropic",
+        "GL_KHR_debug"
+      ],
+      "persistent_mapping": "Real immutable ARB_buffer_storage path with mutable fallback; not executed",
+      "threading": "Single render-thread ownership observed statically; no worker-owned GL context found; dynamic thread behavior remains untested"
+    },
+    "fast_lane": {
+      "result": "PASS",
+      "checks": 16,
+      "jdk": "OpenJDK25.0.4",
+      "host": "macOS ARM64",
+      "scope": "Offline deterministic launcher/input/class-parser checks; no GL/GPU/game execution"
+    },
+    "source_only_portability": "PASS all16fast checks in source-only checkout, empty explicit host-dependency cache, invoked from outside root; no publisher/SDK/private cache",
+    "documentation": "PASS1766local links;580exact pinned-upstream omissions;105migration records",
+    "diff_check": "PASS"
+  },
+  "mesa_source": {
+    "name": "Mesa Zink and RADV",
+    "version": "26.2.0",
+    "repository": "https://github.com/mihawk-99/PS5_Mesa",
+    "commit": "1ba9874f478657ccf6da72ce55f0260164cc0bd0",
+    "archive": {
+      "url": "https://codeload.github.com/mihawk-99/PS5_Mesa/tar.gz/1ba9874f478657ccf6da72ce55f0260164cc0bd0",
+      "size": 111234269,
+      "sha256": "703b2640316a13ddd7c7955a97cd24860f5e14ec4b891faba7c5ddafc7194b8d"
+    },
+    "license": "MIT for Mesa/Zink; retain each upstream file notice and separate dependency licenses",
+    "scope": "Phase A source pin only. Same Mesa pin as client/graphics/sources.json. No Zink build, resident group, new GL support or console acceptance yet. Preserve separate 029 OSMesa implementation."
+  },
+  "presentation_design": "K: private PS5 EGL/frontend + kopper display-surface branch; Zink owns one game instance/device; no extra presenter/device or game CPU copy; not implemented",
+  "hosted_ci": "Not yet run for this change",
+  "physical_console": {
+    "result": "NOT TESTED",
+    "build": null,
+    "run_id": null,
+    "package_sha256": null,
+    "pending_rows": [
+      "1 context/version/renderer/clear/readback/destroy",
+      "2 animated presentation/configured refresh/return",
+      "3 original26.1title",
+      "4 world play/audio",
+      "5 save/reopen/quit/relaunch",
+      "6 repeat3-5for26.1.1and26.1.2",
+      "26.3world regression;26.2and26.4snapshot paths"
+    ]
+  },
+  "pending_implementation": [
+    "Combined static RADV/Zink build and PS5 native allocation/provider/constructor audit",
+    "Resident Vulkan entry and created-instance device resolver",
+    "PS5 kopper display platform and owned surface payload",
+    "Real private frontend/EGL and GLFW context hooks, parent GL dispatch",
+    "Launcher ZINK receipts, development-only Vanilla gates and adapted GLFW for all three releases; Fabric refusal",
+    "Actual rebuilt GLFW+LWJGL Zink/lavapipe positive/negative/readback/thread/lifecycle tests",
+    "Original-client GL capability bootstrap",
+    "Target package/object identity/exports/notices/no game JAR audit"
+  ],
+  "retained_workarounds": [
+    "029 OSMesa for current Vulkan-client native bootstrap",
+    "123 adapted GLFW3.4.1 callback binding with3.4.3parent ABI",
+    "Current runtime opt-in scratch/verifier/emutls/native sync/thread-stack policies",
+    "Current scoped RADV/SDL/WSI provider reserves, original source patches and lifecycle gates"
+  ],
+  "release_store": "No action; exact-build physical confirmation and explicit authorization required"
+}

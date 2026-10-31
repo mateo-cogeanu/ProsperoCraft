@@ -1,0 +1,80 @@
+{
+  "scope": "Phase A draft: original 26.1.x releases enumerated from Mojang on 2026-10-31; Java 25/GLFW/OpenGL 3.3 core; Zink integration not implemented and launcher remains gated; no console acceptance",
+  "versions": [
+    {
+      "id": "26.1",
+      "type": "release",
+      "metadata": {
+        "url": "https://piston-meta.mojang.com/v1/packages/c4bfc5cc47b28f5dedcb9fac76d6dc1fd1f899a9/26.1.json",
+        "sha1": "c4bfc5cc47b28f5dedcb9fac76d6dc1fd1f899a9"
+      },
+      "javaMajor": 25,
+      "assetIndex": "30",
+      "client": {
+        "sha1": "191771837687b766537a8c4607cb6fad79c533a1",
+        "size": 38113398,
+        "url": "https://piston-data.mojang.com/v1/objects/191771837687b766537a8c4607cb6fad79c533a1/client.jar"
+      },
+      "lwjgl": [
+        "org.lwjgl:lwjgl-freetype:3.4.1",
+        "org.lwjgl:lwjgl-glfw:3.4.1",
+        "org.lwjgl:lwjgl-jemalloc:3.4.1",
+        "org.lwjgl:lwjgl-openal:3.4.1",
+        "org.lwjgl:lwjgl-opengl:3.4.1",
+        "org.lwjgl:lwjgl-stb:3.4.1",
+        "org.lwjgl:lwjgl-tinyfd:3.4.1",
+        "org.lwjgl:lwjgl:3.4.1"
+      ]
+    },
+    {
+      "id": "26.1.1",
+      "type": "release",
+      "metadata": {
+        "url": "https://piston-meta.mojang.com/v1/packages/93b7256ce0ec537e8b803991b2b8cac0daaa7660/26.1.1.json",
+        "sha1": "93b7256ce0ec537e8b803991b2b8cac0daaa7660"
+      },
+      "javaMajor": 25,
+      "assetIndex": "30",
+      "client": {
+        "sha1": "377031a9e733ba8ab4d355959a8f6fb8eb707556",
+        "size": 38113231,
+        "url": "https://piston-data.mojang.com/v1/objects/377031a9e733ba8ab4d355959a8f6fb8eb707556/client.jar"
+      },
+      "lwjgl": [
+        "org.lwjgl:lwjgl-freetype:3.4.1",
+        "org.lwjgl:lwjgl-glfw:3.4.1",
+        "org.lwjgl:lwjgl-jemalloc:3.4.1",
+        "org.lwjgl:lwjgl-openal:3.4.1",
+        "org.lwjgl:lwjgl-opengl:3.4.1",
+        "org.lwjgl:lwjgl-stb:3.4.1",
+        "org.lwjgl:lwjgl-tinyfd:3.4.1",
+        "org.lwjgl:lwjgl:3.4.1"
+      ]
+    },
+    {
+      "id": "26.1.2",
+      "type": "release",
+      "metadata": {
+        "url": "https://piston-meta.mojang.com/v1/packages/8f9f3c548c892ce41b78561138aeba112cba3490/26.1.2.json",
+        "sha1": "8f9f3c548c892ce41b78561138aeba112cba3490"
+      },
+      "javaMajor": 25,
+      "assetIndex": "30",
+      "client": {
+        "sha1": "4e618f09a0c649dde3fdf829df443ce0b8831e65",
+        "size": 38113927,
+        "url": "https://piston-data.mojang.com/v1/objects/4e618f09a0c649dde3fdf829df443ce0b8831e65/client.jar"
+      },
+      "lwjgl": [
+        "org.lwjgl:lwjgl-freetype:3.4.1",
+        "org.lwjgl:lwjgl-glfw:3.4.1",
+        "org.lwjgl:lwjgl-jemalloc:3.4.1",
+        "org.lwjgl:lwjgl-openal:3.4.1",
+        "org.lwjgl:lwjgl-opengl:3.4.1",
+        "org.lwjgl:lwjgl-stb:3.4.1",
+        "org.lwjgl:lwjgl-tinyfd:3.4.1",
+        "org.lwjgl:lwjgl:3.4.1"
+      ]
+    }
+  ]
+}

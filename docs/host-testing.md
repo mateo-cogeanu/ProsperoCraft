@@ -21,7 +21,7 @@ missing-dependency skips. Each process has a 180-second bound; workflows have
 existing checks use assertions. Imports of `host_toolchain.py` do no discovery,
 argument parsing or downloads. Individual migrated test entrypoints remain usable.
 
-The fifteen fast checks include three bootstrap/audit/identity checks, discovery regressions and ten existing launcher
+The sixteen fast checks include 26.1 publisher-input/class-parser failure controls, three bootstrap/audit/identity checks, discovery regressions and ten existing launcher
 checks: auth state transitions/redaction, saved-login migration/refresh/sign-out,
 local TLS refusal/body/redirect behavior, storage errors, instance persistence and
 verified download/install/launch restrictions, Modrinth queues/recursive dependencies,
@@ -30,6 +30,11 @@ ownership, deletion recovery, and duplicate isolation/cancellation. The addition
 transports, generated tiny JAR fixtures and temporary directories exercise actual
 launcher code. HTTPS uses a disposable localhost TLS server and keytool certificate.
 No real Microsoft/Modrinth request or Minecraft execution is part of assertions.
+The 26.1 input test uses temporary hash/transport/rule/path fixtures and a real
+JDK-generated class; no publisher downloads, native object or game cache is used.
+The separate `audit_client_261.py` needs explicitly provisioned original publisher
+JARs, pinned parent modules and rebuilt GLFW/OpenGL components. It is outside
+the portable lanes and does not execute GL or establish a console result.
 The instance test's formerly unsupported 26.2 fixture is now unsupported 26.1;
 26.2/26.3 support remains explicitly checked without changing production policy.
 

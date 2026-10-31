@@ -25,6 +25,7 @@ The manual native lane instead tests scoped native implementations against fixtu
 
 | Entrypoint in `tools/` | Dependencies and boundary |
 | --- | --- |
+| `test_client_261_inputs.py` | Required fast; temporary publisher-integrity/rule/path failures and real JDK class/JNI parsing; no game/network/SDK prerequisite |
 | `test_audio_native_mutex.py` | Clang/Clang++, ASan/UBSan; desktop needs Gson/JDK; JNI needs platform headers; required native |
 | `test_openal_thread_error.py` | Clang++/ASan/UBSan; actual header, native-key refusal, thread/context isolation and generation reuse; required native |
 | `test_audio_port_retention.py` | Clang/Clang++, ASan/UBSan; desktop needs Gson/JDK; JNI needs platform headers; required native |
