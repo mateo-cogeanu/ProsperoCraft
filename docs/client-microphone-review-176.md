@@ -48,15 +48,18 @@ control; all20host modes pass with176. No test hook is included in target builds
 Local fast15/native7 pass; the latter includes the actual callback gate test under
 ASan/UBSan. Physical read blocking/pacing, hardware privacy/mute/route, SVC codecs,
 UDP/two-way speech and console cleanup remain unverified. Original173 cause is
-still unknown. Target package/relink results and checksums are recorded after
-build completion in the matching176 validation. No release or Store change.
+still unknown. Target package and both exact relink checks pass; checksums and separate
+host/console/publication status are in the [176 validation](validation/client176-microphone-review.json).
+Both host lanes also pass from a source-only checkout with an initially empty
+dependency cache and invocation outside the source root. No release or Store change.
 
 ## Console test
 
 Use the exact176 package with Voice capture ON and SVC's Java-microphone option
 OFF. Check default/named device selection, intentional speech versus quiet and
 hardware-muted input, then consenting remote two-way voice with game audio. Read
-PS5 AudioIn stage/code diagnostics if an open or worker fails. Stop/start and
+PS5 AudioIn stage/code diagnostics if an open or worker fails. Confirm actual
+sample delivery and audible speech; absence of error messages alone is not success. Stop/start and
 world/server leave/rejoin repeatedly and verify saved state. A true failed join
 must make capture unavailable until restart; do not reset a pinned owner to hide
 it. A native input call that never returns can still delay stop: no unsafe close

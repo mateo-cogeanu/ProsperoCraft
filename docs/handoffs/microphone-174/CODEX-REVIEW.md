@@ -10,7 +10,10 @@ device destruction and late input error.176 fixes worker/callback lifetime and
 retains Claude's useful microphone changes. No physical174/175/176 result is
 claimed and the original173 native open refusal remains undiagnosed.
 
-The source-publication hold reported by Claude has been raised with the user for
-clarification before any push of the reviewed changes. No release/Store action
-is planned. This note describes the review-time state; later publication status
-belongs in the matching validation record.
+The user explicitly authorized the primary maintainer to push the reviewed source
+changes. This supersedes the local-only hold reported in Claude's original handback.
+The specialist handback is retained unchanged as its historical review-time state;
+publication and validation follow-through now belong to the primary maintainer.
+No release or Store action is authorized by that source push. The matching
+[176 validation](../../validation/client176-microphone-review.json) records tests,
+artifacts and publication status.

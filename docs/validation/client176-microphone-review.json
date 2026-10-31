@@ -1,0 +1,34 @@
+{
+  "app_version": "01.000.176",
+  "title_id": "PPSA99874",
+  "source_commit": "d6b7593a20185039474007f1f596fcaa42eadc8b",
+  "specialist_commits": [
+    "d0d76570a70c035234b1331be712bf3d848ba117",
+    "4393dcb"
+  ],
+  "runtime_commit": "f12c86e4f965ff46d0f5d121cd07ff8f27d7baaf (unchanged)",
+  "artifacts": {
+    "PPSA99874.zip": "ccdf023e9e13402bf2f00c97f7ad7ad105828a830f764a3593185e0fb2d1c08a",
+    "bootstrap-symbols.elf": "4aa5935ee722841402eee504a3e36dd934e62fb9f2334edb6721f56a5a82d24b",
+    "client176-openal-source-relink.zip": "61482c11731bfd3384ea9dc6c599388d26c44c539c8f3e71396beda5918cba28"
+  },
+  "tests": {
+    "fast": "PASS15 local",
+    "native": "PASS7 local ASan/UBSan including actual callback detach gate with blocked callback and destroyed target",
+    "source_only": "PASS native7+fast15 outside-root from git archive with initially empty dependency cache and pinned fetch",
+    "openal": "PASS20 actual upstream OpenAL + PS5 backend modes; SVC-order x3/live enumeration/refused competing open/disable/one init;102 forced join failure with blocked input, backend/device destroyed before late error, no native close/reuse/late callback",
+    "negative_controls": "175 backend fails pinned enumeration assertion; omitting only enumeration assertions reaches ASan heap-use-after-free in Ps5Capture::run. Source restored and all20modes pass with176",
+    "package": "PASS actual package CRC/signatures/source/header/native import/runtime0135hash audit/frozen packages; host-only join hook excluded from target symbol table",
+    "relink": "PASS normal+replacement OpenAL paths exactly match symbol ELF hash",
+    "hosted_ci": "Pending source push; no new hosted results claimed"
+  },
+  "console": {
+    "173": "User launcher313blocks/nonzero76876/peak32766; speech/mute/SVC unknown. Native SVC open error stage/code missing",
+    "174_175_176": "No exact physical result received; microphone speech/mute/route/codec/UDP/two-way voice/capture stop/reopen and runtime0135disconnect/save/endurance pending"
+  },
+  "publication": {
+    "source": "User explicitly authorized primary maintainer push after review; push verification pending",
+    "release_store": "None; physical exact-build gate retained"
+  },
+  "storage": "175 original artifacts preserved and SHA-verified;176 original ZIP/symbols/source-relink retained. Expanded176relink kit removed only after every entry matches CRC-checked retained ZIP"
+}
