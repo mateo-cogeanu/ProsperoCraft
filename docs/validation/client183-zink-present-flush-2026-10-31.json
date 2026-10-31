@@ -1,0 +1,301 @@
+{
+  "date": "2026-10-31",
+  "status": "LOCAL183 REPAIR CANDIDATE; physical console NOT TESTED",
+  "build": {
+    "app_version": "01.000.183",
+    "title_id": "PPSA99874",
+    "source_commit": "f9014105504de0885b521c1f2734717af7c8459a",
+    "source_tree": "clean",
+    "scope": "Native console stage2a only:Native fault recorder and first-frame breadcrumbs;3 animated GLFW/SDL kopper cycles with teardown/reinit; human visible result and launcher/JVM/game pending",
+    "combined_object_sha256": "ca187457ac5c7bbf1fabfbc995017c0ec381d9ccdc3db8a5cad4231f35dfe153",
+    "mesa": {
+      "name": "Mesa Zink and RADV",
+      "version": "26.2.0",
+      "repository": "https://github.com/mihawk-99/PS5_Mesa",
+      "commit": "1ba9874f478657ccf6da72ce55f0260164cc0bd0",
+      "archive": {
+        "url": "https://codeload.github.com/mihawk-99/PS5_Mesa/tar.gz/1ba9874f478657ccf6da72ce55f0260164cc0bd0",
+        "size": 111234269,
+        "sha256": "703b2640316a13ddd7c7955a97cd24860f5e14ec4b891faba7c5ddafc7194b8d"
+      },
+      "license": "MIT for Mesa/Zink; retain each upstream file notice and separate dependency licenses",
+      "scope": "Phase A source pin only. Same Mesa pin as client/graphics/sources.json. No Zink build, resident group, new GL support or console acceptance yet. Preserve separate 029 OSMesa implementation."
+    },
+    "consumer_sources_sha256": {
+      "client/zink_present_fix/bootstrap.cpp": "1b6e041d180a153b244abd5e944a36705cf2e1a767402c0f30acd3cee056021e",
+      "client/zink_present_fix/present.c": "0a1c7d6ac7c47cf4c47b1fddab914bfedceb7e67c12841b56cd50185be8481d0",
+      "client/zink_present_fix/param.json": "b09e555984c3c349301b9e191871feba024b71262c5a4647c34fb512f96ae0ab",
+      "client/ports/shaderc/fault.c": "2c5ab59276d522eff8af3189638be895a1896c68992d66c95df2d8b14437a7b5",
+      "client/vulkan/loader.c": "c60168c4a747803c0a4e662eaeb4561ae105814868b3c7ef304d3f79c68947f0",
+      "client/gpu/present_worker.c": "a4c99d27d2f67ba7dde0f4581c58fc474b5ea5527dd2b9c7ec66fab44a03c232",
+      "client/launcher/hardware_identity.hpp": "b37eb0571e9930e4312235d68f33ae980a7fef200f62328febed9b470f42a7e4",
+      "client/ports/oshi/hardware_labels.hpp": "9259b7823a43da5cb7fcf91b2f91a011e230b99f9c15a324ec03043ea7ea07b5",
+      "client/startup/input_present_trace.hpp": "aebb1d26cb5592af6e59036f4c7d128ad497d35337a670b4bb861b5a30d4cc46",
+      "tools/package_zink_present_fix.py": "8f18fc6d83ca1645c4a62e2f791b22713975cebab0c687ea6c3bd78f3b24b785",
+      "tools/build_zink_native.py": "a07be16293a1c0d33d5f3a752f868365974787c893bf958e1936d5c834410b45"
+    },
+    "frontend_sources_sha256": {
+      "frontend.c": "4d515328cca39d335e1036d8d68c81009caa4e84cb9b3b0b4ff68d097778b594",
+      "frontend.h": "51927706954707baeb0e43c7b0c6f5a36d4c9c0e37440087692006f2b260698e"
+    },
+    "driver_crt_pin": {
+      "repository": "https://github.com/mihawk-99/PS5_Vulkan",
+      "commit": "f410e67a0241b3e8edcdbcd2a9b285dfc4a412ed"
+    },
+    "patches": {
+      "0001-resident-vulkan-entry.patch": "4afb8e8b5941671dab8dbde5dcd5a02cb17c9bf1d62c2c26bbb7bfeec627b281",
+      "0002-kopper-private-display-surface.patch": "0759a32e8e66208a3818f8cebf6fd487fc09be66d8a21988986235748b110972",
+      "0003-constant-emulated-gl-tls.patch": "e4d1f68a79401eaa6865712fffe4a3a5ce1d573fbcf15e4cea172a883ec77db1"
+    },
+    "wsi_patches": {
+      "0001-videoout-checkpoints.patch": "eaffa2404a54d754d37d546a54fc9a6ecd9d660890a68697da452bb6dbb7e532",
+      "0002-videoout-open-retry.patch": "1cdf5f8cd0a3f9ecf61090fcdb427b0273a4f81daf28f4bf85c2fd5bd0f36e5f",
+      "0003-videoout-resources.patch": "c93b1df5f9ff53f8a2e8429881498feef792e065adf5260ff6eb6df011a43989",
+      "0004-videoout-early-owner.patch": "222f9e031ad9e46a12e5debdff25582030d31a4b29903ac92887c6caf5c10f58",
+      "0005-videoout-present-progress.patch": "928b61ba90d44ec211731fb07f98f436630bccd32b14f362407186424940e53e",
+      "0006-videoout-menu-cursor.patch": "bfeb7369e10058012e7b5f01d05825ab524ba901f6e82f98fcad68248d46d640",
+      "0007-videoout-keyboard-overlay.patch": "39097a71051b177d60145d4b8eb45031e4f18780dc6d29a80e0c4c171c3b929d",
+      "0008-videoout-reserved-worker.patch": "78f928ddddb46e8f95298fae804134c8d51a569ed05c7deedf87b03291245636",
+      "0009-input-present-checkpoints.patch": "2b707106265425c5a2b3a7823e9c47a2040d8f2d0fdd0c715b1c0775fcb4ec33",
+      "0010-ps5-device-display-name.patch": "bcb646a63b579990133e9fda55c3df9b61876e3d91922b00fa04893f64d9b811"
+    },
+    "objects_sha256": {
+      "bootstrap.o": "be39c513017a5e755ea1cd1d12ad3162fbf35369c61c0b940ebf7906a2ca2946",
+      "probe.o": "580142cc1aff220d18417bd4d6cdde889a82a27baccf2b05cf6c504f7eed9515",
+      "fault.o": "c74e3fe9f20dfb42c330e8bce3a1f211d0bc818905e56708bd41bd13e00a40db",
+      "loader.o": "b38153957a7b69d595c1af84b7d6992dbd5036c1ab3ed16868a3a7dab9188735",
+      "present_worker.o": "b042c756fd2d034158189b9028dcda78e522c9e2a28dac254293415f6153b7bc",
+      "crt.o": "337b4f6f4939cd5090b354b40816687c64a6e17b0f46ba3faa52803d253ad09e",
+      "cpp_runtime.o": "eb7eb686b76886330bb0e263770ffaf5897001a6510c30dcc959dcb5e89a1176",
+      "cpu_model.o": "75807f76bd4241433bf39e3e5ad795de46f17dea685889e1d18ef5b8ad63ac53"
+    },
+    "sdk_pins": {
+      "repository": "https://github.com/mihawk-99/PS5_PayloadSDK",
+      "commit": "b83202be73e930050e00de0f1b4d9ec46c0391bf"
+    },
+    "native_dependencies": {
+      "sdl": {
+        "object_sha256": "234582a28095b3474b00d1348cc25415bd4747a0af2841b04bb1636275290e8c",
+        "linked_object_sha256": "4a2b6ea77f88ac210fa653c09cb0b2370045864c0fce264a852b9f00e0257cdb",
+        "jni_policy": "Genuine initializer privately renamed per component; no JVM or initializer calls in this native title",
+        "audit": {
+          "sdl": {
+            "repository": "https://github.com/libsdl-org/SDL",
+            "tag": "release-3.4.2",
+            "commit": "683181b47cfabd293e3ea409f838915b8297a4fd"
+          },
+          "reference": {
+            "repository": "https://github.com/griches/PS5_Dusklight",
+            "commit": "72d6885cc8b4ff4c5f6be23682ab11578ec926c4",
+            "scope": "Only ps5/sdl video/joystick, platform.h and input-only extraction of ps5/src/platform.c; no game/artwork/Dawn/audio code",
+            "files_sha256": {
+              "ps5/sdl/SDL_ps5video.c": "74dfa37af36944402f5edf9d93369da088ad91613a424ecec39af62af8afa818",
+              "ps5/sdl/SDL_ps5joystick.c": "27fdfb224db6def91c6daf12538da2528287987ad2cef247d22ffe4706cdd199",
+              "ps5/src/platform.h": "618acb99691f2739d0978af9ad1fae07d9d6fe6196064fcda0b0d39b67364b0b",
+              "ps5/src/platform.c": "515591123435389426d798204150c11df6a136e7141a00c3bd082605df26a992"
+            }
+          },
+          "profile": "Static SDL3,dynapi disabled,PS5 video/joystick/events/native gyro and primary-controller actuator-only audio;game speaker audio remains OpenAL;renderers/GPU/standalone sensors/camera/HIDAPI/desktop windows disabled",
+          "port_sha256": {
+            "0001-register-ps5.patch": "c1041c2768b1d7c37d5c5078d0d1f82a6d411a25a2328fc8653759b788065461",
+            "0002-ps5-rwlock.patch": "185a679f87b50c39aab5e8a41cc8c89cefc48d64f67daa5d20cc1ec2061e229e",
+            "0003-ps5-native-sync-reserve.patch": "fcdeeb674e2a9cf655d78cfdd80dc133e5440a7d0d1d5b9774ec7f0e30ac14c6",
+            "0004-ps5-thread-error-storage.patch": "bc6b1daac2af3c1792f053fef4950eeb104efaebb10b4155a1e93d055b8bd7bf",
+            "MIT.txt": "d8db1712b2a1383b27cebeab2ddb8840a6e31ea820b0d56552a0f1c65f920983",
+            "README.md": "bb1102416282f8f6a21e7d9a6f9f94e3d8a24693ee6fb478200cd01ecb3d7ebd",
+            "SDL_ps5audio.c": "afdf8d072db3e2add072ebd3bc687c0251faee5338af2dcaed25fc200db47cf6",
+            "SDL_ps5joystick.c": "814ceadd49cd88eb3c1daa8d25a8c1c09ca82ad8a704fbd562e1cf5bfd98a08e",
+            "SDL_ps5rwlock.c": "fd25d3606287c2da85a30d6ca450a80fede1683c437c6abd7bd4533a240c9c64",
+            "SDL_ps5video.c": "f585b47d1cde2fe7648dc6e2d1015fe76226b41865e24ddbc945337fe4b73d14",
+            "Zlib.txt": "bd9162684043a9d1d7fd18ea992233a24d82d97b7f70471b6ed25e85848dd677",
+            "alias-symbol-runtime.json": "47d00345cdd80566ca340a307e8c6ad6297d44550ba84bdfd22d020b23415e3a",
+            "host-loader-source.json": "872b442bc1c3f698f1c495836e3ef15ef22ea6f1d920d9eeeeab3ef1c9f4e991",
+            "platform-input.c": "44c2436e973fdccba9e59c483f55e426099e7deb20290ecf229ea8bc42333485",
+            "platform.h": "af99d81a0ace1b17805a3a47718b33c46f4ff5da79257bb03180b4a18bc4804e",
+            "ps5_bindings.h": "0c9ab147ea9599d2b5fa5d55eb592dd8e4e3285ee0193eba240d04ffd6cc9a7a",
+            "ps5_controlify_events.c": "388d84838263c1d68b7febe79b2ec2f8b3e105170c73dfa06ba2a8d22f9d3e53",
+            "ps5_display_mode.h": "93be74741068785b8a91de8bd854660b3b712c2b60492848bf74b177b6eddfe4",
+            "ps5_haptic_pcm.h": "79a10b0b384c2829c150fce1a0bfded20397f0263c7a3b8506040335a6308be2",
+            "ps5_hid.h": "e45706985b7784880f8b8491d407f1a02c3ec90c9bb4f16f52181405e1e7a166",
+            "ps5_hid_native.c": "b442351e336c66909412e9a27ce3bc50f4810061b39c5289fba76db7139f0f61",
+            "ps5_input_handoff.h": "5d368a49d0864ba89665ecdd71d24263a4ed820f14811b1df3dbdf89da00ebcb",
+            "ps5_mouse_imports.c": "a6c5be2db892ab4e65c5e0c07d38fc3b06ac94ccedd23da042d329a99383464f",
+            "ps5_relative_mouse.h": "f668854c09e4b1bac98a33b4e636338e32b4e63d1406887ffd3fb9f40ceea3b3",
+            "ps5_startup_boundary.h": "7ed580a345b4929e879ffeca4f6f87f3c0f46a2621eeec72cdabafb8d01ccde9",
+            "ps5_temporary_input.h": "08d89784abbdb1d9325ec594a38cd5dbf3e4ffb9f6d42492a69411706cc37b1a",
+            "ps5_trigger_effect.h": "ffd7a61de7c3b1d27ab105b9ec73ee7158c33c57666b8205d3cb22a18409a95f",
+            "ps5_trigger_follow.h": "11d4c766b187e99ebd716a72d7a051b1bbfefaf304fbcb45b45503262b38b095",
+            "ps5_usb_input.h": "f06516ca2c79806d9375d3264f2911e9e69f0b52d5a9671366ef7475e2a3c6b4",
+            "sources.json": "d643247a8251f962f1a4d5b6a15a94c5ed01b1ecf0e34d7e760c0869108fc286"
+          },
+          "object_sha256": "234582a28095b3474b00d1348cc25415bd4747a0af2841b04bb1636275290e8c",
+          "scope": "Actual SDL3 core/events/PS5 video/Vulkan/joystick driver; primary DualSense actuator-only SDL audio and native joystick gyro; game speaker audio remains OpenAL; native compatible rumble and translated Controlify adaptive-trigger effects;LED/impulse-trigger-rumble/process spawn unsupported; no game modifications",
+          "console": "pending"
+        }
+      },
+      "glfw": {
+        "object_sha256": "75fe0d103c6e55dfd71cd96fc8277ea5c75cfe70ab8d6a47c75148a63545a00f",
+        "linked_object_sha256": "521557fdc076600365b1c63607a6a520c2adb446e08671aabf34287c588c57dd",
+        "jni_policy": "Genuine initializer privately renamed per component; no JVM or initializer calls in this native title",
+        "audit": {
+          "upstream": {
+            "repository": "https://github.com/glfw/glfw",
+            "commit": "a74efa0d5628b74adc0426af4c5710e287fa7c2c",
+            "version": "3.4",
+            "archive_url": "https://codeload.github.com/glfw/glfw/tar.gz/refs/tags/3.4",
+            "archive_sha256": "c038d34200234d071fae9345bc455e4a8f2f544ab60150765d7704e08f3dac01"
+          },
+          "scope": "Genuine GLFW core with explicit SDL3 PS5 window/input/Vulkan backend and optional private Zink core context hooks selected via GLFW_PLATFORM_NULL; no original game or GLFW Java class replacements or arbitrary loader",
+          "target": "PS5 real SDL Vulkan window",
+          "source_sha256": {
+            "context.c": "839a96ff1dcc712129f9bcb9522b8d459b9d6a9b8d029ce32c729c523b9ea012",
+            "init.c": "61ac2188518cae852bc2bfe0c0f2363dad365f8166099a3aa78a3c9ff8504654",
+            "input.c": "b0a40bdd5587d2cfb4900644c525b1814b6aad6960f98d639cb70231d69cb74c",
+            "monitor.c": "1671bbe37502419f08b8072e80a13a78494feea6c008ccb2727ebd44a43afd6a",
+            "platform.c": "117f5e8698eb4f028d7f80ae594fd2b2eb141f55c6122a6c24fd45d1b90209bc",
+            "vulkan.c": "5948e9f0b347640473d23f7dfd94cea82375149639f2cbd288491747312d3a33",
+            "window.c": "c102fd119fd7423ca0cebd17c1fba722d7fe149ef689f09962f6ff79c82dd289",
+            "egl_context.c": "933150523fa2cf24e8f3e7cd279b0d8308635f769e052f035e4088c4ebc83ccf",
+            "osmesa_context.c": "2bb65aa05606a7bb652ee59fb481c45abb223795163fe9c57d808de3e082b09b",
+            "null_init.c": "08a12e1eab00a4ad74b14b02b7bc0bffc865e44231c7e9d0141a6b73a0a84897",
+            "null_monitor.c": "12face8cf2462b5590d8f1ac5502184e0246696f5d5b117dddca3dfbb5658759",
+            "null_window.c": "244c6843b93298f97066a5d40324286b9a2de240200ead019470b0e8846595d9",
+            "null_joystick.c": "5da9465db10034b81b87c3722328bff7dfc3b4a94670cce71672b7d464fd6820",
+            "posix_thread.c": "2c38b730025ed079c44aed73c0014ad3d5df3f35959b3c3ddd2090b2dcfda7ce",
+            "posix_time.c": "548431aa62bc3ead2a82c1f049fd53659b7a92c8702abaa9d9176a0583edadb2",
+            "ps5_platform.c": "9cbd59e494002fce9efdd7ba5b9fe2679cc3a614f1da73b3991a3fbf6815b9f5",
+            "vulkan_bridge.c": "d170f3bacc1c5f462c1eb0738bafa9ea726b489161b8710e04fe1301b459ef4c",
+            "gl_context.c": "5f072e84bf1ac11622a0c278296c12daecfa130c07158bf216ae2556e6f32878",
+            "modules.c": "886988a50d8198a8b19d71169f671375f4df5da3107bc88e4b9e664321c69ad7"
+          },
+          "local_source_sha256": {
+            "sources.json": "d87ecbc0bff4eb528645ca49467ed57dd0713eef479f9870de3a0f87936f2386",
+            "LICENSE.md": "149704059b5d0bf551637e50042dd4de9c2cae921021f6636298911e3a5f9462",
+            "modules.c": "886988a50d8198a8b19d71169f671375f4df5da3107bc88e4b9e664321c69ad7",
+            "binding.json": "52edeff6cf92be3debd6169cbb07cd5075322eb60d2e49853d85069ac616a96d",
+            "0001-sdl-native-mutex.patch": "f30fd543675152ee3c00f191296dc26d0eabb5d8af2e75453f431d2a36e9d555",
+            "gl_context.c": "5f072e84bf1ac11622a0c278296c12daecfa130c07158bf216ae2556e6f32878",
+            "README.md": "5255c95c31082b199ccc1749c31a40638dac09c0caa28dd2f4894ea238176944",
+            "vulkan_bridge.c": "d170f3bacc1c5f462c1eb0738bafa9ea726b489161b8710e04fe1301b459ef4c",
+            "ps5_platform.c": "9cbd59e494002fce9efdd7ba5b9fe2679cc3a614f1da73b3991a3fbf6815b9f5"
+          },
+          "console": "Pending26.2startup/menu/input/gameplay",
+          "zink_frontend_header_sha256": "51927706954707baeb0e43c7b0c6f5a36d4c9c0e37440087692006f2b260698e"
+        }
+      }
+    },
+    "symbols_elf_sha256": "7778487896eca7708af71a30a1d8353b6f66feaf83f6a90ee69a2176eaad7bce",
+    "single_copy_exports": [
+      "ps5zink_create",
+      "ps5zink_destroy",
+      "_mesa_glapi_get_proc_address",
+      "vk_icdGetInstanceProcAddr",
+      "radv_CreateInstance",
+      "radv_CreateDevice",
+      "nir_shader_create",
+      "glfwCreateWindow",
+      "SDL_CreateWindow",
+      "prospero_sdl_tls_preinit"
+    ],
+    "runtime": "JVM not linked; runtime workspace supplies native converter, clean-room libc and log/pad headers",
+    "runtime_inputs_sha256": {
+      "java25/probe/log_share.hpp": "bea5f966b128ad4895e9b887186eaa8ff39f3e4bc67dfe3fc99caf5acd765c9b",
+      "java25/platform/console_model.hpp": "e35013b2594959245b886cc009e6eaea035461578e6b59ee8c459b9bbde01eaf",
+      "src/pad.h": "a19e941ab8430fe1761a6104e5d1186e6b35412201d4ad34316ae355a7b4c732",
+      "build/native/libc.prx": "e6ff45d16adf687855cc3b33b0c8a4132b6504360b221e0a34c7e99fb3ba0036"
+    },
+    "console": "NOT TESTED",
+    "release_store": "No action",
+    "package_sha256": "2dfba3a88e5a0dd6ec8976cc00f3fc082cd63b4778f246d21ee1b3f5830b92bf"
+  },
+  "package_bytes": 17866596,
+  "package_location": "dist/candidates/zink-present-183/PPSA99874.zip (local only)",
+  "evidence": "client182-console-fault-2026-10-31.json",
+  "repair": "Private frontend uses real pipe flush_resource in before_flush callback, after pending GL emission and before end-of-frame batch flush, matching pinned DRI/kopper",
+  "host_animation": {
+    "probe_sha256": "0a1c7d6ac7c47cf4c47b1fddab914bfedceb7e67c12841b56cd50185be8481d0",
+    "glfw_sha256": "44519907de84e5c26353af7bde7170423fd99219b2d83a8d6ddb1308f12e0946",
+    "frontend_sha256": "83dbb4c7548aa60c0f1d460b5c479efca014fd237889ca49fc30a5bbc2cc4ff3",
+    "result": "PASS",
+    "scope": "Execute the exact183 animation/lifecycle core on actual macOS GLFW/Zink.\n\nExplicit native inputs only. SDL dummy draws offscreen on real lavapipe, so no\nVideoOut, positive kopper surface, refresh or launcher handoff is established.\n",
+    "sanitizers": "Frontend/GLFW/driver ASan+UBSan; Mesa/ICD ordinary builds",
+    "cycle_ms": 120,
+    "ps5": "NOT TESTED"
+  },
+  "host_full_glfw_lwjgl": {
+    "host": "macOS-27.2-arm64-arm-64bit-Mach-O",
+    "scope": "Actual macOS lavapipe/Zink + rebuilt GLFW/LWJGL execution, outside CI lanes.\n\nAll native inputs are explicit local build outputs. Original game inputs are\nverified against the draft publisher lock. No account, network or target/GPU\nacceptance is involved; SDL's dummy window has an offscreen Zink drawable.\n",
+    "frontend_sha256": "83dbb4c7548aa60c0f1d460b5c479efca014fd237889ca49fc30a5bbc2cc4ff3",
+    "glfw_sha256": "44519907de84e5c26353af7bde7170423fd99219b2d83a8d6ddb1308f12e0946",
+    "missing_zink_glfw_sha256": "8b55043b88f035a2be35e806b002d41f62e0ba3db00593352ba80294f174937e",
+    "core_sha256": "35337ea41c6963b2ac5fa93b027d87b378a056df41a66292e854606413eacff4",
+    "opengl_jni_sha256": "c49be762b15660e00a3f7b2e0052c6abcef0a688e26ebe48e801abe39702ae80",
+    "versions": [
+      {
+        "id": "26.1",
+        "client_sha256": "bc6194c61566b587f196090d730698f2191170f7580adb143e4ff839939d3840",
+        "cycles": 3,
+        "scope": "Original GlBackend hints and GlDevice capability creation; injected null debug options stop after capability creation; not Main/title/world"
+      },
+      {
+        "id": "26.1.1",
+        "client_sha256": "8c109be6177f40d10d0afd820b06542f9609597874242b96e16c5b0dc9e1fef3",
+        "cycles": 3,
+        "scope": "Original GlBackend hints and GlDevice capability creation; injected null debug options stop after capability creation; not Main/title/world"
+      },
+      {
+        "id": "26.1.2",
+        "client_sha256": "b1b3158572666445eff01e82fad8c7de2e4953db6d354f311730d77a8359d0b0",
+        "cycles": 3,
+        "scope": "Original GlBackend hints and GlDevice capability creation; injected null debug options stop after capability creation; not Main/title/world"
+      }
+    ],
+    "native_sanitizers": "ASan/UBSan frontend, GLFW and test driver; Mesa/lavapipe not instrumented",
+    "ps5": "Not executed; context/presentation/game/save/regression pending"
+  },
+  "checks": {
+    "ordering_regression": "PASS actual prepare_present/present code at modeled pipe boundary; GL emission/resource preparation/batch/present order; old omission fails; window/offscreen/missingtexture/failure/recursion ASan+UBSan controls",
+    "independent_package": "PASS exactZIP/identity/hash/pins/notices/singlecopy/signal-recorder/markers/signatures",
+    "target": "PASS actual GL/Zink/RADV compile/link/converter and one-copy native package",
+    "host_rendering": "PASS actual native/GLFW/LWJGL clear/draw/guarded readback/thread/lifecycle and original26.1/26.1.1/26.1.2 capability boundary; no full Main/game result",
+    "fast": "PASS16local",
+    "native": "PASS7local",
+    "documentation": "PASS local links/archive receipt",
+    "hosted_ci": {
+      "run": "https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41238596999",
+      "source_commit": "f9014105504de0885b521c1f2734717af7c8459a",
+      "status": "PASS16 fast checks in actual completed macOS15/Ubuntu24.04 jobs, logs inspected; no hosted graphics/PS5",
+      "jobs": {
+        "macos-15": 124647493315,
+        "ubuntu-24.04": 124647493494
+      }
+    }
+  },
+  "console": {
+    "result": "NOT TESTED",
+    "required": "Exact183: X once, confirm3visibleRGB/movingbarcycles separately from stage2a checksPASS; after crash reopen without X for retrieval.",
+    "pending": [
+      "Physical183fix and positive presentation",
+      "Selected/physical refresh and native repeated teardown/reacquisition",
+      "Full Java launcher handoff and scoped JVM coexistence",
+      "All26.1 releases originalMain/title/world/audio/save/reopen/exit/relaunch",
+      "ExistingVulkanversionregressions/endurance"
+    ]
+  },
+  "limits": [
+    "Observed182fault consistent with null semaphore; exact183repair not yet console-validated",
+    "Last main-thread glfwPollEvents checkpoint does not establish faulting thread",
+    "Host lavapipe/SDLdummy offscreen cannot exercise VideoOut/kopperwindow",
+    "Ordering regression uses modeled boundary, not real Vulkan synchronization",
+    "No general allocation-failure/orphan/mod compatibility or endurance claim"
+  ],
+  "preserved": [
+    "Exact180/181/182ZIPs/symbols/validation",
+    "029OSMesa and adapted GLFW callbacks",
+    "Existing runtime allocator/TLS/sync/stackworkarounds",
+    "Original game/modJARs,frozenhistory",
+    "Current179root/gameidentity,26.1productiongate",
+    "Release/prerelease/Storehold"
+  ],
+  "publication": "Source only; no release/Store action; raw reports local"
+}

@@ -68,4 +68,11 @@ Build `tools/package_zink_present_fix.py`, host-check with
 `test_zink_present_fix_host.py`, and independently audit with
 `test_client183_package.py`; explicit arguments follow182. Local output is
 `dist/candidates/zink-present-183`; existing candidate ZIPs are never overwritten.
-Exact source/checksum/host/console receipts follow packaging.
+The [183 validation record](validation/client183-zink-present-flush-2026-10-31.json)
+records clean sourcef901410 and separate host/console scopes. ZIP SHA-256:
+`2dfba3a88e5a0dd6ec8976cc00f3fc082cd63b4778f246d21ee1b3f5830b92bf`.
+
+Local16fast and7native checks pass. Full real host rendering/capability-boundary
+checks pass for26.1/26.1.1/26.1.2, as does the183animation/lifecycle check.
+[Actual Ubuntu/macOS CI](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41238596999)
+passes16fast checks for sourcef901410; no hosted graphics/PS5 result follows.
