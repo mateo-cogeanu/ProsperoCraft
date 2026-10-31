@@ -258,7 +258,28 @@
     "scope": "Phase A source pin only. Same Mesa pin as client/graphics/sources.json. No Zink build, resident group, new GL support or console acceptance yet. Preserve separate 029 OSMesa implementation."
   },
   "presentation_design": "K: private PS5 EGL/frontend + kopper display-surface branch; Zink owns one game instance/device; no extra presenter/device or game CPU copy; not implemented",
-  "hosted_ci": "Not yet run for this change",
+  "hosted_ci": {
+    "source_commit": "13d646444f20c46bedeb1fbf1e163347a1a31c0a",
+    "run_id": 41231493001,
+    "url": "https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41231493001",
+    "jobs": [
+      {
+        "id": 124626464867,
+        "name": "policy (macos-15)",
+        "result": "success",
+        "checks": 16,
+        "log_evidence": "PASS16checks in31.3s; new261input-integrity/class-parser check passed"
+      },
+      {
+        "id": 124626465184,
+        "name": "policy (ubuntu-24.04)",
+        "result": "success",
+        "checks": 16,
+        "log_evidence": "PASS16checks in42.9s; new261input-integrity/class-parser check passed"
+      }
+    ],
+    "scope": "Actual completed job steps and downloaded job logs inspected; deterministic host policy/input checks only; no GPU, publisher game execution or PS5"
+  },
   "physical_console": {
     "result": "NOT TESTED",
     "build": null,

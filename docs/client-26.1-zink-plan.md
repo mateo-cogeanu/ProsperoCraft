@@ -4,7 +4,8 @@
 by the launcher. No new app identity, console candidate, release or Store action
 is created by this work. Current identity is 01.000.179; the next available local
 candidate must be checked again before packaging. No physical Zink test or hosted
-GPU test has run. [Evidence](validation/client261-zink-phase-a-2026-10-31.json)
+GPU test has run. The 16-check fast lane passes locally, in a clean source-only
+checkout and in actual [Ubuntu/macOS CI jobs](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41231493001). [Evidence](validation/client261-zink-phase-a-2026-10-31.json)
 separates local host results from pending implementation and console tests.
 
 ## Original publisher inventory
