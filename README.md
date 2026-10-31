@@ -6,15 +6,15 @@
 
 Download Minecraft on your console, keep separate instances for worlds and mods, and play with DualSense controls, native Vulkan graphics and game audio. ProsperoCraft includes Microsoft sign-in, a Modrinth content browser, controller remapping and six saved launcher themes.
 
-**[Download 01.000.167](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.167)** · [Latest release](https://github.com/mateo-cogeanu/ProsperoCraft/releases/latest) · [Changelog](CHANGELOG.md) · [Report an issue](https://github.com/mateo-cogeanu/ProsperoCraft/issues/new/choose)
+**[Download 01.000.179](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.179)** · [Latest release](https://github.com/mateo-cogeanu/ProsperoCraft/releases/latest) · [Changelog](CHANGELOG.md) · [Report an issue](https://github.com/mateo-cogeanu/ProsperoCraft/issues/new/choose)
 
 ProsperoCraft handles Minecraft installation, accounts, input and game integration. Its [Native Java 25 Runtime](https://github.com/mateo-cogeanu/ps5-java25-homebrew) is maintained separately. Official Minecraft game JARs and asset objects are downloaded and verified from the publisher, rather than bundled with the app.
 
-The user confirms **01.000.178 microphone functionality** and requests release with automatic microphone preparation and no launcher microphone menu. Local candidate **01.000.179** applies those changes; the physical controller/system mute remains authoritative. Exact179 confirmation is required before its GitHub release and ProsperoStore submission. [Release preparation](docs/client-microphone-default-179.md) · [178 acceptance](docs/validation/client178-console-acceptance-2026-10-31.json).
+Release **01.000.179** adds confirmed Simple Voice Chat microphone input, automatic microphone preparation before Play, and simpler instance management with no microphone menu. Use the controller's physical mic button or PS5 system mute. It also includes launcher-style browser uploads and the runtime/audio fixes developed since167. [Release notes](docs/releases/client-microphone-default-179.md) · [Exact179 console acceptance](docs/validation/client179-console-acceptance-2026-10-31.json). Broad mod/device compatibility and endurance remain unmeasured.
 
 ## What can I play?
 
-Release **01.000.167** adds supported Minecraft26.2 Fabric, controller/keyboard/mouse handoff fixes, launcher mouse and keyboard controls, and a rounded vector cursor that follows the saved theme. The user accepts this exact build and explicitly requests release. [Release notes](docs/releases/client-input-fabric-167.md) · [Console acceptance](docs/validation/client167-console-acceptance-2026-10-30.json). Broader device coverage and long-session endurance remain unmeasured.
+Earlier release **01.000.167** added supported Minecraft26.2 Fabric, controller/keyboard/mouse handoff fixes, launcher mouse and keyboard controls, and a rounded vector cursor that follows the saved theme. The user accepts this exact build and explicitly requests release. [Release notes](docs/releases/client-input-fabric-167.md) · [Console acceptance](docs/validation/client167-console-acceptance-2026-10-30.json). Broader device coverage and long-session endurance remain unmeasured.
 
 | Minecraft version | Vanilla | Fabric |
 | --- | --- | --- |

@@ -1,10 +1,10 @@
 # Changelog
 
-## 01.000.179 — automatic microphone and simpler instance settings (pending release)
+## 01.000.179 — automatic microphone and simpler instance settings
 
 - Prepare the working system microphone automatically before every supported game launch; remove the launcher Microphone button, toggle and test page. Existing saved microphoneEnabled:false no longer blocks preparation. Use the controller's physical microphone mute button or PS5 system mute.
 - Keep178 native input-port/worker lifetime, mute-state checks and SVC integration unchanged. Browser uploads fills the freed action row; Done/Delete stay at the bottom for controller, keyboard and mouse.
-- User confirms178 microphone functionality and requests GitHub/ProsperoStore update. Exact179 console confirmation is still required before publishing this modified binary. No release or Store submission yet.
+- User confirms178 microphone functionality, requests GitHub/ProsperoStore publication, then confirms exact179 works as requested: automatic SVC mic,physical mute,removed menu and leaving/rejoining. Publish the tested179 ZIP unchanged with matching source/relink and validation; Store catalog submission is separate from live availability.
 
 ## 01.000.178 — opt-in input-port preparation (console pending)
 

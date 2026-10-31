@@ -60,3 +60,13 @@ has only the existing app's version/URL/SHA changed;233catalog unit tests(2skipp
 and164offline records pass. No release, tag, catalog PR or Store availability is
 claimed. All possible local preparation is complete before requesting the final
 exact-build physical check.
+
+## Exact179 gate satisfied
+
+The user now confirms “179 works as requested” in response to the specified
+automatic SVC input,physical mute/unmute,removed menu and leave/rejoin check.
+See [179 acceptance](validation/client179-console-acceptance-2026-10-31.json). This
+supersedes the preparation-time gate above for this exact package only. The
+initial build/preparation validation remains an immutable pre-test snapshot.
+Publish accepted bytes unchanged under the existing explicit release/Store
+authorization; no formal ALL PASS/endurance or new milestone is inferred.

@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-31",
+  "version": "01.000.179",
+  "title_id": "PPSA99874",
+  "package_sha256": "7381b0746b178785b303f7486a0533aa6acce3d25167634b9ce849e0546b648a",
+  "candidate_source_commit": "25f987f50e3d223011eaf3c528bdd533f8cc44f5",
+  "user_report": "179 works as requested",
+  "question_scope": "After installing179: automatic SVC microphone,physical controller mute/unmute,no launcher microphone menu,and leaving/rejoining. User confirms this exact functional scope.",
+  "authorization": "User explicitly requested GitHub release and ProsperoStore update with menu removed/default-on; exact179 confirmation now satisfies the publication gate.",
+  "limits": "Human functional acceptance,not independently measured per-device/route/codec/full-regression or endurance matrix. No new named ALL PASS milestone or shader/FPS guarantee.",
+  "preservation": "Publish the exact tested179 ZIP unchanged; preserve178,older releases/tags and source/relink records. No rebuilding for publication."
+}

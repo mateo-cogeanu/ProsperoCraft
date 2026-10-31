@@ -1,13 +1,13 @@
-# ProsperoCraft 01.000.179 — prepared release notes
+# ProsperoCraft 01.000.179
 
-Unreleased preparation: exact179 physical confirmation is still pending. Do not
-create a GitHub release/prerelease or submit the Store update from these notes
-until the exact package is confirmed. The source update is already authorized.
+The exact179 package is confirmed on PS5 for automatic SVC microphone input, the
+physical mic mute/unmute button, removal of the launcher microphone menu and
+leaving/rejoining. Published bytes are unchanged from that tested package.
 
 ## Changes
 
 - Add working PS5 system microphone input for compatible Simple Voice Chat,
-  following the user's successful178 microphone test. Prepare input automatically
+  following the user's successful178 and179 microphone tests. Prepare input automatically
   when launching gameplay; remove the launcher microphone menu and toggle.
 - Use the DualSense physical mic button or PS5 system mute to mute input. The app
   does not unmute the system microphone or change the selected route.
@@ -23,7 +23,8 @@ until the exact package is confirmed. The source update is already authorized.
 
 Minecraft26.2/26.3 Vanilla/Fabric support is retained; actual mod compatibility
 depends on matching upstream versions. No universal mod/native-code compatibility,
-new supported-version expansion, formal endurance or per-device claim.
+new supported-version expansion, formal endurance or per-device claim. Exact179
+acceptance is the user's functional confirmation, not a formal ALL PASS matrix.
 
 GUI: mihawk-99/PS5_VKHomebrewUI, based on BlackBearReloaded's ps5-homebrew-ui.
 Instance icons: MultiMC/Prism contributors with original attribution/licenses.
