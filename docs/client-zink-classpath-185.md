@@ -72,4 +72,16 @@ relink/build inputs, component, runtime, JDK25, LLVM/LLD as184. Output is
 an explicit `--fixture client/zink_handoff_classpath/ClientStartup25.java` and an
 isolated output directory; actual Java rendering runs on lavapipe, while its
 launcher barrier is modeled and no native UI/VideoOut/LoadExec is established.
-Target/host/package receipts and exact checksum are added after packaging.
+The [185 validation record](validation/client185-zink-classpath-2026-11-01.json)
+records clean build source7ae62cb and exact package/symbol/classpath hashes. ZIP SHA-256:
+`e541f4638ab5034e9addbf280a34f3220276cc0fca04ef70edc5ca0e13be3f7f`.
+The host workload also passes using **the actual185packaged JAR list/order and
+packaged fixture**, with no shadowing fixture class or extra parent JAR entries.
+Supply `--app` and `--classpath-audit` with a clean host output directory to use
+this stricter mode. It still models only the launcher barrier, never PS5 VideoOut.
+
+Local16fast,7native and source-only outside-root16fast checks pass.
+[Build-source Ubuntu/macOS CI](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41293415195)
+and [effective-host-tool CI](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41293624975)
+both pass16fast checks; completed jobs/logs were inspected. Hosted CI executes
+no graphics, native launcher, VideoOut or PS5 process replacement.
