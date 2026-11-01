@@ -50,3 +50,14 @@ measured scanout/FPS/resource reclamation and endurance remain pending. Retain
 allocator/scratch/verifier/emutls/network/sync/stack and SDL/RADV/shaderc/OpenAL/
 input/audio workarounds. No release/prerelease,Store action,archive freeze or full
 milestone ALL PASS is inferred.
+
+The [exact190 build record](validation/client190-zink-fabric-trace-2026-11-01.json)
+pins clean source `e5c5787` and component/package/runtime hashes.
+ZIP SHA-256: `38f6af3bcdd77d391e4cb4e09cab1fbfa01f66a39654550577a8cfdb7ce44f54`.
+Local16fast,8native,source-only16fast, actual host GL and target/package audits
+pass. Real host runs for all three releases contain ordered startup stages and
+exactly48bounded frontend events.
+[Ubuntu/macOS policy CI](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41312559066)
+passes16checks on each host; completed job logs inspected. Current190native tests
+are local;189hostednative verification remains separate. No190physical result or
+hang repair is claimed.
