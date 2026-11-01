@@ -12,6 +12,7 @@ public final class ClientStartup25 {
  public static native void nativeSnapshot(long elapsedMillis,int phase);
  public static native boolean launcherMenu();
  public static native String[] cpuInformation();
+ public static native boolean cleanSystemExit(boolean arm);
  private static boolean normalQuit=false;
  public static boolean normalQuit(){return normalQuit;}
  public static boolean gamePreflight()throws Exception{return ProsperoLauncher.verifySelected();}
@@ -286,7 +287,12 @@ public final class ClientStartup25 {
     catch(Throwable unavailable){console.println("PS5 startup observer unavailable;continuing original Main: "+unavailable);observer=null;}
    }else console.println("PS5 startup observer disabled for performance run;enable ps5.startupObserver explicitly for stack sampling");
    ProsperoSession session=new ProsperoSession(Path.of("/download0/mc-client/logs"));
-   try{method.invoke(null,(Object)selectedArguments);}
+   Thread gameThread=Thread.currentThread();
+   try(ProsperoExit exit=cleanSystemExit(false)?new ProsperoExit(
+     ()->session.verifyCleanReturn(gameThread.getContextClassLoader()),
+     ()->{if(!cleanSystemExit(true))throw new IllegalStateException("Clean exit unavailable");},console):null){
+    method.invoke(null,(Object)selectedArguments);
+   }
    catch(InvocationTargetException failure){throw failure.getCause();}
    stage("Original Main returned;this alone does not establish menu or gameplay success");
    session.verifyCleanReturn(ProsperoLauncher.runningGameLoader());

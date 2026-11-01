@@ -1,5 +1,11 @@
 # Changelog
 
+## Candidate193 — verified System.exit restart and screen diagnostics
+
+- Record independently retrieved192 native screen-creation wait; no title/world pass.
+- Add candidate-only clean-session shutdown observer and status0 one-shot LoadExec handoff; original JARs and real VM shutdown remain.
+- Add bounded internal Zink screen checkpoints; underlying stall remains unproven. Exact PS5 quit/relaunch and startup validation pending.
+
 ## Development — 26.1.x Zink research (not launchable)
 
 - Enumerate original 26.1, 26.1.1 and 26.1.2 release metadata in a draft lock; add explicit hash-verified preparation and read-only parent/GLFW/OpenGL JNI linkage audits. Original game JARs/assets remain outside Git and unmodified.

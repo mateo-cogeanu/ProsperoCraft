@@ -50,3 +50,5 @@ source and licenses; its omitted-upstream-file links are recorded separately by
 the documentation checker.
 
 [Local build storage cleanup](local-build-storage.md)
+
+- [193 clean System.exit handoff and screen wait diagnostics](client-zink-lifecycle-193.md)

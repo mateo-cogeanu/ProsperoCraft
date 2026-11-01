@@ -15,7 +15,8 @@
     "test_launcher_offline.py",
     "test_launcher_delete.py",
     "test_launcher_duplicate.py",
-    "test_launcher_web.py"
+    "test_launcher_web.py",
+    "test_launcher_system_exit.py"
   ],
   "zink": [
     "test_zink_host.py"
@@ -29,6 +30,7 @@
     "test_microphone_capture.py",
     "test_openal_thread_error.py",
     "test_zink_guard.py",
-    "test_zink_submit_policy.py"
+    "test_zink_submit_policy.py",
+    "test_session_exit_gate.py"
   ]
 }

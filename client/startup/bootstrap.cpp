@@ -177,8 +177,28 @@ int vm_print(FILE *requested,const char *format,va_list arguments) {
  if(std::fflush(target)!=0)return -1;
  return count;
 }
+#ifdef PROSPERO_CLEAN_SYSTEM_EXIT
+static prospero_session::CleanExitGate clean_system_exit_gate;
+#endif
+jboolean clean_system_exit(JNIEnv*,jclass,jboolean arm) {
+#ifdef PROSPERO_CLEAN_SYSTEM_EXIT
+ if(arm)clean_system_exit_gate.arm();
+ return JNI_TRUE;
+#else
+ (void)arm;return JNI_FALSE;
+#endif
+}
 void vm_exit(int code) {
  if(startup_log) {std::fprintf(startup_log,"VM EXIT: %d\n",code);std::fflush(startup_log);}
+#ifdef PROSPERO_CLEAN_SYSTEM_EXIT
+ if(clean_system_exit_gate.take(code)) {
+  // Java hooks and real HotSpot VM_Exit cleanup have completed. No JNI here.
+  log_stage("PS5_SESSION verified System.exit(0); replacing process for library");
+  int rc=prospero_session::restart_library();
+  char note[128];std::snprintf(note,sizeof(note),"PS5_SESSION exit restart returned0x%08x; keep open for logs",unsigned(rc));log_stage(note);
+  for(;;)(void)sceKernelUsleep(1000000);
+ }
+#endif
 }
 void vm_abort() {log_stage("VM ABORT");}
 bool read_last_line(const char *path) {
@@ -499,8 +519,9 @@ void run_test(int i) {
   JNINativeMethod callbacks[]={{const_cast<char *>("checkpoint"),const_cast<char *>("(Ljava/lang/String;)V"),reinterpret_cast<void *>(&network_checkpoint)},
    {const_cast<char *>("nativeSnapshot"),const_cast<char *>("(JI)V"),reinterpret_cast<void *>(&native_snapshot)},
    {const_cast<char *>("launcherMenu"),const_cast<char *>("()Z"),reinterpret_cast<void *>(&prospero_menu::menu)},
-   {const_cast<char *>("cpuInformation"),const_cast<char *>("()[Ljava/lang/String;"),reinterpret_cast<void *>(&cpu_information)}};
-  if(java_env->RegisterNatives(klass,callbacks,i==3?4:1)!=JNI_OK || java_env->ExceptionCheck()) {
+   {const_cast<char *>("cpuInformation"),const_cast<char *>("()[Ljava/lang/String;"),reinterpret_cast<void *>(&cpu_information)},
+   {const_cast<char *>("cleanSystemExit"),const_cast<char *>("(Z)Z"),reinterpret_cast<void *>(&clean_system_exit)}};
+  if(java_env->RegisterNatives(klass,callbacks,i==3?5:1)!=JNI_OK || java_env->ExceptionCheck()) {
    java_failure(i,-1317,"network trace binding");java_env->DeleteLocalRef(klass);return;
   }
   jmethodID method=java_env->GetStaticMethodID(klass,"main","([Ljava/lang/String;)V");

@@ -1,0 +1,154 @@
+--- a/src/gallium/drivers/zink/zink_screen.c
++++ b/src/gallium/drivers/zink/zink_screen.c
+@@ -3389,6 +3389,22 @@
+    return "v2024-08-08-00";
+ }
+ 
++#include <errno.h>
++
++/* Bounded fixed startup labels; retain errno and all original control flow. */
++static void
++ps5_screen_stage(const char *label)
++{
++   static unsigned events;
++   unsigned n = __atomic_load_n(&events, __ATOMIC_RELAXED);
++   while (n < 64 && !__atomic_compare_exchange_n(&events, &n, n + 1, false, __ATOMIC_RELAXED, __ATOMIC_RELAXED)) {}
++   if (n < 64) {
++      int saved = errno;
++      fprintf(stderr, "PS5_ZINK screen stage %s\n", label);
++      errno = saved;
++   }
++}
++
+ static struct zink_screen *
+ zink_internal_create_screen(const struct pipe_screen_config *config, int64_t dev_major, int64_t dev_minor, uint64_t adapter_luid)
+ {
+@@ -3454,10 +3470,13 @@
+       screen->driconf.zink_shader_object_enable = driQueryOptionb(config->options, "zink_shader_object_enable");
+    }
+ 
++   ps5_screen_stage("instance lock enter");
+    simple_mtx_lock(&instance_lock);
++   ps5_screen_stage("instance lock acquired");
+    if (++instance_refcount == 1) {
+       instance_info.loader_version = zink_get_loader_version(screen);
+       instance_info.no_device_select = zink_picks_device(dev_major, adapter_luid);
++   ps5_screen_stage("instance creation enter");
+       instance = zink_create_instance(screen, &instance_info);
+    }
+    if (!instance) {
+@@ -3467,6 +3486,7 @@
+       simple_mtx_unlock(&instance_lock);
+       goto fail;
+    }
++   ps5_screen_stage("instance creation complete");
+    screen->instance = instance;
+    screen->instance_info = &instance_info;
+    simple_mtx_unlock(&instance_lock);
+@@ -3504,12 +3524,14 @@
+          debug_printf("ZINK: failed to setup debug utils\n");
+    }
+ 
++   ps5_screen_stage("physical device selection enter");
+    choose_pdev(screen, dev_major, dev_minor, adapter_luid);
+    if (screen->pdev == VK_NULL_HANDLE) {
+       if (!screen->driver_name_is_inferred)
+          mesa_loge("ZINK: failed to choose pdev");
+       goto fail;
+    }
++   ps5_screen_stage("physical device selection complete");
+    screen->is_cpu = screen->info.props.deviceType == VK_PHYSICAL_DEVICE_TYPE_CPU;
+ 
+    update_queue_props(screen);
+@@ -3522,12 +3544,14 @@
+                                               VK_FORMAT_D32_SFLOAT_S8_UINT);
+    screen->have_dynamic_state_vertex_input_binding_stride = true;
+ 
++   ps5_screen_stage("physical device properties enter");
+    if (!zink_get_physical_device_info(screen)) {
+       if (!screen->driver_name_is_inferred)
+          debug_printf("ZINK: failed to detect features\n");
+       goto fail;
+    }
+ 
++   ps5_screen_stage("physical device properties complete");
+    if (!screen->info.rb2_feats.nullDescriptor) {
+       mesa_loge("Zink requires the nullDescriptor feature of KHR/EXT robustness2.");
+       goto fail;
+@@ -3579,6 +3603,7 @@
+          screen->resizable_bar = true;
+    }
+ 
++   ps5_screen_stage("flush queue setup enter");
+    setup_renderdoc(screen);
+    if (screen->threaded_submit && !util_queue_init(&screen->flush_queue, "zfq", 8, 1, UTIL_QUEUE_INIT_RESIZE_IF_FULL, screen)) {
+       if (!screen->driver_name_is_inferred)
+@@ -3586,6 +3611,7 @@
+       goto fail;
+    }
+ 
++   ps5_screen_stage("flush queue setup complete");
+    zink_internal_setup_moltenvk(screen);
+    if (!screen->info.have_KHR_timeline_semaphore && !screen->info.feats12.timelineSemaphore) {
+       if (!screen->driver_name_is_inferred)
+@@ -3610,7 +3636,9 @@
+    init_driver_workarounds(screen);
+    disable_features(screen);
+ 
++   ps5_screen_stage("logical device creation enter");
+    struct zink_device *zdev = zink_create_logical_device(screen);
++   ps5_screen_stage("logical device creation returned");
+    if (!zdev->dev)
+       goto fail;
+    screen->dev = zdev->dev;
+@@ -3620,6 +3648,7 @@
+                                              screen->vk_GetDeviceProcAddr,
+                                              screen->dev);
+ 
++   ps5_screen_stage("device dispatch loaded");
+    init_queue(screen);
+ 
+    zink_verify_device_extensions(screen);
+@@ -3722,6 +3751,7 @@
+       }
+    }
+ 
++   ps5_screen_stage("resource initialization enter");
+    if (!zink_screen_resource_init(&screen->base))
+       goto fail;
+    if (!zink_bo_init(screen)) {
+@@ -3731,27 +3761,34 @@
+    }
+    zink_screen_fence_init(&screen->base);
+ 
++   ps5_screen_stage("compiler initialization enter");
+    zink_screen_init_compiler(screen);
++   ps5_screen_stage("disk cache initialization enter");
+    if (!disk_cache_init(screen)) {
+       if (!screen->driver_name_is_inferred)
+          mesa_loge("ZINK: failed to initialize disk cache");
+       goto fail;
+    }
++   ps5_screen_stage("shader queue initialization enter");
+    if (!util_queue_init(&screen->cache_get_thread, "zcfq", 8, 4,
+                         UTIL_QUEUE_INIT_RESIZE_IF_FULL, screen))
+       goto fail;
++   ps5_screen_stage("shader queue initialization complete");
+    populate_format_props(screen);
+ 
++   ps5_screen_stage("format properties complete");
+    slab_create_parent(&screen->transfer_pool, sizeof(struct zink_transfer), 16);
+ 
+    screen->driconf.inline_uniforms = debug_get_bool_option("ZINK_INLINE_UNIFORMS", screen->is_cpu);
+ 
++   ps5_screen_stage("timeline semaphore enter");
+    if (!zink_screen_init_semaphore(screen)) {
+       if (!screen->driver_name_is_inferred)
+          mesa_loge("zink: failed to create timeline semaphore");
+       goto fail;
+    }
+ 
++   ps5_screen_stage("timeline semaphore complete");
+    bool can_db = true;
+    {
+       if (!screen->info.have_EXT_descriptor_buffer) {

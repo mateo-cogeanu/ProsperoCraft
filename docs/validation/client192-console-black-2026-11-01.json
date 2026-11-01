@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-01",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.192",
+  "package_sha256": "b54fa809bc14166d1ea077c602213501364fd8c64dfe9e6825d2fd2d0846f613",
+  "run_id": "client-01.000.192-1793549326-354338451",
+  "user_statement": "now its just black",
+  "retrieval": "Read-only Safari current-run session and direct report-link downloads; initial native/Java snapshots preserved locally",
+  "observed": [
+    "Native stderr stops after screen create enter and RADV device UUID warning; refreshed snapshot identical",
+    "Java observer repeatedly shows Render thread in genuine GLFW.glfwCreateWindow from original Fabric Knot/Main; last saved snapshot elapsed534262ms",
+    "No current-run VM abort or Java probe exception recorded",
+    "No hs-error file: errno2; diagnostic response reports157open descriptors in8192scanned; not EMFILE evidence",
+    "Native resource sampling continued through elapsed724312ms",
+    "VM trace contains earlier pthread_create return35/libc ENOMEM and later successful creates; exact stalled native operation and allocator owner unproven"
+  ],
+  "classification": "Sustained native screen-creation wait; no title/world/JNI-copy repair acceptance",
+  "next": "193 adds internal Zink screen-creation checkpoints; quit investigation now explicitly authorized",
+  "release_store": "No action",
+  "local_report_sha256": {
+    "abort.txt": "1abd046bf5e8d0fab4be1f483417af3a29410fb9d7e15d68d696083538f914cf",
+    "exception.txt": "507173af8fa7b4cf3d42e88a8b56b173504a5450c0037703e72f8e2600b17a2d",
+    "exceptions.log": "3442115f9ad7085902b8bd3955177ccf20ecb9ca14523094b14d2801ebd163ea",
+    "hs-error.log": "72f21168887373cfce52df85d58fd0625dc9c86649975796b7c7606e245f3231",
+    "native-first.log": "c3917b260d511561b6eb0055870344d640f52ced1d65af7654f729db50faf32e",
+    "native-stderr-refreshed.log": "c3917b260d511561b6eb0055870344d640f52ced1d65af7654f729db50faf32e",
+    "process-usage.log": "be60237893f8ba1ffda589074c116e3834cf3a87d24adfc15db21592370185c1",
+    "startup-tail.log": "8cbb11e1815a18f0c7744427879ea402c0d279d11b4a41608c52a8cd423727bd",
+    "vm-trace.log": "e4563c741b3d69fa9d7a65ebdfea16663ff10d18f60aeb18958878dda14838f5"
+  }
+}
