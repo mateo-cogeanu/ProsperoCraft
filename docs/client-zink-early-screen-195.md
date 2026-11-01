@@ -45,7 +45,8 @@ and initial workers while account/download work runs, even for another renderer.
 Host checks cover real concurrent/idempotent preparation, GL clear/draw/readback,
 refused surface, context ownership/transfer/resize/destruction, original26.1/
 26.1.1/26.1.2 capabilities and real pre-JVM preparation. The missing-validation-
-layer negative test must return an honest preparation failure before host JVM
+layer negative test (`--prepare-screen --check-preparation-refusal`, requiring
+a layerless host provider) must return an honest preparation failure before host JVM
 entry; it is separate from successful GL and PS5 startup checks. No full-game,
 save, native quota/resource recovery or console success is inferred.
 

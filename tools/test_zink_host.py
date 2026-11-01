@@ -33,9 +33,11 @@ def main():
     parser.add_argument('--publisher-cache', type=Path, required=True)
     parser.add_argument('--glfw-binding', type=Path, required=True)
     parser.add_argument('--oshi-provider', type=Path, required=True, help='Existing genuine consumer OSHI overlay; host fixture metadata avoids unrelated macOS JNA telemetry')
+    parser.add_argument('--check-preparation-refusal', action='store_true', help='Require honest early refusal with a layerless host Vulkan provider')
     parser.add_argument('--prepare-screen', action='store_true', help='Prepare the real screen via a native constructor before the host JVM')
     parser.add_argument('--output-dir', type=Path, default=ROOT / 'build/zink-host-test')
     args = parser.parse_args()
+    if args.check_preparation_refusal and not args.prepare_screen: parser.error('--check-preparation-refusal requires --prepare-screen')
     if platform.system() != 'Darwin':
         raise RuntimeError('This host lane currently exercises macOS lavapipe; Linux and PS5 are separate validation')
     jdk, cc = java_home(args.java_home), executable('clang', override=args.cc)
@@ -119,6 +121,16 @@ def main():
     execute([*command, absent, 'absent'], 'missing-zink', 'PASS real GLFW missing-Zink refusal')
     if args.prepare_screen:
         env['DYLD_INSERT_LIBRARIES'] = os.pathsep.join([asan, str(prewarm)])
+    if args.check_preparation_refusal:
+        refused = subprocess.run([str(jdk / 'bin/java'), '-version'], cwd=work,
+            env=dict(env, ZINK_DEBUG='flushsync,validation'), capture_output=True, text=True, timeout=40)
+        refusal = refused.stdout + refused.stderr
+        (work / 'preparation-refusal.log').write_text(refusal)
+        if (not refused.returncode or 'HOST_ZINK preparation failed error=19' not in refusal or
+            any(token in refusal for token in ('HOST_ZINK pre-JVM screen preparation complete',
+                'openjdk version', 'AddressSanitizer', 'runtime error:'))):
+            raise AssertionError('Early preparation refusal failed; requires a layerless host provider: ' + refusal[-3000:])
+        print('PASS pre-JVM preparation refusal and instance cleanup', flush=True)
     reports = []
     for row in json.loads((ROOT / 'client/26.1.lock.json').read_text())['versions']:
         cache = args.publisher_cache.resolve()
@@ -133,12 +145,12 @@ def main():
                 path = cache / 'libraries' / artifact_path(artifact['path']); verified(artifact, path, offline=True); dependencies.append(path)
         full = list(command); full[full.index('-cp') + 1] = cp + os.pathsep + os.pathsep.join(map(str, [game, *dependencies]))
         text = execute([*full, glfw, 'zink', args.opengl_library.resolve()], row['id'], 'PASS actual GLFW/LWJGL Zink')
-        if args.prepare_screen and 'HOST_ZINK pre-JVM screen preparation complete' not in text: raise AssertionError('Missing pre-JVM preparation')
+        if args.prepare_screen and ('HOST_ZINK pre-JVM screen preparation complete' not in text or 'prepared screen reuse' not in text): raise AssertionError('Missing pre-JVM preparation')
         if text.count('PASS actual GLFW/LWJGL Zink') != 3: raise AssertionError('Missing full context cycles')
         reports.append({'id': row['id'], 'client_sha256': sha(game), 'cycles': 3,
                         'scope': 'Original GlBackend hints and GlDevice capability creation; injected null debug options stop after capability creation; not Main/title/world'})
     (work / 'audit.json').write_text(json.dumps({'host': platform.platform(), 'scope': __doc__,
-        'pre_jvm_screen_preparation': args.prepare_screen, 'frontend_sha256': sha(frontend), 'glfw_sha256': sha(glfw), 'missing_zink_glfw_sha256': sha(absent),
+        'pre_jvm_screen_preparation': args.prepare_screen, 'early_refusal_checked': args.check_preparation_refusal, 'frontend_sha256': sha(frontend), 'glfw_sha256': sha(glfw), 'missing_zink_glfw_sha256': sha(absent),
         'core_sha256': sha(args.core_library), 'opengl_jni_sha256': sha(args.opengl_library),
         'versions': reports, 'native_sanitizers': 'ASan/UBSan frontend, GLFW and test driver; Mesa/lavapipe not instrumented',
         'ps5': 'Not executed; context/presentation/game/save/regression pending'}, indent=2) + '\n')
