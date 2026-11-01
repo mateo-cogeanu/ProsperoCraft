@@ -70,3 +70,12 @@ policies, SDL storage/workers, Mesa ownership/reserves, shaderc lifetime, OpenAL
 and input/audio workarounds intact. No release/prerelease, Store update, archive
 freeze or full-game ALL PASS is inferred. README support remains unchanged until
 physical acceptance. Fabric/Sodium-on-GL/Iris/Distant Horizons are later milestones.
+
+The [exact187 build record](validation/client187-zink-launcher-2026-11-01.json)
+pins clean source `269ad73`, package/symbol/runtime/classpath and
+native hashes. ZIP SHA-256:
+`c1f565deebf479cffe29c3c8946d200be46a50381dc538bb6f05e5e35b46ac3a`.
+Local16fast,7native,source-only outside-root16fast and target/package checks pass.
+[Hosted Ubuntu/macOS CI](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41295327361)
+passes16checks on each host; completed steps/logs inspected. None establishes
+original Main/title/world/PS5 acceptance for187.
