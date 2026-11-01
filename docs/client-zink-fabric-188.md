@@ -44,3 +44,11 @@ SDL/RADV reserves/ownership,shaderc lifetime,OpenAL/input/audio implementations.
 Quit repair, actual188 Vanilla/Fabric title/world/save/reopen/relaunch, later
 Vulkan regressions and endurance remain pending. Root/published179 identity and
 release/Store hold remain; no release/prerelease or archive freeze.
+
+[Exact188 build/validation](validation/client188-zink-fabric-2026-11-01.json)
+pins clean source `5ed477c` and package/symbol/runtime hashes.
+ZIP SHA-256: `08fc9856508d67945303353872820e7067ff6d10b6f82901e1c7dc8c25a309eb`.
+Local16fast,7native,source-only16fast and target/package audits pass.
+[Ubuntu/macOS CI](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41307297043)
+passes16checks on each host; completed job logs inspected. Actual188 PS5
+Vanilla/Fabric acceptance remains pending and quit failure remains deferred.
