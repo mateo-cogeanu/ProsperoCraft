@@ -78,3 +78,14 @@ Actual192 GL capabilities/title/world/mod behavior, all Vanilla/Fabric26.1.x
 world/audio/save/reopen/lifecycle,26.2/26.3/snapshot Vulkan regressions, throughput,
 resource reclamation/endurance and deferred quit repair remain pending. No full
 ALL PASS, release/prerelease,Store update or archive freeze is inferred.
+
+[Exact192 build/validation](validation/client192-zink-jni-env-2026-11-01.json) pins
+clean source `bd67015` and package/runtime/native object hashes.
+ZIP SHA-256: `b54fa809bc14166d1ea077c602213501364fd8c64dfe9e6825d2fd2d0846f613`.
+Local16fast,9native,source-only16fast, actual JNI fault/lifetime and target/package
+checks pass. A host LWJGL core relinked with the genuine scoped env/TLS units also
+passes real26.1/26.1.1/26.1.2 Zink capability/rendering/thread/lifecycle workloads
+and missing-provider refusal with flushsync. That host heap models ownership only.
+[Ubuntu/macOS policy CI](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41316983117)
+passes16checks on each host; completed logs inspected. Current192native,explicit
+JNI and graphics lanes are local; PS5 repair acceptance remains pending.
