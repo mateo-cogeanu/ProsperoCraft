@@ -251,13 +251,15 @@ public final class ClientStartup25 {
    org.lwjgl.sdl.SDLHints.SDL_SetHint("PS5_CONTROLLER_BINDINGS",ProsperoLauncher.controllerBindings());
    boolean controls=org.lwjgl.sdl.SDLHints.SDL_SetHint("PS5_TEMPORARY_CONTROLS",System.getProperty("ps5.temporaryControls","1"));
    stage("Temporary SDL controls hint="+org.lwjgl.sdl.SDLHints.SDL_GetHint("PS5_TEMPORARY_CONTROLS")+" accepted="+controls+";D-pad/left stick=menu arrows,X=select,Circle=back,Triangle=Tab,Square=Backspace;gamepad subsystem hands off to future mods");
+   if(ProsperoLauncher.selectedZink())System.setProperty("ps5.opengl.provider","zink");
+   else System.clearProperty("ps5.opengl.provider");
    if(ProsperoLauncher.selectedGlfw()){
     Configuration.GLFW_LIBRARY_NAME.set(System.mapLibraryName("ps5glfw"));System.loadLibrary("ps5glfw");
     ClassLoader game=ProsperoLauncher.gameLoader();
     Class<?> glfw=Class.forName("org.lwjgl.glfw.GLFW",true,game);
     glfw.getMethod("glfwInitHint",int.class,int.class).invoke(null,0x00050003,0x00060005);
     // Do not initialize LWJGL VK here: original26.2Main calls VK.create().
-    try(var provider=new org.lwjgl.system.ps5.PS5Library(System.mapLibraryName("ps5clientgpu"))){
+    try(var provider=new org.lwjgl.system.ps5.PS5Library("libps5clientgpu.so")){
      long address=provider.getFunctionAddress("vkGetInstanceProcAddr");
      if(address==0)throw new UnsatisfiedLinkError("Resident Vulkan loader entry is missing");
      var library=(org.lwjgl.system.SharedLibrary)glfw.getMethod("getLibrary").invoke(null);
@@ -265,7 +267,7 @@ public final class ClientStartup25 {
      if(configure==0)throw new UnsatisfiedLinkError("GLFW Vulkan loader configuration is missing");
      org.lwjgl.system.JNI.invokePV(address,configure);
     }
-    stage("26.2 genuine GLFW with SDL PS5 backend; resident Vulkan loader configured; original game JAR unchanged");
+    stage(ProsperoLauncher.selectedZink()?"26.1 Vanilla Zink development: genuine GLFW, canonical resident GL resolver; original Main/JAR unchanged":"26.2 genuine GLFW with SDL PS5 backend; resident Vulkan loader configured; original game JAR unchanged");
    }
    stage("Menu inactivity FPS policy=minimized;other options retained,original backed up when migrated");
    stage("Guarded C1 warmup:checking actual level1 compiled integer kernel before original Main");

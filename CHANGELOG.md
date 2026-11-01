@@ -25,6 +25,8 @@
 
 - User reports exact186 **Stage2b PASS** for the diagnostic JVM/Zink-to-fresh-launcher handoff. Preserve tested bytes and original build record; record independently observed186 session and uncollected checkpoint limits separately. [Console receipt](docs/validation/client186-console-stage2b-2026-11-01.json). Next is normal Vanilla26.1 original-Main/title integration; full-game/version/regression acceptance and release/Store authorization remain pending.
 
+- Local187 returns to the normal full-game launcher/accounts/instances/downloads and original Main, carrying186's scoped Zink integration. An exact candidate resource enables Vanilla26.1/26.1.1/26.1.2 as development tests with adapted GLFW and original OpenGL arguments; default builds/Fabric remain gated and later versions keep Vulkan. [First26.1 title-screen test](docs/client-zink-launcher-187.md). Physical title/world/lifecycle and regressions pending; no release/Store update.
+
 ## 01.000.179 — automatic microphone and simpler instance settings
 
 - Prepare the working system microphone automatically before every supported game launch; remove the launcher Microphone button, toggle and test page. Existing saved microphoneEnabled:false no longer blocks preparation. Use the controller's physical microphone mute button or PS5 system mute.

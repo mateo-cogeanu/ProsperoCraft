@@ -16,7 +16,7 @@ public final class ProsperoInstall {
  interface Progress {void update(String text,long completed,long total);}
  record Version(String id,String type,String url,String sha1){}
  record FilePin(String path,String url,String sha1,long size){}
- static final class Receipt {String version,assetIndex,window;int javaMajor;ArrayList<FilePin> files=new ArrayList<>();ArrayList<String> classpath=new ArrayList<>();}
+ static final class Receipt {String version,assetIndex,window,renderer;int javaMajor;ArrayList<FilePin> files=new ArrayList<>();ArrayList<String> classpath=new ArrayList<>();}
  private final Path root;private final Source source;
  ProsperoInstall(Path root){this(root,ProsperoInstall::network);}
  ProsperoInstall(Path root,Source source){this.root=root;this.source=source;}
@@ -71,7 +71,7 @@ public final class ProsperoInstall {
   JsonObject meta=object(metadata);if(!version.id.equals(meta.get("id").getAsString()))throw new IOException("Version metadata identity mismatch");
   int javaMajor=meta.getAsJsonObject("javaVersion").get("majorVersion").getAsInt();if(javaMajor<8||javaMajor>100)throw new IOException("Invalid publisher Java requirement");
   if(!"net.minecraft.client.main.Main".equals(meta.get("mainClass").getAsString()))throw new IOException("Unsupported client entry point");
-  Receipt receipt=new Receipt();receipt.javaMajor=javaMajor;receipt.version=version.id;receipt.assetIndex=meta.getAsJsonObject("assetIndex").get("id").getAsString();receipt.window="GLFW";
+  Receipt receipt=new Receipt();receipt.javaMajor=javaMajor;receipt.version=version.id;receipt.assetIndex=meta.getAsJsonObject("assetIndex").get("id").getAsString();receipt.window="GLFW";receipt.renderer=ProsperoGraphics.enabled()&&ProsperoGraphics.release261(version.id)?"ZINK":"VULKAN";
   String client="versions/"+version.id+"/client.jar";receipt.files.add(pin(client,meta.getAsJsonObject("downloads").getAsJsonObject("client")));receipt.classpath.add(client);
   for(var item:meta.getAsJsonArray("libraries")){JsonObject lib=item.getAsJsonObject();String name=lib.get("name").getAsString();if(name.contains(":natives-")||(name.startsWith("io.netty:netty-transport-native-")&&name.split(":").length>3)||!allowed(lib))continue;
    if(name.startsWith("org.lwjgl:lwjgl-sdl:"))receipt.window="SDL";
@@ -96,5 +96,5 @@ public final class ProsperoInstall {
   if(!Files.isRegularFile(path)||Files.size(path)!=index.size||!hash(path).equals(index.sha1))throw new IOException("Asset index needs repair download");
  }
  static String hardwarePort(Receipt receipt){if(receipt.classpath.stream().anyMatch(p->p.endsWith("/oshi-core-6.9.0.jar")))return "oshi-6.9.0-ps5-platform.jar";if(receipt.classpath.stream().anyMatch(p->p.endsWith("/oshi-common-7.7.2.jar")))return "oshi-7.7.2-ps5-provider.jar";return null;}
- java.net.URLClassLoader loader(Receipt receipt)throws Exception {verify(receipt);ArrayList<URL> urls=new ArrayList<>();String port=hardwarePort(receipt);if(port!=null){Path hardware=Path.of("/app0/assets/java25/ports/"+port);if(Files.isRegularFile(hardware))urls.add(hardware.toUri().toURL());}if("26.2".equals(receipt.version)&&"GLFW".equals(receipt.window)){Path binding=Path.of(System.getProperty("ps5.glfw.binding","/app0/assets/java25/ports/lwjgl-glfw-3.4.1-ps5-callback343.jar"));if(!Files.isRegularFile(binding))throw new IOException("26.2 GLFW callback binding missing from app; update ProsperoCraft.");urls.add(binding.toUri().toURL());}for(String file:receipt.classpath)urls.add(relative(root,file).toUri().toURL());return new URLClassLoader(urls.toArray(URL[]::new),ProsperoInstall.class.getClassLoader());}
+ java.net.URLClassLoader loader(Receipt receipt)throws Exception {verify(receipt);ArrayList<URL> urls=new ArrayList<>();String port=hardwarePort(receipt);if(port!=null){Path hardware=Path.of("/app0/assets/java25/ports/"+port);if(Files.isRegularFile(hardware))urls.add(hardware.toUri().toURL());}if(ProsperoGraphics.glfw(receipt.version)&&"GLFW".equals(receipt.window)){Path binding=Path.of(System.getProperty("ps5.glfw.binding","/app0/assets/java25/ports/lwjgl-glfw-3.4.1-ps5-callback343.jar"));if(!Files.isRegularFile(binding))throw new IOException("GLFW callback binding missing from app; update ProsperoCraft.");urls.add(binding.toUri().toURL());}for(String file:receipt.classpath)urls.add(relative(root,file).toUri().toURL());return new URLClassLoader(urls.toArray(URL[]::new),ProsperoInstall.class.getClassLoader());}
 }

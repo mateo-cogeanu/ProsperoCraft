@@ -36,7 +36,10 @@ The separate `audit_client_261.py` needs explicitly provisioned original publish
 JARs, pinned parent modules and rebuilt GLFW/OpenGL components. It is outside
 the portable lanes and does not execute GL or establish a console result.
 The instance test's formerly unsupported 26.2 fixture is now unsupported 26.1;
-26.2/26.3 support remains explicitly checked without changing production policy.
+26.2/26.3 support remains explicitly checked without changing production policy. The same instance test also checks the exact
+187 Zink build-resource gate, normal owned-account launch policy, all three26.1
+Vanilla development versions, adapted GLFW priority, original OpenGL arguments
+and unchanged default/Demo/Fabric/Vulkan boundaries with injected publisher data.
 
 The native runner forces UBSan errors to fail (`halt_on_error=1`), including local runs.
 The seven optional native checks exercise actual scoped audio mutex/port/worker

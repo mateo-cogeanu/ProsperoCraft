@@ -95,6 +95,34 @@ var store=new ProsperoLibrary(root.resolve("store"));if(!store.instances().isEmp
   Files.writeString(channel,"demo");if(!List.of(supportedModel.arguments(null,null)).contains("--demo"))throw new AssertionError("Demo mode changed");Files.delete(channel);
   if(!Files.readString(supportedLibrary.game(supportedInstance).resolve("keep-world.txt")).equals("world"))throw new AssertionError("full launch lost world");
   System.out.println("PASS Temp_gametest verified session arguments, unsigned/expired/signed-out rejection, full-game flags, UI redaction, Demo isolation and existing world/cache reuse");
+  // Normal full-game Zink candidate uses only an exact build resource; no auth bypass.
+  Path zinkResource=Path.of(args[1]).resolve("prosperocraft-zink.txt");
+  Files.writeString(channel,"temp_gametest");Files.writeString(zinkResource,"invalid\n");
+  if(ProsperoLauncher.launchable("26.1","vanilla"))throw new AssertionError("invalid build gate");
+  Files.writeString(zinkResource,"vanilla-26.1-zink-v1\n");
+  Path binding=Path.of(args[1]).resolve("adapted-glfw.jar");try(var jar=new java.util.jar.JarOutputStream(Files.newOutputStream(binding))){}
+  System.setProperty("ps5.glfw.binding",binding.toString());
+  for(String version:List.of("26.1","26.1.1","26.1.2")){
+   if(ProsperoLauncher.supported(version)||!ProsperoLauncher.developmentTest(version,"vanilla")||ProsperoLauncher.launchable(version,"fabric"))throw new AssertionError("Zink Vanilla-only development gate");
+   fixture();byte[] meta=bytes(new String(files.get(META),java.nio.charset.StandardCharsets.UTF_8).replace("26.1",version));files.put(META,meta);
+   Path zr=root.resolve("zink-"+version);var zi=new ProsperoInstall(zr.resolve("cache"),InstanceCheck::open);
+   var receiptZ=zi.install(new ProsperoInstall.Version(version,"release",META,hash(meta)),1,(t,d,n)->{},()->false);
+   if(!"ZINK".equals(receiptZ.renderer)||!"GLFW".equals(receiptZ.window))throw new AssertionError("receipt renderer");
+   System.setProperty("ps5.glfw.binding",binding+".missing");denied(()->zi.loader(receiptZ));System.setProperty("ps5.glfw.binding",binding.toString());
+   try(var loaded=zi.loader(receiptZ)){if(!loaded.getURLs()[0].equals(binding.toUri().toURL()))throw new AssertionError("adapted binding priority");}
+   var zl=new ProsperoLibrary(zr);var instanceZ=zl.add("Vanilla Zink",version,1);zl.settings().showIntro=false;zl.settings().showControls=false;zl.ready(instanceZ,true);zl.save();
+   var zm=new ProsperoLauncher(testAuth,zr,InstanceCheck::open,()->{preparations.incrementAndGet();});zm.tick(0x4000);
+   if(!zm.tick(0)[6].equals("DEV TEST - PLAY")||!zm.tick(0)[69].equals("DEVELOPMENT"))throw new AssertionError("development labels");
+   sessionField.set(zm,new ProsperoAuth.Session("OwnedPlayer","0123456789abcdef0123456789abcdef","SECRET_ZINK",System.currentTimeMillis()+3600000));
+   zm.tick(0x4000);waitFor(zm);if(!zm.tick(0)[10].equals("LAUNCH"))throw new AssertionError("normal Zink launcher did not prepare: "+zm.tick(0)[2]);
+   List<String> zargs=List.of(zm.arguments(null,null));if(zargs.contains("--graphicsBackend")||zargs.contains("--demo")||!zargs.contains(version)||!zargs.contains("SECRET_ZINK"))throw new AssertionError("original GL/full account arguments");
+   sessionField.set(zm,null);denied(()->zm.arguments(null,null));
+   if(!Files.readString(zr.resolve("cache/versions/"+version+"/client.jar")).equals("original client bytes"))throw new AssertionError("rewrote game");
+  }
+  if(ProsperoLauncher.launchable("26.1.3","vanilla")||ProsperoLauncher.launchable("26.1-snapshot-1","vanilla")||ProsperoGraphics.zink("26.2","vanilla")||!ProsperoGraphics.vulkan("26.2","GLFW")||!ProsperoGraphics.vulkan("26.3","SDL"))throw new AssertionError("version/backend boundary");
+  Files.writeString(channel,"demo");if(ProsperoLauncher.launchable("26.1","vanilla"))throw new AssertionError("Zink leaked into default Demo");
+  Files.delete(zinkResource);Files.delete(channel);System.clearProperty("ps5.glfw.binding");
+  System.out.println("PASS normal launcher Zink build gate, all three Vanilla releases, dev labels, verified receipt/binding order, owned-account guard, original GL arguments, Vulkan/default/Fabric boundaries");
   var persisted=new ProsperoLibrary(root.resolve("model"));if(persisted.instances().size()!=1||persisted.instances().get(0).icon!=2||!persisted.instances().get(0).name.endsWith("1"))throw new AssertionError("controller persistence");
   System.out.println("PASS empty/persistent instances, isolated worlds, rename/icons/settings, L1/R1/keyboard/install/play controller flow, unsupported26.1 launch guard and startup-notice persistence, original bytes, pin verification/cache/repair/cancel/failure/traversal/HTTPS/native-classifier rejection");
  }

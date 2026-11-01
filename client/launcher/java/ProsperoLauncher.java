@@ -42,7 +42,7 @@ public final class ProsperoLauncher {
  static ClassLoader gameLoader(){return current.loader;}
  static String launchIdentity(){
   var instance=current.detail;
-  String identity="PS5_LAUNCH game="+instance.version+" loader="+instance.loader+" window="+current.receipt.window+" fabric262_test="+developmentTest(instance.version,instance.loader);
+  String identity="PS5_LAUNCH game="+instance.version+" loader="+instance.loader+" window="+current.receipt.window+" development_test="+developmentTest(instance.version,instance.loader);
   if("fabric".equals(instance.loader))identity+=" fabric_loader="+current.fabricLoaderVersion;
   return identity;
  }
@@ -97,20 +97,21 @@ public final class ProsperoLauncher {
   if(offline&&(!ProsperoChannel.offline()||offlineAccount==null||!offlineAccount.valid(System.currentTimeMillis())))throw new java.io.IOException("Offline profile expired. Verify your account again on your computer.");
   if(ProsperoChannel.tempGameTest()&&!offline&&(session==null||!session.valid(System.currentTimeMillis())))throw new java.io.IOException("Sign in with an owning Microsoft account before playing the full game.");
   if(installed.javaMajor>Runtime.version().feature())throw new java.io.IOException("This instance requires Java "+installed.javaMajor+"; this app includes Java "+Runtime.version().feature());
-  if(!launchable(instance.version,instance.loader)||!("SDL".equals(installed.window)||("26.2".equals(instance.version)&&"GLFW".equals(installed.window)))){message="Coming soon for this version. Downloads are kept.";return;}
+  if(!launchable(instance.version,instance.loader)||!("SDL".equals(installed.window)||(ProsperoGraphics.glfw(instance.version)&&"GLFW".equals(installed.window)))){message="Coming soon for this version. Downloads are kept.";return;}
 
   microphone.prepare(); // Automatic system input; physical controller/system mute remains authoritative.
   installer.verify(installed);receipt=installed;loader=installer.loader(installed);if("fabric".equals(instance.loader)){var f=fabric.read(instance.version);loader=fabric.loader(f,loader);fabricLoaderVersion=f.loader;}detail=instance;offlineLaunch=offline;launchPrepared=true;launch=!awaitingTutorial;message="Starting "+instance.name;
  }
  static boolean supported(String version){return "26.2".equals(version)||"26.3".equals(version)||snapshot(version);}
  static boolean supported(String version,String loader){return supported(version);}
- static boolean developmentTest(String version,String loader){return false;}
+ static boolean developmentTest(String version,String loader){return ProsperoGraphics.zink(version,loader);}
  static boolean launchable(String version,String loader){return supported(version,loader)||developmentTest(version,loader);}
  private boolean draftSupported(String version){return launchable(version,draftLoader==1?"fabric":"vanilla");}
  private String fabricLabel(){return "Fabric";}
- static boolean selectedGlfw(){return current.receipt!=null&&"26.2".equals(current.receipt.version)&&"GLFW".equals(current.receipt.window);}
+ static boolean selectedZink(){return current.receipt!=null&&developmentTest(current.receipt.version,current.detail.loader);}
+ static boolean selectedGlfw(){return current.receipt!=null&&ProsperoGraphics.glfw(current.receipt.version)&&"GLFW".equals(current.receipt.window);}
  static boolean snapshot(String version){return java.util.Set.of("26.4-snapshot-1","26.4-snapshot-2","26.4-snapshot-3","26.4-snapshot-4","26.4-snapshot-5","26.4-snapshot-6").contains(version==null?"":version);}
- private void play(){if(detail==null||busy)return;if(!launchable(detail.version,detail.loader)){message="26.2".equals(detail.version)&&"fabric".equals(detail.loader)?"Fabric for Minecraft 26.2 is coming soon. Your downloads and worlds are kept.":"Coming soon. This build launches 26.2 Vanilla, 26.3 and 26.4 snapshots 1–6.";feedback("error");return;}if(ProsperoChannel.tempGameTest()&&(session==null||!session.valid(System.currentTimeMillis()))){page=3;tab=2;top=false;row=0;signIn();return;}awaitingTutorial=ProsperoChannel.tempGameTest()&&library.settings().showControls;if(awaitingTutorial){page=11;row=1;top=false;launchPrepared=false;}if(!detail.ready){install(true);return;}var instance=detail;runTask("VERIFY",attempt->{var installed=installer.receipt(instance.version);installer.verify(installed);repairDependencies(instance,attempt,false);synchronized(this){if(!cancelled(attempt))prepareLaunch(instance,installed);}});}
+ private void play(){if(detail==null||busy)return;if(!launchable(detail.version,detail.loader)){message="26.2".equals(detail.version)&&"fabric".equals(detail.loader)?"Fabric for Minecraft 26.2 is coming soon. Your downloads and worlds are kept.":ProsperoGraphics.release261(detail.version)?"26.1 Zink development tests support Vanilla only. Fabric and Iris remain unavailable.":"Coming soon for this version. Downloads and worlds are kept.";feedback("error");return;}if(ProsperoChannel.tempGameTest()&&(session==null||!session.valid(System.currentTimeMillis()))){page=3;tab=2;top=false;row=0;signIn();return;}awaitingTutorial=ProsperoChannel.tempGameTest()&&library.settings().showControls;if(awaitingTutorial){page=11;row=1;top=false;launchPrepared=false;}if(!detail.ready){install(true);return;}var instance=detail;runTask("VERIFY",attempt->{var installed=installer.receipt(instance.version);installer.verify(installed);repairDependencies(instance,attempt,false);synchronized(this){if(!cancelled(attempt))prepareLaunch(instance,installed);}});}
  private void playOffline(){
   if(detail==null||busy)return;
   if(!ProsperoChannel.offline()){message="This is the Demo branch.";return;}
@@ -338,7 +339,7 @@ public final class ProsperoLauncher {
   boolean full=ProsperoChannel.tempGameTest()&&!offlineLaunch;
   if(full&&(session==null||!session.valid(System.currentTimeMillis())))throw new java.io.IOException("Your session expired. Sign in again before launching.");
   String player=full?session.name:offlineLaunch?offlineAccount.name:"PS5Demo",id=full?session.id:offlineLaunch?offlineAccount.id:UUID.nameUUIDFromBytes("OfflinePlayer:PS5Demo".getBytes(java.nio.charset.StandardCharsets.UTF_8)).toString();
-  java.util.List<String> args=new java.util.ArrayList<>(java.util.List.of("--username",player,"--uuid",id,"--accessToken",full?session.accessToken():"0","--version",detail.version,"--versionType",snapshot(detail.version)?"snapshot":"release","--gameDir",library.game(detail).toString(),"--assetsDir",library.root.resolve("cache/assets").toString(),"--assetIndex",receipt.assetIndex,"--width",""+ProsperoLibrary.RESOLUTIONS[library.settings().resolution][0],"--height",""+ProsperoLibrary.RESOLUTIONS[library.settings().resolution][1]));if(!full){args.add(0,"--disableChat");args.add(0,"--disableMultiplayer");if(!offlineLaunch)args.add(0,"--demo");}  if("SDL".equals(receipt.window)||("26.2".equals(detail.version)&&"GLFW".equals(receipt.window)))java.util.Collections.addAll(args,"--graphicsBackend","vulkan");return args.toArray(String[]::new);
+  java.util.List<String> args=new java.util.ArrayList<>(java.util.List.of("--username",player,"--uuid",id,"--accessToken",full?session.accessToken():"0","--version",detail.version,"--versionType",snapshot(detail.version)?"snapshot":"release","--gameDir",library.game(detail).toString(),"--assetsDir",library.root.resolve("cache/assets").toString(),"--assetIndex",receipt.assetIndex,"--width",""+ProsperoLibrary.RESOLUTIONS[library.settings().resolution][0],"--height",""+ProsperoLibrary.RESOLUTIONS[library.settings().resolution][1]));if(!full){args.add(0,"--disableChat");args.add(0,"--disableMultiplayer");if(!offlineLaunch)args.add(0,"--demo");}  if(ProsperoGraphics.vulkan(detail.version,receipt.window))java.util.Collections.addAll(args,"--graphicsBackend","vulkan");return args.toArray(String[]::new);
  }
  @Override public String toString(){return "ProsperoCraft launcher [credentials redacted]";}
 }

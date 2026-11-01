@@ -257,3 +257,14 @@ fallbacks. Proposed PS5 static loader, private kopper/EGL platform and emulated
 GL TLS will need separate tests once implemented. Fabric 26.1, Sodium-on-GL,
 Iris, Distant Horizons, Zink for 26.2+, performance claims and older Java majors
 remain separate milestones; none is enabled here.
+
+## Progress — 1 November2026
+
+The implementation/console-pending descriptions above are the original Phase A
+record. The user subsequently reports180 Stage1,183 Stage2a and186 Stage2b PASS;
+see their separate exact-build receipts. The next187candidate restores normal
+launcher/accounts/instances and Vanilla26.1 original-Main integration, with all
+three pinned release versions available as development tests. See the
+[187 guide](client-zink-launcher-187.md). Original title/world/save/lifecycle,
+version/regression and endurance checks remain pending; default published support
+and release/Store gates remain unchanged.
