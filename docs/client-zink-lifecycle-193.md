@@ -71,3 +71,13 @@ world/save, Quit Game, return to the normal launcher library and launch again.
 Report each result separately.26.1.1/26.1.2, Fabric/mod cleanup,26.2+ Vulkan,
 OpenAL/input, resource reclamation and endurance remain pending. Preserve all
 runtime compatibility policies, historical snapshots and exact prior candidates.
+
+[Exact193 build/validation](validation/client193-zink-lifecycle-2026-11-01.json)
+pins clean source `cda4fa8` and package/runtime/native hashes.
+ZIP SHA-256: `df4b19a911250e2ad781491cb565b1b5cd7de9ce84f76d2089115825e3d47496`.
+Local17fast/11native, source-only fast/native, genuine embedded-VM exit/host exec,
+real host26.1/26.1.1/26.1.2 Zink rendering and independent target/package checks
+pass. [Policy CI](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41326343753)
+passes17checks and [native CI](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41326366922)
+passes11checks on each Ubuntu/macOS host; completed jobs/logs inspected.
+All PS5 startup/quit/relaunch acceptance remains pending.
