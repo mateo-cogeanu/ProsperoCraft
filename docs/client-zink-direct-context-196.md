@@ -81,3 +81,14 @@ mods separately. Then test Vanilla26.1 title/world/save/Quit Game/normal launche
 library/relaunch.196startup and retained193quit candidate require physical
 confirmation; patch releases, Fabric shutdown,26.2+ Vulkan/input/audio, resource
 reclamation and endurance remain pending.
+
+[Exact196 build/validation](validation/client196-zink-direct-context-2026-11-01.json)
+pins clean source `0e8903a` and matching package/runtime/native hashes.
+ZIP SHA-256: `256c029462a453eeb3ea53a0dc58ed69c01cca27fdbd44ab2dd7fd3b7d6c5f9a`.
+Source-only outside-root17fast/11native, actual host direct-mode preparation/reuse,
+refused-version/retained-screen/retry/render/destruction, original26.1.x GL checks,
+missing provider/early instance refusal and exact target/package audits pass.
+[Policy CI](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41330816577)
+passes17checks and [native CI](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41330887776)
+passes11checks on each Ubuntu/macOS host; completed jobs/steps/logs inspected.
+Physical196startup, exact195refusal cause and quit/relaunch acceptance remain pending.
