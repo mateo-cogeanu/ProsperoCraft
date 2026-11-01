@@ -85,3 +85,7 @@ Local16fast,7native and source-only outside-root16fast checks pass.
 and [effective-host-tool CI](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41293624975)
 both pass16fast checks; completed jobs/logs were inspected. Hosted CI executes
 no graphics, native launcher, VideoOut or PS5 process replacement.
+
+Physical185 subsequently failed check4 with a bare resident-library name. See the
+[185 failure receipt](validation/client185-console-resident-2026-11-01.json) and
+[186 repair](client-zink-resident-186.md). No185 GL/handoff pass is claimed.

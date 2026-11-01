@@ -96,7 +96,7 @@ def main():
     cp = os.pathsep.join(map(str, [work, *overlays, *parent]))
     subprocess.run([str(jdk / 'bin/javac'), '--release', '25', '-cp', cp, '-d', str(work),
                     str(ROOT / 'tools/fixtures/ZinkGlfwHost25.java')], check=True)
-    alias = work / 'ps5zink'
+    alias = work / 'libps5zink.so'
     if alias.is_symlink(): alias.unlink()
     if alias.exists(): raise ValueError('Refusing to replace a non-symlink host provider alias')
     alias.symlink_to(frontend)

@@ -21,6 +21,8 @@
 
 - 185 repairs184 check4 NoClassDefFoundError: the adapted GLFW JAR was present but omitted from the effective JVM classpath. Add actual-package old-code failure control, first-provider/JDK25 resolution and exact-ELF classpath checks. Native UI closure/JVM creation are observed; physical185GL/handoff remains pending. [Evidence/test guide](docs/client-zink-classpath-185.md). No release/Store change.
 
+- 186 repairs185 check4 resident-name failure: direct GPU and opt-in Zink opens now use canonical lib*.so filenames. Strict host JNI boundary reproduces185 and passes186; actual PS5 GL/handoff remains pending. [Evidence/test guide](docs/client-zink-resident-186.md). Runtime loader/defaults, official game JARs and release/Store state remain unchanged.
+
 ## 01.000.179 — automatic microphone and simpler instance settings
 
 - Prepare the working system microphone automatically before every supported game launch; remove the launcher Microphone button, toggle and test page. Existing saved microphoneEnabled:false no longer blocks preparation. Use the controller's physical microphone mute button or PS5 system mute.

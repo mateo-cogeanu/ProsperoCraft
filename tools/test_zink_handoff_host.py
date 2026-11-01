@@ -10,8 +10,9 @@ from host_toolchain import ROOT,java_home,executable,jni_flags
 
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--graphics-config',type=Path,required=True);p.add_argument('--cc',required=True);p.add_argument('--java-home',type=Path);p.add_argument('--host-vulkan',type=Path,required=True);p.add_argument('--fixture',type=Path,default=ROOT/'client/zink_handoff/ClientStartup25.java');p.add_argument('--output-dir',type=Path,default=ROOT/'build/zink-handoff-host');p.add_argument('--app',type=Path);p.add_argument('--classpath-audit',type=Path)
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--graphics-config',type=Path,required=True);p.add_argument('--cc',required=True);p.add_argument('--java-home',type=Path);p.add_argument('--host-vulkan',type=Path,required=True);p.add_argument('--fixture',type=Path,default=ROOT/'client/zink_handoff/ClientStartup25.java');p.add_argument('--output-dir',type=Path,default=ROOT/'build/zink-handoff-host');p.add_argument('--app',type=Path);p.add_argument('--classpath-audit',type=Path);p.add_argument('--strict-resident',action='store_true');p.add_argument('--expect-resident-failure',action='store_true')
  a=p.parse_args()
+ if a.expect_resident_failure and not a.strict_resident:raise ValueError("--expect-resident-failure requires --strict-resident")
  if platform.system()!='Darwin':raise RuntimeError('macOS/lavapipe research test only')
  jdk=java_home(a.java_home);cc=executable('clang',override=a.cc);cfg=json.loads(a.graphics_config.read_text())
  frontend=Path(cfg['frontend']);glfw=Path(cfg['glfw-library']);core=Path(cfg['core-library']);opengl=Path(cfg['opengl-library']);work=a.output_dir.resolve();work.mkdir(parents=True,exist_ok=True)
@@ -24,7 +25,7 @@ def main():
  assert sha(loader_source)==loader_pin['sha256'],'Pinned host JNI dynamic-link source mismatch'
  loader=work/'libhost-loader.dylib'
  subprocess.run([cc,'-dynamiclib','-DLWJGL_MACOS','-I'+str(ROOT/'.tools/lwjgl-native-src'),*jni_flags(jdk),str(loader_source),'-o',str(loader)],check=True)
- for name,target in [('ps5zink',frontend),('ps5clientgpu',a.host_vulkan),('libps5clientgpu.so',a.host_vulkan),('libps5glfw.so',glfw),('liblwjgl_opengl.so',opengl)]:
+ for name,target in [('libps5zink.so',frontend),('libps5clientgpu.so',a.host_vulkan),('libps5glfw.so',glfw),('liblwjgl_opengl.so',opengl)]:
   dest=work/name
   if dest.is_symlink():dest.unlink()
   if dest.exists():raise FileExistsError(dest)
@@ -52,12 +53,19 @@ def main():
  subprocess.run([str(jdk/'bin/javac'),'--release','25','-cp',cp,'-d',str(work),*map(str,fixture_sources),str(ROOT/'tools/fixtures/ZinkHandoffHost25.java')],check=True)
  asan=subprocess.check_output([cc,'-print-file-name=libclang_rt.asan_osx_dynamic.dylib'],text=True).strip()
  env=dict(os.environ,LIBGL_ALWAYS_SOFTWARE='true',SDL_VIDEODRIVER='dummy',DYLD_INSERT_LIBRARIES=asan,DYLD_LIBRARY_PATH=str(work)+os.pathsep+str(frontend.parent),MESA_SHADER_CACHE_DIR=str(work/'shader-cache'),ASAN_OPTIONS='detect_leaks=0:handle_segv=0:handle_sigbus=0:handle_sigfpe=0',UBSAN_OPTIONS='halt_on_error=1')
+ strict=work/'libstrict-resident.dylib'
+ if a.strict_resident:
+  subprocess.run([cc,'-dynamiclib','-D__PROSPERO__',*jni_flags(jdk),str(ROOT/'client/native/lwjgl_resident.c'),str(ROOT/'tools/fixtures/zink_strict_resident_host.c'),'-o',str(strict)],check=True)
  command=[jdk/'bin/java','-Xint','-Xcheck:jni','-Xverify:all','--enable-native-access=ALL-UNNAMED','--add-exports=java.base/jdk.internal.misc=ALL-UNNAMED','-Djava.library.path='+str(opengl.parent),'-cp',cp,'ZinkHandoffHost25',lib,core,loader]
  for mode in ('reject','resume','positive'):
   env['ZINK_HANDOFF_HOST_MODE']=mode
-  result=subprocess.run(list(map(str,[*command,mode])),env=env,cwd=work,capture_output=True,text=True,timeout=90);text=result.stdout+result.stderr;(work/(mode+'.log')).write_text(text)
+  result=subprocess.run(list(map(str,[*command,mode,*([strict] if a.strict_resident else [])])),env=env,cwd=work,capture_output=True,text=True,timeout=90);text=result.stdout+result.stderr;(work/(mode+'.log')).write_text(text)
+  if a.expect_resident_failure and mode=='positive':
+   assert result.returncode!=0 and 'PS5 resident library unavailable: ps5clientgpu'in text,text[-5000:]
+   assert 'STRICT_RESIDENT rejected noncanonical/unknown name'in text
+   print('PASS actual oldfixture noncanonical-name negative control; real JNI open with strict host boundary rejects bare registry name');continue
   assert result.returncode==0 and 'PASS184'in text,text[-5000:]
   assert not any(s in text for s in ('WARNING in native method','FATAL ERROR in native method','ERROR: AddressSanitizer','runtime error:')),text[-5000:]
   print('PASS184',mode)
- (work/'audit.json').write_text(json.dumps({'fixture_sha256':sha(a.fixture.resolve()),'frontend_sha256':sha(frontend),'glfw_sha256':sha(glfw),'scope':__doc__,'effective_package_classpath':bool(a.app),'results':['reject','resume','positive'],'ps5':'NOT TESTED'},indent=2)+'\n')
+ (work/'audit.json').write_text(json.dumps({'fixture_sha256':sha(a.fixture.resolve()),'frontend_sha256':sha(frontend),'glfw_sha256':sha(glfw),'scope':__doc__,'strict_resident_names':a.strict_resident,'expected_old_failure':a.expect_resident_failure,'effective_package_classpath':bool(a.app),'results':['reject','resume','positive'],'ps5':'NOT TESTED'},indent=2)+'\n')
 if __name__=='__main__':main()

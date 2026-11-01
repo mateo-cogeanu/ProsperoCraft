@@ -6,7 +6,7 @@
      public static void create() {
 +        if (Platform.get() == Platform.PS5 && "zink".equals(System.getProperty("ps5.opengl.provider"))) {
 +            // Explicit consumer opt-in; real resident Mesa GL, no arbitrary loader.
-+            create(apiCreateLibrary("ps5zink"));
++            create(apiCreateLibrary("libps5zink.so"));
 +            return;
 +        }
          SharedLibrary GL = null;

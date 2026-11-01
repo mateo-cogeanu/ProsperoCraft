@@ -1,0 +1,25 @@
+{
+  "date": "2026-11-01",
+  "app_version": "01.000.185",
+  "title_id": "PPSA99874",
+  "package_sha256": "e541f4638ab5034e9addbf280a34f3220276cc0fca04ef70edc5ca0e13be3f7f",
+  "run_id": "client-01.000.185-1793526164-18798947",
+  "user_report": "failedcheck4",
+  "result": "FAIL check4/codeFFFFFAE5",
+  "exception": "java.lang.UnsatisfiedLinkError: PS5 resident library unavailable: ps5clientgpu",
+  "retrieval": "Read-only Safari session/exception/startup-tail; direct tool HTTP no route to host",
+  "report_sha256": {
+    "startup-tail.log": "8afc593c032f652fbb6da3b1e78e325eb39031e4cf4efd25558fd92ec3b3e55a"
+  },
+  "observed": [
+    "JVM calls diagnostic main",
+    "Native launcher display/device closed and UI thread joined",
+    "No GL workload/DestroyJavaVM/fresh return established"
+  ],
+  "cause": "Direct PS5Library constructor receives bare ps5clientgpu; generated runtime registry requires canonical libps5clientgpu.so basename. Opt-in GL Zink resolver has the same bare-name defect.",
+  "verification_gap": "Previous host dlopen simulation accepted bare aliases; strict host boundary now reproduces exact185 error through actual PS5 JNI loader body.",
+  "repair": "186 corrects both direct callers to canonical resident filenames; runtime loader/defaults unchanged",
+  "raw_reports": "Local only",
+  "console_validation": "186 GL/handoff pending; full original Minecraft and endurance pending",
+  "release_store": "No action"
+}
