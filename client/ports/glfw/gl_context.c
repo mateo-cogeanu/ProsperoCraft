@@ -5,6 +5,7 @@
 #include "internal.h"
 #include <SDL3/SDL.h>
 #include "../zink/frontend.h"
+#include "../sdl/ps5_startup_boundary.h"
 
 #ifdef __APPLE__
 #define OPTIONAL __attribute__((weak_import))
@@ -84,7 +85,9 @@ int ps5glfw_gl_create(_GLFWwindow *window, const _GLFWctxconfig *ctx, const _GLF
      * tests explicitly do not claim SDL/VideoOut presentation coverage. */
     config.window = NULL; config.create_surface = NULL;
 #endif
+    PS5_BOUNDARY("Zink frontend create enter");
     window->null.ps5_gl_context = ps5zink_create(&config);
+    PS5_BOUNDARY("Zink frontend create returned");
     if (!window->null.ps5_gl_context) { report(); return GLFW_FALSE; }
     window->context.client = GLFW_OPENGL_API;
     window->context.source = GLFW_NATIVE_CONTEXT_API;
@@ -94,5 +97,8 @@ int ps5glfw_gl_create(_GLFWwindow *window, const _GLFWctxconfig *ctx, const _GLF
     window->context.extensionSupported = platform_extension;
     window->context.getProcAddress = address;
     window->context.destroy = destroy;
-    return _glfwRefreshContextAttribs(window, ctx);
+    PS5_BOUNDARY("GLFW GL attribute refresh enter");
+    int refreshed = _glfwRefreshContextAttribs(window, ctx);
+    PS5_BOUNDARY("GLFW GL attribute refresh returned");
+    return refreshed;
 }

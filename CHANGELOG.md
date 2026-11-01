@@ -31,6 +31,8 @@
 
 - 188 Fabric26.1 reaches upstream Knot/mods/original Main but OpenGL window creation fails with masked Zink error16.189 explicitly leases the frontend guard from the pre-JVM graphics mutex reserve and preserves real lock/init errors with ownership diagnostics. [Evidence/test guide](docs/client-zink-fabric-guard-189.md). Physical cause/pass unconfirmed; quit repair still deferred, no release/Store action.
 
+- 189 confirms guard init0 but Fabric26.1 remains black in native GLFW window creation, with no captured Java/fatal error.190 adds bounded screen/context/drawable/binding/attribute stage checkpoints to locate the next interval; no hang fix claimed. [Evidence/test guide](docs/client-zink-fabric-trace-190.md). Quit repair deferred; no release/Store action.
+
 ## 01.000.179 — automatic microphone and simpler instance settings
 
 - Prepare the working system microphone automatically before every supported game launch; remove the launcher Microphone button, toggle and test page. Existing saved microphoneEnabled:false no longer blocks preparation. Use the controller's physical microphone mute button or PS5 system mute.

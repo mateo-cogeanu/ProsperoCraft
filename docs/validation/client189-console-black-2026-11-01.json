@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-01",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.189",
+  "package_sha256": "8e58ed81335732fc0b0dc731c11359af2a960df1e2bba576c4622900421eb753",
+  "run_id": "client-01.000.189-1793540376-91210473",
+  "user_report": "its just staying black",
+  "session": "RUN: Launcher and selected downloaded instance",
+  "observed": [
+    "Guard init result0 before JVM startup",
+    "Native UI handoff display_closed=1 gpu_closed=1",
+    "SDL init/display/window creation completes",
+    "Repeated Java snapshots retain render thread in GLFW native create-window through elapsed129157ms",
+    "No Java exception captured yet in current run"
+  ],
+  "analysis": "Startup stall inside native GLFW create; internal screen/context/drawable/attribute stage and cause not established. Guard init works but is not a full startup fix. Native resource refusals remain observations, not proof of a specific mutex/thread/GPU wait.",
+  "retrieval": "Read-only Safari session/current exception/native/Java/startup/VM reports; direct tool HTTP no route. Raw logs stay local.",
+  "report_sha256": {
+    "native-stderr.log": "ecbf86b26b93fab848550f7d5dab5c607030101f048fceeec4025a774fbd0718",
+    "exceptions.log": "36b103e90845cd5a24957f5cb3815181810421e6b6c67b205653b9c78c24594f",
+    "startup-tail.log": "4ef184d0a683b05e3bd5c04344c6bd27ef0558685232b8072b486e6e9c36806b",
+    "current-startup.log": "fc928f269d6f2df5d8cf1d80f0271227117f6a18b2da6ce662c09b67ef9b7423",
+    "vm-trace.log": "8c0657eb51fb8729f4a2572550402ea5a0fc349e3b24a2d851a4fae792e1a008"
+  },
+  "next": "190 bounded startup diagnostics to isolate native stage; no hang fix claimed",
+  "quit": "Repair remains explicitly deferred; no shutdown changes",
+  "pending": "Actual Fabric startup/title/world, all version/lifecycle/regression/endurance checks",
+  "release_store": "No action; no full milestone pass",
+  "fatal_report": "hs-error.log unavailable errno2; no captured fatal report"
+}

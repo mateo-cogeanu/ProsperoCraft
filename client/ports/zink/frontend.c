@@ -22,6 +22,20 @@
 #include <stdio.h>
 
 #define PUBLIC __attribute__((visibility("default")))
+/* Startup-only fixed labels; no pointer/path/account output or recovery action. */
+static unsigned startup_events;
+static void startup_trace(const char *stage)
+{
+    unsigned count=__atomic_load_n(&startup_events,__ATOMIC_RELAXED);
+    while(count<48){
+        if(__atomic_compare_exchange_n(&startup_events,&count,count+1,0,__ATOMIC_RELAXED,__ATOMIC_RELAXED)){
+            int saved_errno=errno;
+            fprintf(stderr,"PS5_ZINK startup %s\n",stage);
+            errno=saved_errno;
+            return;
+        }
+    }
+}
 struct ps5zink_context {
     struct pipe_frontend_drawable drawable;
     struct st_visual visual;
@@ -169,6 +183,7 @@ static bool flush_swap(struct st_context *st, struct pipe_frontend_drawable *dra
 
 PUBLIC struct ps5zink_context *ps5zink_create(const struct ps5zink_config *config)
 {
+    startup_trace("create enter");
     last_error = 0;
     if (!config || !config->width || !config->height || config->width > 16384 ||
         config->height > 16384 || config->major < 3 || config->major > 4 ||
@@ -176,12 +191,17 @@ PUBLIC struct ps5zink_context *ps5zink_create(const struct ps5zink_config *confi
         (!!config->window != !!config->create_surface)) {
         fail(EINVAL); return NULL;
     }
+    startup_trace("create guard lock enter");
     int guard_rc = frontend_guard_lock();
     if (guard_rc) { fail(guard_rc); return NULL; }
+    startup_trace("create guard locked");
     struct ps5zink_context *c = calloc(1, sizeof(*c));
     if (!c) { fail(ENOMEM); goto done; }
+    startup_trace("create context allocation complete");
     if (!frontend.screen) {
+        startup_trace("screen create enter");
         frontend.screen = zink_create_screen(NULL, NULL);
+        startup_trace(frontend.screen ? "screen create returned success" : "screen create returned failure");
         frontend.get_param = screen_param;
         if (!frontend.screen) { fail(ENODEV); free(c); c = NULL; goto done; }
     }
@@ -211,7 +231,9 @@ PUBLIC struct ps5zink_context *ps5zink_create(const struct ps5zink_config *confi
     attributes.flags = (config->forward ? ST_CONTEXT_FLAG_FORWARD_COMPATIBLE : 0) |
                        (config->debug ? ST_CONTEXT_FLAG_DEBUG : 0);
     enum st_context_error error;
+    startup_trace("state tracker context create enter");
     c->st = st_api_create_context(&frontend, &attributes, &error, NULL);
+    startup_trace(c->st ? "state tracker context create returned success" : "state tracker context create returned failure");
     if (!c->st) {
         fail(error == ST_CONTEXT_ERROR_BAD_VERSION ? ENOTSUP : ENOMEM);
         free(c); c = NULL;
@@ -220,6 +242,7 @@ PUBLIC struct ps5zink_context *ps5zink_create(const struct ps5zink_config *confi
     }
     c->st->frontend_context = c;
     c->next = contexts; contexts = c;
+    startup_trace("create complete");
 done:
     pthread_mutex_unlock(&guard);
     return c;
@@ -227,6 +250,7 @@ done:
 
 PUBLIC int ps5zink_make_current(struct ps5zink_context *c)
 {
+    startup_trace("make current enter");
     last_error = 0;
     int guard_rc = frontend_guard_lock();
     if (guard_rc) return fail(guard_rc);
@@ -238,16 +262,20 @@ PUBLIC int ps5zink_make_current(struct ps5zink_context *c)
          * real drawable allocation before reporting successful make-current. */
         const enum st_attachment_type attachments[] = {ST_ATTACHMENT_BACK_LEFT, ST_ATTACHMENT_DEPTH_STENCIL};
         struct pipe_resource *textures[2] = {NULL, NULL};
+        startup_trace("drawable validate enter");
         bool ready = validate(c->st, &c->drawable, attachments, 2, textures, NULL);
+        startup_trace(ready ? "drawable validate returned success" : "drawable validate returned failure");
         for (unsigned i = 0; i < 2; i++) pipe_resource_reference(&textures[i], NULL);
         if (!ready) { fail(ENOMEM); goto done; }
     }
+    startup_trace("state tracker bind enter");
     if (!st_api_make_current(c ? c->st : NULL, c ? &c->drawable : NULL, c ? &c->drawable : NULL)) {
         /* Restore the previous real Mesa binding before retaining its owner. */
         st_api_make_current(previous ? previous->st : NULL,
                             previous ? &previous->drawable : NULL, previous ? &previous->drawable : NULL);
         fail(ENOMEM); goto done;
     }
+    startup_trace("state tracker bind returned success");
     if (previous) previous->bound = false;
     current = c;
     if (c) { c->owner = pthread_self(); c->bound = true; }

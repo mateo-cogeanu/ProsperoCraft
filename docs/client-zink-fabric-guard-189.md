@@ -85,3 +85,8 @@ pass on Ubuntu and macOS at test-source `a19cb11`; completed job logs inspected.
 Initial Ubuntu native compilation required explicit POSIX feature declarations;
 that host-only correction and the PIE audit correction change no packaged code.
 PS5 repair acceptance and the deferred quit issue remain pending.
+
+The subsequent [189 console run](validation/client189-console-black-2026-11-01.json)
+confirms guard init0 but remains black inside native GLFW creation. It does not
+establish successful Fabric startup. [190](client-zink-fabric-trace-190.md) adds
+bounded internal-stage diagnostics; quit repair remains deferred.
