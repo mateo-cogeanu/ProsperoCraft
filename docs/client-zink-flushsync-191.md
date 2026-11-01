@@ -67,3 +67,14 @@ shutdown-source preservation, one graphics copy/resident groups and signatures.
 PS5 title/world/audio/save/reopen/lifecycle for all Vanilla/Fabric26.1.x releases,
 26.2/26.3/snapshot Vulkan regressions, performance/resource reclamation/endurance
 and the explicitly deferred quit issue remain pending.
+
+[Exact191 build/validation](validation/client191-zink-flushsync-2026-11-01.json)
+pins clean source `3b304ed` and package/runtime/component hashes.
+ZIP SHA-256: `dcb01a5d8943495c0a1a2b1d47395ad432557b525639462bc3e1a89a8ac830a3`.
+Local16fast,9native,source-only16fast/9native, target/package and actual synchronous
+host GL tests pass. The native worker observer counts4default zfq creations and
+0under the actual candidate policy while both genuine GL workloads pass.
+[Hosted policy](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41315321734)
+and [hosted native](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41315352921)
+pass on Ubuntu/macOS; completed logs inspected. Actual191 PS5 startup, throughput
+and later lifecycle remain pending; underlying native refusal is unresolved.
