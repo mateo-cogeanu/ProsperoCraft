@@ -69,3 +69,12 @@ and endurance remain pending. Game/root identity stays179, production26.1 stays
 blocked. Preserve tested183 and every earlier candidate/symbol/validation,
 original game/mod JARs, compatibility implementations and archived milestones.
 No release, prerelease, Store change or new passing milestone is authorized.
+
+The [exact186 build/validation record](validation/client186-zink-resident-2026-11-01.json)
+records clean source `0848900`, package/symbol/component/classpath hashes and
+verification limits. ZIP SHA-256:
+`c2137f32840e8b22b971418f32fbc63c0e5838827872f717456f11a80b43cd2e`.
+[Hosted source checks](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41294524073)
+pass16fast checks on Ubuntu and macOS; completed job steps/logs were inspected.
+The final packaged fixture and classpath also pass the strict host GL test.
+Physical console acceptance remains pending.
