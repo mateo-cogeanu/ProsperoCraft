@@ -1,5 +1,11 @@
 # Changelog
 
+## Candidate195 — early screen and instance-refusal cleanup
+
+- Retain194 genuine pre-JVM screen/queue preparation and193 quit candidate fix.
+- Load real Vulkan instance dispatch before validation refusal enters teardown, after an extra host negative test exposed a null call.
+- Correct the host missing-provider control to omit the deliberately loaded provider. Physical Fabric startup and quit/relaunch remain pending;194 remains preserved and unaccepted.
+
 ## Candidate194 — early genuine Zink screen preparation
 
 - Record193's required initial shader queue refusal and honest early-Main rejection.

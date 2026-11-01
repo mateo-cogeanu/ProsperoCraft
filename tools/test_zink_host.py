@@ -108,7 +108,8 @@ def main():
                         '-I' + str(ROOT / 'client/ports/zink'),
                         str(ROOT / 'tools/fixtures/zink_prewarm_host.c'), str(frontend),
                         '-Wl,-rpath,' + str(frontend.parent), '-o', str(prewarm)], check=True)
-        inserted.append(str(prewarm))
+        # Keep the missing-provider control free of this genuine provider.
+        # Positive pre-JVM cases load it only after that separate child exits.
     env['DYLD_INSERT_LIBRARIES'] = os.pathsep.join(inserted)
     env['DYLD_LIBRARY_PATH'] = os.pathsep.join(map(str, [work, frontend.parent]))
     command = [jdk / 'bin/java', '-Xint', '-Xcheck:jni', '-Xverify:all', '--enable-native-access=ALL-UNNAMED',
@@ -116,6 +117,8 @@ def main():
                '-Djava.library.path=' + str(args.opengl_library.resolve().parent), '-cp', cp,
                'ZinkGlfwHost25', args.core_library.resolve(), loader]
     execute([*command, absent, 'absent'], 'missing-zink', 'PASS real GLFW missing-Zink refusal')
+    if args.prepare_screen:
+        env['DYLD_INSERT_LIBRARIES'] = os.pathsep.join([asan, str(prewarm)])
     reports = []
     for row in json.loads((ROOT / 'client/26.1.lock.json').read_text())['versions']:
         cache = args.publisher_cache.resolve()

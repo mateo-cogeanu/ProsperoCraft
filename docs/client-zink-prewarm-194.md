@@ -68,3 +68,8 @@ instance. If it fails, leave that screen open for reports. Report title/world/mo
 behavior separately. Then test the previously working Vanilla26.1: title/world,
 save, Quit Game, normal launcher library and relaunch.26.1.1/26.1.2, Fabric mod
 shutdown,26.2+ Vulkan/audio/input, resource reclamation and endurance remain pending.
+
+194 was built but not delivered for console acceptance. An extra missing-validation-
+layer host test exposed an existing partial-screen teardown dispatch failure;
+see [195 ordering repair](client-zink-early-screen-195.md). Do not treat194as
+a successful early-refusal test or physical pass. Its exact package stays retained.

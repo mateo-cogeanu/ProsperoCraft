@@ -1,0 +1,31 @@
+--- a/src/gallium/drivers/zink/zink_screen.c
++++ b/src/gallium/drivers/zink/zink_screen.c
+@@ -3491,6 +3491,14 @@
+    screen->instance_info = &instance_info;
+    simple_mtx_unlock(&instance_lock);
+ 
++   /* Teardown needs real instance dispatch even on validation refusal. */
++   vk_instance_uncompacted_dispatch_table_load(&screen->vk.instance,
++                                                screen->vk_GetInstanceProcAddr,
++                                                screen->instance);
++   vk_physical_device_uncompacted_dispatch_table_load(&screen->vk.physical_device,
++                                                      screen->vk_GetInstanceProcAddr,
++                                                      screen->instance);
++
+    if (zink_debug & ZINK_DEBUG_VALIDATION) {
+       if (!screen->instance_info->have_layer_KHRONOS_validation &&
+           !screen->instance_info->have_layer_LUNARG_standard_validation) {
+@@ -3499,13 +3507,6 @@
+          goto fail;
+       }
+    }
+-
+-   vk_instance_uncompacted_dispatch_table_load(&screen->vk.instance,
+-                                                screen->vk_GetInstanceProcAddr,
+-                                                screen->instance);
+-   vk_physical_device_uncompacted_dispatch_table_load(&screen->vk.physical_device,
+-                                                      screen->vk_GetInstanceProcAddr,
+-                                                      screen->instance);
+ 
+ #ifdef PS5_ZINK_STATIC_VULKAN
+    screen->vk_GetDeviceProcAddr = (PFN_vkGetDeviceProcAddr)

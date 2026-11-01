@@ -54,3 +54,5 @@ the documentation checker.
 - [193 clean System.exit handoff and screen wait diagnostics](client-zink-lifecycle-193.md)
 
 - [194 early genuine Zink screen/queue preparation](client-zink-prewarm-194.md)
+
+- [195 early Zink screen and instance-refusal cleanup](client-zink-early-screen-195.md)
