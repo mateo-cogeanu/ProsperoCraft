@@ -53,7 +53,7 @@ int main(int argc,char**argv){
  puts("PASS actual staged frontend guard: real reserved mutex lease,80000contended increments, late native init denied, exact lock/init error propagation");
 }
 ''')
-  subprocess.run([cc,'-include',str(ROOT/'tools/fixtures/pthread_timedlock_host.h'),'-std=c11','-pthread','-fsanitize=address,undefined','-I'+str(ROOT/'client/gpu'),'-I'+str(w),str(w/'check.c'),'-o',str(w/'check')],check=True)
+  subprocess.run([cc,'-D_POSIX_C_SOURCE=200809L','-include',str(ROOT/'tools/fixtures/pthread_timedlock_host.h'),'-std=c11','-pthread','-fsanitize=address,undefined','-I'+str(ROOT/'client/gpu'),'-I'+str(w),str(w/'check.c'),'-o',str(w/'check')],check=True)
   for mode in ('normal','unprepared','exhausted'):subprocess.run([w/'check',mode],check=True,timeout=30,env=dict(os.environ,UBSAN_OPTIONS='halt_on_error=1'))
  print('PASS actual frontend guard reserve exhaustion/unprepared controls; no PS5 causal/pass inference')
 if __name__=='__main__':main()

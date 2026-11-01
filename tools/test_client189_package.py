@@ -31,7 +31,18 @@ def main():
   kind,flags,offset,address,physical,filesize,memsize,alignment=struct.unpack_from('<IIQQQQQQ',elf,phoff+i*entsize)
   if kind==1 and address<=start and end<=address+filesize:staged=elf[offset+start-address:offset+end-address]
  assert staged is not None and len(staged)%8==0
- assert values['frontend_guard_init'] in struct.unpack('<'+'Q'*(len(staged)//8),staged),'Frontend guard initializer missing from actual staged ELF constructor array'
+ # PIE constructor slots are populated by real R_X86_64_RELATIVE relocations.
+ initializers=list(struct.unpack('<'+'Q'*(len(staged)//8),staged))
+ shoff=struct.unpack_from('<Q',elf,40)[0];shsize,shnum=struct.unpack_from('<HH',elf,58)
+ for i in range(shnum):
+  section=struct.unpack_from('<IIQQQQIIQQ',elf,shoff+i*shsize)
+  if section[1]!=4:continue
+  for offset in range(section[4],section[4]+section[5],section[9]):
+   target,info,addend=struct.unpack_from('<QQq',elf,offset)
+   if start<=target<end:
+    assert info==8 and (target-start)%8==0,'Unexpected constructor relocation'
+    initializers[(target-start)//8]=addend
+ assert values['frontend_guard_init'] in initializers,'Frontend guard initializer missing from actual staged ELF constructor array'
  assert values['__init_array_start']==values['__init_array_end']
  for start,end in [('__jvm_init_array_start','__jvm_init_array_end'),('__client_gpu_init_start','__client_gpu_init_end'),('__client_ui_init_start','__client_ui_init_end')]:assert values[end]>values[start]
  assert counts['ps5zink_get_proc_address']==1 and counts['ps5_ps5zink_JNI_OnLoad']==1
