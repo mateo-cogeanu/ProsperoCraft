@@ -19,6 +19,8 @@
 
 - Local184 integrates the combined Zink/RADV component with existing scoped graphics/JVM providers and a known resident GL resolver. A diagnostic Java page uses the actual native launcher UI, real GLFW/LWJGL rendering and the existing teardown/DestroyJavaVM/LoadExec barrier to return to a fresh launcher. Host GL and barrier controls/target checks pass; actual PS5 handoff and original Minecraft remain pending. [Guide](docs/client-zink-jvm-handoff-184.md). Default game launcher179 and26.1 block remain; no release/Store update.
 
+- 185 repairs184 check4 NoClassDefFoundError: the adapted GLFW JAR was present but omitted from the effective JVM classpath. Add actual-package old-code failure control, first-provider/JDK25 resolution and exact-ELF classpath checks. Native UI closure/JVM creation are observed; physical185GL/handoff remains pending. [Evidence/test guide](docs/client-zink-classpath-185.md). No release/Store change.
+
 ## 01.000.179 — automatic microphone and simpler instance settings
 
 - Prepare the working system microphone automatically before every supported game launch; remove the launcher Microphone button, toggle and test page. Existing saved microphoneEnabled:false no longer blocks preparation. Use the controller's physical microphone mute button or PS5 system mute.

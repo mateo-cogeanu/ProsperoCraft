@@ -6,6 +6,10 @@ PPSA99874 /01.000.184 diagnostic, not a Minecraft launch candidate. Current game
 launcher/root identity stays179;26.1.x game support stays blocked. No release or
 Store action is authorized.
 
+184 failed check4 with a missing effective-classpath GLFW binding, after the
+native launcher closed cleanly. [185 repair and retrieved evidence](client-zink-classpath-185.md)
+record the cause; the original184 build/host receipt and exact ZIP remain unchanged.
+
 ## Physical checkpoint
 
 Install the complete184 PPSA99874 folder. The **actual native launcher UI and

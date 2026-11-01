@@ -276,3 +276,6 @@ The manual native lane instead tests scoped native implementations against fixtu
 
 | `test_zink_handoff_host.py` | Manual macOS exact184Java diagnostic GL workload on real GLFW/LWJGL/Zink/lavapipe; modeled JNI launcher barrier/resume controls, no native UI/VideoOut/LoadExec |
 | `test_client184_package.py` | Exact184ZIP/JVM/registry/constructor/symbol/directclass/JAR/notices/signature checks with accepted179baseline, SDK+LLVM; no console execution |
+
+| `test_zink_jvm_classpath.py` | Explicit actual app/header + JDK25;184missingGLFWnegativecontrol, adapted-provider ordering and non-initializing effective classpath resolution; no graphics/PS5 |
+| `test_client185_package.py` | Exact185ZIP/source/registry/symbol/classpathELF/JAR/signature audit, LLVM+SDKconverter and179baseline; no console execution |

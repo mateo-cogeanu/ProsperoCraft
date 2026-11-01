@@ -1,0 +1,32 @@
+{
+  "date": "2026-11-01",
+  "app_version": "01.000.184",
+  "title_id": "PPSA99874",
+  "package_sha256": "50f4ed0a6b128bb8d1f00d0f064a17f2cf3694539f25975f5073d00f94968c88",
+  "run_id": "client-01.000.184-1793525304-161693377",
+  "user_report": "failedcheck4",
+  "result": "FAIL check4/codeFFFFFAE5",
+  "exception": "java.lang.NoClassDefFoundError: org/lwjgl/glfw/GLFW",
+  "retrieval": "Safari read-only session/probe-exception/startup-tail/native-JVM reports; direct tool HTTP no route to host. First saved startup/native downloads local.",
+  "report_sha256": {
+    "startup-tail.log": "dbd444a8959f3249c03ce774235857d516b2df25cc7ac1380516672cb7637810",
+    "vm-trace.log": "8ff65956a2c12a8d738aea8dfdc50ed86efa01ee22405c59f6cbf85674e9a86c"
+  },
+  "observed": [
+    "Actual native launcher first frame and real JVM creation",
+    "Native launcher display/device closed and UI thread joined before fixture failure",
+    "No successful GLFW/GL workload, DestroyJavaVM or fresh return",
+    "Thrown-exceptions/hs-error endpoints unavailable errno2"
+  ],
+  "cause": "AdaptedGLFWJAR is packaged but absent from the inherited179effective JVM classpath; diagnostic system-loaded harness cannot resolveGLFW",
+  "verification_gap": "184host test supplied its own correct classpath; package audit checked JAR presence, not effective reachability",
+  "repair": "185prepends adaptedGLFWbinding, verifies first providers/actualJDK25resolution and exactclasspathembeddedinELF;184missingentrynegativecontrolfails",
+  "not_established": [
+    "GL/native driver failure or new runtime resource cause",
+    "Physical185repair/handoff",
+    "Fullgame/regression/enduranceacceptance"
+  ],
+  "preserved": "Exact184ZIP/symbols/source/buildrecord; passing183 and all earlier artifacts/frozenhistory; no official game JAR changes",
+  "raw_reports": "Local only",
+  "release_store": "No action"
+}

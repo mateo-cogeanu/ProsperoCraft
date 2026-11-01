@@ -619,11 +619,11 @@ int main(int argc,char** argv) {
 #ifdef PROSPERO_ZINK_HANDOFF_TEST
   // This diagnostic explicitly tests JVM shutdown; normal game policy retains
   // its existing process-replacement barrier and does not use this branch.
-  log_stage("ZINK184 diagnostic calling real DestroyJavaVM before process replacement");
+  log_stage("ZINK_HANDOFF diagnostic calling real DestroyJavaVM before process replacement");
   int destroy_rc=java_vm?java_vm->DestroyJavaVM():JNI_ERR;
-  if(destroy_rc!=JNI_OK){log_stage("ZINK184 DestroyJavaVM failed; process replacement blocked");session_status("FAILED: diagnostic JVM shutdown; keep open for reports");for(;;)(void)sceKernelUsleep(1000000);}
+  if(destroy_rc!=JNI_OK){log_stage("ZINK_HANDOFF DestroyJavaVM failed; process replacement blocked");session_status("FAILED: diagnostic JVM shutdown; keep open for reports");for(;;)(void)sceKernelUsleep(1000000);}
   java_vm=nullptr;java_env=nullptr;
-  log_stage("ZINK184 real DestroyJavaVM completed; now using existing LoadExec barrier");
+  log_stage("ZINK_HANDOFF real DestroyJavaVM completed; now using existing LoadExec barrier");
 #endif
   log_stage("PS5_SESSION REPLACE_PROCESS clean quit -> native instance library");
   session_status("CLEAN QUIT: replacing process for native library;not a gameplay PASS");
