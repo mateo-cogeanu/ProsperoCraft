@@ -96,3 +96,9 @@ and Fabric; leave any failure screen open or reopen after a hard crash without
 starting another game. Compare world creation with the same version/seed/settings
 and warm/cold state. Save/reload, all packs/mods, audio/haptics,26.2+ Vulkan, native
 resource reclamation and endurance remain pending. No new passing milestone.
+## Built197 validation
+
+Exact clean source `69b5cb424afb16e78e0c93b2996926fbac69a543` produced PPSA99874 /01.000.197,
+ZIP SHA-256 `127e348bee49a77ae731683adac81eeeeeea3aa6352465499bc340393ff08656`. The [validation receipt](validation/client197-zink-iris-2026-11-01.json) records matching package/build hashes, local17 policy and11 native checks, source-only outside-root checks with an initially empty dependency cache, actual Mesa barrier tests, genuine target build/package audit and separate macOS lavapipe/Zink graphics execution.
+
+[Policy CI](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41334657259) and [native CI](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41334674652) succeeded on Ubuntu24.04 and macOS15 for that source; actual jobs/logs were inspected. Iris fixture launch preparation passes for all three Fabric releases, but actual Iris/shader rendering is untested. Exact197 physical quit/relaunch, world creation timing, save/reload and regression/endurance checks remain pending. No release or Store upload.
