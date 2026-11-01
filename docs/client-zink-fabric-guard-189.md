@@ -72,3 +72,16 @@ Retain029OSMesa, all SDL/RADV allocation/mutex/condition/TLS/ownership workaroun
 shaderc/OpenAL/input/audio behavior, runtime descriptor/ZIP/ImageIO/JNA/resident
 aliases and scratch/verifier/emutls/network/sync/thread-stack policies. Default
 published identity179 and noncandidate launcher gates remain unchanged.
+
+[Exact189 build/validation](validation/client189-zink-fabric-guard-2026-11-01.json)
+pins build source `56a01d9` and component/package/runtime hashes.
+ZIP SHA-256: `8e58ed81335732fc0b0dc731c11359af2a960df1e2bba576c4622900421eb753`.
+Local16fast,8native,source-only16fast/8native, actual host GL and target/package
+checks pass. The audit resolves PIE relocation addends to prove the guard init
+function is in the actual staged GPU constructor array.
+[Hosted policy](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41311489057)
+and [hosted native](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41311503039)
+pass on Ubuntu and macOS at test-source `a19cb11`; completed job logs inspected.
+Initial Ubuntu native compilation required explicit POSIX feature declarations;
+that host-only correction and the PIE audit correction change no packaged code.
+PS5 repair acceptance and the deferred quit issue remain pending.
