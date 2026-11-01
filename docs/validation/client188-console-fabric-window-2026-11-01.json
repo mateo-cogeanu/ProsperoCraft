@@ -1,0 +1,33 @@
+{
+  "date": "2026-11-01",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.188",
+  "package_sha256": "08fc9856508d67945303353872820e7067ff6d10b6f82901e1c7dc8c25a309eb",
+  "run_id": "client-01.000.188-1793539492-635300548",
+  "user_report": "failed check4 26.1 fabric",
+  "result": "FAIL check4/codeFFFFFAE5",
+  "observed": [
+    "Actual Fabric Loader0.20.1/Knot/mod entrypoints and original26.1 Main reached",
+    "Native launcher display/device handoff completed",
+    "Real GLFW SDL init/display/monitor/window creation completed",
+    "OpenGL backend rejected PS5 Zink context operation failed(16)",
+    "Original Main returned without clean shutdown; verifier correctly refuses restart"
+  ],
+  "reported_exception": "Original Main returned without verified clean shutdown; current=true stopping=false failure=true instanceStopped=false sdlStopped=false",
+  "underlying_error": "OpenGL backend window creation: PS5 Zink context operation failed(16)",
+  "warning": "Invalid window hint0x00020010; not established as causal",
+  "analysis": "Existing frontend maps pthread guard lock errors to EBUSY(16), also used for context ownership refusal; reports cannot distinguish these. Static frontend guard bypasses existing explicit-init graphics mutex lease pool. Fabric run shows libc/anonymous native allocation and thread creation refusals; exact allocator cause/quota unproven.",
+  "repair_candidate": "189 explicitly initializes frontend guard during staged pre-JVM graphics constructors, leases one mutex from existing reserve and preserves actual init/lock errors with bounded diagnostics. No ownership relaxation, reserve increase or runtime policy change. Physical cause/pass remains unconfirmed.",
+  "retrieval": "Safari read-only current session/exception/Java/startup/native/VM reports; direct HTTP no route. hs-error unavailable errno2. Startup history split by exact run ID, native report contains matching build/run.",
+  "report_sha256": {
+    "exceptions.log": "9546a1256c4248cb71789e8cbd9fbe1f23586764268091ee9a790e886a5d665e",
+    "startup-tail.log": "d6de8c3dad4f6f5f06f80d7b8a47481f83ae5e7cc20b8e228898b009d9302d53",
+    "current-startup.log": "184c2cd80b0638bc5e09bc69d24735ac27e0b7b0cf1cc6e22bb1e329e05c9212",
+    "native-stderr.log": "56def860ee9e58b7958be69706b884410066c75c2cba87f12a9fb2db31f26695",
+    "vm-trace.log": "387334dd9b12959aa932bc317968eb7bbbf1afd21273ebf38ce7eb543400cc75"
+  },
+  "quit_crash": "Explicitly deferred; no startup/session/restart changes",
+  "raw_reports": "Local only; not published",
+  "console_pending": "Exact189 Fabric title/world/mod behavior; all version/lifecycle/regression/endurance checks remain separate",
+  "release_store": "No action"
+}

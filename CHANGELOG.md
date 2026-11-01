@@ -29,6 +29,8 @@
 
 - User reports187 Vanilla26.1 works but crashes on quit; exact console scope recorded separately.188 enables all three26.1.x releases for Vanilla/Fabric development testing through the normal upstream loader path. Quit repair explicitly deferred; startup/GLFW/session code remains unchanged. [188 guide](docs/client-zink-fabric-188.md). No release/Store update.
 
+- 188 Fabric26.1 reaches upstream Knot/mods/original Main but OpenGL window creation fails with masked Zink error16.189 explicitly leases the frontend guard from the pre-JVM graphics mutex reserve and preserves real lock/init errors with ownership diagnostics. [Evidence/test guide](docs/client-zink-fabric-guard-189.md). Physical cause/pass unconfirmed; quit repair still deferred, no release/Store action.
+
 ## 01.000.179 — automatic microphone and simpler instance settings
 
 - Prepare the working system microphone automatically before every supported game launch; remove the launcher Microphone button, toggle and test page. Existing saved microphoneEnabled:false no longer blocks preparation. Use the controller's physical microphone mute button or PS5 system mute.

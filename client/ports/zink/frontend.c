@@ -19,6 +19,7 @@
 #include <pthread.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #define PUBLIC __attribute__((visibility("default")))
 struct ps5zink_context {
@@ -34,7 +35,24 @@ struct ps5zink_context {
     pthread_t owner;
     bool bound, window, flushing;
 };
-static pthread_mutex_t guard = PTHREAD_MUTEX_INITIALIZER;
+/* BEGIN FRONTEND GUARD: extracted unchanged by the scoped host failure test. */
+static pthread_mutex_t guard;
+static int guard_init_result = EAGAIN;
+/* Runs in the existing explicitly staged graphics constructor array before JVM
+ * pressure. Explicit init leases one real mutex from the existing scoped pool;
+ * a static initializer alone would bypass that pool and allocate on first lock. */
+static void __attribute__((constructor)) frontend_guard_init(void)
+{
+    guard_init_result = pthread_mutex_init(&guard, NULL);
+    fprintf(stderr, "PS5_ZINK guard_init result=%d\n", guard_init_result);
+}
+static int frontend_guard_lock(void)
+{
+    int rc = guard_init_result ? guard_init_result : pthread_mutex_lock(&guard);
+    if (rc) fprintf(stderr, "PS5_ZINK guard_lock result=%d init_result=%d\n", rc, guard_init_result);
+    return rc;
+}
+/* END FRONTEND GUARD */
 static struct pipe_frontend_screen frontend;
 static struct ps5zink_context *contexts;
 static uint32_t drawable_id;
@@ -158,7 +176,8 @@ PUBLIC struct ps5zink_context *ps5zink_create(const struct ps5zink_config *confi
         (!!config->window != !!config->create_surface)) {
         fail(EINVAL); return NULL;
     }
-    if (pthread_mutex_lock(&guard)) { fail(EBUSY); return NULL; }
+    int guard_rc = frontend_guard_lock();
+    if (guard_rc) { fail(guard_rc); return NULL; }
     struct ps5zink_context *c = calloc(1, sizeof(*c));
     if (!c) { fail(ENOMEM); goto done; }
     if (!frontend.screen) {
@@ -209,10 +228,11 @@ done:
 PUBLIC int ps5zink_make_current(struct ps5zink_context *c)
 {
     last_error = 0;
-    if (pthread_mutex_lock(&guard)) return fail(EBUSY);
+    int guard_rc = frontend_guard_lock();
+    if (guard_rc) return fail(guard_rc);
     struct ps5zink_context *previous = current;
     int result = 0;
-    if (c && !usable(c)) { fail(EBUSY); goto done; }
+    if (c && !usable(c)) { fprintf(stderr, "PS5_ZINK make_current ownership rejected\n"); fail(EBUSY); goto done; }
     if (c) {
         /* A valid GL context does not imply a usable window surface. Force
          * real drawable allocation before reporting successful make-current. */
@@ -240,7 +260,8 @@ PUBLIC struct ps5zink_context *ps5zink_get_current(void) { return current; }
 PUBLIC int ps5zink_destroy(struct ps5zink_context *c)
 {
     last_error = 0;
-    if (pthread_mutex_lock(&guard)) return fail(EBUSY);
+    int guard_rc = frontend_guard_lock();
+    if (guard_rc) return fail(guard_rc);
     int result = 0;
     if (!c || !usable(c)) { fail(EBUSY); goto done; }
     if (current == c) {
@@ -266,7 +287,8 @@ PUBLIC int ps5zink_resize(struct ps5zink_context *c, unsigned width, unsigned he
 {
     last_error = 0;
     if (!width || !height || width > 16384 || height > 16384) return fail(EINVAL);
-    if (pthread_mutex_lock(&guard)) return fail(EBUSY);
+    int guard_rc = frontend_guard_lock();
+    if (guard_rc) return fail(guard_rc);
     int result = 0;
     if (!usable(c)) { fail(EBUSY); goto done; }
     if (c->width != width || c->height != height) {

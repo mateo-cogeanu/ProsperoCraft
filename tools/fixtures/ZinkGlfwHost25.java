@@ -66,7 +66,7 @@ public class ZinkGlfwHost25 {
     long window=glfwCreateWindow(8,8,"Real Zink",0,0);check(window!=0,"original GL hints");glfwMakeContextCurrent(window);check(glfwGetCurrentContext()==window,"current context");
     GL.createCapabilities();String renderer=glGetString(GL_RENDERER);check(renderer!=null&&renderer.contains("zink"),"actual Zink renderer");
     check(GL.getCapabilities().OpenGL33,"GL3.3 core");check(glfwGetProcAddress("glClear")!=0,"GLFW function address");
-    try(SharedLibrary provider=new org.lwjgl.system.ps5.PS5Library("ps5zink")){
+    try(SharedLibrary provider=new org.lwjgl.system.ps5.PS5Library("libps5zink.so")){
      long entry=provider.getFunctionAddress("ps5zink_get_proc_address");check(entry!=0,"real resident-style entry");
      try(MemoryStack stack=MemoryStack.stackPush()){check(JNI.invokePP(MemoryUtil.memAddress(stack.ASCII("glClear")),entry)==glfwGetProcAddress("glClear"),"same actual GL provider");}
     }

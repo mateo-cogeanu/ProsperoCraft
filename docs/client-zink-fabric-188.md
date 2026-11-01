@@ -52,3 +52,8 @@ Local16fast,7native,source-only16fast and target/package audits pass.
 [Ubuntu/macOS CI](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41307297043)
 passes16checks on each host; completed job logs inspected. Actual188 PS5
 Vanilla/Fabric acceptance remains pending and quit failure remains deferred.
+
+Physical188 Fabric26.1 subsequently failed OpenGL window creation/check4. See
+[exact-run evidence](validation/client188-console-fabric-window-2026-11-01.json)
+and the [189 reserve-gap/diagnostic candidate](client-zink-fabric-guard-189.md).
+Quit-crash work remains deferred.

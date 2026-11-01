@@ -42,9 +42,12 @@ Vanilla development versions, adapted GLFW priority, original OpenGL arguments
 and unchanged default/Demo/Fabric/Vulkan boundaries with injected publisher data.
 
 The native runner forces UBSan errors to fail (`halt_on_error=1`), including local runs.
-The seven optional native checks exercise actual scoped audio mutex/port/worker
+The eight optional native checks exercise actual scoped audio mutex/port/worker
 implementations, desktop HID/model policy and resident-library JNI loading, with
-controlled OS boundaries. The microphone check runs the actual bounded capture core with injected AudioIn calls, including silence/route changes, conversion, failure ownership and concurrent producer/consumer cleanup. It does not capture host or PS5 speech. The context-error check covers generation reuse, thread isolation, bounded context capacity and refused native-key setters. They require no external graphics/audio library. They
+controlled OS boundaries. The microphone check runs the actual bounded capture core with injected AudioIn calls, including silence/route changes, conversion, failure ownership and concurrent producer/consumer cleanup. It does not capture host or PS5 speech. The context-error check covers generation reuse, thread isolation, bounded context capacity and refused native-key setters. The Zink guard check combines the actual frontend guard body and existing mutex
+reserve under late-init refusal, contention, unprimed/exhausted pool and exact
+error controls. It models a PS5 allocation boundary, not driver execution. These
+checks require no external graphics/audio library. They
 do **not** exercise OpenAL rendering, SDL, RADV, MoltenVK, Vulkan or a PS5 driver.
 The JNI test uses platform headers, `.dylib`/`-dynamiclib` on macOS and
 `.so`/`-shared -fPIC` plus libdl on Linux. Linux loads Clang's shared UBSan runtime
