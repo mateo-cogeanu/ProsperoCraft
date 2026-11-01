@@ -22,4 +22,12 @@ inline int enable_flushsync(int (*setter)(const char*,const char*,int)=::setenv)
  if(setter("ZINK_DEBUG",selected,1)!=0)return errno?errno:EIO;
  return 0;
 }
+// Use Mesa's genuine direct pipe context; no gdrv queue or substitute GL calls.
+inline int enable_synchronous_context(int (*setter)(const char*,const char*,int)=::setenv){
+ const char* current=std::getenv("GALLIUM_THREAD");
+ if(current&&std::strcmp(current,"0")==0)return 0;
+ if(setter("GALLIUM_THREAD","0",1)!=0)return errno?errno:EIO;
+ return 0;
+}
+
 }

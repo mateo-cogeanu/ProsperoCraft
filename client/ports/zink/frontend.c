@@ -36,6 +36,18 @@ static void startup_trace(const char *stage)
         }
     }
 }
+/* Separate bounded context/refusal checkpoints, including upstream C units. */
+void prospero_zink_context_stage(const char *stage)
+{
+    static unsigned events;
+    unsigned n = __atomic_load_n(&events, __ATOMIC_RELAXED);
+    while (n < 128 && !__atomic_compare_exchange_n(&events, &n, n + 1, false, __ATOMIC_RELAXED, __ATOMIC_RELAXED)) {}
+    if (n < 128) {
+        int saved = errno;
+        fprintf(stderr, "PS5_ZINK context stage %s\n", stage);
+        errno = saved;
+    }
+}
 struct ps5zink_context {
     struct pipe_frontend_drawable drawable;
     struct st_visual visual;
@@ -68,6 +80,7 @@ static int frontend_guard_lock(void)
 }
 /* END FRONTEND GUARD */
 static struct pipe_frontend_screen frontend;
+static bool screen_prepared;
 static struct ps5zink_context *contexts;
 static uint32_t drawable_id;
 /* Constant initialized C TLS; compiler emulation on PS5, no C++ wrappers. */
@@ -198,6 +211,7 @@ PUBLIC int ps5zink_prepare_screen(void)
     int rc = frontend_guard_lock();
     if (rc) return fail(rc);
     bool ready = prepare_screen_locked();
+    if (ready) screen_prepared = true;
     pthread_mutex_unlock(&guard);
     return ready;
 }
@@ -245,14 +259,23 @@ PUBLIC struct ps5zink_context *ps5zink_create(const struct ps5zink_config *confi
     attributes.visual = c->visual;
     attributes.flags = (config->forward ? ST_CONTEXT_FLAG_FORWARD_COMPATIBLE : 0) |
                        (config->debug ? ST_CONTEXT_FLAG_DEBUG : 0);
-    enum st_context_error error;
+    enum st_context_error error = ST_CONTEXT_ERROR_NO_MEMORY;
     startup_trace("state tracker context create enter");
     c->st = st_api_create_context(&frontend, &attributes, &error, NULL);
     startup_trace(c->st ? "state tracker context create returned success" : "state tracker context create returned failure");
     if (!c->st) {
+        fprintf(stderr, "PS5_ZINK context refusal error=%d requested=%d.%d forward=%d debug=%d\n",
+                (int)error, config->major, config->minor, config->forward, config->debug);
+        prospero_zink_context_stage("frontend refusal error record enter");
         fail(error == ST_CONTEXT_ERROR_BAD_VERSION ? ENOTSUP : ENOMEM);
+        prospero_zink_context_stage("frontend refusal temporary release enter");
         free(c); c = NULL;
-        if (!contexts) { st_screen_destroy(&frontend); frontend.screen->destroy(frontend.screen); memset(&frontend, 0, sizeof(frontend)); }
+        prospero_zink_context_stage("frontend refusal temporary release complete");
+        if (!contexts && !screen_prepared) {
+            prospero_zink_context_stage("unprepared failure screen cleanup enter");
+            st_screen_destroy(&frontend); frontend.screen->destroy(frontend.screen); memset(&frontend, 0, sizeof(frontend));
+            prospero_zink_context_stage("unprepared failure screen cleanup complete");
+        } else if (!contexts) prospero_zink_context_stage("prepared screen retained after context refusal");
         goto done;
     }
     c->st->frontend_context = c;
@@ -320,7 +343,7 @@ PUBLIC int ps5zink_destroy(struct ps5zink_context *c)
     while (*link != c) link = &(*link)->next;
     *link = c->next;
     free(c);
-    if (!contexts) { st_screen_destroy(&frontend); frontend.screen->destroy(frontend.screen); memset(&frontend, 0, sizeof(frontend)); }
+    if (!contexts) { st_screen_destroy(&frontend); frontend.screen->destroy(frontend.screen); memset(&frontend, 0, sizeof(frontend)); screen_prepared = false; }
     result = 1;
 done:
     pthread_mutex_unlock(&guard);

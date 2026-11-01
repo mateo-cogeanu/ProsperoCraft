@@ -48,7 +48,7 @@ controlled OS boundaries. The microphone check runs the actual bounded capture c
 reserve under late-init refusal, contention, unprimed/exhausted pool and exact
 error controls. It models a PS5 allocation boundary, not driver execution. These
 checks require no external graphics/audio library. The candidate Zink submission
-policy test checks actual bounded environment setup, exact-token idempotence,
+policy test checks actual bounded flushsync/direct-context environment setup, exact-token idempotence,
 existing flags and setter-refusal ownership. It does not execute graphics. The clean-exit gate check exercises actual atomic status/ownership policy with concurrent consumers and native sanitizers; it does not execute PS5 LoadExec. The embedded-VM check runs genuine HotSpot shutdown hooks, the native gate/exit hook and existing restart bridge with a host exec fixture, including unarmed/nonzero exits and Xcheck:jni. They
 do **not** exercise OpenAL rendering, SDL, RADV, MoltenVK, Vulkan or a PS5 driver.
 The JNI test uses platform headers, `.dylib`/`-dynamiclib` on macOS and

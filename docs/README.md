@@ -56,3 +56,5 @@ the documentation checker.
 - [194 early genuine Zink screen/queue preparation](client-zink-prewarm-194.md)
 
 - [195 early Zink screen and instance-refusal cleanup](client-zink-early-screen-195.md)
+
+- [196 prepared ownership and upstream direct context](client-zink-direct-context-196.md)

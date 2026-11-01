@@ -1,0 +1,297 @@
+--- a/src/mesa/state_tracker/st_manager.c
++++ b/src/mesa/state_tracker/st_manager.c
+@@ -29,6 +29,13 @@
+  */
+ 
+ #include "main/mtypes.h"
++
++#ifdef PS5_ZINK_FRONTEND
++extern void prospero_zink_context_stage(const char *);
++#define PS5_CONTEXT_STAGE(label) prospero_zink_context_stage(label)
++#else
++#define PS5_CONTEXT_STAGE(label) ((void)0)
++#endif
+ #include "main/extensions.h"
+ #include "main/context.h"
+ #include "main/debug_output.h"
+@@ -974,11 +981,13 @@
+    struct gl_config mode, *mode_ptr = &mode;
+    bool no_error = false;
+ 
++   PS5_CONTEXT_STAGE("Mesa global initialize enter");
+    _mesa_initialize(attribs->options.mesa_extension_override);
+ 
+    /* Create a hash table for the framebuffer interface objects
+     * if it has not been created for this st manager.
+     */
++   PS5_CONTEXT_STAGE("Mesa global initialize complete");
+    if (fscreen->st_screen == NULL) {
+       struct st_screen *screen;
+ 
+@@ -1005,32 +1014,40 @@
+    bool is_gles = attribs->profile == API_OPENGLES2;
+    unsigned lod_bias_flag = is_gles ? PIPE_CONTEXT_NO_LOD_BIAS : 0;
+ 
++   PS5_CONTEXT_STAGE("pipe context create enter");
+    pipe = fscreen->screen->context_create(fscreen->screen, NULL,
+                                           PIPE_CONTEXT_PREFER_THREADED |
+                                           lod_bias_flag |
+                                           attribs->context_flags);
+    if (!pipe) {
++      PS5_CONTEXT_STAGE("pipe context refused");
+       *error = ST_CONTEXT_ERROR_NO_MEMORY;
+       return NULL;
+    }
+ 
++   PS5_CONTEXT_STAGE("pipe context create complete");
+    st_visual_to_context_mode(&attribs->visual, &mode);
+    if (attribs->visual.color_format == PIPE_FORMAT_NONE)
+       mode_ptr = NULL;
++   PS5_CONTEXT_STAGE("GL state create enter");
+    st = st_create_context(attribs->profile, pipe, mode_ptr, shared_ctx,
+                           &attribs->options, no_error,
+                           !!fscreen->validate_egl_image);
++   PS5_CONTEXT_STAGE("GL state create returned");
+    if (!st) {
+       *error = ST_CONTEXT_ERROR_NO_MEMORY;
+       pipe->destroy(pipe);
+       return NULL;
+    }
+ 
++   PS5_CONTEXT_STAGE("GL state create complete");
+    if (attribs->context_flags & PIPE_CONTEXT_PROTECTED)
+       st->ctx->Const.ContextFlags |= GL_CONTEXT_FLAG_PROTECTED_CONTENT_BIT_EXT;
+ 
+    if (attribs->flags & ST_CONTEXT_FLAG_DEBUG) {
++      PS5_CONTEXT_STAGE("GL debug state enter");
+       if (!_mesa_set_debug_state_int(st->ctx, GL_DEBUG_OUTPUT, GL_TRUE)) {
++         PS5_CONTEXT_STAGE("GL debug state refused");
+          *error = ST_CONTEXT_ERROR_NO_MEMORY;
+          return NULL;
+       }
+@@ -1063,6 +1080,7 @@
+       /* Is the actual version less than the requested version?
+        */
+       if (st->ctx->Version < attribs->major * 10U + attribs->minor) {
++         PS5_CONTEXT_STAGE("GL version refused");
+          *error = ST_CONTEXT_ERROR_BAD_VERSION;
+          st_destroy_context(st);
+          return NULL;
+--- a/src/mesa/state_tracker/st_context.c
++++ b/src/mesa/state_tracker/st_context.c
+@@ -27,6 +27,13 @@
+ 
+ 
+ #include "main/accum.h"
++
++#ifdef PS5_ZINK_FRONTEND
++extern void prospero_zink_context_stage(const char *);
++#define PS5_CONTEXT_STAGE(label) prospero_zink_context_stage(label)
++#else
++#define PS5_CONTEXT_STAGE(label) ((void)0)
++#endif
+ #include "main/context.h"
+ #include "main/debug_output.h"
+ #include "main/framebuffer.h"
+@@ -776,9 +783,11 @@
+    st_init_driver_functions(pipe->screen, &funcs, has_egl_image_validate);
+ 
+    /* gl_context must be 16-byte aligned due to the alignment on GLmatrix. */
++   PS5_CONTEXT_STAGE("GL context aligned allocation enter");
+    ctx = align_malloc(sizeof(struct gl_context), 16);
+    if (!ctx)
+       return NULL;
++   PS5_CONTEXT_STAGE("GL context aligned allocation complete");
+    memset(ctx, 0, sizeof(*ctx));
+ 
+    ctx->pipe = pipe;
+@@ -786,10 +795,12 @@
+ 
+    if (!_mesa_initialize_context(ctx, api, no_error, visual, shareCtx, &funcs,
+                                  options)) {
++      PS5_CONTEXT_STAGE("Mesa context initialize refused");
+       align_free(ctx);
+       return NULL;
+    }
+ 
++   PS5_CONTEXT_STAGE("Mesa context initialize complete");
+    st_debug_init();
+ 
+    if (pipe->screen->get_disk_shader_cache)
+@@ -801,12 +812,14 @@
+    if (pipe->screen->caps.string_marker)
+       ctx->has_string_marker = true;
+ 
++   PS5_CONTEXT_STAGE("GL private state initialize enter");
+    st = st_create_context_priv(ctx, pipe, options);
+    if (!st) {
+       _mesa_free_context_data(ctx, true);
+       align_free(ctx);
+    }
+ 
++   PS5_CONTEXT_STAGE("GL private state initialize returned");
+    return st;
+ }
+ 
+--- a/src/gallium/drivers/zink/zink_context.c
++++ b/src/gallium/drivers/zink/zink_context.c
+@@ -22,6 +22,13 @@
+  */
+ 
+ #include "zink_clear.h"
++
++#ifdef PS5_ZINK_FRONTEND
++extern void prospero_zink_context_stage(const char *);
++#define PS5_CONTEXT_STAGE(label) prospero_zink_context_stage(label)
++#else
++#define PS5_CONTEXT_STAGE(label) ((void)0)
++#endif
+ #include "zink_context.h"
+ #include "zink_descriptors.h"
+ #include "zink_fence.h"
+@@ -5837,6 +5844,7 @@
+ zink_context_create(struct pipe_screen *pscreen, void *priv, unsigned flags)
+ {
+    struct zink_screen *screen = zink_screen(pscreen);
++   PS5_CONTEXT_STAGE("Zink context allocation enter");
+    struct zink_context *ctx = rzalloc(NULL, struct zink_context);
+    bool is_copy_only = (flags & ZINK_CONTEXT_COPY_ONLY) > 0;
+    bool is_compute_only = (flags & PIPE_CONTEXT_COMPUTE_ONLY) > 0;
+@@ -5844,6 +5852,7 @@
+    if (!ctx)
+       goto fail;
+ 
++   PS5_CONTEXT_STAGE("Zink context allocation complete");
+    ctx->flags = flags;
+    memset(ctx->pipeline_changed, 1, sizeof(ctx->pipeline_changed));
+    ctx->gfx_pipeline_state.dirty = ctx->gfx_pipeline_state.mesh_dirty = true;
+@@ -6035,12 +6044,14 @@
+ 
+    const uint32_t data[] = {0};
+    if (!is_copy_only) {
++      PS5_CONTEXT_STAGE("Zink dummy buffer enter");
+       ctx->dummy_xfb_buffer = pipe_buffer_create(&screen->base,
+          PIPE_BIND_STREAM_OUTPUT, PIPE_USAGE_IMMUTABLE, sizeof(data));
+       if (!ctx->dummy_xfb_buffer)
+          goto fail;
+    }
+    if (!is_copy_only) {
++      PS5_CONTEXT_STAGE("Zink descriptors enter");
+       if (!zink_descriptors_init(ctx))
+          goto fail;
+    }
+@@ -6088,7 +6099,9 @@
+       }
+    }
+ 
++   PS5_CONTEXT_STAGE("Zink initial batch enter");
+    zink_start_batch(ctx);
++   PS5_CONTEXT_STAGE("Zink initial batch returned");
+    if (!ctx->bs)
+       goto fail;
+ 
+@@ -6195,6 +6208,7 @@
+       return &ctx->base;
+    }
+ 
++   PS5_CONTEXT_STAGE("Zink threaded context selection enter");
+    struct threaded_context *tc = (struct threaded_context*)threaded_context_create(&ctx->base, &screen->transfer_pool,
+                                                      zink_context_replace_buffer_storage,
+                                                      &(struct threaded_context_options){
+@@ -6209,6 +6223,7 @@
+                                                      },
+                                                      &ctx->tc);
+ 
++   PS5_CONTEXT_STAGE("Zink threaded context selection returned");
+    if (tc && (struct zink_context*)tc != ctx) {
+       ctx->track_renderpasses = screen->driver_workarounds.track_renderpasses;
+       threaded_context_init_bytes_mapped_limit(tc, 4);
+@@ -6218,6 +6233,7 @@
+    return (struct pipe_context*)tc;
+ 
+ fail:
++   PS5_CONTEXT_STAGE("Zink context failure cleanup enter");
+    if (ctx)
+       zink_context_destroy(&ctx->base);
+    return NULL;
+--- a/src/gallium/auxiliary/util/u_threaded_context.c
++++ b/src/gallium/auxiliary/util/u_threaded_context.c
+@@ -25,6 +25,13 @@
+  **************************************************************************/
+ 
+ #include "util/u_threaded_context.h"
++
++#ifdef PS5_ZINK_FRONTEND
++extern void prospero_zink_context_stage(const char *);
++#define PS5_CONTEXT_STAGE(label) prospero_zink_context_stage(label)
++#else
++#define PS5_CONTEXT_STAGE(label) ((void)0)
++#endif
+ #include "util/u_cpu_detect.h"
+ #include "util/format/u_format.h"
+ #include "util/u_framebuffer.h"
+@@ -5540,10 +5547,14 @@
+    return pipe;
+ #endif
+ 
+-   if (!debug_get_bool_option("GALLIUM_THREAD", true))
++   if (!debug_get_bool_option("GALLIUM_THREAD", true)) {
++      PS5_CONTEXT_STAGE("upstream direct pipe context selected");
+       return pipe;
+-
++   }
++
++   PS5_CONTEXT_STAGE("threaded wrapper allocation enter");
+    tc = CALLOC_STRUCT(threaded_context);
++   PS5_CONTEXT_STAGE("threaded wrapper allocation returned");
+    if (!tc) {
+       pipe->destroy(pipe);
+       return NULL;
+@@ -5591,9 +5602,11 @@
+     * from the queue before being executed, so keep one tc_batch slot for that
+     * execution. Also, keep one unused slot for an unflushed batch.
+     */
++   PS5_CONTEXT_STAGE("gdrv worker queue initialize enter");
+    if (!util_queue_init(&tc->queue, "gdrv", TC_MAX_BATCHES - 2, 1, 0, NULL))
+       goto fail;
+ 
++   PS5_CONTEXT_STAGE("gdrv worker queue initialize complete");
+    tc->last_completed = -1;
+    for (unsigned i = 0; i < TC_MAX_BATCHES; i++) {
+ #if !defined(NDEBUG) && TC_DEBUG >= 1
+--- a/src/gallium/drivers/zink/zink_screen.c
++++ b/src/gallium/drivers/zink/zink_screen.c
+@@ -22,6 +22,13 @@
+  */
+ 
+ #include "zink_screen.h"
++
++#ifdef PS5_ZINK_FRONTEND
++extern void prospero_zink_context_stage(const char *);
++#define PS5_CONTEXT_STAGE(label) prospero_zink_context_stage(label)
++#else
++#define PS5_CONTEXT_STAGE(label) ((void)0)
++#endif
+ 
+ #include "zink_kopper.h"
+ #include "zink_compiler.h"
+@@ -1560,7 +1567,9 @@
+       // Multiple screens can share a queue, so we need to lock queue_lock even
+       // in the screen destructor
+       simple_mtx_lock(screen->queue_lock);
++      PS5_CONTEXT_STAGE("screen queue idle enter");
+       VkResult result = VKSCR(QueueWaitIdle)(screen->queue);
++      PS5_CONTEXT_STAGE("screen queue idle returned");
+       simple_mtx_unlock(screen->queue_lock);
+ 
+       if (result != VK_SUCCESS)
+@@ -1616,7 +1625,9 @@
+ 
+    u_transfer_helper_destroy(pscreen->transfer_helper);
+    if (util_queue_is_initialized(&screen->cache_get_thread)) {
++      PS5_CONTEXT_STAGE("screen shader queue finish enter");
+       util_queue_finish(&screen->cache_get_thread);
++      PS5_CONTEXT_STAGE("screen shader queue finish complete");
+       util_queue_destroy(&screen->cache_get_thread);
+    }
+ #ifdef ENABLE_SHADER_CACHE

@@ -33,6 +33,7 @@ def main():
     parser.add_argument('--publisher-cache', type=Path, required=True)
     parser.add_argument('--glfw-binding', type=Path, required=True)
     parser.add_argument('--oshi-provider', type=Path, required=True, help='Existing genuine consumer OSHI overlay; host fixture metadata avoids unrelated macOS JNA telemetry')
+    parser.add_argument('--synchronous-context', action='store_true', help='Exercise genuine upstream GALLIUM_THREAD=0 direct context mode')
     parser.add_argument('--check-preparation-refusal', action='store_true', help='Require honest early refusal with a layerless host Vulkan provider')
     parser.add_argument('--prepare-screen', action='store_true', help='Prepare the real screen via a native constructor before the host JVM')
     parser.add_argument('--output-dir', type=Path, default=ROOT / 'build/zink-host-test')
@@ -67,6 +68,7 @@ def main():
                ASAN_OPTIONS='detect_leaks=0:handle_segv=0:handle_sigbus=0:handle_sigfpe=0',
                UBSAN_OPTIONS='halt_on_error=1:handle_segv=0:handle_sigbus=0:handle_sigfpe=0',
                MESA_SHADER_CACHE_DIR=str(work / 'shader-cache'))
+    if args.synchronous_context: env['GALLIUM_THREAD'] = '0'
     def execute(command, name, expected):
         result = subprocess.run(list(map(str, command)), cwd=work, env=env, capture_output=True, text=True, timeout=120)
         text = result.stdout + result.stderr
@@ -76,6 +78,14 @@ def main():
         print('PASS', name, flush=True)
         return text
     execute([native], 'native-context', 'PASS real Zink clear/draw/guard/readback')
+    refusal_native = work / 'prepared-refusal-check'
+    subprocess.run([cc, '-std=c11', '-D_POSIX_C_SOURCE=200809L', '-fsanitize=address,undefined',
+                    '-I' + str(ROOT / 'client/ports/zink'), '-I' + str(ROOT / '.tools/PS5_Mesa/include'),
+                    str(ROOT / 'tools/fixtures/zink_prepared_refusal_host.c'), str(frontend),
+                    '-Wl,-rpath,' + str(frontend.parent), '-o', str(refusal_native)], check=True)
+    refusal_text = execute([refusal_native], 'prepared-context-refusal', 'PASS real prepared screen retained after version refusal')
+    if refusal_text.count('PS5_ZINK startup screen create enter') != 1 or 'prepared screen retained after context refusal' not in refusal_text:
+        raise AssertionError('Prepared owner was lost or recreated after context refusal')
     # Use the actual pinned dynamic-link JNI helper for host execution only.
     loader_pin = json.loads((ROOT / 'client/ports/sdl/host-loader-source.json').read_text())
     loader_source = ROOT / '.tools/lwjgl-native-src' / loader_pin['file']
@@ -146,11 +156,12 @@ def main():
         full = list(command); full[full.index('-cp') + 1] = cp + os.pathsep + os.pathsep.join(map(str, [game, *dependencies]))
         text = execute([*full, glfw, 'zink', args.opengl_library.resolve()], row['id'], 'PASS actual GLFW/LWJGL Zink')
         if args.prepare_screen and ('HOST_ZINK pre-JVM screen preparation complete' not in text or 'prepared screen reuse' not in text): raise AssertionError('Missing pre-JVM preparation')
+        if args.synchronous_context and 'upstream direct pipe context selected' not in text: raise AssertionError('No genuine direct context selected')
         if text.count('PASS actual GLFW/LWJGL Zink') != 3: raise AssertionError('Missing full context cycles')
         reports.append({'id': row['id'], 'client_sha256': sha(game), 'cycles': 3,
                         'scope': 'Original GlBackend hints and GlDevice capability creation; injected null debug options stop after capability creation; not Main/title/world'})
     (work / 'audit.json').write_text(json.dumps({'host': platform.platform(), 'scope': __doc__,
-        'pre_jvm_screen_preparation': args.prepare_screen, 'early_refusal_checked': args.check_preparation_refusal, 'frontend_sha256': sha(frontend), 'glfw_sha256': sha(glfw), 'missing_zink_glfw_sha256': sha(absent),
+        'synchronous_context': args.synchronous_context, 'prepared_context_refusal_checked': True, 'pre_jvm_screen_preparation': args.prepare_screen, 'early_refusal_checked': args.check_preparation_refusal, 'frontend_sha256': sha(frontend), 'glfw_sha256': sha(glfw), 'missing_zink_glfw_sha256': sha(absent),
         'core_sha256': sha(args.core_library), 'opengl_jni_sha256': sha(args.opengl_library),
         'versions': reports, 'native_sanitizers': 'ASan/UBSan frontend, GLFW and test driver; Mesa/lavapipe not instrumented',
         'ps5': 'Not executed; context/presentation/game/save/regression pending'}, indent=2) + '\n')

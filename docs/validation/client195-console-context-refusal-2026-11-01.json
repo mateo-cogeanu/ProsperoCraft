@@ -1,0 +1,33 @@
+{
+  "date": "2026-11-01",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.195",
+  "package_sha256": "d863ac675d645a159e42ac3507326c1c5ec2a511d40d2dcbbe492f0936e60be0",
+  "run_id": "client-01.000.195-1793552954-581374807",
+  "user_statement": "just balack screen now",
+  "session": "RUN: Launcher and selected downloaded instance",
+  "retrieval": "Read-only Safari current-run report-link downloads; exact first snapshots retained locally",
+  "observed": [
+    "Pre-JVM genuine screen/initial shader queue/timeline semaphore creation completes",
+    "Native launcher Vulkan initialization and display/device handoff report success",
+    "Game frontend explicitly reuses the prepared screen",
+    "st_api_create_context returns failure;195does not log its exact error enum or failing internal step",
+    "Java Render thread remains in genuine glfwCreateWindow from original Fabric Knot/Main through repeated snapshots; the native call has not returned",
+    "The following branch records the error/frees the temporary owner and, when no contexts exist, attempts whole-screen destruction; exact stalled operation is not established",
+    "No current-run VM abort/probe exception is recorded; no hs-error file, errno2"
+  ],
+  "classification": "Progress past193shader queue failure, then GL context refusal and unresolved native wait; no title/world/quit pass",
+  "next": "196 retains explicit prepared owner on creation refusal, selects upstream direct Gallium context and adds bounded internal refusal checkpoints",
+  "local_report_sha256": {
+    "abort.txt": "7505540c0a8b9c4339ec5656e5ecb7cbcce638cc5294a9720072040c88bf6d68",
+    "exception.txt": "47dbd191376d71e9ac1ec98436b52454a64be2d58777ea36390d89b339631ee9",
+    "exceptions.log": "94db38f2485a01906feb94ab286969bbbb4ab25f34d0ececd1818cdcf03b162e",
+    "hs-error.log": "72f21168887373cfce52df85d58fd0625dc9c86649975796b7c7606e245f3231",
+    "native-stderr.log": "52862bd0e300c80a9950136d8bf6c0dce499088330ead0cc0dc69d60f600103c",
+    "process-usage.log": "18037a9d06df62ffda7635a91427feac6a063bc77d3fd1e0f4c93f7e03636896",
+    "session.txt": "b2b6ce3a8e23f083b00c7347705c9b2020e04a573b071fd23a3b27acbae6aef0",
+    "startup-tail.log": "e3878eef7c11c7a40e903fba9b78ce7833da30fd34d24f16a4596a8838b756a8",
+    "vm-trace.log": "56708645131d8c5a6173303f9fcce9ce0bfc187864108326c0426cd1025249b3"
+  },
+  "release_store": "No action; exact195artifact retained"
+}

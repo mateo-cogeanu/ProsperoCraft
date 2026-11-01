@@ -1,5 +1,11 @@
 # Changelog
 
+## Candidate196 — prepared owner and upstream direct context
+
+- Record195screen/queue preparation success, then original GL context refusal and unresolved native wait.
+- Retain explicitly prepared screen ownership on context refusal; preserve successful last-context cleanup. Select genuine GALLIUM_THREAD=0 for this candidate and add bounded internal checkpoints.
+- Add real refused-version/retry/render/destruction and direct-mode host checks. Actual failing native allocation and PS5 startup/quit acceptance remain pending.
+
 ## Candidate195 — early screen and instance-refusal cleanup
 
 - Retain194 genuine pre-JVM screen/queue preparation and193 quit candidate fix.

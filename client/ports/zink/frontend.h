@@ -8,6 +8,8 @@
 extern "C" {
 #endif
 struct ps5zink_context;
+/* Private bounded trace shared by this optional component only. */
+void prospero_zink_context_stage(const char *);
 /* Stable opaque ABI keeps GLFW's private minimal Vulkan types separate from
  * Mesa's real Vulkan headers. The adapter copies a 64-bit surface handle. */
 typedef int32_t (*ps5zink_surface_fn)(void *, void *, uint64_t *);

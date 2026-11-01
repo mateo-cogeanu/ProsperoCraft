@@ -21,10 +21,16 @@ int main(){
  setenv("ZINK_DEBUG","notflushsync",1);assert(prospero_zink::enable_flushsync(refusal)==ENOMEM&&calls==1);assert(std::string(getenv("ZINK_DEBUG"))=="notflushsync");
  std::string large(501,'x');setenv("ZINK_DEBUG",large.c_str(),1);assert(prospero_zink::enable_flushsync(refusal)==E2BIG&&calls==1);assert(std::string(getenv("ZINK_DEBUG"))==large);
  std::string edge(500,'x');setenv("ZINK_DEBUG",edge.c_str(),1);assert(!prospero_zink::enable_flushsync());assert(std::string(getenv("ZINK_DEBUG"))==edge+",flushsync");
- unsetenv("ZINK_DEBUG");return 0;
+ unsetenv("GALLIUM_THREAD");assert(!getenv("GALLIUM_THREAD"));
+ assert(prospero_zink::enable_synchronous_context(refusal)==ENOMEM&&calls==2);assert(!getenv("GALLIUM_THREAD"));
+ setenv("GALLIUM_THREAD","1",1);assert(prospero_zink::enable_synchronous_context(refusal)==ENOMEM&&calls==3);assert(std::string(getenv("GALLIUM_THREAD"))=="1");
+ assert(!prospero_zink::enable_synchronous_context());assert(std::string(getenv("GALLIUM_THREAD"))=="0");
+ assert(!prospero_zink::enable_synchronous_context(refusal)&&calls==3);
+ assert(std::string(getenv("ZINK_DEBUG"))==edge+",flushsync");
+ unsetenv("GALLIUM_THREAD");unsetenv("ZINK_DEBUG");return 0;
 }
 ''')
   subprocess.run([cxx,'-std=c++20','-D_POSIX_C_SOURCE=200809L','-fsanitize=address,undefined','-I'+str(ROOT/'client/ports/zink'),source,'-o',w/'check'],check=True)
   subprocess.run([w/'check'],check=True,env=dict(os.environ,UBSAN_OPTIONS='halt_on_error=1'))
- print('PASS actual candidate flushsync environment policy: exact token/idempotence/preserved flags/absent default/bounds/native setter refusal;ASan/UBSan;no PS5 inference')
+ print('PASS actual candidate flushsync and direct-context environment policy: exact token/idempotence/preserved flags/absent default/bounds/native setter refusal;ASan/UBSan;no PS5 inference')
 if __name__=='__main__':main()
