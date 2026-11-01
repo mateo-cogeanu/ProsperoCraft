@@ -1,0 +1,32 @@
+{
+  "date": "2026-11-01",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.193",
+  "package_sha256": "df4b19a911250e2ad781491cb565b1b5cd7de9ce84f76d2089115825e3d47496",
+  "run_id": "client-01.000.193-1793551096-3791846",
+  "user_statement": "failed check4",
+  "session": "FAIL: Launcher and selected downloaded instance / code FFFFFAE5",
+  "retrieval": "Read-only Safari report-link downloads; exact first snapshots retained locally",
+  "observed": [
+    "Real Zink instance, physical properties, logical device and dispatch load complete",
+    "Resource/compiler/disk-cache initialization advance to shader queue initialization enter",
+    "util_queue_init(cache_get_thread,zcfq,8,4,...) returns false: screen creation returns failure before format-property completion",
+    "Original Fabric Knot/Main reports GLFW Zink error19/ENODEV and no supported backend, then returns early",
+    "Existing clean-session audit rejects current=true/stopping=false/failure=true/instanceStopped=false/sdlStopped=false; this is not a quit test",
+    "Current-run abort note records no VM abort; no hs-error file, errno2"
+  ],
+  "classification": "Concrete required initial shader queue initialization failure; exact allocation/thread/primitive refusal and underlying native quota owner unproven",
+  "next": "194 prepares the same genuine screen/required initial queues before JVM pressure and reuses it for the first original GL context",
+  "local_report_sha256": {
+    "abort.txt": "92f0e8a2b43e0e46f04cdd1aac8e28f92526d103a19d5cc19f9227e0abaf0ac1",
+    "exception.txt": "c3cbc7e11f26090805f0836bdc7aed52d6f47101150713b56ff42ef164b876c1",
+    "exceptions.log": "0d3e46e62f28ff057f68f6bf67849d6e381a8650145d71c617bbc25e00e2b25c",
+    "hs-error.log": "b16773f3c0f61d25a885594eaccb3734ecf559ebf7e1efe537fa1e1c16b5b756",
+    "native-stderr.log": "b9e1eef3ede25184f695efb0481ba067fdce69b2d0bf843dc1d6c228a1b9a06b",
+    "process-usage.log": "8454a97f255fbf4d1fc4652d0a0d782d975c0fc0c8005a505df2c6b6ea550b71",
+    "session.txt": "e825383116d16646c3b4cbef6b005ece9b3954d09de03bd9419a5b66c47e9736",
+    "startup-tail.log": "23905c36772b434327adc8466ed8f4d4863d6c1a5e5530bebec56c5b8cd5d9af",
+    "vm-trace.log": "adc9aa8a0232d24444b956158a17b42e56918a534017788792f6b7ccd0e3ec2e"
+  },
+  "release_store": "No action;193quit acceptance remains pending"
+}

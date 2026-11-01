@@ -33,6 +33,7 @@ def main():
     parser.add_argument('--publisher-cache', type=Path, required=True)
     parser.add_argument('--glfw-binding', type=Path, required=True)
     parser.add_argument('--oshi-provider', type=Path, required=True, help='Existing genuine consumer OSHI overlay; host fixture metadata avoids unrelated macOS JNA telemetry')
+    parser.add_argument('--prepare-screen', action='store_true', help='Prepare the real screen via a native constructor before the host JVM')
     parser.add_argument('--output-dir', type=Path, default=ROOT / 'build/zink-host-test')
     args = parser.parse_args()
     if platform.system() != 'Darwin':
@@ -100,7 +101,15 @@ def main():
     if alias.is_symlink(): alias.unlink()
     if alias.exists(): raise ValueError('Refusing to replace a non-symlink host provider alias')
     alias.symlink_to(frontend)
-    env['DYLD_INSERT_LIBRARIES'] = asan
+    inserted = [asan]
+    if args.prepare_screen:
+        prewarm = work / 'libprewarm.dylib'
+        subprocess.run([cc, '-dynamiclib', '-fsanitize=address,undefined',
+                        '-I' + str(ROOT / 'client/ports/zink'),
+                        str(ROOT / 'tools/fixtures/zink_prewarm_host.c'), str(frontend),
+                        '-Wl,-rpath,' + str(frontend.parent), '-o', str(prewarm)], check=True)
+        inserted.append(str(prewarm))
+    env['DYLD_INSERT_LIBRARIES'] = os.pathsep.join(inserted)
     env['DYLD_LIBRARY_PATH'] = os.pathsep.join(map(str, [work, frontend.parent]))
     command = [jdk / 'bin/java', '-Xint', '-Xcheck:jni', '-Xverify:all', '--enable-native-access=ALL-UNNAMED',
                '--add-exports=java.base/jdk.internal.misc=ALL-UNNAMED',
@@ -121,11 +130,12 @@ def main():
                 path = cache / 'libraries' / artifact_path(artifact['path']); verified(artifact, path, offline=True); dependencies.append(path)
         full = list(command); full[full.index('-cp') + 1] = cp + os.pathsep + os.pathsep.join(map(str, [game, *dependencies]))
         text = execute([*full, glfw, 'zink', args.opengl_library.resolve()], row['id'], 'PASS actual GLFW/LWJGL Zink')
+        if args.prepare_screen and 'HOST_ZINK pre-JVM screen preparation complete' not in text: raise AssertionError('Missing pre-JVM preparation')
         if text.count('PASS actual GLFW/LWJGL Zink') != 3: raise AssertionError('Missing full context cycles')
         reports.append({'id': row['id'], 'client_sha256': sha(game), 'cycles': 3,
                         'scope': 'Original GlBackend hints and GlDevice capability creation; injected null debug options stop after capability creation; not Main/title/world'})
     (work / 'audit.json').write_text(json.dumps({'host': platform.platform(), 'scope': __doc__,
-        'frontend_sha256': sha(frontend), 'glfw_sha256': sha(glfw), 'missing_zink_glfw_sha256': sha(absent),
+        'pre_jvm_screen_preparation': args.prepare_screen, 'frontend_sha256': sha(frontend), 'glfw_sha256': sha(glfw), 'missing_zink_glfw_sha256': sha(absent),
         'core_sha256': sha(args.core_library), 'opengl_jni_sha256': sha(args.opengl_library),
         'versions': reports, 'native_sanitizers': 'ASan/UBSan frontend, GLFW and test driver; Mesa/lavapipe not instrumented',
         'ps5': 'Not executed; context/presentation/game/save/regression pending'}, indent=2) + '\n')

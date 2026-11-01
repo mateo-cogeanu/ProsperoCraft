@@ -21,3 +21,8 @@ Mesa/Zink sources carry their original MIT notices; the pinned tree contains
 `docs/license.rst` and per-file copyright/licenses. Archives and binaries stay in
 ignored local storage. Existing project/component licensing and OpenAL source/relink
 obligations remain unchanged. The native180 probe links no OpenAL or JVM.
+
+Optional194 `ps5zink_prepare_screen` prepares the real shared screen/required
+initial queues before JVM pressure. Context creation reuses it; existing last-
+context destruction still owns cleanup. Default builders remain lazy. See
+[194 preparation/lifetime limits](../../../docs/client-zink-prewarm-194.md).

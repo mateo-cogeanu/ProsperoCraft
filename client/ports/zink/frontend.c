@@ -181,6 +181,27 @@ static bool flush_front(struct st_context *st, struct pipe_frontend_drawable *dr
 static bool flush_swap(struct st_context *st, struct pipe_frontend_drawable *drawable)
 { (void)st; (void)drawable; return true; }
 
+/* Caller holds guard. Keep the real screen/queues for later context creation. */
+static bool prepare_screen_locked(void)
+{
+    if (frontend.screen) { startup_trace("prepared screen reuse"); return true; }
+    startup_trace("screen create enter");
+    frontend.screen = zink_create_screen(NULL, NULL);
+    startup_trace(frontend.screen ? "screen create returned success" : "screen create returned failure");
+    frontend.get_param = screen_param;
+    if (!frontend.screen) { fail(ENODEV); return false; }
+    return true;
+}
+PUBLIC int ps5zink_prepare_screen(void)
+{
+    last_error = 0;
+    int rc = frontend_guard_lock();
+    if (rc) return fail(rc);
+    bool ready = prepare_screen_locked();
+    pthread_mutex_unlock(&guard);
+    return ready;
+}
+
 PUBLIC struct ps5zink_context *ps5zink_create(const struct ps5zink_config *config)
 {
     startup_trace("create enter");
@@ -198,13 +219,7 @@ PUBLIC struct ps5zink_context *ps5zink_create(const struct ps5zink_config *confi
     struct ps5zink_context *c = calloc(1, sizeof(*c));
     if (!c) { fail(ENOMEM); goto done; }
     startup_trace("create context allocation complete");
-    if (!frontend.screen) {
-        startup_trace("screen create enter");
-        frontend.screen = zink_create_screen(NULL, NULL);
-        startup_trace(frontend.screen ? "screen create returned success" : "screen create returned failure");
-        frontend.get_param = screen_param;
-        if (!frontend.screen) { fail(ENODEV); free(c); c = NULL; goto done; }
-    }
+    if (!prepare_screen_locked()) { free(c); c = NULL; goto done; }
     c->width = config->width; c->height = config->height;
     c->window = config->window != NULL;
     c->visual = (struct st_visual) {

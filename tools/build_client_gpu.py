@@ -62,7 +62,7 @@ def build(runtime,java_home,wsi_diagnostics=False,*,zink_component=None,output_d
  zmap={name:'clientgpu_zlib_'+name for name in zsymbols}
  binding.update(zmap)
  if zink_component:
-  frontend_exports=['create','make_current','get_current','destroy','resize','swap_buffers','swap_interval','get_proc_address','error']
+  frontend_exports=['prepare_screen','create','make_current','get_current','destroy','resize','swap_buffers','swap_interval','get_proc_address','error']
   binding.update({'ps5zink_'+name:'clientgpu_ps5zink_'+name for name in frontend_exports})
  mesa_sync={name:'clientgpu_'+name.removeprefix('pthread_') for name in ['pthread_cond_init','pthread_cond_destroy','pthread_cond_signal','pthread_cond_broadcast','pthread_cond_wait','pthread_cond_timedwait','pthread_condattr_init','pthread_condattr_setclock','pthread_condattr_destroy']}
  mesa_mutex={name:'clientgpu_'+name.removeprefix('pthread_') for name in ['pthread_mutex_init','pthread_mutex_destroy','pthread_mutex_lock','pthread_mutex_unlock','pthread_mutex_trylock','pthread_mutex_timedlock']}

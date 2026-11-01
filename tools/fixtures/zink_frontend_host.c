@@ -83,8 +83,18 @@ static int32_t refused_surface(void *instance, void *window, uint64_t *surface)
     CHECK(instance && window && surface); *surface=0; surface_attempts++;
     return -3; /* Real failure injection, never a successful/faked surface. */
 }
+static void *prepare_worker(void *unused)
+{
+    (void)unused; CHECK(ps5zink_prepare_screen()); return NULL;
+}
 int main(void)
 {
+    pthread_t preparers[4];
+    for(unsigned i=0;i<4;i++) CHECK(!pthread_create(&preparers[i],NULL,prepare_worker,NULL));
+    for(unsigned i=0;i<4;i++) CHECK(!pthread_join(preparers[i],NULL));
+    CHECK(ps5zink_prepare_screen());
+    puts("PASS real shared screen preparation, concurrent idempotence before GL contexts");
+
     CHECK(!ps5zink_create(NULL));CHECK(ps5zink_error()==EINVAL);
     CHECK(!ps5zink_get_proc_address(NULL));CHECK(!ps5zink_swap_buffers(NULL));
     struct ps5zink_config rejected={.width=8,.height=8,.major=3,.minor=3,.core=1,.window=(void*)1,.create_surface=refused_surface};

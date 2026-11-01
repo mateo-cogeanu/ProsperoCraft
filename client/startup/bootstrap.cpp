@@ -30,6 +30,9 @@ extern "C" int sceAudioOutOpen(int,int,int,unsigned,unsigned,unsigned);
 #define PROSPERO_TOOLKIT 1
 #include "../launcher/native_menu.hpp"
 extern "C" void prospero_graphics_init(void);
+#ifdef PROSPERO_PREPARE_ZINK_SCREEN
+extern "C" int clientgpu_ps5zink_prepare_screen(void);
+#endif
 namespace prospero_menu {
 using ToolkitInitializer=void(*)();
 extern "C" ToolkitInitializer __client_ui_init_start[],__client_ui_init_end[];
@@ -622,8 +625,20 @@ int main(int argc,char** argv) {
  run_test(0);
  if(resume_library)log_stage("PS5_SESSION RESUME_LIBRARY fresh process; saved notice preference retained");
  if(status[0]!=1){notify("Client083 runtime initialization failed; inspect logs.");for(;;)(void)sceKernelUsleep(1000000);}
+#ifdef PROSPERO_PREPARE_ZINK_SCREEN
+ // Native reserves/core constructors are ready; the JVM and launcher are not started.
+ prospero_graphics_init();
+ log_stage("PS5_ZINK preparing genuine screen and queues before JVM");
+ if(!clientgpu_ps5zink_prepare_screen()) {
+  log_stage("PS5_ZINK pre-JVM screen preparation failed; no Java/game success");
+  session_status("FAIL: pre-JVM Zink screen preparation; keep open for logs");
+  notify("Zink preparation failed before Java; keep open for logs.");
+  for(;;)(void)sceKernelUsleep(1000000);
+ }
+ log_stage("PS5_ZINK pre-JVM screen and real queues ready; retaining for original GL context");
+#endif
  if(!prospero_menu::start_frontend()){notify("Client083 native launcher display could not start; inspect logs.");for(;;)(void)sceKernelUsleep(1000000);}
- log_stage("Native launcher first frame presented; now creating Java account services, no Minecraft graphics loaded");
+ log_stage("Native launcher first frame presented; now creating Java account services, original Minecraft Main not invoked");
  // Downloaded instance receipts replace the legacy bundled artifact scan (2).
  for(int i:{1,3}) {
   char state[200];std::snprintf(state,sizeof(state),"RUN: %s",names[i]);session_status(state);

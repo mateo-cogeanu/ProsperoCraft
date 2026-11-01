@@ -1,5 +1,11 @@
 # Changelog
 
+## Candidate194 — early genuine Zink screen preparation
+
+- Record193's required initial shader queue refusal and honest early-Main rejection.
+- Prepare the same real screen/device/queues before JVM startup and reuse it for original GL; retain193 quit candidate fix.
+- Add concurrent/idempotent real frontend and pre-JVM host constructor checks. Exact PS5 startup/quit/relaunch and Vulkan coexistence remain pending.
+
 ## Candidate193 — verified System.exit restart and screen diagnostics
 
 - Record independently retrieved192 native screen-creation wait; no title/world pass.

@@ -17,6 +17,8 @@ struct ps5zink_config {
     void *window;
     ps5zink_surface_fn create_surface;
 };
+/* Optional preparation before JVM pressure; no context/window/surface is made. */
+int ps5zink_prepare_screen(void);
 struct ps5zink_context *ps5zink_create(const struct ps5zink_config *);
 int ps5zink_make_current(struct ps5zink_context *);
 struct ps5zink_context *ps5zink_get_current(void);
