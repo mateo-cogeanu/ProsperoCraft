@@ -53,7 +53,10 @@ fatal, running/null singleton, live SDL and failed-arm cases, observer removal a
 nonzero status preservation. Diagnostics exclude exception message text.
 `test_session_exit_gate.py` runs the actual native gate under ASan/UBSan, checking
 unarmed/nonzero refusal, consuming an error arm, one-shot reuse and concurrent
-ownership. These join the portable fast/native lanes; neither executes PS5 LoadExec.
+ownership. `test_session_vm_exit.py` additionally embeds genuine HotSpot through
+JNI_CreateJavaVM, runs the real Java observer/native arm/VM exit hook, and
+executes the existing restart bridge into a fresh host process. Unarmed/nonzero
+exits preserve their status; Xcheck:jni reports no warnings. These join the portable fast/native lanes; neither executes PS5 LoadExec.
 
 `package_zink_lifecycle.py` and `test_client193_package.py` retain verified179
 ZIP/relink inputs, original parent JARs, full launcher/account/download policy,

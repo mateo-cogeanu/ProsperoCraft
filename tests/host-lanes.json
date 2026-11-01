@@ -31,6 +31,7 @@
     "test_openal_thread_error.py",
     "test_zink_guard.py",
     "test_zink_submit_policy.py",
-    "test_session_exit_gate.py"
+    "test_session_exit_gate.py",
+    "test_session_vm_exit.py"
   ]
 }
