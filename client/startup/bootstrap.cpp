@@ -2,6 +2,9 @@
 #define PROSPERO_CLIENT_FIXTURE_TITLE "Minecraft Original Client Startup"
 #endif
 #define PS5_TRACK_FILE_ACTIVITY 1
+#ifndef PROSPERO_STARTUP_OBSERVER
+#define PROSPERO_STARTUP_OBSERVER "true"
+#endif
 extern "C" int prospero_haptic_reserve();
 extern "C" void prospero_hid_preload(void);
 extern "C" int sceAudioOutOpen(int,int,int,unsigned,unsigned,unsigned);
@@ -194,7 +197,9 @@ jboolean clean_system_exit(JNIEnv*,jclass,jboolean arm) {
 void vm_exit(int code) {
  if(startup_log) {std::fprintf(startup_log,"VM EXIT: %d\n",code);std::fflush(startup_log);}
 #ifdef PROSPERO_CLEAN_SYSTEM_EXIT
- if(clean_system_exit_gate.take(code)) {
+ const bool clean_exit=clean_system_exit_gate.take(code);
+ log_stage(clean_exit?"PS5_SESSION native exit gate accepted":"PS5_SESSION native exit gate unarmed or nonzero");
+ if(clean_exit) {
   // Java hooks and real HotSpot VM_Exit cleanup have completed. No JNI here.
   log_stage("PS5_SESSION verified System.exit(0); replacing process for library");
   int rc=prospero_session::restart_library();
@@ -433,7 +438,7 @@ void run_test(int i) {
    {const_cast<char *>("-XX:ActiveProcessorCount=4"),nullptr},
    {const_cast<char *>("-XX:-UsePerfData"),nullptr},
    {const_cast<char *>("-XX:ErrorFile=/download0/hs_err_java25.log"),nullptr},
-   {const_cast<char *>("-Dps5.startupObserver=true"),nullptr},
+   {const_cast<char *>("-Dps5.startupObserver=" PROSPERO_STARTUP_OBSERVER),nullptr},
    {const_cast<char *>(CLIENT_CLASSPATH_OPTION),nullptr},
    {const_cast<char *>("-Djava.io.tmpdir=/download0"),nullptr},
    {const_cast<char *>("-Duser.home=/download0"),nullptr},

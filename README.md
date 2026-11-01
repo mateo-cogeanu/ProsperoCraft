@@ -74,9 +74,11 @@ Physical **keyboard and mouse input is implemented for gameplay**, with positive
 
 ## Mods, shaders and resource packs
 
+Local Zink development196 has user-reported working Vanilla/Fabric26.1,26.1.1and26.1.2, with quit crashes and slower world creation. Candidate197 unlocks Iris testing and includes shutdown/diagnostic changes; its console results are pending. These are local development candidates, not released/Store compatibility. [Development status and test scope](docs/client-zink-iris-197.md).
+
 Open **Instance Settings → Mods, Shaders or Resource Packs** to browse Modrinth, search, select downloads and use **Download All**. The launcher verifies downloads, resolves required dependencies and can upgrade managed dependencies when required. **Installed** lists show what is present and offer per-file **Uninstall** with confirmation. Install only content matching the instance's game version and loader. [Content guide](docs/client-fabric-modrinth-103.md) · [Dependency handling](docs/client-dependency-updates-111.md).
 
-- **Shaders:** the game uses Vulkan. Use the Vitrail shader path; current Iris requires OpenGL and is blocked before launch. The earlier software OpenGL probe does not establish a hardware OpenGL game renderer. Pack compatibility and performance vary; no general shader-FPS target is validated. [Iris explanation](docs/client-iris-vulkan-110.md) · [Performance findings](docs/client-performance-investigation-117.md).
+- **Shaders:** released Vulkan builds use Vitrail and reject OpenGL-only Iris. Local Zink/OpenGL development197 permits Iris testing; shader compatibility remains unvalidated. Pack compatibility and performance vary; no general shader-FPS target is validated. [Iris explanation](docs/client-iris-vulkan-110.md) · [Performance findings](docs/client-performance-investigation-117.md).
 - **Distant Horizons:** a PS5 integration exists, but rendering and persistence compatibility remain work in progress. It is not a generally supported mod. [Integration and limits](docs/client-native-input-storage-112.md).
 - **Resource packs:** browsing, verified downloads, safe Unicode filenames and uninstall are implemented. A successful download does not prove a pack renders correctly on every supported version.
 
@@ -89,7 +91,7 @@ NeoForge and `.mrpack` imports are not available. Fabric support does not imply 
 - **Performance and device coverage remain under testing:** shader frame times, audio across reloads, resolution/input alignment, account recovery, reconnect and repeated quit/relaunch are not exhaustively validated.
 - **Microphone capture is not implemented.** Adaptive-trigger approximations are not identical to full native per-zone profiles.
 
-If Play says Coming soon, compare the **version and loader** with the compatibility table above. For an Iris warning, uninstall Iris through Installed before retrying. For account problems after an older update, use a fresh sign-in. Report persistent problems through the [bug, mod or shader issue forms](https://github.com/mateo-cogeanu/ProsperoCraft/issues/new/choose), including app/game/loader/content versions and steps to reproduce. Working mods and shaders are useful reports too. Keep account tokens and private logs out of public reports.
+If Play says Coming soon, compare the **version and loader** with the compatibility table above. For an Iris warning on a Vulkan build, uninstall Iris through Installed before retrying. For account problems after an older update, use a fresh sign-in. Report persistent problems through the [bug, mod or shader issue forms](https://github.com/mateo-cogeanu/ProsperoCraft/issues/new/choose), including app/game/loader/content versions and steps to reproduce. Working mods and shaders are useful reports too. Keep account tokens and private logs out of public reports.
 
 ## Roadmap
 

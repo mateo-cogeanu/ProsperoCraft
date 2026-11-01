@@ -279,3 +279,5 @@ The manual native lane instead tests scoped native implementations against fixtu
 
 | `test_zink_jvm_classpath.py` | Explicit actual app/header + JDK25;184missingGLFWnegativecontrol, adapted-provider ordering and non-initializing effective classpath resolution; no graphics/PS5 |
 | `test_client185_package.py` | Exact185ZIP/source/registry/symbol/classpathELF/JAR/signature audit, LLVM+SDKconverter and179baseline; no console execution |
+
+| `test_zink_queue_barrier.py` | Manual explicit audited Mesa source/Clang; actual portable barrier/finish-worker plus graphics reserve under late native-init refusal, generations/visibility/reuse/ownership with ASan/UBSan; not PS5 scheduling/monotonic clocks/quit acceptance |

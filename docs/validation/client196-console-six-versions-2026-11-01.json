@@ -1,0 +1,81 @@
+{
+  "date": "2026-11-01",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.196",
+  "package_sha256": "256c029462a453eeb3ea53a0dc58ed69c01cca27fdbd44ab2dd7fd3b7d6c5f9a",
+  "user_statement": "26.1 Vanilla - good, 26.1 fabric - good, 26.1.1 Vanilla - good, 26.1.1 fabric - good, 26.1.2 vanilla - good, 26.1.2 fabric - good; all crash on quit game and world creation takes longer than usual",
+  "results": [
+    {
+      "game": "26.1",
+      "loader": "vanilla",
+      "play": "User reports good/works",
+      "quit": "User reports crash",
+      "world_creation": "User reports slower than usual"
+    },
+    {
+      "game": "26.1",
+      "loader": "fabric",
+      "play": "User reports good/works",
+      "quit": "User reports crash",
+      "world_creation": "User reports slower than usual"
+    },
+    {
+      "game": "26.1.1",
+      "loader": "vanilla",
+      "play": "User reports good/works",
+      "quit": "User reports crash",
+      "world_creation": "User reports slower than usual"
+    },
+    {
+      "game": "26.1.1",
+      "loader": "fabric",
+      "play": "User reports good/works",
+      "quit": "User reports crash",
+      "world_creation": "User reports slower than usual"
+    },
+    {
+      "game": "26.1.2",
+      "loader": "vanilla",
+      "play": "User reports good/works",
+      "quit": "User reports crash",
+      "world_creation": "User reports slower than usual"
+    },
+    {
+      "game": "26.1.2",
+      "loader": "fabric",
+      "play": "User reports good/works",
+      "quit": "User reports crash",
+      "world_creation": "User reports slower than usual"
+    }
+  ],
+  "scope": "User-reported six combinations; no formal ALL PASS, measured timings/FPS, complete save/reload/audio/mod/endurance checklist or physical Iris result inferred",
+  "retrieval": "Read-only Safari current and retained report-link downloads; exact first local reports preserved",
+  "current_run": "client-01.000.196-1793554799-340163429",
+  "previous_run": "client-01.000.196-1793554603-282940146",
+  "independent_evidence": [
+    "Retrieved startup identity includes26.1.2Fabric current and26.1.1Fabric retained runs, with genuine direct-context creation and sustained native rendering",
+    "Retained Fabric Java output ends after Stopping; native output ends after screen queue idle returned and screen shader queue finish enter",
+    "Other retained startup history includes26.1.1Vanilla VM EXIT:0; no verified clean-exit gate result is recorded for that run",
+    "No current/previous VM abort notes; no current/previous hs-error files, errno2",
+    "Current build enables timed Java stack/resource observation; native tracing also remains. Neither establishes the cause of slow world creation",
+    "Fabric reports also contain Controlify haptic audio device errors; no universal audio/haptic pass or causal link to all six quit failures inferred"
+  ],
+  "diagnosis": "Shader queue drain is an observed quit boundary. Exact failing native call, possible hook refusal and world-creation performance cause remain unproven",
+  "next": "197unlocks Iris on Zink, moves barrier destruction to the drain owner after all fences, selects existing scoped portable barrier, disables timed sampling and adds quit checkpoints",
+  "local_report_sha256": {
+    "abort.txt": "9f2e865b84f8a38b35b3b7ab1020542b4494fd8d50a4848469b04fe3aa947dba",
+    "exceptions.log": "9735df5aa166a5534bfb902f3fe5051e85bc4453721ed73cdafe3d18ab608600",
+    "hs-error.log": "55c256020c04d18f9aca52de1451480c2af967853811d737ab6b6e4897a7f481",
+    "native-stderr.log": "a0bf9e898302150540dcc18b993f22763d7ce86e60a39f7dca878a6c15d9cb30",
+    "previous-abort.txt": "071dedf5a7461854bf56792f4a4ff2929301c1cf7350d4db9fd4eb77bd078f93",
+    "previous-exceptions.log": "8c75c37b80f6882bf64cd8f5b7960d7f355378c4f688c204e7121e2f079f1a7d",
+    "previous-hs-error.log": "55c256020c04d18f9aca52de1451480c2af967853811d737ab6b6e4897a7f481",
+    "previous-native-stderr.log": "ac9e6755d9d738495982610bf815ae62d8c085e32639bd9247465451a6c99086",
+    "process-usage.log": "a53eee4f89820d0446cbe8c5447db6024d138f119d7d977e83feabdaed289297",
+    "server.log": "e979c9fa01d0618fa9b6accdc18b89931c7ca6dd7c27f714ce3a344a40f970ae",
+    "session.txt": "26a29b4d98d52c3223c0a752117d3afc1c67ba54b11d127f008266e159d209c7",
+    "startup-tail.log": "a7e90bb0655159417be47119e42238799ec18e9b88c36d741940e07d76e02a7f",
+    "vm-trace.log": "163c6601272a417be7abfcb4589a6d8872b2c40764dd84dc6457f1b695af76fc"
+  },
+  "release_store": "No release/prerelease/Store/archive action; exact196preserved"
+}

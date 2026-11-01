@@ -1,5 +1,11 @@
 # Changelog
 
+## Candidate197 — Iris tests and queue shutdown
+
+- Record user-reported working Vanilla/Fabric26.1/26.1.1/26.1.2 on196, with quit crashes and slower world creation unresolved.
+- Permit Iris on Zink/OpenGL with ordinary dependencies/account checks; update shader help and retain Vulkan compatibility checks.
+- Move Mesa finish-barrier destruction from workers to the owner after all fences, use existing scoped portable primitives, disable timed stack sampling and record clean-exit audit stages. Exact197 Iris/quit/performance console validation pending.
+
 ## Candidate196 — prepared owner and upstream direct context
 
 - Record195screen/queue preparation success, then original GL context refusal and unresolved native wait.

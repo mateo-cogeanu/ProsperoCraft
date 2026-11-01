@@ -19,7 +19,7 @@ public class ExitCheck{
   ProsperoSession session=new ProsperoSession(logs);Thread owner=Thread.currentThread();
   try(var report=new PrintStream(Files.newOutputStream(logs.resolve("audit")));var exit=new ProsperoExit(
    ()->{if(owner.getContextClassLoader()!=ExitCheck.class.getClassLoader())throw new IllegalStateException("wrong loader");session.verifyCleanReturn(owner.getContextClassLoader());},
-   ()->{if(mode.equals("arm-failure"))throw new IllegalStateException("PRIVATE_TEXT");try{Files.writeString(logs.resolve("armed"),"VERIFIED");}catch(IOException e){throw new RuntimeException(e);}},report)){
+   ()->{if(mode.equals("arm-failure"))throw new IllegalStateException("PRIVATE_TEXT");try{Files.writeString(logs.resolve("armed"),"VERIFIED");}catch(IOException e){throw new RuntimeException(e);}},report,stage->{if(mode.equals("checkpoint-failure"))throw new IllegalStateException("PRIVATE_TEXT");try{Files.writeString(logs.resolve("stages"),stage+"\n",StandardOpenOption.CREATE,StandardOpenOption.APPEND);}catch(IOException e){throw new RuntimeException(e);}})){
    if(mode.equals("removed"))return;
    if(!mode.equals("stale"))Files.writeString(logs.resolve("latest.log"),"[Render thread/INFO]: Stopping!\n",StandardOpenOption.APPEND);
    if(mode.equals("fatal"))Files.writeString(logs.resolve("latest.log"),"[Render thread/FATAL]: failed\n",StandardOpenOption.APPEND);
@@ -34,12 +34,17 @@ public class ExitCheck{
   for name,source in sources.items():
    p=w/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(source)
   subprocess.run([jdk/'bin/javac','--release','25','-d',w,ROOT/'client/launcher/java/ProsperoExit.java',ROOT/'client/launcher/java/ProsperoSession.java',*[w/name for name in sources]],check=True)
-  for mode in ('clean','stale','fatal','running','sdl','missing','removed','arm-failure','nonzero'):
+  for mode in ('clean','stale','fatal','running','sdl','missing','removed','arm-failure','checkpoint-failure','nonzero'):
    logs=w/mode;result=subprocess.run([jdk/'bin/java','-cp',w,'ExitCheck',logs,mode],timeout=20)
    assert result.returncode==(7 if mode=='nonzero'else 0),mode
    assert (logs/'armed').exists()==(mode in ('clean','nonzero')),mode
    audit=(logs/'audit').read_text();assert 'PRIVATE_TEXT'not in audit
    if mode not in ('clean','nonzero','removed'):assert 'SYSTEM_EXIT_REJECTED'in audit,mode
    if mode=='removed':assert audit=='',audit
+   stages=logs/'stages'
+   if mode in ('removed','checkpoint-failure'):assert not stages.exists(),mode
+   else:
+    expected=['PS5_SESSION SYSTEM_EXIT_AUDIT_ENTER','PS5_SESSION SYSTEM_EXIT_AUDIT_'+('ARMED'if mode in ('clean','nonzero')else'REJECTED')]
+    assert stages.read_text().splitlines()==expected,(mode,stages.read_text())
  print('PASS real System.exit child JVM: clean audit/arm, stale/fatal/running/live-SDL/null/arm-failure rejection, removed observer, bounded diagnostics; nonzero status preserved for native refusal')
 if __name__=='__main__':main()

@@ -290,7 +290,8 @@ public final class ClientStartup25 {
    Thread gameThread=Thread.currentThread();
    try(ProsperoExit exit=cleanSystemExit(false)?new ProsperoExit(
      ()->session.verifyCleanReturn(gameThread.getContextClassLoader()),
-     ()->{if(!cleanSystemExit(true))throw new IllegalStateException("Clean exit unavailable");},console):null){
+     ()->{if(!cleanSystemExit(true))throw new IllegalStateException("Clean exit unavailable");},console,ClientStartup25::stage):null){
+    if(exit!=null)stage("PS5_SESSION SYSTEM_EXIT_OBSERVER_REGISTERED");
     method.invoke(null,(Object)selectedArguments);
    }
    catch(InvocationTargetException failure){throw failure.getCause();}

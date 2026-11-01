@@ -58,3 +58,5 @@ the documentation checker.
 - [195 early Zink screen and instance-refusal cleanup](client-zink-early-screen-195.md)
 
 - [196 prepared ownership and upstream direct context](client-zink-direct-context-196.md)
+
+- [197 Iris testing, queue shutdown and observation cost](client-zink-iris-197.md)

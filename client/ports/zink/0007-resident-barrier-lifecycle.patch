@@ -1,0 +1,92 @@
+--- a/src/util/u_thread.h
++++ b/src/util/u_thread.h
+@@ -116,7 +116,7 @@
+  * util_barrier
+  */
+ 
+-#if defined(HAVE_PTHREAD) && !defined(__APPLE__) && !defined(__HAIKU__)
++#if defined(HAVE_PTHREAD) && !defined(__APPLE__) && !defined(__HAIKU__) && !defined(PS5_ZINK_FRONTEND)
+ 
+ typedef pthread_barrier_t util_barrier;
+ 
+--- a/src/util/u_thread.c
++++ b/src/util/u_thread.c
+@@ -196,7 +196,7 @@
+ #endif
+ }
+ 
+-#if defined(HAVE_PTHREAD) && !defined(__APPLE__) && !defined(__HAIKU__)
++#if defined(HAVE_PTHREAD) && !defined(__APPLE__) && !defined(__HAIKU__) && !defined(PS5_ZINK_FRONTEND)
+ 
+ void util_barrier_init(util_barrier *barrier, unsigned count)
+ {
+--- a/src/util/u_queue.c
++++ b/src/util/u_queue.c
+@@ -26,6 +26,13 @@
+ 
+ #include "u_queue.h"
+ 
++#ifdef PS5_ZINK_FRONTEND
++extern void prospero_zink_context_stage(const char *);
++#define PS5_FINISH_STAGE(label) prospero_zink_context_stage(label)
++#else
++#define PS5_FINISH_STAGE(label) ((void)0)
++#endif
++
+ #include "c11/threads.h"
+ #include "perf/u_perfetto.h"
+ #include "util/u_cpu_detect.h"
+@@ -522,8 +529,7 @@
+ util_queue_finish_execute(void *data, void *gdata, int num_thread)
+ {
+    util_barrier *barrier = data;
+-   if (util_barrier_wait(barrier))
+-      util_barrier_destroy(barrier);
++   util_barrier_wait(barrier);
+ }
+ 
+ void
+@@ -696,9 +702,11 @@
+     * a deadlock would happen, because 1 barrier requires that all threads
+     * wait for it exclusively.
+     */
++   PS5_FINISH_STAGE("queue finish lock enter");
+    mtx_lock(&queue->lock);
+ 
+    /* The number of threads can be changed to 0, e.g. by the atexit handler. */
++   PS5_FINISH_STAGE("queue finish lock acquired");
+    if (!queue->num_threads) {
+       mtx_unlock(&queue->lock);
+       return;
+@@ -712,23 +720,31 @@
+     */
+    queue->create_threads_on_demand = false;
+ 
++   PS5_FINISH_STAGE("queue finish fence allocation enter");
+    fences = malloc(queue->num_threads * sizeof(*fences));
+    unsigned num_fences = queue->num_threads;
++   PS5_FINISH_STAGE("queue finish barrier initialize enter");
+    util_barrier_init(&barrier, queue->num_threads);
+ 
++   PS5_FINISH_STAGE("queue finish barrier initialize returned");
+    for (unsigned i = 0; i < queue->num_threads; ++i) {
+       util_queue_fence_init(&fences[i]);
+       util_queue_add_job_locked(queue, &barrier, &fences[i],
+                                 util_queue_finish_execute, NULL, 0, true);
+    }
++   PS5_FINISH_STAGE("queue finish jobs enqueued");
+    queue->create_threads_on_demand = true;
+    mtx_unlock(&queue->lock);
+ 
++   PS5_FINISH_STAGE("queue finish fences wait enter");
+    for (unsigned i = 0; i < num_fences; ++i) {
+       util_queue_fence_wait(&fences[i]);
+       util_queue_fence_destroy(&fences[i]);
+    }
+ 
++   PS5_FINISH_STAGE("queue finish fences complete");
++   util_barrier_destroy(&barrier);
++   PS5_FINISH_STAGE("queue finish barrier destroyed");
+    free(fences);
+ }
+ 
