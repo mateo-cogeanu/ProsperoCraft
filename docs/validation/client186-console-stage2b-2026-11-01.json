@@ -1,0 +1,42 @@
+{
+  "date": "2026-11-01",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.186",
+  "source_commit": "08489008b765a35b8ef763345b79e4a9eafe5297",
+  "package_sha256": "c2137f32840e8b22b971418f32fbc63c0e5838827872f717456f11a80b43cd2e",
+  "symbols_elf_sha256": "d1d2acf45e8f0baa1b5e5636da26d1f85ed4b26450bba90d663d63c4924e084b",
+  "runtime_jvm_sha256": "459d9e674bd5ecfb7e1b08f3baa4c90285654507f34c49719a38c76a55b73495",
+  "scoped_glfw_sha256": "ad7a3c69a58764b0b8b48a2ae0f70ef5d2b8634838d20cf759f367d06bf1e79b",
+  "resolver_sha256": "077df2ac00951aad8355586fcf35b093b93cedcd93d978bf17df49d72c851dca",
+  "mesa_commit": "1ba9874f478657ccf6da72ce55f0260164cc0bd0",
+  "combined_object_sha256": "ca187457ac5c7bbf1fabfbc995017c0ec381d9ccdc3db8a5cad4231f35dfe153",
+  "build_record": "client186-zink-resident-2026-11-01.json",
+  "console_result": "USER-REPORTED STAGE2B PASS",
+  "user_statement": "stage2b pass",
+  "scope": "Diagnostic actual native launcher -> JVM GLFW/LWJGL Zink rendering/readback/cleanup -> diagnostic DestroyJavaVM and existing LoadExec -> fresh launcher/JVM Stage2b PASS result, as reported by the user",
+  "evidence": {
+    "user": "Exact186 candidate supplied immediately before this report",
+    "independent_session": "Safari read-only session identifies PPSA99874 /01.000.186, run client-01.000.186-1793526812-811812711, RUN: Launcher and selected downloaded instance",
+    "session_run_id": "client-01.000.186-1793526812-811812711",
+    "original_graphics_run_id": null,
+    "checkpoint_logs": "Startup history/VM trace opened in Safari but complete success checkpoints were not independently captured; direct HTTP no route to host. Do not treat the current RUN status alone as proof of prior teardown.",
+    "raw_reports": "Remain local; none included in source"
+  },
+  "visible_motion": "Stage2b PASS reported; explicit visible-motion confirmation and measured scanout/FPS not supplied",
+  "not_established": [
+    "Exact native resource reclamation or repeated handoff/endurance",
+    "Ordinary accounts/instances/downloads and original Minecraft Main/title",
+    "26.1/26.1.1/26.1.2 world/play/audio/save/reopen/quit/relaunch",
+    "26.2/26.3/snapshot Vulkan regressions on the integrated candidate",
+    "Fabric26.1, Sodium-on-GL, Iris or broad mod compatibility"
+  ],
+  "next_checkpoint": "New candidate integrating the normal launcher/sign-in/Vanilla26.1 original-Main path to title screen; no --graphicsBackend vulkan, development label, Fabric26.1/Iris remain blocked",
+  "preserved": [
+    "Exact186 ZIP/symbols/build validation unchanged, alongside183/185 and all earlier candidates",
+    "029 OSMesa, GLFW callback ABI, staged constructors, resident-only dispatch and single RADV owner",
+    "Runtime descriptor-first paths/ZIP budget, ImageIO/JNA/resident aliases and scratch/verifier/emutls/network/sync/thread-stack policies",
+    "Existing SDL/thread/storage, Mesa mutex/string/timeline, shaderc and OpenAL/input/audio ownership workarounds",
+    "Official game/mod JARs, frozen history, current179 published identity and26.1 production block"
+  ],
+  "publication": "Source receipt only; no release/prerelease/Store authorization, full-game ALL PASS or archive freeze inferred"
+}

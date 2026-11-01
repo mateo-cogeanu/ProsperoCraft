@@ -23,6 +23,8 @@
 
 - 186 repairs185 check4 resident-name failure: direct GPU and opt-in Zink opens now use canonical lib*.so filenames. Strict host JNI boundary reproduces185 and passes186; actual PS5 GL/handoff remains pending. [Evidence/test guide](docs/client-zink-resident-186.md). Runtime loader/defaults, official game JARs and release/Store state remain unchanged.
 
+- User reports exact186 **Stage2b PASS** for the diagnostic JVM/Zink-to-fresh-launcher handoff. Preserve tested bytes and original build record; record independently observed186 session and uncollected checkpoint limits separately. [Console receipt](docs/validation/client186-console-stage2b-2026-11-01.json). Next is normal Vanilla26.1 original-Main/title integration; full-game/version/regression acceptance and release/Store authorization remain pending.
+
 ## 01.000.179 — automatic microphone and simpler instance settings
 
 - Prepare the working system microphone automatically before every supported game launch; remove the launcher Microphone button, toggle and test page. Existing saved microphoneEnabled:false no longer blocks preparation. Use the controller's physical microphone mute button or PS5 system mute.

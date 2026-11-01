@@ -16,7 +16,7 @@ history; a development entry does not imply a public release.
 | Microphone feature handoff for another model | [Start here](handoffs/microphone-174/00-START-HERE.md), [continuation prompt](handoffs/microphone-174/03-CONTINUATION-PROMPT.md) |
 | Released179 — automatic microphone, no launcher mic menu | [Release notes](releases/client-microphone-default-179.md), [console acceptance](validation/client179-console-acceptance-2026-10-31.json), [publication/Store submission](validation/client179-store-publication-2026-10-31.json) |
 | Local178 — opt-in input-port preparation/reuse | [Evidence/test guide](client-audioin-port-178.md) |
-| Local186 — canonical resident-name repair; console pending | [Evidence/test guide](client-zink-resident-186.md) |
+| Local186 — user-reported JVM/launcher Stage2b PASS | [Evidence/test guide](client-zink-resident-186.md) |
 | Local185 — GLFW reachable; check4 resident-name failure | [Evidence/test guide](client-zink-classpath-185.md) |
 | Local184 — check4 failed after native UI closed; GLFW classpath omission | [Test guide](client-zink-jvm-handoff-184.md) |
 | Local183 — user-reported native Stage2a PASS | [Evidence/test guide](client-zink-present-flush-183.md) |

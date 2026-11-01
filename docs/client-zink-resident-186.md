@@ -78,3 +78,20 @@ verification limits. ZIP SHA-256:
 pass16fast checks on Ubuntu and macOS; completed job steps/logs were inspected.
 The final packaged fixture and classpath also pass the strict host GL test.
 Physical console acceptance remains pending.
+
+## Console report — 1 November 2026
+
+The user reports **exact186 Stage2b PASS**. Preserve the tested ZIP and symbols
+unchanged. The [separate console receipt](validation/client186-console-stage2b-2026-11-01.json)
+records the package/runtime/Mesa pins, independently observed current186 session
+and limits. This supersedes the pending186 diagnostic status above; the original
+build/host record remains unchanged. The session run is
+`client-01.000.186-1793526812-811812711`; it is the open result-process session,
+not independently established as the preceding graphics-run ID. Complete success
+checkpoint logs and explicit visible-motion/refresh measurements were not captured.
+
+Next is the plan's original Vanilla26.1 Main-to-title checkpoint through the normal
+launcher/sign-in flow, in a new candidate. Do not reuse186's identity or infer
+world/save/audio/relaunch or26.1.1/26.1.2/regression acceptance. Keep the existing
+OSMesa/callback/runtime/native ownership workarounds, production gate and release/
+Store hold. No full-game ALL PASS or archive freeze is established.
