@@ -33,6 +33,8 @@
 
 - 189 confirms guard init0 but Fabric26.1 remains black in native GLFW window creation, with no captured Java/fatal error.190 adds bounded screen/context/drawable/binding/attribute stage checkpoints to locate the next interval; no hang fix claimed. [Evidence/test guide](docs/client-zink-fabric-trace-190.md). Quit repair deferred; no release/Store action.
 
+- 190 pinpoints Zink flush-queue initialization failure during Fabric26.1 startup.191 opts into upstream flushsync before normal launcher bootstrap, using real synchronous submit/present instead of requesting that queue. Actual host GL/default-worker positive control verifies zero zfq workers under the policy; native-resource subcause/throughput and PS5 startup remain pending. [191 guide](docs/client-zink-flushsync-191.md). Quit repair deferred; no release/Store action.
+
 ## 01.000.179 — automatic microphone and simpler instance settings
 
 - Prepare the working system microphone automatically before every supported game launch; remove the launcher Microphone button, toggle and test page. Existing saved microphoneEnabled:false no longer blocks preparation. Use the controller's physical microphone mute button or PS5 system mute.

@@ -61,3 +61,8 @@ exactly48bounded frontend events.
 passes16checks on each host; completed job logs inspected. Current190native tests
 are local;189hostednative verification remains separate. No190physical result or
 hang repair is claimed.
+
+Physical190 subsequently [failed creating Zink's flush queue](validation/client190-console-flush-queue-2026-11-01.json).
+[191](client-zink-flushsync-191.md) tests the existing upstream synchronous
+flush/present path to avoid that queue; underlying allocation/worker cause and
+physical behavior remain pending. Quit repair stays deferred.

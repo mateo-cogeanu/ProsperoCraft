@@ -28,6 +28,7 @@
     "test_client_library.py",
     "test_microphone_capture.py",
     "test_openal_thread_error.py",
-    "test_zink_guard.py"
+    "test_zink_guard.py",
+    "test_zink_submit_policy.py"
   ]
 }

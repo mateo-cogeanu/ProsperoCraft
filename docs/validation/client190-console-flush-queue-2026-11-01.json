@@ -1,0 +1,28 @@
+{
+  "date": "2026-11-01",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.190",
+  "package_sha256": "38f6af3bcdd77d391e4cb4e09cab1fbfa01f66a39654550577a8cfdb7ce44f54",
+  "run_id": "client-01.000.190-1793541384-788775201",
+  "user_report": "failed check4",
+  "result": "FAIL check4/codeFFFFFAE5",
+  "observed": [
+    "Guard initialization/acquisition succeeds",
+    "Context allocation completes",
+    "Screen create entered; Mesa reports zink: Failed to create flush queue",
+    "Screen creation returns failure, original Main returns without clean startup; verifier correctly blocks restart"
+  ],
+  "cause": "Failure of genuine Zink flush util_queue initialization, zfq; jobs allocation versus worker creation subcause not distinguished by existing Mesa message. Underlying native allocator/quota owner remains unproven.",
+  "retrieval": "Read-only Safari session/exception/Java/native/startup/VM; direct HTTP no route. hs-error unavailable errno2.",
+  "report_sha256": {
+    "native-stderr.log": "4d6ea364f79e05e3088906432c14ec39452915bf9ab20f76d9fac4202fdaa17b",
+    "exceptions.log": "a58a8d7dbcb9a8d8e0346c31878836ada6c63bc88fb82b01398ee2f258be2524",
+    "startup-tail.log": "c2401023b8796bf6e798050e880943d8de81f24ba12ec526ebc83308b3340783",
+    "current-startup.log": "e001fdfa3a7962b237decd2c89f69702e00b1a5b7edc2ed53d2effecf8982809",
+    "vm-trace.log": "c364626157feca230184793427cccadbda750f31e5b8c76ac576773076f1cd70"
+  },
+  "repair_candidate": "191 candidate-only upstream ZINK_DEBUG=flushsync skips asynchronous flush queue, uses existing real synchronous submit/present path; no driver-success stubs or reserve/global allocator change. Other native queues still required; throughput tradeoff and PS5 behavior pending.",
+  "quit": "Explicitly deferred; normal original startup/session/restart unchanged",
+  "raw_reports": "Local only",
+  "release_store": "No action"
+}
