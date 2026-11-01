@@ -1,0 +1,14 @@
+{
+  "date": "2026-11-01",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.187",
+  "package_sha256": "c1f565deebf479cffe29c3c8946d200be46a50381dc538bb6f05e5e35b46ac3a",
+  "user_statement": "Vanilla 26.1 works perfectly, but crashes on quit game",
+  "result": "User-reported Vanilla26.1 works; quit-game crash remains",
+  "scope": "No detailed world/save/audio/endurance checklist supplied; no full ALL PASS inferred",
+  "run_id": null,
+  "independent_reports": "Not retrieved: direct HTTP no route and Safari cannot connect. Crash cause unproven.",
+  "followup": "User explicitly deferred quit-crash repair;188 changes testing access only",
+  "preserved": "Exact187 ZIP/symbols/build receipt unchanged",
+  "release_store": "No authorization or action"
+}

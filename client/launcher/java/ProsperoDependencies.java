@@ -40,9 +40,10 @@ final class ProsperoDependencies {
    if(entries.containsKey("fabric.mod.json"))manifest(entries.get("fabric.mod.json"),p->{byte[] b=entries.get(p);if(b==null)throw new IllegalArgumentException("Nested mod missing");return b;},depth);
   }
  }
- static void verifyVulkan(Collection<Path> jars)throws Exception {
+ static void verifyVulkan(Collection<Path> jars)throws Exception {verifyGraphics(jars,false);}
+ static void verifyGraphics(Collection<Path> jars,boolean zink)throws Exception {
   Scan scan=new Scan();for(Path path:jars)scan.file(path);
-  if(scan.modules.containsKey("iris"))throw new IOException("Iris needs OpenGL; this build uses Vulkan. Uninstall Iris in Installed. Use Vitrail for shaders.");
+  if(scan.modules.containsKey("iris"))throw new IOException(zink?"Iris testing is not enabled for Zink yet. Uninstall Iris in Installed before this Fabric test.":"Iris needs OpenGL; this build uses Vulkan. Uninstall Iris in Installed. Use Vitrail for shaders.");
  }
  static Set<String> providedIds(Path jar)throws Exception {Scan scan=new Scan();scan.file(jar);return Set.copyOf(scan.modules.keySet());}
  static Module rootModule(Path jar)throws Exception {

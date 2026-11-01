@@ -49,6 +49,7 @@ public class DependencyCheck {
    ProsperoDependencies.verifyVulkan(List.of(game.resolve("mods/vitrail.jar"),game.resolve("mods/fabric-api.jar")));
    Path renamed=root.resolve("renamed-shader.jar");byte[] irisBytes=jar("iris","1.11.7+mc26.3","{}",null);Files.write(renamed,irisBytes);
    try{ProsperoDependencies.verifyVulkan(List.of(renamed));throw new AssertionError("Iris Vulkan launch allowed");}catch(IOException expected){check(expected.getMessage().contains("OpenGL")&&expected.getMessage().contains("Vitrail")&&expected.getMessage().contains("Uninstall"),"Iris launch explanation missing");}
+   try{ProsperoDependencies.verifyGraphics(List.of(renamed),true);throw new AssertionError("Iris Zink testing enabled prematurely");}catch(IOException expected){check(expected.getMessage().contains("not enabled for Zink"),"Zink Iris explanation");}
    check(Arrays.equals(irisBytes,Files.readAllBytes(renamed)),"Iris guard modified mod");
    Files.write(renamed,jar("shader-wrapper","1.0","{}",irisBytes));
    try{ProsperoDependencies.verifyVulkan(List.of(renamed));throw new AssertionError("nested Iris launch allowed");}catch(IOException expected){check(expected.getMessage().contains("OpenGL"),"nested Iris not identified");}

@@ -27,6 +27,8 @@
 
 - Local187 returns to the normal full-game launcher/accounts/instances/downloads and original Main, carrying186's scoped Zink integration. An exact candidate resource enables Vanilla26.1/26.1.1/26.1.2 as development tests with adapted GLFW and original OpenGL arguments; default builds/Fabric remain gated and later versions keep Vulkan. [First26.1 title-screen test](docs/client-zink-launcher-187.md). Physical title/world/lifecycle and regressions pending; no release/Store update.
 
+- User reports187 Vanilla26.1 works but crashes on quit; exact console scope recorded separately.188 enables all three26.1.x releases for Vanilla/Fabric development testing through the normal upstream loader path. Quit repair explicitly deferred; startup/GLFW/session code remains unchanged. [188 guide](docs/client-zink-fabric-188.md). No release/Store update.
+
 ## 01.000.179 — automatic microphone and simpler instance settings
 
 - Prepare the working system microphone automatically before every supported game launch; remove the launcher Microphone button, toggle and test page. Existing saved microphoneEnabled:false no longer blocks preparation. Use the controller's physical microphone mute button or PS5 system mute.

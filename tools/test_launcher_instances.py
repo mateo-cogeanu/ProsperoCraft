@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Actual instance persistence, publisher install/cache validation and controller model."""
 from pathlib import Path
-from host_toolchain import java_home, launcher_classpath
+from host_toolchain import java_home, launcher_classpath, dependency
 import tempfile,json,subprocess
 ROOT=Path(__file__).resolve().parents[1];jdk=java_home()
 cp=launcher_classpath()
@@ -119,16 +119,36 @@ var store=new ProsperoLibrary(root.resolve("store"));if(!store.instances().isEmp
    sessionField.set(zm,null);denied(()->zm.arguments(null,null));
    if(!Files.readString(zr.resolve("cache/versions/"+version+"/client.jar")).equals("original client bytes"))throw new AssertionError("rewrote game");
   }
+  Files.writeString(zinkResource,"all-loaders-26.1-zink-v2\n");
+  byte[] actualFabric=Files.readAllBytes(Path.of(args[2]));
+  for(String version:List.of("26.1","26.1.1","26.1.2")){
+   if(!ProsperoLauncher.developmentTest(version,"fabric")||!ProsperoGraphics.zink(version,"fabric"))throw new AssertionError("Fabric Zink development gate");
+   Path zr=root.resolve("zink-"+version);String url="https://maven.fabricmc.net/net/fabricmc/fabric-loader/0.20.1/fabric-loader-0.20.1.jar";
+   String profile="{\"inheritsFrom\":\""+version+"\",\"mainClass\":\""+ProsperoFabric.MAIN+"\",\"libraries\":[{\"name\":\"net.fabricmc:fabric-loader:0.20.1\",\"url\":\"https://maven.fabricmc.net/\",\"sha1\":\""+hash(actualFabric)+"\",\"size\":"+actualFabric.length+"}]}";
+   var requests=new java.util.concurrent.atomic.AtomicInteger();
+   var fabricInstall=new ProsperoFabric(zr.resolve("cache"),new ProsperoDownloads(u->{if(u.equals(url))return new ByteArrayInputStream(actualFabric);if(u.equals(ProsperoFabric.META+version)){if(requests.incrementAndGet()!=1)throw new AssertionError("verified loader was not pinned");return new ByteArrayInputStream(bytes("[{\"loader\":{\"stable\":true,\"version\":\"0.20.1\"}}]"));}if(u.equals(ProsperoFabric.META+version+"/0.20.1/profile/json"))return new ByteArrayInputStream(bytes(profile));throw new AssertionError("unexpected Fabric transport");}));
+   var fr=fabricInstall.install(version,(t,d,n)->{},()->false);fabricInstall.install(version,(t,d,n)->{},()->false);fabricInstall.verify(fr);
+   try(var checker=fabricInstall.dependencies(version)){if(!checker.accepts(version,List.of(">=26.1")))throw new AssertionError("genuine Fabric predicates");}
+   var fl=new ProsperoLibrary(zr);var fi=fl.add("Fabric Zink",version,1,"fabric");fl.ready(fi,true);fl.save();
+   var fm=new ProsperoLauncher(testAuth,zr,InstanceCheck::open,()->{preparations.incrementAndGet();});sessionField.set(fm,new ProsperoAuth.Session("OwnedPlayer","0123456789abcdef0123456789abcdef","SECRET_FABRIC_ZINK",System.currentTimeMillis()+3600000));
+   var detailField=ProsperoLauncher.class.getDeclaredField("detail");detailField.setAccessible(true);detailField.set(fm,fi);
+   var play=ProsperoLauncher.class.getDeclaredMethod("play");play.setAccessible(true);play.invoke(fm);waitFor(fm);
+   if(!fm.tick(0)[10].equals("LAUNCH")||!fm.tick(0)[69].equals("DEVELOPMENT"))throw new AssertionError("Fabric launch preparation: "+fm.tick(0)[2]);
+   List<String> fa=List.of(fm.arguments(null,null));if(fa.contains("--graphicsBackend")||fa.contains("--demo")||!fa.contains("SECRET_FABRIC_ZINK"))throw new AssertionError("Fabric original GL/full account args");
+   var currentField=ProsperoLauncher.class.getDeclaredField("current");currentField.setAccessible(true);Object previous=currentField.get(null);currentField.set(null,fm);
+   if(!ProsperoLauncher.gameMain().equals(ProsperoFabric.MAIN)||!ProsperoLauncher.selectedZink())throw new AssertionError("upstream Knot path");
+   currentField.set(null,previous);sessionField.set(fm,null);denied(()->fm.arguments(null,null));
+  }
   if(ProsperoLauncher.launchable("26.1.3","vanilla")||ProsperoLauncher.launchable("26.1-snapshot-1","vanilla")||ProsperoGraphics.zink("26.2","vanilla")||!ProsperoGraphics.vulkan("26.2","GLFW")||!ProsperoGraphics.vulkan("26.3","SDL"))throw new AssertionError("version/backend boundary");
   Files.writeString(channel,"demo");if(ProsperoLauncher.launchable("26.1","vanilla"))throw new AssertionError("Zink leaked into default Demo");
   Files.delete(zinkResource);Files.delete(channel);System.clearProperty("ps5.glfw.binding");
-  System.out.println("PASS normal launcher Zink build gate, all three Vanilla releases, dev labels, verified receipt/binding order, owned-account guard, original GL arguments, Vulkan/default/Fabric boundaries");
+  System.out.println("PASS normal launcher Zink build gate, all three Vanilla releases, dev labels, verified receipt/binding order, owned-account guard, original GL arguments, genuine Fabric install/repair/Knot selection for all releases, Vulkan/default boundaries");
   var persisted=new ProsperoLibrary(root.resolve("model"));if(persisted.instances().size()!=1||persisted.instances().get(0).icon!=2||!persisted.instances().get(0).name.endsWith("1"))throw new AssertionError("controller persistence");
   System.out.println("PASS empty/persistent instances, isolated worlds, rename/icons/settings, L1/R1/keyboard/install/play controller flow, unsupported26.1 launch guard and startup-notice persistence, original bytes, pin verification/cache/repair/cancel/failure/traversal/HTTPS/native-classifier rejection");
  }
 }
 '''
 with tempfile.TemporaryDirectory(prefix='prospero-instances-')as folder:
- w=Path(folder);(w/'InstanceCheck.java').write_text(source)
+ w=Path(folder).resolve();(w/'InstanceCheck.java').write_text(source)
  subprocess.run([str(jdk/'bin/javac'),'--release','25','-cp',cp,'-d',str(w),*[str(p)for p in (ROOT/'client/launcher/java').glob('*.java')],str(w/'InstanceCheck.java')],check=True)
- subprocess.run([str(jdk/'bin/java'),'-cp',str(w)+':'+cp,'InstanceCheck',str(w/'data'),str(w)],check=True,timeout=40)
+ subprocess.run([str(jdk/'bin/java'),'-cp',str(w)+':'+cp,'InstanceCheck',str(w/'data'),str(w),str(dependency('fabric-loader'))],check=True,timeout=40)
