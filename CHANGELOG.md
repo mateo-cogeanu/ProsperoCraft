@@ -13,7 +13,9 @@
 
 - 181 console crash reaches real GL4.6 Zink context after surface/swapchain registration, without a recorded fault PC. Local182 adds existing forwarding native signal capture and bounded first-frame checkpoints; cause unproven, no fix claimed. [Retrieved evidence/test guide](docs/client-zink-first-frame-182.md).180 pass and exact181 bytes preserved.
 
-- 183 repairs a missing private-frontend resource-preparation callback before end-of-frame batch flush, matching pinned Mesa kopper ordering.182 captures a fault consistent with a null presentation wait semaphore; actual PS5 repair remains pending. [Evidence and test](docs/client-zink-present-flush-183.md). No release/Store update.
+- 183 repairs a missing private-frontend resource-preparation callback before end-of-frame batch flush, matching pinned Mesa kopper ordering.182 captures a fault consistent with a null presentation wait semaphore; user reports exact183 Stage2a PASS on1November2026. [Evidence and test](docs/client-zink-present-flush-183.md). No release/Store update.
+
+- Record exact183 native Stage2a pass separately from the build/host record; preserve tested bytes. Successful-run log retrieval, explicit visible-motion confirmation, measured refresh, actual launcher handoff, scoped JVM/game integration and full version/regression acceptance remain separate. [Console receipt](docs/validation/client183-console-stage2a-2026-11-01.json). No release/Store authorization inferred.
 
 ## 01.000.179 — automatic microphone and simpler instance settings
 

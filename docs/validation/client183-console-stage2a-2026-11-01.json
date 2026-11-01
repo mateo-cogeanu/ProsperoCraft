@@ -1,0 +1,38 @@
+{
+  "date": "2026-11-01",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.183",
+  "source_commit": "f9014105504de0885b521c1f2734717af7c8459a",
+  "package_sha256": "2dfba3a88e5a0dd6ec8976cc00f3fc082cd63b4778f246d21ee1b3f5830b92bf",
+  "symbols_elf_sha256": "7778487896eca7708af71a30a1d8353b6f66feaf83f6a90ee69a2176eaad7bce",
+  "combined_object_sha256": "ca187457ac5c7bbf1fabfbc995017c0ec381d9ccdc3db8a5cad4231f35dfe153",
+  "mesa_commit": "1ba9874f478657ccf6da72ce55f0260164cc0bd0",
+  "native_dependencies": {
+    "sdl": {
+      "object_sha256": "234582a28095b3474b00d1348cc25415bd4747a0af2841b04bb1636275290e8c",
+      "linked_object_sha256": "4a2b6ea77f88ac210fa653c09cb0b2370045864c0fce264a852b9f00e0257cdb"
+    },
+    "glfw": {
+      "object_sha256": "75fe0d103c6e55dfd71cd96fc8277ea5c75cfe70ab8d6a47c75148a63545a00f",
+      "linked_object_sha256": "521557fdc076600365b1c63607a6a520c2adb446e08671aabf34287c588c57dd"
+    }
+  },
+  "console_result": "USER-REPORTED STAGE2A PASS",
+  "user_statement": "stage2a pass",
+  "scope": "Dedicated native GLFW/SDL/Zink presentation probe: automated three animation/swap/guarded-readback and teardown/reinit cycles completed as reported by the user",
+  "evidence": "User report for exact183 supplied in this chat; successful current-run reports not independently retrieved",
+  "run_id": null,
+  "visible_motion": "Separate explicit confirmation of three visible RGB/moving-bar cycles was not supplied; do not infer measured scanout/FPS",
+  "runtime": "No JVM/game/OpenAL linked; matching build record pins native converter/libc/header inputs",
+  "build_record": "client183-zink-present-flush-2026-10-31.json",
+  "not_established": [
+    "Measured physical refresh/FPS or exact native allocation reclamation",
+    "Actual Java launcher release/reclaim of VideoOut",
+    "Scoped JVM/resident integration and resource coexistence",
+    "Original26.1/26.1.1/26.1.2 Main/title/world/audio/save/reopen/quit/relaunch",
+    "Existing26.2/26.3/snapshot Vulkan regressions and endurance"
+  ],
+  "next_checkpoint": "Scoped combined GL/Zink/RADV JVM integration and real launcher-to-Zink-to-launcher ownership handoff; new candidate identity required",
+  "preserved": "Exact180/181/182/183ZIPs,symbols and original source/build/host/failure receipts unchanged;029 OSMesa,callback ABI,runtimeallocation/TLS/sync/stackworkarounds,originalJARs,frozenhistory",
+  "publication": "Source evidence only; no release/prerelease/Store authorization inferred; scoped probe pass is not full-game ALL PASS or archive-freeze authorization"
+}

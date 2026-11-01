@@ -37,7 +37,8 @@ This is a concrete contract violation consistent with the captured fault.
 183 adds the same callback ordering for a real window texture. Offscreen behavior
 is unchanged. It does not suppress null-semaphore errors in Vulkan, fake completion,
 remove event polling, change threading policy or add a CPU presentation copy.
-Actual PS5 repair is still pending; no console pass follows from this diagnosis.
+The subsequent user-reported Stage2a pass is recorded below; it remains a scoped
+native probe result, without launcher/JVM/game acceptance.
 
 `test_zink_present_order.py` compiles the **actual port callback/present functions**
 against a modeled pipe boundary. It checks GL emission -> resource preparation ->
@@ -46,6 +47,12 @@ recursion behavior under ASan/UBSan. Replacing the callback with182's omission
 fails the window case. This is a contract regression, not a real swapchain test.
 Separate host tests execute real rebuilt Zink/lavapipe/GLFW rendering and183
 animation/lifecycle; SDL dummy is offscreen and cannot establish positive VideoOut.
+
+User reports exact183 **Stage2a PASS** on1November2026. The
+[console receipt](validation/client183-console-stage2a-2026-11-01.json) records
+this scoped result separately from the original build record. Successful run logs
+have not been independently retrieved; separate visible-motion confirmation and
+physical-refresh measurement are not inferred. The tested ZIP is preserved unchanged.
 
 ## Physical test
 
