@@ -78,3 +78,8 @@ host GL tests pass. The native worker observer counts4default zfq creations and
 and [hosted native](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41315352921)
 pass on Ubuntu/macOS; completed logs inspected. Actual191 PS5 startup, throughput
 and later lifecycle remain pending; underlying native refusal is unresolved.
+
+Physical191 subsequently creates the real screen/context/swapchain and first flip,
+then [aborts allocating LWJGL's JNI environment copy](validation/client191-console-env-copy-2026-11-01.json).
+[192](client-zink-jni-env-192.md) scopes paired native env/TLS allocation/free.
+No191 full-game acceptance is established; quit repair remains deferred.

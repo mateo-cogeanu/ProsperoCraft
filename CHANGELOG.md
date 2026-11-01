@@ -35,6 +35,8 @@
 
 - 190 pinpoints Zink flush-queue initialization failure during Fabric26.1 startup.191 opts into upstream flushsync before normal launcher bootstrap, using real synchronous submit/present instead of requesting that queue. Actual host GL/default-worker positive control verifies zero zfq workers under the policy; native-resource subcause/throughput and PS5 startup remain pending. [191 guide](docs/client-zink-flushsync-191.md). Quit repair deferred; no release/Store action.
 
+- 191 gets past flush-queue creation to real context/swapchain/first flip, then genuine LWJGL aborts allocating its JNI environment copy.192 scopes ThreadLocalUtil and its common_tools TLS allocator/free owner to the existing graphics allocation family, with unchanged machine instructions and paired lifetime. Actual JNI failure/lifecycle controls pass; PS5 capabilities/title/world remain pending. [192 guide](docs/client-zink-jni-env-192.md). Quit repair deferred; no release/Store change.
+
 ## 01.000.179 — automatic microphone and simpler instance settings
 
 - Prepare the working system microphone automatically before every supported game launch; remove the launcher Microphone button, toggle and test page. Existing saved microphoneEnabled:false no longer blocks preparation. Use the controller's physical microphone mute button or PS5 system mute.

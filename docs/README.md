@@ -16,6 +16,7 @@ history; a development entry does not imply a public release.
 | Microphone feature handoff for another model | [Start here](handoffs/microphone-174/00-START-HERE.md), [continuation prompt](handoffs/microphone-174/03-CONTINUATION-PROMPT.md) |
 | Released179 — automatic microphone, no launcher mic menu | [Release notes](releases/client-microphone-default-179.md), [console acceptance](validation/client179-console-acceptance-2026-10-31.json), [publication/Store submission](validation/client179-store-publication-2026-10-31.json) |
 | Local178 — opt-in input-port preparation/reuse | [Evidence/test guide](client-audioin-port-178.md) |
+| Local192 — paired LWJGL JNI env/TLS allocator scoping; PS5 pending | [Evidence/test guide](client-zink-jni-env-192.md) |
 | Local191 — upstream synchronous Zink flush/present workaround; PS5 pending | [Evidence/test guide](client-zink-flushsync-191.md) |
 | Local190 — bounded native create-window checkpoints; Fabric black-screen cause pending | [Test guide](client-zink-fabric-trace-190.md) |
 | Local189 — early Zink frontend mutex lease; Fabric PS5 retest pending | [Evidence/test guide](client-zink-fabric-guard-189.md) |

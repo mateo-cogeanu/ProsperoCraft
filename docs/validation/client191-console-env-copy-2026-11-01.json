@@ -1,0 +1,29 @@
+{
+  "date": "2026-11-01",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.191",
+  "package_sha256": "dcb01a5d8943495c0a1a2b1d47395ad432557b525639462bc3e1a89a8ac830a3",
+  "crashed_run": "client-01.000.191-1793543270-551516242",
+  "reopened_run": "client-01.000.191-1793543311-154537308",
+  "user_report": "crashed! i reopened it",
+  "observed": [
+    "Early guard initialization/acquisition succeeds",
+    "Screen and state-tracker context create succeed",
+    "Real surface/swapchain/framebuffers and first WSI flip complete",
+    "GLFW GL attribute refresh returns",
+    "FatalError in genuine LWJGL ThreadLocalUtil.setupEnvData while GL.createCapabilities executes: Failed to allocate JNIEnv copy.",
+    "VM ABORT recorded; previous-hs-error unavailable errno2"
+  ],
+  "cause": "Direct malloc in genuine ThreadLocalUtil cannot allocate JNI function-table copy. It and owning common_tools TLS calloc/free remain libc-bound, while main LWJGL memory API already uses scoped graphics heap. Underlying libc/quota refusal remains unproven.",
+  "repair": "192 candidate scopes both genuine units allocator imports to same existing graphics allocator family; native implementation machine instructions unchanged, paired allocation/free retained. No global/JVM allocator change.",
+  "report_sha256": {
+    "previous-native-stderr.log": "cc97111b526db5ba5ef9697151280357d4a54d6bb42f2ce9e3b3b1e88c927e6d",
+    "startup-tail.log": "4e79bb91765126df4ef0a5d8016e8d102124cd49a6a74429ee0e9145f8695ffb",
+    "crashed-startup.log": "b969225b79d43b1b3f9f140b474b8bea1b6babe1bd224debe3e3f12e6c1feb33",
+    "previous-exceptions.log": "158f5538190b3a2d0da190c53560eeed28868cfdbdc997109b904f602e4f8eb1"
+  },
+  "retrieval": "Read-only Safari; previous native report bound to crashed191run, current session identifies reopened191. Startup history split at exact crashed run. Direct tool HTTP no route. Previous Java report saved locally; later abort endpoint connection failed.",
+  "quit": "Repair explicitly deferred, no shutdown changes",
+  "raw_reports": "Local only",
+  "release_store": "No action; no full milestone acceptance"
+}
