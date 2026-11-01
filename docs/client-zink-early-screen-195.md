@@ -56,3 +56,14 @@ mods separately. Then test Vanilla26.1 title/world/save, Quit Game, normal launc
 library and launch again.193's quit handoff remains a candidate until physically
 confirmed.26.1 patch releases, Fabric shutdown,26.2+ Vulkan/input/audio, resource
 reclamation and endurance remain pending. No release/prerelease/Store/archive action.
+
+[Exact195 build/validation](validation/client195-zink-early-screen-2026-11-01.json)
+pins clean source `5b75968` and all package/runtime/native hashes.
+ZIP SHA-256: `d863ac675d645a159e42ac3507326c1c5ec2a511d40d2dcbbe492f0936e60be0`.
+Source-only outside-root17fast/11native, real host pre-JVM preparation/reuse,
+concurrent/native rendering and26.1/26.1.1/26.1.2 GL capability checks,
+missing-provider control, early validation-refusal/instance cleanup and exact
+target/package audits pass. [Policy CI](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41328466574)
+passes17checks and [native CI](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41328477750)
+passes11checks on each Ubuntu/macOS host; actual completed jobs/logs inspected.
+These are host/build results; physical195 startup and quit/relaunch remain pending.
