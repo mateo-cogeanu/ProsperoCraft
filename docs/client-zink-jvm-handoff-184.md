@@ -98,7 +98,12 @@ and pinned SDK/Java8 compilation remain recorded locally, not silently hidden.
 matching direct/JAR diagnostic class, resident groups/resolver, one-copy RADV/NIR,
 explicit constructors,029 presence, original parent JARs and native signatures.
 Target compile/link/converter checks pass with the actual JVM and launcher code.
-Local fast/native/hosted checks are recorded separately after completion.
+Local16fast and7native checks pass, along with16fast checks from a source-only
+checkout invoked outside the root with an empty dependency cache. [Actual Ubuntu/macOS CI](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41290887355)
+also passes16fast checks for sourceea761bb; no hosted graphics/nativeUI/PS5 result
+is inferred. The [184 validation record](validation/client184-zink-jvm-handoff-2026-11-01.json)
+records clean sourceea761bb and exact package/symbol hashes. ZIP SHA-256:
+`50f4ed0a6b128bb8d1f00d0f064a17f2cf3694539f25975f5073d00f94968c88`.
 
 Remaining work after this checkpoint: exact184 physical transfer/return and
 resource coexistence; production launcher ZINK receipts/development gates and
