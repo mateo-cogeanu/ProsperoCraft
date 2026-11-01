@@ -1,3 +1,6 @@
+#ifndef PROSPERO_CLIENT_FIXTURE_TITLE
+#define PROSPERO_CLIENT_FIXTURE_TITLE "Minecraft Original Client Startup"
+#endif
 #define PS5_TRACK_FILE_ACTIVITY 1
 extern "C" int prospero_haptic_reserve();
 extern "C" void prospero_hid_preload(void);
@@ -565,11 +568,11 @@ static void notify(const char* text) {
 }
 int main(int argc,char** argv) {
  for(int i=0;i<argc;++i)if(argv[i]&&std::strcmp(argv[i],"--prospero-library")==0)resume_library=true;
- ps5::log_share::write_note("/download0/probe-build.txt","Minecraft Original Client Startup " PROSPERO_APP_VERSION " / PPSA99874\n");
+ ps5::log_share::write_note("/download0/probe-build.txt",PROSPERO_CLIENT_FIXTURE_TITLE " " PROSPERO_APP_VERSION " / PPSA99874\n");
  ps5::log_share::start();
  read_previous_log();
  prospero_menu::hardware::initialize();
- char model_status[320];std::snprintf(model_status,sizeof(model_status),"Minecraft Original Client Startup %s / PPSA99874\nPS5_HARDWARE model=%s source=launcher_soc soc_id=0x%llx\n",PROSPERO_APP_VERSION,ps5::console::name(prospero_menu::hardware::identity().model),prospero_menu::hardware::identity().id);
+ char model_status[320];std::snprintf(model_status,sizeof(model_status),PROSPERO_CLIENT_FIXTURE_TITLE " %s / PPSA99874\nPS5_HARDWARE model=%s source=launcher_soc soc_id=0x%llx\n",PROSPERO_APP_VERSION,ps5::console::name(prospero_menu::hardware::identity().model),prospero_menu::hardware::identity().id);
  ps5::log_share::write_note("/download0/probe-build.txt",model_status);
 
  sceUserServiceInitialize(nullptr);std::int32_t user=-1;
@@ -613,6 +616,15 @@ int main(int argc,char** argv) {
  // Successful LoadExec replaces this entire session. Never create a second
  // JVM or reopen CPU VideoOut while the old WSI still owns its process handle.
  if(return_to_library){
+#ifdef PROSPERO_ZINK_HANDOFF_TEST
+  // This diagnostic explicitly tests JVM shutdown; normal game policy retains
+  // its existing process-replacement barrier and does not use this branch.
+  log_stage("ZINK184 diagnostic calling real DestroyJavaVM before process replacement");
+  int destroy_rc=java_vm?java_vm->DestroyJavaVM():JNI_ERR;
+  if(destroy_rc!=JNI_OK){log_stage("ZINK184 DestroyJavaVM failed; process replacement blocked");session_status("FAILED: diagnostic JVM shutdown; keep open for reports");for(;;)(void)sceKernelUsleep(1000000);}
+  java_vm=nullptr;java_env=nullptr;
+  log_stage("ZINK184 real DestroyJavaVM completed; now using existing LoadExec barrier");
+#endif
   log_stage("PS5_SESSION REPLACE_PROCESS clean quit -> native instance library");
   session_status("CLEAN QUIT: replacing process for native library;not a gameplay PASS");
   if(startup_log)std::fflush(startup_log);

@@ -17,6 +17,8 @@
 
 - Record exact183 native Stage2a pass separately from the build/host record; preserve tested bytes. Successful-run log retrieval, explicit visible-motion confirmation, measured refresh, actual launcher handoff, scoped JVM/game integration and full version/regression acceptance remain separate. [Console receipt](docs/validation/client183-console-stage2a-2026-11-01.json). No release/Store authorization inferred.
 
+- Local184 integrates the combined Zink/RADV component with existing scoped graphics/JVM providers and a known resident GL resolver. A diagnostic Java page uses the actual native launcher UI, real GLFW/LWJGL rendering and the existing teardown/DestroyJavaVM/LoadExec barrier to return to a fresh launcher. Host GL and barrier controls/target checks pass; actual PS5 handoff and original Minecraft remain pending. [Guide](docs/client-zink-jvm-handoff-184.md). Default game launcher179 and26.1 block remain; no release/Store update.
+
 ## 01.000.179 — automatic microphone and simpler instance settings
 
 - Prepare the working system microphone automatically before every supported game launch; remove the launcher Microphone button, toggle and test page. Existing saved microphoneEnabled:false no longer blocks preparation. Use the controller's physical microphone mute button or PS5 system mute.

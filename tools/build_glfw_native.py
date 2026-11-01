@@ -3,7 +3,7 @@
 from pathlib import Path
 import argparse,hashlib,json,shutil,subprocess,tarfile,urllib.request
 ROOT=Path(__file__).resolve().parents[1];LLVM=Path('/opt/homebrew/opt/llvm/bin')
-def build(runtime,host=False,offline=False,zink_library=None,output_dir=None):
+def build(runtime,host=False,offline=False,zink_library=None,output_dir=None,lld=None):
  port=ROOT/'client/ports/glfw';pin=json.loads((port/'sources.json').read_text());cache=ROOT/'.tools/glfw-3.4.tar.gz'
  if not cache.exists():
   if offline:raise FileNotFoundError(cache)
@@ -32,7 +32,7 @@ def build(runtime,host=False,offline=False,zink_library=None,output_dir=None):
  if host:
   optional=[]if zink_library else['-Wl,-U,_ps5zink_'+name for name in ['create','make_current','destroy','resize','swap_buffers','swap_interval','get_proc_address','error']]
   subprocess.run(['clang','-dynamiclib','-fsanitize=address,undefined',*map(str,objects),*([str(zink_library.resolve())]if zink_library else[]),*optional,'-L/opt/homebrew/lib','-lSDL3','-o',str(out/'libps5glfw.dylib')],check=True)
- else:subprocess.run(['/opt/homebrew/opt/lld/bin/ld.lld','-r',*map(str,objects),'-o',str(result)],check=True)
+ else:subprocess.run([str(lld or Path('/opt/homebrew/opt/lld/bin/ld.lld')),'-r',*map(str,objects),'-o',str(result)],check=True)
  audit={'upstream':pin['upstream'],'scope':pin['scope'],'target':'host ASan/UBSan with real SDL dummy window; Vulkan creation disabled only in host fixture'if host else'PS5 real SDL Vulkan window','source_sha256':{p.name:hashlib.sha256(p.read_bytes()).hexdigest()for p in paths},'local_source_sha256':{p.name:hashlib.sha256(p.read_bytes()).hexdigest()for p in port.iterdir()if p.is_file()},'console':'Pending26.2startup/menu/input/gameplay'}
  audit['zink_frontend_header_sha256']=hashlib.sha256((ROOT/'client/ports/zink/frontend.h').read_bytes()).hexdigest()
  if host:audit['output_sha256']=hashlib.sha256((out/'libps5glfw.dylib').read_bytes()).hexdigest()

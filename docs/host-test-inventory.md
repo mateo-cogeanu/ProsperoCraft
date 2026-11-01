@@ -273,3 +273,6 @@ The manual native lane instead tests scoped native implementations against fixtu
 | `test_zink_present_order.py` | Actual frontend callback/present code, modeled pipe boundary ordering and old-code negative control, selected Clang ASan/UBSan; no driver execution |
 | `test_zink_present_fix_host.py` | Manual macOS actual183GLFW/Zink/lavapipe offscreen rendering/lifecycle, explicit inputs; not VideoOut |
 | `test_client183_package.py` | Exact183nativeZIP/source/notices/dependency/symbol/signature audit; LLVM+SDK converter, no console execution |
+
+| `test_zink_handoff_host.py` | Manual macOS exact184Java diagnostic GL workload on real GLFW/LWJGL/Zink/lavapipe; modeled JNI launcher barrier/resume controls, no native UI/VideoOut/LoadExec |
+| `test_client184_package.py` | Exact184ZIP/JVM/registry/constructor/symbol/directclass/JAR/notices/signature checks with accepted179baseline, SDK+LLVM; no console execution |

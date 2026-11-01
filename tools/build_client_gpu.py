@@ -8,8 +8,8 @@ import argparse,hashlib,json,os,re,subprocess
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];LLVM=Path('/opt/homebrew/opt/llvm/bin');LLD=Path('/opt/homebrew/opt/lld/bin/ld.lld')
 def run(*args,**kw):subprocess.run(list(map(str,args)),check=True,**kw)
-def build(runtime,java_home,wsi_diagnostics=False):
- out=ROOT/'build/client-gpu';out.mkdir(exist_ok=True);sdk=ROOT/'.tools/graphics-sdk';driver=ROOT/'.tools/ps5-vulkan'
+def build(runtime,java_home,wsi_diagnostics=False,*,zink_component=None,output_dir=None):
+ out=output_dir.resolve() if output_dir else ROOT/'build/client-gpu';out.mkdir(parents=True,exist_ok=True);sdk=ROOT/'.tools/graphics-sdk';driver=ROOT/'.tools/ps5-vulkan'
  # The native003 build already supplies a verified recipe with a real target
  # compiler-runtime archive path, independent of Linux host directory layout.
  flags=subprocess.check_output(['bash','-c','source "$1"; radv_link_recipe "$2" "$3" "$4"; printf "%s\\n" "${radv_link_flags[@]}"','radv-flags',str(ROOT/'build/client-graphics/radv-link-host.sh'),str(driver),str(sdk),str(ROOT/'build/graphics-radv/src/amd/vulkan/libvulkan_radeon.a')],env=dict(os.environ,LLVM_CONFIG=str(LLVM/'llvm-config')),text=True).splitlines()
@@ -19,7 +19,16 @@ def build(runtime,java_home,wsi_diagnostics=False):
    a,b=flag.removeprefix('--defsym=').split('=');compatibility[a]=b
   if flag.startswith('--wrap='):wraps.append(flag.removeprefix('--wrap='))
  radv_archive=ROOT/'build/graphics-radv/src/amd/vulkan/libvulkan_radeon.a';wsi_audit=None
- if wsi_diagnostics:
+ if zink_component is not None:
+  radv_archive=zink_component.resolve();combined=json.loads(radv_archive.with_suffix('.json').read_text())
+  assert not combined['host'] and hashlib.sha256(radv_archive.read_bytes()).hexdigest()==combined['output_sha256'],'Wrong combined Zink component'
+  assert combined['source']['recipe']['mesa']['commit']==json.loads((ROOT/'client/graphics/sources.json').read_text())['mesa']['commit'],'Mesa pin mismatch'
+  for name,digest in combined['source']['recipe']['frontend'].items():
+   assert hashlib.sha256((ROOT/'client/ports/zink'/name).read_bytes()).hexdigest()==digest,'Stale Zink frontend'
+  for category,directory in [('patches','zink'),('wsi_patches','mesa'),('wsi_headers','mesa')]:
+   for name,digest in combined['source']['recipe'][category].items():assert hashlib.sha256((ROOT/'client/ports'/directory/name).read_bytes()).hexdigest()==digest,'Stale Mesa patch/header'
+  wsi_audit={'combined_component_sha256':combined['output_sha256'],'source_recipe':combined['source']['recipe']}
+ elif wsi_diagnostics:
   from build_wsi_diagnostics import build as build_wsi
   radv_archive,wsi_audit=build_wsi()
  platform=out/'platform-raw.o';mesa=out/'radv-raw.o'
@@ -45,12 +54,16 @@ def build(runtime,java_home,wsi_diagnostics=False):
   pmap['__real_'+name]=name
  # Mesa and the JVM each include their own zlib. Scope every actual Mesa
  # zlib global, including internal shared globals, without changing either source.
- zobjects=sorted((ROOT/'build/graphics-radv/subprojects/zlib-1.3.1/libz.a.p').glob('*.o'))
+ zlib_dir=(radv_archive.parent/'subprojects/zlib-1.3.1/libz.a.p') if zink_component else ROOT/'build/graphics-radv/subprojects/zlib-1.3.1/libz.a.p'
+ zobjects=sorted(zlib_dir.glob('*.o'))
  assert zobjects
  ztext=subprocess.check_output([str(LLVM/'llvm-nm'),'--defined-only','--extern-only',*map(str,zobjects)],text=True)
  zsymbols={line.split()[-1]for line in ztext.splitlines()if len(line.split())==3}
  zmap={name:'clientgpu_zlib_'+name for name in zsymbols}
  binding.update(zmap)
+ if zink_component:
+  frontend_exports=['create','make_current','get_current','destroy','resize','swap_buffers','swap_interval','get_proc_address','error']
+  binding.update({'ps5zink_'+name:'clientgpu_ps5zink_'+name for name in frontend_exports})
  mesa_sync={name:'clientgpu_'+name.removeprefix('pthread_') for name in ['pthread_cond_init','pthread_cond_destroy','pthread_cond_signal','pthread_cond_broadcast','pthread_cond_wait','pthread_cond_timedwait','pthread_condattr_init','pthread_condattr_setclock','pthread_condattr_destroy']}
  mesa_mutex={name:'clientgpu_'+name.removeprefix('pthread_') for name in ['pthread_mutex_init','pthread_mutex_destroy','pthread_mutex_lock','pthread_mutex_unlock','pthread_mutex_trylock','pthread_mutex_timedlock']}
  for obj,mapping in [(platform,pmap),(mesa,{**binding,**mesa_sync,**mesa_mutex})]:
