@@ -2,6 +2,9 @@
 #define PROSPERO_CLIENT_FIXTURE_TITLE "Minecraft Original Client Startup"
 #endif
 #define PS5_TRACK_FILE_ACTIVITY 1
+#ifndef PROSPERO_ZIP_OPEN_BUDGET
+#define PROSPERO_ZIP_OPEN_BUDGET "64"
+#endif
 #ifndef PROSPERO_STARTUP_OBSERVER
 #define PROSPERO_STARTUP_OBSERVER "true"
 #endif
@@ -412,7 +415,7 @@ void run_test(int i) {
    {const_cast<char *>("--add-modules=jdk.management"),nullptr},
    {const_cast<char *>("-Dps5.managementExtensions=true"),nullptr},
 #endif
-   {const_cast<char *>("-Dps5.zip.maxOpenFiles=64"),nullptr},
+   {const_cast<char *>("-Dps5.zip.maxOpenFiles=" PROSPERO_ZIP_OPEN_BUDGET),nullptr},
    {const_cast<char *>("-Xmixed"),nullptr},
    {const_cast<char *>("-XX:TieredStopAtLevel=1"),nullptr},
    {const_cast<char *>("-XX:CICompilerCount=1"),nullptr},

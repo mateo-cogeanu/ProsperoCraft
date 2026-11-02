@@ -66,3 +66,4 @@ the documentation checker.
 - [201 packaged binding ownership and concurrent shutdown audit](client-zink-ownership-201.md)
 - [202 native small flag queries and final SDL lifecycle](client-zink-final-202.md)
 - [203 normal26.1.x launcher labels and202shader/quit results](client-zink-ready-203.md)
+- [204 save descriptor headroom and extended handle diagnostics](client-save-headroom-204.md)

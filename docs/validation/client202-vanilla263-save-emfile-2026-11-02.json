@@ -1,0 +1,26 @@
+{
+  "date": "2026-11-02",
+  "title_id": "PPSA99874",
+  "reported_versions": "User reports26.3andother versions have failed-to-save-chunk issues; no complete version matrix specified",
+  "retrieved_build": "FTP startup history ends with01.000.202runs on26.3Vanilla; current HTTP session report cannot open errno24, so no independently readable current session header",
+  "latest_retrieved_startup_run": "client-01.000.202-1793649682-494407540",
+  "evidence": [
+    "Live file-backed HTTP reports return open errno24; native snapshot reports269open/248regular/0directory/4socket/0unknown/highest270 although soft=hard12555",
+    "Opt-in accounting reports244trackedlive and192256wrappedopens/192051successfulcloses/88713failedopens; only first24paths exposed, mostly JARs",
+    "FTP retrieved startup/exception data despite partial transfer failures550Brokenpipe/Permissiondenied. Exception stream is a growing captured prefix, not a verified complete atomic file; raw bytes retained",
+    "Captured26.3integratedserver reports repeated Too many open files while creating save directories/writing raids.dat/world_border.dat/chunk IO and trying to store chunk IO exceptions",
+    "Original26.3RegionFileStorage bytecode caches up to256entries per storage; no mutable cache rewrite/config override is introduced. Full actual descriptor owner breakdown unproven"
+  ],
+  "diagnosis": "Concrete EMFILE save failure and title filesystem exhaustion. Reported soft limit is not effective title capacity; exactquota/leakingowner unproven. Accounting does not show an indefinitely growing leak by itself.",
+  "next": "204minimumsupportedimmutableZIPpool8instead64, with fixedbufferup-to512trackedhandle endpoint for fuller owner evidence. This reduces bounded ZIP headroom use only; not universal descriptor cap or proof allsave failures fixed.",
+  "preservation": "No world deletion/repair/rollback, no arbitrary close of game handles, no game/mod/serverJARtransformation. Confirmed20226.1.xshader/quit result remains separately scoped.",
+  "local_report_sha256": {
+    "file-activity-2.txt": "2e7d49e8d33e7937deb1fc23df1f13e1ceb2220a8dc501e0f5c2d59996b0db39",
+    "resource-status-2.txt": "1390cca0d0efe7d9b3ba1c4e66cfbbe21fd60eea8ed765346d9e0187f8ed4e2a",
+    "session-15.txt": "6aee0c3b25641ec713d7a716da2d7aa831ac33d9845c96f6d935b52142011fbd",
+    "ftp-first/java25-exceptions.log": "c5cc9c20bc56f90f7c8fd7541c33988b507088a0d4daec9221ea1f9b987cfbb3",
+    "ftp-first/java25-jit.log": "52ef46e65706acf9c2846f2390c404cd6a6930c84ffa250173085b01b5b99146",
+    "ftp-first/java25-startup.log": "e154212cf82652fbfecab2544e5ffa6fb0fbcf2e5d3d3ba2e4bf8ba4dd63b766"
+  },
+  "release_store": "HOLD for save/reload acceptance and exactbuildapproval; no release/prerelease/Store or frozen pass"
+}

@@ -74,7 +74,7 @@ Physical **keyboard and mouse input is implemented for gameplay**, with positive
 
 ## Mods, shaders and resource packs
 
-The user confirms shader rendering and Quit Game pass on local build202. Build203uses normal PLAY/READY/SUPPORTED labels for26.1,26.1.1and26.1.2 Vanilla/Fabric. Ordinary gameplay was previously reported working across all six combinations; a complete shader/quit version matrix, performance and endurance remain separately scoped. These local builds are not a new released/Store version. [Status and exact test scope](docs/client-zink-ready-203.md).
+The user confirms shader rendering and Quit Game pass on local build202. Build203uses normal PLAY/READY/SUPPORTED labels for26.1,26.1.1and26.1.2 Vanilla/Fabric. Ordinary gameplay was previously reported working across all six combinations; a complete shader/quit version matrix, performance and endurance remain separately scoped. 26.3 save failures now reproduce EMFILE;204tests reduced archive descriptor use and fuller handle diagnostics, with physical save/reload and regression pending. These local builds are not a new released/Store version. [Status and exact test scope](docs/client-zink-ready-203.md).
 
 Open **Instance Settings → Mods, Shaders or Resource Packs** to browse Modrinth, search, select downloads and use **Download All**. The launcher verifies downloads, resolves required dependencies and can upgrade managed dependencies when required. **Installed** lists show what is present and offer per-file **Uninstall** with confirmation. Install only content matching the instance's game version and loader. [Content guide](docs/client-fabric-modrinth-103.md) · [Dependency handling](docs/client-dependency-updates-111.md).
 

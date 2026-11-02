@@ -1,5 +1,11 @@
 # Changelog
 
+## Build204 — save descriptor headroom test
+
+- Retrieve26.3Vanilla save EMFILE evidence:269open/248regulardescriptors despite higher softlimit; report opens fail. Exactquota/fullowner distribution remain unproven.
+- Use supported immutable ZIPpool8instead64 and extend allocation-free trackedhandle diagnostics to512entries. Preserve mutable file ownership, original JARs/worlds, defaultbootstrap64 and previous accepted bytes.
+- Actual budget8lowdescriptor ZIP/data/concurrency/world-like I/O host tests pass; exactPS5save/reload/headroom/performance and26.1.xshader/quit regression pending. Not a universal descriptor cap or complete save-fix claim; no release/Store.
+
 ## Build203 — normal26.1.x launcher presentation
 
 - Record explicit user confirmation that shader rendering and Quit Game pass on exact retained202; no full-checklist/all-version/all-pack acceptance or release authorization inferred.

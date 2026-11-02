@@ -1,0 +1,11 @@
+{
+  "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
+  "commit": "82429cb39228db18700b8449cc8da5a9be3116e1",
+  "source_sha256": {
+    "java25/probe/file_activity.hpp": "095f5663727256158ff8d97ceb4c8bb82a666ef09763dfeffae87a41060c0771",
+    "java25/probe/log_share.hpp": "ae09d9373868152c0dc0483923cf8016fee74a2f899c7443d79f97aea7eafe7b",
+    "tools/test_java25_zip_handle_pool.py": "491bab7f1dc841661113b32f8ba7c07e8e29e893bba4d4d8070bf0d1f408dd30"
+  },
+  "scope": "Existing immutable ZipFile pool at8 via consumer bootstrap; bounded up-to512trackedhandle report works without a new file descriptor. No mutable handle eviction/world JAR changes.",
+  "console": "202Vanilla26.3EMFILE269open/248regular; save/reload/headroom/fullowner inventory and performance pending"
+}
