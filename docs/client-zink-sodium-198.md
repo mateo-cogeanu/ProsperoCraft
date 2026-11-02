@@ -59,3 +59,10 @@ Leave a new failure open, or reopen at the launcher after a hard crash without
 launching again. Iris/shader enable/disable, world creation/timing, save/reload,
 Quit Game/relaunch on Vanilla and Fabric, audio/haptics,26.2+Vulkan and endurance
 remain physical-console work. No release/prerelease or Store publication.
+
+## Exact built198 validation
+
+Clean source `3425ad6f1f2c710bb240bf393041dff8731a66c9` produced ZIP SHA-256
+`cc9a6ebecb107681b6f6eef8236491164eb66cdadac59187679e8fc936ac307e`. The [exact build receipt](validation/client198-zink-sodium-2026-11-02.json) retains the matching package, symbols and build input hashes. Local17 policy and11 native checks pass, as do clean source-only outside-root runs with an initially empty verified dependency cache, original three Sodium property checks and the independent exact198 package audit. The JVM is unchanged from197.
+
+[Hosted policy](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41497499409) passes17 checks on Ubuntu24.04 and macOS15 for that source; actual jobs/logs were inspected. [Optional native CI](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41497576996) has Ubuntu success and macOS queued when inspected; completion remains pending. Exact198 physical launch/Iris/world/quit/performance validation is pending. No release/Store upload.
