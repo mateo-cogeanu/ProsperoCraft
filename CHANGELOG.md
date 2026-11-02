@@ -1,5 +1,12 @@
 # Changelog
 
+## Candidate199 — default fullscreen hint and no-error context
+
+- Record198's26.1.2Fabric failure: prior Sodium guard passed, then GLFW rejects0x00020010 before game context creation; Main returns to an honest failure card.
+- Recognize the default-false GLFW_SOFT_FULLSCREEN extension hint; true remains explicitly unsupported, and unrelated invalid hints still fail.
+- Forward Sodium's possible no-error context request through the paired private ABI into genuine Mesa ST_CONTEXT_FLAG_NO_ERROR. Preserve default contexts, reject debug+no-error, and verify actual GL flags/rendering in host fixtures.
+- Exact PS5 Iris/world/quit/performance and regressions remain pending; no release/Store action.
+
 ## Candidate198 — original Sodium version-check test policy
 
 - Record197's26.1.2Fabric launch refusal: Sodium requires3.4.1 but actual LWJGL is3.4.3+4; subsequent nonzero/error exit still faults. Launcher drains completed; game quit remains untested.

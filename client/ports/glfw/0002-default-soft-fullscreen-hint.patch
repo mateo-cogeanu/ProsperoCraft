@@ -1,0 +1,25 @@
+--- a/include/GLFW/glfw3.h
++++ b/include/GLFW/glfw3.h
+@@ -941,6 +941,9 @@
+  */
+ #define GLFW_POSITION_Y             0x0002000F
+ 
++/* LWJGL IME extension: PS5 supports the existing default (false) only. */
++#define GLFW_SOFT_FULLSCREEN        0x00020010
++
+ /*! @brief Framebuffer bit depth hint.
+  *
+  *  Framebuffer bit depth [hint](@ref GLFW_RED_BITS).
+--- a/src/window.c
++++ b/src/window.c
+@@ -397,6 +397,10 @@
+             return;
+         case GLFW_MOUSE_PASSTHROUGH:
+             _glfw.hints.window.mousePassthrough = value ? GLFW_TRUE : GLFW_FALSE;
++            return;
++        case GLFW_SOFT_FULLSCREEN:
++            if (value)
++                _glfwInputError(GLFW_FEATURE_UNAVAILABLE, "PS5: nonexclusive soft fullscreen is unavailable");
+             return;
+         case GLFW_CLIENT_API:
+             _glfw.hints.context.client = value;

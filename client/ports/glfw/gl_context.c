@@ -66,7 +66,7 @@ int ps5glfw_gl_create(_GLFWwindow *window, const _GLFWctxconfig *ctx, const _GLF
         return GLFW_FALSE;
     }
     if (ctx->client != GLFW_OPENGL_API || ctx->source != GLFW_NATIVE_CONTEXT_API ||
-        ctx->profile != GLFW_OPENGL_CORE_PROFILE || ctx->share || ctx->noerror ||
+        ctx->profile != GLFW_OPENGL_CORE_PROFILE || ctx->share || (ctx->noerror && ctx->debug) ||
         ctx->robustness || fb->stereo || fb->samples || !fb->doublebuffer || fb->sRGB) {
         _glfwInputError(GLFW_VERSION_UNAVAILABLE, "PS5 Zink requires an unshared desktop core native context and non-MSAA framebuffer");
         return GLFW_FALSE;
@@ -77,7 +77,7 @@ int ps5glfw_gl_create(_GLFWwindow *window, const _GLFWctxconfig *ctx, const _GLF
         .width = width > 0 ? (unsigned)width : 1,
         .height = height > 0 ? (unsigned)height : 1,
         .major = ctx->major, .minor = ctx->minor, .core = 1,
-        .forward = ctx->forward, .debug = ctx->debug,
+        .forward = ctx->forward, .debug = ctx->debug, .no_error = ctx->noerror,
         .window = window->null.ps5_window, .create_surface = ps5glfw_gl_surface,
     };
 #ifdef PS5_GLFW_HOST_TEST

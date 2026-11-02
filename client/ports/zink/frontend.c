@@ -223,6 +223,7 @@ PUBLIC struct ps5zink_context *ps5zink_create(const struct ps5zink_config *confi
     if (!config || !config->width || !config->height || config->width > 16384 ||
         config->height > 16384 || config->major < 3 || config->major > 4 ||
         config->minor < 0 || config->minor > 6 || !config->core ||
+        (config->debug && config->no_error) ||
         (!!config->window != !!config->create_surface)) {
         fail(EINVAL); return NULL;
     }
@@ -258,7 +259,8 @@ PUBLIC struct ps5zink_context *ps5zink_create(const struct ps5zink_config *confi
     attributes.major = config->major; attributes.minor = config->minor;
     attributes.visual = c->visual;
     attributes.flags = (config->forward ? ST_CONTEXT_FLAG_FORWARD_COMPATIBLE : 0) |
-                       (config->debug ? ST_CONTEXT_FLAG_DEBUG : 0);
+                       (config->debug ? ST_CONTEXT_FLAG_DEBUG : 0) |
+                       (config->no_error ? ST_CONTEXT_FLAG_NO_ERROR : 0);
     enum st_context_error error = ST_CONTEXT_ERROR_NO_MEMORY;
     startup_trace("state tracker context create enter");
     c->st = st_api_create_context(&frontend, &attributes, &error, NULL);

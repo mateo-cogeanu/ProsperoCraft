@@ -61,3 +61,4 @@ the documentation checker.
 
 - [197 Iris testing, queue shutdown and observation cost](client-zink-iris-197.md)
 - [198 experimental Sodium LWJGL version-check configuration](client-zink-sodium-198.md)
+- [199 default fullscreen hint and genuine no-error contexts](client-zink-hints-199.md)

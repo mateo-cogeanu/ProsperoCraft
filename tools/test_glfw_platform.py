@@ -29,6 +29,7 @@ int main(void){
  glfwInitAllocator(&denied);glfwInitHint(GLFW_PLATFORM,GLFW_PLATFORM_NULL);assert(!glfwInit());assert(glfwGetError(NULL)==GLFW_OUT_OF_MEMORY);assert(!(SDL_WasInit(SDL_INIT_VIDEO)&SDL_INIT_VIDEO));glfwInitAllocator(NULL);
  for(int run=0;run<3;run++){
   glfwInitHint(GLFW_PLATFORM,GLFW_PLATFORM_NULL);assert(glfwInit());int count=0;assert(glfwGetMonitors(&count)&&count>0);const GLFWvidmode* mode=glfwGetVideoMode(glfwGetPrimaryMonitor());assert(mode&&mode->width>0&&mode->height>0);
+  glfwWindowHint(GLFW_SOFT_FULLSCREEN,GLFW_FALSE);assert(glfwGetError(NULL)==GLFW_NO_ERROR);glfwWindowHint(GLFW_SOFT_FULLSCREEN,GLFW_TRUE);assert(glfwGetError(NULL)==GLFW_FEATURE_UNAVAILABLE);glfwWindowHint(0x7fffffff,0);assert(glfwGetError(NULL)==GLFW_INVALID_ENUM);glfwDefaultWindowHints();
   glfwWindowHint(GLFW_CLIENT_API,GLFW_NO_API);GLFWwindow* w=glfwCreateWindow(640,480,"Real SDL GLFW test",NULL,NULL);assert(w);assert(!strcmp(glfwGetWindowTitle(w),"Real SDL GLFW test"));int x=0,y=0;glfwGetWindowSize(w,&x,&y);assert(x==640&&y==480);glfwSetWindowUserPointer(w,&count);assert(glfwGetWindowUserPointer(w)==&count);
   glfwPollEvents();glfwSetKeyCallback(w,onkey);glfwSetCharCallback(w,onchar);glfwSetMouseButtonCallback(w,onbutton);glfwSetScrollCallback(w,onscroll);glfwSetCursorPosCallback(w,onmotion);glfwSetWindowCloseCallback(w,onclose);
   SDL_Window* s=SDL_GetKeyboardFocus();if(!s){int n=0;SDL_Window** windows=SDL_GetWindows(&n);assert(n==1);s=windows[0];SDL_free(windows);}SDL_WindowID id=SDL_GetWindowID(s);

@@ -63,8 +63,12 @@ public class ZinkGlfwHost25 {
    Class.forName("com.mojang.blaze3d.systems.RenderSystem").getMethod("initRenderThread").invoke(null);
    for(int cycle=0;cycle<3;cycle++){
     glfwDefaultWindowHints();backend.getMethod("setWindowHints").invoke(backend.getConstructor().newInstance());
+    glfwWindowHint(GLFW_SOFT_FULLSCREEN,GLFW_FALSE);check(glfwGetError(null)==GLFW_NO_ERROR,"default soft-fullscreen hint rejected");
+    glfwWindowHint(GLFW_CONTEXT_NO_ERROR,cycle==1?GLFW_TRUE:GLFW_FALSE);
     long window=glfwCreateWindow(8,8,"Real Zink",0,0);check(window!=0,"original GL hints");glfwMakeContextCurrent(window);check(glfwGetCurrentContext()==window,"current context");
     GL.createCapabilities();String renderer=glGetString(GL_RENDERER);check(renderer!=null&&renderer.contains("zink"),"actual Zink renderer");
+    check((glGetInteger(GL_CONTEXT_FLAGS)&0x8)==(cycle==1?0x8:0),"real Mesa no-error flag");
+    check(glfwGetWindowAttrib(window,GLFW_CONTEXT_NO_ERROR)==(cycle==1?GLFW_TRUE:GLFW_FALSE),"GLFW no-error attribute");
     check(GL.getCapabilities().OpenGL33,"GL3.3 core");check(glfwGetProcAddress("glClear")!=0,"GLFW function address");
     try(SharedLibrary provider=new org.lwjgl.system.ps5.PS5Library("libps5zink.so")){
      long entry=provider.getFunctionAddress("ps5zink_get_proc_address");check(entry!=0,"real resident-style entry");

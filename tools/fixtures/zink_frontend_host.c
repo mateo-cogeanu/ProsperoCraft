@@ -97,14 +97,18 @@ int main(void)
 
     CHECK(!ps5zink_create(NULL));CHECK(ps5zink_error()==EINVAL);
     CHECK(!ps5zink_get_proc_address(NULL));CHECK(!ps5zink_swap_buffers(NULL));
+    struct ps5zink_config invalid_flags={.width=8,.height=8,.major=3,.minor=3,.core=1,.debug=1,.no_error=1};
+    CHECK(!ps5zink_create(&invalid_flags));CHECK(ps5zink_error()==EINVAL);
     struct ps5zink_config rejected={.width=8,.height=8,.major=3,.minor=3,.core=1,.window=(void*)1,.create_surface=refused_surface};
     struct ps5zink_context *failed=ps5zink_create(&rejected);CHECK(failed);
     CHECK(!ps5zink_make_current(failed));CHECK(surface_attempts==1);CHECK(!ps5zink_get_current());CHECK(ps5zink_destroy(failed));
     for(unsigned cycle=0;cycle<3;cycle++){
-        struct ps5zink_config config={.width=8,.height=8,.major=3,.minor=3,.core=1,.forward=1};
+        struct ps5zink_config config={.width=8,.height=8,.major=3,.minor=3,.core=1,.forward=1,.no_error=cycle==1};
         struct ps5zink_context *c=ps5zink_create(&config);CHECK(c);
         CHECK(ps5zink_make_current(c));CHECK(ps5zink_get_current()==c);
         LOAD(PFNGLGETSTRINGPROC, glGetString);
+        LOAD(PFNGLGETINTEGERVPROC, glGetIntegerv);GLint context_flags=0;glGetIntegerv(GL_CONTEXT_FLAGS,&context_flags);
+        CHECK((context_flags & 8)==(cycle==1?8:0));
         printf("Actual GL %s / %s\n",glGetString(GL_VERSION),glGetString(GL_RENDERER));fflush(stdout);
         pixels();draw();CHECK(ps5zink_swap_interval(c,0));CHECK(ps5zink_swap_buffers(c));
         CHECK(!ps5zink_resize(c,0,4));CHECK(ps5zink_resize(c,4,4));pixels();

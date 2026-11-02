@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-02",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.198",
+  "package_sha256": "cc9a6ebecb107681b6f6eef8236491164eb66cdadac59187679e8fc936ac307e",
+  "run": "client-01.000.198-1793643634-131168151",
+  "user_report": "failed",
+  "reported_state": "FAIL: Launcher and selected downloaded instance / code FFFFFAE5",
+  "retrieval": "Fresh Safari listing/report-link downloads; direct CLI connection refused. Current identity and first local report bytes retained.",
+  "evidence": [
+    "Current26.1.2Fabric run passes the prior Sodium version check and enters original Main/Minecraft window initialization with actual LWJGL3.4.3+4",
+    "First collected GLFW initialization error is INVALID_ENUM for window hint0x00020010; original backend then emits Driver does not support OpenGL3.3",
+    "Pinned original LWJGL GLFW3.4.1 Java binding identifies0x00020010 as GLFW_SOFT_FULLSCREEN; native pinned GLFW3.4 lacks that IME extension",
+    "Original Main returns; existing session audit rejects failed/incomplete shutdown, resulting in the failure card. No success or clean game quit inferred",
+    "Current native log completes real launcher queue fences/barrier destruction and display/GPU handoff; no original Zink context-create entry recorded for this failure"
+  ],
+  "diagnosis": "Concrete window-init blocker is missing soft-fullscreen hint handling; the collected GLFW error does not establish missing actual GL3.3 capability. The hint value is not directly recorded; Controlify logs exclusive fullscreen default=true.",
+  "additional_source_finding": "Original Sodium WindowMixin can request GLFW_CONTEXT_NO_ERROR; old PS5 adapter unconditionally rejects that request. This is a source-discovered next boundary, not a separately observed current-run native error.",
+  "next": "199accepts only default-false soft-fullscreen hint; true returns FEATURE_UNAVAILABLE and unrelated invalid hints stay invalid. Paired GLFW/frontend now forwards no-error request into genuine Mesa ST_CONTEXT_FLAG_NO_ERROR; debug+no-error rejected.",
+  "pending": [
+    "Exact199 PS5 launch/Iris/shader/world/save/quit/timing acceptance",
+    "Nonexclusive soft fullscreen remains unsupported",
+    "196all-six quit crash and world-creation slowdown remain unresolved",
+    "Native error-exit fault from197 remains unresolved;198failure card is distinct"
+  ],
+  "local_report_sha256": {
+    "exception.txt": "c3cbc7e11f26090805f0836bdc7aed52d6f47101150713b56ff42ef164b876c1",
+    "exceptions.log": "2e379d63028055b37fa07164a325c972329e024cbab930d3b342139b65a9ecc8",
+    "hs-error.log": "87f35ebaf8340f8ed21c6072d8f5f44ecf184ee83d9482d85eb02a4c806316d8",
+    "native-stderr.log": "99e4db0b5c5b3f054883b091823ecef288031d489b83701545c4d5caa7b5cb80",
+    "previous-abort.txt": "4ba4e5719707982b175ff8dd77cb347920a9d33a0e9fb7e8653047197fcb8ae1",
+    "previous-exceptions.log": "0516056fed76c0829875c86159f9f6f4e8d709923cd7cb54a93d1cbdaf340137",
+    "previous-hs-error.log": "87f35ebaf8340f8ed21c6072d8f5f44ecf184ee83d9482d85eb02a4c806316d8",
+    "previous-native-stderr.log": "676e882c9695f281f7b58fde78b41eb246b194d459fe82df68db50ca67118507",
+    "session.txt": "10270c0fd96eee67b91327b0dd8fa43706c5966a9b9648455de90b495d71d27b",
+    "startup-tail.log": "dd45b7b3c1053faa4c8cf4ffaec560b61657e7cd01d77adc85eee1e19b0a70b2"
+  },
+  "release_store": "HOLD; no release/prerelease/Store action or new frozen milestone"
+}

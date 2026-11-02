@@ -18,6 +18,7 @@ struct ps5zink_config {
     int major, minor, core, forward, debug;
     void *window;
     ps5zink_surface_fn create_surface;
+    int no_error; /* Explicit genuine Mesa no-error context; paired private ABI. */
 };
 /* Optional preparation before JVM pressure; no context/window/surface is made. */
 int ps5zink_prepare_screen(void);
