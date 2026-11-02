@@ -1,5 +1,11 @@
 # Changelog
 
+## Build203 — normal26.1.x launcher presentation
+
+- Record explicit user confirmation that shader rendering and Quit Game pass on exact retained202; no full-checklist/all-version/all-pack acceptance or release authorization inferred.
+- Remove DEV TEST/DEVELOPMENT/disposable-world labels from all available26.1/26.1.1/26.1.2Vanilla/Fabric entries. Use normal PLAY/sign-in/download, READY and SUPPORTED states.
+- Retain renderer selection, auth/dependency/JAR checks and202runtime/graphics/SDL policies. Separate203package; physical label/launch/shader/quit regression pending. No release/Store change.
+
 ## Candidate202 — native flag scratch and real SDL finalization
 
 - Record201shader black screen with native Flag.getFlags OOM and quit audit SDLmask6210 despite stopped game/no-fatal evidence. No shader/quit pass.

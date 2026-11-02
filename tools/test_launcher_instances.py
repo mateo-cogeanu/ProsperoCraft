@@ -112,9 +112,9 @@ var store=new ProsperoLibrary(root.resolve("store"));if(!store.instances().isEmp
    try(var loaded=zi.loader(receiptZ)){if(!loaded.getURLs()[0].equals(binding.toUri().toURL()))throw new AssertionError("adapted binding priority");}
    var zl=new ProsperoLibrary(zr);var instanceZ=zl.add("Vanilla Zink",version,1);zl.settings().showIntro=false;zl.settings().showControls=false;zl.ready(instanceZ,true);zl.save();
    var zm=new ProsperoLauncher(testAuth,zr,InstanceCheck::open,()->{preparations.incrementAndGet();});zm.tick(0x4000);
-   if(!zm.tick(0)[6].equals("DEV TEST - PLAY")||!zm.tick(0)[69].equals("DEVELOPMENT"))throw new AssertionError("development labels");
+   if(!zm.tick(0)[6].equals("PLAY - Sign in")||!zm.tick(0)[69].equals("SUPPORTED")||!zm.tick(0)[35].equals("READY")||zm.tick(0)[65].contains("Development"))throw new AssertionError("normal Vanilla labels");
    sessionField.set(zm,new ProsperoAuth.Session("OwnedPlayer","0123456789abcdef0123456789abcdef","SECRET_ZINK",System.currentTimeMillis()+3600000));
-   zm.tick(0x4000);waitFor(zm);if(!zm.tick(0)[10].equals("LAUNCH"))throw new AssertionError("normal Zink launcher did not prepare: "+zm.tick(0)[2]);
+   zm.tick(0x4000);waitFor(zm);if(!zm.tick(0)[6].equals("PLAY"))throw new AssertionError("signed-in normal Play");if(!zm.tick(0)[10].equals("LAUNCH"))throw new AssertionError("normal Zink launcher did not prepare: "+zm.tick(0)[2]);
    List<String> zargs=List.of(zm.arguments(null,null));if(zargs.contains("--graphicsBackend")||zargs.contains("--demo")||!zargs.contains(version)||!zargs.contains("SECRET_ZINK"))throw new AssertionError("original GL/full account arguments");
    sessionField.set(zm,null);denied(()->zm.arguments(null,null));
    if(!Files.readString(zr.resolve("cache/versions/"+version+"/client.jar")).equals("original client bytes"))throw new AssertionError("rewrote game");
@@ -152,7 +152,8 @@ var store=new ProsperoLibrary(root.resolve("store"));if(!store.instances().isEmp
    var fm=new ProsperoLauncher(testAuth,zr,InstanceCheck::open,()->{preparations.incrementAndGet();});sessionField.set(fm,new ProsperoAuth.Session("OwnedPlayer","0123456789abcdef0123456789abcdef","SECRET_FABRIC_ZINK",System.currentTimeMillis()+3600000));
    var detailField=ProsperoLauncher.class.getDeclaredField("detail");detailField.setAccessible(true);detailField.set(fm,fi);
    var play=ProsperoLauncher.class.getDeclaredMethod("play");play.setAccessible(true);play.invoke(fm);waitFor(fm);
-   if(!fm.tick(0)[10].equals("LAUNCH")||!fm.tick(0)[69].equals("DEVELOPMENT"))throw new AssertionError("Fabric launch preparation: "+fm.tick(0)[2]);
+   if(!fm.tick(0)[10].equals("LAUNCH")||!fm.tick(0)[69].equals("SUPPORTED"))throw new AssertionError("Fabric launch preparation: "+fm.tick(0)[2]);
+   if(!fm.tick(0)[6].equals("PLAY")||Arrays.toString(fm.tick(0)).contains("DEV TEST")||fm.tick(0)[65].contains("Development"))throw new AssertionError("normal Fabric labels");
    if(!Arrays.equals(irisOriginal,Files.readAllBytes(iris)))throw new AssertionError("Iris testing modified original mod bytes");
    List<String> fa=List.of(fm.arguments(null,null));if(fa.contains("--graphicsBackend")||fa.contains("--demo")||!fa.contains("SECRET_FABRIC_ZINK"))throw new AssertionError("Fabric original GL/full account args");
    var currentField=ProsperoLauncher.class.getDeclaredField("current");currentField.setAccessible(true);Object previous=currentField.get(null);currentField.set(null,fm);
@@ -162,7 +163,7 @@ var store=new ProsperoLibrary(root.resolve("store"));if(!store.instances().isEmp
   if(ProsperoLauncher.launchable("26.1.3","vanilla")||ProsperoLauncher.launchable("26.1-snapshot-1","vanilla")||ProsperoGraphics.zink("26.2","vanilla")||!ProsperoGraphics.vulkan("26.2","GLFW")||!ProsperoGraphics.vulkan("26.3","SDL"))throw new AssertionError("version/backend boundary");
   Files.writeString(channel,"demo");if(ProsperoLauncher.launchable("26.1","vanilla"))throw new AssertionError("Zink leaked into default Demo");
   Files.delete(zinkResource);Files.delete(channel);System.clearProperty("ps5.glfw.binding");
-  System.out.println("PASS normal launcher Zink build gate, all three Vanilla releases, dev labels, verified receipt/binding order, owned-account guard, original GL arguments, genuine Fabric install/repair/Knot selection and untouched Iris test JAR launch preparation for all releases, Vulkan/default boundaries");
+  System.out.println("PASS normal launcher Zink build gate, all three Vanilla releases, normal labels, verified receipt/binding order, normal26.1.xVanilla/Fabric labels, owned-account guard, original GL arguments, genuine Fabric install/repair/Knot selection and untouched Iris test JAR launch preparation for all releases, Vulkan/default boundaries");
   var persisted=new ProsperoLibrary(root.resolve("model"));if(persisted.instances().size()!=1||persisted.instances().get(0).icon!=2||!persisted.instances().get(0).name.endsWith("1"))throw new AssertionError("controller persistence");
   System.out.println("PASS empty/persistent instances, isolated worlds, rename/icons/settings, L1/R1/keyboard/install/play controller flow, unsupported26.1 launch guard and startup-notice persistence, original bytes, pin verification/cache/repair/cancel/failure/traversal/HTTPS/native-classifier rejection");
  }

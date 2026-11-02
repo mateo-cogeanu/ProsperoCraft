@@ -1,0 +1,18 @@
+{
+  "date": "2026-11-02",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.202",
+  "package_sha256": "97e9ffe2f35644d3ddb0740d5f29f329eb04507156510cf503415c6f6ac7bed6",
+  "user_confirmation": "Shader rendering and Quit Game both passed",
+  "scope": "Explicit user answer to build202validation question; two physical checks pass. Most recent investigated instance was26.1.2Fabric with Iris/ComplementaryUnbound_r5.9.3HIGH, but the answer does not independently enumerate each version/pack/profile. No six-version shader/quit matrix or broad pack acceptance inferred.",
+  "evidence": "User-reported physical result; no new independent report retrieval in this label-only turn. Earlier201failures remain historical records.",
+  "retention": "Exact202 ZIP and matching symbols retained; no rebuild/replacement of those accepted bytes",
+  "related_previous_results": "196user reported ordinary gameplay good on all six26.1/26.1.1/26.1.2Vanilla/Fabric combinations. Those older quit/performance failures are not silently rewritten.",
+  "next": "203removes DEV TEST presentation from all six available combinations; graphics/runtime/native policies retained. Exact203physical regression remains pending.",
+  "not_established": [
+    "Formal ALL PASS/full checklist or new frozen milestone",
+    "Shader/quit results across every version and arbitrary mod/pack",
+    "World creation timing/save-reload/audio/haptics/Vulkan/endurance acceptance"
+  ],
+  "release_store": "No release/prerelease/Store publication requested in this turn; existing explicit exact-build release approval gate retained"
+}
