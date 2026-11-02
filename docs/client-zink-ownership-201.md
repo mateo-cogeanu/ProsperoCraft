@@ -71,3 +71,10 @@ Quit Game and relaunch with and without shaders. Leave failures open or reopen
 without starting another game. Shader rendering remains a mandatory exact-build
 physical release check; quit/save/timing/audio/Vulkan/endurance remain pending.
 No release/prerelease/Store action or new frozen milestone.
+
+## Exact built201 validation
+
+Clean source `5b2475cca97bddf17ae86b1dabdb3e704b9a3ed2` produced ZIP SHA-256
+`83a964e2cd30081c708582cda57582b2ee3d78a242697a13b15d8fe470384197`. The [exact build receipt](validation/client201-zink-ownership-2026-11-02.json) retains package/symbol/module/native hashes and separate scopes. Local17policy and11native, clean source-only outside-root checks with an initially empty verified dependency cache, real201package/original publisher binding ownership tests and the independent target ZIP audit pass. The underlying JVM/runtime pin and prior200ZIP remain unchanged.
+
+[Policy CI](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41509920705) passes17checks on Ubuntu24.04/macOS15 at that source; actual jobs/logs inspected. [Optional native CI](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41509937559) has Ubuntu success and macOS queued when inspected; completion pending. No new full shader/graphics execution claimed. Exact201 physical startup/pack render/quit/save/timing/regressions and release gate remain pending. No release/Store upload.
