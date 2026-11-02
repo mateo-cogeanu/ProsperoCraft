@@ -74,7 +74,7 @@ Physical **keyboard and mouse input is implemented for gameplay**, with positive
 
 ## Mods, shaders and resource packs
 
-Local Zink development196 has user-reported working Vanilla/Fabric26.1,26.1.1and26.1.2, with quit crashes and slower world creation. Candidate197 unlocks Iris testing and includes shutdown/diagnostic changes; its console results are pending. These are local development candidates, not released/Store compatibility. [Development status and test scope](docs/client-zink-iris-197.md).
+Local Zink development196 has user-reported working Vanilla/Fabric26.1,26.1.1and26.1.2, with quit crashes and slower world creation. 197 permits Iris but its first console launch was rejected by Sodium’s LWJGL version check. Candidate198 explicitly opts out of that check for Zink/Fabric testing while retaining the real3.4.3 identity; actual Iris/ABI/quit/performance acceptance remains pending. These are local development candidates, not released/Store compatibility. [Development status and test scope](docs/client-zink-sodium-198.md).
 
 Open **Instance Settings → Mods, Shaders or Resource Packs** to browse Modrinth, search, select downloads and use **Download All**. The launcher verifies downloads, resolves required dependencies and can upgrade managed dependencies when required. **Installed** lists show what is present and offer per-file **Uninstall** with confirmation. Install only content matching the instance's game version and loader. [Content guide](docs/client-fabric-modrinth-103.md) · [Dependency handling](docs/client-dependency-updates-111.md).
 

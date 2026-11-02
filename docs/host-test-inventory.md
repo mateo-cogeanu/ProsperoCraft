@@ -281,3 +281,5 @@ The manual native lane instead tests scoped native implementations against fixtu
 | `test_client185_package.py` | Exact185ZIP/source/registry/symbol/classpathELF/JAR/signature audit, LLVM+SDKconverter and179baseline; no console execution |
 
 | `test_zink_queue_barrier.py` | Manual explicit audited Mesa source/Clang; actual portable barrier/finish-worker plus graphics reserve under late native-init refusal, generations/visibility/reuse/ownership with ASan/UBSan; not PS5 scheduling/monotonic clocks/quit acceptance |
+
+Manual198 check: `tools/test_sodium_lwjgl_version.py` requires explicit pinned original mod cache, built platform core, verified SLF4J and JDK25; it executes original Sodium check classes/defaults/single-check opt-out and truthful LWJGL identity only. No rendering, native ABI or PS5 acceptance; outside portable lanes. See [198 scope](client-zink-sodium-198.md).

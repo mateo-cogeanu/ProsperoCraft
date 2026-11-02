@@ -1,0 +1,38 @@
+{
+  "date": "2026-11-02",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.197",
+  "package_sha256": "127e348bee49a77ae731683adac81eeeeeea3aa6352465499bc340393ff08656",
+  "user_report": "Crashed while launching the game; reopened at launcher",
+  "retrieval": "Fresh Safari read-only report-link downloads; direct CLI connection refused. First retrievals retained locally.",
+  "current_run": "client-01.000.197-1793642643-342081227",
+  "failed_previous_run": "client-01.000.197-1793642543-588132837",
+  "evidence": [
+    "Matching197 run identities; selected26.1.2Fabric0.20.1 with Iris1.11.4+mc26.1.2 and Sodium0.9.2+mc26.1.2",
+    "Original Sodium reports installed LWJGL3.4.3+4 versus required3.4.1 and explicitly rejects startup before original GL context creation",
+    "Retained native handoff completes two real queue finish fence waits and owner barrier destroys, then closes launcher display/GPU",
+    "Registered clean-exit observer enters and rejects audit; VM EXIT:1 and native unarmed/nonzero gate, followed by native signal12 captured in retained startup/trace tail",
+    "No current/retained VM abort note; matching hs-error report unavailable errno2"
+  ],
+  "diagnosis": "Concrete first launch blocker is Sodium LWJGL version guard. Subsequent native error-exit fault is distinct and not proven repaired. Completed launcher queue drains do not establish game shutdown or physical Quit Game acceptance.",
+  "next": "198candidate narrowly opts into original Sodium sodium.checks.issue2561=false on build-selected26.1.xZinkFabric. Actual LWJGL version remains3.4.3; no JAR rewrite or claim of native ABI/Iris compatibility.",
+  "pending": [
+    "198 physical launch/Iris/shader/world acceptance",
+    "196 all-six quit crash and slow world creation remain unresolved;197 quit not tested",
+    "Save/reload, audio/haptics, native cleanup, Vulkan regression and endurance"
+  ],
+  "local_report_sha256": {
+    "abort.txt": "4ba4e5719707982b175ff8dd77cb347920a9d33a0e9fb7e8653047197fcb8ae1",
+    "exceptions.log": "0516056fed76c0829875c86159f9f6f4e8d709923cd7cb54a93d1cbdaf340137",
+    "hs-error.log": "752a4033aeeb14d08352177980819a5548910927944fb89937a5f0f25bdf3d64",
+    "native-stderr.log": "c71bfc422cefa4b7c512c96360ce6470016d55374a1a18b2d7ff724d3c2de150",
+    "previous-abort.txt": "f6347c76b2d498437f3331568c63e41d6a5188953b4f22321a478463ea3fa5d0",
+    "previous-exceptions.log": "2b6194e8450b5742a76b0d23a142536679d83144ffcf38dca557441ad454b895",
+    "previous-hs-error.log": "752a4033aeeb14d08352177980819a5548910927944fb89937a5f0f25bdf3d64",
+    "previous-native-stderr.log": "b51e9d6e8f639cbf2320b0d35929eefd94afd3dfdec165bcf5c8b58a53e4fb16",
+    "session.txt": "7c5f698ca61e167bf7794240e456eb25949bd24036c961c49c1e7b9c27437c12",
+    "startup-tail.log": "59731db48a2c432d3809459b726a8e6de579e0facbbe212c3109b0c43ea1a99c",
+    "vm-trace.log": "a64e633271bd7509607695022cc6f316a1e8577adc65287c2c2ba3dcc8c18aa8"
+  },
+  "release_store": "HOLD; no release/prerelease/Store action or new frozen pass"
+}

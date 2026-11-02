@@ -1,5 +1,11 @@
 # Changelog
 
+## Candidate198 — original Sodium version-check test policy
+
+- Record197's26.1.2Fabric launch refusal: Sodium requires3.4.1 but actual LWJGL is3.4.3+4; subsequent nonzero/error exit still faults. Launcher drains completed; game quit remains untested.
+- Add candidate-only upstream sodium.checks.issue2561=false on26.1.xZinkFabric, before Knot/Main. Keep actual LWJGL identity, all other checks, original JARs and default/Vulkan/Vanilla behavior.
+- Check genuine pinned original Sodium0.8.7/0.8.9/0.9.2 defaults and single-check option in host JVMs. Native ABI/Iris/shader/world/quit/performance PS5 acceptance pending; no release/Store action.
+
 ## Candidate197 — Iris tests and queue shutdown
 
 - Record user-reported working Vanilla/Fabric26.1/26.1.1/26.1.2 on196, with quit crashes and slower world creation unresolved.

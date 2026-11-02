@@ -243,6 +243,7 @@ public final class ClientStartup25 {
    configureJna(ProsperoLauncher.selectedResidentJna());
    configureControlifyNative();verifyControlifyLookup();console.println("PS5_CONTROLIFY_LOOKUP handle_scoped=SDL3 verified_events=3");
    prepareCpuInformation();ProsperoNetwork.check();
+   if(ProsperoLauncher.configureSelectedSodiumLwjglTest())stage("PS5_SODIUM experimental LWJGL version check opt-out; real3.4.3 retained; compatibility pending");
    stage("PS5_LAUNCH phase=CONFIGURE_BINDINGS");
    Configuration.OPENGL_CONTEXT_API.set("OSMesa");Configuration.OPENGL_OSMESA_LIBRARY_NAME.set(System.mapLibraryName("ps5clientgl"));
    Configuration.SPVC_LIBRARY_NAME.set(System.mapLibraryName("ps5spvc"));

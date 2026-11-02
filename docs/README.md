@@ -60,3 +60,4 @@ the documentation checker.
 - [196 prepared ownership and upstream direct context](client-zink-direct-context-196.md)
 
 - [197 Iris testing, queue shutdown and observation cost](client-zink-iris-197.md)
+- [198 experimental Sodium LWJGL version-check configuration](client-zink-sodium-198.md)
