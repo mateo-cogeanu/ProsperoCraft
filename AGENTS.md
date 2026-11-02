@@ -127,3 +127,15 @@ allocation-free initialization/lifecycle semantics. Keep legacy 122–150 wrappe
 and specialized assertions in `tools/legacy_package_audit.py`; update migration
 records/negative controls deliberately and include shared headers in future
 source/relink exports. See [shared tooling](docs/tooling-sharing.md).
+
+
+## Required shader release validation —2026-11-02
+
+The user makes successful shader loading/rendering mandatory before release.
+Preserve the existing exact-build physical-console and explicit-release gates.
+Current199 reaches26.1.2Fabric/Iris world rendering but crashes entering
+ComplementaryUnbound_r5.9.3 HIGH shadow rendering due to missing
+com.sun.management.HotSpotDiagnosticMXBean. This is not shader acceptance.
+Host tests, compilation logs or a working no-shader world do not satisfy the gate.
+Record exact candidate/pack/profile and physical shader behavior; keep release,
+prerelease and Store publication on hold until the required confirmation.

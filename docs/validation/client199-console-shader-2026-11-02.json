@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-02",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.199",
+  "package_sha256": "4c61a71dc6bf77cd982dd96db1548f0f2081eca4d159427e6c4d6822885ca46c",
+  "user_report": "Crashed trying to load shader; shader loading mandatory before release",
+  "current_reopened_run": "client-01.000.199-1793645254-260343093",
+  "failed_previous_run": "client-01.000.199-1793644940-260499936",
+  "retrieval": "Fresh Safari report-link downloads; current/retained run identities matched, first local files preserved",
+  "evidence": [
+    "Retained report identifies26.1.2Fabric0.20.1, Iris1.11.4, Sodium0.9.2, an active integrated singleplayer world and real PS5 Zink/MesaGL4.6 with sustained native GPU submissions",
+    "Selected shader pack ComplementaryUnbound_r5.9.3.zip, HIGH profile; many shader compilation warnings recorded but not established as fatal",
+    "Fatal original Iris AdvancedShadowCullingFrustum static initializer throws NoClassDefFoundError com/sun/management/HotSpotDiagnosticMXBean, caused by ClassNotFoundException",
+    "Unmodified official Iris bytecode invokes ManagementFactory.getPlatformMXBean(HotSpotDiagnosticMXBean.class), getVMOption(UseFMA), then sets FMA_SUPPORT from the genuine VM value",
+    "199packaged target module image includes java.management but not jdk.management, and native registry lacks management_ext"
+  ],
+  "diagnosis": "Missing genuine JDK management module/native provider blocks Iris shadow initialization. Do not attribute this Java linkage failure to shader compiler warnings or claim shader acceptance from world/submission evidence.",
+  "repair": "200includes target-built jdk.management and genuine resident OpenJDK management_ext/JMM, adds real UseFMA preflight, keeps original Iris/Sodium/game JARs and VM flags unchanged",
+  "console_scope": "Partial world/renderer evidence only; no all-pass, successful shader rendering, quit/timing/save/endurance acceptance",
+  "release_gate": "Explicit user requirement: exact-build physical shader load/render success is mandatory before release; prior release/Store hold remains",
+  "local_report_sha256": {
+    "exceptions.log": "0516056fed76c0829875c86159f9f6f4e8d709923cd7cb54a93d1cbdaf340137",
+    "native-stderr.log": "2bee3fc158cc72bb74f412c998c8e8b1cc142088751b99ff4a85fc27f3690d2f",
+    "previous-exceptions.log": "ecc2399626b27d3b4d2103bbcdd603363d865f306a272805ee8fa3091009d927",
+    "previous-native-stderr.log": "6e6935569c6bcb7f8d11c59dce0eb1250791b3843df7d7ece225e9bb6166ec2b",
+    "session.txt": "01c0d5ef6407c082ae8fe5006ae3396e709f21ad5fce1fe509d3c20d819a425a",
+    "startup-tail.log": "5ac4a7736b8130d599ad3c19c5fdc169d8ff1e41f9a8ad8f2c205247e6cec0bc",
+    "vm-trace.log": "654b6883d352825965abb488275666d1af4eb081ad9827d24057c40982040f01"
+  }
+}

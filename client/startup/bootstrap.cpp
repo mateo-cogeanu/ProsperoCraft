@@ -397,6 +397,10 @@ void run_test(int i) {
   log_stage("Runtime ENTER/DONE checkpoint sampling enabled: 1 in 4096");
   log_stage("Core image opened and JIMAGE header verified");
   JavaVMOption options[]={
+#ifdef PROSPERO_MANAGEMENT_EXT
+   {const_cast<char *>("--add-modules=jdk.management"),nullptr},
+   {const_cast<char *>("-Dps5.managementExtensions=true"),nullptr},
+#endif
    {const_cast<char *>("-Dps5.zip.maxOpenFiles=64"),nullptr},
    {const_cast<char *>("-Xmixed"),nullptr},
    {const_cast<char *>("-XX:TieredStopAtLevel=1"),nullptr},

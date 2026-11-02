@@ -1,5 +1,12 @@
 # Changelog
 
+## Candidate200 — genuine diagnostic management for Iris shadows
+
+- Record199's ComplementaryUnbound_r5.9.3 HIGH crash: original Iris asks the real VM for UseFMA, but jdk.management/HotSpotDiagnosticMXBean is absent. Active world evidence is not shader acceptance.
+- Pin the runtime-owned opt-in genuine jdk.management/management_ext implementation; preserve the full target module set, original JARs and VM flags, and preflight the actual diagnostic flag query.
+- Exercise original Iris shadow-frustum initialization with real false/true VM flags and forced rebuilt native JNI, with missing-library/unknown/readonly refusal controls.
+- Physical shader load/render success is a user-required release prerequisite. Exact200 shader/world/save/quit/timing/regression tests pending; no release/Store action.
+
 ## Candidate199 — default fullscreen hint and no-error context
 
 - Record198's26.1.2Fabric failure: prior Sodium guard passed, then GLFW rejects0x00020010 before game context creation; Main returns to an honest failure card.

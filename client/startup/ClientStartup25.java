@@ -243,6 +243,15 @@ public final class ClientStartup25 {
    configureJna(ProsperoLauncher.selectedResidentJna());
    configureControlifyNative();verifyControlifyLookup();console.println("PS5_CONTROLIFY_LOOKUP handle_scoped=SDL3 verified_events=3");
    prepareCpuInformation();ProsperoNetwork.check();
+   if(Boolean.getBoolean("ps5.managementExtensions")){
+    Class<?> type=Class.forName("com.sun.management.HotSpotDiagnosticMXBean");
+    Object bean=java.lang.management.ManagementFactory.getPlatformMXBean(type.asSubclass(java.lang.management.PlatformManagedObject.class));
+    if(bean==null)throw new IllegalStateException("Diagnostic MXBean missing");
+    Object option=type.getMethod("getVMOption",String.class).invoke(bean,"UseFMA");
+    Object value=option.getClass().getMethod("getValue").invoke(option);
+    if(!"true".equals(value)&&!"false".equals(value))throw new IllegalStateException("Diagnostic flag value invalid");
+    stage("PS5_MANAGEMENT genuine diagnostic UseFMA="+value);
+   }
    if(ProsperoLauncher.configureSelectedSodiumLwjglTest())stage("PS5_SODIUM experimental LWJGL version check opt-out; real3.4.3 retained; compatibility pending");
    stage("PS5_LAUNCH phase=CONFIGURE_BINDINGS");
    Configuration.OPENGL_CONTEXT_API.set("OSMesa");Configuration.OPENGL_OSMESA_LIBRARY_NAME.set(System.mapLibraryName("ps5clientgl"));
