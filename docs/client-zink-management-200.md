@@ -71,3 +71,11 @@ then enable/disable/reload behavior. Keep new failures open, or reopen after a h
 crash without starting another game. Save/reload, Quit Game/relaunch, world creation
 timing, audio/haptics,26.2+Vulkan and endurance remain separate pending tests. No
 new frozen milestone or broad pack compatibility claim.
+
+## Exact built200 validation
+
+Clean consumer source `5628518f17f54e82f17246889025b459ec241e96` and pinned runtime
+`724896c9711bbb7ccb24e6eec5f4ff8120e6d9bf` produced ZIP SHA-256
+`c16d4a6cd53f4e60e6622eabfdb6c1d46473da097dfdfb05cb0cbbabf9a2122e`. The [exact validation receipt](validation/client200-zink-management-2026-11-02.json) retains matching module/native/symbol/package hashes and scoped tests. Local17 policy and11 native, clean source-only outside-root checks with an initially empty verified dependency cache, forced original Iris initializer/native JMM checks, full target link/signature and independent ZIP/module extraction audits pass. All baseline modules remain; the underlying JVM hash is unchanged from199.
+
+Actual [policy CI jobs](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41505829021) and [native CI jobs](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41505844496) show Ubuntu success and macOS queued when inspected; all-host completion remains pending. No new graphics/shader-render execution is claimed for200. Exact200 physical API/shader/world/save/quit/timing/regression validation is pending. Release/prerelease/Store remain on hold.
