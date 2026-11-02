@@ -70,3 +70,11 @@ rendering, then shader disable/reload and Quit Game/relaunch with/without the pa
 Keep failures open or reopen without another launch after a hard crash. Physical
 shader success remains mandatory before release. Save/reload/world creation timing,
 audio/haptics/Vulkan regression/endurance remain pending; no release/Store/freeze.
+
+## Exact built202 validation
+
+Clean consumer source `2902468d19ecd4a3d9f9fb5e5c69a27c77061372` plus runtime pin
+`e579bdbda18dd3409cc8d35b0bedcbeed1c908ed` produced ZIP SHA-256
+`97e9ffe2f35644d3ddb0740d5f29f329eb04507156510cf503415c6f6ac7bed6`. The [exact validation receipt](validation/client202-zink-final-2026-11-02.json) retains matching package/module/native/symbol hashes. Local17policy and11native, exact-source-only outside-root checks with an initially empty verified dependency cache, forced allocator-refused original Iris/native flag queries, actual GLFW/SDL6210-to-zero lifecycle, real embedded HotSpot/SDL/host-exec checks, all three publisher host graphics paths with final-cleanup policy, fullPS5targetlink/signature and independent ZIP audit pass. The actual target Flag.o changes; the JVM hash and prior201ZIP remain unchanged.
+
+Actual [policy jobs](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41513059814) and [native jobs](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41513084200) at that source show Ubuntu success and macOS in progress when inspected; full hosted completion pending. No physical202shader/quit/save/timing/audio/Vulkan/endurance result or release acceptance. No release/Store upload.
