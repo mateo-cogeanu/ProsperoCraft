@@ -66,3 +66,10 @@ Leave any failure card open, or reopen at the launcher after a hard crash withou
 starting another game. Actual Iris/shader enable/disable, world creation/timing,
 save/reload, Quit Game/relaunch on Vanilla and Fabric, audio/haptics,26.2+Vulkan
 and endurance remain pending. No release/prerelease/Store or new frozen pass.
+
+## Exact built199 validation
+
+Clean source `fdf42c8408f1c90bd1dc075212b62200f357db38` produced ZIP SHA-256
+`4c61a71dc6bf77cd982dd96db1548f0f2081eca4d159427e6c4d6822885ca46c`. The [exact validation receipt](validation/client199-zink-hints-2026-11-02.json) preserves the matching package/symbol/build hashes and distinct test scopes. Local17 policy and11 native, clean source-only outside-root runs with an initially empty verified dependency cache, original Sodium checks, real GLFW/SDL controls, real host Zink default/no-error contexts, all three original publisher capability paths and independent exact199 package audit pass. Matching target component and GLFW are rebuilt together; Java JVM hash is unchanged from198.
+
+[Hosted policy](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41501376662) passes17 checks on Ubuntu24.04/macOS15 at that source; actual jobs/logs were inspected. [Optional native CI](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41501390250) has Ubuntu success and macOS queued when inspected; completion remains pending. Early mixed host sanitizer runtimes were corrected by rebuilding both GLFW providers and tests with explicit matching LLVM22; final graphics tests pass. These host results do not establish exact199 PS5 launch/Iris/world/quit/performance acceptance. No release/Store upload.
