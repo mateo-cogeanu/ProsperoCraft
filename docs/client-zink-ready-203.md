@@ -28,3 +28,10 @@ paths so accepted202bytes cannot be overwritten. Packaging audits require old DE
 TEST labels absent from the actual launcher class. Exact203physical label/launch/
 shader/quit regression remains pending;202's result is not assigned to new bytes.
 No release/prerelease/Store upload or new frozen milestone is part of this task.
+
+## Exact built203 validation
+
+Clean source `c86333c82614e78ddfc33549c4c31b5ac9eaaee0` produced ZIP SHA-256
+`32beadd1f4de828cdea666b9a601c2b2dff173e973fc8393b0a47244852390f2`. The [exact build receipt](validation/client203-normal-labels-2026-11-02.json) retains matching package/symbol/module/native inputs. Local17policy and exact-source-only outside-root checks with an initially empty verified dependency cache pass. The full target compile/link/signature and independent ZIP audit pass, including absence of DEV TEST/DEVELOPMENT/warning markers from the actual launcher class. JVM and target management native object hashes match202; accepted202ZIP checksum reverified unchanged.
+
+Actual [policy CI jobs](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41514554844) show Ubuntu in progress and macOS queued when inspected; hosted completion pending. No new native implementation or native test rerun is claimed for this presentation change. Physical203labels/launch/shader/quit regression remains pending;202shader/quit acceptance is retained separately. No release/Store upload.
