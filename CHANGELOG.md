@@ -1,5 +1,12 @@
 # Changelog
 
+## Candidate201 — binding ownership and concurrent exit checks
+
+- Record200's successful real UseFMA query, shader-associated OpenAL split-loader startup failure and later no-shader quit rejection; no shader/quit acceptance.
+- Keep org.lwjgl bindings with the packaged parent, refuse missing-parent fallback and preflight finite OpenAL owners without initialization or JAR rewriting.
+- Retry unchanged clean-exit checks for concurrent hook cleanup with a2second grace; keep fatal/nonzero/incomplete refusal and add bounded final-state diagnostics. Test latch-ordered actual child-JVM cleanup and genuine binding inputs.
+- Exact201 shader startup/render, quit/relaunch, save/timing/audio/regressions pending. Release/Store hold remains.
+
 ## Candidate200 — genuine diagnostic management for Iris shadows
 
 - Record199's ComplementaryUnbound_r5.9.3 HIGH crash: original Iris asks the real VM for UseFMA, but jdk.management/HotSpotDiagnosticMXBean is absent. Active world evidence is not shader acceptance.

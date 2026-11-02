@@ -1,0 +1,45 @@
+{
+  "date": "2026-11-02",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.200",
+  "package_sha256": "c16d4a6cd53f4e60e6622eabfdb6c1d46473da097dfdfb05cb0cbbabf9a2122e",
+  "user_report": "Crashed starting with shader; deleted shader and game started; Quit Game also crashed",
+  "current_reopened_run": "client-01.000.200-1793646875-771577831",
+  "first_startup_run": "client-01.000.200-1793646720-824363573",
+  "second_quit_run": "client-01.000.200-1793646758-328395817",
+  "retrieval": "Fresh Safari current/previous reports and Cyberduck read-only download of instance crash reports plus actual launcher-owned latest.log. First local bytes preserved; raw reports private.",
+  "evidence": [
+    "Both200game attempts log genuine diagnostic UseFMA=false; the missing management API from199 is no longer the observed blocker",
+    "Time-correlated original initializing-game crash report at19:12:27: IllegalAccessError because org.lwjgl.openal.ALC10 is defined by a URLClassLoader and org.lwjgl.openal.ALC by app loader; package-private ALC.getICD access fails",
+    "The saved exception is an OpenAL binding ownership failure; shader presence is user-reported trigger, not proof of shader-compiler root cause. Why the parent missed ALC10 in that run is unproven",
+    "Later no-shader run logs Stopping; native queue finish fences and barrier destroys complete, Java exit observer rejects audit, VM EXIT:0 and native unarmed gate precede termination fault",
+    "Actual launcher latest.log retains current session marker and Stopping with no fatal marker after that session; precise game-running/SDL-mask audit condition was not logged",
+    "Retained Controlify invalid audio device haptic errors remain unresolved; not established as shared root cause"
+  ],
+  "next": [
+    "201enforces packaged parent ownership for all org.lwjgl classes; missing parents fail instead of silently falling back to incompatible publisher classes; finite non-initializing OpenAL owner preflight before original Main",
+    "201waits for unchanged clean-exit conditions with a2second retry grace for concurrent shutdown hooks, preserves fatal/nonzero/incomplete refusal, logs final bounded booleans/SDLmask on failure"
+  ],
+  "known_pending": [
+    "Physical201 startup with restored same shader pack, actual shader-enabled world rendering mandatory before release",
+    "Physical clean Quit Game/relaunch; exact prior audit rejection condition and underlying parent lookup miss unproven",
+    "World creation timing/save/reload/audio/haptics/Vulkan/endurance still pending"
+  ],
+  "local_report_sha256": {
+    "first/exceptions.log": "0516056fed76c0829875c86159f9f6f4e8d709923cd7cb54a93d1cbdaf340137",
+    "first/native-stderr.log": "1ad9e25643c6088c5ca8f56e213261cdd47b5cdcf1b340980e0f675395278408",
+    "first/previous-exceptions.log": "da8b0f1e18935b2e846b29a317061e2837f123b83e36da2330b0dd06a0756ebc",
+    "first/previous-native-stderr.log": "eaa94800284f0c91036f346b34f43c4b4352a2122db6045e396b81e22b4be70f",
+    "first/session.txt": "fe1a9341aaeecce04259e1df58739e645d1b7fcd500337f513e6c84e4ea5c419",
+    "first/startup-tail.log": "79b592e95be3d4add6bd69a7eb95f5a4bd3039441fcc7cf898dd1731357bdda5",
+    "first/vm-trace.log": "44eb93b07b8d369b770f24bc15699b1dc56a93571c355c38a71f64c925259435",
+    "ftp-first/crash-reports/crash-2026-11-02_18.47.24-client.txt": "183a1eefba3af72292447eda64fabd70fc77adb3338e1d197cdc5ab0b5a7a9f2",
+    "ftp-first/crash-reports/crash-2026-11-02_19.12.27-client.txt": "0480f6724b52ed363527167381f36b4d87fe26b9d7e15e3f803039aeca239dc2",
+    "ftp-first/launcher-latest.log": "87e0e3f7f6af2a2330d484937de9a920a581c3133a946be76046e311408598f0",
+    "ftp-first/logs/telemetry/20261101-1.json.gz": "8844f11a7952d4b1327df953cc246139cd03ea03f14fa9f9854b88bd56e5c86f",
+    "ftp-first/logs/telemetry/20261102-1.json.gz": "ac73670af3abed54ac6fb4695131f4099be9fbe39d6076c5d0264a6bbdae9d83",
+    "ftp-first/logs/telemetry/20261102-2.json.gz": "4d79ac72d61d5b9e6546d75e34ee71d85d1fa79e87d4ec894fc36e4a015e5803",
+    "ftp-first/logs/telemetry/20261102-3.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "release_store": "HOLD; no release/prerelease/Store or frozen pass"
+}

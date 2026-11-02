@@ -258,6 +258,7 @@ public final class ClientStartup25 {
    Configuration.SPVC_LIBRARY_NAME.set(System.mapLibraryName("ps5spvc"));
    Configuration.MEMORY_ALLOCATOR.set("system");Configuration.OPENAL_LIBRARY_NAME.set(System.mapLibraryName("ps5openal"));Configuration.SDL_LIBRARY_NAME.set(System.mapLibraryName("ps5sdl"));Configuration.VULKAN_LIBRARY_NAME.set(System.mapLibraryName("ps5clientgpu"));Configuration.SHADERC_LIBRARY_NAME.set(System.mapLibraryName("ps5shaderc"));Configuration.SHARED_LIBRARY_EXTRACT_PATH.set(work.resolve("native-cache").toString());
    stage("configure validated036 SPIRV-Cross,035 VMA,033 FreeType,031 STB and029 real OSMesa/OpenGL plus026 libffi/OpenAL and resident SDL/Vulkan/shaderc;other native bindings remain incomplete");
+   ProsperoBindings.verify(MemoryUtil.class.getClassLoader());stage("PS5_BINDINGS packaged OpenAL classes share parent owner");
    System.loadLibrary("ps5clientgpu");System.loadLibrary("ps5clientgl");System.loadLibrary("ps5shaderc");System.loadLibrary("ps5sdl");System.loadLibrary("ps5openal");
    org.lwjgl.sdl.SDLHints.SDL_SetHint("PS5_CONTROLLER_BINDINGS",ProsperoLauncher.controllerBindings());
    boolean controls=org.lwjgl.sdl.SDLHints.SDL_SetHint("PS5_TEMPORARY_CONTROLS",System.getProperty("ps5.temporaryControls","1"));
@@ -299,7 +300,7 @@ public final class ClientStartup25 {
    ProsperoSession session=new ProsperoSession(Path.of("/download0/mc-client/logs"));
    Thread gameThread=Thread.currentThread();
    try(ProsperoExit exit=cleanSystemExit(false)?new ProsperoExit(
-     ()->session.verifyCleanReturn(gameThread.getContextClassLoader()),
+     ()->session.awaitCleanReturn(gameThread.getContextClassLoader(),2000,ClientStartup25::stage),
      ()->{if(!cleanSystemExit(true))throw new IllegalStateException("Clean exit unavailable");},console,ClientStartup25::stage):null){
     if(exit!=null)stage("PS5_SESSION SYSTEM_EXIT_OBSERVER_REGISTERED");
     method.invoke(null,(Object)selectedArguments);
