@@ -15,6 +15,7 @@ extern int ps5glfw_gl_create(_GLFWwindow*,const _GLFWctxconfig*,const _GLFWfbcon
 extern int ps5glfw_gl_destroy(_GLFWwindow*);
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "../sdl/ps5_startup_boundary.h"
 
 static SDL_Window* native(_GLFWwindow* w){return (SDL_Window*)w->null.ps5_window;}
