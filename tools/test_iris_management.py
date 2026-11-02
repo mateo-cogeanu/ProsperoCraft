@@ -16,6 +16,7 @@ from prepare_client_261 import ROOT, verified, validate_metadata, allowed, artif
 def main():
  p=argparse.ArgumentParser(description=__doc__)
  for name in ['runtime-workspace','mod-cache','publisher-cache','java-home','cc','output-dir']:p.add_argument('--'+name,type=Path,required=True)
+ p.add_argument('--deny-flag-malloc',action='store_true')
  a=p.parse_args();mods=a.mod_cache.resolve();runtime=a.runtime_workspace.resolve();cache=a.publisher_cache.resolve()
  iris=json.loads((ROOT/'tests/iris-management-pin.json').read_text());ijar=mods/iris['file'];b=ijar.read_bytes()
  assert len(b)==iris['size']and hashlib.sha256(b).hexdigest()==iris['sha256']and hashlib.sha512(b).hexdigest()==iris['sha512'],'Wrong original Iris'
@@ -28,7 +29,7 @@ def main():
   artifact=lib.get('downloads',{}).get('artifact')
   if artifact:
    path=cache/'libraries'/artifact_path(artifact['path']);verified(artifact,path,offline=True);jars.append(path)
- subprocess.run(['python3',str(runtime/'tools/test_java25_management_extensions.py'),'--java-home',str(a.java_home.resolve()),'--cc',str(a.cc.resolve()),'--output-dir',str(a.output_dir.resolve()),'--class-path',os.pathsep.join(map(str,jars)),'--initialize-class','net.irisshaders.iris.shadows.frustum.advanced.AdvancedShadowCullingFrustum','--boolean-field','FMA_SUPPORT'],check=True)
+ subprocess.run(['python3',str(runtime/'tools/test_java25_management_extensions.py'),'--java-home',str(a.java_home.resolve()),'--cc',str(a.cc.resolve()),'--output-dir',str(a.output_dir.resolve()),'--class-path',os.pathsep.join(map(str,jars)),*(['--deny-flag-malloc']if a.deny_flag_malloc else []),'--initialize-class','net.irisshaders.iris.shadows.frustum.advanced.AdvancedShadowCullingFrustum','--boolean-field','FMA_SUPPORT'],check=True)
  assert ijar.read_bytes()==b and sjar.read_bytes()==sb,'Original mod mutated'
  print('PASS original Iris shadow-frustum clinit and FMA_SUPPORT match real VM false/true through forced genuine runtime JNI; shader loading/rendering/PS5 pending')
 

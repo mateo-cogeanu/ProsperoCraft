@@ -33,6 +33,7 @@ def main():
     parser.add_argument('--publisher-cache', type=Path, required=True)
     parser.add_argument('--glfw-binding', type=Path, required=True)
     parser.add_argument('--oshi-provider', type=Path, required=True, help='Existing genuine consumer OSHI overlay; host fixture metadata avoids unrelated macOS JNA telemetry')
+    parser.add_argument('--final-sdl-cleanup',action='store_true',help='Opt into real final main-thread SDL cleanup during GLFW termination')
     parser.add_argument('--synchronous-context', action='store_true', help='Exercise genuine upstream GALLIUM_THREAD=0 direct context mode')
     parser.add_argument('--check-preparation-refusal', action='store_true', help='Require honest early refusal with a layerless host Vulkan provider')
     parser.add_argument('--prepare-screen', action='store_true', help='Prepare the real screen via a native constructor before the host JVM')
@@ -52,6 +53,7 @@ def main():
             raise ValueError('Stale frontend: ' + name)
     for library in (glfw, absent):
         audit = json.loads(library.with_name('audit.json').read_text())
+        if audit.get('final_sdl_cleanup_header_sha256')!=sha(ROOT/'client/ports/sdl/final_cleanup.h'):raise ValueError('Stale final SDL cleanup header')
         for name, digest in audit['local_source_sha256'].items():
             if sha(ROOT / 'client/ports/glfw' / name) != digest:
                 raise ValueError('Stale GLFW source: ' + name)
@@ -69,6 +71,7 @@ def main():
                UBSAN_OPTIONS='halt_on_error=1:handle_segv=0:handle_sigbus=0:handle_sigfpe=0',
                MESA_SHADER_CACHE_DIR=str(work / 'shader-cache'))
     if args.synchronous_context: env['GALLIUM_THREAD'] = '0'
+    if args.final_sdl_cleanup: env['PROSPERO_GLFW_FINAL_SDL_QUIT']='1'
     def execute(command, name, expected):
         result = subprocess.run(list(map(str, command)), cwd=work, env=env, capture_output=True, text=True, timeout=120)
         text = result.stdout + result.stderr
@@ -161,7 +164,7 @@ def main():
         reports.append({'id': row['id'], 'client_sha256': sha(game), 'cycles': 3,
                         'scope': 'Original GlBackend hints and GlDevice capability creation; injected null debug options stop after capability creation; not Main/title/world'})
     (work / 'audit.json').write_text(json.dumps({'host': platform.platform(), 'scope': __doc__,
-        'synchronous_context': args.synchronous_context, 'prepared_context_refusal_checked': True, 'pre_jvm_screen_preparation': args.prepare_screen, 'early_refusal_checked': args.check_preparation_refusal, 'frontend_sha256': sha(frontend), 'glfw_sha256': sha(glfw), 'missing_zink_glfw_sha256': sha(absent),
+        'final_sdl_cleanup': args.final_sdl_cleanup, 'synchronous_context': args.synchronous_context, 'prepared_context_refusal_checked': True, 'pre_jvm_screen_preparation': args.prepare_screen, 'early_refusal_checked': args.check_preparation_refusal, 'frontend_sha256': sha(frontend), 'glfw_sha256': sha(glfw), 'missing_zink_glfw_sha256': sha(absent),
         'core_sha256': sha(args.core_library), 'opengl_jni_sha256': sha(args.opengl_library),
         'versions': reports, 'native_sanitizers': 'ASan/UBSan frontend, GLFW and test driver; Mesa/lavapipe not instrumented',
         'ps5': 'Not executed; context/presentation/game/save/regression pending'}, indent=2) + '\n')

@@ -26,6 +26,10 @@ public class ExitCheck{
    if(mode.equals("fatal"))Files.writeString(logs.resolve("latest.log"),"[Render thread/FATAL]: failed\n",StandardOpenOption.APPEND);
    if(mode.equals("running"))net.minecraft.client.Minecraft.instance.running=true;
    if(mode.equals("sdl"))org.lwjgl.sdl.SDLInit.live=32;
+   if(mode.equals("residual")){System.setProperty("ps5.finalSdlExitCleanup","true");org.lwjgl.sdl.SDLInit.live=0x6210;}
+   if(mode.equals("video")){System.setProperty("ps5.finalSdlExitCleanup","true");org.lwjgl.sdl.SDLInit.live=0x6230;}
+   if(mode.equals("unknown")){System.setProperty("ps5.finalSdlExitCleanup","true");org.lwjgl.sdl.SDLInit.live=0x10000;}
+
    if(mode.equals("delayed-sdl")){
     org.lwjgl.sdl.SDLInit.live=32;
     Runtime.getRuntime().addShutdownHook(new Thread(()->{try{auditEntered.await();Thread.sleep(120);}catch(InterruptedException failure){throw new AssertionError(failure);}org.lwjgl.sdl.SDLInit.live=0;},"Concurrent real cleanup hook"));
@@ -39,12 +43,13 @@ public class ExitCheck{
   for name,source in sources.items():
    p=w/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(source)
   subprocess.run([jdk/'bin/javac','--release','25','-d',w,ROOT/'client/launcher/java/ProsperoExit.java',ROOT/'client/launcher/java/ProsperoSession.java',*[w/name for name in sources]],check=True)
-  for mode in ('clean','stale','fatal','running','sdl','missing','removed','arm-failure','checkpoint-failure','nonzero','delayed-sdl'):
+  for mode in ('clean','stale','fatal','running','sdl','missing','removed','arm-failure','checkpoint-failure','nonzero','delayed-sdl','residual','video','unknown'):
    logs=w/mode;result=subprocess.run([jdk/'bin/java','-cp',w,'ExitCheck',logs,mode],timeout=20)
    assert result.returncode==(7 if mode=='nonzero'else 0),mode
    assert (logs/'armed').exists()==(mode in ('clean','nonzero','delayed-sdl')),mode
    audit=(logs/'audit').read_text();assert 'PRIVATE_TEXT'not in audit
    if mode in ('clean','nonzero','delayed-sdl'):assert (logs/'audit-state').read_text()=='PS5_SESSION AUDIT all clean',mode
+   if mode=='residual':assert 'sdlMask=6210'in (logs/'audit-state').read_text()
    if mode=='sdl':assert 'sdlMask=20' in (logs/'audit-state').read_text()
    if (logs/'audit-state').exists():assert 'PRIVATE_TEXT'not in (logs/'audit-state').read_text()
    if mode not in ('clean','nonzero','delayed-sdl','removed'):assert 'SYSTEM_EXIT_REJECTED'in audit,mode

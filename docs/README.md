@@ -64,3 +64,4 @@ the documentation checker.
 - [199 default fullscreen hint and genuine no-error contexts](client-zink-hints-199.md)
 - [200 genuine management API for Iris shadow initialization](client-zink-management-200.md)
 - [201 packaged binding ownership and concurrent shutdown audit](client-zink-ownership-201.md)
+- [202 native small flag queries and final SDL lifecycle](client-zink-final-202.md)

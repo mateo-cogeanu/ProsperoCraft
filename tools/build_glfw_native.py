@@ -35,6 +35,7 @@ def build(runtime,host=False,offline=False,zink_library=None,output_dir=None,lld
   subprocess.run(['clang','-dynamiclib','-fsanitize=address,undefined',*map(str,objects),*([str(zink_library.resolve())]if zink_library else[]),*optional,'-L/opt/homebrew/lib','-lSDL3','-o',str(out/'libps5glfw.dylib')],check=True)
  else:subprocess.run([str(lld or Path('/opt/homebrew/opt/lld/bin/ld.lld')),'-r',*map(str,objects),'-o',str(result)],check=True)
  audit={'upstream':pin['upstream'],'scope':pin['scope'],'target':'host ASan/UBSan with real SDL dummy window; Vulkan creation disabled only in host fixture'if host else'PS5 real SDL Vulkan window','source_sha256':{p.name:hashlib.sha256(p.read_bytes()).hexdigest()for p in paths},'local_source_sha256':{p.name:hashlib.sha256(p.read_bytes()).hexdigest()for p in port.iterdir()if p.is_file()},'console':'Pending26.2startup/menu/input/gameplay'}
+ audit['final_sdl_cleanup_header_sha256']=hashlib.sha256((ROOT/'client/ports/sdl/final_cleanup.h').read_bytes()).hexdigest()
  audit['zink_frontend_header_sha256']=hashlib.sha256((ROOT/'client/ports/zink/frontend.h').read_bytes()).hexdigest()
  if host:audit['output_sha256']=hashlib.sha256((out/'libps5glfw.dylib').read_bytes()).hexdigest()
  (out/'audit.json').write_text(json.dumps(audit,indent=2)+'\n');return result

@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-02",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.201",
+  "package_sha256": "83a964e2cd30081c708582cda57582b2ee3d78a242697a13b15d8fe470384197",
+  "current_shader_run": "client-01.000.201-1793648157-711110886",
+  "retained_quit_run": "client-01.000.201-1793648112-297271765",
+  "user_report": "Started game with shader; screen turned black. Quit Game still not fixed.",
+  "retrieval": "Fresh Safari current/previous reports with matching identities; raw first bytes retained locally",
+  "evidence": [
+    "Both201runs pass genuine management UseFMA and packaged parent OpenAL preflight",
+    "Current Iris shadow-frustum static initializer throws OutOfMemoryError from original native Flag.getFlags when re-reading real UseFMA later under loading pressure; missing module/parent binding no longer observed first blockers",
+    "Other Iris missing-program errors, getifaddrs ENOMEM and Controlify invalid haptic device errors also recorded; not all assigned to one cause",
+    "Retained quit audit records current=true stopping=true failure=false instanceStopped=true sdlMask=6210 after2second grace, then rejection/VM EXIT:0/unarmed native termination",
+    "0x6210 is live SDL AUDIO|JOYSTICK|GAMEPAD|EVENTS without VIDEO. Consumer event facade intentionally owns one process-lifetime EVENTS reference; original zero-before-finalization assumption was incomplete"
+  ],
+  "next": [
+    "Runtime0136per-call small flag-query stack storage (up to16records), real JMM/values preserved; large queries retain malloc/refusal",
+    "202explicit final SDL_Quit on real main-thread GLFW terminate after window/video release, permitted residual mask only; Java audit still demands maskzero, postVMnative hook verifieszero again before replacement. No SDL cleanup from VMThread."
+  ],
+  "limitations": [
+    "Underlying libc refusal and other native allocation sites unresolved",
+    "Shader black screen not an accepted render; exact202pack/load/render/save/quit/timing/regression still pending",
+    "SDL finalization is a consumer lifecycle integration, not a bypass of real native close/worker joins or return checks"
+  ],
+  "local_report_sha256": {
+    "exceptions.log": "7fb7924f3241ad154d332aaeda391d642510f7e88ccf86f65b95f0c24cb8736d",
+    "native-stderr.log": "9b3a0be5eef994644d0d3677c97ae2e8e4cc483d8d47cf9405cef0c06d84c99a",
+    "previous-exceptions.log": "e12f26de59d6f34bbf0c2c8fe4838de67bb75667d772f00d248e08c9389a083e",
+    "previous-native-stderr.log": "8d062e304979c763edd61ffb187264886ba37f240f57048485093c84403d7469",
+    "session.txt": "68fe784ec5181eded941b554ec750cf5161c393dcb01709fb3b52a4616776a05",
+    "startup-tail.log": "5183589345ee458f5676016866d6f4a157e0ffdcb981af0421170c582c013d66",
+    "vm-trace.log": "5b52ab7e4f83e27a4ac3c7165f9c8b85c29e56082f25c81de590cad0f75ac17b"
+  },
+  "release_store": "HOLD; shader physical exact-build success mandatory. No release/prerelease/Store or frozen pass"
+}

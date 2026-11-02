@@ -1,13 +1,14 @@
 {
   "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
-  "commit": "724896c9711bbb7ccb24e6eec5f4ff8120e6d9bf",
+  "commit": "e579bdbda18dd3409cc8d35b0bedcbeed1c908ed",
   "source_sha256": {
     "tools/java25_builtin_runtime.py": "7e6a86d8a2295a0a22476dfd91591fe55738362fee3feb0259fa82373e6d6ddb",
     "tools/java25_boot_image.py": "0ca07d8be6aa2a020a3af2a4d04ce8f4ef859be4a0890efb32f516fc04fc66f2",
     "tools/package_java25_jni.py": "0a35f7d2dfa825bef80b61efd337907173ab8fde2a0dc33278753758eec0c452",
-    "tools/test_java25_management_extensions.py": "088d0c97a9ba0748c1ebd90402af6123af8b11ddd9496f5a2e12e88b19e05773",
-    "java25/upstream.json": "5926e34b50d88f06b9dd3b6d96a6fa92eb6b7572ecec674236147a3f7c2b1e26"
+    "tools/test_java25_management_extensions.py": "a02c535e29516f0c42c6d9353966a6c93121784934b3a31b88909606d5bfff03",
+    "java25/upstream.json": "5926e34b50d88f06b9dd3b6d96a6fa92eb6b7572ecec674236147a3f7c2b1e26",
+    "java25/patches/0136-ps5-management-small-query-stack.patch": "70ac185f3ec48a3c578217b4c12a42209905d6854848870bb4aa4523b44ab226"
   },
-  "scope": "Opt-in genuine target jdk.management classes/provider and separate resident management_ext JNI/JMM; actual UseFMA data, no VM flag spoof or mod JAR transformation",
-  "console": "199missing HotSpotDiagnosticMXBean crashes original Iris shadow initializer;200API/shader/world/save/quit validation pending"
+  "scope": "Opt-in genuine target jdk.management classes/provider and separate resident management_ext JNI/JMM; actual UseFMA data, no VM flag spoof or mod JAR transformation; PS5 per-call16record native stack scratch for small flag queries; larger malloc/refusal retained",
+  "console": "201reproduces OutOfMemoryError in real Flag.getFlags during Iris shadow initialization;202patch0136query/shader/world/quit pending"
 }

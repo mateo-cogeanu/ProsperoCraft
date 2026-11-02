@@ -4,6 +4,7 @@
  */
 #include "internal.h"
 #include <SDL3/SDL.h>
+#include "../sdl/final_cleanup.h"
 extern void ps5glfw_extensions(char**);
 extern int ps5glfw_vulkan_load(void);
 extern void ps5glfw_vulkan_unload(void);
@@ -13,6 +14,7 @@ extern int ps5glfw_gl_available(void);
 extern int ps5glfw_gl_create(_GLFWwindow*,const _GLFWctxconfig*,const _GLFWfbconfig*);
 extern int ps5glfw_gl_destroy(_GLFWwindow*);
 #include <string.h>
+#include <stdlib.h>
 #include "../sdl/ps5_startup_boundary.h"
 
 static SDL_Window* native(_GLFWwindow* w){return (SDL_Window*)w->null.ps5_window;}
@@ -42,7 +44,16 @@ static int init(void){
  PS5_BOUNDARY("GLFW platform init complete");
  SDL_free(displays);return GLFW_TRUE;
 }
-static void terminate(void){ps5glfw_vulkan_unload();SDL_free(_glfw.null.clipboardString);_glfw.null.clipboardString=NULL;SDL_QuitSubSystem(SDL_INIT_VIDEO|SDL_INIT_EVENTS);}
+static void terminate(void){
+ ps5glfw_vulkan_unload();SDL_free(_glfw.null.clipboardString);_glfw.null.clipboardString=NULL;
+ SDL_QuitSubSystem(SDL_INIT_VIDEO|SDL_INIT_EVENTS);
+ const char* final=getenv("PROSPERO_GLFW_FINAL_SDL_QUIT");
+ if(final&&strcmp(final,"1")==0){
+  fprintf(stderr,"PS5_SESSION GLFW main-thread SDL final cleanup enter mask=%x\n",SDL_WasInit(0));
+  bool done=prospero_sdl_finalize();
+  fprintf(stderr,"PS5_SESSION GLFW final cleanup returned clean=%d mask=%x\n",done,SDL_WasInit(0));
+ }
+}
 static GLFWbool mode(_GLFWmonitor* m,GLFWvidmode* out){
  const SDL_DisplayMode* value=SDL_GetCurrentDisplayMode(m->null.ps5_display);
  if(!value){error();return GLFW_FALSE;}
@@ -161,7 +172,7 @@ static void dispatch(const SDL_Event* e){
  }
 }
 static void poll(void){SDL_Event e;while(SDL_PollEvent(&e))dispatch(&e);}
-static void wait(void){SDL_Event e;if(SDL_WaitEvent(&e))dispatch(&e);poll();}
+static void waitEvents(void){SDL_Event e;if(SDL_WaitEvent(&e))dispatch(&e);poll();}
 static void waitTimeout(double t){SDL_Event e;int ms=t>2147483?2147483000:(int)(t*1000);if(SDL_WaitEventTimeout(&e,ms))dispatch(&e);poll();}
 static void post(void){SDL_Event e={0};e.type=SDL_EVENT_USER;SDL_PushEvent(&e);}
 static void extensions(char** out){ps5glfw_extensions(out);}
@@ -173,7 +184,7 @@ void _glfwConfigurePs5(_GLFWplatform* p){
  p->showWindow=show;p->hideWindow=hide;p->focusWindow=focus;p->iconifyWindow=iconify;p->restoreWindow=restore;p->maximizeWindow=maximize;p->requestWindowAttention=attention;p->setWindowMonitor=setMonitor;
  p->windowFocused=focused;p->windowIconified=iconified;p->windowVisible=visible;p->windowMaximized=maximized;p->windowHovered=hovered;p->framebufferTransparent=transparent;p->getWindowOpacity=opacity;p->setWindowOpacity=setOpacity;p->setWindowResizable=resizable;p->setWindowDecorated=decorated;p->setWindowFloating=floating;p->setWindowMousePassthrough=passthrough;
  p->getCursorPos=cursorPos;p->setCursorPos=warp;p->setCursorMode=cursorMode;p->setRawMouseMotion=raw;p->rawMouseMotionSupported=rawSupported;p->getKeyScancode=scancode;p->getScancodeName=keyName;p->createCursor=makeCursor;p->createStandardCursor=standardCursor;p->destroyCursor=freeCursor;p->setCursor=setCursor;p->setClipboardString=clipboardSet;p->getClipboardString=clipboardGet;
- p->pollEvents=poll;p->waitEvents=wait;p->waitEventsTimeout=waitTimeout;p->postEmptyEvent=post;p->getRequiredInstanceExtensions=extensions;p->getPhysicalDevicePresentationSupport=present;p->createWindowSurface=surface;
+ p->pollEvents=poll;p->waitEvents=waitEvents;p->waitEventsTimeout=waitTimeout;p->postEmptyEvent=post;p->getRequiredInstanceExtensions=extensions;p->getPhysicalDevicePresentationSupport=present;p->createWindowSurface=surface;
 }
 
 /* Minecraft's optional GLFW IME extension. PS5 has no native composition

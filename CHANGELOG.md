@@ -1,5 +1,12 @@
 # Changelog
 
+## Candidate202 — native flag scratch and real SDL finalization
+
+- Record201shader black screen with native Flag.getFlags OOM and quit audit SDLmask6210 despite stopped game/no-fatal evidence. No shader/quit pass.
+- Pin runtime0136small-query per-call stack storage; preserve real JMM values and larger malloc/refusal, original mod/game JARs and VM flags.
+- Finalize real SDL on its main-thread GLFW termination path after video release, opt-in/permitted mask only. Java still demands SDLzero; postVMnative hook verifieszero again and never performs main-thread cleanup itself.
+- Actual denied-allocation original Iris tests and genuine SDL/GLFW/embedded-VM lifecycle checks; exact202physical pack/render/quit/save/timing/audio/regressions pending. Release/Store hold remains.
+
 ## Candidate201 — binding ownership and concurrent exit checks
 
 - Record200's successful real UseFMA query, shader-associated OpenAL split-loader startup failure and later no-shader quit rejection; no shader/quit acceptance.

@@ -47,6 +47,9 @@ static void initialize_toolkit_once(){
 void initialize_toolkit_graphics(){pthread_once(&toolkit_once,initialize_toolkit_once);}
 }
 #include "session_restart.hpp"
+#ifdef PROSPERO_FINAL_SDL_EXIT
+extern "C" unsigned SDL_WasInit(unsigned);
+#endif
 #include "../ports/oshi/native_cpu.hpp"
 #include "../ports/oshi/hardware_labels.hpp"
 #include "../launcher/hardware_identity.hpp"
@@ -201,6 +204,11 @@ void vm_exit(int code) {
  log_stage(clean_exit?"PS5_SESSION native exit gate accepted":"PS5_SESSION native exit gate unarmed or nonzero");
  if(clean_exit) {
   // Java hooks and real HotSpot VM_Exit cleanup have completed. No JNI here.
+#ifdef PROSPERO_FINAL_SDL_EXIT
+  const bool sdl_clean=SDL_WasInit(0)==0;
+  log_stage(sdl_clean?"PS5_SESSION native SDL final cleanup complete":"PS5_SESSION native SDL final cleanup refused; no restart");
+  if(!sdl_clean)for(;;)(void)sceKernelUsleep(1000000);
+#endif
   log_stage("PS5_SESSION verified System.exit(0); replacing process for library");
   int rc=prospero_session::restart_library();
   char note[128];std::snprintf(note,sizeof(note),"PS5_SESSION exit restart returned0x%08x; keep open for logs",unsigned(rc));log_stage(note);
@@ -397,6 +405,9 @@ void run_test(int i) {
   log_stage("Runtime ENTER/DONE checkpoint sampling enabled: 1 in 4096");
   log_stage("Core image opened and JIMAGE header verified");
   JavaVMOption options[]={
+#ifdef PROSPERO_FINAL_SDL_EXIT
+   {const_cast<char *>("-Dps5.finalSdlExitCleanup=true"),nullptr},
+#endif
 #ifdef PROSPERO_MANAGEMENT_EXT
    {const_cast<char *>("--add-modules=jdk.management"),nullptr},
    {const_cast<char *>("-Dps5.managementExtensions=true"),nullptr},

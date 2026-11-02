@@ -45,7 +45,7 @@ int main(void){
   assert(!glfwSetPreeditCallback(w,(void*)onchar));assert(glfwSetPreeditCallback(w,NULL)==(void*)onchar);assert(!glfwSetIMEStatusCallback(w,(void*)onclose));assert(glfwSetIMEStatusCallback(w,NULL)==(void*)onclose);
   assert(!glfwGetInputMode(w,208903));glfwSetInputMode(w,208903,0);glfwSetPreeditCursorRectangle(w,1,2,3,4);glfwGetPreeditCursorRectangle(w,&x,&y,NULL,NULL);assert(x==1&&y==2);
   e=(SDL_Event){0};e.window.type=SDL_EVENT_WINDOW_CLOSE_REQUESTED;e.window.windowID=id;SDL_PushEvent(&e);glfwPollEvents();assert(closed==run+1&&glfwWindowShouldClose(w));
-  glfwDestroyWindow(w);glfwWindowHint(GLFW_CLIENT_API,GLFW_OPENGL_API);assert(!glfwCreateWindow(320,200,"No invented GL",NULL,NULL));assert(glfwGetError(NULL)==GLFW_API_UNAVAILABLE);glfwTerminate();assert(!(SDL_WasInit(SDL_INIT_VIDEO)&SDL_INIT_VIDEO));
+  glfwDestroyWindow(w);glfwWindowHint(GLFW_CLIENT_API,GLFW_OPENGL_API);assert(!glfwCreateWindow(320,200,"No invented GL",NULL,NULL));assert(glfwGetError(NULL)==GLFW_API_UNAVAILABLE);assert(SDL_Init(SDL_INIT_AUDIO|SDL_INIT_GAMEPAD|SDL_INIT_EVENTS));assert(setenv("PROSPERO_GLFW_FINAL_SDL_QUIT","1",1)==0);glfwTerminate();assert(SDL_WasInit(0)==0);unsetenv("PROSPERO_GLFW_FINAL_SDL_QUIT");
  }
  return 0;
 }
@@ -53,5 +53,5 @@ int main(void){
 with tempfile.TemporaryDirectory()as d:
  w=Path(d);(w/'test.c').write_text(source);lib=ROOT/'build/glfw-native/host';includes=lib/'source/include'
  subprocess.run(['clang','-std=c11','-fsanitize=address,undefined','-I'+str(includes),'-I/opt/homebrew/include',str(w/'test.c'),str(lib/'libps5glfw.dylib'),'-L/opt/homebrew/lib','-lSDL3','-o',str(w/'test')],check=True)
- subprocess.run([str(w/'test')],check=True,env=dict(os.environ,SDL_VIDEODRIVER='dummy'),timeout=30)
+ subprocess.run([str(w/'test')],check=True,env=dict(os.environ,SDL_VIDEODRIVER='dummy',SDL_AUDIODRIVER='dummy'),timeout=30)
 print('PASS genuine GLFW core + SDL window/monitor, allocator refusal/monitor cleanup then3 init/teardown cycles, key state/150held-repeat callbacks across3lifecycles/releases, Unicode including emoji, mouse/button/scroll, optional IME ABI/disabled state/rectangle, close callback and explicit OpenGL refusal under ASan/UBSan. Host SDL dummy window only; PS5 and Vulkan pending.')
