@@ -96,15 +96,7 @@ If Play says Coming soon, compare the **version and loader** with the compatibil
 
 ## Roadmap
 
-These are directions, without delivery dates or a promised order:
-
-- **More playable versions:** complete Fabric 26.2 world/audio/stability testing and validate further 26.x releases and snapshots individually.
-- **Smoother shader play:** measure frame-time costs and improve compatible shader workloads while retaining visual quality. The shader path already exists; consistent performance remains open.
-- **More mod choices:** add NeoForge instance support and `.mrpack` imports so compatible mod setups are easier to install.
-- **Faster access to favorites:** revisit the deferred Home page for saved worlds and servers. A [development 094 prototype](docs/client-home-library-094.md) exists; it was omitted from published builds.
-- **Launcher atmosphere:** add custom menu music by CogiArt.
-
-LAN hosting, microphone capture and fully uncapped presentation remain deferred or unimplemented. Older Minecraft support would also need Java 21/17 from the [separate runtime project](https://github.com/mateo-cogeanu/ps5-java25-homebrew) and game-specific compatibility work; those runtimes are not bundled here.
+![ProsperoCraft roadmap: completed features in white, followed by planned NeoForge, older Minecraft versions, Forge and .mrpack imports](assets/roadmap/prosperocraft-roadmap.png)
 
 ### Completed milestones
 
