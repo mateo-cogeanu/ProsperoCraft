@@ -2,7 +2,8 @@
 
 Code-drawn artwork requested by the maintainer on 2026-11-03. White bubbles mark
 completed items; dark bubbles mark planned older-version support along a winding
-road. Wording and status follow the maintainer's requested roadmap. This graphic
+road on a dark background. Thin connectors, flat cards and a monochrome palette
+keep the presentation minimal. Wording and status follow the maintainer's requested roadmap. This graphic
 does not replace the scoped build, console or compatibility validation records.
 
 - `prosperocraft-roadmap.png`: 1800 × 1470 sharing image, rendered at twice the

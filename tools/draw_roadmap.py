@@ -6,7 +6,6 @@ Requires Pillow and explicit regular/bold TrueType font files. No generated art.
 import argparse
 from html import escape
 from pathlib import Path
-import math
 from PIL import Image, ImageDraw, ImageFont
 
 
@@ -17,7 +16,7 @@ def main():
     p.add_argument('--output', type=Path, required=True)
     a = p.parse_args()
     width, height, scale = 1800, 1470, 2
-    bg, ink, muted = '#E9EDE9', '#172E26', '#61746A'
+    bg, ink, muted = '#101413', '#131816', '#87928C'
     canvas = Image.new('RGB', (width * scale, height * scale), bg)
     draw = ImageDraw.Draw(canvas)
     svg = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
@@ -43,14 +42,8 @@ def main():
         draw.ellipse(tuple(round(v * scale) for v in (x-r, y-r, x+r, y+r)), fill=fill)
         svg.append(f'<circle cx="{x}" cy="{y}" r="{r}" fill="{fill}"/>')
 
-    rect(76, 76, 8, 43, '#5D9D7A', 4)
-    text(104, 81, 'PROSPEROCRAFT', 30, bold=True)
-    text(76, 155, 'The road ahead.', 84, bold=True)
-    text(80, 260, 'More ways to play. More versions to explore.', 28, muted)
-    rect(1365, 82, 160, 42, '#FFFFFF', 21)
-    text(1391, 93, 'DONE', 18, bold=True)
-    rect(1540, 82, 184, 42, ink, 21)
-    text(1566, 93, 'PLANNED', 18, '#FFFFFF', True)
+    text(76, 92, 'ProsperoCraft', 58, '#F4F6F4', True)
+    text(79, 171, 'Roadmap', 28, muted)
 
     # Continuous three-row road, sampled from cubic curves for both formats.
     road = [(258 + i * 1284 / 100, 550) for i in range(101)]
@@ -62,33 +55,23 @@ def main():
     road.extend((1542-i*1284/100,910) for i in range(1,101))
     curve((258,910),(40,910),(40,1270),(258,1270))
     road.extend((258+i*856/100,1270) for i in range(1,101))
-    line(road, '#CAD4CC', 57)
-    line(road, '#52685C', 43)
-    # Evenly spaced lane marks follow arc length, including the curved sections.
-    position = 0.0
-    for start,end in zip(road,road[1:]):
-        length=math.dist(start,end)
-        if int(position/30)%2 == 0:
-            line([start,end], '#DEE7DD', 3)
-        position += length
+    line(road, '#35403A', 3)
+    line(road[:101], '#A9B6AD', 3)
     for x,y,direction in [(940,550,1),(870,910,-1),(720,1270,1)]:
-        line([(x-10*direction,y-9),(x,y),(x-10*direction,y+9)], '#FFFFFF', 3)
+        line([(x-7*direction,y-6),(x,y),(x-7*direction,y+6)], muted, 2)
 
     def card(x, y, title, done, road_y, number):
         w,h=364,158; center=x+w/2
-        line([(center,y+h),(center,road_y-16)], '#AFBFB2', 2)
-        rect(x,y+5,w,h,'#DCE3DC',25)
-        rect(x,y,w,h,'#FFFFFF' if done else ink,25)
-        circle(center,road_y,16,bg)
-        circle(center,road_y,10,'#5D9D7A' if done else ink)
-        if done:
-            circle(x+30,y+30,10,'#E2EFE4')
-            line([(x+25,y+30),(x+29,y+34),(x+36,y+26)],'#3F7B57',2)
-            text(x+49,y+21,'DONE',15,'#4D7D60',True)
-        else:
-            text(x+26,y+22,f'{number:02d}  /  PLANNED',15,'#9DB9A6',True)
+        line([(center,y+h),(center,road_y-12)], '#35403A', 2)
+        if not done:
+            rect(x-1,y-1,w+2,h+2,'#303A34',21)
+        rect(x,y,w,h,'#F4F6F3' if done else '#1A211D',20)
+        circle(center,road_y,11,bg)
+        circle(center,road_y,7,'#F4F6F3' if done else '#68786D')
+        text(x+26,y+23,'DONE' if done else f'{number:02d} / PLANNED',13,
+             '#617168' if done else '#84958A')
         for i,label in enumerate(title):
-            text(x+26,y+64+i*37,label,30,ink if done else '#FFFFFF',True)
+            text(x+26,y+64+i*37,label,30,ink if done else '#D0D9D2',True)
 
     xs=[76,504,932,1360]
     completed=[['Full 26.x.x support'],['Microphone support'],['Shader support'],['OpenGL support']]
@@ -100,9 +83,11 @@ def main():
         card(x,690,[version+' support'],False,910,n)
     for n,(x,title) in enumerate(zip(xs,[['1.17.x support'],['1.16.x support'],['Older versions']]),5):
         card(x,1050,title,False,1270,n)
-    circle(1114,1270,7,'#FFFFFF')
-    text(80,1375,'PROSPEROCRAFT  /  DEVELOPMENT ROADMAP',18,muted,True)
-    text(1242,1375,'COMPLETED → UPCOMING',18,muted,True)
+    circle(1114,1270,4,'#84958A')
+    circle(84,1380,5,'#F4F6F3')
+    text(101,1370,'Completed',18,muted)
+    circle(256,1380,5,'#68786D')
+    text(273,1370,'Planned',18,muted)
     a.output.mkdir(parents=True,exist_ok=True)
     (a.output/'prosperocraft-roadmap.svg').write_text('\n'.join(svg+['</svg>'])+'\n')
     canvas.resize((width,height),Image.Resampling.LANCZOS).save(a.output/'prosperocraft-roadmap.png',optimize=True)
