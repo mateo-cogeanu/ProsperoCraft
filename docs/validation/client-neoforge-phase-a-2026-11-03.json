@@ -185,7 +185,24 @@
     "neoforge_installer_or_game": "Not executed."
   },
   "hosted_ci": {
-    "status": "pending source publication; inspect actual jobs after push"
+    "status": "passed",
+    "source_commit": "8f527e572cb6edd26c8245d6897572fce6ae24e2",
+    "url": "https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41695186157",
+    "jobs": [
+      {
+        "name": "policy (ubuntu-24.04)",
+        "conclusion": "success",
+        "checks": 17
+      },
+      {
+        "name": "policy (macos-15)",
+        "conclusion": "success",
+        "checks": 17
+      }
+    ],
+    "completed_jobs_and_logs_inspected": true,
+    "log_sha256": "4004e59076ea84e5087d056489988e821eef29f848eab752162661f8c7d639ee",
+    "scope": "Existing host policy tests on Ubuntu/macOS; no NeoForge install/game execution or physical-console result."
   },
   "physical_console": {
     "status": "not run",
