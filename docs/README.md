@@ -13,7 +13,7 @@ history; a development entry does not imply a public release.
 | Full target preparation, ownership and archived source | [Source organization](source-organization.md) |
 | Shared bootstrap, current identity and legacy package audits | [Tooling sharing](tooling-sharing.md) |
 | NeoForge client research; implementation decisions pending | [Phase A plan](client-neoforge-plan.md), [inspection and validation](validation/client-neoforge-phase-a-2026-11-03.json) |
-| 1.21.x before NeoForge; all twelve releases Coming soon; LWJGL overlay decision pending | [Phase A draft](client-1.21-plan.md), [publisher lock](../client/1.21.lock.json), [inspection and validation](validation/client121-phase-a-2026-11-03.json) |
+| 1.21.x Vanilla first; local205 tests1.21.11; other releases/Fabric blocked | [Local205](client-1.21-205.md), [Phase A draft](client-1.21-plan.md), [publisher lock](../client/1.21.lock.json), [inspection and validation](validation/client121-phase-a-2026-11-03.json) |
 | Published 167 scope | [Release notes](releases/client-input-fabric-167.md), [console acceptance](validation/client167-console-acceptance-2026-10-30.json) |
 | Microphone feature handoff for another model | [Start here](handoffs/microphone-174/00-START-HERE.md), [continuation prompt](handoffs/microphone-174/03-CONTINUATION-PROMPT.md) |
 | Released179 — automatic microphone, no launcher mic menu | [Release notes](releases/client-microphone-default-179.md), [console acceptance](validation/client179-console-acceptance-2026-10-31.json), [publication/Store submission](validation/client179-store-publication-2026-10-31.json) |

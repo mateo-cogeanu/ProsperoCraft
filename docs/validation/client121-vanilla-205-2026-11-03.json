@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-03",
+  "status": "Development; local205 packaging pending; no physical acceptance",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.205",
+  "runtime_commit": "d19b3fd8bf7c2108c48c63502c0a325f4841a8ce",
+  "execution_order": "all121Vanilla before Fabric; only1.21.11 Vanilla enabled in205",
+  "local_checks": {
+    "fast": "PASS19/19,22.7seconds; includes mapped shutdown negative controls",
+    "native": "PASS11/11,11.4seconds",
+    "333_core_stb_callbacks": "PASS; real core/memory,1600 concurrent closure lifetimes,3 PNG cycles with guards and invalid inputs",
+    "333_ownership": "PASS; actual native code ASan/UBSan/XcheckJNI,32 threads/3200 foreign-table cycles,allocation/key refusals,rollback and balanced ownership",
+    "333_zink": "PASS;3 real Zink context cycles/readback/fence/mapped buffer and original unchanged1.21.11 GlDevice constructor; debug0,null shader lookup",
+    "26x_zink": "PASS existing26.1/26.1.1/26.1.2 original capability-boundary tests;17.5seconds",
+    "full_assets_main": "45second bounded original1.21.11 desktop Main; atlas/OpenAL initialization; deliberate timeout; no world/title/exit acceptance",
+    "target": "PASS333208units,runtime137java.base,205compile/link/converter"
+  },
+  "hosted_ci": "pending source push",
+  "source_only": "PASS19/19,22.9seconds; tracked source copy, initially empty explicit dependency cache, invocation from/tmp; only2pinned host libraries fetched",
+  "package": "pending",
+  "pending": [
+    "Exact205PS5 install/title/world/save/reload/audio/input/Quit/library/relaunch",
+    "26.1/.1/.2,26.2,26.3 Vanilla/Fabric and supported snapshot regression",
+    "Physical shader loading/rendering before release unless explicitly scoped out",
+    "Matching-version server/resource pack/authenticated session",
+    "Comparable full-game memory/thread/descriptor peaks and endurance",
+    "Earlier121Vanilla renderer/OSHI integration; Fabric deferred"
+  ],
+  "release_store": "No action; physical exact-build confirmation and explicit authorization required"
+}

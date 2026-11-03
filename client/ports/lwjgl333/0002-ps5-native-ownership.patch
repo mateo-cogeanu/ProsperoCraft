@@ -1,0 +1,204 @@
+--- a/modules/lwjgl/core/src/main/c/common_tools.h
++++ b/modules/lwjgl/core/src/main/c/common_tools.h
+@@ -4,6 +4,9 @@
+  */
+ #pragma once
+
++#ifdef LWJGL_PS5
++    #include "PS5Config.h"
++#endif
+ #ifdef LWJGL_WINDOWS
+     #include "WindowsConfig.h"
+ #endif
+@@ -54,6 +57,24 @@
+  *  \                                                             /                                       \
+  *   -> nfunction downcall (any module) -> saveErrno/saveLastError                                         -> nsetupEnvData downcall (core module)
+  */
++#ifdef LWJGL_PS5
++// A different resident LWJGL generation may own the thread's existing JNI copy.
++extern EnvData* ps5_lwjgl333_envdata(JNIEnv* env);
++extern void ps5_lwjgl333_begin_shutdown(void);
++#define saveErrno() \
++    jint errnum = errno; \
++    EnvData *envData = ps5_lwjgl333_envdata(__env); \
++    if (envData == NULL) { \
++        jclass TLU = (*__env)->FindClass(__env, "org/lwjgl/system/ThreadLocalUtil"); \
++        if (TLU == NULL) (*__env)->FatalError(__env, "LWJGL333 ThreadLocalUtil unavailable"); \
++        jmethodID setup = (*__env)->GetStaticMethodID(__env, TLU, "setupEnvData", "()J"); \
++        if (setup == NULL) (*__env)->FatalError(__env, "LWJGL333 env setup unavailable"); \
++        envData = (EnvData*)(uintptr_t)(*__env)->CallStaticLongMethod(__env, TLU, setup); \
++        if ((*__env)->ExceptionCheck(__env) || envData == NULL) (*__env)->FatalError(__env, "LWJGL333 env setup refused"); \
++        (*__env)->DeleteLocalRef(__env, TLU); \
++    } \
++    envData->errnum = errnum;
++#else
+ #define saveErrno() \
+     jint errnum = errno; \
+     EnvData *envData = (EnvData *)(*__env)->reserved2; \
+@@ -62,6 +83,8 @@
+         envData = (EnvData *)(uintptr_t)(*__env)->CallStaticLongMethod(__env, TLU, (*__env)->GetStaticMethodID(__env, TLU, "setupEnvData", "()J")); \
+     } \
+     envData->errnum = errnum;
++
++#endif
+
+ #ifdef LWJGL_WINDOWS
+     #define saveLastError() \
+--- a/modules/lwjgl/core/src/main/c/common_tools.c
++++ b/modules/lwjgl/core/src/main/c/common_tools.c
+@@ -28,7 +28,14 @@
+     return env;
+ }
+
++#ifdef LWJGL_PS5
++static volatile uint8_t ps5_vm_shutting_down;
++void ps5_lwjgl333_begin_shutdown(void) { ps5_vm_shutting_down = 1; }
++#endif
+ static inline void detachCurrentThread(void) {
++#ifdef LWJGL_PS5
++    if (ps5_vm_shutting_down) return;
++#endif
+     if ((*jvm)->DetachCurrentThread(jvm) != JNI_OK) {
+         fprintf(stderr, "[LWJGL] Failed to detach native thread from the JVM.");
+         fflush(stderr);
+@@ -38,6 +45,9 @@
+ static inline EnvData* createEnvData(jboolean async, JNIEnv* env) {
+     EnvData* data = (EnvData*)calloc(sizeof(EnvData), 1);
+
++#ifdef LWJGL_PS5
++    if (data == NULL) return NULL;
++#endif
+     data->async = async;
+     data->env = env;
+
+@@ -120,6 +130,57 @@
+         }
+         return data;
+     }
++#elif defined(LWJGL_PS5)
++    #include <pthread.h>
++    static pthread_key_t envTLS;
++    static int envTLSValid;
++
++    static void autoDetach(void* value) {
++        EnvData* data = (EnvData*)value;
++        // Upstream343 ownership fix: only threads attached by this group detach.
++        if (data->async && getThreadEnv() != NULL) detachCurrentThread();
++        free((void*)data->envCopy);
++        free(data);
++    }
++    static inline int tlsInit(void) {
++        int error = pthread_key_create(&envTLS, autoDetach);
++        envTLSValid = error == 0;
++        return error;
++    }
++    static inline void tlsDestroy(void) {
++        if (envTLSValid) { pthread_key_delete(envTLS); envTLSValid = 0; }
++    }
++    EnvData* ps5_lwjgl333_envdata(JNIEnv* env) {
++        EnvData* data = envTLSValid ? pthread_getspecific(envTLS) : NULL;
++        return data != NULL && data->envCopy == *env ? data : NULL;
++    }
++    EnvData* tlsCreateEnvData(void) {
++        jboolean async = 0;
++        JNIEnv* env = getThreadEnv();
++        if (env == NULL) { async = 1; env = attachCurrentThreadAsDaemon(); }
++        EnvData* data = createEnvData(async, env);
++        if (data == NULL || pthread_setspecific(envTLS, data) != 0) {
++            free(data);
++            (*env)->FatalError(env, "LWJGL333 native thread state allocation/key refusal");
++            return NULL;
++        }
++        return data;
++    }
++    EnvData* tlsCreateEnvDataWithCopy(JNIEnv* env) {
++        EnvData* data = pthread_getspecific(envTLS);
++        if (data == NULL) {
++            data = createEnvData(0, env);
++            if (data == NULL) return NULL;
++            if (pthread_setspecific(envTLS, data) != 0) { free(data); return NULL; }
++        }
++        if (data->envCopy != NULL && data->envCopy != *env) free((void*)data->envCopy);
++        linkEnvData(data, env);
++        return data;
++    }
++    static inline EnvData* tlsGetEnvData(void) {
++        EnvData* data = pthread_getspecific(envTLS);
++        return data != NULL ? data : tlsCreateEnvData();
++    }
+ #else
+     #include <pthread.h>
+     pthread_key_t envTLS = 0;
+@@ -187,7 +248,7 @@
+     }
+ #endif
+
+-inline JNIEnv* getEnv(jboolean *async) {
++JNIEnv* getEnv(jboolean *async) {
+     EnvData* data = tlsGetEnvData();
+     *async = data->async;
+     return data->env;
+@@ -200,7 +261,11 @@
+
+     jvm = vm;
+
++#ifdef LWJGL_PS5
++    if (tlsInit() != 0) return JNI_ERR;
++#else
+     tlsInit();
++#endif
+     return JNI_VERSION_1_6;
+ }
+
+--- a/modules/lwjgl/core/src/main/c/org_lwjgl_system_ThreadLocalUtil.c
++++ b/modules/lwjgl/core/src/main/c/org_lwjgl_system_ThreadLocalUtil.c
+@@ -41,11 +41,49 @@
+ JNIEXPORT jlong JNICALL Java_org_lwjgl_system_ThreadLocalUtil_nsetupEnvData(JNIEnv *env, jclass clazz, jint functionCount) {
+     UNUSED_PARAM(clazz)
+
++#ifdef LWJGL_PS5
++    EnvData* existing = ps5_lwjgl333_envdata(env);
++    if (existing != NULL) return (jlong)(uintptr_t)existing;
++    if (functionCount != sizeof(**env) / sizeof(void*)) {
++        jclass error = (*env)->FindClass(env, "java/lang/LinkageError");
++        if (error != NULL) (*env)->ThrowNew(env, error, "LWJGL333 JNI table/header size mismatch");
++        return 0;
++    }
++    JNIEnv original = *env;
++#endif
+     void *envCopy = malloc(functionCount * sizeof(void *));
++#ifdef LWJGL_PS5
++    if (envCopy == NULL) {
++        jclass error = (*env)->FindClass(env, "java/lang/OutOfMemoryError");
++        if (error != NULL) (*env)->ThrowNew(env, error, "LWJGL333 JNI table allocation refused");
++        return 0;
++    }
++#endif
+     memcpy(envCopy, *env, functionCount * sizeof(void *));
+     *(void **)env = envCopy;
+
++#ifdef LWJGL_PS5
++    EnvData* data = tlsCreateEnvDataWithCopy(env);
++    if (data == NULL) {
++        *(void**)env = (void*)original;
++        free(envCopy);
++        jclass error = (*env)->FindClass(env, "java/lang/OutOfMemoryError");
++        if (error != NULL) (*env)->ThrowNew(env, error, "LWJGL333 thread record/key allocation refused");
++        return 0;
++    }
++    return (jlong)(uintptr_t)data;
++#else
+     return (jlong)(uintptr_t)tlsCreateEnvDataWithCopy(env);
++#endif
++}
++
++JNIEXPORT jboolean JNICALL Java_org_lwjgl_system_ThreadLocalUtil_ownsEnvData(JNIEnv* env, jclass clazz) {
++    UNUSED_PARAM(clazz)
++#ifdef LWJGL_PS5
++    return ps5_lwjgl333_envdata(env) != NULL;
++#else
++    return JNI_FALSE;
++#endif
+ }
+
+ EXTERN_C_EXIT

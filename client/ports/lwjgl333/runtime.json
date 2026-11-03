@@ -1,0 +1,12 @@
+{
+  "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
+  "commit": "d19b3fd8bf7c2108c48c63502c0a325f4841a8ce",
+  "feature": "opt-in native definition namespaces and builtin scoped handles",
+  "source_sha256": {
+    "tools/java25_builtin_runtime.py": "c800ce963654f2f0f65d01dd7b4e0ea86f197b6bf3888a5c7c237ed4ff9807c0",
+    "tools/java25_resident_libraries.py": "1dad25d792ddafa7036dc7ba7099f57c2cfecea4f974f4d057929a5b4f9de92b",
+    "java25/patches/0137-opt-in-resident-builtin-handle-scope.patch": "47f97ff6e43078cb4b82e27b6828d2a7286623158bd935cf59cb337ce2a4166e"
+  },
+  "nativeLibrariesObjectSha256": "e0383e15e8bbb4fe0e18ec221cadbe54c1ad538125a61f7b6f0694c24adf8f8b",
+  "console": "pending matched333consumer integration and physical validation"
+}

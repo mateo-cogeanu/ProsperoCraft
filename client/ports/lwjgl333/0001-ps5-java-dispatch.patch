@@ -1,0 +1,170 @@
+--- a/org/lwjgl/system/Platform.java
++++ b/org/lwjgl/system/Platform.java
+@@ -47,6 +47,12 @@
+
+             return System.mapLibraryName(name);
+         }
++    },
++    PS5("PS5", "ps5") {
++        private final Pattern SO = Pattern.compile("(?:^|/)lib\\w+[.]so(?:[.]\\d+)*$");
++        @Override String mapLibraryName(String name) {
++            return SO.matcher(name).find() ? name : "lib" + name + ".so";
++        }
+     };
+
+     /** The architectures supported by LWJGL. */
+@@ -81,7 +87,12 @@
+
+     static {
+         String osName = System.getProperty("os.name");
+-        if (osName.startsWith("Windows")) {
++        if ("PS5".equals(osName)) {
++            if (Architecture.current != Architecture.X64) {
++                throw new LinkageError("Unsupported PS5 architecture: " + System.getProperty("os.arch"));
++            }
++            current = PS5;
++        } else if (osName.startsWith("Windows")) {
+             current = WINDOWS;
+         } else if (osName.startsWith("Linux") || osName.startsWith("FreeBSD") || osName.startsWith("SunOS") || osName.startsWith("Unix")) {
+             current = LINUX;
+--- a/org/lwjgl/system/APIUtil.java
++++ b/org/lwjgl/system/APIUtil.java
+@@ -122,6 +122,8 @@
+
+     public static SharedLibrary apiCreateLibrary(String name) {
+         switch (Platform.get()) {
++            case PS5:
++                return new org.lwjgl.system.ps5.PS5Library(name);
+             case WINDOWS:
+                 return new WindowsLibrary(name);
+             case LINUX:
+--- a/org/lwjgl/system/Library.java
++++ b/org/lwjgl/system/Library.java
+@@ -30,7 +30,7 @@
+ public final class Library {
+
+     /** The LWJGL shared library name. */
+-    public static final String JNI_LIBRARY_NAME = Configuration.LIBRARY_NAME.get(Platform.mapLibraryNameBundled("lwjgl"));
++    public static final String JNI_LIBRARY_NAME = Configuration.LIBRARY_NAME.get(Platform.get() == Platform.PS5 ? "lwjgl333" : Platform.mapLibraryNameBundled("lwjgl"));
+
+     static final String JAVA_LIBRARY_PATH = "java.library.path";
+
+@@ -85,6 +85,14 @@
+         String module,
+         String name
+     ) throws UnsatisfiedLinkError {
++        if (Platform.get() == Platform.PS5 && (
++                (module.equals("org.lwjgl") && name.equals("lwjgl333")) ||
++                (module.equals("org.lwjgl.opengl") && name.equals("lwjgl_opengl")) ||
++                (module.equals("org.lwjgl.stb") && name.equals("lwjgl_stb")))) {
++            // One isolated matched core/GL/STB JNI group; no second343 load.
++            loadLibrary.accept("lwjgl333");
++            return;
++        }
+         if (DEBUG) {
+             DEBUG_STREAM.print(
+                 "[LWJGL] Loading JNI library: " + name +
+--- a/org/lwjgl/opengl/GL.java
++++ b/org/lwjgl/opengl/GL.java
+@@ -95,6 +95,13 @@
+
+     /** Loads the OpenGL native library, using the default library name. */
+     public static void create() {
++        if (Platform.get() == Platform.PS5) {
++            if (!"zink".equals(System.getProperty("ps5.opengl.provider"))) {
++                throw new IllegalStateException("PS5 LWJGL333 requires the resident Zink provider");
++            }
++            create(apiCreateLibrary("libps5zink.so"));
++            return;
++        }
+         SharedLibrary GL;
+         switch (Platform.get()) {
+             case LINUX:
+@@ -139,6 +146,9 @@
+                         case WINDOWS:
+                             GetProcAddress = library.getFunctionAddress("wglGetProcAddress");
+                             break;
++                    }
++                    if (Platform.get() == Platform.PS5) {
++                        GetProcAddress = library.getFunctionAddress("ps5zink_get_proc_address");
+                     }
+                     if (GetProcAddress == NULL) {
+                         GetProcAddress = library.getFunctionAddress("OSMesaGetProcAddress");
+--- a/org/lwjgl/openal/ALC.java
++++ b/org/lwjgl/openal/ALC.java
+@@ -62,6 +62,9 @@
+     public static void create() {
+         String libName;
+         switch (Platform.get()) {
++            case PS5:
++                libName = "ps5openal";
++                break;
+             case LINUX:
+             case MACOSX:
+                 libName = "openal";
+--- a/org/lwjgl/system/ThreadLocalUtil.java
++++ b/org/lwjgl/system/ThreadLocalUtil.java
+@@ -142,6 +142,10 @@
+                 jniCallCount = 231;
+                 break;
+             case JNI_VERSION_21:
++                jniCallCount = 231; // genuine IsVirtualThread table; upstream343 correction
++                break;
++            case 0x00180000: // genuine JNI_VERSION_24: GetStringUTFLengthAsLong
++            case 0x00190000: // JNI_VERSION_25 has the same table size
+                 jniCallCount = 232;
+                 break;
+             default:
+@@ -160,6 +164,7 @@
+     private static native long getFunctionMissingAbort();
+
+     private static native long nsetupEnvData(int functionCount);
++    private static native boolean ownsEnvData();
+     public static long setupEnvData() {
+         return nsetupEnvData(JNI_NATIVE_INTERFACE_FUNCTION_COUNT);
+     }
+@@ -170,11 +175,11 @@
+         long env_p  = memGetAddress(env_pp);
+
+         if (capabilities == NULL) {
+-            if (env_p != JNI_NATIVE_INTERFACE) {
++            if (Platform.get() == Platform.PS5 ? ownsEnvData() : env_p != JNI_NATIVE_INTERFACE) {
+                 memPutAddress(env_p + CAPABILITIES_OFFSET, FUNCTION_MISSING_ABORT_TABLE);
+             }
+         } else {
+-            if (env_p == JNI_NATIVE_INTERFACE) {
++            if (Platform.get() == Platform.PS5 ? !ownsEnvData() : env_p == JNI_NATIVE_INTERFACE) {
+                 setupEnvData();
+                 env_p = memGetAddress(env_pp);
+             }
+@@ -184,6 +189,30 @@
+
+     // Ensures FUNCTION_MISSING_ABORT will be called even if no context is current,
+     public static void setFunctionMissingAddresses(int functionCount) {
++        if (Platform.get() == Platform.PS5) {
++            // Do not write another generation's global/foreign JNIEnv table.
++            if (functionCount < 0) throw new IllegalArgumentException("Negative GL function count");
++            if (functionCount == 0) {
++                if (ownsEnvData()) memPutAddress(memGetAddress(getThreadJNIEnv()) + CAPABILITIES_OFFSET, NULL);
++                long previous = FUNCTION_MISSING_ABORT_TABLE;
++                FUNCTION_MISSING_ABORT_TABLE = NULL;
++                if (previous != NULL) getAllocator().free(previous);
++                return;
++            }
++            if (FUNCTION_MISSING_ABORT_TABLE != NULL) throw new IllegalStateException("setFunctionMissingAddresses has been called already");
++            long table = getAllocator().malloc(Integer.toUnsignedLong(functionCount) * POINTER_SIZE);
++            if (table == NULL) throw new OutOfMemoryError("LWJGL333 missing-function table allocation refused");
++            try {
++                for (int i = 0; i < functionCount; i++) memPutAddress(table + Integer.toUnsignedLong(i) * POINTER_SIZE, FUNCTION_MISSING_ABORT);
++                if (!ownsEnvData()) setupEnvData();
++            } catch (Throwable refusal) {
++                getAllocator().free(table);
++                throw refusal;
++            }
++            FUNCTION_MISSING_ABORT_TABLE = table;
++            memPutAddress(memGetAddress(getThreadJNIEnv()) + CAPABILITIES_OFFSET, table);
++            return;
++        }
+         // OpenJDK: NULL
+         // GraalVM Native Image: pointer to UnimplementedWithJNIEnvArgument function (see #875)
+         long RESERVED0_NULL = memGetAddress(JNI_NATIVE_INTERFACE);

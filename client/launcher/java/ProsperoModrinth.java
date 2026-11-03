@@ -29,7 +29,7 @@ final class ProsperoModrinth {
  }
  static String array(String s){return new Gson().toJson(List.of(s));}
  Results search(Kind kind,String game,String loader,String query,int offset,BooleanSupplier cancel)throws Exception {
-  ProsperoFabric.game(game);if(query.length()>80||offset<0||offset>100000)throw new IOException("Invalid content search");
+  if(!ProsperoVersions.valid(game))throw new IOException("Invalid content game version");if(query.length()>80||offset<0||offset>100000)throw new IOException("Invalid content search");
   if(kind==Kind.MOD&&!loader.equals("fabric"))return new Results(List.of(),0);
   var facets=new ArrayList<List<String>>();facets.add(List.of("project_type:"+kind.type));facets.add(List.of("versions:"+game));
   if(kind==Kind.MOD){facets.add(List.of("categories:fabric"));facets.add(List.of("client_side:required","client_side:optional"));}

@@ -21,7 +21,7 @@ missing-dependency skips. Each process has a 180-second bound; workflows have
 existing checks use assertions. Imports of `host_toolchain.py` do no discovery,
 argument parsing or downloads. Individual migrated test entrypoints remain usable.
 
-The seventeen fast checks include real child-JVM clean System.exit observer/refusal checks, 26.1 publisher-input/class-parser failure controls, three bootstrap/audit/identity checks, discovery regressions and ten existing launcher
+The nineteen fast checks include121 publisher failure controls, Vanilla-only gates, coherent333/343/SDL ownership and mapped shutdown evidence, alongside real child-JVM clean System.exit observer/refusal checks, 26.1 publisher-input/class-parser failure controls, three bootstrap/audit/identity checks, discovery regressions and ten existing launcher
 checks: auth state transitions/redaction, saved-login migration/refresh/sign-out,
 local TLS refusal/body/redirect behavior, storage errors, instance persistence and
 verified download/install/launch restrictions, Modrinth queues/recursive dependencies,
@@ -137,3 +137,13 @@ fast/native prerequisites. No game/native cache is searched or downloaded by the
 runner. SDL dummy windows are offscreen, so this proves neither kopper presentation
 nor PS5 RADV nor Minecraft Main/title/world. See
 [build instructions and evidence](client-26.1-zink-native-180.md).
+
+
+## Optional matched333 research checks
+
+`tools/test_lwjgl333_host.py` and `tools/test_lwjgl333_ownership.py` require explicit
+pinned333 source/build inputs; they are outside portable CI. Host Zink additionally
+requires actual matching frontend/GLFW libraries and sanitizer compiler, and the
+original-client option requires verified publisher inputs plus the genuine OSHI
+provider. See [local205 evidence and limitations](client-1.21-205.md). The fast lane
+uses injected temporary fixtures and downloads no game files.

@@ -16,7 +16,7 @@ public final class ProsperoInstall {
  interface Progress {void update(String text,long completed,long total);}
  record Version(String id,String type,String url,String sha1){}
  record FilePin(String path,String url,String sha1,long size){}
- static final class Receipt {String version,assetIndex,window,renderer;int javaMajor;ArrayList<FilePin> files=new ArrayList<>();ArrayList<String> classpath=new ArrayList<>();}
+ static final class Receipt {String version,assetIndex,window,renderer;int javaMajor;Integer runtimeJavaMajor;ArrayList<FilePin> files=new ArrayList<>();ArrayList<String> classpath=new ArrayList<>();}
  private final Path root;private final Source source;
  ProsperoInstall(Path root){this(root,ProsperoInstall::network);}
  ProsperoInstall(Path root,Source source){this.root=root;this.source=source;}
@@ -45,7 +45,8 @@ public final class ProsperoInstall {
   catch(Exception offline){active(cancelled);Path cached=root.resolve("catalog.json");if(!Files.isRegularFile(cached))throw offline;bytes=Files.readAllBytes(cached);}
   ArrayList<Version> versions=new ArrayList<>();
   for(JsonElement item:object(bytes).getAsJsonArray("versions")){JsonObject row=item.getAsJsonObject();String id=row.get("id").getAsString(),type=row.get("type").getAsString();
-   if(id.matches("26\\.[0-9][A-Za-z0-9._-]{0,70}")&&(type.equals("release")||snapshots)){String url=row.get("url").getAsString(),sha=row.get("sha1").getAsString();safeUrl(url);if(!sha.matches("[a-f0-9]{40}"))throw new IOException("Invalid metadata hash");versions.add(new Version(id,type,url,sha));}}
+   if(ProsperoVersions.catalog(id,type,snapshots)){String url=row.get("url").getAsString(),sha=row.get("sha1").getAsString();safeUrl(url);if(!sha.matches("[a-f0-9]{40}"))throw new IOException("Invalid metadata hash");versions.add(new Version(id,type,url,sha));}}
+  versions.sort(java.util.Comparator.comparingInt(v->ProsperoVersions.release121(v.id())?1:0));
   return List.copyOf(versions);
  }
  private void obtain(FilePin pin,BooleanSupplier cancelled)throws Exception {
@@ -66,12 +67,12 @@ public final class ProsperoInstall {
   for(var item:lib.getAsJsonArray("rules")){var rule=item.getAsJsonObject();boolean matches=!rule.has("features");if(rule.has("os")){var os=rule.getAsJsonObject("os");if(os.has("name"))matches&=os.get("name").getAsString().equals("linux");if(os.has("arch"))matches&=os.get("arch").getAsString().matches("x86_64|amd64");if(os.has("version"))matches=false;}if(matches)allowed=rule.get("action").getAsString().equals("allow");}return allowed;
  }
  Receipt install(Version version,int workers,Progress progress,BooleanSupplier cancelled)throws Exception {
-  if(!version.id.matches("26\\.[0-9][A-Za-z0-9._-]{0,70}"))throw new IOException("Only26.x instances are supported");
+  if(!ProsperoVersions.valid(version.id))throw new IOException("Invalid supported-family instance version");
   byte[] metadata=json(version.url,cancelled);if(!HexFormat.of().formatHex(MessageDigest.getInstance("SHA-1").digest(metadata)).equals(version.sha1))throw new IOException("Version metadata checksum mismatch");
   JsonObject meta=object(metadata);if(!version.id.equals(meta.get("id").getAsString()))throw new IOException("Version metadata identity mismatch");
-  int javaMajor=meta.getAsJsonObject("javaVersion").get("majorVersion").getAsInt();if(javaMajor<8||javaMajor>100)throw new IOException("Invalid publisher Java requirement");
+  int javaMajor=meta.getAsJsonObject("javaVersion").get("majorVersion").getAsInt();if((ProsperoVersions.release121(version.id)&&javaMajor!=21)||javaMajor<8||javaMajor>100)throw new IOException("Invalid publisher Java requirement");
   if(!"net.minecraft.client.main.Main".equals(meta.get("mainClass").getAsString()))throw new IOException("Unsupported client entry point");
-  Receipt receipt=new Receipt();receipt.javaMajor=javaMajor;receipt.version=version.id;receipt.assetIndex=meta.getAsJsonObject("assetIndex").get("id").getAsString();receipt.window="GLFW";receipt.renderer=ProsperoGraphics.enabled()&&ProsperoGraphics.release261(version.id)?"ZINK":"VULKAN";
+  Receipt receipt=new Receipt();receipt.javaMajor=javaMajor;if(ProsperoVersions.release121(version.id))receipt.runtimeJavaMajor=Runtime.version().feature();receipt.version=version.id;receipt.assetIndex=meta.getAsJsonObject("assetIndex").get("id").getAsString();receipt.window="GLFW";receipt.renderer=(ProsperoVersions.release121(version.id)||(ProsperoGraphics.enabled()&&ProsperoGraphics.release261(version.id)))?"ZINK":"VULKAN";
   String client="versions/"+version.id+"/client.jar";receipt.files.add(pin(client,meta.getAsJsonObject("downloads").getAsJsonObject("client")));receipt.classpath.add(client);
   for(var item:meta.getAsJsonArray("libraries")){JsonObject lib=item.getAsJsonObject();String name=lib.get("name").getAsString();if(name.contains(":natives-")||(name.startsWith("io.netty:netty-transport-native-")&&name.split(":").length>3)||!allowed(lib))continue;
    if(name.startsWith("org.lwjgl:lwjgl-sdl:"))receipt.window="SDL";
@@ -88,7 +89,7 @@ public final class ProsperoInstall {
   }finally{for(var job:jobs)job.cancel(true);pool.shutdownNow();if(!pool.awaitTermination(25,TimeUnit.SECONDS))throw new IOException("Downloads are still stopping; reopen before retrying");}
   active(cancelled);save(root.resolve("versions/"+version.id+"/metadata.json"),new String(metadata,StandardCharsets.UTF_8));save(root.resolve("versions/"+version.id+"/receipt.json"),new Gson().toJson(receipt));progress.update("Ready to play",total,total);return receipt;
  }
- Receipt receipt(String version)throws Exception {if(!version.matches("26\\.[0-9][A-Za-z0-9._-]{0,70}"))throw new IOException("Invalid version");return new Gson().fromJson(Files.readString(root.resolve("versions/"+version+"/receipt.json")),Receipt.class);}
+ Receipt receipt(String version)throws Exception {if(!ProsperoVersions.valid(version))throw new IOException("Invalid version");return new Gson().fromJson(Files.readString(root.resolve("versions/"+version+"/receipt.json")),Receipt.class);}
  void verify(Receipt receipt)throws Exception {
   if(receipt==null||receipt.classpath==null||receipt.classpath.isEmpty()||receipt.files==null)throw new IOException("Install this instance first");
   for(String entry:receipt.classpath){FilePin pin=receipt.files.stream().filter(f->f.path.equals(entry)).findFirst().orElseThrow(()->new IOException("Unverified class path"));Path path=relative(root,entry);if(!Files.isRegularFile(path)||Files.size(path)!=pin.size||!hash(path).equals(pin.sha1))throw new IOException("Instance files need repair. Select Repair download.");}
@@ -96,5 +97,12 @@ public final class ProsperoInstall {
   if(!Files.isRegularFile(path)||Files.size(path)!=index.size||!hash(path).equals(index.sha1))throw new IOException("Asset index needs repair download");
  }
  static String hardwarePort(Receipt receipt){if(receipt.classpath.stream().anyMatch(p->p.endsWith("/oshi-core-6.9.0.jar")))return "oshi-6.9.0-ps5-platform.jar";if(receipt.classpath.stream().anyMatch(p->p.endsWith("/oshi-common-7.7.2.jar")))return "oshi-7.7.2-ps5-provider.jar";return null;}
- java.net.URLClassLoader loader(Receipt receipt)throws Exception {verify(receipt);ArrayList<URL> urls=new ArrayList<>();String port=hardwarePort(receipt);if(port!=null){Path hardware=Path.of("/app0/assets/java25/ports/"+port);if(Files.isRegularFile(hardware))urls.add(hardware.toUri().toURL());}if(ProsperoGraphics.glfw(receipt.version)&&"GLFW".equals(receipt.window)){Path binding=Path.of(System.getProperty("ps5.glfw.binding","/app0/assets/java25/ports/lwjgl-glfw-3.4.1-ps5-callback343.jar"));if(!Files.isRegularFile(binding))throw new IOException("GLFW callback binding missing from app; update ProsperoCraft.");urls.add(binding.toUri().toURL());}for(String file:receipt.classpath)urls.add(relative(root,file).toUri().toURL());return new ProsperoGameLoader(urls.toArray(URL[]::new),ProsperoInstall.class.getClassLoader());}
+ java.net.URLClassLoader loader(Receipt receipt)throws Exception {verify(receipt);ArrayList<URL> urls=new ArrayList<>();String port=hardwarePort(receipt);if(port!=null){Path hardware=Path.of("/app0/assets/java25/ports/"+port);if(Files.isRegularFile(hardware))urls.add(hardware.toUri().toURL());}if(ProsperoVersions.release121(receipt.version)){
+   if(!Prospero121.RELEASES.contains(receipt.version)||receipt.javaMajor!=21||!"GLFW".equals(receipt.window)||!"ZINK".equals(receipt.renderer))throw new IOException("Unknown1.21 native generation");
+   long count=receipt.classpath.stream().filter(p->p.contains("/org/lwjgl/")).count();
+   if(count!=8||receipt.classpath.stream().filter(p->p.contains("/org/lwjgl/")).anyMatch(p->!p.endsWith("-3.3.3.jar")))throw new IOException("1.21requires matched LWJGL3.3.3 inputs");
+   Path overlay=Path.of(System.getProperty("ps5.lwjgl333.overlay","/app0/assets/java25/ports/lwjgl-3.3.3-ps5-overlay.jar"));
+   if(!Files.isRegularFile(overlay))throw new IOException("Matched LWJGL3.3.3 overlay missing; update ProsperoCraft");
+   urls.add(overlay.toUri().toURL());
+  }else if(ProsperoGraphics.glfw(receipt.version)&&"GLFW".equals(receipt.window)){Path binding=Path.of(System.getProperty("ps5.glfw.binding","/app0/assets/java25/ports/lwjgl-glfw-3.4.1-ps5-callback343.jar"));if(!Files.isRegularFile(binding))throw new IOException("GLFW callback binding missing from app; update ProsperoCraft.");urls.add(binding.toUri().toURL());}for(String file:receipt.classpath)urls.add(relative(root,file).toUri().toURL());return new ProsperoGameLoader(urls.toArray(URL[]::new),ProsperoInstall.class.getClassLoader(),ProsperoVersions.release121(receipt.version));}
 }

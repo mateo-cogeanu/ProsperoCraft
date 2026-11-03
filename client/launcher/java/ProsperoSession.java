@@ -5,9 +5,13 @@ import java.util.*;
 
 /** Evidence for a single original Main call. Never mutates game classes/threads. */
 public final class ProsperoSession {
- private final Path logs;private final String marker;
+ private final Path logs;private final String marker;private final String[] accessors;
  public ProsperoSession(Path logs)throws IOException {
-  this.logs=logs;marker="PS5_MAIN_SESSION "+UUID.randomUUID();
+  this(logs,null);
+ }
+ public ProsperoSession(Path logs,String[] accessors)throws IOException {
+  if(accessors!=null&&(accessors.length!=3||Arrays.stream(accessors).anyMatch(s->s==null||!s.matches("[A-Za-z][A-Za-z0-9_.]{0,95}"))))throw new IllegalArgumentException("Invalid shutdown contract");
+  this.logs=logs;this.accessors=accessors==null?null:accessors.clone();marker="PS5_MAIN_SESSION "+UUID.randomUUID();
   Files.createDirectories(logs);
   Files.writeString(logs.resolve("latest.log"),"\n"+marker+"\n",StandardCharsets.UTF_8,StandardOpenOption.CREATE,StandardOpenOption.APPEND);
  }
@@ -47,10 +51,13 @@ public final class ProsperoSession {
     for(String line;(line=lines.readLine())!=null;)evidence.line(line,marker);
    }
   }
-  Class<?> minecraft=Class.forName("net.minecraft.client.Minecraft",false,loader);
-  Object instance=minecraft.getMethod("getInstance").invoke(null);
-  boolean stopped=instance!=null&&Boolean.FALSE.equals(minecraft.getMethod("isRunning").invoke(instance));
-  Class<?> sdl=Class.forName("org.lwjgl.sdl.SDLInit",false,loader);
+  Class<?> minecraft=Class.forName(accessors==null?"net.minecraft.client.Minecraft":accessors[0],false,loader);
+  var getter=minecraft.getMethod(accessors==null?"getInstance":accessors[1]);
+  var running=minecraft.getMethod(accessors==null?"isRunning":accessors[2]);
+  if(accessors!=null&&(getter.getReturnType()!=minecraft||!java.lang.reflect.Modifier.isStatic(getter.getModifiers())||running.getReturnType()!=boolean.class||java.lang.reflect.Modifier.isStatic(running.getModifiers())))throw new ReflectiveOperationException("Shutdown contract signature mismatch");
+  Object instance=getter.invoke(null);
+  boolean stopped=instance!=null&&Boolean.FALSE.equals(running.invoke(instance));
+  Class<?> sdl=Class.forName("org.lwjgl.sdl.SDLInit",false,accessors==null?loader:ProsperoSession.class.getClassLoader());
   int mask=((Number)sdl.getMethod("SDL_WasInit",int.class).invoke(null,0)).intValue();
   boolean sdlStopped=mask==0;
   if(!evidence.clean(stopped,sdlStopped))throw new NotClean(evidence,stopped,mask);

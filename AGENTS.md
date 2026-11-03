@@ -157,3 +157,15 @@ establish controller/event isolation. Keep full-assets/Fabric/resource experimen
 actual package growth and PS5 validation explicit; retain204 ZIP budget8 and all
 existing runtime/native ownership contracts. No new release/Store authorization;
 exact-build physical shader acceptance remains mandatory unless scoped out.
+
+## Approved1.21 Vanilla execution order —2026-11-03
+
+The user approves the Phase A recommended matching333 natives and minimal genuine
+PS5 Java platform/dispatch overlays. Implement and validate1.21.11 Vanilla first,
+then the remaining1.21.x Vanilla releases. **Defer Fabric implementation/testing
+until those Vanilla releases are good.** This supersedes the pending overlay
+decision and Vanilla/Fabric-per-release sequence in the original research draft;
+it does not imply hardware acceptance, shader scope-out or release/Store approval.
+Publish reusable runtime isolation fixes first, then pin/integrate them here.
+Keep original publisher JARs intact, all26.x decisions/native groups unchanged,
+released204/frozen history preserved and each unproven release independently gated.

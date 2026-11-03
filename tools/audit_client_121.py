@@ -1,0 +1,138 @@
+#!/usr/bin/env python3
+"""Independently inspect local205 against accepted204 and original333 inputs.
+
+Requires explicit SDK build outputs and publisher cache; not a portable CI lane
+or evidence of physical-console acceptance. Never modifies packages or game JARs.
+"""
+import argparse
+import hashlib
+import json
+from pathlib import Path
+import re
+import subprocess
+import zipfile
+
+from audit_client_261 import jar_info, jni_mangle
+from build_lwjgl333 import publisher_jars
+from host_toolchain import ROOT
+from package_client_121 import BASE_PACKAGE
+
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def symbols(nm, path):
+    return set(subprocess.check_output([str(nm), '--defined-only', '--extern-only', str(path)], text=True).split())
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    for name in ('package', 'baseline-package', 'build-dir', 'lwjgl333-build', 'publisher-cache', 'llvm-nm', 'output'):
+        parser.add_argument('--' + name, type=Path, required=True)
+    args = parser.parse_args()
+    if sha(args.baseline_package) != BASE_PACKAGE:
+        raise ValueError('Not the exact accepted204 package')
+    prefix = 'PPSA99874/assets/java25/'
+    with zipfile.ZipFile(args.baseline_package) as old, zipfile.ZipFile(args.package) as new:
+        names = new.namelist()
+        if new.testzip() or len(names) != len(set(names)):
+            raise ValueError('ZIP CRC/duplicate failure')
+        if any(Path(n).is_absolute() or '..' in Path(n).parts for n in names):
+            raise ValueError('Unsafe ZIP path')
+        if set(old.namelist()) - set(names):
+            raise ValueError('Baseline files removed')
+        changed = [n for n in old.namelist() if old.read(n) != new.read(n)]
+        allowed = {'PPSA99874/eboot.bin', 'PPSA99874/sce_sys/param.json', prefix + 'client-probe.jar',
+                   prefix + 'lib/libjava.so', prefix + 'resident-libraries-audit.json',
+                   prefix + 'classes/prosperocraft-build.properties'}
+        if any(n not in allowed and not (n.startswith(prefix + 'classes/') and n.endswith('.class')) for n in changed):
+            raise ValueError('Unexpected baseline change: ' + repr(changed))
+        added = sorted(set(names) - set(old.namelist()))
+        for n in added:
+            if not (n.startswith(prefix + 'lwjgl333-source/') or n.startswith(prefix + 'classes/') or
+                    n in {prefix + 'lwjgl333-integration-audit.json', prefix + 'ports/lwjgl-3.3.3-ps5-overlay.jar',
+                          'PPSA99874/licenses/LWJGL333-PORT.txt'}):
+                raise ValueError('Unexpected added file: ' + n)
+        param = json.loads(new.read('PPSA99874/sce_sys/param.json'))
+        if param['contentVersion'] != '01.000.205':
+            raise ValueError('Wrong identity')
+        if new.read(prefix + 'classes/prosperocraft-121.txt') != b'vanilla-1.21.11-zink-v1\n':
+            raise ValueError('Wrong per-release gate')
+        if new.read(prefix + 'ports/lwjgl-3.3.3-ps5-overlay.jar') != (args.lwjgl333_build / 'lwjgl-3.3.3-ps5-overlay.jar').read_bytes():
+            raise ValueError('Wrong overlay')
+        # Parent JARs, Java image, VM options and original26 resource tokens must
+        # remain byte-identical. Exploded updated classes must match their JAR.
+        import io
+        with zipfile.ZipFile(io.BytesIO(new.read(prefix + 'client-probe.jar'))) as probe:
+            for n in names:
+                if n.startswith(prefix + 'classes/'):
+                    relative = n[len(prefix + 'classes/'):]
+                    if relative in probe.namelist() and new.read(n) != probe.read(relative):
+                        raise ValueError('Exploded/JAR class mismatch: ' + relative)
+            with zipfile.ZipFile(io.BytesIO(old.read(prefix + 'client-probe.jar'))) as previous:
+                for n in previous.namelist():
+                    if not n.endswith('.class') and n != 'prosperocraft-build.properties' and previous.read(n) != probe.read(n):
+                        raise ValueError('Existing probe resource changed: ' + n)
+        growth = sum(i.file_size for i in new.infolist()) - sum(i.file_size for i in old.infolist())
+        if growth > 8 * 1024 * 1024:
+            raise ValueError('Exceeds approved provisional8MiB budget; reassess before handoff')
+        registry = json.loads(new.read(prefix + 'resident-libraries-audit.json'))
+        if registry['library_symbol_prefixes'] != {'lwjgl333': 'lwjgl333_'}:
+            raise ValueError('Wrong generation namespace')
+    native = args.lwjgl333_build / 'ps5/lwjgl333.o'
+    raw = symbols(args.llvm_nm, native)
+    scoped = symbols(args.llvm_nm, args.build_dir / 'registry/embedded-lwjgl333.o')
+    if any(n.startswith('Java_') for n in scoped) or 'lwjgl333_Java_org_lwjgl_opengl_GL32C_nglDeleteSync' not in scoped:
+        raise ValueError('Generation JNI symbols not isolated')
+    # Exact unsupported desktop APIs are disclosed, not redirected to343.
+    unsupported = {'org/lwjgl/system/SharedLibraryUtil', 'org/lwjgl/system/libc/LibCErrno',
+                   'org/lwjgl/system/libc/LibCLocale', 'org/lwjgl/system/libc/LibCStdio'}
+    counts, absent = {}, []
+    tinyfd = jar_info(next(p for p in publisher_jars(args.publisher_cache) if p.name == 'lwjgl-tinyfd-3.3.3.jar'))[1]
+    c = (ROOT / 'client/ports/tinyfd/ps5_dialogs.c').read_text()
+    scalar = {'jlong': 'J', 'jint': 'I', 'void': 'V'}
+    for owner, method, desc, static in tinyfd:
+        name = 'Java_' + jni_mangle(owner) + '_' + jni_mangle(method)
+        match = re.search(r'JNIEXPORT\s+(\w+)\s+JNICALL\s+' + re.escape(name) + r'\(([^)]*)\)', c)
+        if not match or not static:
+            raise ValueError('TinyFD adapter method missing')
+        types = [part.strip().split()[0] for part in match[2].split(',')]
+        actual = '(' + ''.join(scalar[t] for t in types[2:]) + ')' + scalar[match[1]]
+        if types[:2] != ['JNIEnv*', 'jclass'] or actual != desc:
+            raise ValueError('TinyFD adapter ABI mismatch: ' + method)
+    for jar in publisher_jars(args.publisher_cache):
+        covered = 0
+        for owner, method, desc, static in jar_info(jar)[1]:
+            if any(x in owner for x in ('/windows/', '/linux/', '/macosx/', '/WGL', '/GLX', '/tinyfd/')):
+                continue
+            if owner in unsupported:
+                absent.append([owner, method, desc])
+                continue
+            short = 'Java_' + jni_mangle(owner) + '_' + jni_mangle(method)
+            long = short + '__' + jni_mangle(desc[1:desc.index(')')])
+            if short not in raw and long not in raw:
+                raise ValueError('Missing matched333 native: ' + repr((owner, method, desc)))
+            covered += 1
+        counts[jar.name] = covered
+    source = (args.build_dir / 'registry/builtin-libraries.cpp').read_text()
+    if 'std::strcmp(name,"lwjgl333") == 0' not in source:
+        raise ValueError('No scoped builtin handle')
+    # The exact204 main was compiled from the same bootstrap apart from identity.
+    boot = (ROOT / 'client/save_headroom/bootstrap.cpp').read_text()
+    if '#define' not in boot or '"8"' not in boot:
+        raise ValueError('Missing accepted ZIP budget8')
+    audit = {'package_sha256': sha(args.package), 'version': '01.000.205', 'title_id': 'PPSA99874',
+             'package_bytes': args.package.stat().st_size, 'zip_growth_bytes': args.package.stat().st_size - args.baseline_package.stat().st_size,
+             'uncompressed_growth_bytes': growth, 'baseline_changed_files': changed, 'added_files': added,
+             'matched_native_declarations': counts, 'unsupported_nonplatform_native_declarations': sorted(absent),
+             'tinyfd': '11 original333 declarations match existing explicit-unavailable/cancel adapter; no new dialog implementation',
+             'native_symbols': '333 definitions prefixed; original lookup keys retained with scoped handle',
+             'result': 'PASS scoped package/static ABI audit; no complete feature or console acceptance', 'console': 'NOT TESTED'}
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(audit, indent=2) + '\n')
+    print('PASS205 package audit; uncompressed growth', growth, 'bytes; SHA256', audit['package_sha256'])
+
+
+if __name__ == '__main__':
+    main()

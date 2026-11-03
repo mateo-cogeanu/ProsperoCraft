@@ -1,5 +1,16 @@
 # Minecraft 1.21.x — Phase A research, 3 November 2026
 
+## Execution authorization —3 November2026
+
+The user authorizes executing this plan, including the recommended genuine333
+PS5 Java platform/dispatch overlays and matching native generation. **Implement
+and validate all1.21.x Vanilla releases first; Fabric follows only once those are
+good.** This supersedes the original proposed Vanilla/Fabric-per-version order
+and the pending overlay decision below. The Phase A record retains its original
+research limitations. Full-assets Vanilla/resource experiments, matching native
+isolation, host/native checks and a new audited local candidate precede physical
+tests. No release/Store authorization or console acceptance is inferred.
+
 **All twelve releases remain Coming soon.** This is a disabled research draft,
 paused at the supplied port prompt's explicit publisher-library overlay decision.
 No launcher/native/runtime implementation, application identity, released204 bytes,

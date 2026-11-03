@@ -1,5 +1,15 @@
 # Changelog
 
+## Local205 — 1.21.11 Vanilla development, 2026-11-03
+
+- Follow the approved order:1.21.x Vanilla first, Fabric deferred. Gate only
+  1.21.11 Vanilla; retain independent Coming soon states for all other121 entries.
+- Add matched genuine333 Java/native ownership, scoped runtime integration,
+  publisher provisioning, finite shutdown accessors and package/ABI audits.
+- Preserve original game/library JARs and accepted204 native providers,26.x behavior
+  and ZIP budget8. Host tests pass; exact205 PS5 startup/world/save/audio/clean-return
+  and26.x regressions remain pending. No release, prerelease or Store action.
+
 ## Unreleased — 1.21.x Phase A research draft, 2026-11-03
 
 - Enumerate and pin all twelve original1.21.x releases, full libraries/rules,

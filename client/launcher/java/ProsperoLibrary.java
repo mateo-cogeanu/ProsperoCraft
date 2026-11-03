@@ -30,7 +30,7 @@ public final class ProsperoLibrary {
   if(state==null||state.schema!=1||state.instances==null||state.settings==null||state.instances.size()>256)throw new IOException();if(state.favorites==null)state.favorites=new ArrayList<>();if(state.favorites.size()>1024)throw new IOException();
   for(var f:state.favorites)if(f==null||f.instance==null||!f.instance.matches("[a-f0-9-]{36}")||!ProsperoDestinations.valid(f.kind==null?"":f.kind,f.target)||f.name==null||f.name.length()>80)throw new IOException();
   Set<String> ids=new HashSet<>();
-  for(var i:state.instances){if(i==null||!i.id.matches("[a-f0-9-]{36}")||!ids.add(i.id)||!i.version.matches("26\\.[0-9][A-Za-z0-9._-]{0,70}")||i.icon<0||i.icon>=ICONS.length)throw new IOException();clean(i.name);if(i.loader==null)i.loader="vanilla";if(!Set.of("vanilla","fabric").contains(i.loader))throw new IOException();}
+  for(var i:state.instances){if(i==null||!i.id.matches("[a-f0-9-]{36}")||!ids.add(i.id)||!ProsperoVersions.valid(i.version)||i.icon<0||i.icon>=ICONS.length)throw new IOException();clean(i.name);if(i.loader==null)i.loader="vanilla";if(!Set.of("vanilla","fabric").contains(i.loader))throw new IOException();}
   if(state.settings.controllerKeys==null)state.settings.controllerKeys=ProsperoInput.DEFAULT.clone();ProsperoInput.validate(state.settings.controllerKeys);
   if(state.settings.theme<0||state.settings.theme>5)state.settings.theme=0;
   if(state.settings.background<1||state.settings.background>10)state.settings.background=5;
@@ -41,7 +41,7 @@ public final class ProsperoLibrary {
  synchronized Instance add(String name,String version,int icon)throws Exception {return add(name,version,icon,"vanilla");}
  synchronized Instance add(String name,String version,int icon,String loader)throws Exception {
   if(!Set.of("vanilla","fabric").contains(loader))throw new IOException("This loader is coming soon");
-  if(state.instances.size()>=256)throw new IOException("This library is full");if(!version.matches("26\\.[0-9][A-Za-z0-9._-]{0,70}")||icon<0||icon>=ICONS.length)throw new IOException("Invalid instance choice");
+  if(state.instances.size()>=256)throw new IOException("This library is full");if(!ProsperoVersions.valid(version)||icon<0||icon>=ICONS.length)throw new IOException("Invalid instance choice");
   Instance instance=new Instance(name,version,icon);instance.loader=loader;instance.defaultContentPending=Set.of("fabric","neoforge").contains(loader);Files.createDirectories(game(instance));state.instances.add(instance);try{save();}catch(Exception error){state.instances.remove(instance);throw error;}return instance;
  }
  Path game(Instance i){return root.resolve("instances").resolve(i.id).resolve("game");}

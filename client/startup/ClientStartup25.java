@@ -265,7 +265,11 @@ public final class ClientStartup25 {
    stage("Temporary SDL controls hint="+org.lwjgl.sdl.SDLHints.SDL_GetHint("PS5_TEMPORARY_CONTROLS")+" accepted="+controls+";D-pad/left stick=menu arrows,X=select,Circle=back,Triangle=Tab,Square=Backspace;gamepad subsystem hands off to future mods");
    if(ProsperoLauncher.selectedZink())System.setProperty("ps5.opengl.provider","zink");
    else System.clearProperty("ps5.opengl.provider");
-   if(ProsperoLauncher.selectedGlfw()){
+   if(ProsperoLauncher.selected121()){
+    Class<?> matched=Class.forName("prosperocraft.lwjgl333.Bootstrap",true,ProsperoLauncher.gameLoader());
+    matched.getMethod("configure").invoke(null);
+    stage("PS5_LWJGL333 matched original3.3.3 bindings and isolated native group configured; Vanilla only");
+   }else if(ProsperoLauncher.selectedGlfw()){
     Configuration.GLFW_LIBRARY_NAME.set(System.mapLibraryName("ps5glfw"));System.loadLibrary("ps5glfw");
     ClassLoader game=ProsperoLauncher.gameLoader();
     Class<?> glfw=Class.forName("org.lwjgl.glfw.GLFW",true,game);
@@ -297,7 +301,7 @@ public final class ClientStartup25 {
     try{observer=new StartupObserver(console,390,1000,5000);observer.start();}
     catch(Throwable unavailable){console.println("PS5 startup observer unavailable;continuing original Main: "+unavailable);observer=null;}
    }else console.println("PS5 startup observer disabled for performance run;enable ps5.startupObserver explicitly for stack sampling");
-   ProsperoSession session=new ProsperoSession(Path.of("/download0/mc-client/logs"));
+   ProsperoSession session=new ProsperoSession(Path.of("/download0/mc-client/logs"),ProsperoLauncher.selectedShutdownAccessors());
    Thread gameThread=Thread.currentThread();
    try(ProsperoExit exit=cleanSystemExit(false)?new ProsperoExit(
      ()->session.awaitCleanReturn(gameThread.getContextClassLoader(),2000,ClientStartup25::stage),
