@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — NeoForge Phase A, 2026-11-03
+
+- Record official version enumeration, five verified installer profiles, exact JVM options, upstream patched-output requirements, early-window configuration and NeoForge content availability.
+- Add a disabled research lock and scoped evidence; implementation awaits the explicit patched-cache/fresh-process/Zink/beta decisions. NeoForge remains Coming soon; no runtime, launcher behavior, package, release or Store change.
+
 ## Release 01.000.204 — 2026-11-03
 
 - Publish the exact user-confirmed 204 package, without rebuilding, with matching source/relink materials and checksums.

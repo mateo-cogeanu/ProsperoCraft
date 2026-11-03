@@ -85,6 +85,8 @@ Open **Instance Settings → Mods, Shaders or Resource Packs** to browse Modrint
 
 NeoForge and `.mrpack` imports are not available. Fabric support does not imply that every desktop mod, native dependency or shader pack works on PS5.
 
+NeoForge [Phase A research](docs/client-neoforge-plan.md) now records upstream builds and integration requirements. Implementation decisions and all NeoForge console validation remain pending.
+
 ## Known limitations and troubleshooting
 
 - **LAN hosting is deferred.** Joining servers has earlier PS5 confirmation; Open to LAN is not established working.

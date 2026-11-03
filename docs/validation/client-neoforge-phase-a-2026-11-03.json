@@ -1,0 +1,336 @@
+{
+  "schema": 1,
+  "date": "2026-11-03",
+  "scope": "NeoForge Phase A research only; no production integration, processor execution, application package or physical pass.",
+  "status": "awaiting-explicit-phase-b-decisions",
+  "baseline_commit": "f43a6a782baa29d0357de2b6fb53681fdb4eef82",
+  "baseline_fetched_origin_main": "f43a6a782baa29d0357de2b6fb53681fdb4eef82",
+  "draft_lock": {
+    "path": "client/neoforge.lock.json",
+    "sha256": "6e8ee5948348be600b64e88e7f3cdb315568b171cd23528e805f3becc04f6f57"
+  },
+  "metadata": {
+    "url": "https://maven.neoforged.net/releases/net/neoforged/neoforge/maven-metadata.xml",
+    "sha256": "2dffba1a6485d09a4ada3a72e7972ac8906517b8e052f017d6853fb841b9f178",
+    "size": 68838,
+    "lastUpdated": "20261101220411",
+    "published_versions_count": 1856,
+    "api_url": "https://maven.neoforged.net/api/maven/versions/releases/net/neoforged/neoforge",
+    "api_sha256": "c955f1f218b7f586b82b35f8bcd10edf2d33df2f6a5f08704eabd7fe960e6253",
+    "api_set_matches_xml": true
+  },
+  "selected_candidates": [
+    {
+      "minecraft": "26.1",
+      "neoforge": "26.1.0.19-beta",
+      "enabled": false,
+      "installer": {
+        "url": "https://maven.neoforged.net/releases/net/neoforged/neoforge/26.1.0.19-beta/neoforge-26.1.0.19-beta-installer.jar",
+        "size": 11195940,
+        "sha1": "7d9f928b8d34fcbb1ea7bad30f6c4849bab4aef7",
+        "sha256": "8fba9309b78ffb14a3791ed64a42b28a4bc924bb38942046949d8b0c7ebd6cc0"
+      },
+      "approval_required": [
+        "upstream-patched-client-cache",
+        "neoforge-only-fresh-process",
+        "beta-loader",
+        "neoforge-zink"
+      ]
+    },
+    {
+      "minecraft": "26.1.1",
+      "neoforge": "26.1.1.15-beta",
+      "enabled": false,
+      "installer": {
+        "url": "https://maven.neoforged.net/releases/net/neoforged/neoforge/26.1.1.15-beta/neoforge-26.1.1.15-beta-installer.jar",
+        "size": 11225753,
+        "sha1": "2c1372a6ec59f93937796ac54ac97000d91e272c",
+        "sha256": "210855229fb30c2378e3734902c1d07ff62ed97ff55baac21e57f42594b7c063"
+      },
+      "approval_required": [
+        "upstream-patched-client-cache",
+        "neoforge-only-fresh-process",
+        "beta-loader",
+        "neoforge-zink"
+      ]
+    },
+    {
+      "minecraft": "26.1.2",
+      "neoforge": "26.1.2.126",
+      "enabled": false,
+      "installer": {
+        "url": "https://maven.neoforged.net/releases/net/neoforged/neoforge/26.1.2.126/neoforge-26.1.2.126-installer.jar",
+        "size": 11322753,
+        "sha1": "b1c3eec3468ae94f61d79ea716131eff1d8dbbf5",
+        "sha256": "1184ffee181bd7a940691539fea07f237096378da4c94795247ecdb9cb354a1b"
+      },
+      "approval_required": [
+        "upstream-patched-client-cache",
+        "neoforge-only-fresh-process",
+        "neoforge-zink"
+      ]
+    },
+    {
+      "minecraft": "26.2",
+      "neoforge": "26.2.0.93",
+      "enabled": false,
+      "installer": {
+        "url": "https://maven.neoforged.net/releases/net/neoforged/neoforge/26.2.0.93/neoforge-26.2.0.93-installer.jar",
+        "size": 3608527,
+        "sha1": "97205829a020fc9389f504a77f590b54157c8dde",
+        "sha256": "7618883b9d87186281da2bd2a5e9a11af042ed15112bb63ccfc62bb0230ca699"
+      },
+      "approval_required": [
+        "upstream-patched-client-cache",
+        "neoforge-only-fresh-process"
+      ]
+    },
+    {
+      "minecraft": "26.3",
+      "neoforge": "26.3.0.101",
+      "enabled": false,
+      "installer": {
+        "url": "https://maven.neoforged.net/releases/net/neoforged/neoforge/26.3.0.101/neoforge-26.3.0.101-installer.jar",
+        "size": 3695743,
+        "sha1": "fdc7740d48063e9ea511d606d8bdb229e745c62d",
+        "sha256": "6bac566026d3f18b1dd9a529e7a4041fbc3141841e72d869c54f06730a38f09d"
+      },
+      "approval_required": [
+        "upstream-patched-client-cache",
+        "neoforge-only-fresh-process"
+      ]
+    },
+    {
+      "minecraft": "26.4-snapshot-1",
+      "neoforge": null,
+      "enabled": false,
+      "installer": null,
+      "approval_required": []
+    },
+    {
+      "minecraft": "26.4-snapshot-2",
+      "neoforge": null,
+      "enabled": false,
+      "installer": null,
+      "approval_required": []
+    },
+    {
+      "minecraft": "26.4-snapshot-3",
+      "neoforge": null,
+      "enabled": false,
+      "installer": null,
+      "approval_required": []
+    },
+    {
+      "minecraft": "26.4-snapshot-4",
+      "neoforge": null,
+      "enabled": false,
+      "installer": null,
+      "approval_required": []
+    },
+    {
+      "minecraft": "26.4-snapshot-5",
+      "neoforge": null,
+      "enabled": false,
+      "installer": null,
+      "approval_required": []
+    },
+    {
+      "minecraft": "26.4-snapshot-6",
+      "neoforge": null,
+      "enabled": false,
+      "installer": null,
+      "approval_required": []
+    }
+  ],
+  "inspection_checks": {
+    "xml_and_versions_api_sets_match": true,
+    "five_installer_sizes_sha1_sidecars_sha256_recorded": true,
+    "all_selected_game_and_inheritance_fields_match": true,
+    "embedded_profile_version_binpatch_hashes_recorded": true,
+    "referenced_artifact_hosts_exactly": [
+      "maven.neoforged.net",
+      "libraries.minecraft.net"
+    ],
+    "all_profile_library_artifacts_declare_sha1_and_size": true,
+    "processor_output_hash_declarations": "Absent in all five profiles; no upstream output hash claimed.",
+    "client_processor": "PROCESS_MINECRAFT_JAR creates a patched client derivative; not run.",
+    "selected_upstream_library_jars_verified_from_profile": 10,
+    "matching_source_jar_sidecars_verified": 10,
+    "neoforge_source_jars_sha1_sidecars_verified": 3,
+    "all_rows_disabled": true,
+    "modrinth_neoforge_queries_recorded_without_mod_jar_downloads": true,
+    "whole_history_installer_inspection": false,
+    "graphics_status": "Source-only candidate inference; branch patch sources are context, not proven matches to selected binary patch bundle.",
+    "downloaded_jars_committed": false
+  },
+  "local_tests": {
+    "fast": {
+      "command": "python3 tools/run_host_tests.py --fetch-deps",
+      "result": "passed",
+      "checks": 17,
+      "log_sha256": "f3defabf1d539fc35f43adbcb566886ff4366b0ac52a6eab330ae5dceaaa6bac",
+      "scope": "Existing deterministic launcher policy regression tests; no new NeoForge code exists."
+    },
+    "source_only_outside_root": {
+      "command": "python3 <source-only-export>/tools/run_host_tests.py --deps-dir <initially-empty-cache> --fetch-deps",
+      "result": "passed",
+      "checks": 17,
+      "log_sha256": "56b460a80678113ca58439bb8133adef0699244a43f62e59aaf86d4a282017e6",
+      "scope": "Git archive baseline plus draft data/plan, invocation outside repository; no private game cache."
+    },
+    "documentation": "passed: 1904 local links; 580 exact pinned-upstream omissions; 105 migration records",
+    "diff_check": "passed",
+    "native": "Not run: no native code changed.",
+    "neoforge_installer_or_game": "Not executed."
+  },
+  "hosted_ci": {
+    "status": "pending source publication; inspect actual jobs after push"
+  },
+  "physical_console": {
+    "status": "not run",
+    "package": null,
+    "required": [
+      "Each enabled version: install/repair/cancel, title, world create/load/play, save/reopen, Quit Game/library/relaunch",
+      "Controlify/controller/keyboard/mouse/haptics/audio and one compatible mod install/uninstall",
+      "Chosen NeoForge shader pack/profile loading/rendering and enable/disable before release unless explicitly scoped out",
+      "Vanilla/Fabric version regressions, native/class/code/FD budgets and endurance"
+    ]
+  },
+  "required_decisions": {
+    "upstream_patched_cache": "pending",
+    "neoforge_only_fresh_process": "pending",
+    "neoforge_261_zink": "pending",
+    "beta_261_and_2611": "pending"
+  },
+  "known_limits": [
+    "No processor output hash map; reproducible derived pins must be established after approval.",
+    "No full selected-binary graphics execution; keep all rows Coming soon.",
+    "No 26.4 NeoForge family in recorded catalog.",
+    "No PS5 memory demand or compatibility guarantee.",
+    "No current release/Store authorization for a new NeoForge package."
+  ],
+  "publication": {
+    "owner": "mateo-cogeanu/ProsperoCraft",
+    "runtime_source_changed": false,
+    "new_release_created": false,
+    "store_action": false
+  },
+  "baseline_source_sha256": {
+    "AGENTS.md": "f0114390b80763364a96e39eaf293a38cff774c0f04653f1e6989268ecab7751",
+    "client/26.1.lock.json": "93024e584f34c0c9dd949c464e968c8a4ffc3a1a7566de24b47670210eb9f9bf",
+    "client/26.2.lock.json": "6645decb2027fa77af9149fcbd68633ff543abdcab6801a856bbed34454d3329",
+    "client/26.3.lock.json": "b3bbc049dc8a01bc0e83e5e413c1173384486be441cbf78120d1515476900747",
+    "client/26.4-snapshots.lock.json": "82535324619f56e7143cf062e0b8f62803ac15fc6ba7804d196b1840680256f3",
+    "client/launcher/java/ProsperoControlifyKeyboard.java": "5e2750ca5d1a743bcda8bad3055a2b514c7fa6d529e960e2d0e38fc64c2bb65c",
+    "client/launcher/java/ProsperoDependencies.java": "5b68c6783cdbab913dc973625726591ecd8723082d56ecbf3d3f5f09f631afa5",
+    "client/launcher/java/ProsperoFabric.java": "ee8c969e8313fb6a04dcaab6d536ef3fa19d5612fc08e093e186ab9623e587b5",
+    "client/launcher/java/ProsperoGameLoader.java": "8b46b8b173c897fce01e042a2dbc372543afa1462f3a031422dbfb905100f0a8",
+    "client/launcher/java/ProsperoGraphics.java": "7b37c0fd45c57ea1ce085f1f47928331860594920aceda6f6cfb54df99018383",
+    "client/launcher/java/ProsperoInput.java": "877db0072596d902a7ac988a39fdf2210f219ef9ac62f738a054c84cc332e9f7",
+    "client/launcher/java/ProsperoInstall.java": "7db08add5455760e56730cecda303614daf555727c122e5fa4546d3bf527a194",
+    "client/launcher/java/ProsperoLauncher.java": "c42d666af13bc761f38fefbde0661dd2bff72619bd8a8e3b3c0bca02ea4fca6c",
+    "client/launcher/java/ProsperoLibrary.java": "c44bd05feadb18e5725c2898d7ef343274057e113070dcfc2d41aab172834c82",
+    "client/launcher/java/ProsperoModrinth.java": "70f43ed5a76be19c4ff8beeeae278fc44a9b419bf735edbf8db26c590e8e2b82",
+    "client/save_headroom/bootstrap.cpp": "28784a4e1fca2964fc824ae2cc62c9c129303c2f5d82219958e272df9dfa9b53",
+    "client/startup/ClientStartup25.java": "30e9b2a8524f9c2b57026c2a51557437c5e1bfdcb91feb23f827e22208af3dac",
+    "client/startup/bootstrap.cpp": "106c32c728a0dba8c61c43caceed9ed43a72dd51b5321f8d7150a9c264b1c61f",
+    "docs/client-controlify-event-isolation-164.md": "3cad36ff90cdcac8ac8c6d2c92a6d30880f099d3567d85c43ae08d1d55783eb4",
+    "docs/client-controlify-keyboard-162.md": "46ef4864523ac81cde0e59b8c443fc86865c780ecc6d5c7be29825f5879f5328",
+    "docs/client-controlify-lookup-165.md": "85b87cad137023e247d7441007beb852eea37700e2db92f7ea66785e2de5e8c6",
+    "docs/client-controlify-path-166.md": "bcf1c4280993398dac8a0a682db26e2d7566cc761d0103a6489747082f07214c",
+    "docs/client-fabric-audio-input-145.md": "e665b0f3f0cb5b2d84950fd94a149c7153c39ee1c6e3f79ac79b3d4f14c145cb",
+    "docs/client-fabric-audio-workers-149.md": "6e962f6bc2c99b10a2e4a795ead567e030c2385ed44b129ab5682a62d7fad01d",
+    "docs/client-fabric-context-locks-150.md": "fc231fa31eadd2cfb2f77e4709841e0e734023367bc0d98e1ed81070488b35f7",
+    "docs/client-fabric-data-search-148.md": "6c47f854eb38a608e600a93a30d66e6acf32b3dc30ea95c434837c4d50a3b0c9",
+    "docs/client-fabric-device-state-146.md": "58042bfe70f30edaa1285b296e1b4805d04d3a6e7c96e24f43f8bffba8318621",
+    "docs/client-fabric-emutls-130.md": "d2c83736edb54dc93a27052e04fec766ab00183874f8f1d3fc1d8f669b63fd33",
+    "docs/client-fabric-glfw-mutex-133.md": "f47a43655c3eb071d2793d1aa3de2819f7fe25fc92ee3159c1448fcc44c498f0",
+    "docs/client-fabric-hrtf-locks-147.md": "36edf248207c435f94e5923be6dc80dcce9ee3660162004e32f59188c80d38a8",
+    "docs/client-fabric-input-105.md": "35dbc939811aa777d1fe3654fd9fdca68ef92f89e724be96e6d83a4ac22954d4",
+    "docs/client-fabric-library-names-144.md": "fd9e4a7935368ed845324a203d5adcfccf756d761c61f2c187fb18c18c07301f",
+    "docs/client-fabric-mesa-strings-132.md": "f35cfba5d0ab1e189403d4d363ae97e88ca75fd8f64325edff6c1ba462af4ecb",
+    "docs/client-fabric-modrinth-103.md": "b6921a3e0643ec5c7323040f53d5392adaeffa9721fc26d9778971a0aacb9e3f",
+    "docs/client-fabric-monitor-reserve-142.md": "cedd5516f8044d49c525866fd23c72f0140147c49803591401a7635c211c406d",
+    "docs/client-fabric-monotonic-137.md": "3306b31c09fe162148cd84d4a87fa935dbb897cc4b251ff40998574e1617e9cb",
+    "docs/client-fabric-mutex-caller-138.md": "7195b8aeb1c3622da7cff82510d8f283025bb39b0210cfabd8a5f8e66d86a555",
+    "docs/client-fabric-native-exit-diagnostics-143.md": "294cde7d4d57ff3e647e3ee489dbd01a6643f71eb36a23cd114bf789493afb17",
+    "docs/client-fabric-native-scratch-125.md": "4cc8686d38737537b8749bec691b7c8df4d3e65e89886e0d0e6fb7c6c05cbc23",
+    "docs/client-fabric-native-throw-135.md": "abeddc0fbd5558ab6129751f3f0905663e4fc8993a6bedf078b88de59d593e49",
+    "docs/client-fabric-network-scratch-141.md": "037bbcf94e4681a4c9e939e9eb2211aa1239daef2977b93dbf645a6ec3813547",
+    "docs/client-fabric-present-reserve-140.md": "95a56629cfce3002a7f6bd9da6207203a60cb4db6ec8859424f455f88dbefdc9",
+    "docs/client-fabric-radv-conditions-134.md": "83dd37311b4342db353ee6a98405378e283c04943b673873b1183dc5336eaa9b",
+    "docs/client-fabric-sdl-locks-128.md": "4429ba9d6c0a0831b0c50aa5f0369dfc1b452ab08c4e3dedc9da7ee8d4ed88fa",
+    "docs/client-fabric-sdl-sync-131.md": "de6310641d5524522d94426d79cb59725820e7249e45da164ad9bda2d5858f23",
+    "docs/client-fabric-shaderc-locks-136.md": "da2b2792baf63f6b159fdcbf4dc8876f3678e1010f000cf0453b1c72fbdff420",
+    "docs/client-fabric-startup-diagnostics-129.md": "8b0b08bae3ea3dabd0bf04a831019d754bc672285c5ff5ae580a9f8b0c01c97b",
+    "docs/client-fabric-verifier-126.md": "d2cce8202128dbcea8057323a39456a1017c7d7517e9465e6cccb15ba5103f1c",
+    "docs/client-fabric-verifier-127.md": "42c19755c6d3af713d493fd39d3114b38281e029aa8a0fd175f89c50e5052141",
+    "docs/client-fabric-vma-locks-139.md": "8a59f07ec3190de97a568932514b723e0c734830a5d8e221113a226a211a4ea8",
+    "docs/client-zink-classpath-185.md": "8f9bc3a866f24cc36cfbfb3e86e747055638f742cfca2adebb71f4017741dda9",
+    "docs/client-zink-direct-context-196.md": "51486de1c2a1f2f86a5931d48d3c5bfc1969b7ecf0f0819395d75464fd483209",
+    "docs/client-zink-early-screen-195.md": "dd5aa92e1f7d1fa90cbc6fb03ed8d4a5297f9927b4e2898d769b1a80d86ec2f0",
+    "docs/client-zink-fabric-188.md": "bd31af9391bdc11b8b0bbe33ff8c891633f058487cec487cbfe10659d29819fc",
+    "docs/client-zink-fabric-guard-189.md": "89bfa61d9a93fedb98277ed3f0151dae80b6693f53793d3b765fa618e1641505",
+    "docs/client-zink-fabric-trace-190.md": "5536c24533a8409372413fac6a9ca27ed04c5e8a288123d4730203d3a143318a",
+    "docs/client-zink-final-202.md": "2cea64c557b9197641683e1a3e3bdfc164c58e278c9578ca6b241d32ce9da647",
+    "docs/client-zink-first-frame-182.md": "2f65ce6ef3b2df2436ca7744bcedd534966b2359ad236d080b8aa377f3691d7d",
+    "docs/client-zink-flushsync-191.md": "292f0f0be348dc5d1f9829867e96563eebd1e254dd70451195eee99d2d79fb33",
+    "docs/client-zink-hints-199.md": "d814a7b3e47ed30732f75e7b477623f47a34d1f26ea5b83fdc5bc1f025c37c52",
+    "docs/client-zink-iris-197.md": "abf5885a82133219cdb3825241a0408bf8f5d0a53a93a8477c26f7728694dca2",
+    "docs/client-zink-jni-env-192.md": "0ef80b98b5316033db86aee6a7ff82851e358891e38b234c17864894aa93190f",
+    "docs/client-zink-jvm-handoff-184.md": "1f4e1b397a94a33fc0de955a2e5f5cf172bbb538e4575c58f75125885b51e4d8",
+    "docs/client-zink-launcher-187.md": "111b68301303bf8feaca1f6befda0d9eb86c88b320ea27eb20d885a6f20dcc52",
+    "docs/client-zink-lifecycle-193.md": "0d03d2c90b63afd78af6da28e3691a825413fb7ce811051e874f23646773c112",
+    "docs/client-zink-management-200.md": "cb9339df876b77be74006535043688d4614550ba7b1c90b7148bd05567dfeaee",
+    "docs/client-zink-ownership-201.md": "c65a61ef014b87cf10eba7f3948b9d83a6ce57ab17f95d5f5cc9c2afef18183f",
+    "docs/client-zink-present-flush-183.md": "f8a16df8facb2f5aa12d252a0287e837064d7df9b1888856a7c83d5176fb4932",
+    "docs/client-zink-prewarm-194.md": "31124eefe643ad9c06f24bd090cd9a7b7846b452b031dc78abda4a7ea49af918",
+    "docs/client-zink-ready-203.md": "0e55d62c1098acf5f31f18f2365a06b2ade81999a66c617c755d1ac78a603719",
+    "docs/client-zink-resident-186.md": "434416da85e99b2088deefd19a5a31c10f5236134a4b8571ba1b3a54c8b15f52",
+    "docs/client-zink-sodium-198.md": "19eced8075d3fd05d81e6e9d0deb618c14c79b3473f98aedc28383e5aa2263d9",
+    "docs/host-test-inventory.md": "08e160c84e1482a8a6a22da7b4eb27835ecffbef8dce6aa06f5a6b81dcdc7b42",
+    "docs/host-testing.md": "1bf87f9e9d760786ac5e72fa2368feba1dfac82c02d856cc5a7e37332f362506",
+    "docs/maintainer-constraints.md": "daae9c8d0a99e433912b5d1043bfb7421e22811b0e1aa946348fb9dc1d7f1f2c",
+    "docs/source-organization.md": "400aae85d668f5c7b3f65ed79152a257aa66c76f073825573307ecb2a70ed7b7",
+    "docs/tooling-sharing.md": "08d28b1851b9d4f54f4e987410e3f59e032418b83818fb21a5965ea9d712d25f",
+    "tests/host-lanes.json": "fb4132cf0bea93e5ef2928c021446a113af15a8b6524f0942965195aff8bf47e",
+    "tools/package_save_headroom.py": "a03374aaefba438c2d138ce1a678fc5104698374752a89a86f798bf7eb3d2871"
+  },
+  "upstream_source_files_sha256": {
+    "upstream/net.neoforged.installertools_installertools_4.0.17_fatjar/source/net/neoforged/installertools/ProcessMinecraftJar.java": "541226674f8387ae15de3e58eb62fa2acdcac296238984b58c4015fcc7b9611b",
+    "upstream/net.neoforged.fancymodloader_loader_11.0.16/source/net/neoforged/fml/ModWorkManager.java": "9585332c4975915689eaf9842bad110d07b1adf88aadf2ffd1a102c0aabf8a46",
+    "upstream/net.neoforged.fancymodloader_loader_11.0.16/source/net/neoforged/fml/loading/EarlyLoadingScreenController.java": "bc54026061a7b68b8f0c0f01bcd615a9757534a139d30dbacb17db406229adb2",
+    "upstream/net.neoforged.fancymodloader_loader_11.0.16/source/net/neoforged/fml/loading/FMLConfig.java": "b7a6fb0dbc4b6328341c95b786f3c270b07e7eb7725398ecd48755fcd2657dae",
+    "upstream/net.neoforged.fancymodloader_loader_11.0.16/source/net/neoforged/fml/loading/ImmediateWindowHandler.java": "f51471b1e876512610c3f5d9954ea69691c567b55b7635a60e6f82831c568865",
+    "upstream/net.neoforged.fancymodloader_loader_11.0.16/source/net/neoforged/fml/classloading/ModuleClassLoader.java": "1298c69ea1157e896515e3ec65b01c142d2a0112480a4de85c2d6cc27080088f",
+    "upstream/net.neoforged.fancymodloader_loader_11.0.16/source/net/neoforged/fml/startup/Client.java": "2722aae706f2ce94d08ffb544c67995340611d71d93b879efb63add1537059e6",
+    "upstream/net.neoforged.fancymodloader_loader_11.0.16/source/net/neoforged/fml/startup/DevAgent.java": "d8fc4baf3e9182316a33d46e1cb819a3e69680e1c633a243f938404c9505bce4",
+    "upstream/net.neoforged.fancymodloader_loader_11.0.16/source/net/neoforged/fml/startup/Entrypoint.java": "bd31d7da43968ed8bcf702c4b2f24e491fbaa7d93660029fa9d861db4454a32d",
+    "upstream/net.neoforged.fancymodloader_loader_11.0.5/source/net/neoforged/fml/ModWorkManager.java": "9585332c4975915689eaf9842bad110d07b1adf88aadf2ffd1a102c0aabf8a46",
+    "upstream/net.neoforged.fancymodloader_loader_11.0.5/source/net/neoforged/fml/loading/EarlyLoadingScreenController.java": "bc54026061a7b68b8f0c0f01bcd615a9757534a139d30dbacb17db406229adb2",
+    "upstream/net.neoforged.fancymodloader_loader_11.0.5/source/net/neoforged/fml/loading/FMLConfig.java": "b7a6fb0dbc4b6328341c95b786f3c270b07e7eb7725398ecd48755fcd2657dae",
+    "upstream/net.neoforged.fancymodloader_loader_11.0.5/source/net/neoforged/fml/loading/ImmediateWindowHandler.java": "f51471b1e876512610c3f5d9954ea69691c567b55b7635a60e6f82831c568865",
+    "upstream/net.neoforged.fancymodloader_loader_11.0.5/source/net/neoforged/fml/classloading/ModuleClassLoader.java": "1298c69ea1157e896515e3ec65b01c142d2a0112480a4de85c2d6cc27080088f",
+    "upstream/net.neoforged.fancymodloader_loader_11.0.5/source/net/neoforged/fml/startup/Client.java": "2722aae706f2ce94d08ffb544c67995340611d71d93b879efb63add1537059e6",
+    "upstream/net.neoforged.fancymodloader_loader_11.0.5/source/net/neoforged/fml/startup/DevAgent.java": "d8fc4baf3e9182316a33d46e1cb819a3e69680e1c633a243f938404c9505bce4",
+    "upstream/net.neoforged.fancymodloader_loader_11.0.5/source/net/neoforged/fml/startup/Entrypoint.java": "bd31d7da43968ed8bcf702c4b2f24e491fbaa7d93660029fa9d861db4454a32d",
+    "upstream/net.neoforged.fancymodloader_loader_12.0.12/source/net/neoforged/fml/ModWorkManager.java": "9585332c4975915689eaf9842bad110d07b1adf88aadf2ffd1a102c0aabf8a46",
+    "upstream/net.neoforged.fancymodloader_loader_12.0.12/source/net/neoforged/fml/loading/EarlyLoadingScreenController.java": "c8e332471dc7e59ca83ee3f727d0d951884a43dbb4cd4cb92307f7c79410feda",
+    "upstream/net.neoforged.fancymodloader_loader_12.0.12/source/net/neoforged/fml/loading/FMLConfig.java": "b7a6fb0dbc4b6328341c95b786f3c270b07e7eb7725398ecd48755fcd2657dae",
+    "upstream/net.neoforged.fancymodloader_loader_12.0.12/source/net/neoforged/fml/loading/ImmediateWindowHandler.java": "338a6e054b086a349dc3786b9549e521ac08d2afb718cbe7c5a4be54f87037cd",
+    "upstream/net.neoforged.fancymodloader_loader_12.0.12/source/net/neoforged/fml/classloading/ModuleClassLoader.java": "64dac53c49960dd5d806ec1da059112360120c4d67de42a8bfd0983ec1117411",
+    "upstream/net.neoforged.fancymodloader_loader_12.0.12/source/net/neoforged/fml/startup/Client.java": "2722aae706f2ce94d08ffb544c67995340611d71d93b879efb63add1537059e6",
+    "upstream/net.neoforged.fancymodloader_loader_12.0.12/source/net/neoforged/fml/startup/DevAgent.java": "d8fc4baf3e9182316a33d46e1cb819a3e69680e1c633a243f938404c9505bce4",
+    "upstream/net.neoforged.fancymodloader_loader_12.0.12/source/net/neoforged/fml/startup/Entrypoint.java": "7513c8bd8a76f34fea9576a539e882c8fbac05cde7f0468f2b9ccb82106a0cc6",
+    "upstream/net.neoforged.fancymodloader_loader_11.0.15/source/net/neoforged/fml/ModWorkManager.java": "9585332c4975915689eaf9842bad110d07b1adf88aadf2ffd1a102c0aabf8a46",
+    "upstream/net.neoforged.fancymodloader_loader_11.0.15/source/net/neoforged/fml/loading/EarlyLoadingScreenController.java": "bc54026061a7b68b8f0c0f01bcd615a9757534a139d30dbacb17db406229adb2",
+    "upstream/net.neoforged.fancymodloader_loader_11.0.15/source/net/neoforged/fml/loading/FMLConfig.java": "b7a6fb0dbc4b6328341c95b786f3c270b07e7eb7725398ecd48755fcd2657dae",
+    "upstream/net.neoforged.fancymodloader_loader_11.0.15/source/net/neoforged/fml/loading/ImmediateWindowHandler.java": "f51471b1e876512610c3f5d9954ea69691c567b55b7635a60e6f82831c568865",
+    "upstream/net.neoforged.fancymodloader_loader_11.0.15/source/net/neoforged/fml/classloading/ModuleClassLoader.java": "1298c69ea1157e896515e3ec65b01c142d2a0112480a4de85c2d6cc27080088f",
+    "upstream/net.neoforged.fancymodloader_loader_11.0.15/source/net/neoforged/fml/startup/Client.java": "2722aae706f2ce94d08ffb544c67995340611d71d93b879efb63add1537059e6",
+    "upstream/net.neoforged.fancymodloader_loader_11.0.15/source/net/neoforged/fml/startup/DevAgent.java": "d8fc4baf3e9182316a33d46e1cb819a3e69680e1c633a243f938404c9505bce4",
+    "upstream/net.neoforged.fancymodloader_loader_11.0.15/source/net/neoforged/fml/startup/Entrypoint.java": "bd31d7da43968ed8bcf702c4b2f24e491fbaa7d93660029fa9d861db4454a32d",
+    "upstream/net.neoforged.installertools_installertools_4.0.12_fatjar/source/net/neoforged/installertools/ProcessMinecraftJar.java": "6e7f6b92823498d2087407bcba5790c749b23ab89e336f9c99b6738dbe6675f5"
+  }
+}

@@ -10,6 +10,13 @@ or awaiting console acceptance.
 
 ## Current candidate and deferred goals
 
+NeoForge client work is now authorized through the supplied phased prompt. The
+[Phase A plan](client-neoforge-plan.md) records upstream candidates and a disabled
+draft lock; implementation awaits the requested decisions on upstream patched
+cache output, a NeoForge-only fresh process, 26.1.x Zink and beta-only builds.
+NeoForge remains Coming soon. Preserve released204 and every existing
+Vanilla/Fabric path; no release or Store action follows from this research.
+
 Published 167 was accepted for functionality/polish and explicitly released; broader
 device/lifecycle/endurance coverage was not measured. Local 168 packages shared
 tooling at source `8d9874ddda9a3c468d8f2dc5b1a64147b76a26f0`, SHA-256

@@ -12,6 +12,7 @@ history; a development entry does not imply a public release.
 | Fast portable checks and optional lanes | [Host testing](host-testing.md), [inventory](host-test-inventory.md) |
 | Full target preparation, ownership and archived source | [Source organization](source-organization.md) |
 | Shared bootstrap, current identity and legacy package audits | [Tooling sharing](tooling-sharing.md) |
+| NeoForge client research; implementation decisions pending | [Phase A plan](client-neoforge-plan.md), [inspection and validation](validation/client-neoforge-phase-a-2026-11-03.json) |
 | Published 167 scope | [Release notes](releases/client-input-fabric-167.md), [console acceptance](validation/client167-console-acceptance-2026-10-30.json) |
 | Microphone feature handoff for another model | [Start here](handoffs/microphone-174/00-START-HERE.md), [continuation prompt](handoffs/microphone-174/03-CONTINUATION-PROMPT.md) |
 | Released179 — automatic microphone, no launcher mic menu | [Release notes](releases/client-microphone-default-179.md), [console acceptance](validation/client179-console-acceptance-2026-10-31.json), [publication/Store submission](validation/client179-store-publication-2026-10-31.json) |
