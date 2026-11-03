@@ -115,6 +115,28 @@ def main():
                 raise ValueError('Missing matched333 native: ' + repr((owner, method, desc)))
             covered += 1
         counts[jar.name] = covered
+    baseline = args.build_dir / 'baseline204'
+    manifest = json.loads((baseline / 'manifest.json').read_text())
+    linked = [json.loads(line) for line in (args.build_dir / 'link205.rsp').read_text().splitlines()]
+    replaced = {'inputs/104-main.o', 'inputs/032-embedded-java.o', 'inputs/109-builtin-libraries.o'}
+    retained = {}
+    for item in manifest['arguments']:
+        if item.startswith('inputs/') and item not in replaced:
+            file = (baseline / item).resolve()
+            if linked.count(str(file)) != manifest['arguments'].count(item):
+                raise ValueError('Baseline link input missing/duplicated: ' + item)
+            retained[item] = sha(file)
+    for row in manifest['files']:
+        if sha(baseline / row['path']) != row['sha256']:
+            raise ValueError('Retained relink input corrupted: ' + row['path'])
+    linked333 = str((args.build_dir / 'registry/embedded-lwjgl333.o').resolve())
+    if linked.count(linked333) != 1:
+        raise ValueError('Missing/duplicate333 native group')
+    elf = (args.build_dir / 'eboot.elf').read_bytes()
+    for option in (b'-Dps5.zip.maxOpenFiles=8', b'-Xmx1536m', b'-XX:CompressedClassSpaceSize=64m',
+                   b'-XX:ReservedCodeCacheSize=96m', b'-XX:ActiveProcessorCount=4'):
+        if option + b'\0' not in elf:
+            raise ValueError('Retained option missing from actual205 ELF: ' + option.decode())
     source = (args.build_dir / 'registry/builtin-libraries.cpp').read_text()
     if 'std::strcmp(name,"lwjgl333") == 0' not in source:
         raise ValueError('No scoped builtin handle')
@@ -127,6 +149,7 @@ def main():
              'uncompressed_growth_bytes': growth, 'baseline_changed_files': changed, 'added_files': added,
              'matched_native_declarations': counts, 'unsupported_nonplatform_native_declarations': sorted(absent),
              'tinyfd': '11 original333 declarations match existing explicit-unavailable/cancel adapter; no new dialog implementation',
+             'retained_link_input_sha256': retained,
              'native_symbols': '333 definitions prefixed; original lookup keys retained with scoped handle',
              'result': 'PASS scoped package/static ABI audit; no complete feature or console acceptance', 'console': 'NOT TESTED'}
     args.output.parent.mkdir(parents=True, exist_ok=True)

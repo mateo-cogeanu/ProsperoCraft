@@ -1,6 +1,6 @@
 {
   "date": "2026-11-03",
-  "status": "Development; local205 packaging pending; no physical acceptance",
+  "status": "Signed local205 candidate; independent package audit PASS; physical acceptance pending",
   "title_id": "PPSA99874",
   "app_version": "01.000.205",
   "runtime_commit": "d19b3fd8bf7c2108c48c63502c0a325f4841a8ce",
@@ -15,9 +15,45 @@
     "full_assets_main": "45second bounded original1.21.11 desktop Main; atlas/OpenAL initialization; deliberate timeout; no world/title/exit acceptance",
     "target": "PASS333208units,runtime137java.base,205compile/link/converter"
   },
-  "hosted_ci": "pending source push",
+  "hosted_ci": {
+    "source_commit": "3c3b06c907d74ce812c618c24b07d1fe9fd98374",
+    "url": "https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41711828931",
+    "ubuntu-24.04": "PASS19 fast checks; inspected actual completed job",
+    "macos-15": "queued at last inspection; no hosted macOS pass claimed",
+    "scope": "Portable launcher/policy checks only; target/manual333 tests are local, not hosted"
+  },
   "source_only": "PASS19/19,22.9seconds; tracked source copy, initially empty explicit dependency cache, invocation from/tmp; only2pinned host libraries fetched",
-  "package": "pending",
+  "package": {
+    "app_version": "01.000.205",
+    "title_id": "PPSA99874",
+    "source_commit": "3c3b06c907d74ce812c618c24b07d1fe9fd98374",
+    "source_tree": "clean",
+    "package_sha256": "1bcc84a8905bcefd31688bc1fdeee74bfc2a8c5620ab97311d59e2905d10fe6c",
+    "package_bytes": 127433975,
+    "baseline_package_sha256": "89167d01c7da0ece733b0dd8b7871a05ee38ff5f79ee45b4ce9beefc5d4c14a0",
+    "baseline_relink_sha256": "4351224b234d2b16a688afc4d31f23f0c6badc30670d034ad065cc629bce9f0f",
+    "symbols_sha256": "352eb616cd5e206b35b6e70d1a60d80b43277a6e961bd34c847edc44be67514d",
+    "eboot_sha256": "0b300f894a6afbcd98b5c57bfcb26fc264d1767e1b89722df1c71eedd6d2d8a6",
+    "newGroupSha256": "8f99cb4d5a5062933f68bcd6fc14b15916aea7f3edda9fe99dfab95e5b6de5d7",
+    "overlaySha256": "50681a2cf89aaaed19f462607073d2487ec61252c9c2c89bf80ae9c4bd763ff8",
+    "zip_growth_bytes": 377094,
+    "uncompressed_growth_bytes": 1116901,
+    "matched_native_declarations": {
+      "lwjgl-freetype-3.3.3.jar": 0,
+      "lwjgl-glfw-3.3.3.jar": 0,
+      "lwjgl-jemalloc-3.3.3.jar": 0,
+      "lwjgl-openal-3.3.3.jar": 0,
+      "lwjgl-opengl-3.3.3.jar": 2228,
+      "lwjgl-stb-3.3.3.jar": 215,
+      "lwjgl-tinyfd-3.3.3.jar": 0,
+      "lwjgl-3.3.3.jar": 1756
+    },
+    "tinyfd": "11 original333 declarations match existing explicit-unavailable/cancel adapter; no new dialog implementation",
+    "native_symbols": "333 definitions prefixed; original lookup keys retained with scoped handle",
+    "audit": "PASS ZIP CRC/duplicates/paths, exact baseline delta, unchanged parent JARs/Java image/resources/options, exploded-class/JAR agreement, all retained link inputs/checksums and isolated333 exports",
+    "zip_budget": 8,
+    "baseline204": "Retained exact bytes and original release; no overwrite/rebuild"
+  },
   "pending": [
     "Exact205PS5 install/title/world/save/reload/audio/input/Quit/library/relaunch",
     "26.1/.1/.2,26.2,26.3 Vanilla/Fabric and supported snapshot regression",

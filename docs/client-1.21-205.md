@@ -9,8 +9,13 @@ original research evidence; they are not a production support declaration.
 
 Title **PPSA99874**, app **01.000.205**, local candidate only. Accepted204 and its
 release remain unchanged. No release, prerelease or Store update is authorized.
-Exact package hash and growth will be recorded in the [validation](validation/client121-vanilla-205-2026-11-03.json)
-after signing and independent audit. Physical-console acceptance is pending.
+Signed package SHA-256 is
+`1bcc84a8905bcefd31688bc1fdeee74bfc2a8c5620ab97311d59e2905d10fe6c`.
+The ZIP is127,433,975bytes: +377,094 compressed and +1,116,901 uncompressed
+against204, below the provisional8MiB budget. The independent package audit passes;
+see [validation](validation/client121-vanilla-205-2026-11-03.json). Physical-console
+acceptance is pending. Build source is `3c3b06c907d74ce812c618c24b07d1fe9fd98374`
+with a clean working tree; later audit/documentation changes do not rebuild it.
 
 ## Changes and retained boundaries
 
