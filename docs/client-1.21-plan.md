@@ -144,6 +144,17 @@ extension references were collected from original classfiles; dynamic mod calls,
 worker ownership and every capability path still require execution. A zero-share
 Window site is not proof that arbitrary mods create no shared contexts.
 
+Comparison with the hash-verified original26.1 client finds older static calls
+absent from26.1's references:1.21–1.21.4 includes stencil/renderbuffer operations,
+glMapBuffer, glGetTexImage, glDrawPixels and legacy uniform uploads;1.21.5 adds
+glGetActiveUniform relative to that baseline;1.21.6–1.21.8 retains legacy uniform
+uploads.1.21.9–1.21.11 has no additional method names under this comparison.
+The validation stores the complete differences. It normalizes owner suffixC,
+not inherited owners or overloads, so it is a screening inventory, not a native
+ABI proof. In particular, glDrawPixels is a compatibility-era operation: establish
+whether the original path is reachable under core rendering before claiming an
+early release works. Do not fabricate its support or change the game's context.
+
 Existing `gl_context.c`/frontend accepts core major3/4 and minor0–6, including3.2;
 it still rejects shared/robust/MSAA/stereo/sRGB requests and incompatible debug/
 no-error combinations. Reuse its native context/ownership/present/flush/lifetime
@@ -266,7 +277,9 @@ native/Java owner, allocation/descriptor peaks and joined cleanup. Keep raw data
 local. Host macOS OpenGL is not the target Zink/RADV resource footprint.
 
 All versions retain publisher `--accessToken`, `--uuid`, `--username`, `--version`
-and account-type argument structure, and authlib uses the normal session flow.
+and account-type argument structure. Read-only inspection of all five authlib
+versions confirms the same `joinServer(UUID, String, String)` declaration in
+YggdrasilMinecraftSessionService; no authlib adapter is indicated by that surface.
 Keep ProsperoAuth/approved OAuth client unchanged. No authenticated live session/
 matching-version server join was performed; metadata is not confirmation that
 all older authlib/HTTP/native paths work. Only matching121 servers are in scope
@@ -301,8 +314,11 @@ staticness, not only method names. For JNA, compile the unchanged runtime
 the hash-verified5.19.1 host dispatch and require missing-library failure with
 `jna.nosys`, `jna.noclasspath` and `jna.nounpack` enabled.
 
-Local existing17 fast checks pass. Documentation/diff and actual hosted jobs are
-recorded in the matching validation after publication. Native/graphics lanes were
+Local existing17 fast checks and source-only outside-root17 checks with an
+initially empty dependency cache pass; documentation and diff checks pass.
+Actual [Ubuntu/macOS jobs](https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41700953629)
+for research sourced91fdab were inspected; final results are recorded in the
+matching validation. Native/graphics lanes were
 not rerun for this research-only change; no native implementation changed.
 No portable test code or launcher options changed. A fresh-cache source-only
 outside-root check is recorded separately from local and hosted execution.
