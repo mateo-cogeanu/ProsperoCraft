@@ -1,5 +1,11 @@
 # Changelog
 
+## Release 01.000.204 — 2026-11-03
+
+- Publish the exact user-confirmed 204 package, without rebuilding, with matching source/relink materials and checksums.
+- Include normal 26.1.x Vanilla/Fabric launcher support, shader rendering/quit cleanup repairs and reduced archive-handle retention for save headroom.
+- User reports the build works very well and explicitly requests ProsperoStore release. No exhaustive mod/shader/device matrix, formal ALL PASS or endurance claim.
+
 ## Build204 — save descriptor headroom test
 
 - Retrieve26.3Vanilla save EMFILE evidence:269open/248regulardescriptors despite higher softlimit; report opens fail. Exactquota/fullowner distribution remain unproven.

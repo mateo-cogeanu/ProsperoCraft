@@ -1,0 +1,13 @@
+{
+  "date": "2026-11-03",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.204",
+  "package_sha256": "89167d01c7da0ece733b0dd8b7871a05ee38ff5f79ee45b4ce9beefc5d4c14a0",
+  "source_commit": "8e5cb817e3a54164a75809824453ab23a8cac5e3",
+  "user_confirmation": "\ud83d\udc4d lets make prosperostore release, its all working very well.",
+  "context": "User responds to exact build 204 delivery and requested PS5 save/reopen test. Records functional physical-console acceptance and explicit GitHub/ProsperoStore release authorization for the retained 204 package.",
+  "prior_shader_quit_confirmation": "User explicitly confirmed shader rendering and Quit Game passed on 202; 204 retains the implementation. Latest broad functional confirmation authorizes 204 release; no new exact shader pack/profile measurement or per-version checklist was provided.",
+  "scope": "Functional acceptance reported by the physical tester. No formal ALL PASS, new frozen milestone, complete mod/device/shader matrix, measured world-creation speed or endurance inferred.",
+  "limits": "Original EMFILE failure record remains preserved. ZIP budget 8 creates descriptor headroom, not a universal process cap; other handle owners may exhaust capacity during longer sessions. No recovery of earlier failed writes claimed.",
+  "publication": "Explicitly authorized release and existing ProsperoStore listing update; exact package bytes preserved without rebuild."
+}

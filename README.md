@@ -6,11 +6,11 @@
 
 Download Minecraft on your console, keep separate instances for worlds and mods, and play with DualSense controls, native Vulkan graphics and game audio. ProsperoCraft includes Microsoft sign-in, a Modrinth content browser, controller remapping and six saved launcher themes.
 
-**[Download 01.000.179](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.179)** · [Latest release](https://github.com/mateo-cogeanu/ProsperoCraft/releases/latest) · [Changelog](CHANGELOG.md) · [Report an issue](https://github.com/mateo-cogeanu/ProsperoCraft/issues/new/choose)
+**[Download 01.000.204](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.204)** · [Latest release](https://github.com/mateo-cogeanu/ProsperoCraft/releases/latest) · [Changelog](CHANGELOG.md) · [Report an issue](https://github.com/mateo-cogeanu/ProsperoCraft/issues/new/choose)
 
 ProsperoCraft handles Minecraft installation, accounts, input and game integration. Its [Native Java 25 Runtime](https://github.com/mateo-cogeanu/ps5-java25-homebrew) is maintained separately. Official Minecraft game JARs and asset objects are downloaded and verified from the publisher, rather than bundled with the app.
 
-Release **01.000.179** adds confirmed Simple Voice Chat microphone input, automatic microphone preparation before Play, and simpler instance management with no microphone menu. Use the controller's physical mic button or PS5 system mute. It also includes launcher-style browser uploads and the runtime/audio fixes developed since167. [Release notes](docs/releases/client-microphone-default-179.md) · [Exact179 console acceptance](docs/validation/client179-console-acceptance-2026-10-31.json). Broad mod/device compatibility and endurance remain unmeasured. [ProsperoStore catalog update submitted](https://github.com/darkxex/ps5-homebrew-catalog/pull/991); Store availability follows catalog publication.
+Release **01.000.204** adds normal 26.1/26.1.1/26.1.2 Vanilla/Fabric support, shader and Quit Game fixes, and improved descriptor headroom for world saving. The physical tester confirms the exact package works well and authorizes release. [Release notes](docs/releases/client-26x-shaders-saves-204.md) · [Console acceptance and limits](docs/validation/client204-console-acceptance-2026-11-03.json). Broad mod/shader compatibility, world-creation performance and endurance remain unmeasured. ProsperoStore publication requires catalog approval and deployment.
 
 ## What can I play?
 
@@ -18,6 +18,7 @@ Earlier release **01.000.167** added supported Minecraft26.2 Fabric, controller/
 
 | Minecraft version | Vanilla | Fabric |
 | --- | --- | --- |
+| **26.1 / 26.1.1 / 26.1.2** | Supported with normal Play/Ready states in 204. | Supported; matching loader, mods and shader versions required. |
 | **26.3** | Established playable PS5 baseline, including game audio and server joining. | Released, with positive console feedback. Mods still need individual compatibility checks. |
 | **26.2** | Released; positive console play and keyboard feedback. | Supported in167, following user acceptance of Fabric26.2 and Controlify controller/keyboard/mouse handoff. |
 | **26.4 snapshots 1–6** | Available; positive console feedback on 118/119. Use separate test worlds. | Selectable when matching loader/mod versions exist; snapshot-specific Fabric, Controlify and mod compatibility is not established. |
