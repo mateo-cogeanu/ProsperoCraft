@@ -6,7 +6,7 @@ road on a dark background. Thin connectors, flat cards and a monochrome palette
 keep the presentation minimal. Wording and status follow the maintainer's requested roadmap. This graphic
 does not replace the scoped build, console or compatibility validation records.
 
-- `prosperocraft-roadmap.png`: 1800 × 1470 sharing image, rendered at twice the
+- `prosperocraft-roadmap.png`: 1800 × 1830 sharing image, rendered at twice the
   output resolution and downsampled.
 - `prosperocraft-roadmap.svg`: editable vector version with live text.
 - Generator: `tools/draw_roadmap.py`, using Pillow and supplied TrueType fonts.
@@ -19,6 +19,7 @@ Regenerate from the repository root:
 python3 tools/draw_roadmap.py --font /path/to/Arial.ttf --bold-font /path/to/Arial-Bold.ttf --output assets/roadmap
 ```
 
-The first planned row follows the road from right to left, then the final row
-continues left to right. Numbered planned milestones make the reading order
+The planned rows follow the road right to left, left to right, then right to
+left. NeoForge precedes 1.21.x; Forge precedes 1.20.x; .mrpack imports sit between
+1.20.x and 1.19.x. Numbered planned milestones make the reading order
 explicit. No release dates are assigned.

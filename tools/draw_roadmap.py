@@ -15,13 +15,13 @@ def main():
     p.add_argument('--bold-font', type=Path, required=True)
     p.add_argument('--output', type=Path, required=True)
     a = p.parse_args()
-    width, height, scale = 1800, 1470, 2
+    width, height, scale = 1800, 1830, 2
     bg, ink, muted = '#101413', '#131816', '#87928C'
     canvas = Image.new('RGB', (width * scale, height * scale), bg)
     draw = ImageDraw.Draw(canvas)
     svg = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
            '<title>ProsperoCraft roadmap</title>',
-           '<desc>White completed milestones: Full 26.x.x support, microphone support, shader support, OpenGL support. A winding road continues through dark planned milestones: 1.21.x, 1.20.x, 1.19.x, 1.18.x, 1.17.x, 1.16.x support and older versions.</desc>',
+           '<desc>White completed milestones: Full 26.x.x support, microphone support, shader support, OpenGL support. A winding road continues through dark planned milestones: NeoForge support, 1.21.x support, Forge support, 1.20.x support, .mrpack imports, 1.19.x support, 1.18.x support, 1.17.x support, 1.16.x support and older versions.</desc>',
            f'<rect width="{width}" height="{height}" fill="{bg}"/>']
 
     def rect(x, y, w, h, fill, radius=0):
@@ -45,7 +45,7 @@ def main():
     text(76, 92, 'ProsperoCraft', 58, '#F4F6F4', True)
     text(79, 171, 'Roadmap', 28, muted)
 
-    # Continuous three-row road, sampled from cubic curves for both formats.
+    # Continuous four-row road, sampled from cubic curves for both formats.
     road = [(258 + i * 1284 / 100, 550) for i in range(101)]
     def curve(p0, p1, p2, p3):
         for i in range(1, 101):
@@ -54,10 +54,12 @@ def main():
     curve((1542,550),(1760,550),(1760,910),(1542,910))
     road.extend((1542-i*1284/100,910) for i in range(1,101))
     curve((258,910),(40,910),(40,1270),(258,1270))
-    road.extend((258+i*856/100,1270) for i in range(1,101))
+    road.extend((258+i*1284/100,1270) for i in range(1,101))
+    curve((1542,1270),(1760,1270),(1760,1630),(1542,1630))
+    road.extend((1542-i*428/100,1630) for i in range(1,101))
     line(road, '#35403A', 3)
     line(road[:101], '#A9B6AD', 3)
-    for x,y,direction in [(940,550,1),(870,910,-1),(720,1270,1)]:
+    for x,y,direction in [(940,550,1),(870,910,-1),(720,1270,1),(1350,1630,-1)]:
         line([(x-7*direction,y-6),(x,y),(x-7*direction,y+6)], muted, 2)
 
     def card(x, y, title, done, road_y, number):
@@ -79,15 +81,20 @@ def main():
     completed[0]=['Full 26.x.x','support']
     completed[1]=['Microphone','support']
     for x,title in zip(xs,completed): card(x,330,title,True,550,0)
-    for n,(x,version) in enumerate(zip(reversed(xs),['1.21.x','1.20.x','1.19.x','1.18.x']),1):
-        card(x,690,[version+' support'],False,910,n)
-    for n,(x,title) in enumerate(zip(xs,[['1.17.x support'],['1.16.x support'],['Older versions']]),5):
-        card(x,1050,title,False,1270,n)
-    circle(1114,1270,4,'#84958A')
-    circle(84,1380,5,'#F4F6F3')
-    text(101,1370,'Completed',18,muted)
-    circle(256,1380,5,'#68786D')
-    text(273,1370,'Planned',18,muted)
+    planned = [
+        'NeoForge support', '1.21.x support', 'Forge support', '1.20.x support',
+        '.mrpack imports', '1.19.x support', '1.18.x support', '1.17.x support',
+        '1.16.x support', 'Older versions',
+    ]
+    for index, title in enumerate(planned):
+        row, column = divmod(index, 4)
+        x = xs[3-column] if row % 2 == 0 else xs[column]
+        card(x,690+row*360,[title],False,910+row*360,index+1)
+    circle(1114,1630,4,'#84958A')
+    circle(84,1740,5,'#F4F6F3')
+    text(101,1730,'Completed',18,muted)
+    circle(256,1740,5,'#68786D')
+    text(273,1730,'Planned',18,muted)
     a.output.mkdir(parents=True,exist_ok=True)
     (a.output/'prosperocraft-roadmap.svg').write_text('\n'.join(svg+['</svg>'])+'\n')
     canvas.resize((width,height),Image.Resampling.LANCZOS).save(a.output/'prosperocraft-roadmap.png',optimize=True)
