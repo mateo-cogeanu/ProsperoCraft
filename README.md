@@ -22,7 +22,8 @@ Earlier release **01.000.167** added supported Minecraft26.2 Fabric, controller/
 | **26.3** | Established playable PS5 baseline, including game audio and server joining. | Released, with positive console feedback. Mods still need individual compatibility checks. |
 | **26.2** | Released; positive console play and keyboard feedback. | Supported in167, following user acceptance of Fabric26.2 and Controlify controller/keyboard/mouse handoff. |
 | **26.4 snapshots 1–6** | Available; positive console feedback on 118/119. Use separate test worlds. | Selectable when matching loader/mod versions exist; snapshot-specific Fabric, Controlify and mod compatibility is not established. |
-| **Other versions** | Downloadable 26.x entries may appear, but Play is blocked for versions outside the set above. | No additional compatibility claim. NeoForge is not enabled. |
+| **1.21 through 1.21.11** | Coming soon for all twelve releases; [Phase A research](docs/client-1.21-plan.md) requires a matching PS5 LWJGL 3.3.3 integration and an explicit Java-library overlay decision. | Coming soon for all twelve; loader/mod availability does not establish PS5 compatibility. |
+| **Other versions** | Unsupported 26.x catalog entries may download, but Play stays blocked. 1.21.x is not yet offered by the launcher. | No additional compatibility claim. NeoForge is not enabled. |
 
 The user accepted166’s Controlify controller detection and physical input handoff repair, then accepted167’s launcher keyboard/mouse and cursor work.167 removes the Fabric26.2 development labels. Mod compatibility still depends on the exact game/mod versions; no universal compatibility or endurance claim is made. [Launcher input details](docs/client-launcher-desktop-167.md).
 

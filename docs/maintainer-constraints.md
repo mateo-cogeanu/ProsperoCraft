@@ -10,6 +10,15 @@ or awaiting console acceptance.
 
 ## Current candidate and deferred goals
 
+The user now prioritizes **1.21.x before NeoForge**. The [1.21 Phase A draft](client-1.21-plan.md)
+enumerates twelve original releases and identifies one LWJGL3.3.3 native generation,
+three OSHI/JNA generations, obfuscated shutdown checks and older Controlify JNA
+SDL bindings. All121 rows remain Coming soon. Native-only integration cannot
+recognize PS5; minimal genuine333 Java platform/dispatch overlays require the
+explicit user decision specified by the supplied prompt. Full-assets/Fabric host
+startup and resource comparisons remain incomplete. Preserve204 and all26.x paths;
+no implementation, package, release or Store change follows from this draft.
+
 NeoForge client work is now authorized through the supplied phased prompt. The
 [Phase A plan](client-neoforge-plan.md) records upstream candidates and a disabled
 draft lock; implementation awaits the requested decisions on upstream patched

@@ -139,3 +139,21 @@ com.sun.management.HotSpotDiagnosticMXBean. This is not shader acceptance.
 Host tests, compilation logs or a working no-shader world do not satisfy the gate.
 Record exact candidate/pack/profile and physical shader behavior; keep release,
 prerelease and Store publication on hold until the required confirmation.
+
+## Minecraft1.21.x research and generation isolation —2026-11-03
+
+The user prioritizes1.21.x before NeoForge. Follow docs/client-1.21-plan.md and
+client/1.21.lock.json; all twelve rows remain Coming soon until implemented and
+validated independently. The supplied port prompt requires an explicit decision
+before publisher-library Java overlays: original LWJGL3.3.3 cannot recognize PS5,
+and unchanged333 Java/current343 JNI is incompatible. No approval is inferred
+from source publication. Preserve current26.x bindings/groups/options and204.
+Original game/library/mod JARs stay intact; no game remapping/transformations or
+version/platform spoofing. Matching333 native groups need scoped JNI and a coherent
+game/Fabric class owner, plus genuine platform/dispatch sources if approved.
+Obfuscated clean-shutdown accessors must preserve the existing evidence/SDL/exit
+gate. Older Controlify uses JNA SDL bindings: the26.x FFM property alone does not
+establish controller/event isolation. Keep full-assets/Fabric/resource experiments,
+actual package growth and PS5 validation explicit; retain204 ZIP budget8 and all
+existing runtime/native ownership contracts. No new release/Store authorization;
+exact-build physical shader acceptance remains mandatory unless scoped out.

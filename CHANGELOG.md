@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased — 1.21.x Phase A research draft, 2026-11-03
+
+- Enumerate and pin all twelve original1.21.x releases, full libraries/rules,
+  native classifiers and Fabric/Modrinth research; all remain Coming soon.
+- Record incompatible333/343 native descriptors, original Java25 desktop-GL
+  initialization, forced older-JNA host dispatch checks, renderer generations,
+  obfuscated clean-quit and Controlify JNA integration requirements.
+- Prioritize1.21.x before NeoForge; pause for required minimal333 Java overlay
+  approval. Full-assets/Fabric/resource and every PS5 check remain pending.
+  No launcher/runtime behavior, package, release or Store change.
+
 ## Unreleased — NeoForge Phase A, 2026-11-03
 
 - Record official version enumeration, five verified installer profiles, exact JVM options, upstream patched-output requirements, early-window configuration and NeoForge content availability.
