@@ -286,3 +286,20 @@ record verifies with0errors/0warnings. Description,credits and icon remain uncha
 only version/artifact/digest change,with release changelog. No monitoring after
 submission per established preference; Store availability requires approval and
 deployment. See validation/client167-store-publication-2026-10-30.json.
+
+
+## Accepted 204 release — 2026-11-03
+
+[Release 01.000.204](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.204)
+publishes the exact user-confirmed package with normal 26.1.x Vanilla/Fabric
+support, shader/quit repairs and descriptor headroom for saves. All five public
+assets were independently downloaded and hash-verified; both downloaded OpenAL
+relink routes reproduce the exact native executable. Catalog checks pass:
+233 tests (2 skipped), 182 offline records, and online digest/version verification
+with zero errors or warnings.
+
+The existing-listing update is [PR 1094](https://github.com/darkxex/ps5-homebrew-catalog/pull/1094).
+Description, credits and icon remain unchanged. No post-submission monitoring
+of checks, merge, deployment or live availability is performed. See the
+[publication record](validation/client204-store-publication-2026-11-03.json) for
+asset digests, user acceptance scope and remaining endurance/compatibility limits.

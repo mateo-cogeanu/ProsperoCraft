@@ -1,0 +1,48 @@
+{
+  "date": "2026-11-03",
+  "title_id": "PPSA99874",
+  "version": "01.000.204",
+  "release_url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.204",
+  "release_tag_commit": "a5c4afc24c5dcc72630254a4164fdb3d7dd3fd81",
+  "candidate_source_commit": "8e5cb817e3a54164a75809824453ab23a8cac5e3",
+  "package_sha256": "89167d01c7da0ece733b0dd8b7871a05ee38ff5f79ee45b4ce9beefc5d4c14a0",
+  "assets": [
+    {
+      "name": "PPSA99874.zip",
+      "bytes": 127056881,
+      "sha256": "89167d01c7da0ece733b0dd8b7871a05ee38ff5f79ee45b4ce9beefc5d4c14a0"
+    },
+    {
+      "name": "client204-openal-source-relink.zip",
+      "bytes": 146612794,
+      "sha256": "4351224b234d2b16a688afc4d31f23f0c6badc30670d034ad065cc629bce9f0f"
+    },
+    {
+      "name": "client204-build-validation.json",
+      "bytes": 6341,
+      "sha256": "3d86e38f62e0d823a400bc7732f111b4eeae7355fe0c0c19f25f66b8b3bb9d35"
+    },
+    {
+      "name": "client204-console-validation.json",
+      "bytes": 1436,
+      "sha256": "d3510fe897fed43e9cb3fe8ae81c6af7d2bf8861e813cde19fc5083df10ec079"
+    },
+    {
+      "name": "SHA256SUMS",
+      "bytes": 379,
+      "sha256": "39bf56162f8efdb8995411470e01158beca83be6d100c07cb28b3d361a16db32"
+    }
+  ],
+  "verification": "Public full release, not draft or prerelease. All five assets independently downloaded and matched exact local sizes/hashes. Normal and accepted OpenAL replacement routes from both local and downloaded corresponding-source kits reproduce the exact 204 native ELF. CRC, identity, classes, original JAR, module, native/graphics/signature package audit passes. Root param.json matches the exact shipped 204 identity.",
+  "console_acceptance": "client204-console-acceptance-2026-11-03.json",
+  "console_scope": "User reports exact delivered 204 works very well and explicitly requests ProsperoStore publication. Broad functional acceptance; no formal ALL PASS, new frozen milestone, exhaustive pack/device/version matrix or measured endurance inferred. 202 shader/quit confirmation retained separately; no newly measured shader pack/profile supplied.",
+  "catalog_pr": "https://github.com/darkxex/ps5-homebrew-catalog/pull/1094",
+  "catalog_head": "7ded464e5e0c1856b38fb9a58fa1dd828426d94d",
+  "catalog_base": "43b0538",
+  "catalog_checks": "233 tests pass (2 skipped), 182 records valid offline. Online PPSA99874 verification: 0 errors/0 warnings; correct 01.000.204 contentVersion and 127056881-byte package digest.",
+  "catalog_status": "Submitted. No PR checks, merge, deployment or live Store monitoring after creation. Live Store availability requires catalog approval and deployment; not claimed.",
+  "metadata": "Only existing listing version, artifact_url and sha256 changed. Description, credits, icon, license, author, category and source_repo preserved. Release body provides changelog.",
+  "preservation": "Exact accepted package published without rebuilding. Prior releases/assets/tags, candidate symbols and archived validation preserved. Matching 204 corresponding source and checksums retained.",
+  "limits": "Immutable ZIP budget creates descriptor headroom, not a universal handle cap. Long-session save behavior, world-creation performance and broad mod/shader/device/endurance coverage remain areas for testing. No recovery of previously failed writes claimed.",
+  "runtime": "No new runtime source change during publication. Existing runtime management and diagnostic source pins are recorded in the accepted build audit and corresponding-source provenance."
+}

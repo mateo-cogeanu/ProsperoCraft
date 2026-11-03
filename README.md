@@ -10,7 +10,7 @@ Download Minecraft on your console, keep separate instances for worlds and mods,
 
 ProsperoCraft handles Minecraft installation, accounts, input and game integration. Its [Native Java 25 Runtime](https://github.com/mateo-cogeanu/ps5-java25-homebrew) is maintained separately. Official Minecraft game JARs and asset objects are downloaded and verified from the publisher, rather than bundled with the app.
 
-Release **01.000.204** adds normal 26.1/26.1.1/26.1.2 Vanilla/Fabric support, shader and Quit Game fixes, and improved descriptor headroom for world saving. The physical tester confirms the exact package works well and authorizes release. [Release notes](docs/releases/client-26x-shaders-saves-204.md) · [Console acceptance and limits](docs/validation/client204-console-acceptance-2026-11-03.json). Broad mod/shader compatibility, world-creation performance and endurance remain unmeasured. ProsperoStore publication requires catalog approval and deployment.
+Release **01.000.204** adds normal 26.1/26.1.1/26.1.2 Vanilla/Fabric support, shader and Quit Game fixes, and improved descriptor headroom for world saving. The physical tester confirms the exact package works well and authorizes release. [Release notes](docs/releases/client-26x-shaders-saves-204.md) · [Console acceptance and limits](docs/validation/client204-console-acceptance-2026-11-03.json). Broad mod/shader compatibility, world-creation performance and endurance remain unmeasured. [ProsperoStore update submitted](https://github.com/darkxex/ps5-homebrew-catalog/pull/1094); availability requires catalog approval and deployment.
 
 ## What can I play?
 

@@ -68,3 +68,16 @@ Exact-build 26.1.x shader/quit regression, other versions/loaders, performance,
 audio/haptics, Vulkan and endurance remain pending. The user's 202 shader/quit
 confirmation is not assigned to 204. No release, prerelease, Store update or
 frozen milestone is created.
+
+## Accepted release — 2026-11-03
+
+The physical tester reports that the exact 204 package works very well and
+explicitly requests ProsperoStore release. The preceding pending checks describe
+the original candidate handoff; this functional confirmation permits publication
+without implying an exhaustive matrix or new formal ALL PASS.
+[Console acceptance](validation/client204-console-acceptance-2026-11-03.json) and
+[publication verification](validation/client204-store-publication-2026-11-03.json)
+record the scope. The unchanged tested package is public in
+[release 01.000.204](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.204).
+[Catalog PR 1094](https://github.com/darkxex/ps5-homebrew-catalog/pull/1094) is submitted;
+its checks, merge, deployment and live availability are not monitored.
