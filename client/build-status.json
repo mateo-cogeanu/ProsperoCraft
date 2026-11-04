@@ -97,7 +97,12 @@
   "development_212": {
     "app_version": "01.000.212",
     "validation": "docs/validation/client212-launcher-selectors-2026-11-04.json",
-    "scope": "In-place selectors, live theme preview,32-icon grid, stronger detent and remove transition dark pulse",
-    "console": "Pending; previous candidates retained"
+    "scope": "In-place selectors, live theme preview,32-icon grid, stronger detent and remove transition dark pulse, retired service logos replaced including bundled assets/source",
+    "console": "Pending; previous candidates retained",
+    "package_sha256": "d97e530ea67838ef806e8fa88731d399aa9ce1ae661b091daff5eaacfe3f75a7",
+    "package_bytes": 127488343,
+    "source_commit": "8f43ac872973736ba0896373868e2c9e7d0f6f17",
+    "source_tree": "clean",
+    "package_audit": "PASS final signed integrity and independent static audit"
   }
 }

@@ -61,3 +61,13 @@ theme and Cancel/confirm, all icon rows and pointer/controller selection, strong
 page detents including Vibration off, and card entry/exit without a black flash.
 Retest startup/account focus and Play/quit/library return. Keep actual FPS and
 hardware acceptance distinct from previews, CI and positive subjective feedback.
+
+Final local artifact: `dist/candidates/client121-212-final/PPSA99874.zip`,
+127488343bytes, SHA-256
+`d97e530ea67838ef806e8fa88731d399aa9ce1ae661b091daff5eaacfe3f75a7`.
+Built from clean source `8f43ac872973736ba0896373868e2c9e7d0f6f17`. Signed integrity
+and independent package/ABI audit pass;1262275bytes uncompressed growth over204.
+The earlier local212 ZIP is retained but superseded because its bundled pixel
+source was stale; use212-final. Ubuntu hosted policy/native pass on8405534; final
+packaging-only source push policy and queued macOS jobs are tracked separately
+in the validation record. No release or physical pass is implied.

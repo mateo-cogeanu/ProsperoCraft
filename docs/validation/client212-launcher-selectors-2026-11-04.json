@@ -2,18 +2,30 @@
   "date": "2026-11-04",
   "title_id": "PPSA99874",
   "app_version": "01.000.212",
-  "status": "Host checked; preparing exact signed candidate",
+  "status": "Final signed local candidate; physical validation pending",
   "scope": "In-place dimmed selectors/nested overlays, undimmed unsaved theme preview, larger32-icon grid, stronger localized detent, remove extra dark card-transition material, remove Modrinth/CurseForge icon payloads with stable IDs4/25",
   "unchanged": "211120Hz presenter64fe7c7/native game groups/Java image/options/original JARs/Vanilla gates and login fixes",
   "checks": {
     "fast": "PASS19 checks22.2s",
     "native": "PASS12 checks12.1s",
     "preview": "PASS actual Vulkan selector-parent dimming, undimmed six-theme previews, all32icons and actual pointer targets, existing entry/exit/mailbox/pointer refusal/handoff fixtures; visually inspected",
-    "target": "PASS final212 compile/link/converter",
-    "source_only": "PASS source-only checkout, empty explicit dependency cache with --fetch-deps, outside-root19fast22.3s and12native; SDK/GPU packaging checked separately",
-    "hosted": "Pending212 push;211mac native15ms wait failure recorded and addressed",
-    "icons": "PASS only IDs4/25 pixels changed;30 other images byte-identical; final Vulkan grid visually inspected"
+    "target": "PASS final compile/link/converter and signed integrity",
+    "source_only": "PASS source-only checkout, empty explicit dependency cache with --fetch-deps, outside-root19fast22.3s and12native11.9s; SDK/GPU packaging checked separately",
+    "hosted": {
+      "policy_8405534": "Ubuntu PASS; macOS canceled by next source push; run41900668191",
+      "native_8405534": "Ubuntu PASS; macOS queued; run41900708041",
+      "policy_8f43ac8": "Ubuntu in progress; macOS queued; run41900841688",
+      "scope": "Actual jobs inspected; no hosted macOS pass claimed"
+    },
+    "icons": "PASS only IDs4/25 pixels changed;30 other images byte-identical; final Vulkan grid visually inspected",
+    "package": "PASS independent static ABI/retained image/game-JAR audit; six retired image files absent; bundled icon header and replacement assets exact; uncompressed growth1262275bytes"
   },
   "physical212": "NOT RUN: overlay/theme/grid interaction, stronger haptic feel/reset, black-flash repair and launcher/game handoff remain pending",
-  "release_store": "No action; prior physical/shader/explicit approval gates retained"
+  "release_store": "No action; prior physical/shader/explicit approval gates retained",
+  "package_sha256": "d97e530ea67838ef806e8fa88731d399aa9ce1ae661b091daff5eaacfe3f75a7",
+  "package_bytes": 127488343,
+  "source_commit": "8f43ac872973736ba0896373868e2c9e7d0f6f17",
+  "source_tree": "clean",
+  "artifact": "dist/candidates/client121-212-final/PPSA99874.zip",
+  "local_superseded_candidate": "dist/candidates/client121-212/PPSA99874.zip SHA2563d3177944b394d4da175fc9852326344f3b3e3c98e5820c80375fab90644d93c retained locally but superseded: bundled source header still contained old pixels. Use only212-final."
 }
