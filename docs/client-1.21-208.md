@@ -6,6 +6,15 @@ preserves its scope; exact207 bytes remain unchanged.208 enables development
 Vanilla1.21.10 and1.21.11 only. Earlier1.21 releases and all121 Fabric stay gated.
 No release, prerelease or Store action is authorized.
 
+Signed ZIP SHA-256:
+`eee875bc90ffcc5d7f19c6836a9069b0024301eb0d5d750b9bd259ec351c20f8`.
+Size127,465,721bytes (27,468bytes above207). Build source is clean
+`e76ff48c078dbf99fa88232e79bfa182a76a8fda`. Signed integrity and independent
+package audit pass; uncompressed growth over accepted204 is1,192,400bytes.
+Original343/OpenAL groups, Java module image and VM/ZIPbudget8 policy remain.
+SDL and the combined graphics inventory are rebuilt; graphics external definitions
+are unchanged with no new undefined symbols. Package remains local, not released.
+
 ## Changes
 
 1.21.10 keeps original publisher game/libraries and the existing isolated matching

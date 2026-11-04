@@ -2,7 +2,7 @@
   "date": "2026-11-04",
   "title_id": "PPSA99874",
   "app_version": "01.000.208",
-  "status": "Source checked; signed candidate preparation",
+  "status": "Signed208 local candidate; independent package audit PASS; PS5 pending",
   "runtime_commit": "62c583f145d82309e15758c460b3bd3e9a925bf4",
   "enabled": "Vanilla1.21.10/.11 only; all121 Fabric deferred",
   "original_publisher_jars": "Unmodified; downloaded and verified outside source/package",
@@ -13,9 +13,43 @@
     "graphics": "PASS original12110 GlDevice constructor/close and3genuine host Zink cycles; not Main/world/PS5",
     "display": "PASS actual SDL query/surface at all5launcher sizes, stale1080window precedence, malformed/unavailable refusal and legacy refresh/plane controls",
     "source_only": "PASS19/19 in23.9s; tracked/new source-only copy, initially empty explicit dependency cache, outside-root/tmp invocation",
-    "target": "PASS rebuilt SDL, full1326-step genuine Zink/RADV with five-size WSI inventory; final208 link/package pending",
-    "hosted": "Pending source push"
+    "target": "PASS full1326-step genuine Zink/RADV, rebuilt SDL,208 namespace/bootstrap link/converter and signed SELF integrity",
+    "hosted": {
+      "source_commit": "e76ff48c078dbf99fa88232e79bfa182a76a8fda",
+      "policy_url": "https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41879548944",
+      "status": "Actual Ubuntu/macOS policy and native jobs inspected; both lanes queued as of17:43UTC. Pending hosted results; local lanes passed.",
+      "native_url": "https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41879781853"
+    },
+    "package": "PASS independent CRC/identity/resources/original parent JARs and Java image/333 namespace/retained native groups/options/OSHI source and output/new SDL and graphics object integration",
+    "graphics_exports": "PASS rebuilt graphics external definitions unchanged and no new undefined symbols versus accepted204"
   },
   "physical208": "NOT RUN: exact startup/world/save/reload/quit, all resolutions and launcher keyboard, HTTP,26.x regressions/shaders/endurance pending",
-  "release_store": "No action; exact-build physical confirmation, shader acceptance and explicit authorization remain required"
+  "release_store": "No action; exact-build physical confirmation, shader acceptance and explicit authorization remain required",
+  "package": {
+    "package_sha256": "eee875bc90ffcc5d7f19c6836a9069b0024301eb0d5d750b9bd259ec351c20f8",
+    "package_bytes": 127465721,
+    "source_commit": "e76ff48c078dbf99fa88232e79bfa182a76a8fda",
+    "source_tree": "clean",
+    "symbols_sha256": "aea3e17fd172d00e5c64713a0d8c85d45848b36ecc5a524806c738ed7792fe6e",
+    "eboot_sha256": "d662486249ef16d9f3b80c86a72e8e31eb7701d0149ef3298662ab9dec72bff1",
+    "newSdlGroupSha256": "96cab67f509650a2c32d0d08e2981ec9ac9d826eecf0f24c85636258104816bb",
+    "graphicsSupportSha256": "f9c5d7440d4960ae85a35a5fec8eedff016d308168f370876eb813eb62adc926",
+    "oshi665Sha256": "d5d7e7affd46736d3add806b4b331f20d4c8fd0e317e78272fa7ddcddef6ae8c",
+    "newGroupSha256": "7bead679117a434fc0f2d893fb28e4c461c202d0f8f96734acacfaddb815db9a",
+    "overlaySha256": "5baae8699c219db87845132c159c421d12926de461fe8b90890e7f40a74d9d20",
+    "zip_growth_bytes": 408840,
+    "uncompressed_growth_bytes": 1192400,
+    "matched_native_declarations": {
+      "lwjgl-freetype-3.3.3.jar": 0,
+      "lwjgl-glfw-3.3.3.jar": 0,
+      "lwjgl-jemalloc-3.3.3.jar": 0,
+      "lwjgl-openal-3.3.3.jar": 0,
+      "lwjgl-opengl-3.3.3.jar": 2228,
+      "lwjgl-stb-3.3.3.jar": 215,
+      "lwjgl-tinyfd-3.3.3.jar": 0,
+      "lwjgl-3.3.3.jar": 1756
+    },
+    "growth_from207_bytes": 27468
+  },
+  "console207_feedback": "Positive human1.21.11 feedback recorded separately; no formal ALL PASS"
 }

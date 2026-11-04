@@ -53,6 +53,11 @@
     "app_version": "01.000.208",
     "validation": "docs/validation/client121-vanilla-208-2026-11-04.json",
     "scope": "1.21.10 Vanilla; selected Zink resolution; launcher keyboard actions",
-    "console": "Pending; historical root milestone unchanged"
+    "console": "Pending; historical root milestone unchanged",
+    "package_sha256": "eee875bc90ffcc5d7f19c6836a9069b0024301eb0d5d750b9bd259ec351c20f8",
+    "package_bytes": 127465721,
+    "source_commit": "e76ff48c078dbf99fa88232e79bfa182a76a8fda",
+    "source_tree": "clean",
+    "package_audit": "PASS signed integrity and independent audit"
   }
 }
