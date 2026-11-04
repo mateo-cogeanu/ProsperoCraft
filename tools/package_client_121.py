@@ -180,6 +180,7 @@ def main():
     extract(args.baseline_package, work, prefix='PPSA99874/')
     java = app / 'assets/java25'
     # Replace retired logo payloads too, not only the compiled picker pixels.
+    shutil.copyfile(ROOT / 'client/launcher/instance_icons.hpp', java / 'launcher-toolkit/instance_icons.hpp')
     icons = ROOT / 'assets/launcher-icons'
     for directory, suffixes in (('launcher-icons', ('.svg', '.png')), ('launcher-icon-source', ('.svg',))):
         destination = java / directory

@@ -52,10 +52,12 @@ def main():
         for name in replacement_icons | {prefix + directory + '/attribution.json' for directory in ('launcher-icons', 'launcher-icon-source')}:
             if new.read(name) != (ROOT / 'assets/launcher-icons' / Path(name).name).read_bytes():
                 raise ValueError('Replacement icon/attribution mismatch: ' + name)
+        if new.read(prefix+'launcher-toolkit/instance_icons.hpp') != (ROOT/'client/launcher/instance_icons.hpp').read_bytes():
+            raise ValueError('Bundled picker pixel source is stale')
         changed = [n for n in old.namelist() if n in names and old.read(n) != new.read(n)]
         allowed = {'PPSA99874/eboot.bin', 'PPSA99874/sce_sys/param.json', prefix + 'client-probe.jar',
                    prefix + 'lib/libjava.so', prefix + 'resident-libraries-audit.json',
-                   prefix + 'classes/prosperocraft-build.properties', prefix+'launcher-icons/attribution.json', prefix+'launcher-icon-source/attribution.json'}
+                   prefix + 'classes/prosperocraft-build.properties', prefix+'launcher-icons/attribution.json', prefix+'launcher-icon-source/attribution.json', prefix+'launcher-toolkit/instance_icons.hpp'}
         if any(n not in allowed and not (n.startswith(prefix + 'classes/') and n.endswith('.class')) for n in changed):
             raise ValueError('Unexpected baseline change: ' + repr(changed))
         added = sorted(set(names) - set(old.namelist()))

@@ -30,7 +30,7 @@ picker, generated web pixels and packaged SVG/PNG assets. Original Amethyst and
 Compass artwork replaces IDs4 and25, preserving saved selections and every other
 icon ID. Upstream credits for retained artwork remain, with CC0 replacement
 attribution. The package audit requires removal of all six inherited logo files
-and verifies replacement assets against source.
+and verifies replacement assets and the bundled picker pixel header against source.
 
 The prearmed localized adaptive page detent increases native force2 to4 (of8),
 retaining travel2–3, release while pressed, neutral rearm, unavailable-direction
