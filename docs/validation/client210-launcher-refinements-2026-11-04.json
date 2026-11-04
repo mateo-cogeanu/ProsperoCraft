@@ -2,17 +2,40 @@
   "date": "2026-11-04",
   "title_id": "PPSA99874",
   "app_version": "01.000.210",
-  "status": "Source checks; signed candidate preparation",
+  "status": "Signed210 local candidate; independent package audit PASS; physical launcher/trigger acceptance pending",
   "scope": "Restore lower controls; static startup notice and background login focus; low-force bounded page-trigger click; instance-card expansion into real detail UI",
   "checks": {
     "fast": "PASS19/19 in25.0s; includes injected blocked-refresh navigation and retained intro",
     "native": "PASS12/12 in12.1s; actual worker/refusal/lifecycle and all8card source/end/intermediate bounds",
     "haptics": "PASS real worker left/right native ABI,55ms timeout,disable/shutdown,nonfatal active-command refusal and reset,no stale cue replay; host boundary fixture",
     "preview": "PASS actual Vulkan restored bottoms, untranslated notice, expanding selected-card/detail checkpoints, original pointer/page/scroll/mailbox/handoff controls; visually inspected",
-    "target": "PASS final210 -Werror compile/link/converter; signed package pending",
+    "target": "PASS final210 -Werror compile/link/converter/signed SELF integrity; actual main contains expanded-card state and larger compose/haptic worker bodies",
     "source_only": "PASS19fast in24.1s and12native in11.9s, source-only copy with empty explicit dependency cache and invocation from/tmp",
-    "hosted": "Pending source push"
+    "hosted": {
+      "source_commit": "ddeb990264116266382e25c914318f3887b0395c",
+      "policy_url": "https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41890489917",
+      "native_url": "https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41890525511",
+      "ubuntu-24.04": "PASS actual policy19 and native12 jobs completed",
+      "macos-15": "Actual policy/native jobs inspected; queued, pending results"
+    },
+    "package": "PASS independent CRC/identity/paths/resources/parent JARs/Java image/retained native group objects/VMoptions/OSHI source and overlay/SDL and graphics integration"
   },
   "physical210": "NOT RUN: bottom controls,notice/login focus,card opening,trigger feel/reset/release/reduced motion and game handoff remain pending",
-  "release_store": "No action; exact physical/shader/explicit authorization gates retained"
+  "release_store": "No action; exact physical/shader/explicit authorization gates retained",
+  "package": {
+    "package_sha256": "f89a6b8bb6a784fefa9190d3a777fed17a25e2382a60c375a496324685618435",
+    "package_bytes": 127474135,
+    "source_commit": "ddeb990264116266382e25c914318f3887b0395c",
+    "source_tree": "clean",
+    "symbols_sha256": "17ed06dabcacb69092cb4c1668daccacc5af84c5a6a064948e296b7c32695c98",
+    "eboot_sha256": "18604e47dee82d147a91383d42e8b9f26cbbd71ce01b580756aa0580442539c8",
+    "newSdlGroupSha256": "96cab67f509650a2c32d0d08e2981ec9ac9d826eecf0f24c85636258104816bb",
+    "graphicsSupportSha256": "f9c5d7440d4960ae85a35a5fec8eedff016d308168f370876eb813eb62adc926",
+    "oshi665Sha256": "d5d7e7affd46736d3add806b4b331f20d4c8fd0e317e78272fa7ddcddef6ae8c",
+    "newGroupSha256": "7bead679117a434fc0f2d893fb28e4c461c202d0f8f96734acacfaddb815db9a",
+    "overlaySha256": "5baae8699c219db87845132c159c421d12926de461fe8b90890e7f40a74d9d20",
+    "zip_growth_bytes": 417254,
+    "uncompressed_growth_bytes": 1225365,
+    "growth_from209_bytes": 396
+  }
 }

@@ -6,6 +6,13 @@ are recorded separately;209/208 exact packages remain retained. Game versions,
 original publisher JARs, native groups, runtime pin and VM/ZIPbudget8 policy stay
 unchanged. Only1.21.10/.11 Vanilla are enabled;121 Fabric remains deferred.
 
+Signed ZIP SHA-256:
+`f89a6b8bb6a784fefa9190d3a777fed17a25e2382a60c375a496324685618435`.
+Size127,474,135bytes; exact clean source
+`ddeb990264116266382e25c914318f3887b0395c`. Signed integrity and independent
+package audit pass. Actual Ubuntu policy/native jobs pass; macOS jobs were queued
+when inspected. Later documentation records do not rebuild these candidate bytes.
+
 The209 global content scissor ended at925px, above existing keyboard buttons,
 Settings’ last control and the startup notice bottom.210 extends it to1005px and
 moves the footer fade below the controls. Existing list-specific clipping stays.

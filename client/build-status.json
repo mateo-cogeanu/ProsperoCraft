@@ -75,6 +75,11 @@
     "app_version": "01.000.210",
     "validation": "docs/validation/client210-launcher-refinements-2026-11-04.json",
     "scope": "Lower controls, static notice, focused automatic login, trigger click and expanding instance cards",
-    "console": "Pending; previous candidate bytes retained"
+    "console": "Pending; previous candidate bytes retained",
+    "package_sha256": "f89a6b8bb6a784fefa9190d3a777fed17a25e2382a60c375a496324685618435",
+    "package_bytes": 127474135,
+    "source_commit": "ddeb990264116266382e25c914318f3887b0395c",
+    "source_tree": "clean",
+    "package_audit": "PASS signed integrity and independent audit"
   }
 }
