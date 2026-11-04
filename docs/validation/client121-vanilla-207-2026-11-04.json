@@ -1,6 +1,6 @@
 {
   "date": "2026-11-04",
-  "status": "207 target compile/link/converter pass; signed package pending; physical repair pending",
+  "status": "Signed207local candidate; independent package audit PASS; physical world repair pending",
   "title_id": "PPSA99874",
   "app_version": "01.000.207",
   "failed206_package_sha256": "c630521c465a97678d12aeb5d4ed9b21b9ed751eb399c5544380843019b34a73",
@@ -37,9 +37,39 @@
     "native": "PASS11/11,10.8seconds",
     "target": "PASS209target units/current patch,207bootstrap namespace link/converter",
     "source_only": "PASS19/19,25.6seconds; tracked source-only copy, empty explicit host dependency cache and invocation from/tmp",
-    "hosted": "pending source push"
+    "hosted": {
+      "source_commit": "eaa0f2670fc654556a53cdeb6dcebf70e2ea00be",
+      "url": "https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41873864983",
+      "ubuntu-24.04": "PASS completed actual policy job and assertions step",
+      "macos-15": "PASS completed actual policy job and assertions step",
+      "scope": "19fast policy checks; manual PNG/JNI/Zink, target/package and physical evidence are separate"
+    }
   },
-  "package": "pending",
+  "package": {
+    "package_sha256": "06465d7debb74ad6652f8ca26c6d3a4bb0554d7a5768256822465edd8e5f8787",
+    "package_bytes": 127438253,
+    "source_commit": "eaa0f2670fc654556a53cdeb6dcebf70e2ea00be",
+    "source_tree": "clean",
+    "baseline_package_sha256": "89167d01c7da0ece733b0dd8b7871a05ee38ff5f79ee45b4ce9beefc5d4c14a0",
+    "baseline_relink_sha256": "4351224b234d2b16a688afc4d31f23f0c6badc30670d034ad065cc629bce9f0f",
+    "symbols_sha256": "be6158c26ab3b2546f188a9a7b5bf5f63c88e5525875db56c02cb58f7803d216",
+    "eboot_sha256": "3cbb0520ce8518ea734ec6efda8276a32b9ec002f1926a7c590e390fa689c0ac",
+    "newGroupSha256": "7bead679117a434fc0f2d893fb28e4c461c202d0f8f96734acacfaddb815db9a",
+    "overlaySha256": "5baae8699c219db87845132c159c421d12926de461fe8b90890e7f40a74d9d20",
+    "zip_growth_bytes": 381372,
+    "uncompressed_growth_bytes": 1126749,
+    "matched_native_declarations": {
+      "lwjgl-freetype-3.3.3.jar": 0,
+      "lwjgl-glfw-3.3.3.jar": 0,
+      "lwjgl-jemalloc-3.3.3.jar": 0,
+      "lwjgl-openal-3.3.3.jar": 0,
+      "lwjgl-opengl-3.3.3.jar": 2228,
+      "lwjgl-stb-3.3.3.jar": 215,
+      "lwjgl-tinyfd-3.3.3.jar": 0,
+      "lwjgl-3.3.3.jar": 1756
+    },
+    "audit": "PASS signedZIP identity/CRC/paths/baseline delta/parent JARs/Java image/resources/exploded classes/retained native inputs and checksums/namespace exports/actual bootstrap options. Original206hash reverified."
+  },
   "physical207": "Pending world load/create/save/reload/quit/library/relaunch,input/audio,26.x/shader regression,endurance; no ALL PASS",
   "release_store": "No action; gates retained"
 }

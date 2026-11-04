@@ -7,6 +7,13 @@ initial world buffer resizing. This is progress, not world/save/endurance accept
 Original 204/205/206 packages remain retained. Other 1.21 releases and Fabric stay
 gated; no release, prerelease or Store action is authorized.
 
+Signed ZIP SHA-256:
+`06465d7debb74ad6652f8ca26c6d3a4bb0554d7a5768256822465edd8e5f8787`.
+ZIP size: 127,438,253 bytes. Independent package audit passes. Exact build source is
+`eaa0f2670fc654556a53cdeb6dcebf70e2ea00be`, with a clean source tree. Actual Ubuntu
+and macOS policy CI jobs pass for that source. Later validation/documentation
+updates do not rebuild the signed artifact; PS5 repair acceptance remains pending.
+
 ## Failure evidence and repair
 
 FTP retrieved current startup history and preserved 206 Java/native reports after
