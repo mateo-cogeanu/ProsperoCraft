@@ -469,6 +469,7 @@ inline bool update() noexcept {
  if(pressed){desktop.cursor=false;pointer_kind=-1;}
  push_input(pressed);
  bool desktop_changed=desktop.poll(current_time,[](unsigned command){push_input(command);},[](int x,int y,bool click){
+  if(page_turn.moving(now_ms()))return;
   int page=number(11);auto hit=desktop_hit(page,x,y,page==0?number(14):number(84),page==0?number(13):page==12?number(93):number(83),layout_slide,std::strcmp(fields[71].data(),"OFFLINE")==0,std::strcmp(fields[103].data(),"INSTALLED")==0,std::strcmp(fields[82].data(),"Shaders")==0);
 if(page==0&&y>=495&&y<585){if(x>=5&&x<58&&number(14)>0)hit={5,0};if(x>=1862&&x<1915&&number(14)+8<number(13))hit={5,1};}
 #ifdef PROSPERO_TOOLKIT
