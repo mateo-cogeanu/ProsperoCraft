@@ -81,5 +81,12 @@
     "source_commit": "ddeb990264116266382e25c914318f3887b0395c",
     "source_tree": "clean",
     "package_audit": "PASS signed integrity and independent audit"
+  },
+  "development_211": {
+    "app_version": "01.000.211",
+    "validation": "docs/validation/client211-launcher-120-2026-11-04.json",
+    "scope": "Whole-launcher120 target, moderate menus, symmetric continuous-background cards and adaptive page detent",
+    "presentation_runtime": "64fe7c70821dfc94aa3566703011b751a86d2900",
+    "console": "Pending actual refresh/FPS/feel/visual/handoff; previous packages retained"
   }
 }

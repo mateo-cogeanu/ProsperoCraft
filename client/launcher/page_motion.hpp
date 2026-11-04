@@ -13,6 +13,11 @@ struct Glide {
 };
 struct CardRect {float x,y,w,h;};
 inline CardRect opening_card_rect(int slot,float progress)noexcept{slot=std::clamp(slot,0,7);float t=std::clamp(progress,0.f,1.f);CardRect from{float(70+slot%4*450),float(342+slot/4*272),420,242};return {from.x*(1-t),from.y+(155-from.y)*t,from.w+(1920-from.w)*t,from.h+(850-from.h)*t};}
+inline float card_detail_alpha(float progress)noexcept{float t=std::clamp(progress/0.65f,0.f,1.f);return t*t*(3-2*t);}
+inline float card_library_alpha(float progress)noexcept{float t=std::clamp(progress/0.55f,0.f,1.f);return 1-t*t*(3-2*t);}
+struct SelectionMenu {float x,y,w,h;int visible;static constexpr int pitch=64;float first_y()const noexcept{return y+24;}};
+inline SelectionMenu selection_menu(int count,int limit,float label_width,float title_width,bool icons=false)noexcept{int visible=std::clamp(count,0,limit);float w=std::clamp(std::max(label_width+(icons?60:0),title_width)+96.f,600.f,1100.f),h=48.f+visible*SelectionMenu::pitch;return {(1920-w)/2,155+(850-h)/2,w,h,visible};}
+inline int selection_menu_hit(const SelectionMenu& menu,int x,int y,float position,int count)noexcept{if(x<menu.x+12||x>=menu.x+menu.w-20||y<menu.first_y()||y>=menu.first_y()+menu.visible*menu.pitch)return -1;int index=int(position+(y-menu.first_y())/menu.pitch);return index>=0&&index<count?index:-1;}
 struct PageTurn {
  std::uint64_t began=0;int direction=1;bool enabled=false;
  void start(int d,std::uint64_t now,bool reduced)noexcept{direction=d<0?-1:1;began=now;enabled=!reduced;}

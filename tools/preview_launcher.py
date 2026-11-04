@@ -36,6 +36,8 @@ int scePadSetVibrationMode(int,int mode){assert(mode==2);return 0;}
 int scePadSetVibration(int,const prospero_menu::LauncherMotors* motors){motor_large=motors->large_motor;motor_small=motors->small_motor;return 0;}
 int scePadRead(int,PadSample* samples,int){samples[0]={};samples[0].connected=1;samples[0].lx=samples[0].ly=128;samples[0].buttons=fake_buttons.load();pad_reads.fetch_add(1);return 1;}
 int sceSystemServiceHideSplashScreen(){return 0;}
+int sceVideoOutIsOutputSupported(int,std::uint32_t,const void*,const void*,const void*){return 0;}
+int sceVideoOutConfigureOutput(int,std::uint32_t,const void*,const void*,const void*){return 0;}
 int sceVideoOutOpen(int32_t,int32_t,int32_t,const void*){return 17;}
 int sceVideoOutClose(int32_t){operations.push_back("close");return failure==1?-1:0;}
 int sceVideoOutSetFlipRate(int32_t,int32_t){return 0;}

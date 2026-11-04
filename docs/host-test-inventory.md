@@ -312,3 +312,9 @@ Launcher210 requires `test_launcher_haptics.py` in the native lane with portable
 JDK/compiler/library discovery. The actual worker’s native trigger effect and
 reset lifecycle use injected pad calls; no hardware feel is inferred. The fast
 saved-login test covers an injected blocked refresh and current navigation/notice.
+
+Launcher211 extends native desktop checks for moderate selection geometry and
+preserved return-to-card navigation, and haptic checks for prearm/press/held/neutral/
+page-boundary/stale/reset policy. Runtime-owned refresh and tiled-blit tests require
+that workspace separately; manual Vulkan and SDK/presentation checks remain
+separate from portable CI and physical delivered FPS.

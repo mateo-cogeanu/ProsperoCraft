@@ -1,0 +1,8 @@
+{
+  "date": "2026-11-04",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.210",
+  "package_sha256": "f89a6b8bb6a784fefa9190d3a777fed17a25e2382a60c375a496324685618435",
+  "human_report": "Login fix is great. Adaptive triggers warm up during turn and produce no effect. Requests moderately sized selection menus, no solid-to-animated backdrop blink, matching instance exit, smoother transitions and whole launcher120FPS.",
+  "scope": "Positive login behavior; animation/haptic/performance refinement still required. No independently retrieved FPS measurement or120Hz capability evidence in this turn. No ALL PASS/release authorization."
+}

@@ -1,0 +1,12 @@
+{
+  "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
+  "commit": "64fe7c70821dfc94aa3566703011b751a86d2900",
+  "source_sha256": {
+    "native/renderer/demo_renderer.cpp": "a327abb4f3bfc457b6193640ed3721c4a163e2b68352392494e5fd8818b54e1f",
+    "native/renderer/demo_renderer.hpp": "160107dde8840a783c848ef23c6c1b1307ccd13a37e821586d07297e446824d6",
+    "native/renderer/presentation_refresh.hpp": "71ca0d6faae6ac6767f3e8e8ce66f199c67b2da55a7ee982f12058a6a7f26e23",
+    "native/renderer/tiled_frame_blit.hpp": "5361eb892232890c8ae64883eb1036a30d518d53d1749f92c0e8c7ba1989c7c8",
+    "tools/build_native_presenter.py": "3d619b468919348cd8a8125136d7a9f744bcb4ced79557f9e12e68e24adc6c3a"
+  },
+  "scope": "Explicit verified120Hz native presenter and fast tiled publication; physical FPS pending"
+}

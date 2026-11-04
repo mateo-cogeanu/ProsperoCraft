@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-04",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.211",
+  "status": "Checked source; local signed package preparation",
+  "scope": "Whole-launcher verified120Hz/FPS target, fast tiling/publication, moderate menus, continuous backdrop with symmetric card exit, prearmed localized adaptive page detents",
+  "presentation_runtime": "64fe7c70821dfc94aa3566703011b751a86d2900",
+  "java_runtime_pin": "62c583f145d82309e15758c460b3bd3e9a925bf4 unchanged existing137/HTTP integration",
+  "checks": {
+    "runtime": "PASS actual default-no-query/verified120/unsupported/refused/slow/failed/impossible wait/refused restore; old/fast full1080p RGBA/padded rows/invalid input atomic refusal ASan/UBSan; target object build",
+    "fast": "PASS19/19 in22.9s",
+    "native": "PASS12/12 in14.2s",
+    "preview": "PASS actual Vulkan medium3/5/6-option menus, opening/closing frames and existing pointer/mailbox/cleanup controls; visually inspected",
+    "target": "PASS211 -Werror bootstrap/one-copy replacement presenter link/converter and existing manifest0x40",
+    "source_only": "Pending source-only fresh cache",
+    "hosted": "Pending source push"
+  },
+  "physical211": "NOT RUN: selected120Hz, actual measured/rendered FPS, haptic feel/reset, menus, card continuity/exit, saved-account/notice and game handoff pending",
+  "release_store": "No action; exact physical/shader/explicit authorization gates retained"
+}

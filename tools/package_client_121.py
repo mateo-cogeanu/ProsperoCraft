@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Local210 launcher clipping, focused refresh, trigger clicks and expanding-card candidate from exact accepted204 inputs. No releases.
+"""Local211 whole-launcher120 target, moderate menus and adaptive card/page candidate from exact accepted204 inputs. No releases.
 
 Original343/OpenAL groups are retained byte for byte from the relink kit.
 Main, explicit libjava handle hook, SDL, graphics inventory and matched333 are rebuilt.
@@ -41,13 +41,14 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ('runtime-workspace', 'baseline-package', 'baseline-relink', 'base-header', 'llvm-home', 'lld', 'lwjgl333-build'):
         parser.add_argument('--' + name, type=Path, required=True)
+    parser.add_argument('--presenter-object',type=Path,required=True)
     parser.add_argument('--graphics-build', type=Path, required=True)
     parser.add_argument('--sdl-build',type=Path,required=True)
     parser.add_argument('--oshi665-build',type=Path,required=True)
     parser.add_argument('--java-home', type=Path)
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--work-dir', type=Path, required=True)
-    parser.add_argument('--app-version', choices=('01.000.210',), default='01.000.210')
+    parser.add_argument('--app-version', choices=('01.000.211',), default='01.000.211')
     parser.add_argument('--check-only', action='store_true', help='Compile/link/convert without signing or a candidate ZIP')
     args = parser.parse_args()
     app_version = args.app_version
@@ -119,7 +120,7 @@ def main():
     if sha(sdl_object)!=sdl_audit['object_sha256']:raise ValueError('Stale SDL output')
     for name,digest in sdl_audit['port_sha256'].items():
         if sha(ROOT/'client/ports/sdl'/name)!=digest:raise ValueError('Stale SDL source: '+name)
-    sdl_scoped=work/'sdl210-scoped.o'
+    sdl_scoped=work/'sdl211-scoped.o'
     subprocess.run([str(llvm/'llvm-objcopy'),'--redefine-syms='+str(baseline/'provider-bindings.txt'),str(sdl_object),str(sdl_scoped)],check=True)
     os_build=args.oshi665_build.resolve();os_overlay=os_build/'oshi-6.6.5-ps5-platform.jar';os_audit=json.loads((os_build/'audit.json').read_text())
     if sha(os_overlay)!=os_audit['output_sha256']:raise ValueError('Stale OSHI665 overlay')
@@ -135,6 +136,12 @@ def main():
         for name, digest in recipe[category].items():
             if sha(ROOT / 'client/ports' / directory / name) != digest:
                 raise ValueError('Stale graphics source: ' + name)
+    presenter=args.presenter_object.resolve();presenter_audit=json.loads(presenter.with_suffix('.json').read_text());presentation_pin=json.loads((ROOT/'client/launcher/presentation-runtime.json').read_text())
+    if sha(presenter)!=presenter_audit['output_sha256']:raise ValueError('Stale native presenter')
+    for name,digest in presentation_pin['source_sha256'].items():
+        if sha(runtime/name)!=digest:raise ValueError('Wrong presentation runtime source: '+name)
+    for name,digest in presenter_audit['source_sha256'].items():
+        if sha(runtime/name)!=digest:raise ValueError('Stale presenter object source: '+name)
     groups = []
     old_groups = {}
     for item in manifest['arguments']:
@@ -215,6 +222,7 @@ def main():
     (java / 'classes/prosperocraft-build.properties').write_text('app_version='+app_version+'\ntitle_id=PPSA99874\n')
     (java / 'classes/prosperocraft-121.txt').write_text('vanilla-1.21.10-1.21.11-zink-v2\n')
     param = json.loads((app / 'sce_sys/param.json').read_text())
+    if not int(param.get('attribute3',0))&0x40:raise ValueError('120Hz title declaration missing')
     param['contentVersion'] = app_version
     (app / 'sce_sys/param.json').write_text(json.dumps(param, indent=2) + '\n')
     sdk = runtime / '.tools/native-sdk/ps5-payload-sdk'
@@ -238,7 +246,7 @@ def main():
             if not destination.exists():
                 os.link(file, destination)
     pie = work / ('client121-'+candidate+'-symbols.elf')
-    replacements = {'inputs/110-graphics-support.o': graphics_object, 'inputs/104-main.o': main_obj, 'inputs/044-embedded-ps5sdl.o': registry/'embedded-ps5sdl.o', 'inputs/032-embedded-java.o': registry / 'embedded-java.o',
+    replacements = {'inputs/022-renderer.o':presenter,'inputs/110-graphics-support.o': graphics_object, 'inputs/104-main.o': main_obj, 'inputs/044-embedded-ps5sdl.o': registry/'embedded-ps5sdl.o', 'inputs/032-embedded-java.o': registry / 'embedded-java.o',
                     'inputs/109-builtin-libraries.o': registry / 'builtin-libraries.o'}
     link = []
     for item in manifest['arguments']:
@@ -264,7 +272,7 @@ def main():
     subprocess.run([str(converter), 'link', '--in', str(pie), '--out', str(elf), '--stub-dir', str(sdk / 'target/lib'),
         *sum([['--stub', str(p)] for p in stubs], []), '--module-sdk', '0x02000009', '--companion-sdk', '0x08050001', '--file-name', 'eboot.elf'], check=True)
     if args.check_only:
-        print('PASS210 target compile/link/converter; no signed candidate ZIP')
+        print('PASS211 target compile/link/converter; no signed candidate ZIP')
         return
     subprocess.run([str(converter), 'self', '--sign', '--in', str(elf), '--out', str(app / 'eboot.bin'), '--magic', '0x1D3D154F'], check=True)
     subprocess.run([str(converter), 'self', '--inspect', '--file', str(app / 'eboot.bin')], check=True)
@@ -275,6 +283,9 @@ def main():
         'Original publisher game/library JARs are downloaded, verified and retained intact.\n'
         'Only listed platform/dispatch classes take precedence in the separate333 owner; no game remapping/transformation.\n'
         'Bootstrap integration is GPL-3.0-or-later; LWJGL source/patches BSD-3-Clause; STB individual upstream notices retained.\n')
+    (java/'native-presentation-audit.json').write_text(json.dumps({'runtime':presentation_pin,'build':presenter_audit},indent=2)+'\n')
+    for name in presentation_pin['source_sha256']:
+        destination=java/'native-presentation-source'/name;destination.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(runtime/name,destination)
     shutil.copytree(ROOT/'client/ports/oshi665',java/'oshi665-source',dirs_exist_ok=True)
     source_sdl=java/'sdl-resolution-source';source_sdl.mkdir(exist_ok=True)
     shutil.copyfile(ROOT/'client/ports/mesa/0011-videoout-launcher-resolutions.patch',source_sdl/'0011-videoout-launcher-resolutions.patch')
@@ -299,13 +310,13 @@ def main():
         'newGroupSha256': sha(registry / 'embedded-lwjgl333.o'), 'overlaySha256': sha(overlay),
         'source_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
         'source_tree': 'modified' if subprocess.check_output(['git', 'status', '--porcelain'], text=True).strip() else 'clean',
-        'scope': 'Launcher full lower controls, static notice/focused automatic refresh, bounded native trigger click and expanding instance card; prior tab/page/list behavior and208 game/native/VM policies retained;Fabric121blocked',
-        'graphicsSupportSha256':sha(graphics_object),'newSdlGroupSha256':sha(registry/'embedded-ps5sdl.o'),'oshi665Sha256':sha(os_overlay),
+        'scope': 'Whole-launcher120 target/verified native output and fast publication; moderate menus, prearmed localized adaptive detent and symmetric live-backdrop card entry/exit; login/game/Java policies retained;Fabric121blocked',
+        'nativePresenterSha256':sha(presenter),'presentationRuntime':presentation_pin,'graphicsSupportSha256':sha(graphics_object),'newSdlGroupSha256':sha(registry/'embedded-ps5sdl.o'),'oshi665Sha256':sha(os_overlay),
         'console': 'NOT TESTED', 'releaseStore': 'No action'}
     (output / 'build-audit.json').write_text(json.dumps(record, indent=2) + '\n')
     (output / 'SHA256SUMS').write_text(record['package_sha256'] + '  PPSA99874.zip\n')
     shutil.copyfile(pie, output / pie.name)
-    print('LOCAL210', package, 'SHA256', record['package_sha256'])
+    print('LOCAL211', package, 'SHA256', record['package_sha256'])
 
 
 if __name__ == '__main__':

@@ -1,5 +1,17 @@
 # Changelog
 
+## Local211 — whole-launcher120 target, 2026-11-04
+
+- Remove the33ms launcher redraw gate; pin reusable verified120Hz presenter and
+  fast tiled publication with measured frame timing. Actual PS5 FPS remains pending.
+- Give selection menus moderate content-aware bounds, readable rows and shared
+  scroll/hit geometry. Keep continuous backdrop/glass during card entry and add
+  collapse-to-card exit, preserving library selection.
+- Prearm a localized adaptive page detent before pressing; release on press/hold
+  and rearm on neutral, only for available directions. Preserve login/notice fixes,
+  haptic opt-out/watchdog/reset and unchanged game/native/Java policies.
+
+
 ## Local210 — launcher layout and focused startup, 2026-11-04
 
 - Repair209 bottom clipping and move the footer fade below existing controls.

@@ -237,3 +237,20 @@ native ABI/basic effect and bounded haptic worker, honors Vibration preference a
 resets before pad close; API refusal is nonfatal, physical feel/reset pending.
 Keep game/native/runtime policies and all earlier gates/packages. See
  docs/client-launcher-refinements-210.md; native lane now includes portable haptics.
+
+
+## Whole-launcher120 target and adaptive page detent —2026-11-04
+
+User requests whole-launcher120FPS and moderate selection panels.211 removes33ms
+redraw gating and opts into pinned runtime64fe7c7 native support/configure/vblank
+verification plus fast tiled publication. Replace the old renderer once; preserve
+manifest0x40, buffers/ownership and checked restore/handoff. Report measured FPS,
+not a120pass inferred from refresh/host tests. Menus use moderate600px minimum,
+64px rows/28px text/24px vertical padding and shared pointer geometry. Card entry/
+exit use the same live backdrop with continuous glass/opacity curves, preserving
+selected library card. Startup/login210 behavior remains. Adaptive page detents
+prearm only available sides in a narrow native travel zone, release on press and
+rearm on neutral; no uniform constant resistance or post-turn warmup pulse.250ms
+stale watchdog/opt-out/refusal/shutdown remain. Exact211 PS5 FPS/feel/reset/visual/
+game handoff pending; preserve210 and all release/shader/Vanilla-first gates.
+See docs/client-launcher-120-211.md and matching validation.
