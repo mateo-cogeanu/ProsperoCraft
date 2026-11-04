@@ -24,7 +24,7 @@ public class Lwjgl333GraphicsHost25 {
   if(zink){System.setProperty("ps5.opengl.provider","zink");glfwInitHint(GLFW_PLATFORM,GLFW_PLATFORM_NULL);if(!absent)prosperocraft.lwjgl333.Bootstrap.configure();}
   try(GLFWErrorCallback error=GLFWErrorCallback.create((code,text)->{if(!absent)throw new AssertionError("GLFW error "+code);})){
    glfwSetErrorCallback(error);check(glfwInit(),"genuine GLFW init");
-   boolean original=args.length>3&&args[3].equals("original121");
+   boolean original=args.length>3&&args[3].startsWith("original121");
    if(original){
     System.setProperty("oshi.ps5","true");System.setProperty("ps5.cpu.brand","Host integration fixture");
     System.setProperty("ps5.cpu.vendor","Fixture");System.setProperty("ps5.cpu.signature","00000000");
@@ -61,12 +61,12 @@ public class Lwjgl333GraphicsHost25 {
       glBindBuffer(GL_ARRAY_BUFFER,0);glDeleteBuffers(buffer);
       check(glGetError()==GL_NO_ERROR,"GL errors");
       if(original){
-       Class<?> device=Class.forName("fxe");
+       boolean older=args[3].equals("original12110");Class<?> device=Class.forName(older?"frx":"fxe");
        check(device.getProtectionDomain().getCodeSource().getLocation().toString().endsWith("client.jar"),"original client provenance");
-       Object gpu=device.getConstructor(long.class,int.class,boolean.class,Class.forName("fyy"),boolean.class).newInstance(window,0,false,null,false);
+       Object gpu=device.getConstructor(long.class,int.class,boolean.class,(older?java.util.function.BiFunction.class:Class.forName("fyy")),boolean.class).newInstance(window,0,false,null,false);
        check(device.getMethod("getBackendName").invoke(gpu).equals("OpenGL"),"original GPU backend");
        device.getMethod("close").invoke(gpu);
-       System.out.println("PASS original1.21.11 GlDevice constructor/capabilities/close; null shader lookup; not Main/world");
+       System.out.println("PASS original"+(older?"1.21.10":"1.21.11")+" GlDevice constructor/capabilities/close; null shader lookup; not Main/world");
       }
       System.out.println("PASS333 genuine GL cycle"+cycle+" "+glGetString(GL_VERSION)+" renderer="+glGetString(GL_RENDERER)+"; clear/readback/guards/sync-delete/mapped-buffer");
      }finally{MemoryUtil.memFree(bytes);}

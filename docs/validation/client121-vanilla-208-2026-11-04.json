@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-04",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.208",
+  "status": "Source checked; signed candidate preparation",
+  "runtime_commit": "62c583f145d82309e15758c460b3bd3e9a925bf4",
+  "enabled": "Vanilla1.21.10/.11 only; all121 Fabric deferred",
+  "original_publisher_jars": "Unmodified; downloaded and verified outside source/package",
+  "checks": {
+    "fast": "PASS19/19 in23.5s",
+    "native": "PASS11/11 in12.0s",
+    "oshi665": "PASS original12110 GLX CPU valid/missing, original desktop factory, provenance, no PS5 JNA initialization",
+    "graphics": "PASS original12110 GlDevice constructor/close and3genuine host Zink cycles; not Main/world/PS5",
+    "display": "PASS actual SDL query/surface at all5launcher sizes, stale1080window precedence, malformed/unavailable refusal and legacy refresh/plane controls",
+    "source_only": "PASS19/19 in23.9s; tracked/new source-only copy, initially empty explicit dependency cache, outside-root/tmp invocation",
+    "target": "PASS rebuilt SDL, full1326-step genuine Zink/RADV with five-size WSI inventory; final208 link/package pending",
+    "hosted": "Pending source push"
+  },
+  "physical208": "NOT RUN: exact startup/world/save/reload/quit, all resolutions and launcher keyboard, HTTP,26.x regressions/shaders/endurance pending",
+  "release_store": "No action; exact-build physical confirmation, shader acceptance and explicit authorization remain required"
+}

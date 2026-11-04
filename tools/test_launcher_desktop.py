@@ -26,7 +26,13 @@ public class DesktopCheck {
   set(m,"page",6);set(m,"keyboard","");m.tick(0x30000000|'x');m.tick(click(6,4,4)&~0x8000);ok(m.tick(0)[11].equals("6"));m.tick(0x20000001);ok(m.tick(0)[11].equals("5"));ok(m.tick(0)[16].equals("x"));
   set(m,"page",6);set(m,"keyboardReturn",12);set(m,"keyboard","query");m.tick(0x30000000|'x');ok(m.tick(0)[106].equals("Search content"));m.tick(0x20);ok(m.tick(0)[29].equals("queryx"));m.tick(0x2000);ok(m.tick(0)[11].equals("12"));
   set(m,"page",6);set(m,"keyboardReturn",1);set(m,"keyboard","x".repeat(40));m.tick(0x30000000|'A');ok(m.tick(0)[29].length()==40);m.tick(0x20000002);ok(m.tick(0)[29].length()==39);m.tick(0x20000001);ok(m.tick(0)[11].equals("1"));
-  System.out.println("PASS supported Fabric26.2; real model pointer/tab/dropdown/modal/stale click; typing/backspace/commit/cancel; library preservation");
+  set(m,"page",6);set(m,"keyboardReturn",5);set(m,"keyboard","Saved by Done");set(m,"physicalEditing",false);set(m,"key",0);
+  for(int n=0;n<4;n++)m.tick(0x40);ok(m.tick(0)[31].equals("40"));for(int n=0;n<4;n++)m.tick(0x20);ok(m.tick(0)[31].equals("44"));m.tick(0x4000);ok(m.tick(0)[11].equals("5")&&m.tick(0)[16].equals("Saved by Done"));
+  set(m,"page",6);set(m,"keyboardReturn",5);set(m,"originalText","Saved by Done");set(m,"keyboard","Discard");set(m,"key",43);m.tick(0x4000);ok(m.tick(0)[11].equals("5")&&m.tick(0)[29].equals("Saved by Done"));
+  set(m,"page",6);set(m,"keyboard","Ab");set(m,"key",40);m.tick(0x4000);ok(m.tick(0)[29].equals("A"));set(m,"key",41);m.tick(0x4000);ok(m.tick(0)[29].equals("A "));set(m,"key",42);String previous=m.tick(0)[66];m.tick(0x4000);ok(!m.tick(0)[66].equals(previous));
+  set(m,"key",44);set(m,"keyboard","x".repeat(40));m.tick(0x4000);ok(m.tick(0)[11].equals("5"));
+  var visited=new java.util.HashSet<Integer>();var queue=new java.util.ArrayDeque<Integer>();queue.add(0);while(!queue.isEmpty()){int at=queue.remove();if(!visited.add(at))continue;for(int direction:new int[]{-1,1,-10,10}){int next=ProsperoLauncher.keyboardMove(at,direction);ok(next>=0&&next<45);queue.add(next);}}ok(visited.size()==45);
+  System.out.println("PASS all45launcher keyboard targets reachable;action-row Done/Cancel/Backspace/Space/Case and full-length commit; supported Fabric26.2; real model pointer/tab/dropdown/modal/stale click; typing/backspace/commit/cancel; library preservation");
  }
 }
 '''

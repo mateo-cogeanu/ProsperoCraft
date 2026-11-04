@@ -37,6 +37,7 @@ public final class ProsperoLauncher {
   return current.arguments(null,null);
  }
  static String prepareControlifyKeyboard()throws java.io.IOException{return ProsperoControlifyKeyboard.prepare(selectedWork(),current.detail.version,current.detail.loader);}
+ static String selectedRenderSize(){int[]size=ProsperoLibrary.RESOLUTIONS[current.library.settings().resolution];return size[0]+"x"+size[1];}
  static Path selectedWork(){return current.library.game(current.detail);}
  static String controllerBindings(){return ProsperoInput.hint(current.library.settings().controllerKeys);}
  static ClassLoader gameLoader(){return current.loader;}
@@ -123,13 +124,25 @@ public final class ProsperoLauncher {
   if(!launchable(detail.version,detail.loader)||!detail.ready){message="Download a supported instance before playing offline.";return;}
   var instance=detail;runTask("VERIFY",attempt->{var installed=installer.receipt(instance.version);repairDependencies(instance,attempt,true);synchronized(this){if(!cancelled(attempt))prepareLaunch(instance,installed,true);}});
  }
+ static int keyboardMove(int selected,int direction){
+  if(selected<0||selected>=45)throw new IllegalArgumentException("Invalid keyboard selection");
+  int row=selected/10,col=selected%10;
+  if(direction==1||direction==-1){int count=row==4?5:10;return row*10+Math.floorMod(col+direction,count);}
+  if(direction==-10)return row==4?31+2*col:row==0?40+col/2:selected-10;
+  if(direction==10)return row==3?40+col/2:row==4?1+2*col:selected+10;
+  throw new IllegalArgumentException("Invalid keyboard direction");
+ }
  private void beginName(int back){keyboardReturn=back;page=6;keyboard=back==12?contentQuery:back==5?detail.name:draftName;originalText=keyboard;key=0;}
  private void keyboard(int buttons)throws Exception {
+  if((buttons&0x80)!=0)key=keyboardMove(key,-1);if((buttons&0x20)!=0)key=keyboardMove(key,1);
+  if((buttons&0x10)!=0)key=keyboardMove(key,-10);if((buttons&0x40)!=0)key=keyboardMove(key,10);
+  if((buttons&0x4000)!=0&&key>=40){int[]actions={0x1000,0x200,0x100,0x2000,0x8000};buttons=(buttons&~0x4000)|actions[key-40];}
+
   final String chars=lowercase?"1234567890qwertyuiopasdfghjkl_zxcvbnm .-":"1234567890QWERTYUIOPASDFGHJKL_ZXCVBNM .-";
   if((buttons&0x100)!=0)lowercase=!lowercase;
   if((buttons&0x200)!=0&&keyboard.length()<40)keyboard+=" ";
   if((buttons&0x8)!=0)keyboard="";
-  if((buttons&0x80)!=0)key=(key+39)%40;if((buttons&0x20)!=0)key=(key+1)%40;if((buttons&0x10)!=0)key=(key+30)%40;if((buttons&0x40)!=0)key=(key+10)%40;
+
   if((buttons&0x4000)!=0&&keyboard.length()<40)keyboard+=chars.charAt(key);
   if((buttons&0x1000)!=0&&!keyboard.isEmpty())keyboard=keyboard.substring(0,keyboard.length()-1);
   if((buttons&0x8000)!=0){if(keyboardReturn==12){contentQuery=keyboard.strip();contentOffset=0;contentHits=List.of();browse();}else if(keyboardReturn==5)library.rename(detail,keyboard);else{draftName=ProsperoLibrary.clean(keyboard);customName=true;}page=keyboardReturn;}
@@ -223,6 +236,7 @@ public final class ProsperoLauncher {
    if(kind==0){if(click&&page!=6&&!(page>=7&&page<=11)&&page!=14)selectTab(target);}
    else if(kind==1&&page==0&&target>=0&&target<=library.instances().size()){selected=target;top=false;if(click)return tickModel(0x4000);}
    else if(kind==2&&page==6&&!physicalEditing&&target<40){key=target;if(click)return tickModel(0x4000);}
+   else if(kind==4&&page==6&&target<5){if(physicalEditing&&target<3)return state();if(!physicalEditing)key=40+target;if(click){int[] actions={0x1000,0x200,0x100,0x2000,0x8000};return tickModel(actions[target]);}}
    else if(kind==4&&click){if(page==6&&physicalEditing&&target<3)return state();int[] actions={0x1000,0x200,0x100,0x2000,0x8000,0x80,0x20,0x8000,0x1000};if(target<actions.length)return tickModel(actions[target]);}
    else if(kind==3&&target<32){row=target;top=false;if(click)return tickModel(0x4000);}
   }else if(tag==2){int key=command&255;

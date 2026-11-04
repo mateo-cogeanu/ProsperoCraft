@@ -25,7 +25,8 @@ def main():
     parser.add_argument('--zink-glfw', type=Path)
     parser.add_argument('--no-zink-glfw', type=Path)
     parser.add_argument('--cc')
-    parser.add_argument('--original-client', action='store_true', help='Also initialize the verified original1.21.11 GlDevice on Zink')
+    parser.add_argument('--original-version', choices=('1.21.10','1.21.11'), default='1.21.11')
+    parser.add_argument('--original-client', action='store_true', help='Also initialize the verified selected original1.21.x GlDevice on Zink')
     parser.add_argument('--oshi-provider', type=Path)
     parser.add_argument('--oshi-audit', type=Path)
     args = parser.parse_args()
@@ -45,10 +46,10 @@ def main():
         if sha(args.oshi_provider) != oshi_audit['output_sha256']:
             raise ValueError('OSHI provider output mismatch')
         for name, digest in oshi_audit['source_sha256'].items():
-            if sha(ROOT / 'client/ports/oshi' / name) != digest:
+            if sha(ROOT / ('client/ports/oshi665' if args.original_version == '1.21.10' else 'client/ports/oshi') / name) != digest:
                 raise ValueError('OSHI source mismatch: ' + name)
         from prepare_client_261 import verified, allowed
-        row = json.loads((ROOT / 'client/1.21.lock.json').read_text())['versions'][-1]
+        row = next(r for r in json.loads((ROOT / 'client/1.21.lock.json').read_text())['versions'] if r['id'] == args.original_version)
         cache = args.publisher_cache.resolve()
         game = cache / row['id'] / 'client.jar'
         verified(row['client'], game, offline=True)
@@ -84,7 +85,7 @@ def main():
     if args.desktop_graphics:
         if platform.system() != 'Darwin' or platform.machine() != 'arm64':
             raise RuntimeError('Desktop graphics fixture currently requires native macOS ARM64')
-        row = json.loads((ROOT / 'client/1.21.lock.json').read_text())['versions'][-1]
+        row = next(r for r in json.loads((ROOT / 'client/1.21.lock.json').read_text())['versions'] if r['id'] == args.original_version)
         pin = next(lib['downloads']['artifact'] for lib in row['libraries']
                    if lib['name'] == 'org.lwjgl:lwjgl-glfw:3.3.3:natives-macos-arm64')
         original = args.publisher_cache / 'libraries' / pin['path']
@@ -132,7 +133,7 @@ def main():
         for mode, library in (('absent', absent), ('zink', glfw)):
             result = subprocess.run([str(jdk / 'bin/java'), '-Xint', '-Xcheck:jni', '--enable-native-access=ALL-UNNAMED',
                 '-Djava.library.path=' + str(native.parent), '-cp', cp, 'prosperocraft.host333.Lwjgl333GraphicsHost25', str(native), str(library), mode,
-                *(['original121'] if args.original_client and mode == 'zink' else [])],
+                *(['original12110' if args.original_version == '1.21.10' else 'original121'] if args.original_client and mode == 'zink' else [])],
                 env=env, cwd=work, capture_output=True, text=True, timeout=120)
             text = result.stdout + result.stderr
             (work / (mode + '.log')).write_text(text)

@@ -263,7 +263,12 @@ public final class ClientStartup25 {
    org.lwjgl.sdl.SDLHints.SDL_SetHint("PS5_CONTROLLER_BINDINGS",ProsperoLauncher.controllerBindings());
    boolean controls=org.lwjgl.sdl.SDLHints.SDL_SetHint("PS5_TEMPORARY_CONTROLS",System.getProperty("ps5.temporaryControls","1"));
    stage("Temporary SDL controls hint="+org.lwjgl.sdl.SDLHints.SDL_GetHint("PS5_TEMPORARY_CONTROLS")+" accepted="+controls+";D-pad/left stick=menu arrows,X=select,Circle=back,Triangle=Tab,Square=Backspace;gamepad subsystem hands off to future mods");
-   if(ProsperoLauncher.selectedZink())System.setProperty("ps5.opengl.provider","zink");
+   if(ProsperoLauncher.selectedZink()){
+    String size=ProsperoLauncher.selectedRenderSize();
+    if(!org.lwjgl.sdl.SDLHints.SDL_SetHint("PS5_RENDER_SIZE",size))throw new IllegalStateException("Selected Zink resolution hint refused");
+    stage("PS5_ZINK selected render size="+size+" source=launcher-setting");
+    System.setProperty("ps5.opengl.provider","zink");
+   }
    else System.clearProperty("ps5.opengl.provider");
    if(ProsperoLauncher.selected121()){
     Class<?> matched=Class.forName("prosperocraft.lwjgl333.Bootstrap",true,ProsperoLauncher.gameLoader());

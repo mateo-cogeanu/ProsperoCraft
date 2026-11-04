@@ -1,0 +1,20 @@
+--- a/wsi_common_videoout.c
++++ b/wsi_common_videoout.c
+@@ -178,6 +178,8 @@
+    VIDEOOUT_SIZE(3840, 2160),
+    VIDEOOUT_SIZE(2560, 1440),
+    VIDEOOUT_SIZE(1920, 1080),
++   VIDEOOUT_SIZE(1600, 900),
++   VIDEOOUT_SIZE(1280, 720),
+ };
+ #define VIDEOOUT_SIZES ARRAY_SIZE(videoout_sizes)
+ 
+@@ -206,6 +208,8 @@
+    VIDEOOUT_SIZE_MODES(0),
+    VIDEOOUT_SIZE_MODES(1),
+    VIDEOOUT_SIZE_MODES(2),
++   VIDEOOUT_SIZE_MODES(3),
++   VIDEOOUT_SIZE_MODES(4),
+ };
+ 
+ static VkDisplayKHR

@@ -1,5 +1,20 @@
 # Changelog
 
+## Local208 — 1.21.10 Vanilla, resolution and launcher keyboard, 2026-11-04
+
+- Preserve207 and record the user’s positive1.21.11 Vanilla report separately.
+  Enable1.21.10 Vanilla with genuine pinned OSHI6.6.5 CPU dispatch; other121
+  releases and all121 Fabric remain gated. Original game/library JARs stay intact.
+- Route every Zink instance’s selected launcher resolution into initial SDL display
+  reporting and surface selection. Extend the existing VideoOut size inventory for
+  launcher720p/900p; no silent1080p substitution of an explicit request.
+- Include the launcher keyboard action row in controller navigation and highlight
+  the selected action. Done/Cancel/Backspace/Space/Case work through X; ingame
+  keyboard behavior is unchanged.
+- Local policy/native, publisher OSHI and original1.21.10 GlDevice/Zink checks
+  pass; physical208 startup/world/save/quit/resolution/keyboard remain pending.
+  No release, prerelease or Store action.
+
 ## Local207 — Java-worker PNG callback state, 2026-11-04
 
 - Record206 world creation/join progress, then native state allocation/key fatal

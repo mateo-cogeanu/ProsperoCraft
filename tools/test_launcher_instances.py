@@ -116,6 +116,9 @@ var store=new ProsperoLibrary(root.resolve("store"));if(!store.instances().isEmp
    sessionField.set(zm,new ProsperoAuth.Session("OwnedPlayer","0123456789abcdef0123456789abcdef","SECRET_ZINK",System.currentTimeMillis()+3600000));
    zm.tick(0x4000);waitFor(zm);if(!zm.tick(0)[6].equals("PLAY"))throw new AssertionError("signed-in normal Play");if(!zm.tick(0)[10].equals("LAUNCH"))throw new AssertionError("normal Zink launcher did not prepare: "+zm.tick(0)[2]);
    List<String> zargs=List.of(zm.arguments(null,null));if(zargs.contains("--graphicsBackend")||zargs.contains("--demo")||!zargs.contains(version)||!zargs.contains("SECRET_ZINK"))throw new AssertionError("original GL/full account arguments");
+   var modelLibraryField=ProsperoLauncher.class.getDeclaredField("library");modelLibraryField.setAccessible(true);var modelLibrary=(ProsperoLibrary)modelLibraryField.get(zm);
+   var currentField=ProsperoLauncher.class.getDeclaredField("current");currentField.setAccessible(true);currentField.set(null,zm);
+   for(int resolution=0;resolution<ProsperoLibrary.RESOLUTIONS.length;resolution++){modelLibrary.settings().resolution=resolution;var selectedArgs=List.of(zm.arguments(null,null));int[] size=ProsperoLibrary.RESOLUTIONS[resolution];if(!selectedArgs.get(selectedArgs.indexOf("--width")+1).equals(""+size[0])||!selectedArgs.get(selectedArgs.indexOf("--height")+1).equals(""+size[1])||!ProsperoLauncher.selectedRenderSize().equals(size[0]+"x"+size[1]))throw new AssertionError("Zink ignored selected render size");}
    sessionField.set(zm,null);denied(()->zm.arguments(null,null));
    if(!Files.readString(zr.resolve("cache/versions/"+version+"/client.jar")).equals("original client bytes"))throw new AssertionError("rewrote game");
   }

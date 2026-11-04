@@ -66,11 +66,13 @@ static bool PS5_Vulkan_CreateSurface(SDL_VideoDevice *_this,SDL_Window *window,V
     if(GetPhysicalDeviceDisplayPropertiesKHR(devices[0],&count,displays)!=VK_SUCCESS||!count||count>16)return SDL_SetError("PS5 Vulkan display inventory failed");
     VkDisplayModePropertiesKHR modes[32];count=32;
     if(GetDisplayModePropertiesKHR(devices[0],displays[0].display,&count,modes)!=VK_SUCCESS||!count||count>32)return SDL_SetError("PS5 Vulkan mode inventory failed");
-    int selected=PS5_SelectDisplayMode(modes,count,displays[0].physicalResolution);
+    int configured=PS5_SelectConfiguredRenderMode(modes,count,SDL_GetHint("PS5_RENDER_SIZE"));
+    if(configured==-1)return SDL_SetError("PS5 selected render resolution is malformed or unavailable in the real display inventory");
+    int selected=configured>=0?configured:PS5_SelectDisplayMode(modes,count,displays[0].physicalResolution);
     if(selected<0)return SDL_SetError("PS5 Vulkan no usable enumerated mode");
     /* Prefer the requested real display mode when the driver enumerates it.
      * Retain a usable physical mode otherwise; logical size remains independent. */
-    if(window){int requested=PS5_SelectRequestedMode(modes,count,(uint32_t)window->w,(uint32_t)window->h);if(requested>=0)selected=requested;}
+    if(configured==-2&&window){int requested=PS5_SelectRequestedMode(modes,count,(uint32_t)window->w,(uint32_t)window->h);if(requested>=0)selected=requested;}
     SDL_Log("PS5 Vulkan surface creation: requested %dx%d selected %ux%u %.3fHz",window?window->w:0,window?window->h:0,modes[selected].parameters.visibleRegion.width,modes[selected].parameters.visibleRegion.height,modes[selected].parameters.refreshRate/1000.0);
     VkDisplayPlanePropertiesKHR planes[32];uint32_t plane_count=32;
     if(GetPhysicalDeviceDisplayPlanePropertiesKHR(devices[0],&plane_count,planes)!=VK_SUCCESS||!plane_count||plane_count>32)return SDL_SetError("PS5 Vulkan plane inventory failed");
@@ -125,10 +127,14 @@ static bool PS5_QueryDisplay(SDL_DisplayMode *mode)
     if(GetPhysicalDeviceDisplayPropertiesKHR(devices[0],&count,displays)!=VK_SUCCESS||count<1||count>16)goto done;
     VkDisplayModePropertiesKHR modes[32];count=32;
     if(GetDisplayModePropertiesKHR(devices[0],displays[0].display,&count,modes)!=VK_SUCCESS||count<1||count>32)goto done;
-    int selected=PS5_SelectDisplayMode(modes,count,displays[0].physicalResolution);
+    int configured=PS5_SelectConfiguredRenderMode(modes,count,SDL_GetHint("PS5_RENDER_SIZE"));
+    if(configured==-1)goto done;
+    int selected=configured>=0?configured:PS5_SelectDisplayMode(modes,count,displays[0].physicalResolution);
     if(selected<0)goto done;
     SDL_Log("PS5 SDL display: selected enumerated %ux%u %.3fHz (advertised native %ux%u)",modes[selected].parameters.visibleRegion.width,modes[selected].parameters.visibleRegion.height,modes[selected].parameters.refreshRate/1000.0,displays[0].physicalResolution.width,displays[0].physicalResolution.height);
-    SDL_zero(*mode);mode->format=SDL_PIXELFORMAT_BGRA32;mode->w=(int)modes[selected].parameters.visibleRegion.width;mode->h=(int)modes[selected].parameters.visibleRegion.height;mode->refresh_rate=modes[selected].parameters.refreshRate/1000.0f;ok=true;
+    SDL_zero(*mode);mode->format=SDL_PIXELFORMAT_BGRA32;mode->w=(int)modes[selected].parameters.visibleRegion.width;mode->h=(int)modes[selected].parameters.visibleRegion.height;mode->refresh_rate=modes[selected].parameters.refreshRate/1000.0f;
+    if(configured>=0){ps5_surface_width=mode->w;ps5_surface_height=mode->h;}
+    ok=true;
 done:
     if(DestroyInstance)DestroyInstance(instance,NULL);
     if(!ok)return SDL_SetError("SDL PS5 display inventory/mode query failed");

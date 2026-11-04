@@ -42,6 +42,10 @@ public class Policy121 {
   }
   check(ProsperoGraphics.glfw("1.21.11")&&ProsperoGraphics.zink("1.21.11","vanilla"),"121 GLFW/Zink");
   check(ProsperoLauncher.launchable("1.21.11","vanilla"),"Vanilla development launch");
+  Files.writeString(work.resolve("prosperocraft-121.txt"),"vanilla-1.21.10-1.21.11-zink-v2\n");
+  for(String version:Prospero121.RELEASES){check(Prospero121.available(version,"vanilla")==Set.of("1.21.10","1.21.11").contains(version),"208two explicit releases");check(!Prospero121.available(version,"fabric"),"208noFabric");}
+  check(ProsperoGraphics.glfw("1.21.10")&&ProsperoGraphics.zink("1.21.10","vanilla"),"12110Zink");
+  var oldHardware=new ProsperoInstall.Receipt();oldHardware.classpath.add("libraries/com/github/oshi/oshi-core/6.6.5/oshi-core-6.6.5.jar");check(ProsperoInstall.hardwarePort(oldHardware).equals("oshi-6.6.5-ps5-platform.jar"),"exact665provider");
   Files.writeString(work.resolve("prosperocraft-121.txt"),"bad-token\n");
   check(!ProsperoLauncher.launchable("1.21.11","vanilla"),"bad-token refusal");
   Files.writeString(work.resolve("prosperocraft-zink.txt"),"all-loaders-26.1-zink-v2\n");

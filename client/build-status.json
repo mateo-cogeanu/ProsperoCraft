@@ -48,5 +48,11 @@
   "vulkan_bindings_candidate": "client/vulkan/status.json:006 fixes005 row9 unmapped resident library lookup; host GPU/package checks pass, all ten PS5 rows pending",
   "opengl_provider_candidate": "Client_OpenGL_Provider029 frozen ALL5 PASS with matching session/startup:3real softpipe/OpenGL JNI contexts,192RGBA pixels,768guards and JVM shutdown;game startup pending",
   "startup_candidate": "030failed at STB,index0.031real STB acceptance host/package pass;actual PS5 pending",
-  "stb_candidate": "Client_STB_Codecs031 frozen ALL5 PASS,human+matching saved session. Detailed startup download incomplete. Minecraft startup still unvalidated."
+  "stb_candidate": "Client_STB_Codecs031 frozen ALL5 PASS,human+matching saved session. Detailed startup download incomplete. Minecraft startup still unvalidated.",
+  "development_208": {
+    "app_version": "01.000.208",
+    "validation": "docs/validation/client121-vanilla-208-2026-11-04.json",
+    "scope": "1.21.10 Vanilla; selected Zink resolution; launcher keyboard actions",
+    "console": "Pending; historical root milestone unchanged"
+  }
 }

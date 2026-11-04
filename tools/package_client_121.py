@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Local207 Vanilla121.11 worker-callback repair candidate from exact accepted204 inputs. No releases.
+"""Local208 Vanilla121.10,selected-resolution and launcher-keyboard candidate from exact accepted204 inputs. No releases.
 
-Original343/OpenAL/graphics groups are retained byte for byte from the relink kit.
-Only main, libjava's explicit handle hook, lookup table and matched333 are linked anew.
+Original343/OpenAL groups are retained byte for byte from the relink kit.
+Main, explicit libjava handle hook, SDL, graphics inventory and matched333 are rebuilt.
 """
 import argparse
 import hashlib
@@ -41,10 +41,13 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ('runtime-workspace', 'baseline-package', 'baseline-relink', 'base-header', 'llvm-home', 'lld', 'lwjgl333-build'):
         parser.add_argument('--' + name, type=Path, required=True)
+    parser.add_argument('--graphics-build', type=Path, required=True)
+    parser.add_argument('--sdl-build',type=Path,required=True)
+    parser.add_argument('--oshi665-build',type=Path,required=True)
     parser.add_argument('--java-home', type=Path)
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--work-dir', type=Path, required=True)
-    parser.add_argument('--app-version', choices=('01.000.207',), default='01.000.207')
+    parser.add_argument('--app-version', choices=('01.000.208',), default='01.000.208')
     parser.add_argument('--check-only', action='store_true', help='Compile/link/convert without signing or a candidate ZIP')
     args = parser.parse_args()
     app_version = args.app_version
@@ -112,6 +115,26 @@ def main():
     scoped = work / 'lwjgl333-scoped-imports.o'
     subprocess.run([str(llvm / 'llvm-objcopy'), '--redefine-syms=' + str(baseline / 'provider-bindings.txt'),
                     str(native), str(scoped)], check=True)
+    sdl_build=args.sdl_build.resolve();sdl_object=sdl_build/'resident-sdl.o';sdl_audit=json.loads((sdl_build/'audit.json').read_text())
+    if sha(sdl_object)!=sdl_audit['object_sha256']:raise ValueError('Stale SDL output')
+    for name,digest in sdl_audit['port_sha256'].items():
+        if sha(ROOT/'client/ports/sdl'/name)!=digest:raise ValueError('Stale SDL source: '+name)
+    sdl_scoped=work/'sdl208-scoped.o'
+    subprocess.run([str(llvm/'llvm-objcopy'),'--redefine-syms='+str(baseline/'provider-bindings.txt'),str(sdl_object),str(sdl_scoped)],check=True)
+    os_build=args.oshi665_build.resolve();os_overlay=os_build/'oshi-6.6.5-ps5-platform.jar';os_audit=json.loads((os_build/'audit.json').read_text())
+    if sha(os_overlay)!=os_audit['output_sha256']:raise ValueError('Stale OSHI665 overlay')
+    for name,digest in os_audit['source_sha256'].items():
+        if sha(ROOT/'client/ports/oshi665'/name)!=digest:raise ValueError('Stale OSHI665 source: '+name)
+    graphics_build = args.graphics_build.resolve()
+    graphics_object = graphics_build / 'graphics-support.o'
+    graphics_audit = json.loads((graphics_build / 'audit.json').read_text())
+    if sha(graphics_object) != graphics_audit['objects_sha256']['graphics-support.o']:
+        raise ValueError('Stale graphics output')
+    recipe = graphics_audit['wsi_diagnostics']['source_recipe']
+    for category, directory in (('patches','zink'),('wsi_patches','mesa'),('wsi_headers','mesa')):
+        for name, digest in recipe[category].items():
+            if sha(ROOT / 'client/ports' / directory / name) != digest:
+                raise ValueError('Stale graphics source: ' + name)
     groups = []
     old_groups = {}
     for item in manifest['arguments']:
@@ -121,7 +144,7 @@ def main():
     core = {'jvm', 'java', 'zip', 'jimage', 'net', 'nio', 'verify', 'management', 'management_ext', 'awt', 'lcms'}
     for name, obj in old_groups.items():
         if name not in core:
-            groups.append({'name': name, 'objects': [str(obj)]})
+            groups.append({'name': name, 'objects': [str(sdl_scoped if name=='ps5sdl' else obj)]})
     groups.append({'name': 'lwjgl333', 'objects': [str(scoped)]})
     registry = work / 'registry'
     registry.mkdir(exist_ok=True)
@@ -150,6 +173,10 @@ def main():
     extract(args.baseline_package, work, prefix='PPSA99874/')
     java = app / 'assets/java25'
     shutil.copyfile(overlay, java / 'ports' / overlay.name)
+    (java/'graphics-resolution-audit.json').write_text(json.dumps(graphics_audit,indent=2)+'\n')
+    shutil.copyfile(os_overlay,java/'ports'/os_overlay.name)
+    (java/'oshi665-platform-audit.json').write_text(json.dumps(os_audit,indent=2)+'\n')
+    (java/'sdl-resolution-audit.json').write_text(json.dumps(sdl_audit,indent=2)+'\n')
     shutil.copyfile(runtime / '.tools/java25/openjdk/build/ps5-bootstrap/support/modules_libs/java.base/libjava.so', java / 'lib/libjava.so')
     shutil.copyfile(registry / 'builtin-resident-audit.json', java / 'resident-libraries-audit.json')
     (java / 'lwjgl333-integration-audit.json').write_text(json.dumps({'runtime': pin, 'java': java_audit, 'native': native_audit,
@@ -181,12 +208,12 @@ def main():
         for file in files:
             out.writestr(file.name, file.read_bytes())
         out.writestr('prosperocraft-build.properties', ('app_version='+app_version+'\ntitle_id=PPSA99874\n').encode())
-        out.writestr('prosperocraft-121.txt', b'vanilla-1.21.11-zink-v1\n')
+        out.writestr('prosperocraft-121.txt', b'vanilla-1.21.10-1.21.11-zink-v2\n')
     temporary.replace(jar)
     for file in files:
         shutil.copyfile(file, java / 'classes' / file.name)
     (java / 'classes/prosperocraft-build.properties').write_text('app_version='+app_version+'\ntitle_id=PPSA99874\n')
-    (java / 'classes/prosperocraft-121.txt').write_text('vanilla-1.21.11-zink-v1\n')
+    (java / 'classes/prosperocraft-121.txt').write_text('vanilla-1.21.10-1.21.11-zink-v2\n')
     param = json.loads((app / 'sce_sys/param.json').read_text())
     param['contentVersion'] = app_version
     (app / 'sce_sys/param.json').write_text(json.dumps(param, indent=2) + '\n')
@@ -211,7 +238,7 @@ def main():
             if not destination.exists():
                 os.link(file, destination)
     pie = work / ('client121-'+candidate+'-symbols.elf')
-    replacements = {'inputs/104-main.o': main_obj, 'inputs/032-embedded-java.o': registry / 'embedded-java.o',
+    replacements = {'inputs/110-graphics-support.o': graphics_object, 'inputs/104-main.o': main_obj, 'inputs/044-embedded-ps5sdl.o': registry/'embedded-ps5sdl.o', 'inputs/032-embedded-java.o': registry / 'embedded-java.o',
                     'inputs/109-builtin-libraries.o': registry / 'builtin-libraries.o'}
     link = []
     for item in manifest['arguments']:
@@ -237,7 +264,7 @@ def main():
     subprocess.run([str(converter), 'link', '--in', str(pie), '--out', str(elf), '--stub-dir', str(sdk / 'target/lib'),
         *sum([['--stub', str(p)] for p in stubs], []), '--module-sdk', '0x02000009', '--companion-sdk', '0x08050001', '--file-name', 'eboot.elf'], check=True)
     if args.check_only:
-        print('PASS207 target compile/link/converter; no signed candidate ZIP')
+        print('PASS208 target compile/link/converter; no signed candidate ZIP')
         return
     subprocess.run([str(converter), 'self', '--sign', '--in', str(elf), '--out', str(app / 'eboot.bin'), '--magic', '0x1D3D154F'], check=True)
     subprocess.run([str(converter), 'self', '--inspect', '--file', str(app / 'eboot.bin')], check=True)
@@ -248,6 +275,11 @@ def main():
         'Original publisher game/library JARs are downloaded, verified and retained intact.\n'
         'Only listed platform/dispatch classes take precedence in the separate333 owner; no game remapping/transformation.\n'
         'Bootstrap integration is GPL-3.0-or-later; LWJGL source/patches BSD-3-Clause; STB individual upstream notices retained.\n')
+    shutil.copytree(ROOT/'client/ports/oshi665',java/'oshi665-source',dirs_exist_ok=True)
+    source_sdl=java/'sdl-resolution-source';source_sdl.mkdir(exist_ok=True)
+    shutil.copyfile(ROOT/'client/ports/mesa/0011-videoout-launcher-resolutions.patch',source_sdl/'0011-videoout-launcher-resolutions.patch')
+    for name in ('SDL_ps5video.c','ps5_display_mode.h'):
+        shutil.copyfile(ROOT/'client/ports/sdl'/name,source_sdl/name)
     shutil.copytree(ROOT / 'client/ports/lwjgl333', java / 'lwjgl333-source', dirs_exist_ok=True)
     shared_source = java / 'lwjgl333-source/shared-libffi'
     shared_source.mkdir(exist_ok=True)
@@ -262,17 +294,18 @@ def main():
     record = {'app_version': app_version, 'title_id': 'PPSA99874', 'package_sha256': sha(package),
         'package_bytes': package.stat().st_size, 'baseline_package_sha256': BASE_PACKAGE, 'baseline_relink_sha256': BASE_RELINK,
         'symbols_sha256': sha(pie), 'eboot_sha256': sha(app / 'eboot.bin'), 'runtime': pin,
-        'parentNativeGroupsRetainedSha256': {n: sha(p) for n, p in old_groups.items() if n not in ('java',)},
+        'parentNativeGroupsRetainedSha256': {n: sha(p) for n, p in old_groups.items() if n not in ('java','ps5sdl')},
         'javaRuntimeClassesAndImage': 'exact204 modules retained; native libjava handle hook rebuilt',
         'newGroupSha256': sha(registry / 'embedded-lwjgl333.o'), 'overlaySha256': sha(overlay),
         'source_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
         'source_tree': 'modified' if subprocess.check_output(['git', 'status', '--porcelain'], text=True).strip() else 'clean',
-        'scope': 'Development Vanilla1.21.11 only; original121libraries downloaded;26.x support/resources/options retained; Fabric121blocked',
+        'scope': 'Vanilla1.21.10 candidate plus confirmed1.21.11;allZink selected-resolution hint/native SDL;launcher keyboard action row;original JARs/VMoptions retained;Fabric121blocked',
+        'graphicsSupportSha256':sha(graphics_object),'newSdlGroupSha256':sha(registry/'embedded-ps5sdl.o'),'oshi665Sha256':sha(os_overlay),
         'console': 'NOT TESTED', 'releaseStore': 'No action'}
     (output / 'build-audit.json').write_text(json.dumps(record, indent=2) + '\n')
     (output / 'SHA256SUMS').write_text(record['package_sha256'] + '  PPSA99874.zip\n')
     shutil.copyfile(pie, output / pie.name)
-    print('LOCAL207', package, 'SHA256', record['package_sha256'])
+    print('LOCAL208', package, 'SHA256', record['package_sha256'])
 
 
 if __name__ == '__main__':

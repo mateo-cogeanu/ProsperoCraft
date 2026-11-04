@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Independently inspect local207 against accepted204 and original333 inputs.
+"""Independently inspect local208 against accepted204 and original333 inputs.
 
 Requires explicit SDK build outputs and publisher cache; not a portable CI lane
 or evidence of physical-console acceptance. Never modifies packages or game JARs.
@@ -51,17 +51,24 @@ def main():
             raise ValueError('Unexpected baseline change: ' + repr(changed))
         added = sorted(set(names) - set(old.namelist()))
         for n in added:
-            if not (n.startswith(prefix + 'lwjgl333-source/') or n.startswith(prefix + 'classes/') or
-                    n in {prefix + 'lwjgl333-integration-audit.json', prefix + 'ports/lwjgl-3.3.3-ps5-overlay.jar',
+            if not (n.startswith(prefix + 'lwjgl333-source/') or n.startswith(prefix + 'classes/') or n.startswith(prefix+'oshi665-source/') or n.startswith(prefix+'sdl-resolution-source/') or
+                    n in {prefix+'graphics-resolution-audit.json',prefix+'oshi665-platform-audit.json', prefix+'sdl-resolution-audit.json',prefix+'ports/oshi-6.6.5-ps5-platform.jar',prefix + 'lwjgl333-integration-audit.json', prefix + 'ports/lwjgl-3.3.3-ps5-overlay.jar',
                           'PPSA99874/licenses/LWJGL333-PORT.txt'}):
                 raise ValueError('Unexpected added file: ' + n)
         param = json.loads(new.read('PPSA99874/sce_sys/param.json'))
-        if param['contentVersion'] != '01.000.207':
+        if param['contentVersion'] != '01.000.208':
             raise ValueError('Wrong identity')
-        if new.read(prefix + 'classes/prosperocraft-121.txt') != b'vanilla-1.21.11-zink-v1\n':
+        if new.read(prefix + 'classes/prosperocraft-121.txt') != b'vanilla-1.21.10-1.21.11-zink-v2\n':
             raise ValueError('Wrong per-release gate')
         if new.read(prefix + 'ports/lwjgl-3.3.3-ps5-overlay.jar') != (args.lwjgl333_build / 'lwjgl-3.3.3-ps5-overlay.jar').read_bytes():
             raise ValueError('Wrong overlay')
+        os_audit = json.loads(new.read(prefix + 'oshi665-platform-audit.json'))
+        if hashlib.sha256(new.read(prefix + 'ports/oshi-6.6.5-ps5-platform.jar')).hexdigest() != os_audit['output_sha256']:
+            raise ValueError('OSHI665 package mismatch')
+        for name, digest in os_audit['source_sha256'].items():
+            if hashlib.sha256(new.read(prefix + 'oshi665-source/' + name)).hexdigest() != digest:
+                raise ValueError('OSHI665 packaged source mismatch')
+        graphics_audit = json.loads(new.read(prefix + 'graphics-resolution-audit.json'))
         # Parent JARs, Java image, VM options and original26 resource tokens must
         # remain byte-identical. Exploded updated classes must match their JAR.
         import io
@@ -73,7 +80,7 @@ def main():
                         raise ValueError('Exploded/JAR class mismatch: ' + relative)
             with zipfile.ZipFile(io.BytesIO(old.read(prefix + 'client-probe.jar'))) as previous:
                 for n in previous.namelist():
-                    if not n.endswith('.class') and n != 'prosperocraft-build.properties' and previous.read(n) != probe.read(n):
+                    if not n.endswith('.class') and n not in ('prosperocraft-build.properties','prosperocraft-121.txt') and previous.read(n) != probe.read(n):
                         raise ValueError('Existing probe resource changed: ' + n)
         growth = sum(i.file_size for i in new.infolist()) - sum(i.file_size for i in old.infolist())
         if growth > 8 * 1024 * 1024:
@@ -81,6 +88,10 @@ def main():
         registry = json.loads(new.read(prefix + 'resident-libraries-audit.json'))
         if registry['library_symbol_prefixes'] != {'lwjgl333': 'lwjgl333_'}:
             raise ValueError('Wrong generation namespace')
+    # The final image must contain selected-size routing and the new SDL group.
+    linked_text=(args.build_dir/'client121-208-symbols.elf').read_bytes()
+    for value in (b'PS5_RENDER_SIZE',b'PS5 selected render resolution is malformed or unavailable'):
+        if value not in linked_text:raise ValueError('Missing selected-resolution native path')
     native = args.lwjgl333_build / 'ps5/lwjgl333.o'
     raw = symbols(args.llvm_nm, native)
     if 'prospero_ffi_reserve_prime' not in raw or 'ffi_closure_alloc' not in raw:
@@ -120,8 +131,8 @@ def main():
         counts[jar.name] = covered
     baseline = args.build_dir / 'baseline204'
     manifest = json.loads((baseline / 'manifest.json').read_text())
-    linked = [json.loads(line) for line in (args.build_dir / 'link207.rsp').read_text().splitlines()]
-    replaced = {'inputs/104-main.o', 'inputs/032-embedded-java.o', 'inputs/109-builtin-libraries.o'}
+    linked = [json.loads(line) for line in (args.build_dir / 'link208.rsp').read_text().splitlines()]
+    replaced = {'inputs/110-graphics-support.o','inputs/104-main.o', 'inputs/044-embedded-ps5sdl.o', 'inputs/032-embedded-java.o', 'inputs/109-builtin-libraries.o'}
     retained = {}
     for item in manifest['arguments']:
         if item.startswith('inputs/') and item not in replaced:
@@ -132,6 +143,12 @@ def main():
     for row in manifest['files']:
         if sha(baseline / row['path']) != row['sha256']:
             raise ValueError('Retained relink input corrupted: ' + row['path'])
+    sdl_group = str((args.build_dir / 'registry/embedded-ps5sdl.o').resolve())
+    if linked.count(sdl_group) != 1:
+        raise ValueError('Missing/duplicate rebuilt SDL group')
+    graphics = [Path(n) for n in linked if n.endswith('/graphics-support.o')]
+    if len(graphics) != 1 or sha(graphics[0]) != graphics_audit['objects_sha256']['graphics-support.o']:
+        raise ValueError('Wrong linked graphics inventory')
     linked333 = str((args.build_dir / 'registry/embedded-lwjgl333.o').resolve())
     if linked.count(linked333) != 1:
         raise ValueError('Missing/duplicate333 native group')
@@ -139,9 +156,9 @@ def main():
     for option in (b'-Dps5.zip.maxOpenFiles=8', b'-Xmx1536m', b'-XX:CompressedClassSpaceSize=64m',
                    b'-XX:ReservedCodeCacheSize=96m', b'-XX:ActiveProcessorCount=4'):
         if option + b'\0' not in elf:
-            raise ValueError('Retained option missing from actual207 ELF: ' + option.decode())
+            raise ValueError('Retained option missing from actual208 ELF: ' + option.decode())
     source = (args.build_dir / 'registry/builtin-libraries.cpp').read_text()
-    if 'lwjgl333_prospero_ffi_reserve_prime' not in symbols(args.llvm_nm, args.build_dir / 'client121-207-symbols.elf', external=False):
+    if 'lwjgl333_prospero_ffi_reserve_prime' not in symbols(args.llvm_nm, args.build_dir / 'client121-208-symbols.elf', external=False):
         raise ValueError('333 callback reserve not linked')
     if b'PS5 LWJGL333 pre-JVM closure reserve result=' not in elf:
         raise ValueError('Pre-JVM reserve priming missing from actual executable')
@@ -151,7 +168,7 @@ def main():
     boot = (ROOT / 'client/save_headroom/bootstrap.cpp').read_text()
     if '#define' not in boot or '"8"' not in boot:
         raise ValueError('Missing accepted ZIP budget8')
-    audit = {'package_sha256': sha(args.package), 'version': '01.000.207', 'title_id': 'PPSA99874',
+    audit = {'package_sha256': sha(args.package), 'version': '01.000.208', 'title_id': 'PPSA99874',
              'package_bytes': args.package.stat().st_size, 'zip_growth_bytes': args.package.stat().st_size - args.baseline_package.stat().st_size,
              'uncompressed_growth_bytes': growth, 'baseline_changed_files': changed, 'added_files': added,
              'matched_native_declarations': counts, 'unsupported_nonplatform_native_declarations': sorted(absent),
@@ -161,7 +178,7 @@ def main():
              'result': 'PASS scoped package/static ABI audit; no complete feature or console acceptance', 'console': 'NOT TESTED'}
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(audit, indent=2) + '\n')
-    print('PASS207 package audit; uncompressed growth', growth, 'bytes; SHA256', audit['package_sha256'])
+    print('PASS208 package audit; uncompressed growth', growth, 'bytes; SHA256', audit['package_sha256'])
 
 
 if __name__ == '__main__':

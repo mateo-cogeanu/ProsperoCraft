@@ -344,7 +344,7 @@ inline void compose(Canvas& c) noexcept {
   bool physical=std::strcmp(fields[105].data(),"PHYSICAL")==0;
   if(physical)wrap(c,103,470,"Type on your keyboard. Enter confirms; Esc cancels. Use the controller to show its keyboard again.",1560,3);
   if(!physical)for(int i=0;i<40;i++){int x=80+(i%10)*176,y=465+(i/10)*91;if(i==chosen)selection(c,x,y,152,73);c.rounded(x,y,152,73,16,ink(i==chosen?0x356647:0x172e24));char letter[2]={chars[i],0};label(c,x+61,y+21,letter,30);}
-  const char* edits[]={"BACKSPACE","SPACE","CASE","CANCEL","DONE"};for(int i=0;i<5;i++)if(!physical||i>=3)action(c,70+i*360,855,330,edits[i],false,i==4);
+  const char* edits[]={"BACKSPACE","SPACE","CASE","CANCEL","DONE"};for(int i=0;i<5;i++)if(!physical||i>=3)action(c,70+i*360,855,330,edits[i],chosen==40+i,i==4);
  }
 #ifdef PROSPERO_TOOLKIT
  c.end_content();

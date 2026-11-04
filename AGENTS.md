@@ -195,3 +195,18 @@ remain. Original PNG fault replay,64worker PNG cycles,own/foreign native attachm
 ASan/UBSan/XcheckJNI ownership and existing Zink checks pass. Exact207PS5world/save/
 quit/endurance and26.x regressions remain pending. No new reserve/heap/GC/JAR policy,
 release/Store approval or ALL PASS. See docs/client-1.21-207.md; raw reports local.
+
+
+## Vanilla1.21.10 and selected-resolution candidate —2026-11-04
+
+User reports2071.21.11 working and requests1.21.10 next. Preserve207 exact bytes;
+positive feedback is recorded separately, not formal ALL PASS.208 enables only
+1.21.10/.11 Vanilla; all121 Fabric and earlier releases remain gated. Genuine
+OSHI6.6.5 CPU-only dispatch uses original interfaces/UNKNOWN, original JAR intact.
+All Zink instances pass the launcher-selected size before SDL/GLFW initialization;
+SDL query/surface honor it, with explicit refusal for unavailable inventory modes.
+VideoOut additionally enumerates launcher720p/900p using existing buffer handling;
+physical modes/presentation remain pending. Launcher keyboard navigation includes
+all five action buttons; do not change ingame keyboard for this repair. Preserve
+VM/ZIPbudget8/native333/343 ownership and existing release/Store/shader gates.
+See docs/client-1.21-208.md and exact package validation before claims.
