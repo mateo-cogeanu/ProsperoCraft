@@ -1,0 +1,12 @@
+{
+  "date": "2026-11-04",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.212",
+  "package_sha256": "d97e530ea67838ef806e8fa88731d399aa9ce1ae661b091daff5eaacfe3f75a7",
+  "source_commit": "8f43ac872973736ba0896373868e2c9e7d0f6f17",
+  "user_confirmation": "absolute peak of this launcher is now. lets make a prosperostore release",
+  "context": "User responds to delivery of exact final212 ZIP and explicitly requests ProsperoStore release. Treat as physical tester launcher acceptance and authorization for this retained package; do not infer an exhaustive game/device test.",
+  "scope": "Launcher polish accepted. Prior1.21.11/1.21.10 Vanilla positive feedback retained. Earlier202 shader/quit and204 release acceptance remain scoped historical evidence; implementation retained, no new212 shader pack/profile or game regression measurement supplied.",
+  "limits": "No formal ALL PASS, measured120FPS, full shader/mod/version/device matrix or endurance inferred. Earlier1.21 releases and all1.21Fabric remain blocked.",
+  "publication": "Explicit212 GitHub release and existing Store listing update authorization. Preserve exact tested bytes without rebuilding; future builds retain approval gates."
+}

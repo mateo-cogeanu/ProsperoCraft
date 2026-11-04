@@ -104,5 +104,13 @@
     "source_commit": "8f43ac872973736ba0896373868e2c9e7d0f6f17",
     "source_tree": "clean",
     "package_audit": "PASS final signed integrity and independent static audit"
+  },
+  "published_client": {
+    "version": "01.000.212",
+    "release": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.212",
+    "package_sha256": "d97e530ea67838ef806e8fa88731d399aa9ce1ae661b091daff5eaacfe3f75a7",
+    "source_commit": "8f43ac872973736ba0896373868e2c9e7d0f6f17",
+    "acceptance": "docs/validation/client212-console-acceptance-2026-11-04.json",
+    "scope": "User accepted launcher polish and explicitly authorized release; no exhaustive game regression/FPS/endurance inference"
   }
 }

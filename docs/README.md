@@ -73,3 +73,5 @@ the documentation checker.
 - [202 native small flag queries and final SDL lifecycle](client-zink-final-202.md)
 - [203 normal26.1.x launcher labels and202shader/quit results](client-zink-ready-203.md)
 - [204 save descriptor headroom and extended handle diagnostics](client-save-headroom-204.md)
+
+Release212: [notes](releases/client-launcher-vanilla-212.md) and [console acceptance](validation/client212-console-acceptance-2026-11-04.json).

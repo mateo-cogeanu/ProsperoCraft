@@ -1,7 +1,10 @@
 # Changelog
 
-## Local212 — selectors stay in context, 2026-11-04
+## 01.000.212 — launcher polish and1.21 Vanilla, 2026-11-04
 
+- User accepts the exact212 launcher and authorizes GitHub/ProsperoStore release.
+  Publish retained bytes with matching source/relink materials; preserve earlier packages.
+- Include Vanilla1.21.10/.11 and prior resolution/keyboard/login repairs.
 - Record211 positive smoothness feedback and preserve its exact package.
 - Overlay selectors on dimmed source screens; preview themes undimmed without
   saving until confirm. Add all32 icons as larger artwork in a spatial grid.

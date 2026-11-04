@@ -273,3 +273,16 @@ PS5 visuals/feel/handoff remain pending. Preserve211 bytes and release gates; se
 212 removes Modrinth/CurseForge logo assets and embedded pixels at user request.
 Original CC0 Amethyst/Compass retain IDs4/25; preserve other icon IDs and upstream
 notices. Package audit requires all six inherited logo assets absent.
+
+
+## Authorized212 release —2026-11-04
+
+User accepts the exact212 launcher and explicitly requests ProsperoStore release.
+Publish retained212-final package SHA256
+ d97e530ea67838ef806e8fa88731d399aa9ce1ae661b091daff5eaacfe3f75a7
+without rebuild, with matching source/relink materials. Preserve existing listing
+description/credits/icon; update version/artifact/digest and release changelog.
+No exhaustive212 shader/game/device/FPS/endurance or formal ALL PASS is inferred.
+Earlier202shader/quit and204release acceptance remain scoped; future candidates
+retain explicit physical/release gates. Submit catalog PR, do not monitor after
+submission. See docs/validation/client212-console-acceptance-2026-11-04.json.
