@@ -1,6 +1,6 @@
 {
   "date": "2026-11-04",
-  "status": "206target compile/link/converter pass; signed packaging pending; no physical acceptance",
+  "status": "Signed206local candidate; independent package audit PASS; physical repair acceptance pending",
   "title_id": "PPSA99874",
   "app_version": "01.000.206",
   "failed_package205_sha256": "1bcc84a8905bcefd31688bc1fdeee74bfc2a8c5620ab97311d59e2905d10fe6c",
@@ -45,10 +45,41 @@
     "native": "PASS11/11,9.1seconds",
     "default_closure_adapter": "PASS existing native W->X fault test with reserve disabled",
     "target": "PASS209units/currentadapterhash,namespace link,compile/converter;206main explicit64page bootstrap",
-    "source_only": "PASS19/19; tracked source-only copy, initially empty explicit dependency cache, invoked from/tmp; original host-only dependency pins",
-    "hosted": "pending source push"
+    "source_only": "PASS19/19,21.8seconds; source-only copy, initially empty explicit host dependency cache, invocation from/tmp",
+    "hosted": {
+      "source_commit": "01be7bb95733e331b7cc9e041d9850627278bbf8",
+      "url": "https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41869455693",
+      "ubuntu-24.04": "PASS completed actual policy job",
+      "macos-15": "queued at inspection; no hosted macOS repair pass claimed",
+      "scope": "Fast portable assertions; manual libffi, SDK/package and physical checks are separate"
+    }
   },
-  "package": "pending",
+  "package": {
+    "package_sha256": "c630521c465a97678d12aeb5d4ed9b21b9ed751eb399c5544380843019b34a73",
+    "package_bytes": 127437975,
+    "source_commit": "ea4ebb1cb595b6a10069b33a88fdaa289430ded6",
+    "source_tree": "clean",
+    "baseline_package_sha256": "89167d01c7da0ece733b0dd8b7871a05ee38ff5f79ee45b4ce9beefc5d4c14a0",
+    "baseline_relink_sha256": "4351224b234d2b16a688afc4d31f23f0c6badc30670d034ad065cc629bce9f0f",
+    "symbols_sha256": "dd02ad0bedb853f64e6672c86afaccdbd37acd62ba9b1edfc122c73d4a7650e3",
+    "eboot_sha256": "39b58b0c20574f818e0400cea05fe624c797f541507fe2f681bc59bbfa8ae8a0",
+    "newGroupSha256": "6105afbccb715e6173c0427e95b621de47667a59e8255942b265c5120d4fcb50",
+    "overlaySha256": "526e6802131484f5760b377274d5642ab308865ff69a1ae44ece5efd1fefd15d",
+    "zip_growth_bytes": 381094,
+    "uncompressed_growth_bytes": 1125220,
+    "matched_native_declarations": {
+      "lwjgl-freetype-3.3.3.jar": 0,
+      "lwjgl-glfw-3.3.3.jar": 0,
+      "lwjgl-jemalloc-3.3.3.jar": 0,
+      "lwjgl-openal-3.3.3.jar": 0,
+      "lwjgl-opengl-3.3.3.jar": 2228,
+      "lwjgl-stb-3.3.3.jar": 215,
+      "lwjgl-tinyfd-3.3.3.jar": 0,
+      "lwjgl-3.3.3.jar": 1756
+    },
+    "audit": "PASS actual signedZIP identity/CRC/paths/baseline delta/original resources/parentJARs/Java image/exploded classes/retained link inputs/checksums;333exports and hidden final priming symbol; actualVM optionsZIP8/heap1536m/class64m/code96m/CPU4",
+    "preservation": "Exact204and205package hashes reverified unchanged"
+  },
   "physical_pending": [
     "206HTTP index/log/full512row snapshot download",
     "Original1.21.11 native callbacks/title/world/input/audio/save/reload/quit/library/relaunch",

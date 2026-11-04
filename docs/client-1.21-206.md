@@ -5,6 +5,13 @@ only1.21.11 Vanilla remains enabled for development testing. Other121Vanilla and
 all121Fabric entries stay Coming soon. Accepted204, original205 and frozen history
 are retained. No release, prerelease or Store action is authorized.
 
+Signed ZIP SHA-256:
+`c630521c465a97678d12aeb5d4ed9b21b9ed751eb399c5544380843019b34a73`.
+ZIP size127,437,975bytes (+381,094 versus204); uncompressed growth1,125,220bytes.
+Independent package audit passes. Build source is
+`ea4ebb1cb595b6a10069b33a88fdaa289430ded6` with a clean source tree. Subsequent
+auditor/documentation updates do not rebuild the signed artifact.
+
 ## Retrieved evidence
 
 The user reports a game crash, reopening, and another exit when accessing reports

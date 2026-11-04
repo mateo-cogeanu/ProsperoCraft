@@ -22,8 +22,9 @@ def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def symbols(nm, path):
-    return set(subprocess.check_output([str(nm), '--defined-only', '--extern-only', str(path)], text=True).split())
+def symbols(nm, path, external=True):
+    flags = ['--defined-only'] + (['--extern-only'] if external else [])
+    return set(subprocess.check_output([str(nm), *flags, str(path)], text=True).split())
 
 
 def main():
@@ -140,7 +141,7 @@ def main():
         if option + b'\0' not in elf:
             raise ValueError('Retained option missing from actual206 ELF: ' + option.decode())
     source = (args.build_dir / 'registry/builtin-libraries.cpp').read_text()
-    if 'lwjgl333_prospero_ffi_reserve_prime' not in symbols(args.llvm_nm, args.build_dir / 'client121-206-symbols.elf'):
+    if 'lwjgl333_prospero_ffi_reserve_prime' not in symbols(args.llvm_nm, args.build_dir / 'client121-206-symbols.elf', external=False):
         raise ValueError('333 callback reserve not linked')
     if b'PS5 LWJGL333 pre-JVM closure reserve result=' not in elf:
         raise ValueError('Pre-JVM reserve priming missing from actual executable')
