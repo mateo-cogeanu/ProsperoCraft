@@ -1,0 +1,18 @@
+{
+  "date": "2026-11-04",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.210",
+  "status": "Source checks; signed candidate preparation",
+  "scope": "Restore lower controls; static startup notice and background login focus; low-force bounded page-trigger click; instance-card expansion into real detail UI",
+  "checks": {
+    "fast": "PASS19/19 in25.0s; includes injected blocked-refresh navigation and retained intro",
+    "native": "PASS12/12 in12.1s; actual worker/refusal/lifecycle and all8card source/end/intermediate bounds",
+    "haptics": "PASS real worker left/right native ABI,55ms timeout,disable/shutdown,nonfatal active-command refusal and reset,no stale cue replay; host boundary fixture",
+    "preview": "PASS actual Vulkan restored bottoms, untranslated notice, expanding selected-card/detail checkpoints, original pointer/page/scroll/mailbox/handoff controls; visually inspected",
+    "target": "PASS final210 -Werror compile/link/converter; signed package pending",
+    "source_only": "PASS19fast in24.1s and12native in11.9s, source-only copy with empty explicit dependency cache and invocation from/tmp",
+    "hosted": "Pending source push"
+  },
+  "physical210": "NOT RUN: bottom controls,notice/login focus,card opening,trigger feel/reset/release/reduced motion and game handoff remain pending",
+  "release_store": "No action; exact physical/shader/explicit authorization gates retained"
+}

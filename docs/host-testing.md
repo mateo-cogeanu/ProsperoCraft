@@ -42,7 +42,7 @@ Vanilla development versions, adapted GLFW priority, original OpenGL arguments
 and unchanged default/Demo/Fabric/Vulkan boundaries with injected publisher data.
 
 The native runner forces UBSan errors to fail (`halt_on_error=1`), including local runs.
-The eleven optional native checks exercise actual scoped audio mutex/port/worker
+The twelve optional native checks exercise actual scoped audio mutex/port/worker
 implementations, desktop HID/model policy and resident-library JNI loading, with
 controlled OS boundaries. The microphone check runs the actual bounded capture core with injected AudioIn calls, including silence/route changes, conversion, failure ownership and concurrent producer/consumer cleanup. It does not capture host or PS5 speech. The context-error check covers generation reuse, thread isolation, bounded context capacity and refused native-key setters. The Zink guard check combines the actual frontend guard body and existing mutex
 reserve under late-init refusal, contention, unprimed/exhausted pool and exact
@@ -147,3 +147,9 @@ requires actual matching frontend/GLFW libraries and sanitizer compiler, and the
 original-client option requires verified publisher inputs plus the genuine OSHI
 provider. See [local205 evidence and limitations](client-1.21-205.md). The fast lane
 uses injected temporary fixtures and downloads no game files.
+
+Launcher210 adds the portable actual haptic-worker fixture to the native lane: its
+bounded motor/trigger deadlines, disable/shutdown, refusal and no-replay controls
+use injected native pad calls. Saved-account tests additionally block a refresh
+while navigating and assert that intro/page/tab/selection remain in place. Physical
+trigger feel, reset and console layout still require exact-build testing.

@@ -223,3 +223,17 @@ Reduced motion. Native launcher owns presentation/mailbox/lifecycle; no SDL/JVM 
 game/native policy changes for this UI repair.208 exact bytes remain retained;
 physical209 responsiveness/animation/input/game handoff is pending. Existing
 release/Store/shader and Vanilla-before-Fabric gates remain.
+
+
+## Launcher layout, refresh focus and card entry —2026-11-04
+
+209 positive animation feedback also reports bottom clipping.210 content viewport
+must cover existing controls through962px; fade begins below1005px. Startup notice
+must stay out of page/card transitions and survive saved-account refresh. Automatic
+refresh preserves current navigation; explicit sign-in keeps its existing return.
+Instance entry expands the selected card into actual detail controls; L1/R1 tabs
+and L2/R2 pages keep horizontal movement. Launcher-only trigger cue uses the existing
+native ABI/basic effect and bounded haptic worker, honors Vibration preference and
+resets before pad close; API refusal is nonfatal, physical feel/reset pending.
+Keep game/native/runtime policies and all earlier gates/packages. See
+ docs/client-launcher-refinements-210.md; native lane now includes portable haptics.

@@ -121,6 +121,12 @@ page_preview=r'''
   for(int i=0;i<8;i++){char text[40];snprintf(text,sizeof(text),"Version option %d",i+3);field(85+i,text);}prospero_menu::cache_scroll_rows();prospero_menu::list_scroll.from=0;prospero_menu::list_scroll.target=2;prospero_menu::list_scroll.began=prospero_menu::now_ms()-60;
   prospero_ui::surface->list.clear();{prospero_ui::Canvas c;prospero_menu::compose(c);}save_scene("dropdown-scroll-midpoint");
   assert(prospero_menu::list_scroll.value(prospero_menu::now_ms())>0&&prospero_menu::list_scroll.value(prospero_menu::now_ms())<=2);
+  field(11,"0");field(12,"0");field(9,"3");field(14,"0");for(int i=0;i<8;i++){char n[40];snprintf(n,sizeof(n),"Instance %d",i+1);field(32+i*4,n);}prospero_menu::outgoing_fields=prospero_menu::fields;field(69,"SUPPORTED");field(6,"PLAY");field(65,"1.21.10 Vanilla");field(11,"4");field(16,"Instance 4");field(17,"1.21.10 / Vanilla");field(18,"1");field(15,"0");prospero_menu::opening_slot=3;prospero_menu::page_turn.enabled=false;
+  for(int ms:{0,140,280}){prospero_menu::card_open.start(1,prospero_menu::now_ms()-ms,false);prospero_ui::surface->list.clear();{prospero_ui::Canvas c;prospero_menu::compose(c);}char name[40];snprintf(name,sizeof(name),"instance-open-%d",ms);save_scene(name);}prospero_menu::card_open.enabled=false;
+  field(11,"7");field(15,"1");field(104,"0");prospero_menu::page_turn.start(1,prospero_menu::now_ms()-140,false);prospero_ui::surface->list.clear();{prospero_ui::Canvas c;prospero_menu::compose(c);}save_scene("startup-notice-untranslated");
+  field(11,"2");field(12,"1");field(15,"6");prospero_menu::page_turn.enabled=false;settle_preview();save_scene("settings-bottom-restored");
+  field(11,"6");field(15,"0");field(31,"44");settle_preview();save_scene("keyboard-bottom-restored");
+  field(11,"10");field(83,"20");field(84,"2");field(15,"9");
   auto before_click=prospero_menu::event_write;prospero_menu::page_turn.start(1,prospero_menu::now_ms(),false);prospero_menu::pointer_input(300,320,true);assert(prospero_menu::event_write==before_click);prospero_menu::page_turn.enabled=false;prospero_menu::pointer_input(300,320,true);assert(prospero_menu::event_write==before_click+1);prospero_menu::event_read=prospero_menu::event_write;
   puts("PASS actual pointer callback rejects moving dropdown clicks and accepts settled visual row");
   puts("PASS actual Vulkan horizontal outgoing/incoming page frames, both side chevrons across six themes and fractional clipped dropdown scrolling with thumb");

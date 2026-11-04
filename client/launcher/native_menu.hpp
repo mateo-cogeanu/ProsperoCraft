@@ -47,7 +47,7 @@ struct Fields {
 // startup thread. A bounded mailbox exchanges public UI text and button edges.
 inline Fields fields{},published{},outgoing_fields{};
 inline void swap_page_fields()noexcept{fields.text.swap(outgoing_fields.text);fields.images.swap(outgoing_fields.images);}
-inline PageTurn page_turn{};inline Glide list_scroll{},tab_x{},tab_w{};inline bool tabs_ready=false;inline int page_direction=1;inline std::uint64_t page_direction_at=0;inline int list_page=-1;
+inline PageTurn page_turn{},card_open{};inline int opening_slot=0;inline Glide list_scroll{},tab_x{},tab_w{};inline bool tabs_ready=false;inline int page_direction=1;inline std::uint64_t page_direction_at=0;inline int trigger_page_side=-1;inline std::uint64_t trigger_page_at=0;inline int list_page=-1;
 struct ScrollRow {int index=-1;std::array<char,512> text{};};
 inline std::array<ScrollRow,32> scroll_rows{};
 inline void cache_scroll_rows()noexcept{
@@ -395,9 +395,16 @@ inline void compose(Canvas& c) noexcept {
  c.begin_content();
 #endif
 #ifdef PROSPERO_TOOLKIT
- auto& list=prospero_ui::surface->list;bool moving=page_turn.moving(now_ms())&&std::strcmp(fields[30].data(),"ON")!=0;
- prospero_ui::paging=moving;list.push_clip({0,155,1920,770});
- if(moving){float t=page_turn.progress(now_ms());animating=true;
+ auto& list=prospero_ui::surface->list;bool moving=page!=7&&page_turn.moving(now_ms())&&std::strcmp(fields[30].data(),"ON")!=0;
+ prospero_ui::paging=moving;list.push_clip({0,155,1920,850});
+ bool opening=page==4&&card_open.moving(now_ms())&&std::strcmp(fields[30].data(),"ON")!=0;
+ if(opening){float t=card_open.progress(now_ms());animating=true;prospero_ui::paging=true;
+  if(t<0.9f){swap_page_fields();prospero_ui::outgoing=true;compose_content(c);prospero_ui::outgoing=false;swap_page_fields();}
+  auto rect=opening_card_rect(opening_slot,t);float opacity=t>0.9f?(1-t)*10:1;
+  list.rounded_rect({rect.x,rect.y,rect.w,rect.h},22,prospero_ui::themed(0x081a13,opacity));
+  list.push_clip({rect.x,rect.y,rect.w,rect.h});float scale=rect.w/1920;
+  list.push_transform(scale,0,0,rect.x,rect.y-155*scale);compose_content(c);list.pop_transform();list.pop_clip();
+ }else if(moving){float t=page_turn.progress(now_ms());animating=true;
   swap_page_fields();prospero_ui::outgoing=true;list.push_transform(1,0,0,-page_turn.direction*1920*t,0);compose_content(c);list.pop_transform();prospero_ui::outgoing=false;swap_page_fields();
   list.push_transform(1,0,0,page_turn.direction*1920*(1-t),0);compose_content(c);list.pop_transform();
  }else compose_content(c);
@@ -453,7 +460,7 @@ inline void draw(ps5::demo::Canvas& output) noexcept {
 inline void draw(ps5::demo::Canvas& output) noexcept {compose(output);}
 #endif
 inline void pointer_input(int x,int y,bool click)noexcept{
-  if(page_turn.moving(now_ms()))return;
+  if(page_turn.moving(now_ms())||card_open.moving(now_ms()))return;
   int page=number(11);auto hit=desktop_hit(page,x,y,page==0?number(14):number(84),page==0?number(13):page==12?number(93):number(83),layout_slide,std::strcmp(fields[71].data(),"OFFLINE")==0,std::strcmp(fields[103].data(),"INSTALLED")==0,std::strcmp(fields[82].data(),"Shaders")==0);
 if(page==0&&y>=495&&y<585){if(x>=5&&x<58&&number(14)>0)hit={5,0};if(x>=1862&&x<1915&&number(14)+8<number(13))hit={5,1};}
 #ifdef PROSPERO_TOOLKIT
@@ -490,6 +497,7 @@ inline bool update() noexcept {
  push_input(pressed);
  bool desktop_changed=desktop.poll(current_time,[](unsigned command){push_input(command);},pointer_input);
  if(pressed&0xf00){page_direction=(pressed&0xa00)?1:-1;page_direction_at=now_ms();}
+ if((pressed&0x300)&&(number(11)==0||number(11)==8||number(11)==12)){trigger_page_side=(pressed&0x200)?1:0;trigger_page_at=now_ms();}
  bool changed=false;
  if(!online.load(std::memory_order_acquire)){
   if(pressed&0x400){std::snprintf(fields[12].data(),512,"%d",(number(12)+2)%3);std::snprintf(fields[28].data(),512,"TOP");changed=true;}
@@ -498,7 +506,13 @@ inline bool update() noexcept {
   pthread_mutex_lock(&mailbox);changed=fields!=published;
   if(changed){
    int before=number(11),after=std::atoi(published[11].data());
-   bool turn=before!=after||(before==0&&std::strcmp(fields[14].data(),published[14].data())!=0)||(before==8&&std::strcmp(fields[74].data(),published[74].data())!=0);
+   bool paged=before==after&&((before==0&&std::strcmp(fields[14].data(),published[14].data())!=0)||(before==8&&std::strcmp(fields[74].data(),published[74].data())!=0)||(before==12&&std::strcmp(fields[84].data(),published[84].data())!=0));
+   if(paged&&trigger_page_side>=0&&now_ms()-trigger_page_at<400){haptics.page_click(trigger_page_side,now_ms());trigger_page_side=-1;}
+   bool opening=before==0&&after==4;
+   bool turn=!opening&&(before!=7&&after!=7)&&(before!=after||(before==0&&std::strcmp(fields[14].data(),published[14].data())!=0)||(before==8&&std::strcmp(fields[74].data(),published[74].data())!=0));
+   if(before==7||after==7){page_turn.enabled=false;focus.initialized=false;}
+   if(before!=after)card_open.enabled=false;
+   if(opening){outgoing_fields=fields;std::snprintf(outgoing_fields[9].data(),512,"%s",published[9].data());opening_slot=std::clamp(std::atoi(published[9].data())-number(14),0,7);card_open.start(1,now_ms(),std::strcmp(published[30].data(),"ON")==0);page_turn.enabled=false;focus.initialized=false;}
    if(turn){int a=before==0&&after==0?number(14):before==8&&after==8?number(74):number(12)*20+before;
     int b=before==0&&after==0?std::atoi(published[14].data()):before==8&&after==8?std::atoi(published[74].data()):std::atoi(published[12].data())*20+after;
     outgoing_fields=fields;page_turn.start(now_ms()-page_direction_at<400&&((before==0&&after==0)||std::strcmp(fields[12].data(),published[12].data())!=0)?page_direction:(b>=a?1:-1),now_ms(),std::strcmp(published[30].data(),"ON")==0);focus.initialized=false;list_page=-1;
@@ -512,7 +526,7 @@ inline bool update() noexcept {
 #ifdef PROSPERO_TOOLKIT
  if(!prospero_ui::reduced&&prospero_ui::healthy)return now_ms()-last_draw_time>=33;
 #endif
- return (animating||page_turn.moving(now_ms())||list_scroll.moving(now_ms()))&&now_ms()-last_draw_time>=16;
+ return (animating||page_turn.moving(now_ms())||card_open.moving(now_ms())||list_scroll.moving(now_ms()))&&now_ms()-last_draw_time>=16;
 
 }
 inline bool stop() noexcept{bool value=exit_requested.load(std::memory_order_acquire);if(value)haptics.control(false,now_ms());return value;}
@@ -538,7 +552,7 @@ inline void* ui_main(void*) noexcept {
 inline bool start_frontend() noexcept {
  visible=false;online=false;exit_requested=false;display_done=false;display_ok=false;
  desktop=DesktopInput{};pointer_kind=pointer_target=pointer_page=-1;
- page_turn={};list_scroll={};tab_x={};tab_w={};tabs_ready=false;page_direction=1;page_direction_at=0;list_page=-1;updates=0;navigation.clear();pressed_at=0;focus={};transition_start=now_ms();animating=false;event_read=event_write=0;fields={};published={};
+ page_turn={};card_open={};opening_slot=0;list_scroll={};tab_x={};tab_w={};tabs_ready=false;page_direction=1;page_direction_at=0;trigger_page_side=-1;trigger_page_at=0;list_page=-1;updates=0;navigation.clear();pressed_at=0;focus={};transition_start=now_ms();animating=false;event_read=event_write=0;fields={};published={};
  const char* boot[]={"Instances","","Opening your library...","","","Not signed in","PLAY DEMO","L1 / R1  Top bar     X  Select","PREPARING","0","WAIT","0"};
  for(int i=0;i<12;++i)std::snprintf(fields[i].data(),512,"%s",boot[i]);
  std::int32_t user=-1;if(sceUserServiceGetInitialUser(&user)<0)return false;controller=scePadOpen(user,0,0,nullptr);if(controller<0)return false;

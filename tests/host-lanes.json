@@ -28,6 +28,7 @@
     "test_audio_port_retention.py",
     "test_openal_mixer_workers.py",
     "test_launcher_desktop.py",
+    "test_launcher_haptics.py",
     "test_client_library.py",
     "test_microphone_capture.py",
     "test_openal_thread_error.py",

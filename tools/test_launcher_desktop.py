@@ -56,6 +56,7 @@ extern "C" void prospero_hid_close(int,int){closes++;}
 extern "C" int prospero_hid_read(int mouse,int,void* out,int){if(mouse){int n=mp.size();if(n)memcpy(out,mp.data(),n*sizeof(prospero_mouse_packet));mp.clear();return n;}int n=kp.size();if(n)memcpy(out,kp.data(),n*sizeof(prospero_keyboard_packet));kp.clear();return n;}
 int main(){
  Glide glide;glide.to(1,100);assert(glide.value(100)==0&&glide.moving(150));float mid=glide.value(190);assert(mid>0&&mid<1);glide.to(2,190);assert(glide.value(190)==mid);assert(glide.value(370)==2&&!glide.moving(370));glide.to(9,400,true);assert(glide.value(400)==9&&!glide.moving(400));
+ for(int slot=0;slot<8;slot++){auto a=opening_card_rect(slot,0),b=opening_card_rect(slot,1),m=opening_card_rect(slot,0.5f);assert(a.x==70+slot%4*450&&a.y==342+slot/4*272&&a.w==420&&a.h==242);assert(b.x==0&&b.y==155&&b.w==1920&&b.h==850);assert(m.w>a.w&&m.w<b.w&&m.h>a.h&&m.h<b.h);}
  PageTurn turn;turn.start(1,100,false);assert(turn.progress(100)==0&&turn.progress(240)>0&&turn.progress(240)<1&&turn.progress(380)==1);turn.start(-1,400,true);assert(turn.direction==-1&&!turn.moving(400));
 
  CursorShape shape;assert(shape.count>90&&shape.count<128);for(int i=0;i<shape.count;i++){int a=(i+shape.count-1)%shape.count,b=(i+1)%shape.count;float ax=shape.xy[i*2]-shape.xy[a*2],ay=shape.xy[i*2+1]-shape.xy[a*2+1],bx=shape.xy[b*2]-shape.xy[i*2],by=shape.xy[b*2+1]-shape.xy[i*2+1];float lengths=std::sqrt((ax*ax+ay*ay)*(bx*bx+by*by));assert(lengths>0&&(ax*bx+ay*by)/lengths>0.8f);}

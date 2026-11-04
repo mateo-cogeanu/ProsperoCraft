@@ -70,5 +70,11 @@
     "source_commit": "bf66e60c6691f722e1c5dfbc15a44385d7742cd9",
     "source_tree": "clean",
     "package_audit": "PASS final signed integrity and independent package audit"
+  },
+  "development_210": {
+    "app_version": "01.000.210",
+    "validation": "docs/validation/client210-launcher-refinements-2026-11-04.json",
+    "scope": "Lower controls, static notice, focused automatic login, trigger click and expanding instance cards",
+    "console": "Pending; previous candidate bytes retained"
   }
 }

@@ -43,7 +43,7 @@ struct Canvas {
  void begin_content(){}
  void end_content(){
   if(effects->page!=9&&effects->dialog.visible()){effects->dialog.update(reduced?1:dt);hui::ui::Canvas c{surface->list,surface->fonts,surface->renderer.glass_texture(),effects->clock};effects->dialog.draw(c);}
-  surface->list.gradient_rect({0,910,1920,170},0,themed(0x03100c,0),themed(0x03100c,0.92f));
+  surface->list.gradient_rect({0,1005,1920,75},0,themed(0x03100c,0),themed(0x03100c,0.92f));
  }
  void chevron(float x,float y,int direction){auto col=theme().focus;float d=float(direction);surface->list.line(x-d*7,y-15,x+d*7,y,4,col);surface->list.line(x+d*7,y,x-d*7,y+15,4,col);}
  void scrollbar(float x,float y,float h,float first,int visible,int total){if(total<=visible)return;auto& l=surface->list;float thumb=std::max(28.f,h*visible/total);float yy=y+(h-thumb)*std::clamp(first/float(total-visible),0.f,1.f);l.rounded_rect({x,y,4,h},2,themed(0xb6f2be,0.14f));l.rounded_rect({x-1,yy,6,thumb},3,theme().focus.with_alpha(0.8f));}

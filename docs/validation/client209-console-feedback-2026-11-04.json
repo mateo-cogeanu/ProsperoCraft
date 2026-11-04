@@ -1,0 +1,9 @@
+{
+  "date": "2026-11-04",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.209",
+  "package_sha256": "f0fedac2a287e8df8d72834e8f9acf13e488bcc3f9192597cfa86b6b435b5c07",
+  "human_report": "Good animations; many lower controls cut off. Requests startup notice isolation, background account-refresh focus preservation, adaptive L2/R2 page click and expanding instance-card opening.",
+  "cause": "209 content scissor ended at925px, above existing keyboard/Settings/notice bounds; old footer fade began910px. Saved refresh shared the interactive account selection handler.",
+  "scope": "Partial positive animation feedback with concrete UI regressions; no ALL PASS/release authorization"
+}

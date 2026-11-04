@@ -1,5 +1,17 @@
 # Changelog
 
+## Local210 — launcher layout and focused startup, 2026-11-04
+
+- Repair209 bottom clipping and move the footer fade below existing controls.
+- Keep startup notice static and visible through saved login. Automatic refresh
+  preserves current page/tab/selection; interactive sign-in keeps its normal return.
+- Expand the selected instance card into its detail view while preserving L1/R1
+  tab and L2/R2 page animations. Add a short low-force page trigger click with
+  timeout/disable/shutdown reset through the existing launcher haptic worker.
+- Native lane gains the portable real haptic-worker fixture; physical210 layout,
+  trigger feel, startup/account behavior and game handoff remain pending.
+
+
 ## Local209 — launcher page motion, 2026-11-04
 
 - Record positive208 feedback and preserve its exact package.

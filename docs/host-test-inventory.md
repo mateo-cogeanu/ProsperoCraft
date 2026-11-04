@@ -307,3 +307,8 @@ Launcher209 extends the existing native desktop check with real model multi-page
 row/trigger/arrow navigation and list windows, plus native page/scroll timing and
 retarget/reduced-motion assertions. The manual Vulkan preview additionally renders
 page-turn checkpoints, side arrows in six themes and fractional clipped lists.
+
+Launcher210 requires `test_launcher_haptics.py` in the native lane with portable
+JDK/compiler/library discovery. The actual worker’s native trigger effect and
+reset lifecycle use injected pad calls; no hardware feel is inferred. The fast
+saved-login test covers an injected blocked refresh and current navigation/notice.
