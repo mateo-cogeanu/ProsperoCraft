@@ -2,22 +2,52 @@
   "date": "2026-11-04",
   "title_id": "PPSA99874",
   "app_version": "01.000.209",
-  "status": "Launcher motion source checks; signed candidate preparation",
+  "status": "Signed209 final local candidate; independent package audit PASS; physical launcher validation pending",
   "scope": "Two-row in-page vertical navigation; L2/R2 pages; horizontal outgoing/incoming turn; theme vector arrows; continuous dropdown/keybinding lists and scrollbar",
   "unchanged": "208 runtime/native groups/original publisher JARs/Java image/VM and ZIPbudget8/game gates; no Fabric121",
   "checks": {
     "fast": "PASS19/19 in24.7s; final desktop model rerun also passes",
     "native": "PASS11/11 in10.5s; model row/trigger/side-arrow/list tests plus actual native page/scroll tween checks",
-    "source_only": "PASS19/19 in22.0s; source-only copy, empty explicit dependency cache, outside-root/tmp invocation",
+    "source_only": "PASS19/19 in22.6s; final Java policy/source-only copy, empty explicit dependency cache, outside-root/tmp invocation. Later native-only pointer repair separately covered by actual callback preview.",
     "preview": "PASS actual Vulkan outgoing/incoming page frames and bidirectional top-tab frames, six themed chevrons, fractional clipped list/thumb and original mailbox/cleanup controls; images visually inspected",
-    "target": "PASS209 -Werror target compile/link/converter; small inspected compose/content stack reservations (600/280bytes), resident field exchange; signed package pending",
-    "hosted": "Pending source push",
+    "target": "PASS final209 -Werror compile/link/converter and signed SELF integrity",
+    "hosted": {
+      "source_commit": "bf66e60c6691f722e1c5dfbc15a44385d7742cd9",
+      "policy_url": "https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41887475831",
+      "native_url": "https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41887503255",
+      "ubuntu_native": "PASS completed actual native job",
+      "ubuntu_policy": "PASS completed actual policy job",
+      "macos": "Both actual jobs queued when inspected; pending, not claimed passed"
+    },
     "previous208_hosted": {
       "policy_url": "https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41879893960",
       "native_url": "https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41879781853",
       "result": "Actual Ubuntu/macOS policy and native jobs completed successfully;209 jobs separate"
-    }
+    },
+    "package": "PASS independent ZIP CRC/identity/resources/unchanged parent JARs/Java image/native groups/options/OSHI output and source/SDL and graphics link integration",
+    "pointer": "PASS actual native pointer callback: moving dropdown click emits no event; settled visual row emits exactly one event"
   },
   "physical209": "NOT RUN; navigation/timing/themes/dropdowns/trigger paging/reduced motion,launcher responsiveness and game handoff pending",
-  "release_store": "No action; existing physical/shader/explicit approval gates retained"
+  "release_store": "No action; existing physical/shader/explicit approval gates retained",
+  "package": {
+    "package_sha256": "f0fedac2a287e8df8d72834e8f9acf13e488bcc3f9192597cfa86b6b435b5c07",
+    "package_bytes": 127473739,
+    "source_commit": "bf66e60c6691f722e1c5dfbc15a44385d7742cd9",
+    "source_tree": "clean",
+    "symbols_sha256": "a01731a980b0be85116fc2ce689423106641e2ca4264fb878a1839f303004e44",
+    "eboot_sha256": "b7f2fa09b82b120525a7318f40f49b00cad8c6ee88a8433cbc1a7d8586cb068c",
+    "newSdlGroupSha256": "96cab67f509650a2c32d0d08e2981ec9ac9d826eecf0f24c85636258104816bb",
+    "graphicsSupportSha256": "f9c5d7440d4960ae85a35a5fec8eedff016d308168f370876eb813eb62adc926",
+    "oshi665Sha256": "d5d7e7affd46736d3add806b4b331f20d4c8fd0e317e78272fa7ddcddef6ae8c",
+    "newGroupSha256": "7bead679117a434fc0f2d893fb28e4c461c202d0f8f96734acacfaddb815db9a",
+    "overlaySha256": "5baae8699c219db87845132c159c421d12926de461fe8b90890e7f40a74d9d20",
+    "zip_growth_bytes": 416858,
+    "uncompressed_growth_bytes": 1219594,
+    "growth_from208_bytes": 8018
+  },
+  "retained_pre_handoff_draft": {
+    "package_sha256": "e4c0e26119db29afad7551c82a5bda3d082008bd2a8ce5e935d6717f7b6697c4",
+    "source_commit": "6d287c25555105e622514efba6fb6145013d7172",
+    "scope": "Unaccepted/unhanded-off draft retained locally. Final209 adds pointer gate before every hit override and an actual callback regression. No accepted package overwritten."
+  }
 }

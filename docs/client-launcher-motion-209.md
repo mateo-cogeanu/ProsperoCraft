@@ -6,6 +6,13 @@ records its scope;208 remains retained byte-for-byte. Game versions, native grou
 runtime pin, original JARs, resolution path and VM/ZIPbudget8 policies remain208.
 Only1.21.10/.11 Vanilla are enabled; all121 Fabric remains deferred.
 
+Final signed ZIP SHA-256:
+`f0fedac2a287e8df8d72834e8f9acf13e488bcc3f9192597cfa86b6b435b5c07`.
+Size127,473,739bytes,8,018bytes above208. Exact clean source is
+`bf66e60c6691f722e1c5dfbc15a44385d7742cd9`. Signed integrity and independent
+package audit pass. A pre-handoff209 draft is separately retained by checksum;
+use this final checksum for the physical test.208 was not rebuilt or replaced.
+
 ## Navigation and presentation
 
 The instance grid keeps Up/Down within the current page’s two rows. Up from its

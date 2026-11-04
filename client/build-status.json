@@ -64,6 +64,11 @@
     "app_version": "01.000.209",
     "validation": "docs/validation/client209-launcher-motion-2026-11-04.json",
     "scope": "Launcher horizontal page turns, L2/R2, theme side arrows and continuous lists",
-    "console": "Pending;208 exact candidate retained"
+    "console": "Pending;208 exact candidate retained",
+    "package_sha256": "f0fedac2a287e8df8d72834e8f9acf13e488bcc3f9192597cfa86b6b435b5c07",
+    "package_bytes": 127473739,
+    "source_commit": "bf66e60c6691f722e1c5dfbc15a44385d7742cd9",
+    "source_tree": "clean",
+    "package_audit": "PASS final signed integrity and independent package audit"
   }
 }
