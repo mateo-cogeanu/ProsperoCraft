@@ -18,7 +18,7 @@ compiler TLS, while original lookup names resolve through a selected builtin han
 Original343/native providers stay linked unchanged. Process-wide lookup still has
 first-match behavior; this is generation routing, not a security boundary.
 
-208 native source units provide genuine333 core/callback/JNI/OpenGL/STB plus the
+209 target native source units provide genuine333 core/callback/JNI/OpenGL/STB plus a generation-owned closure allocator, the
 existing resident bridge and three bootstrap diagnostics. Actual libffi ABI guards
 follow the chosen headers. C APIs share existing real GLFW/Zink/RADV/OpenAL/FreeType;
 there is one graphics provider and VideoOut owner. Jemalloc is unselected under the
@@ -39,3 +39,20 @@ separate. Host generated JNI uses UBSan except function-type checking because
 upstream function-pointer bridges deliberately cast C ABI signatures. Ownership
 fixtures additionally use ASan/UBSan and XcheckJNI. No host result establishes PS5
 startup, callback lifetime, rendering, audio, save/reload or clean shutdown.
+
+
+Build206 compiles the existing closure W->X adapter separately inside the333
+namespace, with an explicit64-page pre-JVM reserve. Ordinary mmap remains first;
+only ENOMEM may borrow a reserved page. Each closure owns an independent page and
+retains the real libffi prep/call ABI. Free resets a reserve page to RW before reuse;
+failed reset quarantines that page with its backing retained. Partial bootstrap
+priming retains bounded ownership but fails initialization and never publishes a
+partly ready pool. Other failures remain real. At the PS5 page size this is1MiB,
+not a larger heap or native allocator budget. The original343 ffi group remains
+exact204 bytes. See [repair206](../../../docs/client-1.21-206.md).
+
+The reserve's real x86_64 libffi ASan/UBSan fault/concurrency test is separate from
+the original333 Java callback host tests. Apple ARM64's stock libffi uses trampoline
+tables and is not a valid W->X adapter test backend; the explicit x86_64 test uses
+its genuine dynamic trampoline branch, under Rosetta on ARM Macs. No ARM table
+adapter or PS5 callback/console pass is implied.

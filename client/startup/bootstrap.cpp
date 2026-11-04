@@ -8,6 +8,9 @@
 #ifndef PROSPERO_STARTUP_OBSERVER
 #define PROSPERO_STARTUP_OBSERVER "true"
 #endif
+#ifdef PROSPERO_LWJGL333_CLOSURE_RESERVE
+extern "C" int lwjgl333_prospero_ffi_reserve_prime(void);
+#endif
 extern "C" int prospero_haptic_reserve();
 extern "C" void prospero_hid_preload(void);
 extern "C" int sceAudioOutOpen(int,int,int,unsigned,unsigned,unsigned);
@@ -351,6 +354,11 @@ void run_test(int i) {
   char events_note[128];std::snprintf(events_note,sizeof(events_note),"PS5 Controlify scoped events preinit result=%d capacity256;before JVM",controlify_events_rc);log_stage(events_note);
   if(controlify_events_rc){result(i,controlify_events_rc,"Cannot prepare scoped Controlify event delivery");return;}
 
+#ifdef PROSPERO_LWJGL333_CLOSURE_RESERVE
+  const int closure_reserve_rc=lwjgl333_prospero_ffi_reserve_prime();
+  char closure_note[128];std::snprintf(closure_note,sizeof(closure_note),"PS5 LWJGL333 pre-JVM closure reserve result=%d capacity64;independent RW->RX pages",closure_reserve_rc);log_stage(closure_note);
+  if(closure_reserve_rc){result(i,closure_reserve_rc,"Cannot prepare LWJGL333 callback reserve before JVM");return;}
+#endif
   const int mixer_worker_rc=client_ps5_audio_worker_preinit();
   char mixer_worker_note[128];std::snprintf(mixer_worker_note,sizeof(mixer_worker_note),"PS5 OpenAL pre-JVM mixer workers result=%d capacity2",mixer_worker_rc);log_stage(mixer_worker_note);
   const int event_worker_rc=client_ps5_audio_event_preinit();

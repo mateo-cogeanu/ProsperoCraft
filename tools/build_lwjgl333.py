@@ -140,6 +140,8 @@ def build_native(args, pin, jdk, cache, work):
                    'org_lwjgl_system_libffi_FFIClosure.c', 'org_lwjgl_system_libffi_LibFFI.c')]
     units = [*core_units, *sorted(f for f in gl.glob('*.c') if not f.name.startswith(('org_lwjgl_opengl_WGL', 'org_lwjgl_opengl_GLX'))),
              *sorted(stb.glob('*.c')), ROOT / 'client/native/lwjgl_resident.c', PORT / 'bridge.c']
+    if not args.host:
+        units.append(ROOT / 'client/ports/libffi/closures_wx.c')
     compiler = executable('clang', override=args.cc)
     flags = ['-std=c11', '-D_GNU_SOURCE', '-O2', '-fPIC', '-DLWJGL_PS5', '-include', 'string.h',
              '-I' + str(core), '-I' + str(args.ffi_include.resolve()),
@@ -159,7 +161,7 @@ def build_native(args, pin, jdk, cache, work):
         flags += ['-target', 'x86_64-sie-ps5', '-march=x86-64', '-msse2', '-mno-avx', '-mno-avx2', '-mno-fma',
                   '-fvisibility-nodllstorageclass=default', '-fno-stack-protector', '-femulated-tls',
                   '-isysroot', str(sdk), '-isystem', str(sdk / 'target/include'),
-                  '-I' + str(headers), '-I' + str(headers / 'freebsd'), '-DHAS_FFI_UNIX64=1']
+                  '-I' + str(headers), '-I' + str(headers / 'freebsd'), '-DHAS_FFI_UNIX64=1', '-DPROSPERO_FFI_RESERVE_COUNT=64']
     output = work / ('host' if args.host else 'ps5')
     output.mkdir(exist_ok=True)
     def compile_unit(unit):

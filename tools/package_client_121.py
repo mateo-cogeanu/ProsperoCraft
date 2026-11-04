@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Local205 Vanilla121.11 candidate from exact accepted204 inputs. No releases.
+"""Local206 Vanilla121.11 repair candidate from exact accepted204 inputs. No releases.
 
 Original343/OpenAL/graphics groups are retained byte for byte from the relink kit.
 Only main, libjava's explicit handle hook, lookup table and matched333 are linked anew.
@@ -44,8 +44,11 @@ def main():
     parser.add_argument('--java-home', type=Path)
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--work-dir', type=Path, required=True)
+    parser.add_argument('--app-version', choices=('01.000.206',), default='01.000.206')
     parser.add_argument('--check-only', action='store_true', help='Compile/link/convert without signing or a candidate ZIP')
     args = parser.parse_args()
+    app_version = args.app_version
+    candidate = app_version.split('.')[-1]
     runtime, llvm, jdk = args.runtime_workspace.resolve(), args.llvm_home.resolve() / 'bin', java_home(args.java_home)
     work, output = args.work_dir.resolve(), args.output_dir.resolve()
     work.mkdir(parents=True, exist_ok=True)
@@ -67,8 +70,16 @@ def main():
         for original in (source_base / subtree).rglob('*'):
             if original.suffix in ('.c', '.cpp', '.h', '.hpp'):
                 current = ROOT / original.relative_to(source_base)
-                if not current.is_file() or sha(current) != sha(original):
-                    raise ValueError('204 native bootstrap/policy changed: ' + str(current))
+                if not current.is_file():
+                    raise ValueError('Missing204 native bootstrap source: ' + str(current))
+                body = current.read_bytes()
+                if str(original.relative_to(source_base)) == 'client/startup/bootstrap.cpp':
+                    text, count = re.subn(r'^#ifdef PROSPERO_LWJGL333_CLOSURE_RESERVE\n.*?^#endif\n', '', body.decode(), flags=re.M | re.S)
+                    if count != 2:
+                        raise ValueError('Expected exactly the two explicit333 reserve bootstrap blocks')
+                    body = text.encode()
+                if hashlib.sha256(body).hexdigest() != sha(original):
+                    raise ValueError('204 native bootstrap/policy changed beyond explicit333 reserve: ' + str(current))
     pin = json.loads((ROOT / 'client/ports/lwjgl333/runtime.json').read_text())
     for name, digest in pin['source_sha256'].items():
         if sha(runtime / name) != digest:
@@ -91,7 +102,7 @@ def main():
     for name, digest in java_audit['localSourceSha256'].items():
         if sha(ROOT / 'client/ports/lwjgl333' / name) != digest:
             raise ValueError('Stale333 Java helper: ' + name)
-    for file in (ROOT / 'client/ports/lwjgl333/bridge.c', ROOT / 'client/native/lwjgl_resident.c'):
+    for file in (ROOT / 'client/ports/lwjgl333/bridge.c', ROOT / 'client/native/lwjgl_resident.c', ROOT / 'client/ports/libffi/closures_wx.c'):
         if sha(file) != native_audit['sourceUnitsSha256'][file.name]:
             raise ValueError('Stale333 native helper: ' + file.name)
     if sha(ROOT / 'client/ports/lwjgl/PS5Config.h') != native_audit['sharedConfigSha256']:
@@ -169,23 +180,23 @@ def main():
                 out.writestr(info, original.read(info))
         for file in files:
             out.writestr(file.name, file.read_bytes())
-        out.writestr('prosperocraft-build.properties', b'app_version=01.000.205\ntitle_id=PPSA99874\n')
+        out.writestr('prosperocraft-build.properties', ('app_version='+app_version+'\ntitle_id=PPSA99874\n').encode())
         out.writestr('prosperocraft-121.txt', b'vanilla-1.21.11-zink-v1\n')
     temporary.replace(jar)
     for file in files:
         shutil.copyfile(file, java / 'classes' / file.name)
-    (java / 'classes/prosperocraft-build.properties').write_text('app_version=01.000.205\ntitle_id=PPSA99874\n')
+    (java / 'classes/prosperocraft-build.properties').write_text('app_version='+app_version+'\ntitle_id=PPSA99874\n')
     (java / 'classes/prosperocraft-121.txt').write_text('vanilla-1.21.11-zink-v1\n')
     param = json.loads((app / 'sce_sys/param.json').read_text())
-    param['contentVersion'] = '01.000.205'
+    param['contentVersion'] = app_version
     (app / 'sce_sys/param.json').write_text(json.dumps(param, indent=2) + '\n')
     sdk = runtime / '.tools/native-sdk/ps5-payload-sdk'
     flags = ['-target', 'x86_64-sie-ps5', '-fvisibility-nodllstorageclass=default', '-isysroot', str(sdk),
              '-isystem', str(sdk / 'target/include/c++/v1'), '-isystem', str(sdk / 'target/include'),
              '-march=x86-64', '-mno-avx', '-mno-avx2', '-mno-fma', '-O2', '-fno-stack-protector',
              '-fno-plt', '-femulated-tls', '-ffunction-sections', '-fdata-sections']
-    main_obj = work / 'main205.o'
-    subprocess.run([str(llvm / 'clang++'), *flags, '-DPROSPERO_APP_VERSION="01.000.205"', '-std=c++20',
+    main_obj = work / ('main'+candidate+'.o')
+    subprocess.run([str(llvm / 'clang++'), *flags, '-DPROSPERO_APP_VERSION="'+app_version+'"', '-DPROSPERO_LWJGL333_CLOSURE_RESERVE=1', '-std=c++20',
         '-Wall', '-Wextra', '-Werror', '-fno-exceptions', '-fno-rtti',
         *['-I' + str(p) for p in (runtime / 'native/renderer', runtime / 'build/native', runtime / 'src',
           runtime / 'native', work, ROOT / 'client/native', ROOT / 'client/launcher/toolkit/src',
@@ -199,7 +210,7 @@ def main():
             destination = libraries / file.name.split('-', 1)[1]
             if not destination.exists():
                 os.link(file, destination)
-    pie = work / 'client121-205-symbols.elf'
+    pie = work / ('client121-'+candidate+'-symbols.elf')
     replacements = {'inputs/104-main.o': main_obj, 'inputs/032-embedded-java.o': registry / 'embedded-java.o',
                     'inputs/109-builtin-libraries.o': registry / 'builtin-libraries.o'}
     link = []
@@ -216,7 +227,7 @@ def main():
             link.append(str(baseline / item))
         else:
             link.append(item)
-    response = work / 'link205.rsp'
+    response = work / ('link'+candidate+'.rsp')
     response.write_text('\n'.join(json.dumps(x) for x in link) + '\n')
     subprocess.run([str(args.lld.absolute()), '@' + str(response)], check=True)
     converter = runtime / 'build/native/host/ps5-native-tool'
@@ -226,7 +237,7 @@ def main():
     subprocess.run([str(converter), 'link', '--in', str(pie), '--out', str(elf), '--stub-dir', str(sdk / 'target/lib'),
         *sum([['--stub', str(p)] for p in stubs], []), '--module-sdk', '0x02000009', '--companion-sdk', '0x08050001', '--file-name', 'eboot.elf'], check=True)
     if args.check_only:
-        print('PASS205 target compile/link/converter; no signed candidate ZIP')
+        print('PASS206 target compile/link/converter; no signed candidate ZIP')
         return
     subprocess.run([str(converter), 'self', '--sign', '--in', str(elf), '--out', str(app / 'eboot.bin'), '--magic', '0x1D3D154F'], check=True)
     subprocess.run([str(converter), 'self', '--inspect', '--file', str(app / 'eboot.bin')], check=True)
@@ -238,6 +249,9 @@ def main():
         'Only listed platform/dispatch classes take precedence in the separate333 owner; no game remapping/transformation.\n'
         'Bootstrap integration is GPL-3.0-or-later; LWJGL source/patches BSD-3-Clause; STB individual upstream notices retained.\n')
     shutil.copytree(ROOT / 'client/ports/lwjgl333', java / 'lwjgl333-source', dirs_exist_ok=True)
+    shared_source = java / 'lwjgl333-source/shared-libffi'
+    shared_source.mkdir(exist_ok=True)
+    shutil.copyfile(ROOT / 'client/ports/libffi/closures_wx.c', shared_source / 'closures_wx.c')
     with zipfile.ZipFile(package, 'w', zipfile.ZIP_DEFLATED) as archive:
         for file in sorted(app.rglob('*')):
             if file.is_file():
@@ -245,7 +259,7 @@ def main():
                 info.external_attr = 0o100777 << 16
                 info.compress_type = zipfile.ZIP_DEFLATED
                 archive.writestr(info, file.read_bytes())
-    record = {'app_version': '01.000.205', 'title_id': 'PPSA99874', 'package_sha256': sha(package),
+    record = {'app_version': app_version, 'title_id': 'PPSA99874', 'package_sha256': sha(package),
         'package_bytes': package.stat().st_size, 'baseline_package_sha256': BASE_PACKAGE, 'baseline_relink_sha256': BASE_RELINK,
         'symbols_sha256': sha(pie), 'eboot_sha256': sha(app / 'eboot.bin'), 'runtime': pin,
         'parentNativeGroupsRetainedSha256': {n: sha(p) for n, p in old_groups.items() if n not in ('java',)},
@@ -258,7 +272,7 @@ def main():
     (output / 'build-audit.json').write_text(json.dumps(record, indent=2) + '\n')
     (output / 'SHA256SUMS').write_text(record['package_sha256'] + '  PPSA99874.zip\n')
     shutil.copyfile(pie, output / pie.name)
-    print('LOCAL205', package, 'SHA256', record['package_sha256'])
+    print('LOCAL206', package, 'SHA256', record['package_sha256'])
 
 
 if __name__ == '__main__':

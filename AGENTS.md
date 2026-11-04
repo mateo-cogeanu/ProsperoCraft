@@ -169,3 +169,17 @@ it does not imply hardware acceptance, shader scope-out or release/Store approva
 Publish reusable runtime isolation fixes first, then pin/integrate them here.
 Keep original publisher JARs intact, all26.x decisions/native groups unchanged,
 released204/frozen history preserved and each unproven release independently gated.
+
+
+## Report transport and333 callback repair —2026-11-04
+
+205physical1.21.11 initialization fails at original Callback.create: native closure
+allocation returnsnull; Java heap exhaustion is not established. Reopened205HTTP
+access also exits. Runtime report handler formerly reserves70,472bytes on every
+request; fixed target frame5,704bytes,64KiB host fault/control tests pass. Shared
+HTTP fix is runtime-owned. Consumer206 compiles a separate opt-in64page pre-JVM
+closure reserve in333 only (1MiB at16KiB pages); mmapfirst, ENOMEMonly, real W->X/
+libffi, pairedRW reset and failed-reset quarantine. Original343/provider objects,
+heap/GC/ZIPbudget8 and original publisherJARs retained. Real x86_64 fault/3200
+closure tests are host evidence; native allocation cause and exact206PS5startup/
+HTTP/callback/world/save/quit/regression remain pending. No release/Store approval.

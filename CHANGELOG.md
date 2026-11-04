@@ -1,5 +1,17 @@
 # Changelog
 
+## Local206 — report transport and333 callback repair, 2026-11-04
+
+- Retrieve205startup/game/crash reports over FTP after reopening. Original1.21.11
+  fails creating its first native GLFW callback; Java heap exhaustion is not shown.
+- Pin shared HTTP stack repair:70,472byte handler frame reduced to5,704; actual
+  small-stack historical fault and repaired handler controls pass.
+- Add a generation-owned64page pre-JVM closure reserve to333, with mmapfirst,
+  ENOMEMonly borrowing, genuine W->X/libffi and quarantined failed-reset ownership.
+- Preserve204/205 bytes and existing343/providers/VM/ZIP policies. Local/target
+  checks pass;206PS5HTTP/startup/world/save/quit and26.x regressions pending.
+  No release, prerelease or Store change.
+
 ## Local205 — 1.21.11 Vanilla development, 2026-11-03
 
 - Follow the approved order:1.21.x Vanilla first, Fabric deferred. Gate only

@@ -1,0 +1,59 @@
+{
+  "date": "2026-11-04",
+  "status": "206target compile/link/converter pass; signed packaging pending; no physical acceptance",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.206",
+  "failed_package205_sha256": "1bcc84a8905bcefd31688bc1fdeee74bfc2a8c5620ab97311d59e2905d10fe6c",
+  "retrieval": {
+    "method": "Cyberduck FTP after explicit reopen; some root files550denied; partial retrieval; raw reports local only",
+    "failed_run": "client-01.000.205-1793807515-225686877",
+    "game": "Original1.21.11 Vanilla",
+    "failure": "OutOfMemoryError in Callback.create159 -> GLFWErrorCallback.create56 -> first window constructor. ffi_closure_alloc returnednull; errno/native quota not captured. Java heap free remains substantial. Nonzero exit/clean-audit rejection retained.",
+    "report_sha256": {
+      "java25-exceptions.log": "0516056fed76c0829875c86159f9f6f4e8d709923cd7cb54a93d1cbdaf340137",
+      "latest.log": "3f4a05507f900ba92f5a03d5ea76ba03e5de46817fb526d03f1f4ab5bdc96c0a",
+      "previous-zink-driver.log": "f566ced20f27adc51167b0e01261485ae89189fd68389b8ac2f81cc22d82f69f",
+      "previous-java25-gc.log": "69baef732dfae1c221a01228885e572d5ff874d8a01841831107f16c50937571",
+      "previous-probe-exception.txt": "335a657bb4ebff2778fff9a12e51383ef70b854cf2bb22fb39d4043543d77b71",
+      "crash-2026-11-04_15.54.02-client.txt": "b6976fda7ef3eb55f5941f3a11a9ed7c8ce522ffaf2ee34c2fa9120645363894",
+      "java25-startup.log": "8ffe9de3607e20a5799e3e4c22bb23616216a39f6d3b873f5fcd68cf88cdc326",
+      "previous-java25-jit.log": "56ae50545c6aac948ddb0bbea57c2d09feedd30e89c3762a131ff8f63c66f41d",
+      "previous-process-usage.log": "e2e34db9044ecd0a491794cb0fc333bf47bf62015758b6f601f76c4059114f7b",
+      "previous-mc-bootstrap-abort.txt": "2f76669f90fb1a7ded73c5ddcf0bf54e03ddd23ddaf505ef7e1fa26279a5f82c",
+      "previous-probe-native-stderr.log": "90b5fa9e3593ae6bee800c36183e4afcaf537638336d3243a8bdab46412d5aef",
+      "previous-java25-exceptions.log": "0516056fed76c0829875c86159f9f6f4e8d709923cd7cb54a93d1cbdaf340137",
+      "java25-gc.log": "59196469778477e538332dfda0d8129fcdea0ae70db1958cfbe1e2da7e8f6253",
+      "java25-jit.log": "9879781c956b86ba3fb4a3877d3e447866d6004d8f7b04e7325df5203b1a5a97"
+    }
+  },
+  "runtime_commit": "62c583f145d82309e15758c460b3bd3e9a925bf4",
+  "http_stack": {
+    "old_target_bytes": 70472,
+    "new_target_bytes": 5704,
+    "host": "Historical x86_64 O2 faults on64KiB worker; repaired O0/O2 and existing HTTP/collector/writer/file accounting pass",
+    "physical": "repaired HTTP access pending; original fault address/defaultstack unproved"
+  },
+  "closure_reserve": {
+    "pages": 64,
+    "PS5_bytes_at16KiB": 1048576,
+    "policy": "333namespace only; pre-JVM real RW pages, mmapfirst, ENOMEMonly, real libffi/W->X, resetRW on free, quarantinefailed reset; bootstrap partial pool unpublished; no VM allocation budget enlargement",
+    "host": "PASS actual genuine x86_64 libffi ASan/UBSan,3200concurrent lifetimes,64exhaust/reuse,unprimed/EACCES/RX/RW-failure and failed-prep controls; separate child verifies partial bootstrap pool remains unpublished",
+    "native_cause": "Anonymous allocator refusal remains unproved until actual native errno is recorded; Java throw alone does not establish ENOMEM"
+  },
+  "checks": {
+    "fast": "PASS19/19,21.9seconds",
+    "native": "PASS11/11,9.1seconds",
+    "default_closure_adapter": "PASS existing native W->X fault test with reserve disabled",
+    "target": "PASS209units/currentadapterhash,namespace link,compile/converter;206main explicit64page bootstrap",
+    "source_only": "PASS19/19; tracked source-only copy, initially empty explicit dependency cache, invoked from/tmp; original host-only dependency pins",
+    "hosted": "pending source push"
+  },
+  "package": "pending",
+  "physical_pending": [
+    "206HTTP index/log/full512row snapshot download",
+    "Original1.21.11 native callbacks/title/world/input/audio/save/reload/quit/library/relaunch",
+    "26.x Vanilla/Fabric/snapshots and shader regressions",
+    "Native allocation errno/cause,endurance/resource peaks"
+  ],
+  "release_store": "No action; exact physical confirmation and explicit authorization required"
+}

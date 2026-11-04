@@ -27,6 +27,7 @@ The manual native lane instead tests scoped native implementations against fixtu
 | --- | --- |
 | `test_client_121_inputs.py` | Required fast; exact twelve-release lock/metadata/library corruption controls, no network |
 | `test_launcher_121_policy.py` | Required fast; Vanilla gates,333/343/SDL owner isolation and mapped shutdown rejection |
+| `test_libffi_reserve.py` | Manual explicit pinned libffi/LLVM inputs; real x86_64 W->X callbacks, denied allocation,64slot exhaustion/reuse and protection-failure ownership; Rosetta opt-in on ARM Macs |
 | `test_lwjgl333_host.py`, `test_lwjgl333_ownership.py` | Manual explicit pinned native/publisher inputs; genuine333 core/STB/callback/JNI ownership and optional real Zink; outside portable CI |
 | `test_client_261_inputs.py` | Required fast; temporary publisher-integrity/rule/path failures and real JDK class/JNI parsing; no game/network/SDK prerequisite |
 | `test_audio_native_mutex.py` | Clang/Clang++, ASan/UBSan; desktop needs Gson/JDK; JNI needs platform headers; required native |
@@ -294,3 +295,4 @@ Manual200 `tools/test_iris_management.py` verifies original Iris/Sodium/publishe
 201 extends required System.exit checks with latch-ordered genuine concurrent delayed cleanup and unchanged refusal gates. Manual `tools/test_binding_ownership.py` uses explicit actual packaged parent LWJGL plus verified original publisher OpenAL to reproduce split ownership and check new parent-only refusal/preflight; no native rendering. See [201 scope](client-zink-ownership-201.md).
 
 202 manual `test_session_sdl_exit.py` requires explicit SDL include/library and tests genuine embedded HotSpot exit/host exec with actual main-thread SDL finalization before exit and zero-mask verification after VM cleanup. Real GLFW/SDL tests require audio/gamepad/events6210-to-zero termination. Required Java exit checks continue rejecting residual/video/unknown bits. Runtime/consumer Iris native query tests support actual Flag.c malloc refusal; all remain distinct from PS5 shader acceptance. See [202 scope](client-zink-final-202.md).
+
