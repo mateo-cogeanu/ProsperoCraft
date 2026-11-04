@@ -1,0 +1,45 @@
+{
+  "date": "2026-11-04",
+  "status": "207 target compile/link/converter pass; signed package pending; physical repair pending",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.207",
+  "failed206_package_sha256": "c630521c465a97678d12aeb5d4ed9b21b9ed751eb399c5544380843019b34a73",
+  "console206": {
+    "human": "World created and player joined, then crash; a lot more progress",
+    "retrieved_run": "client-01.000.206-1793811062-572846927",
+    "retrieved_progress": [
+      "original1.21.11 Vanilla title/resources/audio initialization",
+      "spawn generation/player login/join",
+      "advancements and world UBO resizing"
+    ],
+    "fatal": "LWJGL333 native thread state allocation/key refusal at original STBImageWrite.nstbi_write_png_to_func on Java thread-pool worker; VM abort",
+    "cause_limit": "206 combined fatal does not distinguish record calloc from TLS setter refusal; native quota/owner unproved. No GPU fault inferred from neighboring resize logs.",
+    "retrieval": "Cyberduck FTP; current native-stderr denied550, preserved reports/startup available; raw local only",
+    "report_sha256": {
+      "java25-exceptions.log": "0516056fed76c0829875c86159f9f6f4e8d709923cd7cb54a93d1cbdaf340137",
+      "previous-java25-gc.log": "dc8533e04e195a1e5c03ed7913c565325da2ce1389ae334768dfaa2c6aa35416",
+      "java25-startup.log": "eac7cd882832903620880d4d88e53d9f6d8639b4e4c76f7431d38594573abb48",
+      "previous-java25-jit.log": "d27c3d524d5e126788d836cf1e4efaba57a0962cf3e3a96bbf62b77c8e9fb4ff",
+      "previous-probe-native-stderr.log": "babeb89a06cff31747bebf2163f81b51a9ee10af708796ed7e863c3710aec6bf",
+      "previous-java25-exceptions.log": "f9b2362efc1d8d6a973eaed66c86195f7cf21c0fa589b5e4c7a3789c3bdc2cb7",
+      "java25-gc.log": "591edaf2aa0969e9e0e96ce56d16b57e3bd8554f3398ba500c511fdc8e3dc004",
+      "java25-jit.log": "7b93732d0a6c424e2d22a2a10a6484aa0fef4833ba2e343be073b643309c9d4d"
+    },
+    "local_symbolization": "Original publisher mappings identify fyh as NativeImage and hob as GameRenderer; mappings used read-only, not bundled/remapped"
+  },
+  "repair": "PS5 GetEnv fast path for attached callback threads; preserve own async status and foreign ownership; unattached attach/record/destructor unchanged. Separate future native record/key refusal diagnostics. No new allocation policy.",
+  "checks": {
+    "png_worker": "PASS64 original333 PNG write/decode cycles on32Java workers; calloc/TLS setters forced to refuse and zero attempts asserted; XcheckJNI/UBSan",
+    "historical_png": "PASS actual old native fatal reproduced in original PNG callback path",
+    "ownership": "PASS ASan/UBSan/XcheckJNI attached allocation refusal bypass,own/foreign native threads,32threads/3200foreign-copy cycles and existing failure/cleanup controls",
+    "zink": "PASS genuine333 core/STB/1600callbacks plus3real Zink cycles and original1.21.11 GlDevice constructor; missing-Zink refusal; not full Main/world",
+    "fast": "PASS19/19,25.6seconds",
+    "native": "PASS11/11,10.8seconds",
+    "target": "PASS209target units/current patch,207bootstrap namespace link/converter",
+    "source_only": "PASS19/19,25.6seconds; tracked source-only copy, empty explicit host dependency cache and invocation from/tmp",
+    "hosted": "pending source push"
+  },
+  "package": "pending",
+  "physical207": "Pending world load/create/save/reload/quit/library/relaunch,input/audio,26.x/shader regression,endurance; no ALL PASS",
+  "release_store": "No action; gates retained"
+}

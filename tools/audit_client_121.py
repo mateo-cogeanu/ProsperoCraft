@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Independently inspect local206 against accepted204 and original333 inputs.
+"""Independently inspect local207 against accepted204 and original333 inputs.
 
 Requires explicit SDK build outputs and publisher cache; not a portable CI lane
 or evidence of physical-console acceptance. Never modifies packages or game JARs.
@@ -56,7 +56,7 @@ def main():
                           'PPSA99874/licenses/LWJGL333-PORT.txt'}):
                 raise ValueError('Unexpected added file: ' + n)
         param = json.loads(new.read('PPSA99874/sce_sys/param.json'))
-        if param['contentVersion'] != '01.000.206':
+        if param['contentVersion'] != '01.000.207':
             raise ValueError('Wrong identity')
         if new.read(prefix + 'classes/prosperocraft-121.txt') != b'vanilla-1.21.11-zink-v1\n':
             raise ValueError('Wrong per-release gate')
@@ -120,7 +120,7 @@ def main():
         counts[jar.name] = covered
     baseline = args.build_dir / 'baseline204'
     manifest = json.loads((baseline / 'manifest.json').read_text())
-    linked = [json.loads(line) for line in (args.build_dir / 'link206.rsp').read_text().splitlines()]
+    linked = [json.loads(line) for line in (args.build_dir / 'link207.rsp').read_text().splitlines()]
     replaced = {'inputs/104-main.o', 'inputs/032-embedded-java.o', 'inputs/109-builtin-libraries.o'}
     retained = {}
     for item in manifest['arguments']:
@@ -139,9 +139,9 @@ def main():
     for option in (b'-Dps5.zip.maxOpenFiles=8', b'-Xmx1536m', b'-XX:CompressedClassSpaceSize=64m',
                    b'-XX:ReservedCodeCacheSize=96m', b'-XX:ActiveProcessorCount=4'):
         if option + b'\0' not in elf:
-            raise ValueError('Retained option missing from actual206 ELF: ' + option.decode())
+            raise ValueError('Retained option missing from actual207 ELF: ' + option.decode())
     source = (args.build_dir / 'registry/builtin-libraries.cpp').read_text()
-    if 'lwjgl333_prospero_ffi_reserve_prime' not in symbols(args.llvm_nm, args.build_dir / 'client121-206-symbols.elf', external=False):
+    if 'lwjgl333_prospero_ffi_reserve_prime' not in symbols(args.llvm_nm, args.build_dir / 'client121-207-symbols.elf', external=False):
         raise ValueError('333 callback reserve not linked')
     if b'PS5 LWJGL333 pre-JVM closure reserve result=' not in elf:
         raise ValueError('Pre-JVM reserve priming missing from actual executable')
@@ -151,7 +151,7 @@ def main():
     boot = (ROOT / 'client/save_headroom/bootstrap.cpp').read_text()
     if '#define' not in boot or '"8"' not in boot:
         raise ValueError('Missing accepted ZIP budget8')
-    audit = {'package_sha256': sha(args.package), 'version': '01.000.206', 'title_id': 'PPSA99874',
+    audit = {'package_sha256': sha(args.package), 'version': '01.000.207', 'title_id': 'PPSA99874',
              'package_bytes': args.package.stat().st_size, 'zip_growth_bytes': args.package.stat().st_size - args.baseline_package.stat().st_size,
              'uncompressed_growth_bytes': growth, 'baseline_changed_files': changed, 'added_files': added,
              'matched_native_declarations': counts, 'unsupported_nonplatform_native_declarations': sorted(absent),
@@ -161,7 +161,7 @@ def main():
              'result': 'PASS scoped package/static ABI audit; no complete feature or console acceptance', 'console': 'NOT TESTED'}
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(audit, indent=2) + '\n')
-    print('PASS206 package audit; uncompressed growth', growth, 'bytes; SHA256', audit['package_sha256'])
+    print('PASS207 package audit; uncompressed growth', growth, 'bytes; SHA256', audit['package_sha256'])
 
 
 if __name__ == '__main__':

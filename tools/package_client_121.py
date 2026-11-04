@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Local206 Vanilla121.11 repair candidate from exact accepted204 inputs. No releases.
+"""Local207 Vanilla121.11 worker-callback repair candidate from exact accepted204 inputs. No releases.
 
 Original343/OpenAL/graphics groups are retained byte for byte from the relink kit.
 Only main, libjava's explicit handle hook, lookup table and matched333 are linked anew.
@@ -44,7 +44,7 @@ def main():
     parser.add_argument('--java-home', type=Path)
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--work-dir', type=Path, required=True)
-    parser.add_argument('--app-version', choices=('01.000.206',), default='01.000.206')
+    parser.add_argument('--app-version', choices=('01.000.207',), default='01.000.207')
     parser.add_argument('--check-only', action='store_true', help='Compile/link/convert without signing or a candidate ZIP')
     args = parser.parse_args()
     app_version = args.app_version
@@ -237,7 +237,7 @@ def main():
     subprocess.run([str(converter), 'link', '--in', str(pie), '--out', str(elf), '--stub-dir', str(sdk / 'target/lib'),
         *sum([['--stub', str(p)] for p in stubs], []), '--module-sdk', '0x02000009', '--companion-sdk', '0x08050001', '--file-name', 'eboot.elf'], check=True)
     if args.check_only:
-        print('PASS206 target compile/link/converter; no signed candidate ZIP')
+        print('PASS207 target compile/link/converter; no signed candidate ZIP')
         return
     subprocess.run([str(converter), 'self', '--sign', '--in', str(elf), '--out', str(app / 'eboot.bin'), '--magic', '0x1D3D154F'], check=True)
     subprocess.run([str(converter), 'self', '--inspect', '--file', str(app / 'eboot.bin')], check=True)
@@ -272,7 +272,7 @@ def main():
     (output / 'build-audit.json').write_text(json.dumps(record, indent=2) + '\n')
     (output / 'SHA256SUMS').write_text(record['package_sha256'] + '  PPSA99874.zip\n')
     shutil.copyfile(pie, output / pie.name)
-    print('LOCAL206', package, 'SHA256', record['package_sha256'])
+    print('LOCAL207', package, 'SHA256', record['package_sha256'])
 
 
 if __name__ == '__main__':

@@ -32,11 +32,11 @@ def main():
 #include <stdatomic.h>
 #include <string.h>
 static _Atomic int allocations,releases,live;
-static _Thread_local int fault;
-void*checked_malloc(size_t n){if(fault==1)return NULL;void*p=malloc(n);if(p){++allocations;++live;}return p;}
-void*checked_calloc(size_t n,size_t size){if(fault==2)return NULL;void*p=calloc(n,size);if(p){++allocations;++live;}return p;}
+static _Thread_local int fault,alloc_calls,setter_calls;
+void*checked_malloc(size_t n){++alloc_calls;if(fault==1)return NULL;void*p=malloc(n);if(p){++allocations;++live;}return p;}
+void*checked_calloc(size_t n,size_t size){++alloc_calls;if(fault==2)return NULL;void*p=calloc(n,size);if(p){++allocations;++live;}return p;}
 void checked_free(void*p){if(p){++releases;--live;free(p);}}
-int checked_setspecific(pthread_key_t key,const void*data){return fault==3?12:pthread_setspecific(key,data);}
+int checked_setspecific(pthread_key_t key,const void*data){++setter_calls;return fault==3?12:pthread_setspecific(key,data);}
 extern jlong Java_org_lwjgl_system_ThreadLocalUtil_nsetupEnvData(JNIEnv*,jclass,jint);
 extern jboolean Java_org_lwjgl_system_ThreadLocalUtil_ownsEnvData(JNIEnv*,jclass);
 JNIEXPORT void JNICALL Java_Ownership333_cycle(JNIEnv*e,jclass c,jint failure){
@@ -58,6 +58,25 @@ JNIEXPORT void JNICALL Java_Ownership333_cycle(JNIEnv*e,jclass c,jint failure){
  jclass strings=(*e)->FindClass(e,"java/lang/String");assert(strings&&!(*e)->ExceptionCheck(e));(*e)->DeleteLocalRef(e,strings);
  *e=original;free(foreign); //333TLS owns only its333copy and record until native destructor.
 }
+JNIEXPORT void JNICALL Java_Ownership333_attachedCallback(JNIEnv*e,jclass c){
+ (void)c;int ac=alloc_calls,sc=setter_calls;JNIEnv original=*e;
+ for(int mode=2;mode<=3;mode++){fault=mode;for(int i=0;i<100;i++){jboolean async=99;assert(getEnv(&async)==e&&!async);assert(*e==original);}}
+ fault=0;assert(alloc_calls==ac&&setter_calls==sc);
+}
+static JavaVM*owner_vm;
+static void* own_native(void*unused){
+ (void)unused;JNIEnv*env=NULL;assert((*owner_vm)->GetEnv(owner_vm,(void**)&env,JNI_VERSION_1_6)==JNI_EDETACHED);
+ jboolean async=0;env=getEnv(&async);assert(env&&async);jboolean again=0;assert(getEnv(&again)==env&&again);assert((*env)->GetVersion(env)>=JNI_VERSION_1_6);return NULL;
+}
+static void* foreign_native(void*unused){
+ (void)unused;JNIEnv*env=NULL;assert((*owner_vm)->AttachCurrentThreadAsDaemon(owner_vm,(void**)&env,NULL)==JNI_OK);
+ int ac=alloc_calls,sc=setter_calls;for(int mode=2;mode<=3;mode++){fault=mode;jboolean async=99;assert(getEnv(&async)==env&&!async);}
+ fault=0;assert(alloc_calls==ac&&setter_calls==sc);assert((*owner_vm)->DetachCurrentThread(owner_vm)==JNI_OK);return NULL;
+}
+JNIEXPORT void JNICALL Java_Ownership333_nativeOwners(JNIEnv*e,jclass c){
+ (void)c;assert((*e)->GetJavaVM(e,&owner_vm)==JNI_OK);pthread_t own,foreign;
+ assert(!pthread_create(&own,NULL,own_native,NULL));assert(!pthread_create(&foreign,NULL,foreign_native,NULL));assert(!pthread_join(own,NULL));assert(!pthread_join(foreign,NULL));
+}
 JNIEXPORT jint JNICALL Java_Ownership333_live(JNIEnv*e,jclass c){(void)e;(void)c;return live;}
 JNIEXPORT void JNICALL Java_Ownership333_balanced(JNIEnv*e,jclass c){(void)e;(void)c;assert(live==0&&allocations==releases);}
 JNIEXPORT void JNICALL Java_Ownership333_wrongSize(JNIEnv*e,jclass c){
@@ -68,17 +87,19 @@ JNIEXPORT void JNICALL Java_Ownership333_wrongSize(JNIEnv*e,jclass c){
     java.write_text(r'''
 import java.util.concurrent.atomic.AtomicReference;
 public class Ownership333 {
- static native void cycle(int fault);static native int live();static native void balanced();static native void wrongSize();
+ static native void attachedCallback();static native void nativeOwners();static native void cycle(int fault);static native int live();static native void balanced();static native void wrongSize();
  public static void main(String[]a)throws Exception{
   System.load(a[0]);try{wrongSize();throw new AssertionError("bad count accepted");}catch(LinkageError expected){}
+  nativeOwners();
   var failure=new AtomicReference<Throwable>();Thread[]threads=new Thread[32];
   for(int i=0;i<threads.length;i++){threads[i]=new Thread(()->{try{
+   attachedCallback();
    for(int fault=1;fault<=3;fault++)try{cycle(fault);throw new AssertionError("allocation/key refusal accepted");}catch(OutOfMemoryError expected){}
    for(int n=0;n<100;n++)cycle(0);
   }catch(Throwable t){failure.compareAndSet(null,t);}},"333 real JNI ownership");threads[i].start();}
   for(Thread thread:threads)thread.join();if(failure.get()!=null)throw new AssertionError(failure.get());
   long deadline=System.nanoTime()+3_000_000_000L;while(live()!=0&&System.nanoTime()<deadline)Thread.sleep(1);balanced();
-  System.out.println("PASS333 actual JNI ownership:32threads/3200foreign-copy cycles, idempotence, foreign-table preservation, malloc/calloc/key refusal rollback, exact-size refusal, paired native destructor frees");
+  System.out.println("PASS333 actual JNI ownership:allocation-free attached callbacks under calloc/key refusal,own/foreign native attachment ownership,32threads/3200foreign-copy cycles, idempotence, foreign-table preservation, malloc/calloc/key refusal rollback, exact-size refusal, paired native destructor frees");
  }
 }
 ''')

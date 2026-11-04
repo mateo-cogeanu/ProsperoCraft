@@ -1,5 +1,16 @@
 # Changelog
 
+## Local207 — Java-worker PNG callback state, 2026-11-04
+
+- Record206 world creation/join progress, then native state allocation/key fatal
+  in the original STB PNG callback on a Java worker; underlying native refusal
+  phase/quota remains unproved by the combined206 diagnostic.
+- Reuse the already attached thread's genuine JNI environment without extra native
+  record/TLS setup; preserve owned/foreign native attachment and cleanup semantics.
+- Original PNG historical fault replay and repaired concurrent PNG/JNI/Zink checks
+  pass. No additional reserve or heap/GC policy; PS5 world/save/quit regression
+  remains pending. Original packages retained; no release, prerelease or Store.
+
 ## Local206 — report transport and333 callback repair, 2026-11-04
 
 - Retrieve205startup/game/crash reports over FTP after reopening. Original1.21.11

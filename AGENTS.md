@@ -183,3 +183,15 @@ libffi, pairedRW reset and failed-reset quarantine. Original343/provider objects
 heap/GC/ZIPbudget8 and original publisherJARs retained. Real x86_64 fault/3200
 closure tests are host evidence; native allocation cause and exact206PS5startup/
 HTTP/callback/world/save/quit/regression remain pending. No release/Store approval.
+
+
+## Attached333 callback environments —2026-11-04
+
+206 reaches original1.21.11 world creation/join, then fatal native state allocation/
+key refusal in STB PNG write callback on a Java worker.207PS5 getEnv reuses genuine
+JNI GetEnv for attached threads, retaining this group's async flag; no redundant
+record/TLS setter there. Unattached native attach/destructor and foreign ownership
+remain. Original PNG fault replay,64worker PNG cycles,own/foreign native attachment,
+ASan/UBSan/XcheckJNI ownership and existing Zink checks pass. Exact207PS5world/save/
+quit/endurance and26.x regressions remain pending. No new reserve/heap/GC/JAR policy,
+release/Store approval or ALL PASS. See docs/client-1.21-207.md; raw reports local.

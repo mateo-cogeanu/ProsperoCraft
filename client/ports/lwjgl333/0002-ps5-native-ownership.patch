@@ -71,7 +71,7 @@
      data->async = async;
      data->env = env;
 
-@@ -120,6 +130,57 @@
+@@ -120,6 +130,63 @@
          }
          return data;
      }
@@ -104,9 +104,15 @@
 +        JNIEnv* env = getThreadEnv();
 +        if (env == NULL) { async = 1; env = attachCurrentThreadAsDaemon(); }
 +        EnvData* data = createEnvData(async, env);
-+        if (data == NULL || pthread_setspecific(envTLS, data) != 0) {
++        if (data == NULL) {
++            (*env)->FatalError(env, "LWJGL333 native thread record allocation refusal");
++            return NULL;
++        }
++        int error = pthread_setspecific(envTLS, data);
++        if (error != 0) {
 +            free(data);
-+            (*env)->FatalError(env, "LWJGL333 native thread state allocation/key refusal");
++            fprintf(stderr, "LWJGL333 native thread key setter returned=%d\n", error);
++            (*env)->FatalError(env, "LWJGL333 native thread key refusal");
 +            return NULL;
 +        }
 +        return data;
@@ -129,16 +135,26 @@
  #else
      #include <pthread.h>
      pthread_key_t envTLS = 0;
-@@ -187,7 +248,7 @@
+@@ -187,7 +254,17 @@
      }
  #endif
 
 -inline JNIEnv* getEnv(jboolean *async) {
 +JNIEnv* getEnv(jboolean *async) {
++#ifdef LWJGL_PS5
++    // Synchronous callbacks on an already attached Java/foreign thread need no
++    // new native record or TLS setter. Preserve our own async attachment flag.
++    JNIEnv* env = getThreadEnv();
++    if (env != NULL) {
++        EnvData* existing = envTLSValid ? pthread_getspecific(envTLS) : NULL;
++        *async = existing != NULL && existing->env == env ? existing->async : JNI_FALSE;
++        return env;
++    }
++#endif
      EnvData* data = tlsGetEnvData();
      *async = data->async;
      return data->env;
-@@ -200,7 +261,11 @@
+@@ -200,7 +277,11 @@
 
      jvm = vm;
 

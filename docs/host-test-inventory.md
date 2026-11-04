@@ -28,6 +28,7 @@ The manual native lane instead tests scoped native implementations against fixtu
 | `test_client_121_inputs.py` | Required fast; exact twelve-release lock/metadata/library corruption controls, no network |
 | `test_launcher_121_policy.py` | Required fast; Vanilla gates,333/343/SDL owner isolation and mapped shutdown rejection |
 | `test_libffi_reserve.py` | Manual explicit pinned libffi/LLVM inputs; real x86_64 W->X callbacks, denied allocation,64slot exhaustion/reuse and protection-failure ownership; Rosetta opt-in on ARM Macs |
+| `test_lwjgl333_png_worker.py` | Manual explicit macOS native/publisher/ffi inputs; actual PNG callbacks under denied record/TLS setup, with historical native-fatal negative control; no portable CI/game replacement |
 | `test_lwjgl333_host.py`, `test_lwjgl333_ownership.py` | Manual explicit pinned native/publisher inputs; genuine333 core/STB/callback/JNI ownership and optional real Zink; outside portable CI |
 | `test_client_261_inputs.py` | Required fast; temporary publisher-integrity/rule/path failures and real JDK class/JNI parsing; no game/network/SDK prerequisite |
 | `test_audio_native_mutex.py` | Clang/Clang++, ASan/UBSan; desktop needs Gson/JDK; JNI needs platform headers; required native |

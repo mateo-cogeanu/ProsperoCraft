@@ -56,3 +56,12 @@ the original333 Java callback host tests. Apple ARM64's stock libffi uses trampo
 tables and is not a valid W->X adapter test backend; the explicit x86_64 test uses
 its genuine dynamic trampoline branch, under Rosetta on ARM Macs. No ARM table
 adapter or PS5 callback/console pass is implied.
+
+
+Build 207 reuses genuine JNI GetEnv for already attached PS5 callback threads,
+without allocating another native EnvData record or setting TLS. Existing own
+native attachments retain their async flag and destructor; foreign attachments
+remain foreign-owned. Unattached native threads still require the real original
+attach/record/TLS path, with separate refusal diagnostics. See the
+[world-entry PNG repair and tests](../../../docs/client-1.21-207.md). No extra reserve
+or game transformation is introduced by this change.
