@@ -7,6 +7,14 @@ remain retained.121 support stays Vanilla1.21.10/.11; all121 Fabric remains defe
 No game JAR, game resolution, Java module image, VM/ZIPbudget8 or resident game
 native-group policy changes. This is a local hardware-test candidate, not a release.
 
+Signed ZIP SHA-256:
+`4b341656bff9aa6ae7e24e5d290a60b3f7cbaf568eea158f785854e4d726d0f1`.
+Size127,485,490bytes. Exact clean consumer source is
+`eeb984a15e83f885a2d130f8a4e6daeb8f1ed3de`; reusable presenter source is pinned
+separately below. Signed integrity and independent package audit pass. Actual
+Ubuntu policy/native jobs pass; macOS jobs were queued when inspected. Neither
+host result nor packaging establishes physical120Hz or120FPS.
+
 ## Presentation and FPS
 
 The launcher previously imposed a33ms redraw gate (about30FPS) and used the default

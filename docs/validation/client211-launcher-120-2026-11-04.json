@@ -2,7 +2,7 @@
   "date": "2026-11-04",
   "title_id": "PPSA99874",
   "app_version": "01.000.211",
-  "status": "Checked source; local signed package preparation",
+  "status": "Signed211 local candidate; independent package audit PASS; actual PS5 FPS/output/feel pending",
   "scope": "Whole-launcher verified120Hz/FPS target, fast tiling/publication, moderate menus, continuous backdrop with symmetric card exit, prearmed localized adaptive page detents",
   "presentation_runtime": "64fe7c70821dfc94aa3566703011b751a86d2900",
   "java_runtime_pin": "62c583f145d82309e15758c460b3bd3e9a925bf4 unchanged existing137/HTTP integration",
@@ -11,10 +11,33 @@
     "fast": "PASS19/19 in22.9s",
     "native": "PASS12/12 in14.2s",
     "preview": "PASS actual Vulkan medium3/5/6-option menus, opening/closing frames and existing pointer/mailbox/cleanup controls; visually inspected",
-    "target": "PASS211 -Werror bootstrap/one-copy replacement presenter link/converter and existing manifest0x40",
-    "source_only": "Pending source-only fresh cache",
-    "hosted": "Pending source push"
+    "target": "PASS final211 -Werror main/presenter one-copy link/converter/signed SELF integrity; manifest0x40 and explicit120 opt-in symbol in final image",
+    "source_only": "PASS19fast in21.7s and12native in12.1s, tracked/new source-only copy, initially empty explicit dependency cache, outside-root/tmp invocation",
+    "hosted": {
+      "source_commit": "eeb984a15e83f885a2d130f8a4e6daeb8f1ed3de",
+      "policy_url": "https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41895318165",
+      "native_url": "https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41895361833",
+      "ubuntu-24.04": "PASS actual policy19 and native12 jobs completed",
+      "macos-15": "Actual jobs inspected; queued, results pending"
+    },
+    "package": "PASS independent CRC/identity/resources/parent JARs/Java image/native groups/options/runtime source/output hashes and one-copy presenter; actual presentation/timing diagnostics in final image"
   },
   "physical211": "NOT RUN: selected120Hz, actual measured/rendered FPS, haptic feel/reset, menus, card continuity/exit, saved-account/notice and game handoff pending",
-  "release_store": "No action; exact physical/shader/explicit authorization gates retained"
+  "release_store": "No action; exact physical/shader/explicit authorization gates retained",
+  "package": {
+    "package_sha256": "4b341656bff9aa6ae7e24e5d290a60b3f7cbaf568eea158f785854e4d726d0f1",
+    "package_bytes": 127485490,
+    "source_commit": "eeb984a15e83f885a2d130f8a4e6daeb8f1ed3de",
+    "source_tree": "clean",
+    "symbols_sha256": "68dc36a8b21d7f5f267ff4fca416da8c03df198b380a798294668a3e240efa88",
+    "eboot_sha256": "ce5dbf4430ff8987d4c0a8aab1a8eeb3e7e55f25c2d0c3d0dcddf37a64cc3d13",
+    "nativePresenterSha256": "d8388e4f0f18b395daee176ddbc7c6e03535fd4f91ef6d842a6276da937b7118",
+    "graphicsSupportSha256": "f9c5d7440d4960ae85a35a5fec8eedff016d308168f370876eb813eb62adc926",
+    "newSdlGroupSha256": "96cab67f509650a2c32d0d08e2981ec9ac9d826eecf0f24c85636258104816bb",
+    "newGroupSha256": "7bead679117a434fc0f2d893fb28e4c461c202d0f8f96734acacfaddb815db9a",
+    "overlaySha256": "5baae8699c219db87845132c159c421d12926de461fe8b90890e7f40a74d9d20",
+    "zip_growth_bytes": 428609,
+    "uncompressed_growth_bytes": 1264805,
+    "growth_from210_bytes": 11355
+  }
 }

@@ -87,6 +87,11 @@
     "validation": "docs/validation/client211-launcher-120-2026-11-04.json",
     "scope": "Whole-launcher120 target, moderate menus, symmetric continuous-background cards and adaptive page detent",
     "presentation_runtime": "64fe7c70821dfc94aa3566703011b751a86d2900",
-    "console": "Pending actual refresh/FPS/feel/visual/handoff; previous packages retained"
+    "console": "Pending actual refresh/FPS/feel/visual/handoff; previous packages retained",
+    "package_sha256": "4b341656bff9aa6ae7e24e5d290a60b3f7cbaf568eea158f785854e4d726d0f1",
+    "package_bytes": 127485490,
+    "source_commit": "eeb984a15e83f885a2d130f8a4e6daeb8f1ed3de",
+    "source_tree": "clean",
+    "package_audit": "PASS signed integrity and independent audit"
   }
 }
