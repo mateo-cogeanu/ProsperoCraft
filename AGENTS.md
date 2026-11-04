@@ -210,3 +210,16 @@ physical modes/presentation remain pending. Launcher keyboard navigation include
 all five action buttons; do not change ingame keyboard for this repair. Preserve
 VM/ZIPbudget8/native333/343 ownership and existing release/Store/shader gates.
 See docs/client-1.21-208.md and exact package validation before claims.
+
+
+## Launcher page motion —2026-11-04
+
+User reports208 working and requests horizontal page turns, theme side arrows,
+continuous dropdown scrolling and L2/R2 pages.209 keeps vertical movement on each
+instance page’s two rows, L1/R1 top tabs, L2/R2 previous/next pages. Preserve bounded
+resident snapshots/list caches; never put a full Fields snapshot on a native stack.
+Keep independent outgoing/current card state, visual-position pointer hits and
+Reduced motion. Native launcher owns presentation/mailbox/lifecycle; no SDL/JVM or
+game/native policy changes for this UI repair.208 exact bytes remain retained;
+physical209 responsiveness/animation/input/game handoff is pending. Existing
+release/Store/shader and Vanilla-before-Fabric gates remain.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Local208 Vanilla121.10,selected-resolution and launcher-keyboard candidate from exact accepted204 inputs. No releases.
+"""Local209 launcher page transitions and continuous list scrolling candidate from exact accepted204 inputs. No releases.
 
 Original343/OpenAL groups are retained byte for byte from the relink kit.
 Main, explicit libjava handle hook, SDL, graphics inventory and matched333 are rebuilt.
@@ -47,7 +47,7 @@ def main():
     parser.add_argument('--java-home', type=Path)
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--work-dir', type=Path, required=True)
-    parser.add_argument('--app-version', choices=('01.000.208',), default='01.000.208')
+    parser.add_argument('--app-version', choices=('01.000.209',), default='01.000.209')
     parser.add_argument('--check-only', action='store_true', help='Compile/link/convert without signing or a candidate ZIP')
     args = parser.parse_args()
     app_version = args.app_version
@@ -119,7 +119,7 @@ def main():
     if sha(sdl_object)!=sdl_audit['object_sha256']:raise ValueError('Stale SDL output')
     for name,digest in sdl_audit['port_sha256'].items():
         if sha(ROOT/'client/ports/sdl'/name)!=digest:raise ValueError('Stale SDL source: '+name)
-    sdl_scoped=work/'sdl208-scoped.o'
+    sdl_scoped=work/'sdl209-scoped.o'
     subprocess.run([str(llvm/'llvm-objcopy'),'--redefine-syms='+str(baseline/'provider-bindings.txt'),str(sdl_object),str(sdl_scoped)],check=True)
     os_build=args.oshi665_build.resolve();os_overlay=os_build/'oshi-6.6.5-ps5-platform.jar';os_audit=json.loads((os_build/'audit.json').read_text())
     if sha(os_overlay)!=os_audit['output_sha256']:raise ValueError('Stale OSHI665 overlay')
@@ -264,7 +264,7 @@ def main():
     subprocess.run([str(converter), 'link', '--in', str(pie), '--out', str(elf), '--stub-dir', str(sdk / 'target/lib'),
         *sum([['--stub', str(p)] for p in stubs], []), '--module-sdk', '0x02000009', '--companion-sdk', '0x08050001', '--file-name', 'eboot.elf'], check=True)
     if args.check_only:
-        print('PASS208 target compile/link/converter; no signed candidate ZIP')
+        print('PASS209 target compile/link/converter; no signed candidate ZIP')
         return
     subprocess.run([str(converter), 'self', '--sign', '--in', str(elf), '--out', str(app / 'eboot.bin'), '--magic', '0x1D3D154F'], check=True)
     subprocess.run([str(converter), 'self', '--inspect', '--file', str(app / 'eboot.bin')], check=True)
@@ -299,13 +299,13 @@ def main():
         'newGroupSha256': sha(registry / 'embedded-lwjgl333.o'), 'overlaySha256': sha(overlay),
         'source_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
         'source_tree': 'modified' if subprocess.check_output(['git', 'status', '--porcelain'], text=True).strip() else 'clean',
-        'scope': 'Vanilla1.21.10 candidate plus confirmed1.21.11;allZink selected-resolution hint/native SDL;launcher keyboard action row;original JARs/VMoptions retained;Fabric121blocked',
+        'scope': 'Launcher horizontal page turns, themed vector side arrows, bounded continuous dropdown scrolling and in-page vertical card navigation;208 game/native/VM policies retained;Fabric121blocked',
         'graphicsSupportSha256':sha(graphics_object),'newSdlGroupSha256':sha(registry/'embedded-ps5sdl.o'),'oshi665Sha256':sha(os_overlay),
         'console': 'NOT TESTED', 'releaseStore': 'No action'}
     (output / 'build-audit.json').write_text(json.dumps(record, indent=2) + '\n')
     (output / 'SHA256SUMS').write_text(record['package_sha256'] + '  PPSA99874.zip\n')
     shutil.copyfile(pie, output / pie.name)
-    print('LOCAL208', package, 'SHA256', record['package_sha256'])
+    print('LOCAL209', package, 'SHA256', record['package_sha256'])
 
 
 if __name__ == '__main__':

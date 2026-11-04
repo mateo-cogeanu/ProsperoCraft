@@ -15,7 +15,7 @@
 namespace prospero_ui {
 inline Surface* surface=nullptr;
 inline std::atomic<bool> healthy{true};
-inline bool motion=false,reduced=false;
+inline bool motion=false,reduced=false,paging=false,outgoing=false;
 inline float dt=1.0f/60;
 struct MenuControlMotion {hui::tween::Spring focus;hui::ui::Pulse press;int page=-1,x=0,y=0,w=0,h=0;std::uint64_t last_press=0;};
 inline std::array<MenuControlMotion,32>* buttons=nullptr;
@@ -29,7 +29,7 @@ struct Canvas {
  template<class F> void context(const F& fields,std::uint64_t press_time){
   auto num=[&](int i){return std::atoi(fields[i].data());};auto& e=*effects;reduced=std::strcmp(fields[30].data(),"ON")==0;e.feedback.clear();
   const int page=num(11),selected=num(9);e.page_changed=page!=e.page;
-  if(e.page_changed){e.previous_page=e.page;e.page=page;e.age=0;e.entrance.start(reduced?0.0f:0.48f);e.grid.enter();if(page!=9)e.dialog.close(e.feedback);}
+  if(e.page_changed){e.previous_page=e.page;e.page=page;e.age=0;e.entrance.start(reduced?0.0f:0.48f);if(page!=9)e.dialog.close(e.feedback);}
   e.age+=dt;e.clock+=reduced?0.0f:dt;e.entrance.update(dt);e.press.update(dt,10);
   if(press_time&&press_time!=e.last_press){e.last_press=press_time;e.press_page=page;e.press_row=num(15);if(!reduced)e.press.trigger();}
   int icon=page==1?num(24):num(18);if(page==0){int slot=selected-num(14);icon=slot>=0&&slot<8?num(34+slot*4):0;}
@@ -40,11 +40,13 @@ struct Canvas {
   e.selection=selected;e.model_row=num(15);
  }
 
- void begin_content(){auto& e=*effects;float t=reduced?1:hui::tween::quint_out(e.entrance.progress());surface->list.push_transform(1,960,540,0,reduced?0:28*(1-t));surface->list.push_opacity(reduced?1:hui::tween::cubic_out(e.entrance.progress()));}
- void end_content(){surface->list.pop_opacity();surface->list.pop_transform();
+ void begin_content(){}
+ void end_content(){
   if(effects->page!=9&&effects->dialog.visible()){effects->dialog.update(reduced?1:dt);hui::ui::Canvas c{surface->list,surface->fonts,surface->renderer.glass_texture(),effects->clock};effects->dialog.draw(c);}
   surface->list.gradient_rect({0,910,1920,170},0,themed(0x03100c,0),themed(0x03100c,0.92f));
  }
+ void chevron(float x,float y,int direction){auto col=theme().focus;float d=float(direction);surface->list.line(x-d*7,y-15,x+d*7,y,4,col);surface->list.line(x+d*7,y,x-d*7,y+15,4,col);}
+ void scrollbar(float x,float y,float h,float first,int visible,int total){if(total<=visible)return;auto& l=surface->list;float thumb=std::max(28.f,h*visible/total);float yy=y+(h-thumb)*std::clamp(first/float(total-visible),0.f,1.f);l.rounded_rect({x,y,4,h},2,themed(0xb6f2be,0.14f));l.rounded_rect({x-1,yy,6,thumb},3,theme().focus.with_alpha(0.8f));}
 
  void rounded(int x,int y,unsigned w,unsigned h,unsigned r,std::uint32_t c){
   auto col=color(c);hui::gfx::Rect rect{float(x),float(y),float(w),float(h)};
@@ -66,11 +68,11 @@ struct Canvas {
  }
  void progress(int value){auto& bar=effects->progress;bar.style.theme=theme();bar.style.reduced_motion=reduced;bar.style.sheen=!reduced;bar.style.placement=hui::ui::LabelPlacement::none;bar.style.percent=false;bar.style.height=7;bar.style.mode=value>0?hui::ui::ProgressMode::determinate:hui::ui::ProgressMode::indeterminate;bar.set_bounds({72,979,1770,14});bar.set_value(float(value)/1000,reduced);bar.update(reduced?1:dt);hui::ui::Canvas c{surface->list,surface->fonts,surface->renderer.glass_texture(),effects->clock};bar.draw(c);}
  template<class F> void library(const F& fields,int slide){
-  auto num=[&](int i){return std::atoi(fields[i].data());};auto& e=*effects;auto& grid=e.grid;
+  auto num=[&](int i){return std::atoi(fields[i].data());};auto& e=*effects;auto& grid=outgoing?e.previous_grid:e.grid;auto& items_key=outgoing?e.previous_items_key:e.items_key;
   int count=std::min(8,std::max(0,num(13)-num(14)));std::string key=fields[14].data();
   for(int i=0;i<count*4;i++)key+=std::string("|")+fields[32+i].data();
-  auto t=theme();grid.style.theme=t;grid.style.reduced_motion=reduced;grid.style.columns=4;grid.style.cell_width=420;grid.style.cell_height=242;grid.style.gap_x=30;grid.style.gap_y=30;grid.style.padding=0;grid.style.scroll_thumb=false;grid.style.card.art_aspect=0;grid.style.card.text=hui::ui::CardText::over;grid.style.card.title_size=30;grid.style.card.subtitle_size=24;grid.style.card.text_inset=24;grid.style.card.badge_corner=hui::ui::CardCorner::top_right;grid.style.card.glow=true;grid.style.card.focus_scale=reduced?1:1.025f;grid.style.card.lift=reduced?0:7;grid.style.card.press_scale=reduced?0:0.025f;grid.style.entrance_step=reduced?0:0.05f;
-  if(key!=e.items_key){std::vector<hui::ui::CardItem> items;for(int i=0;i<count;i++){int at=32+i*4;hui::ui::CardItem item;item.title=fields[at].data();item.subtitle=fields[at+1].data();item.badge=std::strcmp(fields[at+3].data(),"ADD")==0?"":fields[at+3].data();item.tag=num(at+2);item.accent=icon_color(item.tag);items.push_back(item);}grid.set_items(std::move(items));e.items_key=key;grid.enter();}
+  auto t=theme();grid.style.theme=t;grid.style.reduced_motion=reduced||paging;grid.style.columns=4;grid.style.cell_width=420;grid.style.cell_height=242;grid.style.gap_x=30;grid.style.gap_y=30;grid.style.padding=0;grid.style.scroll_thumb=false;grid.style.card.art_aspect=0;grid.style.card.text=hui::ui::CardText::over;grid.style.card.title_size=30;grid.style.card.subtitle_size=24;grid.style.card.text_inset=24;grid.style.card.badge_corner=hui::ui::CardCorner::top_right;grid.style.card.glow=true;grid.style.card.focus_scale=reduced?1:1.025f;grid.style.card.lift=reduced?0:7;grid.style.card.press_scale=reduced?0:0.025f;grid.style.entrance_step=0;
+  if(key!=items_key){std::vector<hui::ui::CardItem> items;for(int i=0;i<count;i++){int at=32+i*4;hui::ui::CardItem item;item.title=fields[at].data();item.subtitle=fields[at+1].data();item.badge=std::strcmp(fields[at+3].data(),"ADD")==0?"":fields[at+3].data();item.tag=num(at+2);item.accent=icon_color(item.tag);items.push_back(item);}grid.set_items(std::move(items));items_key=key;grid.update(1);}
   if(grid.bounds().y!=342+slide||grid.bounds().w!=1770)grid.set_bounds({70,float(342+slide),1770,514});
   grid.art=[](hui::ui::Canvas& canvas,const hui::gfx::Rect& art,float radius,const hui::ui::CardItem& item,float focus){
    using hui::gfx::Color;if(item.tag<0){float x=art.x+art.w/2,y=art.y+art.h/2;canvas.list.rounded_rect({x-26,y-3,52,6},3,themed(0xb6f2be));canvas.list.rounded_rect({x-3,y-26,6,52},3,themed(0xb6f2be));return;}auto tint=icon_color(item.tag);canvas.list.gradient_rect(art,radius,hui::gfx::mix(themed(0x133e32),tint,0.22f),themed(0x071e19));
@@ -89,10 +91,10 @@ struct Canvas {
  void instance_icon(int x,int y,int size,int kind){unsigned index=kind>=0&&unsigned(kind)<icon_textures.size()?unsigned(kind):0;surface->list.image(icon_textures[index],{float(x),float(y),float(size),float(size)},{0,0,1,1},themed(0xffffff),0);}
  void logo(int x,int y,int size){surface->list.image(surface->logo,{float(x),float(y),float(size),float(size)},{0,0,1,1},themed(0xffffff),0);}
  void control(int x,int y,int w,int h,bool active,bool press_live=false,bool positive=false){
-  if(button_index>=buttons->size())return;auto& state=(*buttons)[button_index++];auto& e=*effects;
+  if(button_index>=buttons->size())return;MenuControlMotion previous{};auto& state=outgoing?previous:(*buttons)[button_index++];auto& e=*effects;
   if(state.page!=e.page||state.w!=w||state.h!=h){state=MenuControlMotion{};state.page=e.page;state.x=x;state.y=y;state.w=w;state.h=h;}
   state.focus.target=active?1.0f:0.0f;
-  if(reduced){state.focus.snap(state.focus.target);state.press.value=0;}
+  if(reduced||outgoing){state.focus.snap(state.focus.target);state.press.value=0;}
   else{
    if(press_live&&active&&!e.page_changed&&e.last_press&&state.last_press!=e.last_press&&e.press_page==e.page&&e.press_row==e.model_row){state.press.trigger();state.last_press=e.last_press;}
    state.focus.update(dt,22);state.press.update(dt,10);

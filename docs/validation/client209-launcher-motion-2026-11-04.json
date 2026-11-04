@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-04",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.209",
+  "status": "Launcher motion source checks; signed candidate preparation",
+  "scope": "Two-row in-page vertical navigation; L2/R2 pages; horizontal outgoing/incoming turn; theme vector arrows; continuous dropdown/keybinding lists and scrollbar",
+  "unchanged": "208 runtime/native groups/original publisher JARs/Java image/VM and ZIPbudget8/game gates; no Fabric121",
+  "checks": {
+    "fast": "PASS19/19 in24.7s; final desktop model rerun also passes",
+    "native": "PASS11/11 in10.5s; model row/trigger/side-arrow/list tests plus actual native page/scroll tween checks",
+    "source_only": "PASS19/19 in22.0s; source-only copy, empty explicit dependency cache, outside-root/tmp invocation",
+    "preview": "PASS actual Vulkan outgoing/incoming page frames and bidirectional top-tab frames, six themed chevrons, fractional clipped list/thumb and original mailbox/cleanup controls; images visually inspected",
+    "target": "PASS209 -Werror target compile/link/converter; small inspected compose/content stack reservations (600/280bytes), resident field exchange; signed package pending",
+    "hosted": "Pending source push",
+    "previous208_hosted": {
+      "policy_url": "https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41879893960",
+      "native_url": "https://github.com/mateo-cogeanu/ProsperoCraft/actions/runs/41879781853",
+      "result": "Actual Ubuntu/macOS policy and native jobs completed successfully;209 jobs separate"
+    }
+  },
+  "physical209": "NOT RUN; navigation/timing/themes/dropdowns/trigger paging/reduced motion,launcher responsiveness and game handoff pending",
+  "release_store": "No action; existing physical/shader/explicit approval gates retained"
+}

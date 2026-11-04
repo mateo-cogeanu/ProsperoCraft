@@ -15,6 +15,11 @@ public class DesktopCheck {
   ok(ProsperoLauncher.supported("26.2","fabric"));ok(!ProsperoLauncher.developmentTest("26.2","fabric"));ok(!ProsperoChannel.fabric262Test());ok(!ProsperoLauncher.supported("26.1","fabric"));
   var root=Path.of(args[0]);var lib=new ProsperoLibrary(root);lib.settings().showIntro=false;lib.save();var item=lib.add("Preserved","26.2",1,"fabric");lib.ready(item,true);String saved=Files.readString(root.resolve("library.json"));
   var m=new ProsperoLauncher(new ProsperoAuth(),root,url->{throw new AssertionError("No network");});
+  var manyRoot=root.resolve("many");var manyLib=new ProsperoLibrary(manyRoot);manyLib.settings().showIntro=false;manyLib.save();for(int i=0;i<17;i++)manyLib.add("Card"+i,"26.2",1,"vanilla");
+  var grid=new ProsperoLauncher(new ProsperoAuth(),manyRoot,url->{throw new AssertionError("No network");});
+  for(int first:new int[]{0,8})for(int col=0;col<4;col++){set(grid,"page",0);set(grid,"selected",first+col);set(grid,"top",false);String[] down=grid.tick(0x40);ok(Integer.parseInt(down[9])==first+4+col);ok(Integer.parseInt(down[14])==first);grid.tick(0x40);ok(Integer.parseInt(grid.tick(0)[9])==first+4+col);grid.tick(0x10);ok(Integer.parseInt(grid.tick(0)[9])==first+col);}
+  set(grid,"selected",0);grid.tick(0x200);ok(grid.tick(0)[14].equals("8"));grid.tick(0x100);ok(grid.tick(0)[14].equals("0"));grid.tick(click(0,5,1));ok(grid.tick(0)[14].equals("8"));grid.tick(click(0,5,0));ok(grid.tick(0)[14].equals("0"));
+  set(grid,"page",10);set(grid,"dropdownKind",7);set(grid,"row",7);set(grid,"listFirst",0);grid.tick(0x40);ok(grid.tick(0)[84].equals("1"));grid.tick(0x40);ok(grid.tick(0)[84].equals("2"));grid.tick(0x10);ok(grid.tick(0)[84].equals("2"));set(grid,"row",2);grid.tick(0x10);ok(grid.tick(0)[84].equals("1"));
   ok(m.tick(0)[35].equals("READY"));m.tick(click(0,1,0));ok(m.tick(0)[11].equals("4"));ok(m.tick(0)[69].equals("SUPPORTED"));ok(!m.tick(0)[6].contains("DEV"));
   m.tick(click(0,3,1));ok(m.tick(0)[11].equals("4")); // stale click ignored
   m.tick(click(4,3,1));ok(m.tick(0)[11].equals("5"));m.tick(click(5,3,0));ok(m.tick(0)[11].equals("6"));
@@ -38,6 +43,7 @@ public class DesktopCheck {
 '''
 cpp=r'''
 #include "desktop_input.hpp"
+#include "page_motion.hpp"
 #include "cursor_shape.hpp"
 #include <cmath>
 #include <cassert>
@@ -49,6 +55,9 @@ extern "C" int prospero_hid_open(int mouse,int i){return i==0?mouse+10:-1;}
 extern "C" void prospero_hid_close(int,int){closes++;}
 extern "C" int prospero_hid_read(int mouse,int,void* out,int){if(mouse){int n=mp.size();if(n)memcpy(out,mp.data(),n*sizeof(prospero_mouse_packet));mp.clear();return n;}int n=kp.size();if(n)memcpy(out,kp.data(),n*sizeof(prospero_keyboard_packet));kp.clear();return n;}
 int main(){
+ Glide glide;glide.to(1,100);assert(glide.value(100)==0&&glide.moving(150));float mid=glide.value(190);assert(mid>0&&mid<1);glide.to(2,190);assert(glide.value(190)==mid);assert(glide.value(370)==2&&!glide.moving(370));glide.to(9,400,true);assert(glide.value(400)==9&&!glide.moving(400));
+ PageTurn turn;turn.start(1,100,false);assert(turn.progress(100)==0&&turn.progress(240)>0&&turn.progress(240)<1&&turn.progress(380)==1);turn.start(-1,400,true);assert(turn.direction==-1&&!turn.moving(400));
+
  CursorShape shape;assert(shape.count>90&&shape.count<128);for(int i=0;i<shape.count;i++){int a=(i+shape.count-1)%shape.count,b=(i+1)%shape.count;float ax=shape.xy[i*2]-shape.xy[a*2],ay=shape.xy[i*2+1]-shape.xy[a*2+1],bx=shape.xy[b*2]-shape.xy[i*2],by=shape.xy[b*2+1]-shape.xy[i*2+1];float lengths=std::sqrt((ax*ax+ay*ay)*(bx*bx+by*by));assert(lengths>0&&(ax*bx+ay*by)/lengths>0.8f);}
  assert(desktop_hit(0,70,342,0,2).target==0);assert(desktop_hit(0,69,342,0,2).kind==-1);assert(desktop_hit(0,520,342,0,2).target==1);assert(desktop_hit(0,491,342,0,2).kind==-1);
  assert(desktop_hit(5,110,805,0,0).kind==-1);assert(desktop_hit(5,800,760,0,0).target==8);assert(desktop_hit(5,1400,760,0,0).target==8);assert(desktop_hit(5,800,850,0,0).target==5);assert(desktop_hit(5,1400,850,0,0).target==6);assert(desktop_hit(6,900,70,0,0).kind==-1);assert(desktop_hit(10,300,285,8,20).target==8);assert(desktop_hit(5,1350,650,0,0).target==7);assert(desktop_hit(12,1600,550,0,1,0,false,true).target==20);

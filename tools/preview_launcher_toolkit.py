@@ -105,6 +105,25 @@ source=source.replace('static void animation_check(ps5::demo::Canvas& c) noexcep
 # The legacy discrete interpolation assertion has its own fixture. Here dt
 # and the toolkit spring are exercised by the rendered controller transitions.
 source=source.replace(' assert(ps5::demo::run_ui_until(animation_check,update,stop,""));','')
+page_preview=r'''
+  auto save_scene=[&](const char* name){assert(prospero_ui::surface->render());auto* px=static_cast<const unsigned char*>(prospero_ui::surface->pixels);std::ofstream f(std::string(argv[1])+"/"+name+".ppm",std::ios::binary);f<<"P6\n1920 1080\n255\n";for(int i=0;i<1920*1080;i++)f.write(reinterpret_cast<const char*>(px+i*4),3);};
+  auto field=[&](int n,const char* value){snprintf(prospero_menu::fields[n].data(),prospero_menu::fields[n].size(),"%s",value);};
+  field(11,"0");field(13,"18");field(14,"0");field(9,"0");field(30,"OFF");field(28,"CONTENT");field(104,"0");
+  for(int i=0;i<8;i++){char text[40];snprintf(text,sizeof(text),"Instance %d",i+1);field(32+i*4,text);field(33+i*4,"1.21.10 / Vanilla");field(34+i*4,"1");field(35+i*4,"READY");}
+  settle_preview();prospero_menu::outgoing_fields=prospero_menu::fields;field(14,"8");field(9,"8");
+  for(int i=0;i<8;i++){char text[40];snprintf(text,sizeof(text),"Instance %d",i+9);field(32+i*4,text);}
+  for(int ms:{70,140,280}){prospero_menu::page_turn.start(1,prospero_menu::now_ms()-ms,false);prospero_ui::surface->list.clear();prospero_ui::Canvas c;prospero_menu::compose(c);char name[40];snprintf(name,sizeof(name),"page-turn-%d",ms);save_scene(name);}
+  for(int theme=0;theme<6;theme++){char t[8],name[40];snprintf(t,sizeof(t),"%d",theme);field(104,t);settle_preview();snprintf(name,sizeof(name),"page-arrows-theme-%d",theme);save_scene(name);}
+  prospero_menu::outgoing_fields=prospero_menu::fields;field(11,"2");field(12,"1");field(15,"0");prospero_menu::page_turn.start(1,prospero_menu::now_ms()-140,false);prospero_ui::surface->list.clear();{prospero_ui::Canvas c;prospero_menu::compose(c);}save_scene("tab-turn-right-midpoint");
+  prospero_menu::outgoing_fields=prospero_menu::fields;field(11,"0");field(12,"0");prospero_menu::page_turn.start(-1,prospero_menu::now_ms()-140,false);prospero_ui::surface->list.clear();{prospero_ui::Canvas c;prospero_menu::compose(c);}save_scene("tab-turn-left-midpoint");prospero_menu::page_turn.enabled=false;
+  field(11,"10");field(82,"Choose version");field(83,"20");field(84,"0");field(15,"7");field(93,"0");prospero_menu::list_page=-1;
+  for(int i=0;i<8;i++){char text[40];snprintf(text,sizeof(text),"Version option %d",i+1);field(85+i,text);}field(108,"Version option 9");prospero_menu::cache_scroll_rows();field(84,"2");field(15,"9");field(107,"Version option 2");field(108,"Version option 11");
+  for(int i=0;i<8;i++){char text[40];snprintf(text,sizeof(text),"Version option %d",i+3);field(85+i,text);}prospero_menu::cache_scroll_rows();prospero_menu::list_scroll.from=0;prospero_menu::list_scroll.target=2;prospero_menu::list_scroll.began=prospero_menu::now_ms()-60;
+  prospero_ui::surface->list.clear();{prospero_ui::Canvas c;prospero_menu::compose(c);}save_scene("dropdown-scroll-midpoint");
+  assert(prospero_menu::list_scroll.value(prospero_menu::now_ms())>0&&prospero_menu::list_scroll.value(prospero_menu::now_ms())<=2);
+  puts("PASS actual Vulkan horizontal outgoing/incoming page frames, both side chevrons across six themes and fractional clipped dropdown scrolling with thumb");
+'''
+source=source.replace(' for(failure=1;failure<=3;failure++)',page_preview+'\n for(failure=1;failure<=3;failure++)')
 (work/'preview.cpp').write_text(source)
 jdk=Path('/Library/Java/JavaVirtualMachines/openjdk-25.jdk/Contents/Home')
 runtime=a.runtime_workspace.resolve()

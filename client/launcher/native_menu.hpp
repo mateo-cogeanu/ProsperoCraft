@@ -9,6 +9,7 @@
 #include "instance_icons.hpp"
 #include "login_qr.hpp"
 #include "navigation.hpp"
+#include "page_motion.hpp"
 #include "desktop_input.hpp"
 #include "cursor_shape.hpp"
 #include "haptics.hpp"
@@ -44,7 +45,19 @@ struct Fields {
 };
 // Only the native UI thread draws/reads the controller. JNI stays on the JVM
 // startup thread. A bounded mailbox exchanges public UI text and button edges.
-inline Fields fields{},published{};
+inline Fields fields{},published{},outgoing_fields{};
+inline void swap_page_fields()noexcept{fields.text.swap(outgoing_fields.text);fields.images.swap(outgoing_fields.images);}
+inline PageTurn page_turn{};inline Glide list_scroll{},tab_x{},tab_w{};inline bool tabs_ready=false;inline int page_direction=1;inline std::uint64_t page_direction_at=0;inline int list_page=-1;
+struct ScrollRow {int index=-1;std::array<char,512> text{};};
+inline std::array<ScrollRow,32> scroll_rows{};
+inline void cache_scroll_rows()noexcept{
+ int page=std::atoi(fields[11].data());if(page!=10&&page!=13)return;
+ if(list_page!=page){list_page=page;for(auto& r:scroll_rows)r.index=-1;list_scroll.snap(float(std::atoi(fields[84].data())));}
+ int first=std::atoi(fields[84].data()),count=std::atoi(fields[83].data()),visible=page==10?8:7;
+ for(int i=-1;i<=visible;i++){int at=first+i;if(at<0||at>=count)continue;auto& r=scroll_rows[at%scroll_rows.size()];r.index=at;std::snprintf(r.text.data(),r.text.size(),"%s",fields[i==-1?107:i==visible?108:85+i].data());}
+}
+inline const char* scroll_text(int index)noexcept{if(index<0)return "";auto& r=scroll_rows[index%scroll_rows.size()];return r.index==index?r.text.data():"";}
+
 inline pthread_mutex_t mailbox=PTHREAD_MUTEX_INITIALIZER;
 inline pthread_t ui_thread{};
 inline unsigned events[64]{},event_read=0,event_write=0;
@@ -128,6 +141,9 @@ struct Focus {float x=0,y=0,w=0,h=0;bool initialized=false;};
 inline Focus focus{};inline std::uint64_t transition_start=0,last_draw_time=0,component_motion_until=0;inline bool animating=false;
 inline std::uint64_t now_ms(){return sceKernelGetProcessTime()/1000;}
 inline void selection(Canvas& c,int x,int y,int w,int h){
+#ifdef PROSPERO_TOOLKIT
+ if(prospero_ui::outgoing)return;
+#endif
  const bool reduced=std::strcmp(fields[30].data(),"ON")==0;
  if(!focus.initialized||reduced){focus={float(x),float(y),float(w),float(h),true};}
  #ifdef PROSPERO_TOOLKIT
@@ -182,37 +198,36 @@ inline void player_head(Canvas& c,int x,int y,int size){
  for(int py=0;py<8;py++)for(int px=0;px<8;px++){char rgb[7]{};std::memcpy(rgb,hex+(py*8+px)*6,6);c.rectangle(x+px*size/8,y+py*size/8,(size+7)/8,(size+7)/8,static_cast<ps5::demo::Color>(prospero_palette::raw_ink(unsigned(std::strtoul(rgb,nullptr,16)))));}
 }
 inline void login_qr(Canvas& c,int x,int y,int scale){c.rounded(x,y,prospero_qr::size*scale,prospero_qr::size*scale,0,ink(0xffffff));for(int py=0;py<prospero_qr::size;py++)for(int px=0;px<prospero_qr::size;px++)if(prospero_qr::modules[py*prospero_qr::size+px]=='1')c.rectangle(x+px*scale,y+py*scale,scale,scale,static_cast<ps5::demo::Color>(ink(0x000000)));}
-inline void compose(Canvas& c) noexcept {
- animating=false;last_draw_time=now_ms();prospero_palette::selected=std::clamp(number(104),0,5);
+inline void scrolling_list(Canvas& c,bool dropdown) noexcept {
+ int first=number(84),count=number(83),visible=dropdown?8:7,row=number(15),pitch=dropdown?72:78,base=dropdown?285:340;
+ float position=float(first);
 #ifdef PROSPERO_TOOLKIT
- c.context(fields,pressed_at);
+ if(!prospero_ui::outgoing){cache_scroll_rows();list_scroll.to(float(first),now_ms(),prospero_ui::reduced);position=list_scroll.value(now_ms());if(list_scroll.moving(now_ms()))animating=true;}
+ auto& list=prospero_ui::surface->list;list.push_clip({dropdown?260.f:65.f,float(base),dropdown?1400.f:1780.f,float(visible*pitch)});
 #endif
- c.gradient(ink(0x0b1815),ink(0x08120f));c.disc(1760,850,380,ink(0x0c211a));
- const int page=number(11),row=number(15),selected=number(9),tab=number(12);const bool top=std::strcmp(fields[28].data(),"TOP")==0;(void)selected;
- float elapsed=float(now_ms()-transition_start)/180.0f;if(elapsed<0)elapsed=0;if(elapsed>1)elapsed=1;
- const int slide=std::strcmp(fields[30].data(),"ON")==0?0:int(16*(1-elapsed)*(1-elapsed));layout_slide=slide;if(slide>0)animating=true;
- c.rounded(40,32,1840,108,24,ink(0x10221c));block(c,66,53,64,0);label(c,149,66,"ProsperoCraft",30);label(c,405,72,"NATIVE JAVA 25",24,0x718d7b);
- const bool signed_in=fields[81][0]&&std::strcmp(fields[5].data(),"Not signed in")!=0;
- const char* tabs[]={"Instances","Settings",signed_in?fields[81].data():"Sign in"};const int tx[]={865,1245,1555},tw[]={350,280,280};
- for(int i=0;i<3;i++){
-  const bool current=tab==i,account=i==2&&signed_in;
-  const int name_width=tw[i]-(account?68:0);
-  if(current&&top)selection(c,tx[i],52,tw[i],68);
-  c.rounded(tx[i],52,name_width,68,18,ink(current?0x53885c:0x14251e));
-  auto text=centered_text(tx[i],52,name_width,68,tabs[i],i==2?24:30);
-  if(account)text.x=std::max(tx[i]+16,text.x);
-  title(c,text.x,text.y,tabs[i],i==2?24:30,account?name_width-32:tw[i]-45,current?0xc7f4cf:0xb0c4b5);
-  if(current)c.rounded(tx[i]+24,124,tw[i]-48,6,3,ink(0xd0ff9a));
-  if(account)player_head(c,tx[i]+tw[i]-51,66,40);
+ int begin=std::max(0,int(std::floor(position))),end=std::min(count,int(std::ceil(position))+visible);
+ for(int index=begin;index<end;index++){
+  const char* text=scroll_text(index);
+#ifdef PROSPERO_TOOLKIT
+  if(prospero_ui::outgoing)text=index>=first&&index<first+visible?fields[85+index-first].data():"";
+#endif
+  int yy=base+int((index-position)*pitch);
+  if(dropdown){if(index==row)selection(c,265,yy,1370,66);bool icon=number(93)==1||number(93)==2;if(icon)block(c,285,yy+5,54,index);title(c,icon?365:290,yy+17,text,24,1210);}
+  else action(c,70,yy,1740,text,row==index);
  }
 #ifdef PROSPERO_TOOLKIT
- c.begin_content();
+ list.pop_clip();c.scrollbar(dropdown?1650:1825,float(base),float(visible*pitch),position,visible,count);
 #endif
+}
+inline void compose_content(Canvas& c) noexcept {
+ const int page=number(11),row=number(15),selected=number(9),tab=number(12),slide=0;
+ const bool top=std::strcmp(fields[28].data(),"TOP")==0;const bool signed_in=fields[81][0]&&std::strcmp(fields[5].data(),"Not signed in")!=0;(void)tab;(void)selected;(void)top;
  if(page==0){
   label(c,70,192+slide,"Instances",64);
   [[maybe_unused]] const int count=number(13),start=number(14);
 #ifdef PROSPERO_TOOLKIT
    c.library(fields,slide);
+
 #else
    for(int i=0;i<8&&start+i<count;i++){int x=70+(i%4)*450,y=342+(i/4)*272+slide,at=32+i*4;bool active=!top&&selected==start+i;if(active)selection(c,x,y,420,242);c.rounded(x,y,420,242,22,ink(active?0x1f3a2b:0x13291f));if(std::strcmp(fields[at+3].data(),"ADD")==0){c.rounded(x+184,y+118,52,6,3,ink(0xb6f2be));c.rounded(x+207,y+95,6,52,3,ink(0xb6f2be));}else{block(c,x+27,y+26,88,number(at+2));title(c,x+26,y+137,fields[at].data(),30,365);label(c,x+27,y+187,fields[at+1].data(),24,0x92b6a0);label(c,x+235,y+187,fields[at+3].data(),24,0xa7d4ae);}}
 #endif
@@ -238,7 +253,7 @@ inline void compose(Canvas& c) noexcept {
   title(c,70,225,fields[82].data(),64,1750);content_icon(c,85,365,96,fields[96].data());title(c,220,385,fields[85].data(),36,1550);wrap(c,85,515,fields[70].data(),1640,3);
   action(c,760,740,520,"CANCEL",row==0,true);action(c,1320,740,520,"UNINSTALL",row==1);
  }else if(page==13){
-  title(c,70,185,fields[82].data(),64,1700);title(c,75,275,fields[70].data(),24,1750,0x91ad9b);int first=number(84);for(int n=0;n<7&&first+n<23;n++){int y=340+n*78;action(c,70,y,1770,fields[85+n].data(),row==first+n);}
+  title(c,70,185,fields[82].data(),64,1700);title(c,75,275,fields[70].data(),24,1750,0x91ad9b);scrolling_list(c,false);
  }else if(page==12){
   title(c,70,185,fields[82].data(),64,1500);title(c,75,270,fields[70].data(),24,1770,0x91ad9b);
   action(c,70,325,1010,fields[92].data(),row==0,true);char queue[80];std::snprintf(queue,sizeof(queue),"DOWNLOAD ALL (%s)",fields[91].data());action(c,1120,325,720,queue,row==1,true);
@@ -284,7 +299,7 @@ inline void compose(Canvas& c) noexcept {
   int y=505;for(int i=0;i<4;i++){if(i==3&&std::strcmp(fields[71].data(),"OFFLINE")!=0)continue;action(c,760,y+slide,1080,actions[i],row==i,i==0&&std::strcmp(fields[69].data(),"PENDING")!=0);y+=100;}
   if(y<920)wrap(c,790,y+8+slide,fields[65].data(),1000,1);
  }else if(page==10){
-  label(c,250,185,fields[82].data(),48);c.rounded(240,265,1440,650,28,ink(0x10251d));int first=number(84),count=number(83);for(int i=0;i<8&&first+i<count;i++){int yy=285+i*72;if(first+i==row)selection(c,265,yy,1390,66);if(number(93)==1||number(93)==2)block(c,285,yy+5,54,first+i);title(c,(number(93)==1||number(93)==2)?365:290,yy+17,fields[85+i].data(),24,1230);}label(c,270,937,"D-PAD  Choose     LEFT / RIGHT  Page     X  Confirm     CIRCLE  Cancel",24,0xa9eab6);
+  label(c,250,185,fields[82].data(),48);c.rounded(240,265,1440,650,28,ink(0x10251d));scrolling_list(c,true);label(c,270,937,"D-PAD  Scroll     X  Confirm     CIRCLE  Cancel",24,0xa9eab6);
  }else if(page==9){
 #ifdef PROSPERO_TOOLKIT
   c.confirm(fields[16].data(),row);
@@ -346,6 +361,53 @@ inline void compose(Canvas& c) noexcept {
   if(!physical)for(int i=0;i<40;i++){int x=80+(i%10)*176,y=465+(i/10)*91;if(i==chosen)selection(c,x,y,152,73);c.rounded(x,y,152,73,16,ink(i==chosen?0x356647:0x172e24));char letter[2]={chars[i],0};label(c,x+61,y+21,letter,30);}
   const char* edits[]={"BACKSPACE","SPACE","CASE","CANCEL","DONE"};for(int i=0;i<5;i++)if(!physical||i>=3)action(c,70+i*360,855,330,edits[i],chosen==40+i,i==4);
  }
+}
+inline void compose(Canvas& c) noexcept {
+ animating=false;last_draw_time=now_ms();prospero_palette::selected=std::clamp(number(104),0,5);
+#ifdef PROSPERO_TOOLKIT
+ c.context(fields,pressed_at);
+#endif
+ c.gradient(ink(0x0b1815),ink(0x08120f));c.disc(1760,850,380,ink(0x0c211a));
+ const int page=number(11),tab=number(12);const bool top=std::strcmp(fields[28].data(),"TOP")==0;
+ float elapsed=float(now_ms()-transition_start)/180.0f;if(elapsed<0)elapsed=0;if(elapsed>1)elapsed=1;
+ const int slide=0;layout_slide=0;(void)slide;(void)elapsed;
+ c.rounded(40,32,1840,108,24,ink(0x10221c));block(c,66,53,64,0);label(c,149,66,"ProsperoCraft",30);label(c,405,72,"NATIVE JAVA 25",24,0x718d7b);
+ const bool signed_in=fields[81][0]&&std::strcmp(fields[5].data(),"Not signed in")!=0;
+ const char* tabs[]={"Instances","Settings",signed_in?fields[81].data():"Sign in"};const int tx[]={865,1245,1555},tw[]={350,280,280};
+ for(int i=0;i<3;i++){
+  const bool current=tab==i,account=i==2&&signed_in;
+  const int name_width=tw[i]-(account?68:0);
+  if(current&&top)selection(c,tx[i],52,tw[i],68);
+  c.rounded(tx[i],52,name_width,68,18,ink(current?0x53885c:0x14251e));
+  auto text=centered_text(tx[i],52,name_width,68,tabs[i],i==2?24:30);
+  if(account)text.x=std::max(tx[i]+16,text.x);
+  title(c,text.x,text.y,tabs[i],i==2?24:30,account?name_width-32:tw[i]-45,current?0xc7f4cf:0xb0c4b5);
+
+  if(account)player_head(c,tx[i]+tw[i]-51,66,40);
+ }
+ bool reduced=std::strcmp(fields[30].data(),"ON")==0;int active_tab=std::clamp(tab,0,2);
+ if(!tabs_ready){tab_x.snap(float(tx[active_tab]+24));tab_w.snap(float(tw[active_tab]-48));tabs_ready=true;}
+ tab_x.to(float(tx[active_tab]+24),now_ms(),reduced);tab_w.to(float(tw[active_tab]-48),now_ms(),reduced);
+ c.rounded(int(tab_x.value(now_ms())),124,unsigned(tab_w.value(now_ms())),6,3,ink(0xd0ff9a));
+ if(tab_x.moving(now_ms())||tab_w.moving(now_ms()))animating=true;
+
+#ifdef PROSPERO_TOOLKIT
+ c.begin_content();
+#endif
+#ifdef PROSPERO_TOOLKIT
+ auto& list=prospero_ui::surface->list;bool moving=page_turn.moving(now_ms())&&std::strcmp(fields[30].data(),"ON")!=0;
+ prospero_ui::paging=moving;list.push_clip({0,155,1920,770});
+ if(moving){float t=page_turn.progress(now_ms());animating=true;
+  swap_page_fields();prospero_ui::outgoing=true;list.push_transform(1,0,0,-page_turn.direction*1920*t,0);compose_content(c);list.pop_transform();prospero_ui::outgoing=false;swap_page_fields();
+  list.push_transform(1,0,0,page_turn.direction*1920*(1-t),0);compose_content(c);list.pop_transform();
+ }else compose_content(c);
+ list.pop_clip();prospero_ui::paging=false;
+ if(page==0){int start=number(14),count=number(13);if(start>0)c.chevron(31,540,-1);if(start+8<count)c.chevron(1889,540,1);if(count>8){char paging[48];std::snprintf(paging,sizeof(paging),"%d / %d",start/8+1,(count+7)/8);label(c,915,885,paging,22,0x91ad9b);}}
+
+#else
+ compose_content(c);
+#endif
+
 #ifdef PROSPERO_TOOLKIT
  c.end_content();
 #endif
@@ -408,7 +470,15 @@ inline bool update() noexcept {
  push_input(pressed);
  bool desktop_changed=desktop.poll(current_time,[](unsigned command){push_input(command);},[](int x,int y,bool click){
   int page=number(11);auto hit=desktop_hit(page,x,y,page==0?number(14):number(84),page==0?number(13):page==12?number(93):number(83),layout_slide,std::strcmp(fields[71].data(),"OFFLINE")==0,std::strcmp(fields[103].data(),"INSTALLED")==0,std::strcmp(fields[82].data(),"Shaders")==0);
-if(page==6&&std::strcmp(fields[105].data(),"PHYSICAL")==0&&hit.kind==2)hit={};
+if(page==0&&y>=495&&y<585){if(x>=5&&x<58&&number(14)>0)hit={5,0};if(x>=1862&&x<1915&&number(14)+8<number(13))hit={5,1};}
+#ifdef PROSPERO_TOOLKIT
+  if(page_turn.moving(now_ms()))hit={};
+  if((page==10||page==13)&&x>=(page==10?265:70)&&x<(page==10?1640:1810)){
+   int base=page==10?285:340,pitch=page==10?72:78,visible=page==10?8:7;
+   if(y>=base&&y<base+visible*pitch){float at=list_scroll.value(now_ms())+float(y-base)/pitch;int index=int(at);hit=index>=0&&index<number(83)?DesktopHit{3,index}:DesktopHit{};}
+  }
+#endif
+  if(page==6&&std::strcmp(fields[105].data(),"PHYSICAL")==0&&hit.kind==2)hit={};
 #ifdef PROSPERO_TOOLKIT
   if(page==9&&prospero_ui::healthy){hui::ui::Canvas c{prospero_ui::surface->list,prospero_ui::surface->fonts,prospero_ui::surface->renderer.glass_texture(),prospero_ui::effects->clock};auto& dialog=prospero_ui::effects->dialog;auto r=dialog.panel_rect(c);float left=r.x+dialog.style.padding,yy=r.y+r.h-dialog.style.padding-dialog.style.button_height;float width=(r.w-2*dialog.style.padding-dialog.style.button_gap)/2;for(int i=0;i<2;i++)if(x>=left+i*(width+dialog.style.button_gap)&&x<left+i*(width+dialog.style.button_gap)+width&&y>=yy&&y<yy+dialog.style.button_height)hit={3,i};}
 #else
@@ -417,13 +487,21 @@ if(page==6&&std::strcmp(fields[105].data(),"PHYSICAL")==0&&hit.kind==2)hit={};
   if(hit.kind>=0&&(click||hit.kind!=pointer_kind||hit.target!=pointer_target||page!=pointer_page))push_input(pointer_command(page,hit.kind,hit.target,click));
   pointer_kind=hit.kind;pointer_target=hit.target;pointer_page=page;
  });
+ if(pressed&0xf00){page_direction=(pressed&0xa00)?1:-1;page_direction_at=now_ms();}
  bool changed=false;
  if(!online.load(std::memory_order_acquire)){
   if(pressed&0x400){std::snprintf(fields[12].data(),512,"%d",(number(12)+2)%3);std::snprintf(fields[28].data(),512,"TOP");changed=true;}
   if(pressed&0x800){std::snprintf(fields[12].data(),512,"%d",(number(12)+1)%3);std::snprintf(fields[28].data(),512,"TOP");changed=true;}
  }else{
   pthread_mutex_lock(&mailbox);changed=fields!=published;
-  if(changed){if(std::strcmp(fields[11].data(),published[11].data())!=0){transition_start=now_ms();focus.initialized=false;}fields=published;}
+  if(changed){
+   int before=number(11),after=std::atoi(published[11].data());
+   bool turn=before!=after||(before==0&&std::strcmp(fields[14].data(),published[14].data())!=0)||(before==8&&std::strcmp(fields[74].data(),published[74].data())!=0);
+   if(turn){int a=before==0&&after==0?number(14):before==8&&after==8?number(74):number(12)*20+before;
+    int b=before==0&&after==0?std::atoi(published[14].data()):before==8&&after==8?std::atoi(published[74].data()):std::atoi(published[12].data())*20+after;
+    outgoing_fields=fields;page_turn.start(now_ms()-page_direction_at<400&&((before==0&&after==0)||std::strcmp(fields[12].data(),published[12].data())!=0)?page_direction:(b>=a?1:-1),now_ms(),std::strcmp(published[30].data(),"ON")==0);focus.initialized=false;list_page=-1;
+   }fields=published;cache_scroll_rows();
+  }
   pthread_mutex_unlock(&mailbox);
  }
  bool vibration=online.load(std::memory_order_acquire)&&pad_connected&&!connection_changed&&current_time-navigation.last_sample<=250&&std::strcmp(fields[79].data(),"ON")==0&&!exit_requested.load();
@@ -432,7 +510,7 @@ if(page==6&&std::strcmp(fields[105].data(),"PHYSICAL")==0&&hit.kind==2)hit={};
 #ifdef PROSPERO_TOOLKIT
  if(!prospero_ui::reduced&&prospero_ui::healthy)return now_ms()-last_draw_time>=33;
 #endif
- return animating&&now_ms()-last_draw_time>=16;
+ return (animating||page_turn.moving(now_ms())||list_scroll.moving(now_ms()))&&now_ms()-last_draw_time>=16;
 
 }
 inline bool stop() noexcept{bool value=exit_requested.load(std::memory_order_acquire);if(value)haptics.control(false,now_ms());return value;}
@@ -458,7 +536,7 @@ inline void* ui_main(void*) noexcept {
 inline bool start_frontend() noexcept {
  visible=false;online=false;exit_requested=false;display_done=false;display_ok=false;
  desktop=DesktopInput{};pointer_kind=pointer_target=pointer_page=-1;
- updates=0;navigation.clear();pressed_at=0;focus={};transition_start=now_ms();animating=false;event_read=event_write=0;fields={};published={};
+ page_turn={};list_scroll={};tab_x={};tab_w={};tabs_ready=false;page_direction=1;page_direction_at=0;list_page=-1;updates=0;navigation.clear();pressed_at=0;focus={};transition_start=now_ms();animating=false;event_read=event_write=0;fields={};published={};
  const char* boot[]={"Instances","","Opening your library...","","","Not signed in","PLAY DEMO","L1 / R1  Top bar     X  Select","PREPARING","0","WAIT","0"};
  for(int i=0;i<12;++i)std::snprintf(fields[i].data(),512,"%s",boot[i]);
  std::int32_t user=-1;if(sceUserServiceGetInitialUser(&user)<0)return false;controller=scePadOpen(user,0,0,nullptr);if(controller<0)return false;

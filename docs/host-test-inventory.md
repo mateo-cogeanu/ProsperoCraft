@@ -302,3 +302,8 @@ The208 manual publisher lane adds `build_oshi665_platform.py` /
 downloads. `test_lwjgl333_host.py --original-version 1.21.10` checks that original
 GlDevice; the default remains1.21.11. SDL display-mode host fixtures cover all five
 launcher sizes and explicit refusal; they do not execute VideoOut/PS5 presentation.
+
+Launcher209 extends the existing native desktop check with real model multi-page
+row/trigger/arrow navigation and list windows, plus native page/scroll timing and
+retarget/reduced-motion assertions. The manual Vulkan preview additionally renders
+page-turn checkpoints, side arrows in six themes and fractional clipped lists.

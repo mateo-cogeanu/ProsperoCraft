@@ -10,7 +10,7 @@ namespace prospero_ui {
 struct Effects {
  hui::ui::Feedback feedback;
  hui::tween::Spring switches[10];
- hui::ui::GridView grid;
+ hui::ui::GridView grid,previous_grid;
  hui::ui::Dialog dialog;
  hui::ui::ProgressBar progress;
  hui::ui::SpringColor palette[4];
@@ -21,7 +21,7 @@ struct Effects {
  int backdrop=5;
  int page=-1,previous_page=-1,selection=-1,model_row=-1,press_page=-1,press_row=-1;
  bool page_changed=false,ready=false;
- std::string items_key;
+ std::string items_key,previous_items_key;
  std::uint64_t last_press=0;
 };
 inline Effects* effects=nullptr;

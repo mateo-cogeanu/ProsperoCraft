@@ -1,5 +1,17 @@
 # Changelog
 
+## Local209 — launcher page motion, 2026-11-04
+
+- Record positive208 feedback and preserve its exact package.
+- Keep vertical card movement on the current two-row page; add L2/R2 paging
+  and theme-colored rounded vector side arrows with a fixed page indicator.
+- Replace the vertical entrance with an eased horizontal outgoing/incoming page
+  turn. Make dropdown/keybinding lists scroll continuously with a position thumb
+  and pointer hit testing at the visible position; honor Reduced motion.
+- Keep208 game/native/runtime policies. Local model/native and actual Vulkan
+  preview checks pass; physical209 launcher/game handoff remains pending.
+
+
 ## Local208 — 1.21.10 Vanilla, resolution and launcher keyboard, 2026-11-04
 
 - Preserve207 and record the user’s positive1.21.11 Vanilla report separately.
