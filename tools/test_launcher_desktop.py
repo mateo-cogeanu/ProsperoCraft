@@ -79,5 +79,5 @@ with tempfile.TemporaryDirectory() as td:
  (w/'test.cpp').write_text(cpp)
  subprocess.run([executable('clang++', env='CXX'),'-std=c++20','-fsanitize=address,undefined','-I'+str(R/'client/launcher'),str(w/'test.cpp'),'-o',str(w/'test')],check=True)
  subprocess.run([str(w/'test')],check=True)
-native=(R/'client/launcher/native_menu.hpp').read_text();callback=native[native.index('bool desktop_changed=desktop.poll'):native.index('bool changed=false;',native.index('bool desktop_changed=desktop.poll'))];assert callback.index('if(page_turn.moving(now_ms()))return;')<callback.index('desktop_hit(')<callback.index('if((page==10||page==13)')
+
 print('PASS native HID packet read/held-on-entry/repeat/intercept/clamp/single-click/close and layout hit boundaries under ASan/UBSan')

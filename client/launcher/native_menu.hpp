@@ -452,23 +452,7 @@ inline void draw(ps5::demo::Canvas& output) noexcept {
 #else
 inline void draw(ps5::demo::Canvas& output) noexcept {compose(output);}
 #endif
-inline bool update() noexcept {
- // The second update follows the initial submit/WaitVblank in run_ui_until.
- if(++updates>=2)visible.store(true,std::memory_order_release);
- unsigned pressed=0;PadSample batch[64]{};const int count=scePadRead(controller,batch,64);
- const auto current_time=now_ms();bool connection_changed=false;
- if(count<0||count>64){pad_connected=false;navigation.clear();}
- else for(int i=0;i<count;++i){
-  pad_connected=batch[i].connected&&!(batch[i].buttons&0x80000000u);
-  if(pad_generation!=batch[i].connection_generation){connection_changed=true;haptics.control(false,current_time);pad_generation=batch[i].connection_generation;}
-  if(!pad_connected)pressed=0;
-  pressed|=navigation.sample(batch[i].buttons,batch[i].lx,batch[i].ly,batch[i].connected,current_time);
- }
- unsigned repeated=navigation.repeat(current_time);if(std::strcmp(fields[105].data(),"PHYSICAL")!=0)pressed|=repeated;
- if(pressed&0x4000)pressed_at=current_time;
- if(pressed){desktop.cursor=false;pointer_kind=-1;}
- push_input(pressed);
- bool desktop_changed=desktop.poll(current_time,[](unsigned command){push_input(command);},[](int x,int y,bool click){
+inline void pointer_input(int x,int y,bool click)noexcept{
   if(page_turn.moving(now_ms()))return;
   int page=number(11);auto hit=desktop_hit(page,x,y,page==0?number(14):number(84),page==0?number(13):page==12?number(93):number(83),layout_slide,std::strcmp(fields[71].data(),"OFFLINE")==0,std::strcmp(fields[103].data(),"INSTALLED")==0,std::strcmp(fields[82].data(),"Shaders")==0);
 if(page==0&&y>=495&&y<585){if(x>=5&&x<58&&number(14)>0)hit={5,0};if(x>=1862&&x<1915&&number(14)+8<number(13))hit={5,1};}
@@ -487,7 +471,24 @@ if(page==0&&y>=495&&y<585){if(x>=5&&x<58&&number(14)>0)hit={5,0};if(x>=1862&&x<1
 #endif
   if(hit.kind>=0&&(click||hit.kind!=pointer_kind||hit.target!=pointer_target||page!=pointer_page))push_input(pointer_command(page,hit.kind,hit.target,click));
   pointer_kind=hit.kind;pointer_target=hit.target;pointer_page=page;
- });
+}
+inline bool update() noexcept {
+ // The second update follows the initial submit/WaitVblank in run_ui_until.
+ if(++updates>=2)visible.store(true,std::memory_order_release);
+ unsigned pressed=0;PadSample batch[64]{};const int count=scePadRead(controller,batch,64);
+ const auto current_time=now_ms();bool connection_changed=false;
+ if(count<0||count>64){pad_connected=false;navigation.clear();}
+ else for(int i=0;i<count;++i){
+  pad_connected=batch[i].connected&&!(batch[i].buttons&0x80000000u);
+  if(pad_generation!=batch[i].connection_generation){connection_changed=true;haptics.control(false,current_time);pad_generation=batch[i].connection_generation;}
+  if(!pad_connected)pressed=0;
+  pressed|=navigation.sample(batch[i].buttons,batch[i].lx,batch[i].ly,batch[i].connected,current_time);
+ }
+ unsigned repeated=navigation.repeat(current_time);if(std::strcmp(fields[105].data(),"PHYSICAL")!=0)pressed|=repeated;
+ if(pressed&0x4000)pressed_at=current_time;
+ if(pressed){desktop.cursor=false;pointer_kind=-1;}
+ push_input(pressed);
+ bool desktop_changed=desktop.poll(current_time,[](unsigned command){push_input(command);},pointer_input);
  if(pressed&0xf00){page_direction=(pressed&0xa00)?1:-1;page_direction_at=now_ms();}
  bool changed=false;
  if(!online.load(std::memory_order_acquire)){

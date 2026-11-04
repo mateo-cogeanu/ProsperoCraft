@@ -121,6 +121,8 @@ page_preview=r'''
   for(int i=0;i<8;i++){char text[40];snprintf(text,sizeof(text),"Version option %d",i+3);field(85+i,text);}prospero_menu::cache_scroll_rows();prospero_menu::list_scroll.from=0;prospero_menu::list_scroll.target=2;prospero_menu::list_scroll.began=prospero_menu::now_ms()-60;
   prospero_ui::surface->list.clear();{prospero_ui::Canvas c;prospero_menu::compose(c);}save_scene("dropdown-scroll-midpoint");
   assert(prospero_menu::list_scroll.value(prospero_menu::now_ms())>0&&prospero_menu::list_scroll.value(prospero_menu::now_ms())<=2);
+  auto before_click=prospero_menu::event_write;prospero_menu::page_turn.start(1,prospero_menu::now_ms(),false);prospero_menu::pointer_input(300,320,true);assert(prospero_menu::event_write==before_click);prospero_menu::page_turn.enabled=false;prospero_menu::pointer_input(300,320,true);assert(prospero_menu::event_write==before_click+1);prospero_menu::event_read=prospero_menu::event_write;
+  puts("PASS actual pointer callback rejects moving dropdown clicks and accepts settled visual row");
   puts("PASS actual Vulkan horizontal outgoing/incoming page frames, both side chevrons across six themes and fractional clipped dropdown scrolling with thumb");
 '''
 source=source.replace(' for(failure=1;failure<=3;failure++)',page_preview+'\n for(failure=1;failure<=3;failure++)')
