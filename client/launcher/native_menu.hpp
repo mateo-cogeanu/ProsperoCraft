@@ -47,6 +47,10 @@ struct Fields {
 // Only the native UI thread draws/reads the controller. JNI stays on the JVM
 // startup thread. A bounded mailbox exchanges public UI text and button edges.
 inline Fields fields{},published{},outgoing_fields{};
+struct SelectorSnapshot {std::array<std::array<char,512>,104> text{};};
+inline SelectorSnapshot selector_base{},selector_parent{};
+inline unsigned selector_depth=0;inline Glide selector_reveal{};
+inline void swap_selector(SelectorSnapshot& other)noexcept{fields.text.swap(other.text);}
 inline void swap_page_fields()noexcept{fields.text.swap(outgoing_fields.text);fields.images.swap(outgoing_fields.images);}
 inline PageTurn page_turn{},card_open{};inline int opening_slot=0;inline bool card_reverse=false;inline Glide list_scroll{},tab_x{},tab_w{};inline bool tabs_ready=false;inline int page_direction=1;inline std::uint64_t page_direction_at=0;inline unsigned trigger_held=0;inline int list_page=-1;
 struct ScrollRow {int index=-1;std::array<char,512> text{};};
@@ -199,6 +203,13 @@ inline void player_head(Canvas& c,int x,int y,int size){
  for(int py=0;py<8;py++)for(int px=0;px<8;px++){char rgb[7]{};std::memcpy(rgb,hex+(py*8+px)*6,6);c.rectangle(x+px*size/8,y+py*size/8,(size+7)/8,(size+7)/8,static_cast<ps5::demo::Color>(prospero_palette::raw_ink(unsigned(std::strtoul(rgb,nullptr,16)))));}
 }
 inline void login_qr(Canvas& c,int x,int y,int scale){c.rounded(x,y,prospero_qr::size*scale,prospero_qr::size*scale,0,ink(0xffffff));for(int py=0;py<prospero_qr::size;py++)for(int px=0;px<prospero_qr::size;px++)if(prospero_qr::modules[py*prospero_qr::size+px]=='1')c.rectangle(x+px*scale,y+py*scale,scale,scale,static_cast<ps5::demo::Color>(ink(0x000000)));}
+inline void selector_surface(Canvas& c,int x,int y,int w,int h)noexcept{
+#ifdef PROSPERO_TOOLKIT
+ (void)c;auto& list=prospero_ui::surface->list;list.shadow({float(x),float(y+8),float(w),float(h)},22,24,prospero_ui::themed(0,0.25f));list.rounded_rect({float(x),float(y),float(w),float(h)},22,prospero_ui::themed(0x10251d,1.0f));list.bordered_rect({float(x),float(y),float(w),float(h)},22,prospero_ui::themed(0,0),1,prospero_ui::themed(0xb6f2d4,0.18f));
+#else
+ c.rounded(x,y,unsigned(w),unsigned(h),22,ink(0x10251d));
+#endif
+}
 inline SelectionMenu menu_layout()noexcept{
  bool icons=number(11)==10&&(number(93)==1||number(93)==2);float widest=0;
  for(int i=0;i<8;i++)widest=std::max(widest,float(Canvas::text_width(fields[85+i].data(),28)));
@@ -207,7 +218,7 @@ inline SelectionMenu menu_layout()noexcept{
 }
 inline void scrolling_list(Canvas& c,bool dropdown) noexcept {
  int first=number(84),count=number(83),row=number(15);auto menu=menu_layout();int visible=menu.visible,pitch=menu.pitch;float base=menu.first_y(),position=float(first);
- title(c,int(menu.x+16),int(menu.y-60),fields[82].data(),36,unsigned(menu.w-32));c.rounded(int(menu.x),int(menu.y),unsigned(menu.w),unsigned(menu.h),20,ink(0x10251d));
+ selector_surface(c,int(menu.x),int(menu.y-68),int(menu.w),int(menu.h+68));title(c,int(menu.x+16),int(menu.y-60),fields[82].data(),36,unsigned(menu.w-32));
 #ifdef PROSPERO_TOOLKIT
  if(!prospero_ui::outgoing){cache_scroll_rows();list_scroll.to(float(first),now_ms(),prospero_ui::reduced);position=list_scroll.value(now_ms());if(list_scroll.moving(now_ms()))animating=true;}
  auto& list=prospero_ui::surface->list;list.push_clip({menu.x+8,base-8,menu.w-16,float(visible*pitch)+16});
@@ -228,6 +239,7 @@ inline void scrolling_list(Canvas& c,bool dropdown) noexcept {
 #endif
 }
 
+inline void icon_selector(Canvas& c)noexcept{int count=std::min(number(83),int(prospero_icons::count)),selected=number(15);auto grid=icon_grid(count);selector_surface(c,int(grid.x),int(grid.y-68),int(grid.w),int(grid.h+68));title(c,int(grid.x+16),int(grid.y-60),fields[82].data(),36,unsigned(grid.w-32));for(int i=0;i<count;i++){int x=int(grid.x)+24+i%8*128,y=int(grid.y)+24+i/8*128;if(i==selected)selection(c,x+6,y+6,116,116);block(c,x+16,y+16,96,i);}}
 inline void compose_content(Canvas& c) noexcept {
  const int page=number(11),row=number(15),selected=number(9),tab=number(12),slide=0;
  const bool top=std::strcmp(fields[28].data(),"TOP")==0;const bool signed_in=fields[81][0]&&std::strcmp(fields[5].data(),"Not signed in")!=0;(void)tab;(void)selected;(void)top;
@@ -308,7 +320,7 @@ inline void compose_content(Canvas& c) noexcept {
   int y=505;for(int i=0;i<4;i++){if(i==3&&std::strcmp(fields[71].data(),"OFFLINE")!=0)continue;action(c,760,y+slide,1080,actions[i],row==i,i==0&&std::strcmp(fields[69].data(),"PENDING")!=0);y+=100;}
   if(y<920)wrap(c,790,y+8+slide,fields[65].data(),1000,1);
  }else if(page==10){
-  scrolling_list(c,true);
+  if(number(93)==1||number(93)==2)icon_selector(c);else scrolling_list(c,true);
  }else if(page==9){
 #ifdef PROSPERO_TOOLKIT
   c.confirm(fields[16].data(),row);
@@ -407,7 +419,13 @@ inline void compose(Canvas& c) noexcept {
  auto& list=prospero_ui::surface->list;bool moving=page!=7&&page_turn.moving(now_ms())&&std::strcmp(fields[30].data(),"ON")!=0;
  prospero_ui::paging=moving;list.push_clip({0,155,1920,850});
  bool opening=(page==4||page==0)&&card_open.moving(now_ms())&&std::strcmp(fields[30].data(),"ON")!=0;
- if(opening){float t=card_open.progress(now_ms());animating=true;prospero_ui::paging=true;
+ if(page==10||page==13){
+  bool theme_preview=page==10&&number(93)==8;float reveal=selector_reveal.value(now_ms());if(selector_reveal.moving(now_ms()))animating=true;
+  swap_selector(selector_base);prospero_ui::outgoing=true;compose_content(c);prospero_ui::outgoing=false;swap_selector(selector_base);
+  if(selector_depth==2){list.pop_clip();list.rounded_rect({0,0,1920,1080},0,prospero_ui::themed(0x000000,0.55f));list.push_clip({0,155,1920,850});swap_selector(selector_parent);prospero_ui::outgoing=true;compose_content(c);prospero_ui::outgoing=false;swap_selector(selector_parent);}
+  list.pop_clip();if(!theme_preview)list.rounded_rect({0,0,1920,1080},0,prospero_ui::themed(0x000000,0.55f*reveal));list.push_clip({0,155,1920,850});
+  list.push_opacity(reveal);compose_content(c);list.pop_opacity();
+ }else if(opening){float t=card_open.progress(now_ms());animating=true;prospero_ui::paging=true;
   float expansion=card_reverse?1-t:t,library_alpha=card_library_alpha(expansion);
   if(library_alpha>0.001f){list.push_opacity(library_alpha);
    if(!card_reverse){swap_page_fields();prospero_ui::outgoing=true;}
@@ -415,7 +433,7 @@ inline void compose(Canvas& c) noexcept {
    if(!card_reverse){prospero_ui::outgoing=false;swap_page_fields();}
    list.pop_opacity();
   }
-  auto rect=opening_card_rect(opening_slot,expansion);list.push_opacity(4*expansion*(1-expansion));list.glass(prospero_ui::surface->renderer.glass_texture(),{rect.x,rect.y,rect.w,rect.h},22,prospero_ui::themed(0x081a13,0.85f));list.pop_opacity();list.push_clip({rect.x,rect.y,rect.w,rect.h});float scale=rect.w/1920;
+  auto rect=opening_card_rect(opening_slot,expansion);list.push_clip({rect.x,rect.y,rect.w,rect.h});float scale=rect.w/1920;
   list.push_opacity(card_detail_alpha(expansion));list.push_transform(scale,0,0,rect.x,rect.y-155*scale);
   if(card_reverse){swap_page_fields();prospero_ui::outgoing=true;}
   compose_content(c);
@@ -482,7 +500,7 @@ inline void pointer_input(int x,int y,bool click)noexcept{
 if(page==0&&y>=495&&y<585){if(x>=5&&x<58&&number(14)>0)hit={5,0};if(x>=1862&&x<1915&&number(14)+8<number(13))hit={5,1};}
 #ifdef PROSPERO_TOOLKIT
   if(page_turn.moving(now_ms()))hit={};
-  if(page==10||page==13){auto menu=menu_layout();int index=selection_menu_hit(menu,x,y,list_scroll.value(now_ms()),number(83));hit=index>=0?DesktopHit{3,index}:DesktopHit{};}
+  if(page==10||page==13){int index;if(page==10&&(number(93)==1||number(93)==2))index=icon_grid_hit(icon_grid(number(83)),x,y,number(83));else index=selection_menu_hit(menu_layout(),x,y,list_scroll.value(now_ms()),number(83));hit=index>=0?DesktopHit{3,index}:click?DesktopHit{4,3}:DesktopHit{};}
 
 #endif
   if(page==6&&std::strcmp(fields[105].data(),"PHYSICAL")==0&&hit.kind==2)hit={};
@@ -520,9 +538,12 @@ inline bool update() noexcept {
   pthread_mutex_lock(&mailbox);changed=fields!=published;
   if(changed){
    int before=number(11),after=std::atoi(published[11].data());
+   bool selector_change=before!=after&&(before==10||before==13||after==10||after==13);
+   if(before!=after&&(after==10||after==13)){if(before==13&&after==10){selector_parent.text=fields.text;selector_depth=2;}else if(!(before==10&&after==13)){selector_base.text=fields.text;selector_depth=1;}else selector_depth=1;selector_reveal.snap(before==10&&after==13?1:0);selector_reveal.duration=140;selector_reveal.to(1,now_ms(),std::strcmp(published[30].data(),"ON")==0);}
+   if(selector_change){page_turn.enabled=false;card_open.enabled=false;focus.initialized=false;list_page=-1;}
    bool opening=before==0&&after==4;
    bool closing=(before==4||before==5)&&after==0&&std::strcmp(fields[12].data(),published[12].data())==0;
-   bool turn=!opening&&!closing&&(before!=7&&after!=7)&&(before!=after||(before==0&&std::strcmp(fields[14].data(),published[14].data())!=0)||(before==8&&std::strcmp(fields[74].data(),published[74].data())!=0));
+   bool turn=!selector_change&&!opening&&!closing&&(before!=7&&after!=7)&&(before!=after||(before==0&&std::strcmp(fields[14].data(),published[14].data())!=0)||(before==8&&std::strcmp(fields[74].data(),published[74].data())!=0));
    if(before==7||after==7){page_turn.enabled=false;focus.initialized=false;}
    if(before!=after)card_open.enabled=false;
    if(opening||closing){card_reverse=closing;outgoing_fields=fields;std::snprintf(outgoing_fields[9].data(),512,"%s",published[9].data());opening_slot=std::clamp(std::atoi(published[9].data())-std::atoi((closing?published:fields)[14].data()),0,7);card_open.start(1,now_ms(),std::strcmp(published[30].data(),"ON")==0);page_turn.enabled=false;focus.initialized=false;}
@@ -570,7 +591,7 @@ inline void* ui_main(void*) noexcept {
 inline bool start_frontend() noexcept {
  visible=false;online=false;exit_requested=false;display_done=false;display_ok=false;
  desktop=DesktopInput{};pointer_kind=pointer_target=pointer_page=-1;
- page_turn={};card_open={};opening_slot=0;card_reverse=false;list_scroll={};tab_x={};tab_w={};tabs_ready=false;page_direction=1;page_direction_at=0;trigger_held=0;list_page=-1;updates=0;navigation.clear();pressed_at=0;focus={};transition_start=now_ms();animating=false;event_read=event_write=0;fields={};published={};
+ selector_depth=0;selector_reveal.snap(1);page_turn={};card_open={};opening_slot=0;card_reverse=false;list_scroll={};tab_x={};tab_w={};tabs_ready=false;page_direction=1;page_direction_at=0;trigger_held=0;list_page=-1;updates=0;navigation.clear();pressed_at=0;focus={};transition_start=now_ms();animating=false;event_read=event_write=0;fields={};published={};
  const char* boot[]={"Instances","","Opening your library...","","","Not signed in","PLAY DEMO","L1 / R1  Top bar     X  Select","PREPARING","0","WAIT","0"};
  for(int i=0;i<12;++i)std::snprintf(fields[i].data(),512,"%s",boot[i]);
  std::int32_t user=-1;if(sceUserServiceGetInitialUser(&user)<0)return false;controller=scePadOpen(user,0,0,nullptr);if(controller<0)return false;

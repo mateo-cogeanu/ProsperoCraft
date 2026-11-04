@@ -167,7 +167,7 @@ var store=new ProsperoLibrary(root.resolve("store"));if(!store.instances().isEmp
   Files.writeString(channel,"demo");if(ProsperoLauncher.launchable("26.1","vanilla"))throw new AssertionError("Zink leaked into default Demo");
   Files.delete(zinkResource);Files.delete(channel);System.clearProperty("ps5.glfw.binding");
   System.out.println("PASS normal launcher Zink build gate, all three Vanilla releases, normal labels, verified receipt/binding order, normal26.1.xVanilla/Fabric labels, owned-account guard, original GL arguments, genuine Fabric install/repair/Knot selection and untouched Iris test JAR launch preparation for all releases, Vulkan/default boundaries");
-  var persisted=new ProsperoLibrary(root.resolve("model"));if(persisted.instances().size()!=1||persisted.instances().get(0).icon!=2||!persisted.instances().get(0).name.endsWith("1"))throw new AssertionError("controller persistence");
+  var persisted=new ProsperoLibrary(root.resolve("model"));if(persisted.instances().size()!=1||persisted.instances().get(0).icon!=9||!persisted.instances().get(0).name.endsWith("1"))throw new AssertionError("controller persistence");
   System.out.println("PASS empty/persistent instances, isolated worlds, rename/icons/settings, L1/R1/keyboard/install/play controller flow, unsupported26.1 launch guard and startup-notice persistence, original bytes, pin verification/cache/repair/cancel/failure/traversal/HTTPS/native-classifier rejection");
  }
 }

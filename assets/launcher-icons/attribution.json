@@ -3,14 +3,14 @@
   "revision": "390a240abaefe389d1ab8510cc0ba5c2692a65be",
   "source_directory": "launcher/resources/multimc/scalable/instances",
   "authors": "Prism Launcher and MultiMC contributors; embedded SVG metadata credits AutiOne, Boba, ely, Fulmine, gon sawa, Pankakes, tobimori, Zeke",
-  "license": "CC-BY-SA-4.0 per embedded SVG metadata, plus upstream notices retained; see individual SVGs",
-  "changes": "SVG rasterized72x72RGBA; Prism launcher logo replaced with user-owned ProsperoCraft transparent artwork",
+  "license": "Selected upstream SVGs: CC-BY-SA-4.0 per embedded metadata and retained notices; original amethyst.svg/compass.svg: CC0-1.0; ProsperoCraft branding user-owned",
+  "changes": "SVG rasterized72x72RGBA; Prism launcher logo replaced with user-owned ProsperoCraft transparent artwork; legacy icon IDs4 and25 now use original Amethyst/Compass artwork; removed service-logo SVG/PNG files and generated pixels",
   "names": [
     "ProsperoCraft",
     "Grass",
     "Nether star",
     "Ender pearl",
-    "Redstone flame",
+    "Amethyst",
     "Planks",
     "Gold",
     "Snow / stone",
@@ -31,7 +31,7 @@
     "Iron",
     "Magitech",
     "Meat",
-    "Modrinth",
+    "Compass",
     "Neoforged",
     "Quiltmc",
     "Skeleton",
@@ -44,7 +44,7 @@
     "grass",
     "netherstar",
     "enderpearl",
-    "flame",
+    "amethyst",
     "planks",
     "gold",
     "stone",
@@ -65,7 +65,7 @@
     "iron",
     "magitech",
     "meat",
-    "modrinth",
+    "compass",
     "neoforged",
     "quiltmc",
     "skeleton",
@@ -77,7 +77,6 @@
     "grass.svg": "93e7332f3e5fb7435e873e3e14c6b43b83491032503b8b1bc7fd156bda816a1d",
     "netherstar.svg": "ad3b6bce8639fe8f5ec2ee8e86ac7ebf057cd6806d0f705f8b8025b3576122d5",
     "enderpearl.svg": "1c21fe90776ee245c7971f42f21bd9eb2753cc4f737c3d65a199bdafcda8fcc1",
-    "flame.svg": "afd98453059840e6a04ecdd5e47a7ebda4fd6f706f9a70a52c5e35b783176ac4",
     "planks.svg": "c2d7ccb8399a296a89e17e33960395f03b301ccc520fdc1837ac88a96b4417f2",
     "gold.svg": "cea20a76c79863e4f6e95efadf97c06e39ffd9aba502b7d82f1a45611abd4e9f",
     "stone.svg": "9951bd551b53a1f15bb2fac1cdc206369538a6036549ded45e68eafcc6805459",
@@ -98,12 +97,27 @@
     "iron.svg": "0562ef93e485f3bc748ab4c875c7fa8f9d7706ae57bba2364376ae0a7472a532",
     "magitech.svg": "903ffc3c2401b432cdc3e97979af78aac31325bde42fb921fbc7e458d707e2c0",
     "meat.svg": "150cac9b3f75eba60fc2827531d60456113ffd0e6b0d455c72716165f8a0865a",
-    "modrinth.svg": "1693c68f8c990c93a0b1c1d1d5c6211d0df11570010134bfe5ddae5eec4e26f8",
     "neoforged.svg": "f991e2d7ad3ea92f370177ab8363c5d66d3dbf616ebf40d410262206864adc5c",
     "quiltmc.svg": "956b8ae32a1e9b4331d8752daea945794b525677ba32b9b071d60ca607b494a4",
     "skeleton.svg": "21c37063e0d9ec497adad979ee87932bf99b8305bddbfd4348ad78386c88d6c8",
     "squarecreeper.svg": "7f2076451063e33b9dfffac3d4a217203a2a152b5ba105be7e00e39f20671a89",
     "steve.svg": "2b86ce24ae713fabd00c9a1bfbaaf172a5b28c71523ee06d24ccc0b5e960b1fa",
-    "tnt.svg": "c5c81452d4ee38a0e80516b8503df48e1c7112f518b42225361df2c3cb09bf20"
+    "tnt.svg": "c5c81452d4ee38a0e80516b8503df48e1c7112f518b42225361df2c3cb09bf20",
+    "amethyst.svg": "c2b5b839e5eeb7a23758ae2b90e3b2ab721203035c912d8e975b54eda9e850a3",
+    "compass.svg": "ff58f4abe764e37146a95fef49167da23af53359860e275c4fb9d8ed3f305ad0"
+  },
+  "local_replacements": {
+    "4": {
+      "file": "amethyst.svg",
+      "name": "Amethyst",
+      "author": "ProsperoCraft",
+      "license": "CC0-1.0"
+    },
+    "25": {
+      "file": "compass.svg",
+      "name": "Compass",
+      "author": "ProsperoCraft",
+      "license": "CC0-1.0"
+    }
   }
 }

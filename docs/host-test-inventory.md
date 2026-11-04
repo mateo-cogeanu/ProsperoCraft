@@ -318,3 +318,9 @@ preserved return-to-card navigation, and haptic checks for prearm/press/held/neu
 page-boundary/stale/reset policy. Runtime-owned refresh and tiled-blit tests require
 that workspace separately; manual Vulkan and SDK/presentation checks remain
 separate from portable CI and physical delivered FPS.
+
+Launcher212 native desktop assertions cover transient all-theme hover without
+storage writes, cancel restore, invalid hover rejection, spatial icon choice and
+all32 pointer cells. The haptic fixture polls actual state within a deadline
+instead of assuming15ms hosted scheduling; explicit stale-poll tests stay unrefreshed.
+Manual Vulkan previews cover parent overlays, six theme previews and icon targets.

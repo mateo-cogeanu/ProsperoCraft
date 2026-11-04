@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Local211 whole-launcher120 target, moderate menus and adaptive card/page candidate from exact accepted204 inputs. No releases.
+"""Local212 overlay selectors, live themes, icon grid and transition refinement candidate from exact accepted204 inputs. No releases.
 
 Original343/OpenAL groups are retained byte for byte from the relink kit.
 Main, explicit libjava handle hook, SDL, graphics inventory and matched333 are rebuilt.
@@ -48,7 +48,7 @@ def main():
     parser.add_argument('--java-home', type=Path)
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--work-dir', type=Path, required=True)
-    parser.add_argument('--app-version', choices=('01.000.211',), default='01.000.211')
+    parser.add_argument('--app-version', choices=('01.000.212',), default='01.000.212')
     parser.add_argument('--check-only', action='store_true', help='Compile/link/convert without signing or a candidate ZIP')
     args = parser.parse_args()
     app_version = args.app_version
@@ -120,7 +120,7 @@ def main():
     if sha(sdl_object)!=sdl_audit['object_sha256']:raise ValueError('Stale SDL output')
     for name,digest in sdl_audit['port_sha256'].items():
         if sha(ROOT/'client/ports/sdl'/name)!=digest:raise ValueError('Stale SDL source: '+name)
-    sdl_scoped=work/'sdl211-scoped.o'
+    sdl_scoped=work/'sdl212-scoped.o'
     subprocess.run([str(llvm/'llvm-objcopy'),'--redefine-syms='+str(baseline/'provider-bindings.txt'),str(sdl_object),str(sdl_scoped)],check=True)
     os_build=args.oshi665_build.resolve();os_overlay=os_build/'oshi-6.6.5-ps5-platform.jar';os_audit=json.loads((os_build/'audit.json').read_text())
     if sha(os_overlay)!=os_audit['output_sha256']:raise ValueError('Stale OSHI665 overlay')
@@ -179,6 +179,17 @@ def main():
         shutil.rmtree(app)
     extract(args.baseline_package, work, prefix='PPSA99874/')
     java = app / 'assets/java25'
+    # Replace retired logo payloads too, not only the compiled picker pixels.
+    icons = ROOT / 'assets/launcher-icons'
+    for directory, suffixes in (('launcher-icons', ('.svg', '.png')), ('launcher-icon-source', ('.svg',))):
+        destination = java / directory
+        for retired in ('flame', 'modrinth'):
+            for suffix in suffixes:
+                (destination / (retired + suffix)).unlink()
+        for replacement in ('amethyst', 'compass'):
+            for suffix in suffixes:
+                shutil.copyfile(icons / (replacement + suffix), destination / (replacement + suffix))
+        shutil.copyfile(icons / 'attribution.json', destination / 'attribution.json')
     shutil.copyfile(overlay, java / 'ports' / overlay.name)
     (java/'graphics-resolution-audit.json').write_text(json.dumps(graphics_audit,indent=2)+'\n')
     shutil.copyfile(os_overlay,java/'ports'/os_overlay.name)
@@ -272,7 +283,7 @@ def main():
     subprocess.run([str(converter), 'link', '--in', str(pie), '--out', str(elf), '--stub-dir', str(sdk / 'target/lib'),
         *sum([['--stub', str(p)] for p in stubs], []), '--module-sdk', '0x02000009', '--companion-sdk', '0x08050001', '--file-name', 'eboot.elf'], check=True)
     if args.check_only:
-        print('PASS211 target compile/link/converter; no signed candidate ZIP')
+        print('PASS212 target compile/link/converter; no signed candidate ZIP')
         return
     subprocess.run([str(converter), 'self', '--sign', '--in', str(elf), '--out', str(app / 'eboot.bin'), '--magic', '0x1D3D154F'], check=True)
     subprocess.run([str(converter), 'self', '--inspect', '--file', str(app / 'eboot.bin')], check=True)
@@ -310,13 +321,13 @@ def main():
         'newGroupSha256': sha(registry / 'embedded-lwjgl333.o'), 'overlaySha256': sha(overlay),
         'source_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
         'source_tree': 'modified' if subprocess.check_output(['git', 'status', '--porcelain'], text=True).strip() else 'clean',
-        'scope': 'Whole-launcher120 target/verified native output and fast publication; moderate menus, prearmed localized adaptive detent and symmetric live-backdrop card entry/exit; login/game/Java policies retained;Fabric121blocked',
+        'scope': 'In-place overlay selectors, undimmed transient theme preview,32-icon grid, stronger localized detent and removal of transition dark glass quad;211120/login/game/Java policies retained;Fabric121blocked',
         'nativePresenterSha256':sha(presenter),'presentationRuntime':presentation_pin,'graphicsSupportSha256':sha(graphics_object),'newSdlGroupSha256':sha(registry/'embedded-ps5sdl.o'),'oshi665Sha256':sha(os_overlay),
         'console': 'NOT TESTED', 'releaseStore': 'No action'}
     (output / 'build-audit.json').write_text(json.dumps(record, indent=2) + '\n')
     (output / 'SHA256SUMS').write_text(record['package_sha256'] + '  PPSA99874.zip\n')
     shutil.copyfile(pie, output / pie.name)
-    print('LOCAL211', package, 'SHA256', record['package_sha256'])
+    print('LOCAL212', package, 'SHA256', record['package_sha256'])
 
 
 if __name__ == '__main__':

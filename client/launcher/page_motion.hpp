@@ -18,6 +18,9 @@ inline float card_library_alpha(float progress)noexcept{float t=std::clamp(progr
 struct SelectionMenu {float x,y,w,h;int visible;static constexpr int pitch=64;float first_y()const noexcept{return y+24;}};
 inline SelectionMenu selection_menu(int count,int limit,float label_width,float title_width,bool icons=false)noexcept{int visible=std::clamp(count,0,limit);float w=std::clamp(std::max(label_width+(icons?60:0),title_width)+96.f,600.f,1100.f),h=48.f+visible*SelectionMenu::pitch;return {(1920-w)/2,155+(850-h)/2,w,h,visible};}
 inline int selection_menu_hit(const SelectionMenu& menu,int x,int y,float position,int count)noexcept{if(x<menu.x+12||x>=menu.x+menu.w-20||y<menu.first_y()||y>=menu.first_y()+menu.visible*menu.pitch)return -1;int index=int(position+(y-menu.first_y())/menu.pitch);return index>=0&&index<count?index:-1;}
+struct IconGrid {float x,y,w,h;static constexpr int columns=8,pitch=128,padding=24;};
+inline IconGrid icon_grid(int count)noexcept{int columns=std::clamp(count,1,8),rows=(std::max(0,count)+7)/8;float w=48.f+columns*128,h=48.f+rows*128;return {(1920-w)/2,155+(850-h)/2,w,h};}
+inline int icon_grid_hit(const IconGrid& grid,int x,int y,int count)noexcept{float xx=x-grid.x-24,yy=y-grid.y-24;if(xx<0||yy<0||xx>=grid.w-48||yy>=grid.h-48)return -1;int col=int(xx)/128,row=int(yy)/128,index=row*8+col;return index<count&&int(xx)%128>=6&&int(xx)%128<122&&int(yy)%128>=6&&int(yy)%128<122?index:-1;}
 struct PageTurn {
  std::uint64_t began=0;int direction=1;bool enabled=false;
  void start(int d,std::uint64_t now,bool reduced)noexcept{direction=d<0?-1:1;began=now;enabled=!reduced;}

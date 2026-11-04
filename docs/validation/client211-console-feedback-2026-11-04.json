@@ -1,0 +1,9 @@
+{
+  "date": "2026-11-04",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.211",
+  "package_sha256": "4b341656bff9aa6ae7e24e5d290a60b3f7cbaf568eea158f785854e4d726d0f1",
+  "human_report": "Launcher is extremely smooth. Requests selectors over dimmed source screen, undimmed live theme hover, all icons in a larger grid, stronger adaptive detent and removal of brief black flash during instance entry/exit.",
+  "scope": "Strong positive smoothness feedback; no numeric FPS/vblank logs retrieved. UI refinements remain; no ALL PASS/release authorization.",
+  "late_hosted211": "Ubuntu policy/native passed; macOS native failed a15ms asynchronous trigger-state wait, policy macOS job canceled.212 replaces trigger fixed sleeps with bounded state polling; production worker timing unchanged."
+}

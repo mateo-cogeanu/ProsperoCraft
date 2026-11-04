@@ -1,0 +1,19 @@
+{
+  "date": "2026-11-04",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.212",
+  "status": "Host checked; preparing exact signed candidate",
+  "scope": "In-place dimmed selectors/nested overlays, undimmed unsaved theme preview, larger32-icon grid, stronger localized detent, remove extra dark card-transition material, remove Modrinth/CurseForge icon payloads with stable IDs4/25",
+  "unchanged": "211120Hz presenter64fe7c7/native game groups/Java image/options/original JARs/Vanilla gates and login fixes",
+  "checks": {
+    "fast": "PASS19 checks22.2s",
+    "native": "PASS12 checks12.1s",
+    "preview": "PASS actual Vulkan selector-parent dimming, undimmed six-theme previews, all32icons and actual pointer targets, existing entry/exit/mailbox/pointer refusal/handoff fixtures; visually inspected",
+    "target": "PASS final212 compile/link/converter",
+    "source_only": "PASS source-only checkout, empty explicit dependency cache with --fetch-deps, outside-root19fast22.3s and12native; SDK/GPU packaging checked separately",
+    "hosted": "Pending212 push;211mac native15ms wait failure recorded and addressed",
+    "icons": "PASS only IDs4/25 pixels changed;30 other images byte-identical; final Vulkan grid visually inspected"
+  },
+  "physical212": "NOT RUN: overlay/theme/grid interaction, stronger haptic feel/reset, black-flash repair and launcher/game handoff remain pending",
+  "release_store": "No action; prior physical/shader/explicit approval gates retained"
+}

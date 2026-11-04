@@ -254,3 +254,22 @@ rearm on neutral; no uniform constant resistance or post-turn warmup pulse.250ms
 stale watchdog/opt-out/refusal/shutdown remain. Exact211 PS5 FPS/feel/reset/visual/
 game handoff pending; preserve210 and all release/shader/Vanilla-first gates.
 See docs/client-launcher-120-211.md and matching validation.
+
+
+## In-place selectors and live theme preview —2026-11-04
+
+User reports211 very smooth.212 selectors retain/dim their source view instead of
+page-turning; themes remain undimmed and preview hover/focus without saving until
+confirm, Cancel restores. Icons use all32 icons in an8x4 named-free grid
+with shared pointer geometry and spatial controls. Text-only resident snapshots
+retain parent/nested menu state; no large automatic Fields copy. Adaptive detent
+force4 retains localized travel/release/neutral/reset policy. Remove the extra
+expanding-area glass quad to address black flash; do not regress the existing120
+presenter/login/notice/game policies. Late211Mac haptic fixture failed a15ms wait;
+212 uses bounded actual-state polling, not production timing changes. Exact212
+PS5 visuals/feel/handoff remain pending. Preserve211 bytes and release gates; see
+ docs/client-launcher-selectors-212.md and matching validation.
+
+212 removes Modrinth/CurseForge logo assets and embedded pixels at user request.
+Original CC0 Amethyst/Compass retain IDs4/25; preserve other icon IDs and upstream
+notices. Package audit requires all six inherited logo assets absent.

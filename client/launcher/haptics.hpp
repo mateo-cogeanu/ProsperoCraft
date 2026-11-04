@@ -21,7 +21,7 @@ struct LauncherTriggerCommand {std::int32_t mode=0,reserved=0;std::uint8_t data[
 struct LauncherTriggerEffect {std::uint8_t mask=3,reserved[7]{};LauncherTriggerCommand left{},right{};};
 static_assert(sizeof(LauncherTriggerEffect)==120&&offsetof(LauncherTriggerEffect,right)==64);
 extern "C" int scePadSetTriggerEffect(int,const LauncherTriggerEffect*);
-inline LauncherTriggerEffect page_trigger_effect(unsigned sides){LauncherTriggerEffect e{};for(unsigned side=0;side<2;side++)if(sides&(1u<<side)){auto& c=side?e.right:e.left;c.mode=2;c.data[0]=2;c.data[1]=3;c.data[2]=2;}return e;}
+inline LauncherTriggerEffect page_trigger_effect(unsigned sides){LauncherTriggerEffect e{};for(unsigned side=0;side<2;side++)if(sides&(1u<<side)){auto& c=side?e.right:e.left;c.mode=2;c.data[0]=2;c.data[1]=3;c.data[2]=4;}return e;}
 struct Haptics {
  pthread_mutex_t mutex=PTHREAD_MUTEX_INITIALIZER;
  pthread_t thread{};int handle=-1;bool started=false,quit=false,allowed=false;

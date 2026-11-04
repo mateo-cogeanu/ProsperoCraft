@@ -93,5 +93,11 @@
     "source_commit": "eeb984a15e83f885a2d130f8a4e6daeb8f1ed3de",
     "source_tree": "clean",
     "package_audit": "PASS signed integrity and independent audit"
+  },
+  "development_212": {
+    "app_version": "01.000.212",
+    "validation": "docs/validation/client212-launcher-selectors-2026-11-04.json",
+    "scope": "In-place selectors, live theme preview,32-icon grid, stronger detent and remove transition dark pulse",
+    "console": "Pending; previous candidates retained"
   }
 }

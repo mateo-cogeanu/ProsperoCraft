@@ -1,5 +1,18 @@
 # Changelog
 
+## Local212 — selectors stay in context, 2026-11-04
+
+- Record211 positive smoothness feedback and preserve its exact package.
+- Overlay selectors on dimmed source screens; preview themes undimmed without
+  saving until confirm. Add all32 icons as larger artwork in a spatial grid.
+- Remove Modrinth/CurseForge logos from picker, web pixels and package assets;
+  original Amethyst/Compass preserve stable IDs and retained artwork credits.
+- Strengthen the localized adaptive detent and remove the additional dark glass
+  layer from instance transitions. Preserve120 presentation and login behavior.
+- Replace a late211macOS fixture’s15ms trigger-state assumption with bounded
+  response polling; physical212 visual/feel/handoff checks remain pending.
+
+
 ## Local211 — whole-launcher120 target, 2026-11-04
 
 - Remove the33ms launcher redraw gate; pin reusable verified120Hz presenter and

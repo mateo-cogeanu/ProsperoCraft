@@ -13,6 +13,7 @@ history; a development entry does not imply a public release.
 | Full target preparation, ownership and archived source | [Source organization](source-organization.md) |
 | Shared bootstrap, current identity and legacy package audits | [Tooling sharing](tooling-sharing.md) |
 | NeoForge client research; implementation decisions pending | [Phase A plan](client-neoforge-plan.md), [inspection and validation](validation/client-neoforge-phase-a-2026-11-03.json) |
+| Launcher212 — in-place selectors, live theme preview and full icon grid | [Guide](client-launcher-selectors-212.md), [validation](validation/client212-launcher-selectors-2026-11-04.json) |
 | Launcher211 — whole-launcher120 target, moderate menus and symmetric cards | [Guide](client-launcher-120-211.md), [validation](validation/client211-launcher-120-2026-11-04.json) |
 | Launcher210 — full controls, focused automatic login and expanding instance cards | [Guide](client-launcher-refinements-210.md), [validation](validation/client210-launcher-refinements-2026-11-04.json) |
 | Launcher209 — horizontal page turns, L2/R2, theme arrows and continuous lists | [Guide](client-launcher-motion-209.md), [validation](validation/client209-launcher-motion-2026-11-04.json) |

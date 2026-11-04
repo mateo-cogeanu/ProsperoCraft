@@ -5,7 +5,7 @@ import java.util.*;
 
 /** Persistent instance metadata; display names are never used as directory names. */
 public final class ProsperoLibrary {
- static final String[] ICONS={"ProsperoCraft", "Grass", "Nether star", "Ender pearl", "Redstone flame", "Planks", "Gold", "Snow / stone", "Bee", "Bee Legacy", "Brick", "Chicken", "Creeper", "Diamond", "Dirt", "Enderman", "Fabricmc", "Fox", "Fox Legacy", "Ftb Logo", "Gear", "Herobrine", "Iron", "Magitech", "Meat", "Modrinth", "Neoforged", "Quiltmc", "Skeleton", "Squarecreeper", "Steve", "Tnt"};
+ static final String[] ICONS={"ProsperoCraft", "Grass", "Nether star", "Ender pearl", "Amethyst", "Planks", "Gold", "Snow / stone", "Bee", "Bee Legacy", "Brick", "Chicken", "Creeper", "Diamond", "Dirt", "Enderman", "Fabricmc", "Fox", "Fox Legacy", "Ftb Logo", "Gear", "Herobrine", "Iron", "Magitech", "Meat", "Compass", "Neoforged", "Quiltmc", "Skeleton", "Squarecreeper", "Steve", "Tnt"};
  static final int GAME_WIDTH=1920,GAME_HEIGHT=1080,LOCKED_RESOLUTION=2;
  static final int[][] RESOLUTIONS={{1280,720},{1600,900},{1920,1080},{2560,1440},{3840,2160}};
  static String resolutionLabel(int i){return RESOLUTIONS[i][0]+" x "+RESOLUTIONS[i][1];}
