@@ -1,0 +1,48 @@
+{
+  "date": "2026-11-04",
+  "title_id": "PPSA99874",
+  "version": "01.000.212",
+  "release_url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.212",
+  "release_tag_commit": "8509c3f0b1b946bdf97dc955890c3d25a37dda5d",
+  "candidate_source_commit": "8f43ac872973736ba0896373868e2c9e7d0f6f17",
+  "package_sha256": "d97e530ea67838ef806e8fa88731d399aa9ce1ae661b091daff5eaacfe3f75a7",
+  "assets": [
+    {
+      "name": "PPSA99874.zip",
+      "bytes": 127488343,
+      "sha256": "d97e530ea67838ef806e8fa88731d399aa9ce1ae661b091daff5eaacfe3f75a7"
+    },
+    {
+      "name": "client212-openal-source-relink.zip",
+      "bytes": 187483069,
+      "sha256": "b3e850c58cd8cda31cc9891d92ea51023cbca23603ccfc5995a72fe20e637647"
+    },
+    {
+      "name": "client212-build-validation.json",
+      "bytes": 26415,
+      "sha256": "f700b648909edd345349692e5224cfcca45052a8c2f48c90dcff50e875f3311e"
+    },
+    {
+      "name": "client212-console-validation.json",
+      "bytes": 1206,
+      "sha256": "449fe48f5d17ba3552f3ef462ccd63dda0482c9ee8b11f3d9915d9a046a543be"
+    },
+    {
+      "name": "SHA256SUMS",
+      "bytes": 379,
+      "sha256": "0ad4a15fb79aafc2445976178d00ac88484cbea589e42d899aee765e070f6466"
+    }
+  ],
+  "verification": "Public full release, not draft/prerelease. All five assets independently downloaded and matched exact local size/SHA256. Local and downloaded kits both reproduce exact native ELF c7998760c267fc44ffa1a6a18e8c38d664081a8e4c42efe0cb9f05f5597cd0aa through normal and accepted OpenAL replacement routes. Source/runtime hashes, signed integrity and independent package audit pass.",
+  "console_acceptance": "client212-console-acceptance-2026-11-04.json",
+  "console_scope": "User accepts exact final212 launcher and explicitly requests Store release. Earlier1.21.10/.11 Vanilla feedback,202 shader/quit and204 functional release acceptance retained separately. No new formal ALL PASS, measuredFPS or full212game/shader/device/endurance matrix.",
+  "catalog_checks": "242 tests pass (2 skipped);183 offline records valid; online PPSA99874 version/digest verification passes with0errors/0warnings.",
+  "catalog_base": "49bcc6f",
+  "metadata": "Only existing record version/artifact_url/sha256 changed; description,credits,icon and all other fields preserved. Release body supplies changelog.",
+  "catalog_status": "Submitted. No post-submission monitoring of PR checks, merge, deployment or live API performed. Approval/deployment required for Store availability.",
+  "preservation": "Exact accepted app published without rebuilding. Prior releases/assets/tags and all212candidates retained. No new frozen milestone.",
+  "runtime": "No reusable runtime source changes this publication turn; pinned source exported in corresponding-source kit.",
+  "catalog_pr": "https://github.com/darkxex/ps5-homebrew-catalog/pull/1121",
+  "catalog_head": "942c78900ff32054f37951af133448ba725c8cff",
+  "hosted_native": "Ubuntu and macOS native jobs PASS at8405534, run41900708041. Ubuntu final packaging-source policy PASS at8f43ac8, run41900841688; macOS policy canceled by subsequent source push, not claimed as a pass."
+}

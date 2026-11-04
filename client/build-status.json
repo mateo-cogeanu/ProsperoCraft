@@ -111,6 +111,8 @@
     "package_sha256": "d97e530ea67838ef806e8fa88731d399aa9ce1ae661b091daff5eaacfe3f75a7",
     "source_commit": "8f43ac872973736ba0896373868e2c9e7d0f6f17",
     "acceptance": "docs/validation/client212-console-acceptance-2026-11-04.json",
-    "scope": "User accepted launcher polish and explicitly authorized release; no exhaustive game regression/FPS/endurance inference"
+    "scope": "User accepted launcher polish and explicitly authorized release; no exhaustive game regression/FPS/endurance inference",
+    "store_submission": "https://github.com/darkxex/ps5-homebrew-catalog/pull/1121",
+    "store_status": "Submitted; approval/deployment not monitored or claimed"
   }
 }

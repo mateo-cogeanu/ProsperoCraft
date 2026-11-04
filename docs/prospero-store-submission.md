@@ -303,3 +303,22 @@ Description, credits and icon remain unchanged. No post-submission monitoring
 of checks, merge, deployment or live availability is performed. See the
 [publication record](validation/client204-store-publication-2026-11-03.json) for
 asset digests, user acceptance scope and remaining endurance/compatibility limits.
+
+
+## Authorized212 launcher release —2026-11-04
+
+[Release01.000.212](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.212)
+publishes the exact user-accepted launcher package, with Vanilla1.21.10/.11,
+120Hz presentation target, in-place selectors/live themes and an icon grid.
+All five assets were independently downloaded and hash-verified. Local and
+downloaded OpenAL kits reproduce the exact executable through both normal and
+accepted replacement links.242catalog tests pass (2skipped),183records pass
+offline validation, and online version/digest verification reports0errors/warnings.
+
+Existing-listing update: [PR1121](https://github.com/darkxex/ps5-homebrew-catalog/pull/1121). Only version/artifact/digest changed;
+description, credits and icon remain unchanged. No post-submission monitoring of
+checks/merge/deployment/liveStore was performed. Availability is not claimed.
+Acceptance concerns the launcher; no numericFPS, formal ALL PASS or exhaustive
+212shader/game/device/endurance result is inferred. Earlier scoped shader/quit
+and game acceptance remains historical. See the
+[publication record](validation/client212-store-publication-2026-11-04.json).
