@@ -13,14 +13,26 @@ public final class ProsperoLibrary {
  static final class Favorite {String instance,kind,target,name;Favorite(String i,ProsperoDestinations.Entry e){instance=i;kind=e.kind();target=e.target();name=e.name();}}
  static final class Settings {int[] controllerKeys=ProsperoInput.DEFAULT.clone();int resolution=LOCKED_RESOLUTION,workers=4,theme=0,background=5,backgroundDefaultsRevision=0;boolean vibration=true,reducedMotion=false,snapshots=false,showIntro=true,showControls=true;}
  static final class State {int schema=1;ArrayList<Instance> instances=new ArrayList<>();Settings settings=new Settings();ArrayList<Favorite> favorites=new ArrayList<>();}
- final Path root;private State state;
- ProsperoLibrary(Path root)throws Exception {
-  this.root=root;Files.createDirectories(root);Path file=root.resolve("library.json");
+ final Path root,legacy;private State state;
+ private final Set<String> legacyInstances=java.util.concurrent.ConcurrentHashMap.newKeySet();
+ ProsperoLibrary(Path root)throws Exception {this(root,null);}
+ ProsperoLibrary(Path root,Path legacy)throws Exception {
+  this.root=root;this.legacy=legacy;Files.createDirectories(root);Path file=root.resolve("library.json");
   if(Files.isRegularFile(file)){
    try{if(Files.size(file)>1024*1024)throw new IOException();state=new Gson().fromJson(Files.readString(file),State.class);validate();}
    catch(Exception bad){throw new IOException("Library data could not be read. Your instance folders are preserved.");}
   }else state=new State();
-  recoverInterruptedMoves();recoverPermanentDeletes();recoverCopies();
+  recoverInterruptedMoves();recoverPermanentDeletes(root);recoverCopies();
+  if(legacy!=null){
+   recoverPermanentDeletes(legacy);
+   for(Instance instance:state.instances){
+    Path primary=instanceDir(root,instance),original=instanceDir(legacy,instance);
+    ProsperoStorageRoot.noLinks(primary);
+    ProsperoStorageRoot.noLinks(original);
+    if(ProsperoStorageRoot.directory(original)&&!ProsperoMigration.published(original,primary))
+     legacyInstances.add(instance.id);
+   }
+  }
   // Apply the requested Waves default once, including existing libraries.
   if(state.settings.backgroundDefaultsRevision<1){state.settings.background=5;state.settings.backgroundDefaultsRevision=1;save();}
 
@@ -50,7 +62,15 @@ public final class ProsperoLibrary {
   if(state.instances.size()>=256)throw new IOException("This library is full");if(!ProsperoVersions.valid(version)||icon<0||icon>=ICONS.length)throw new IOException("Invalid instance choice");
   Instance instance=new Instance(name,version,icon);instance.loader=loader;instance.defaultContentPending=Set.of("fabric","neoforge").contains(loader);Files.createDirectories(game(instance));state.instances.add(instance);try{save();}catch(Exception error){state.instances.remove(instance);throw error;}return instance;
  }
- Path game(Instance i){return root.resolve("instances").resolve(i.id).resolve("game");}
+ static Path instanceDir(Path library,Instance i){return library.resolve("instances").resolve(i.id);}
+ Path gameRoot(Instance i){return legacyInstances.contains(i.id)?legacy:root;}
+ Path game(Instance i){return instanceDir(gameRoot(i),i).resolve("game");}
+ synchronized boolean usesLegacy(Instance i){return state.instances.contains(i)&&legacyInstances.contains(i.id);}
+ synchronized void publishInstance(Instance i,Path staged)throws IOException {
+  if(!usesLegacy(i))throw new IOException("Instance is no longer eligible for migration");
+  ProsperoMigration.publish(staged,instanceDir(root,i));
+  legacyInstances.remove(i.id);
+ }
  synchronized List<Favorite> favorites(){return state.favorites.stream().filter(f->state.instances.stream().anyMatch(i->i.id.equals(f.instance))).toList();}
  synchronized boolean favorite(Instance i,ProsperoDestinations.Entry e){return state.favorites.stream().anyMatch(f->f.instance.equals(i.id)&&f.kind.equals(e.kind())&&f.target.equals(e.target()));}
  synchronized void toggleFavorite(Instance i,ProsperoDestinations.Entry e)throws Exception {
@@ -71,19 +91,20 @@ public final class ProsperoLibrary {
  // committed permanent deletion after interruption. It is never user undo.
  synchronized boolean delete(Instance instance)throws Exception {
   int at=state.instances.indexOf(instance);if(at<0)throw new IOException("Instance is no longer in this library");
-  Path base=root.resolve("pending-delete");noLink(root.resolve("instances"));noLink(base);Path source=game(instance).getParent();noLink(source);
+  Path owner=gameRoot(instance);Path base=owner.resolve("pending-delete");noLink(owner.resolve("instances"));noLink(base);Path source=game(instance).getParent();noLink(source);
   Path journal=base.resolve(UUID.randomUUID().toString());Files.createDirectories(journal);Files.writeString(journal.resolve("id"),instance.id);
   boolean moved=Files.exists(source,LinkOption.NOFOLLOW_LINKS);if(moved)Files.move(source,journal.resolve("files"));
   var favorites=new ArrayList<>(state.favorites);state.instances.remove(at);state.favorites.removeIf(f->f.instance.equals(instance.id));
   try{save();}catch(Exception failure){state.instances.add(at,instance);state.favorites=favorites;if(moved)try{Files.move(journal.resolve("files"),source);}catch(Exception rollback){failure.addSuppressed(rollback);}throw failure;}
+  legacyInstances.remove(instance.id);
   try{purge(journal);return true;}catch(IOException cleanup){return false;}
  }
- private void recoverPermanentDeletes()throws Exception {
-  Path base=root.resolve("pending-delete");noLink(base);if(!Files.isDirectory(base))return;
+ private void recoverPermanentDeletes(Path owner)throws Exception {
+  Path base=owner.resolve("pending-delete");noLink(base);if(!Files.isDirectory(base))return;
   try(var dirs=Files.list(base)){for(Path journal:dirs.toList()){
    noLink(journal);Path idFile=journal.resolve("id");noLink(idFile);if(!Files.isRegularFile(idFile)||Files.size(idFile)>40)throw new IOException("Invalid deletion journal");String id=Files.readString(idFile);if(!id.matches("[a-f0-9-]{36}"))throw new IOException("Invalid deletion journal");
    Path files=journal.resolve("files");noLink(files);var live=state.instances.stream().filter(i->i.id.equals(id)).findFirst();
-   if(live.isPresent()&&Files.isDirectory(files)){Path target=game(live.get()).getParent();noLink(root.resolve("instances"));noLink(target);if(Files.exists(target,LinkOption.NOFOLLOW_LINKS))throw new IOException("Deletion recovery has conflicting folders");Files.createDirectories(target.getParent());Files.move(files,target);}
+   if(live.isPresent()&&Files.isDirectory(files)){Path target=instanceDir(owner,live.get());noLink(owner.resolve("instances"));noLink(target);if(Files.exists(target,LinkOption.NOFOLLOW_LINKS))throw new IOException("Deletion recovery has conflicting folders");Files.createDirectories(target.getParent());Files.move(files,target);}
    purge(journal);
   }}
  }

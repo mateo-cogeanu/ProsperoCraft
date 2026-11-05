@@ -9,7 +9,9 @@ import java.util.*;
 final class ProsperoStorageRoot {
  static final String POINTER=".shared-storage-v1",OWNER=".prospero-migration-owner",PART=".prospero-migration-part",READY=".prospero-shared-v1";
  static final int MAX_ENTRIES=262144;
- record Selection(Path root,String notice){}
+ record Selection(Path root,String notice,Path legacy){
+  Selection(Path root,String notice){this(root,notice,null);}
+ }
  interface Probe {void check(Path root)throws IOException;}
  interface Progress {boolean update(String phase,long done,long total);}
  static final Progress SILENT=(phase,done,total)->true;
@@ -46,7 +48,8 @@ final class ProsperoStorageRoot {
   String explicit=System.getProperty("ps5.launcher.root");
   if(explicit!=null&&!explicit.isBlank())return new Selection(Path.of(explicit),"");
   if("/download0/ProsperoCraft".equals(System.getenv("PROSPERO_STORAGE_BASE")))return fallback(Path.of("/download0/ProsperoCraft"),"Shared storage access failed. Using the original download0 library; it may be older.");
-  return select(Path.of("/download0/ProsperoCraft"),Path.of("/data/ProsperoCraft/library"),ProsperoStorageRoot::probe,null,progress);
+  progress.update("Opening library catalog",0,0);
+  return ProsperoMigration.open(Path.of("/download0/ProsperoCraft"),Path.of("/data/ProsperoCraft/library"));
  }
  static BasicFileAttributes attributes(Path path)throws IOException {
   try{return Files.readAttributes(path,BasicFileAttributes.class,LinkOption.NOFOLLOW_LINKS);}catch(NoSuchFileException absent){return null;}
@@ -136,10 +139,21 @@ final class ProsperoStorageRoot {
   return total[0];
  }
  static void migrate(Path source,Path target,Copier copier,MigrationProgress progress)throws IOException {
+  Path stage=target.resolveSibling(".ProsperoCraft-migration");
+  verifiedTree(source,target,stage,copier,progress,false);
+  ProsperoLibrary.verifyReadable(stage);
+  if(attributes(stage.resolve(READY))==null)Files.writeString(stage.resolve(READY),"shared-v1\n",StandardOpenOption.CREATE_NEW);
+  if(!marker(stage.resolve(READY),"shared-v1\n"))throw new IOException("Invalid shared-storage commit marker");
+  privateMode(stage.resolve(READY),false);
+  if(directory(target))Files.delete(target);
+  Files.move(stage,target);
+ }
+ static void verifiedTree(Path source,Path target,Path stage,Copier copier,MigrationProgress progress,boolean incremental)throws IOException {
+  noLinks(source);
   progress.phase("Scanning your library",0);
   long total=inventory(source,progress);
   progress.phase("Moving your library",total);
-  Path stage=target.resolveSibling(".ProsperoCraft-migration");noLinks(stage);
+  noLinks(stage);
   String identity="ProsperoCraft migration v1\n"+source+"\n"+target+"\n";
   if(directory(stage)){if(!marker(stage.resolve(OWNER),identity))throw new IOException("Unrecognized storage migration folder; original data is preserved");}
   else{Files.createDirectory(stage);privateMode(stage,true);Files.writeString(stage.resolve(OWNER),identity,StandardOpenOption.CREATE_NEW);privateMode(stage.resolve(OWNER),false);}
@@ -150,8 +164,8 @@ final class ProsperoStorageRoot {
    }
    public FileVisitResult visitFile(Path file,BasicFileAttributes a)throws IOException {
     progress.advance(0);if(++entries[0]>MAX_ENTRIES||!a.isRegularFile())throw new IOException("Unsupported file in storage migration");String name=source.relativize(file).toString();
-    if(file.getParent().equals(source)&&name.equals(POINTER))return FileVisitResult.CONTINUE;
-    if(file.getParent().equals(source)&&Set.of(OWNER,PART,READY).contains(name))throw new IOException("Reserved storage migration filename");
+    if(!incremental&&file.getParent().equals(source)&&name.equals(POINTER))return FileVisitResult.CONTINUE;
+    if(file.getParent().equals(source)&&Set.of(OWNER,PART,READY,POINTER).contains(name))throw new IOException("Reserved storage migration filename");
     Path destination=stage.resolve(name);noLinks(destination);String expected=digest(file,progress,false);var previous=attributes(destination);
     if(previous==null||!previous.isRegularFile()||previous.size()!=a.size()||!digest(destination,progress,false).equals(expected)){
      Path part=stage.resolve(PART);noLinks(part);var partial=attributes(part);if(partial!=null&&!partial.isRegularFile())throw new IOException("Invalid storage migration partial");
@@ -169,22 +183,38 @@ final class ProsperoStorageRoot {
   Files.walkFileTree(source,EnumSet.noneOf(FileVisitOption.class),64,new SimpleFileVisitor<>(){
    public FileVisitResult preVisitDirectory(Path dir,BasicFileAttributes a)throws IOException {progress.advance(0);String name=source.relativize(dir).toString();if(!directories.contains(name))throw new IOException("Source directories changed during migration");checkedDirectories.add(name);return FileVisitResult.CONTINUE;}
    public FileVisitResult visitFile(Path file,BasicFileAttributes a)throws IOException {
-    String name=source.relativize(file).toString();if(file.getParent().equals(source)&&name.equals(POINTER))return FileVisitResult.CONTINUE;Stamp before=files.get(name);if(before==null||!a.isRegularFile()||a.size()!=before.size()||!a.lastModifiedTime().equals(before.modified())||!digest(file,progress,false).equals(before.digest())||!digest(stage.resolve(name),progress,true).equals(before.digest()))throw new IOException("Source data changed during storage migration");checkedFiles.add(name);progress.advance(1);return FileVisitResult.CONTINUE;
+    String name=source.relativize(file).toString();if(!incremental&&file.getParent().equals(source)&&name.equals(POINTER))return FileVisitResult.CONTINUE;Stamp before=files.get(name);if(before==null||!a.isRegularFile()||a.size()!=before.size()||!a.lastModifiedTime().equals(before.modified())||!digest(file,progress,false).equals(before.digest())||!digest(stage.resolve(name),progress,true).equals(before.digest()))throw new IOException("Source data changed during storage migration");checkedFiles.add(name);progress.advance(1);return FileVisitResult.CONTINUE;
    }
   });
   if(!checkedFiles.equals(files.keySet())||!checkedDirectories.equals(directories))throw new IOException("Source data disappeared during storage migration");
   progress.finish();
   progress.phase("Checking copied files",0);
   Files.walkFileTree(stage,EnumSet.noneOf(FileVisitOption.class),64,new SimpleFileVisitor<>(){
-   public FileVisitResult preVisitDirectory(Path dir,BasicFileAttributes a)throws IOException {progress.advance(0);if(!directories.contains(stage.relativize(dir).toString()))throw new IOException("Unexpected staged directory");return FileVisitResult.CONTINUE;}
-   public FileVisitResult visitFile(Path file,BasicFileAttributes a)throws IOException {progress.advance(0);String name=stage.relativize(file).toString();if(!a.isRegularFile()||(!name.equals(OWNER)&&!name.equals(READY)&&!files.containsKey(name)))throw new IOException("Unexpected staged file");return FileVisitResult.CONTINUE;}
+   public FileVisitResult preVisitDirectory(Path dir,BasicFileAttributes a)throws IOException {
+    progress.advance(0);
+    if(directories.contains(stage.relativize(dir).toString()))return FileVisitResult.CONTINUE;
+    if(!incremental)throw new IOException("Unexpected staged directory");
+    ProsperoMigration.purge(dir);
+    return FileVisitResult.SKIP_SUBTREE;
+   }
+   public FileVisitResult visitFile(Path file,BasicFileAttributes a)throws IOException {
+    progress.advance(0);
+    String name=stage.relativize(file).toString();
+    if(!a.isRegularFile())throw new IOException("Unexpected staged file type");
+    if(name.equals(OWNER)||(!incremental&&name.equals(READY))||files.containsKey(name)){
+     if(incremental)ProsperoMigration.force(file,false);
+     return FileVisitResult.CONTINUE;
+    }
+    if(!incremental)throw new IOException("Unexpected staged file");
+    Files.delete(file);
+    return FileVisitResult.CONTINUE;
+   }
+   public FileVisitResult postVisitDirectory(Path dir,IOException error)throws IOException{
+    if(error!=null)throw error;
+    if(incremental)ProsperoMigration.force(dir,true);
+    return FileVisitResult.CONTINUE;
+   }
   });
   progress.phase("Finishing library move",0);
-  ProsperoLibrary.verifyReadable(stage);
-  if(attributes(stage.resolve(READY))==null)Files.writeString(stage.resolve(READY),"shared-v1\n",StandardOpenOption.CREATE_NEW);
-  if(!marker(stage.resolve(READY),"shared-v1\n"))throw new IOException("Invalid shared-storage commit marker");privateMode(stage.resolve(READY),false);
-  // A single same-filesystem directory rename publishes only a verified complete tree.
-  if(directory(target))Files.delete(target); // succeeds only for an empty target
-  Files.move(stage,target);
  }
 }

@@ -63,6 +63,50 @@ public class StorageCheck {
       !finished.contains("Verifying your library")||
       !new ProsperoLibrary(next).instances().getFirst().name.equals("Paused world")||
       !Files.isRegularFile(old.resolve("library.json")))throw new AssertionError("resume lost library data");
+  Path incremental=folder.resolve("incremental"),legacyUnit=incremental.resolve("legacy"),primaryUnit=incremental.resolve("data/library");
+  Files.createDirectories(primaryUnit.getParent());
+  var legacyModel=new ProsperoLibrary(legacyUnit);
+  var first=legacyModel.add("Playing now","26.3",1);
+  var second=legacyModel.add("Move later","26.3",2);
+  Files.writeString(legacyModel.game(first).resolve("world"),"original");
+  Files.writeString(legacyModel.game(first).resolve("removed"),"gone on next copy");
+  Files.writeString(legacyModel.game(second).resolve("world"),"second");
+  Files.writeString(legacyUnit.resolve("unrelated.txt"),"keep");
+  Files.createDirectories(legacyUnit.resolve("cache"));
+  Files.writeString(legacyUnit.resolve("cache/verified-asset"),"cache bytes");
+  var selection=ProsperoMigration.open(legacyUnit,primaryUnit);
+  var incrementalModel=new ProsperoLibrary(selection.root(),selection.legacy());
+  var active=incrementalModel.instances().getFirst();
+  if(!incrementalModel.game(active).equals(legacyModel.game(first))||
+      Files.exists(primaryUnit.resolve("instances"))||Files.exists(primaryUnit.resolve("cache")))
+   throw new AssertionError("catalog startup moved bulk content");
+  Path src=incrementalModel.game(active).getParent(),dst=ProsperoLibrary.instanceDir(primaryUnit,active);
+  Path partialRoot=primaryUnit.resolve(".prospero-staged");
+  try{
+   ProsperoMigration.stage(src,dst,partialRoot,(phase,done,total)->!phase.equals("Verifying your library"));
+   throw new AssertionError("pause ignored");
+  }catch(IOException expected){}
+  if(Files.exists(dst)||!incrementalModel.game(active).equals(src.resolve("game")))
+   throw new AssertionError("a partial copy became playable");
+  Files.writeString(incrementalModel.game(active).resolve("world"),"saved after playing");
+  Files.delete(incrementalModel.game(active).resolve("removed"));
+  var created=incrementalModel.add("New instance","26.3",3);
+  if(!incrementalModel.game(created).startsWith(primaryUnit))throw new AssertionError("new instance used legacy");
+  var launcher=new ProsperoLauncher(new ProsperoAuth(),selection.root(),null,()->{},selection.legacy());
+  long until=System.nanoTime()+10_000_000_000L;
+  while(Files.exists(legacyUnit.resolve("library.json"))&&System.nanoTime()<until){
+   launcher.tick(0);
+   Thread.sleep(10);
+  }
+  var reopened=ProsperoMigration.open(legacyUnit,primaryUnit);
+  var afterMigration=new ProsperoLibrary(reopened.root(),reopened.legacy());
+  if(!Files.readString(afterMigration.game(afterMigration.instances().getFirst()).resolve("world")).equals("saved after playing")||
+      Files.exists(dst.resolve("game/removed"))||Files.exists(src)||Files.exists(legacyUnit.resolve("cache"))||
+      Files.exists(legacyUnit.resolve("library.json"))||!Files.readString(legacyUnit.resolve("unrelated.txt")).equals("keep")||
+      !Files.readString(primaryUnit.resolve("cache/verified-asset")).equals("cache bytes"))
+   throw new AssertionError("incremental publish, shared cache or scoped cleanup failed");
+  if(!afterMigration.game(afterMigration.instances().get(1)).startsWith(primaryUnit))
+   throw new AssertionError("second instance did not move independently");
   System.setProperty("ps5.launcher.root",folder.resolve("explicit").toString());try{if(!ProsperoStorageRoot.current().root().equals(folder.resolve("explicit")))throw new AssertionError("explicit root ignored");}finally{System.clearProperty("ps5.launcher.root");}
 
   System.out.println("PASS shared-root proof/verified-readable-fallback/no-legacy-writes/copy-resume/account+world verification/symlink+source-change refusal;256MiBmanifest/same title, typed ENOSPC/quota/access/read-only categories and app-local full message, unchanged library/world path and visible data root; no invented free-space or console resize claim");

@@ -153,7 +153,7 @@ final class ProsperoWeb implements AutoCloseable {
  static void noLink(Path path)throws IOException{require(!Files.isSymbolicLink(path),400,"Linked storage is unavailable");}
  Path folder(ProsperoLibrary.Instance instance,String kind,boolean create)throws IOException {
   if(kind.equals("mods"))require(instance.loader.equals("fabric"),409,"Mods require a Fabric instance");
-  Path target=library.game(instance).resolve(DESTINATIONS.get(kind));Path at=library.root.toAbsolutePath().normalize();ProsperoDownloads.noLinks(at);
+  Path target=library.game(instance).resolve(DESTINATIONS.get(kind));Path at=library.gameRoot(instance).toAbsolutePath().normalize();ProsperoDownloads.noLinks(at);
   for(Path part:at.relativize(target.toAbsolutePath().normalize())){at=at.resolve(part);noLink(at);if(create&&!Files.exists(at,LinkOption.NOFOLLOW_LINKS))Files.createDirectory(at);if(Files.exists(at,LinkOption.NOFOLLOW_LINKS))require(Files.isDirectory(at,LinkOption.NOFOLLOW_LINKS),400,"Invalid content directory");}
   if(create&&Files.isDirectory(target,LinkOption.NOFOLLOW_LINKS))try(var leftovers=Files.newDirectoryStream(target,".prospero-upload-*.part")){int count=0;for(Path file:leftovers){require(++count<=2048,409,"Too many interrupted uploads");if(Files.isRegularFile(file,LinkOption.NOFOLLOW_LINKS))Files.delete(file);}}
   return target;

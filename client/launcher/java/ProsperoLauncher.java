@@ -14,8 +14,8 @@ public final class ProsperoLauncher {
  interface Microphone {void prepare()throws java.io.IOException;}
  private final Microphone microphone;
  private static ProsperoLauncher current;
- private final ProsperoAuth auth;private final ProsperoLibrary library;private final ProsperoInstall installer;
- private final ProsperoFabric fabric;private final ProsperoModrinth modrinth=new ProsperoModrinth();
+ private final ProsperoAuth auth;private final ProsperoLibrary library;private ProsperoInstall installer;
+ private ProsperoFabric fabric;private final ProsperoModrinth modrinth=new ProsperoModrinth();
  private ProsperoModrinth.Local pendingUninstall;private int uninstallReturnRow;private int bindingIndex=8;private int shadowScale=100;private boolean contentInstalled;private String activeContentIcon="";private List<ProsperoModrinth.Local> localContent=List.of();private final Map<String,String> contentIcons=new HashMap<>();
  private int draftLoader=0,contentOffset=0,contentTotal=0;private String contentQuery="";private ProsperoModrinth.Kind contentKind=ProsperoModrinth.Kind.MOD;private List<ProsperoModrinth.Hit> contentHits=List.of();private List<ProsperoModrinth.Selection> contentQueue=List.of();
  private int dropdownKind,dropdownChoice,dropdownReturn,dropdownRow;
@@ -26,11 +26,32 @@ public final class ProsperoLauncher {
  private int guideReturn=0,guideTab=0,guideSection=0;private boolean guideTop=false;private ProsperoOfflineAccount offlineAccount;private boolean offlineLaunch;
  private String fabricLoaderVersion="";private String avatar="";private final ProsperoAccountStore accounts;
  private ProsperoAuth.Session session;private Thread worker;private long completed,total,lastProgress;private String[] cached;
+ private Path cacheRoot;
+ private final ProsperoInstall.Source installSource;
+ private Thread migrationWorker;
+ private long migrationEpoch, migrationAfter;
+ private boolean migrationClosed, migrationFinished;
+ private final Set<String> migrationFailed=new HashSet<>();
+ private String migratingId="", migrationStatus="";
  private ProsperoInstall.Receipt receipt;private java.net.URLClassLoader loader;
  ProsperoLauncher(ProsperoAuth auth)throws Exception{this(auth,ProsperoStorageRoot.current());}
- private ProsperoLauncher(ProsperoAuth auth,ProsperoStorageRoot.Selection storage)throws Exception{this(auth,storage.root(),null);message=storage.notice();}
+ private ProsperoLauncher(ProsperoAuth auth,ProsperoStorageRoot.Selection storage)throws Exception{this(auth,storage.root(),null,()->ProsperoMicrophone.enable(true),storage.legacy());message=storage.notice();}
  ProsperoLauncher(ProsperoAuth auth,Path root,ProsperoInstall.Source source)throws Exception{this(auth,root,source,()->ProsperoMicrophone.enable(true));}
- ProsperoLauncher(ProsperoAuth auth,Path root,ProsperoInstall.Source source,Microphone microphone)throws Exception{this.microphone=Objects.requireNonNull(microphone);this.auth=auth;library=new ProsperoLibrary(root);accounts=new ProsperoAccountStore(root);offlineAccount=ProsperoOfflineAccount.load(root,System.currentTimeMillis());fabric=new ProsperoFabric(root.resolve("cache"));installer=source==null?new ProsperoInstall(root.resolve("cache")):new ProsperoInstall(root.resolve("cache"),source);if(library.settings().showIntro&&!Boolean.getBoolean("ps5.launcher.resume")){page=7;row=1;}if(ProsperoChannel.tempGameTest()&&accounts.exists())restoreAccount();}
+ ProsperoLauncher(ProsperoAuth auth,Path root,ProsperoInstall.Source source,Microphone microphone)throws Exception{
+  this(auth,root,source,microphone,null);
+ }
+ ProsperoLauncher(ProsperoAuth auth,Path root,ProsperoInstall.Source source,Microphone microphone,Path legacy)throws Exception{
+  this.microphone=Objects.requireNonNull(microphone);this.auth=auth;installSource=source;
+  library=new ProsperoLibrary(root,legacy);accounts=new ProsperoAccountStore(root);
+  offlineAccount=ProsperoOfflineAccount.load(root,System.currentTimeMillis());
+  cacheRoot=root.resolve("cache");
+  if(legacy!=null){
+   Path original=legacy.resolve("cache");
+   ProsperoStorageRoot.noLinks(original);
+   if(ProsperoStorageRoot.directory(original)&&!ProsperoMigration.published(original,cacheRoot))cacheRoot=original;
+  }
+  fabric=new ProsperoFabric(cacheRoot);
+  installer=source==null?new ProsperoInstall(cacheRoot):new ProsperoInstall(cacheRoot,source);if(library.settings().showIntro&&!Boolean.getBoolean("ps5.launcher.resume")){page=7;row=1;}if(ProsperoChannel.tempGameTest()&&accounts.exists())restoreAccount();}
  static String[] run(Menu menu,ProsperoStorageRoot.Progress progress)throws Exception {
   var storage=ProsperoStorageRoot.current(progress);
   progress.update("Loading instances and settings",0,0);
@@ -43,7 +64,7 @@ public final class ProsperoLauncher {
        "The shared library could not be opened. Using the original library for this session.");
    current=new ProsperoLauncher(auth,fallback);
   }
-  try{if(!menu.show()){current.cancel();throw new IllegalStateException("Launcher display handoff failed;game not started");}}finally{synchronized(current){current.stopWeb();}}
+  try{if(!menu.show()){current.cancel();throw new IllegalStateException("Launcher display handoff failed;game not started");}}finally{synchronized(current){current.migrationClosed=true;current.stopWeb();}}
   synchronized(current){if(!current.launch)throw new IllegalStateException("No launch selected");}
   return current.arguments(null,null);
  }
@@ -62,12 +83,12 @@ public final class ProsperoLauncher {
  static String[] selectedShutdownAccessors()throws java.io.IOException{return selected121()?Prospero121.shutdownAccessors(current.receipt.version):null;}
  static String gameMain(){return "fabric".equals(current.detail.loader)?ProsperoFabric.MAIN:"net.minecraft.client.main.Main";}
  static ClassLoader runningGameLoader(){return "fabric".equals(current.detail.loader)?Thread.currentThread().getContextClassLoader():gameLoader();}
- static void configureGameLaunch(){if("fabric".equals(current.detail.loader))ProsperoFabric.configure(current.loader,current.library.root.resolve("cache/versions/"+current.detail.version+"/client.jar"),current.detail.version);}
+ static void configureGameLaunch(){if("fabric".equals(current.detail.loader))ProsperoFabric.configure(current.loader,current.cacheRoot.resolve("versions/"+current.detail.version+"/client.jar"),current.detail.version);}
  static boolean selectedResidentJna(){return current.receipt!=null&&(selected121()||current.receipt.classpath.stream().anyMatch(p->p.endsWith("/jna-5.19.1.jar")));}
  static boolean verifySelected()throws Exception{current.installer.verify(current.receipt);return true;}
  public static String[] nativeTick(int buttons){return current.tick(buttons);}
  synchronized void cancel(){generation++;code="";uri="";if(worker!=null&&worker.isAlive()){worker.interrupt();busy=true;task="STOPPING";}else{busy=false;task="";}cached=null;}
- private void runTask(String kind,Job job){if(busy){message="A task is running. Circle cancels it.";return;}busy=true;task=kind;int attempt=++generation;worker=new Thread(()->{try{job.run(attempt);}catch(Exception failure){synchronized(this){if(generation==attempt){message=failure instanceof ProsperoAuth.Failure?failure.getMessage():friendly(failure);feedback("error");System.err.println("PS5_LAUNCHER task="+kind+" result=FAILED storageCode="+(failure instanceof java.io.IOException io?ProsperoStorage.code(io):"NONE"));}}}finally{synchronized(this){if(generation==attempt||worker==Thread.currentThread()){busy=false;task="";code="";uri="";cached=null;}}}},"ProsperoCraft "+kind);worker.setDaemon(true);worker.start();}
+ private void runTask(String kind,Job job){if(busy){message="A task is running. Circle cancels it.";return;}busy=true;task=kind;migrationEpoch++;int attempt=++generation;worker=new Thread(()->{try{job.run(attempt);}catch(Exception failure){synchronized(this){if(generation==attempt){message=failure instanceof ProsperoAuth.Failure?failure.getMessage():friendly(failure);feedback("error");System.err.println("PS5_LAUNCHER task="+kind+" result=FAILED storageCode="+(failure instanceof java.io.IOException io?ProsperoStorage.code(io):"NONE"));}}}finally{synchronized(this){if(generation==attempt||worker==Thread.currentThread()){busy=false;task="";code="";uri="";cached=null;}}}},"ProsperoCraft "+kind);worker.setDaemon(true);worker.start();}
  interface Job{void run(int attempt)throws Exception;}
  private static String friendly(Exception error){if(error instanceof java.io.IOException io&&java.util.Set.of("ENOSPC","QUOTA").contains(ProsperoStorage.code(io)))return "App storage is full. Free space in this app, or refresh the loader metadata and relaunch to apply its storage request.";if(error instanceof IllegalArgumentException)return "Use1-40 letters, numbers, spaces or ._()!+-";if(error instanceof java.io.IOException)return error.getMessage()==null?"Storage or download error. Retry when ready.":error.getMessage();return "This action could not finish. Your worlds are kept. Try again.";}
  private synchronized boolean cancelled(int attempt){return attempt!=generation;}
@@ -173,13 +194,91 @@ public final class ProsperoLauncher {
  }
  private void stopWeb(){if(web!=null){web.close();web=null;}cached=null;}
  synchronized String[] tick(int buttons){
+  int desktopTag=buttons>>>28;
+  boolean action=desktopTag==0?(buttons&0xf008)!=0:
+      desktopTag!=1||(buttons&0x8000)!=0;
+  if(action){
+   // Foreground actions win. Scrolling and pointer hover can continue.
+   migrationEpoch++;
+   migrationAfter=System.nanoTime()+600_000_000L;
+  }
   String[] before=state();int serial=feedbackSerial;String[] after=tickModel(buttons);
   if(page!=15&&web!=null)stopWeb();
+  if(buttons==0)queueMigration();
   if(buttons!=0&&serial==feedbackSerial){
    boolean changed=false;for(int at:new int[]{2,8,9,10,11,12,13,15,19,22,24,26,27,28,29,30,31,64,68,75,79})changed|=!before[at].equals(after[at]);
    if(changed)feedback((buttons&0x2000)!=0?"back":(buttons&0xf008)!=0?"confirm":"move");
   }
   return state();
+ }
+ private boolean migrationAllowed(long epoch){
+  return !migrationClosed&&!busy&&!webMutating&&web==null&&!launch&&!launchPrepared&&epoch==migrationEpoch;
+ }
+ private void queueMigration(){
+  if(library.legacy==null||migrationWorker!=null||migrationFinished||
+      System.nanoTime()<migrationAfter||!migrationAllowed(migrationEpoch))return;
+  var instances=library.instances();
+  var chosen=detail!=null&&library.usesLegacy(detail)&&!migrationFailed.contains(detail.id)?detail:
+      instances.stream().filter(i->library.usesLegacy(i)&&!migrationFailed.contains(i.id)).findFirst().orElse(null);
+  boolean moveCache=chosen==null&&cacheRoot.equals(library.legacy.resolve("cache"))&&!migrationFailed.contains("cache");
+  String unit=chosen!=null?chosen.id:moveCache?"cache":"cleanup";
+  long epoch=migrationEpoch;
+  migrationWorker=new Thread(()->moveLibraryUnit(chosen,moveCache,unit,epoch),"ProsperoCraft storage");
+  migrationWorker.setDaemon(true);
+  try{migrationWorker.start();}catch(OutOfMemoryError refused){migrationWorker=null;migrationFinished=true;}
+ }
+ private void moveLibraryUnit(ProsperoLibrary.Instance instance,boolean moveCache,String unit,long epoch){
+  try{
+   if(instance==null&&!moveCache){
+    for(var entry:library.instances()){
+     ProsperoMigration.recoverRetired(ProsperoLibrary.instanceDir(library.legacy,entry),
+         ProsperoLibrary.instanceDir(library.root,entry));
+    }
+    ProsperoMigration.recoverRetired(library.legacy.resolve("cache"),library.root.resolve("cache"));
+    ProsperoMigration.retireCatalog(library.legacy,library.root);
+    synchronized(this){migrationFinished=true;}
+    return;
+   }
+   Path source=moveCache?library.legacy.resolve("cache"):ProsperoLibrary.instanceDir(library.legacy,instance);
+   Path target=moveCache?library.root.resolve("cache"):ProsperoLibrary.instanceDir(library.root,instance);
+   Path staged=ProsperoMigration.stage(source,target,library.root.resolve(".prospero-staged"),
+       (phase,done,total)->{
+        synchronized(this){
+         if(!migrationAllowed(epoch))return false;
+         migratingId=unit;
+         migrationStatus=total>0?phase+" · "+(int)(100.0*done/total)+"%":phase;
+         cached=null;
+         return true;
+        }
+       });
+   Path retired;
+   synchronized(this){
+    if(!migrationAllowed(epoch))return;
+    if(moveCache){
+     ProsperoMigration.publish(staged,target);
+     cacheRoot=target;
+     installer=installSource==null?new ProsperoInstall(target):new ProsperoInstall(target,installSource);
+     fabric=new ProsperoFabric(target);
+    }else library.publishInstance(instance,staged);
+    retired=ProsperoMigration.retire(source,target);
+   }
+   ProsperoMigration.purge(retired);
+  }catch(java.io.IOException failure){
+   synchronized(this){
+    if(migrationAllowed(epoch)){
+     migrationFailed.add(unit);
+     if(unit.equals("cleanup"))migrationFinished=true;
+     System.err.println("PS5_STORAGE unit="+(moveCache?"CACHE":instance==null?"CATALOG":"INSTANCE")+
+         " migration=DEFERRED code="+ProsperoStorage.code(failure));
+    }
+   }
+  }finally{
+   synchronized(this){
+    migratingId="";migrationStatus="";migrationWorker=null;
+    migrationAfter=System.nanoTime()+600_000_000L;
+    cached=null;
+   }
+  }
  }
  private int tabPage(){return switch(tab){case 0->0;case 1->2;default->3;};}
  private void selectTab(int next){int keep=(page==4||page==5)&&detail!=null?library.instances().indexOf(detail):0;tab=Math.floorMod(next,3);page=tabPage();top=false;selected=tab==0?Math.max(0,keep):0;row=0;cached=null;}
@@ -372,7 +471,7 @@ public final class ProsperoLauncher {
   f[104]=""+(page==10&&dropdownKind==8?row:library.settings().theme);f[75]=""+library.settings().background;f[76]=BACKGROUNDS[library.settings().background-1];
   f[73]=ProsperoChannel.label();f[74]=page==8?""+guideSection:"";
   f[71]=ProsperoChannel.offline()&&offlineAccount!=null&&offlineAccount.valid(System.currentTimeMillis())?"OFFLINE":"";f[72]=offlineAccount==null?"":offlineAccount.name;
-  f[69]=detail!=null&&launchable(detail.version,detail.loader)?"SUPPORTED":"PENDING";if(page!=12&&page!=13&&page!=14)f[70]=versions.isEmpty()?"":snapshot(versions.get(versionChoice).id())?versions.get(versionChoice).id()+" / supported snapshot. Use a separate world.":draftSupported(versions.get(versionChoice).id())?(ProsperoChannel.tempGameTest()?versions.get(versionChoice).id()+" full game requires Microsoft sign-in.":versions.get(versionChoice).id()+" demo can launch on this build."):"Download available. Play support coming soon.";f[68]=library.settings().showIntro?"ON":"OFF";f[67]="Data and downloads: "+library.root;f[66]=lowercase?"LOWER":"UPPER";f[64]=busy?"BUSY":"IDLE";f[65]=detail!=null&&ProsperoGraphics.zink(detail.version,detail.loader)?detail.version+" full game / native GLFW/Zink gameplay":detail!=null&&!launchable(detail.version,detail.loader)?"Download available. Play support coming soon.":detail!=null&&snapshot(detail.version)?detail.version+" / native SDL gameplay":((detail==null?"26.3":detail.version)+(ProsperoChannel.tempGameTest()?" full game / native ":" demo / native ")+(detail!=null&&"26.2".equals(detail.version)?"GLFW/SDL gameplay":"SDL gameplay"));return cached=f;
+  f[69]=detail!=null&&launchable(detail.version,detail.loader)?"SUPPORTED":"PENDING";if(page!=12&&page!=13&&page!=14)f[70]=versions.isEmpty()?"":snapshot(versions.get(versionChoice).id())?versions.get(versionChoice).id()+" / supported snapshot. Use a separate world.":draftSupported(versions.get(versionChoice).id())?(ProsperoChannel.tempGameTest()?versions.get(versionChoice).id()+" full game requires Microsoft sign-in.":versions.get(versionChoice).id()+" demo can launch on this build."):"Download available. Play support coming soon.";f[68]=library.settings().showIntro?"ON":"OFF";f[67]="Data and downloads: "+library.root;f[66]=lowercase?"LOWER":"UPPER";f[64]=busy?"BUSY":"IDLE";f[65]=detail!=null&&ProsperoGraphics.zink(detail.version,detail.loader)?detail.version+" full game / native GLFW/Zink gameplay":detail!=null&&!launchable(detail.version,detail.loader)?"Download available. Play support coming soon.":detail!=null&&snapshot(detail.version)?detail.version+" / native SDL gameplay":((detail==null?"26.3":detail.version)+(ProsperoChannel.tempGameTest()?" full game / native ":" demo / native ")+(detail!=null&&"26.2".equals(detail.version)?"GLFW/SDL gameplay":"SDL gameplay"));if(page==4&&!busy&&detail!=null&&detail.id.equals(migratingId))f[2]=migrationStatus;return cached=f;
  }
  synchronized String[] arguments(Path ignoredWork,Path ignoredAssets)throws Exception {
   if(!launch||detail==null||receipt==null)throw new IllegalStateException("No installed instance selected");
@@ -380,7 +479,7 @@ public final class ProsperoLauncher {
   boolean full=ProsperoChannel.tempGameTest()&&!offlineLaunch;
   if(full&&(session==null||!session.valid(System.currentTimeMillis())))throw new java.io.IOException("Your session expired. Sign in again before launching.");
   String player=full?session.name:offlineLaunch?offlineAccount.name:"PS5Demo",id=full?session.id:offlineLaunch?offlineAccount.id:UUID.nameUUIDFromBytes("OfflinePlayer:PS5Demo".getBytes(java.nio.charset.StandardCharsets.UTF_8)).toString();
-  java.util.List<String> args=new java.util.ArrayList<>(java.util.List.of("--username",player,"--uuid",id,"--accessToken",full?session.accessToken():"0","--version",detail.version,"--versionType",snapshot(detail.version)?"snapshot":"release","--gameDir",library.game(detail).toString(),"--assetsDir",library.root.resolve("cache/assets").toString(),"--assetIndex",receipt.assetIndex,"--width",""+ProsperoLibrary.RESOLUTIONS[library.settings().resolution][0],"--height",""+ProsperoLibrary.RESOLUTIONS[library.settings().resolution][1]));if(!full){args.add(0,"--disableChat");args.add(0,"--disableMultiplayer");if(!offlineLaunch)args.add(0,"--demo");}  if(ProsperoGraphics.vulkan(detail.version,receipt.window))java.util.Collections.addAll(args,"--graphicsBackend","vulkan");return args.toArray(String[]::new);
+  java.util.List<String> args=new java.util.ArrayList<>(java.util.List.of("--username",player,"--uuid",id,"--accessToken",full?session.accessToken():"0","--version",detail.version,"--versionType",snapshot(detail.version)?"snapshot":"release","--gameDir",library.game(detail).toString(),"--assetsDir",cacheRoot.resolve("assets").toString(),"--assetIndex",receipt.assetIndex,"--width",""+ProsperoLibrary.RESOLUTIONS[library.settings().resolution][0],"--height",""+ProsperoLibrary.RESOLUTIONS[library.settings().resolution][1]));if(!full){args.add(0,"--disableChat");args.add(0,"--disableMultiplayer");if(!offlineLaunch)args.add(0,"--demo");}  if(ProsperoGraphics.vulkan(detail.version,receipt.window))java.util.Collections.addAll(args,"--graphicsBackend","vulkan");return args.toArray(String[]::new);
  }
  @Override public String toString(){return "ProsperoCraft launcher [credentials redacted]";}
 }

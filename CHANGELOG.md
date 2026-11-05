@@ -1,5 +1,12 @@
 # Changelog
 
+## Local 221 · Incremental library move, 2026-11-05
+
+- Open the catalog first. Move existing instances and the shared cache in the
+  background and use their original paths until verification and publication.
+- Give play, edits and browser uploads priority. Retire each verified original
+  after publication and leave unidentified or conflicting files in place.
+
 ## Local 220 · One-time library move notice, 2026-11-05
 
 - Tell players on the migration panel that their library only needs to move once.
