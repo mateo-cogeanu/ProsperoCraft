@@ -65,3 +65,12 @@ growth, large real-pack rendering or exhaustive endurance claim.
 
 [Validation](validation/client214-browser-large-packs-2026-11-05.json) records the
 exact candidate, source, host/target checks and remaining physical tests.
+
+Final local214 artifact: `dist/candidates/client121-214/PPSA99874.zip`,
+127478126bytes, SHA-256
+`996d6650152340fe43604ca1b6c54b82c68f0428d058e1f73f681c913cffee17`.
+Built from clean source `4c155c06c9673e258843ff95d245c10615810b01`.
+19fast/12native checks and19source-only outside-root checks pass; target compile,
+signed integrity, ZIP CRC and independent package audit pass. Both hosted native
+jobs pass; hosted policy jobs were in progress when inspected. No physical214
+10GB transfer/loader growth/pack loading or public release is claimed.

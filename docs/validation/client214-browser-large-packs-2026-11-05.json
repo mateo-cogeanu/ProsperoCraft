@@ -8,12 +8,21 @@
     "web": "PASS129MiB resource+shader HTTP streams under64MiB heap; sparse10GiB ZIP64 offset/readable metadata entry,65537entries, malformed64bit controls/max65535byte comment;16GiB+1 early413 and interrupted declared10GiB body; injected deadlines and cleanup",
     "fast": "PASS19 checks35.1s",
     "native": "PASS12 checks13.5s",
-    "source_only": "Pending",
-    "target_package": "PASS initial214 target compile/link/converter; final signed package pending",
-    "hosted": "Pending source push"
+    "source_only": "PASS19 checks33.8s from source-only copy, empty explicit verified dependency cache and outside-root /tmp invocation",
+    "target_package": "PASS final signed integrity, ZIP CRC, independent package/static ABI audit; corresponding212 graphics/presenter/SDL/LWJGL/native dependency hashes retained. Manifest differs from212 only in version/storage request; no official JAR changes. Uncompressed growth1241903bytes over204.",
+    "hosted": {
+      "policy": "run42058503892 at4c155c0: actual Ubuntu/macOS jobs in progress when inspected",
+      "native": "run42058549181 at4c155c0: actual Ubuntu and macOS jobs PASS"
+    }
   },
   "physical": "NOT RUN: loader expands existing data request, existing worlds retained, actual10GB browser upload and cancellation/ENOSPC, real resource/shader pack loading and game return. Sparse host test is not full10GiB transfer.",
   "limits": "No invented free space, numeric FPS/throughput, broad pack/GPU memory compatibility or endurance; paired session may need renewal after a long request",
   "preservation": "Local213 retained/superseded; released212 unchanged. No reusable runtime, graphics/game-native or game-JAR changes.",
-  "release_store": "No action; exact-build physical and explicit release approval retained"
+  "release_store": "No action; exact-build physical and explicit release approval retained",
+  "source_commit": "4c155c06c9673e258843ff95d245c10615810b01",
+  "source_tree": "clean",
+  "package_sha256": "996d6650152340fe43604ca1b6c54b82c68f0428d058e1f73f681c913cffee17",
+  "package_bytes": 127478126,
+  "artifact": "dist/candidates/client121-214/PPSA99874.zip",
+  "status": "Signed local candidate, physical validation pending"
 }
