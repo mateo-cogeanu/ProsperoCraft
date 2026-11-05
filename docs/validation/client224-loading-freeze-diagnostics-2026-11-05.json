@@ -1,0 +1,18 @@
+{
+  "app_version": "01.000.224",
+  "title_id": "PPSA99874",
+  "package_sha256": "73501c3aa4baea2a4ebca3e02c55c2d61a11779059fc8a3ea0e0dbf0ab646fdd",
+  "package_bytes": 127577247,
+  "source_commit": "80ca88e464de3aaab278e97024bef175e3abd386",
+  "date": "2026-11-05",
+  "physical_223": [
+    "26.3 Fabric remained black. The archived exception log records Essential avatar workers failing on unavailable AWT font JNI. The render thread wait and the causal role of the worker failures remain unproven.",
+    "26.3 Vanilla created the Vulkan window and began resource reload. Repeated retrievals showed no new Java resource progress or GC progress after the observed stall. Native logs show that the OpenAL device was created. The blocking stack is unknown."
+  ],
+  "diagnostic": "Enable the existing startup observer for 48 snapshots at five-second intervals. The short diagnostic profile skips the high-frequency language transition burst. Timing and resource use may differ from build 223.",
+  "checks": [
+    "Signed target package and independent audit passed",
+    "Host configuration and observer property test passed with the packaged LWJGL PS5 platform JAR added to the fixture classpath"
+  ],
+  "console_pending": "Reproduce on 224 and inspect current-run render and worker stacks. Vanilla and Fabric gameplay acceptance remain pending."
+}
