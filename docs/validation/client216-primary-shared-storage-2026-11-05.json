@@ -15,7 +15,7 @@
     "package": "PASS final signed integrity and independent ZIP/class/ABI/source audit; separately named fault object included once, exact source/runtime fingerprints and original JNI/VM/graphics groups retained; SDL diagnostic routing rebuilt. Uncompressed growth1311158bytes over204.",
     "hosted": {
       "policy": "run42068457201 at40005dd: actual Ubuntu/macOS jobs PASS",
-      "native": "run42068826140 at40005dd: actual Ubuntu/macOS jobs in progress when inspected"
+      "native": "run42068826140 at40005dd: actual Ubuntu/macOS jobs PASS"
     },
     "fallback": "PASS readable shared metadata validation, explicit original fallback on corrupt/access/copy conflict, no fresh legacy writes, copied relative cache receipt verifies at new root"
   },
