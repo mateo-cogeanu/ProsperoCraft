@@ -13,7 +13,7 @@
     "Actual Vulkan host preview rendered scanning, copying and verification",
     "PS5 target compile, link, signature and independent package audit passed"
   ],
-  "console_pending": "Reproduce and capture the exact build, migration phase and live diagnostic evidence. Verify migration completion, restart and the pause path before release.",
-  "console_report": "The user reported that migration advanced from 58% to 59%, then appeared completely frozen at 95%. Build 219 was the candidate under discussion when migration began, but the running build, phase and responsiveness of the PS5 system menu remain unconfirmed.",
+  "console_pending": "Reproduce and capture the migration phase and live diagnostic evidence. Verify migration completion, restart and the pause path before release.",
+  "console_report": "The user reported that migration advanced from 58% to 59%, then appeared completely frozen at 95%. The user identified the running build as the candidate immediately before the one-time move notice (219) and confirmed the PS button still opened the system menu. The migration phase remains unconfirmed.",
   "diagnostics": "The FTP server responded, but denied access to the shared report directory and the recently modified legacy VM trace. Older readable legacy reports were not attributed to this run."
 }
