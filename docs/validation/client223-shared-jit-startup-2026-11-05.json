@@ -13,7 +13,9 @@
     "PS5 target build, signature, independent package audit and both reader/writer path pairs passed"
   ],
   "console_pending": [
-    "Confirm 223 reaches original Minecraft Main and the game menu on shared storage",
-    "Check Vanilla and Fabric launch, world save and launcher return"
-  ]
+    "Confirm whether the reported 26.3 Fabric run reaches the menu",
+    "Compare a clean 26.3 Vanilla instance on the same build and display mode if the modded run stays black",
+    "Check 26.2 Vanilla and Fabric launch, world save and launcher return"
+  ],
+  "physical_followup": "Build 223 on PPSA99874 passed the C1 gate, closed the launcher display successfully, and entered original Minecraft through 26.3 Fabric. The user reported a black screen. The same run continued from mod initialization to the LWJGL backend and SDL 1920x1080 display selection. No menu or terminal Java failure was established. Essential Discord IPC logged an unavailable native library on a background thread. Its causal role is unproven."
 }
