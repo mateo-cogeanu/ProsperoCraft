@@ -9,15 +9,25 @@
     "fast": "PASS19 checks41.1s",
     "native": "PASS13 checks16.2s; actual native shared/fallback storage/SDL/fault/OpenAL operations, injected cross-repository report hook",
     "runtime_reports": "PASS actual configure_root default/refusal/relocated HTTP/archive/frozen API with ASan/UBSan; prior HTTP/collector and actual64KiB pthread O0/O2 stack checks",
-    "target": "PASS initial216 compile/link/converter; signed candidate pending",
+    "target": "PASS final216 compile/link/converter/signature",
     "preview": "PASS actual Vulkan/JNI/mailbox/close/refusal/transition/selector fixtures; normal/dev/coming-soon badge rendering visually inspected",
-    "source_only": "PASS19fast37.3s and13native13.7s from source-only copy, initially empty explicit dependency cache and outside-root invocation; final primary-independent-of-legacy targeted test pending",
-    "package": "Pending signed/static audit",
-    "hosted": "Pending source push",
+    "source_only": "PASS19fast37.3s and13native13.7s, source-only copy with fresh explicit verified dependency cache/outside-root invocation; final primary-with-unavailable-legacy Java fixture also passes outside root",
+    "package": "PASS final signed integrity and independent ZIP/class/ABI/source audit; separately named fault object included once, exact source/runtime fingerprints and original JNI/VM/graphics groups retained; SDL diagnostic routing rebuilt. Uncompressed growth1311158bytes over204.",
+    "hosted": {
+      "policy": "run42068457201 at40005dd: actual Ubuntu/macOS jobs PASS",
+      "native": "run42068826140 at40005dd: actual Ubuntu/macOS jobs in progress when inspected"
+    },
     "fallback": "PASS readable shared metadata validation, explicit original fallback on corrupt/access/copy conflict, no fresh legacy writes, copied relative cache receipt verifies at new root"
   },
   "physical": "NOT RUN: actual ShadowMountPlus native+Java shared access, full migration/load/persistence, data reports/HTTP, large real-pack import/loading, clean Quit/relaunch, fallback and card/Back behavior. Host sparse10GiB test is not full PS5 transfer.",
   "allocation": "No existing download0 shrink/reclamation or automatic legacy cleanup;256MiB fallback request remains. Original private account/world backups retained.",
   "preservation": "Released212 unchanged; local213/214/215 retained. Genuine VM/JNI/graphics/LWJGL/OpenAL/shaderc groups and120Hz presenter retained; SDL differs only in breadcrumb path policy and fault recorder is separately named.",
-  "release_store": "No action; exact physical and explicit release gates retained"
+  "release_store": "No action; exact physical and explicit release gates retained",
+  "source_commit": "40005ddc01c0284182b3610f9bef3eaca9e08f85",
+  "source_tree": "clean",
+  "package_sha256": "ddffd1b389ed81a9b904d76aba172e4fd43b9b283047ad1985761c92f3ce1973",
+  "package_bytes": 127519033,
+  "status": "Signed local candidate; physical migration/quit and separate26.2 crash investigation pending",
+  "artifact": "dist/candidates/client121-216/PPSA99874.zip",
+  "known_report": "client262-crash-report-2026-11-05.json"
 }

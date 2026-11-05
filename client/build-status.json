@@ -145,6 +145,12 @@
     "validation": "docs/validation/client216-primary-shared-storage-2026-11-05.json",
     "scope": "Primary shared library/reports/tmp and verified readable legacy fallback, no normal card badges, settings Back retained",
     "report_runtime": "39f71e103864ec79c5d64fb1e36d7aefd40099f8",
-    "console": "Pending; no existing allocation reclaimed; release212 unchanged"
+    "console": "Pending; no existing allocation reclaimed; release212 unchanged",
+    "source_commit": "40005ddc01c0284182b3610f9bef3eaca9e08f85",
+    "source_tree": "clean",
+    "package_sha256": "ddffd1b389ed81a9b904d76aba172e4fd43b9b283047ad1985761c92f3ce1973",
+    "package_bytes": 127519033,
+    "package_audit": "PASS signed integrity and independent static audit",
+    "known_report": "docs/validation/client262-crash-report-2026-11-05.json"
   }
 }

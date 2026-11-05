@@ -342,3 +342,13 @@ root; Log4j and shutdown evidence move together. User removes normal card READY
 badges (only Coming soon/DEV TEST);215 settings Back remains. Physical shared
 access/migration/reports/quit/large packs pending; preserve212 and all candidates/
 release gates. See docs/client-primary-shared-storage-216.md.
+
+
+## New26.2 crash report —2026-11-05
+
+User reports both Vanilla26.2 and Fabric26.2 crashing while216 is prepared.
+Installed build/phase/cause remain unknown. Current FTP endpoint is unreachable;
+current address/enabled service and reopened launcher requested. Retrieve current
+reports and proceed with concrete repairs when access is restored; do not use old
+runs or host/static success as a26.2 fix. Preserve212 and exact local candidates.
+See docs/validation/client262-crash-report-2026-11-05.json.

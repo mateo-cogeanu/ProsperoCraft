@@ -85,3 +85,5 @@ Release212: [notes](releases/client-launcher-vanilla-212.md) and [console accept
 [Local215 shared storage and instance-settings Back](client-shared-storage-215.md).
 
 [Local216 primary shared storage and clean cards](client-primary-shared-storage-216.md).
+
+[New26.2 crash report awaiting current evidence](validation/client262-crash-report-2026-11-05.json).

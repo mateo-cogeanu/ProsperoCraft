@@ -95,3 +95,14 @@ legacy fallback notice and preserve both locations. These remain physical tests;
 no full10GB PS5 transfer, actual shared access, clean quit or endurance is implied
 by host/target checks. Released212 and local213/214/215 stay retained. No release,
 prerelease, Store submission or frozen milestone is authorized for216.
+
+Final local artifact: `dist/candidates/client121-216/PPSA99874.zip`,127519033bytes,
+SHA-256 `ddffd1b389ed81a9b904d76aba172e4fd43b9b283047ad1985761c92f3ce1973`,
+from clean source `40005ddc01c0284182b3610f9bef3eaca9e08f85`. Signed integrity and
+independent static/source audit pass;1311158bytes uncompressed growth over204.
+Both hosted policy jobs pass; native jobs were in progress when inspected.
+
+The user now reports [Vanilla/Fabric26.2 crashes](validation/client262-crash-report-2026-11-05.json)
+on an unidentified installed build. Current FTP is unreachable; current reports
+are requested. This report is unresolved and is not treated as an exact216
+regression or a fix established by storage/UI/host changes.

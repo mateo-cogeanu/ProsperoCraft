@@ -1,0 +1,15 @@
+{
+  "date": "2026-11-05",
+  "human_report": "i launched vanilla 26.2 and it crashed! fabric 26.2 also crashes",
+  "versions": [
+    "26.2 Vanilla",
+    "26.2 Fabric"
+  ],
+  "installed_build": "UNKNOWN: current build/session reports not yet retrieved",
+  "reproduction_phase": "Not yet established: launcher, game menu, world load or in-world",
+  "evidence": "Human report only; no current-run log, crash PC or exception retrieved",
+  "retrieval": "Previously supplied FTP endpoint returns No route to host; current address/enabled FTP and reopened launcher requested. No historical run substituted.",
+  "status": "Active investigation pending current FTP access. Do not infer a shared native/Java/storage cause or change policies without concrete evidence.",
+  "relation_to216": "Reported while216 was being prepared; no exact216 physical test established. Local/CI/package success does not resolve these crashes.",
+  "publication": "Sanitized consumer report only; raw device paths/logs remain local. Release212 preserved."
+}
