@@ -1,0 +1,24 @@
+{
+  "app_version": "01.000.222",
+  "title_id": "PPSA99874",
+  "package_sha256": "7d4f67960a5d093a0bc28d6d4187c4456a05d4e5a3f56432397bfe4bbb57c96d",
+  "package_bytes": 127576180,
+  "source_commit": "318b1da3604470cb848d4b4f951d34866b1b5b16",
+  "date": "2026-11-05",
+  "change": "A bounded catalog copy opens the launcher before bulk transfer. Existing instance and cache paths stay authoritative until each verified staging directory is atomically published. One background worker gives foreground actions priority. Each verified original is retired and its cleanup journal remains until payload deletion completes.",
+  "cleanup": "Original catalog files are removed only after verified instance and cache retirement and only if their original digests still match. Unidentified files, conflicting copies, historical diagnostics and earlier completed bulk-migration backups are preserved. An interrupted publication without a retirement journal may leave an original copy for review.",
+  "permissions": "Native startup adds read and traverse bits on the shared app and reports directories, including existing directories. No recursive permission changes are made. FTP behavior on the console is pending.",
+  "checks": [
+    "19 fast and 13 native host checks passed",
+    "Host fixture exercised early catalog, staged pause and edits, background resumption, separate instance and cache publication, scoped cleanup and restart",
+    "PS5 target compile, signature and independent package audit passed",
+    "Both host lanes also passed from a source-only archive with a freshly provisioned dependency cache and invocation outside the checkout."
+  ],
+  "console_pending": [
+    "Open a pre-migration library with no full-screen bulk transfer",
+    "Play and edit while an instance is being copied, then verify saves after resume",
+    "Interrupt and resume transfer and cleanup, then verify recognized legacy library data is gone",
+    "List the shared directory in Cyberduck and verify private children remain protected",
+    "Retest 26.2 Vanilla and Fabric and shared storage on ShadowMountPlus"
+  ]
+}
