@@ -392,6 +392,7 @@ inline void compose_library_progress(Canvas& c) noexcept {
  c.rounded(430,337,1060,352,32,ink(0x10251d));
  label(c,490,391,"PROSPEROCRAFT  /  LIBRARY",24,0x9bc8a9);
  title(c,490,449,fields[2].data(),46,940);
+ if(fields[7][0])label(c,490,507,"Your library only needs to move once.",24,0xaac8b2);
  constexpr int x=490,y=550,width=940,height=18;
  c.rounded(x,y,width,height,9,ink(0x233c2c));
  if(determinate){

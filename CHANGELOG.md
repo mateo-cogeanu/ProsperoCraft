@@ -1,5 +1,9 @@
 # Changelog
 
+## Local 220 · One-time library move notice, 2026-11-05
+
+- Tell players on the migration panel that their library only needs to move once.
+
 ## Local 219 · Library migration progress bar, 2026-11-05
 
 - Show a startup panel with measured percentages for moving and verifying the
