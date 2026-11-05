@@ -438,6 +438,7 @@ void run_test(int i) {
    {const_cast<char *>("-XX:ReservedCodeCacheSize=96m"),nullptr},
    {const_cast<char *>("-XX:SweeperThreshold=50.0"),nullptr},
    {const_cast<char *>(PROSPERO_STORAGE_OPTION("-Xlog:jit+compilation=debug,codecache=info:file=/data/ProsperoCraft/reports/java25-jit.log:uptime,level,tags:filecount=1,filesize=4M","-Xlog:jit+compilation=debug,codecache=info:file=/download0/java25-jit.log:uptime,level,tags:filecount=1,filesize=4M")),nullptr},
+   {const_cast<char *>(PROSPERO_STORAGE_OPTION("-Dps5.probe.jitLog=/data/ProsperoCraft/reports/java25-jit.log","-Dps5.probe.jitLog=/download0/java25-jit.log")),nullptr},
    {const_cast<char *>("--enable-native-access=ALL-UNNAMED"),nullptr},
    {const_cast<char *>("--add-exports=java.base/jdk.internal.misc=ALL-UNNAMED"),nullptr},
    {const_cast<char *>("-XX:+UseCompactObjectHeaders"),nullptr},

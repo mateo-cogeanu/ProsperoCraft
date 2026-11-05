@@ -22,6 +22,14 @@ def normalize(name, text):
             text = text.replace(block, '')
         text = re.sub(r'PROSPERO_REPORT_PATH\("([^"\n]*)"\)', lambda m: '"/download0/' + m[1] + '"', text)
         text = text.replace('std::strncmp(path,"/download0/",std::strlen("/download0/"))', 'std::strncmp(path,"/download0/",11)')
+        jit_reader = (
+            '   {const_cast<char *>(PROSPERO_STORAGE_OPTION('
+            '"-Dps5.probe.jitLog=/data/ProsperoCraft/reports/java25-jit.log",'
+            '"-Dps5.probe.jitLog=/download0/java25-jit.log")),nullptr},\n'
+        )
+        if text.count(jit_reader) != 1:
+            raise ValueError('JIT gate must follow the selected report root')
+        text = text.replace(jit_reader, '')
         options = {
             '-Xlog:jit+compilation=debug,codecache=info:file=/data/ProsperoCraft/reports/java25-jit.log:uptime,level,tags:filecount=1,filesize=4M': '-Xlog:jit+compilation=debug,codecache=info:file=/download0/java25-jit.log:uptime,level,tags:filecount=1,filesize=4M',
             '-Xlog:gc=info,safepoint=info:file=/data/ProsperoCraft/reports/java25-gc.log:uptimemillis,level,tags:filecount=1,filesize=4M': '-Xlog:gc=info,safepoint=info:file=/download0/java25-gc.log:uptimemillis,level,tags:filecount=1,filesize=4M',

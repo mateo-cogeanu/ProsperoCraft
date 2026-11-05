@@ -1,5 +1,11 @@
 # Changelog
 
+## Local 223 · Repair Minecraft startup on shared storage, 2026-11-05
+
+- Read the C1 warmup proof from the same report location the JVM writes.
+  Build 222 compiled the kernel but checked the old location and stopped
+  before entering Minecraft.
+
 ## Local 222 · Shared folder browsing and cleanup recovery, 2026-11-05
 
 - Allow read and traverse access on the shared app and reports directories.
