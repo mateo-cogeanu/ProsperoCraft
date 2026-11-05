@@ -1,0 +1,15 @@
+{
+  "app_version": "01.000.220",
+  "title_id": "PPSA99874",
+  "package_sha256": "0834922b9371db0ce90b2dec310b14a3f44c5c4ee521e84482c560ad91891a83",
+  "package_bytes": 127559228,
+  "source_commit": "c1d3a96de73570c6e4bc5a6b1258bddeebcd4161",
+  "date": "2026-11-05",
+  "change": "The migration panel says \u201cYour library only needs to move once.\u201d The note appears during the migration phases with the pause hint.",
+  "checks": [
+    "Vulkan host preview checked for text placement and readability",
+    "PS5 target build, signature and package audit passed",
+    "19 fast and 13 native host checks passed"
+  ],
+  "console_pending": "Verify the exact 220 build on PS5 before public release."
+}
