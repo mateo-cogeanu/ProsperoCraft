@@ -1,0 +1,21 @@
+{
+  "app_version": "01.000.218",
+  "title_id": "PPSA99874",
+  "package_sha256": "ebf63d3d63d606ec94a33c18206d390cb682ce8c6ca9f42263c20ae20795b08d",
+  "package_bytes": 127550912,
+  "source_commit": "0e25e954dd246cba9bc86977cf6b00246f921cf6",
+  "date": "2026-11-05",
+  "human_report": "After uploading candidate 217, the user reported being stuck on Opening your library.",
+  "evidence": "Cyberduck FTP refused listing of the shared reports directory. The legacy Java startup and exception reports visible over FTP were older than the latest native activity. Exact blocking phase is unconfirmed. The old screen does not distinguish JVM startup from synchronous copy and verification.",
+  "change": "Show JVM, reports, storage, copy, verification and library-load phases. Poll Circle while copying and verifying to pause before the staged tree is published. Open the verified legacy root for this session after a pause or shared library load failure.",
+  "checks": [
+    "Target compile, link, signature and package audit passed",
+    "Host storage fixture paused during verification and resumed with both library trees preserved",
+    "19 fast and 13 native host checks passed"
+  ],
+  "console_pending": [
+    "Confirm visible phase during opening",
+    "Verify Circle pause on a large library and successful migration on restart",
+    "Retry 26.2 Vanilla and Fabric launch and world save"
+  ]
+}
