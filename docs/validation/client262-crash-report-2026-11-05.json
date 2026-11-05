@@ -11,5 +11,22 @@
   "retrieval": "Cyberduck FTP retrieved 11 files including the archived Fabric failure. FTP denied access to some current native reports. Cyberduck treated the report HTTP URL as WebDAV and received HTTP 405. Raw reports are local.",
   "status": "Development 217 restores the unmodified publisher TinyFD 3.4.1 Java binding to the shared 26.x parent. Its existing native adapter reports desktop dialogs unavailable. Exact 217 console tests for both launch paths are pending.",
   "relation_to216": "The identified failure is on 212. Development 217 carries the 216 storage and launcher changes forward.",
-  "publication": "Sanitized consumer evidence only. Local candidate and source publication are separate from release and Store publication."
+  "publication": "Sanitized consumer evidence only. Local candidate and source publication are separate from release and Store publication.",
+  "candidate": {
+    "title_id": "PPSA99874",
+    "app_version": "01.000.217",
+    "build_source_commit": "e3881fc6bde7922d19367630f11f95299f84e37a",
+    "package_sha256": "77841433b2fa4a0ff49038f362c8ea1e89904b009fe17954268f672d82c72dbe",
+    "package_bytes": 127525873,
+    "checks": [
+      "19 fast and 13 native host checks passed",
+      "Original 3.4.1 TinyFD Java calls passed against the PS5 adapter compiled for host with a pinned stock host LWJGL core",
+      "PS5 target compile, link, signature integrity and independent package audit passed"
+    ],
+    "console_pending": [
+      "Launch 26.2 Vanilla to menu, join a world, save and return",
+      "Launch 26.2 Fabric to menu, join a world, save and return",
+      "Retest 1.21.10 and 1.21.11 Vanilla, and shared storage on ShadowMountPlus"
+    ]
+  }
 }
