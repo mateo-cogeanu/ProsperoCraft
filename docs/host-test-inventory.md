@@ -329,3 +329,8 @@ Manual Vulkan previews cover parent overlays, six theme previews and icon target
 byte equality,9001entry pack and ZIP metadata controls, plus injected3minute
 success/30minute deadline cleanup. This does not validate PS5 upload throughput
 or pack/game compatibility. See [213](client-browser-uploads-213.md).
+
+214 adds sparse ZIP64 central-directory offsets above10GiB, actual65537entry
+archives, malformed64bit metadata and max-comment controls under64MiB heap;
+32GiB requested metadata identity and storage-error/path preservation checks.
+Sparse offsets are not a real10GiB upload or PS5 quota/pack-loading test.

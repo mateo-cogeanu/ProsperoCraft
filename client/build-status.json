@@ -119,6 +119,13 @@
     "app_version": "01.000.213",
     "validation": "docs/validation/client213-browser-uploads-2026-11-05.json",
     "scope": "1GiB streamed browser imports, longer deadlines and bounded larger pack directory",
-    "console": "Pending; released212 retained"
+    "console": "Pending; released212 retained",
+    "status": "Superseded by214 after explicit10GB request; signed ZIP retained"
+  },
+  "development_214": {
+    "app_version": "01.000.214",
+    "validation": "docs/validation/client214-browser-large-packs-2026-11-05.json",
+    "scope": "16GiB streamed ZIP64 pack uploads, size-scaled deadline,32GiB requested storage",
+    "console": "Pending; released212 unchanged"
   }
 }

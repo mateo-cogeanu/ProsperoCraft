@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Local213 larger streaming browser uploads candidate from exact accepted204 inputs. No releases.
+"""Local214 large ZIP64 browser uploads candidate from exact accepted204 inputs. No releases.
 
 Original343/OpenAL groups are retained byte for byte from the relink kit.
 Main, explicit libjava handle hook, SDL, graphics inventory and matched333 are rebuilt.
@@ -48,7 +48,7 @@ def main():
     parser.add_argument('--java-home', type=Path)
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--work-dir', type=Path, required=True)
-    parser.add_argument('--app-version', choices=('01.000.213',), default='01.000.213')
+    parser.add_argument('--app-version', choices=('01.000.214',), default='01.000.214')
     parser.add_argument('--check-only', action='store_true', help='Compile/link/convert without signing or a candidate ZIP')
     args = parser.parse_args()
     app_version = args.app_version
@@ -81,7 +81,7 @@ def main():
                     text, count = re.subn(r'^#ifdef PROSPERO_LWJGL333_CLOSURE_RESERVE\n.*?^#endif\n', '', body.decode(), flags=re.M | re.S)
                     if count != 2:
                         raise ValueError('Expected exactly the two explicit333 reserve bootstrap blocks')
-                    body = text.encode()
+                    body = text.replace('Storage /download0: title-local reservation follows app manifest; actual capacity is unavailable, not zero', 'Storage /download0: title-local reservation requested4096MiB; actual capacity is unavailable, not zero').encode()
                 if hashlib.sha256(body).hexdigest() != sha(original):
                     raise ValueError('204 native bootstrap/policy changed beyond explicit333 reserve: ' + str(current))
     pin = json.loads((ROOT / 'client/ports/lwjgl333/runtime.json').read_text())
@@ -120,7 +120,7 @@ def main():
     if sha(sdl_object)!=sdl_audit['object_sha256']:raise ValueError('Stale SDL output')
     for name,digest in sdl_audit['port_sha256'].items():
         if sha(ROOT/'client/ports/sdl'/name)!=digest:raise ValueError('Stale SDL source: '+name)
-    sdl_scoped=work/'sdl213-scoped.o'
+    sdl_scoped=work/'sdl214-scoped.o'
     subprocess.run([str(llvm/'llvm-objcopy'),'--redefine-syms='+str(baseline/'provider-bindings.txt'),str(sdl_object),str(sdl_scoped)],check=True)
     os_build=args.oshi665_build.resolve();os_overlay=os_build/'oshi-6.6.5-ps5-platform.jar';os_audit=json.loads((os_build/'audit.json').read_text())
     if sha(os_overlay)!=os_audit['output_sha256']:raise ValueError('Stale OSHI665 overlay')
@@ -236,6 +236,7 @@ def main():
     param = json.loads((app / 'sce_sys/param.json').read_text())
     if not int(param.get('attribute3',0))&0x40:raise ValueError('120Hz title declaration missing')
     param['contentVersion'] = app_version
+    param['downloadDataSize'] = 32768
     (app / 'sce_sys/param.json').write_text(json.dumps(param, indent=2) + '\n')
     sdk = runtime / '.tools/native-sdk/ps5-payload-sdk'
     flags = ['-target', 'x86_64-sie-ps5', '-fvisibility-nodllstorageclass=default', '-isysroot', str(sdk),
@@ -284,7 +285,7 @@ def main():
     subprocess.run([str(converter), 'link', '--in', str(pie), '--out', str(elf), '--stub-dir', str(sdk / 'target/lib'),
         *sum([['--stub', str(p)] for p in stubs], []), '--module-sdk', '0x02000009', '--companion-sdk', '0x08050001', '--file-name', 'eboot.elf'], check=True)
     if args.check_only:
-        print('PASS213 target compile/link/converter; no signed candidate ZIP')
+        print('PASS214 target compile/link/converter; no signed candidate ZIP')
         return
     subprocess.run([str(converter), 'self', '--sign', '--in', str(elf), '--out', str(app / 'eboot.bin'), '--magic', '0x1D3D154F'], check=True)
     subprocess.run([str(converter), 'self', '--inspect', '--file', str(app / 'eboot.bin')], check=True)
@@ -322,13 +323,13 @@ def main():
         'newGroupSha256': sha(registry / 'embedded-lwjgl333.o'), 'overlaySha256': sha(overlay),
         'source_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
         'source_tree': 'modified' if subprocess.check_output(['git', 'status', '--porcelain'], text=True).strip() else 'clean',
-        'scope': '1GiB streaming browser uploads,30minute deadline,30second idle wait and larger bounded pack directories;212launcher/game/Java policies retained;Fabric121blocked',
+        'scope': '16GiB streaming imports, size-scaled deadline, bounded ZIP64 pack directory,32GiB manifest storage request;212launcher/game/Java policies retained;Fabric121blocked',
         'nativePresenterSha256':sha(presenter),'presentationRuntime':presentation_pin,'graphicsSupportSha256':sha(graphics_object),'newSdlGroupSha256':sha(registry/'embedded-ps5sdl.o'),'oshi665Sha256':sha(os_overlay),
         'console': 'NOT TESTED', 'releaseStore': 'No action'}
     (output / 'build-audit.json').write_text(json.dumps(record, indent=2) + '\n')
     (output / 'SHA256SUMS').write_text(record['package_sha256'] + '  PPSA99874.zip\n')
     shutil.copyfile(pie, output / pie.name)
-    print('LOCAL213', package, 'SHA256', record['package_sha256'])
+    print('LOCAL214', package, 'SHA256', record['package_sha256'])
 
 
 if __name__ == '__main__':

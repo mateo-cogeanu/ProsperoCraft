@@ -1,5 +1,14 @@
 # Changelog
 
+## Local214 — imports above10GB,2026-11-05
+
+- User requests10GB packs: supersede local213 with16GiB cap, long request lengths,
+  size-scaled transfer deadlines and bounded ZIP64 pack metadata validation.
+- Request32GiB persistent title storage to accommodate large packs; preserve the
+  same title/data paths. Loader growth and actual10GB uploads remain console checks.
+- Retain streamed writes, progress/cancel/no-overwrite and failure cleanup.
+  Released212 and Store listing unchanged; no214 release authorization.
+
 ## Local213 — larger browser uploads,2026-11-05
 
 - Raise per-file browser uploads from128MiB to1GiB, retaining64KiB streaming.

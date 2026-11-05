@@ -63,7 +63,8 @@ milestone scopes. Public packages provision original downloads on console rather
 than bundling game payloads or preset instances. Keep isolated UUID game directories,
 shared hash-verified cache and old worlds/settings. Unsupported capacity queries
 mean unknown, not zero physical free space; `/download0/ProsperoCraft` and existing
-4096 MiB data policy do not authorize migration/elevation or deletion.
+32768 MiB request for the explicit10GB pack goal in [214](client-browser-uploads-214.md)
+do not authorize migration/elevation or deletion; actual loader expansion remains pending.
 
 Use approved artwork and pinned branding metadata via existing preparation and
 `apply_branding.py` hooks. Retain all original/v2/v3 masters and supplied corner

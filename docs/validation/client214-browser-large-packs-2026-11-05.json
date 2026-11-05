@@ -1,0 +1,19 @@
+{
+  "date": "2026-11-05",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.214",
+  "request": "more than a gig, i saw packs of 10 GB pretty please",
+  "scope": "16GiB streamed browser cap, size-scaled deadlines, bounded ZIP64 pack metadata and32GiB title-local manifest storage request",
+  "checks": {
+    "web": "PASS129MiB resource+shader HTTP streams under64MiB heap; sparse10GiB ZIP64 offset/readable metadata entry,65537entries, malformed64bit controls/max65535byte comment;16GiB+1 early413 and interrupted declared10GiB body; injected deadlines and cleanup",
+    "fast": "PASS19 checks35.1s",
+    "native": "PASS12 checks13.5s",
+    "source_only": "Pending",
+    "target_package": "PASS initial214 target compile/link/converter; final signed package pending",
+    "hosted": "Pending source push"
+  },
+  "physical": "NOT RUN: loader expands existing data request, existing worlds retained, actual10GB browser upload and cancellation/ENOSPC, real resource/shader pack loading and game return. Sparse host test is not full10GiB transfer.",
+  "limits": "No invented free space, numeric FPS/throughput, broad pack/GPU memory compatibility or endurance; paired session may need renewal after a long request",
+  "preservation": "Local213 retained/superseded; released212 unchanged. No reusable runtime, graphics/game-native or game-JAR changes.",
+  "release_store": "No action; exact-build physical and explicit release approval retained"
+}

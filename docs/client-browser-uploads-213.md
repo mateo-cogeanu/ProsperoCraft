@@ -39,3 +39,5 @@ interrupted cleanup, existing files, subsequent game loading and library return.
 
 [Validation](validation/client213-browser-uploads-2026-11-05.json) records exact
 source/package checks and pending physical tests.
+
+Superseded before delivery: the user requests10GB packs; see [214](client-browser-uploads-214.md). Exact213 signed ZIP remains retained with its validation.

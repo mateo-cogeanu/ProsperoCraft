@@ -326,7 +326,7 @@ void run_test(int i) {
   const auto file_budget=ps5::file_limits::prepare(8192);
   char file_stage[256];std::snprintf(file_stage,sizeof(file_stage),"PS5_FILE_LIMIT query=%d change=%d errno=%d before=%llu after=%llu hard=%llu",file_budget.query,file_budget.change,file_budget.error,(unsigned long long)file_budget.before,(unsigned long long)file_budget.after,(unsigned long long)file_budget.hard);log_stage(file_stage);
   ps5::file_limits::snapshot(file_stage,sizeof(file_stage));log_stage(file_stage);
-  log_stage("Storage /download0: title-local reservation requested4096MiB; actual capacity is unavailable, not zero");
+  log_stage("Storage /download0: title-local reservation follows app manifest; actual capacity is unavailable, not zero");
   prospero_hid_preload();
   log_stage("Begin embedded core constructors");
   size_t count=0;

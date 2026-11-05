@@ -298,3 +298,16 @@ ZIP64/split/path rejection retained. Host129MiB real uploads with64MiB heap and
 injected deadlines are scoped evidence; physical large-pack transfers/loading
 remain pending. No USB implementation or release/Store change; preserve212 and
 future exact-build gates. See docs/client-browser-uploads-213.md.
+
+
+## Explicit10GB browser pack request —2026-11-05
+
+User requires more than1GiB, citing10GB packs.214 supersedes local213:16GiB cap,
+long request lengths, size-scaled deadline (minimum30min;512KiB/s plus5min),
+30second idle, bounded pack ZIP64 up to100000entries/16MiB; mods retain8192/4MiB
+and ZIP64 refusal. Request32GiB title-local downloadDataSize for214, preserving
+identity/data paths; no migration/elevation/deletion/image manipulation. This
+supersedes the earlier4GiB request for this large-pack goal. Loader expansion,
+actual10GB transfers/pack loading remain physical tests; sparse host10GiB offsets
+are not full transfer proof. Preserve213/212 and release gates. See
+ docs/client-browser-uploads-214.md.

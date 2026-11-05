@@ -12,9 +12,11 @@ import com.google.gson.*;
 /** Menu-scoped administrative service. One worker/socket/upload; no diagnostics sharing. */
 final class ProsperoWeb implements AutoCloseable {
  static final long PAIRING_MS=5*60_000L;
- static final long MAX_UPLOAD=1024L*1024*1024, UPLOAD_MS=30*60_000L, SESSION_MS=15*60_000L;
+ static final long MAX_UPLOAD=16L*1024*1024*1024, UPLOAD_MS=30*60_000L, SESSION_MS=15*60_000L;
  static final int UPLOAD_IDLE_MS=30_000;
- static final String UPLOAD_LABEL="1 GiB";
+ static final String UPLOAD_LABEL="16 GiB";
+ static final long UPLOAD_RATE=512*1024, UPLOAD_GRACE_MS=5*60_000L;
+ static long uploadMillis(long bytes){return Math.max(UPLOAD_MS,((bytes+UPLOAD_RATE-1)/UPLOAD_RATE)*1000+UPLOAD_GRACE_MS);}
  interface Owner {
   Object snapshot()throws Exception;
   default String selectedInstance(){return "";}
@@ -90,7 +92,7 @@ final class ProsperoWeb implements AutoCloseable {
    for(int i=0;;i++){String h=line(in,2048,deadline);bytes+=h.length();require(bytes<=8192&&i<=32,431,"Request headers too large");if(h.isEmpty())break;int at=h.indexOf(':');require(at>0,400,"Invalid header");String key=h.substring(0,at).toLowerCase(Locale.ROOT);require(key.matches("[a-z0-9-]+")&&!headers.containsKey(key),400,"Duplicate or invalid header");headers.put(key,h.substring(at+1).strip());}
    require(!headers.containsKey("transfer-encoding")&&!headers.containsKey("expect"),400,"Use a bounded Content-Length upload");
    String host=headers.getOrDefault("host","");require(hosts.contains(host),403,"Address changed. Reopen the launcher address");
-   long length=0;try{String l=headers.getOrDefault("content-length","0");require(l.matches("[0-9]{1,10}"),400,"Invalid length");length=Long.parseLong(l);}catch(NumberFormatException bad){throw new Refused(400,"Invalid length");}
+   long length=0;try{String l=headers.getOrDefault("content-length","0");require(l.matches("[0-9]{1,18}"),400,"Invalid length");length=Long.parseLong(l);}catch(NumberFormatException bad){throw new Refused(400,"Invalid length");}
    require(length<=MAX_UPLOAD,413,"Maximum file size is "+UPLOAD_LABEL);
    if(method.equals("GET"))require(length==0,400,"Unexpected body");
    if(!method.equals("GET")){require(("http://"+host).equals(headers.get("origin")),403,"Open this page directly from the launcher address");require("1".equals(headers.get("x-prospero-request")),403,"Browser request required");}
@@ -128,7 +130,7 @@ final class ProsperoWeb implements AutoCloseable {
      Path staging=Files.createTempFile(folder,".prospero-upload-",".part");
      try{
       // Capacity query is unsupported on the console; ENOSPC/quota write errors are authoritative.
-      byte[] buffer=new byte[65536];long left=length,until=clock.getAsLong()+UPLOAD_MS;socket.setSoTimeout(UPLOAD_IDLE_MS);
+      byte[] buffer=new byte[65536];long left=length,until=clock.getAsLong()+uploadMillis(length);socket.setSoTimeout(UPLOAD_IDLE_MS);
       try(var file=sink.open(staging)){
        while(left>0){require(!closed&&clock.getAsLong()<until,408,"Upload timed out");int count=in.read(buffer,0,(int)Math.min(buffer.length,left));if(count<0)throw new Refused(400,"Upload interrupted");require(!closed&&clock.getAsLong()<until,408,"Upload timed out");file.write(buffer,0,count);left-=count;}
       }
@@ -162,20 +164,42 @@ final class ProsperoWeb implements AutoCloseable {
  }
  static int u16(byte[] b,int i){return (b[i]&255)|(b[i+1]&255)<<8;}
  static long u32(byte[] b,int i){return Integer.toUnsignedLong(u16(b,i)|u16(b,i+2)<<16);}
+ // ZIP64 fields are unsigned; values outside Java/file limits are refused before allocation.
+ static long u64(byte[] bytes,int at)throws IOException {long value=u32(bytes,at)|(u32(bytes,at+4)<<32);require(value>=0,400,"ZIP value exceeds supported range");return value;}
+ static long directory(Path file,String kind)throws IOException {
+  boolean pack=kind.equals("resources")||kind.equals("shaders");long maxEntries=pack?100_000:8192,maxDirectory=pack?16L*1024*1024:4L*1024*1024;
+  try(var input=new RandomAccessFile(file.toFile(),"r")){
+   int n=(int)Math.min(input.length(),65557);byte[] tail=new byte[n];long start=input.length()-n;input.seek(start);input.readFully(tail);int end=-1;
+   for(int i=n-22;i>=0;i--)if(u32(tail,i)==0x06054b50L&&i+22+u16(tail,i+20)==n){end=i;break;}
+   require(end>=0,400,"Missing ZIP directory");
+   require(u16(tail,end+4)==0&&u16(tail,end+6)==0&&u16(tail,end+8)==u16(tail,end+10),400,"Split ZIP archives are unsupported");
+   long count=u16(tail,end+10),size=u32(tail,end+12),offset=u32(tail,end+16),boundary=start+end;
+   byte[] location=new byte[20];if(boundary>=20){input.seek(boundary-20);input.readFully(location);}
+   boolean locator=boundary>=20&&u32(location,0)==0x07064b50L;
+   if(locator||count==65535||size==0xffffffffL||offset==0xffffffffL){
+    require(pack&&locator,400,"Missing or unsupported ZIP64 directory");long locPosition=boundary-20;
+    require(u32(location,4)==0&&u32(location,16)==1,400,"Split ZIP64 archives are unsupported");
+    long record=u64(location,8);require(record<=locPosition-56,400,"Invalid ZIP64 record offset");
+    byte[] fixed=new byte[56];input.seek(record);input.readFully(fixed);
+    require(u32(fixed,0)==0x06064b50L,400,"Invalid ZIP64 record");long recordSize=u64(fixed,4);
+    require(recordSize>=44&&recordSize<=65536&&recordSize==locPosition-record-12,400,"Invalid ZIP64 record size");
+    require(u32(fixed,16)==0&&u32(fixed,20)==0,400,"Split ZIP64 archives are unsupported");
+    long actualCount=u64(fixed,32),actualSize=u64(fixed,40),actualOffset=u64(fixed,48);
+    require(u64(fixed,24)==actualCount&&(count==65535||count==actualCount)&&(size==0xffffffffL||size==actualSize)&&(offset==0xffffffffL||offset==actualOffset),400,"Inconsistent ZIP64 directory");
+    count=actualCount;size=actualSize;offset=actualOffset;boundary=record;
+   }
+   require(count>0&&count<=maxEntries&&size<=maxDirectory&&offset<=boundary&&size<=boundary-offset,400,"ZIP directory limit exceeded or invalid offset");
+   return count;
+  }
+ }
  static void inspect(Path file,String kind)throws IOException {
   if(kind.equals("litematica")||kind.equals("worldedit")){
    // Bounded gzip/NBT signature check only; no promise of mod/version schema compatibility.
    try(var in=new java.io.PushbackInputStream(Files.newInputStream(file),2)){int a=in.read(),b=in.read();require(a==31&&b==139||a==10,400,"Expected gzip or compound NBT schematic");if(a==31){in.unread(new byte[]{(byte)a,(byte)b});try(var gzip=new java.util.zip.GZIPInputStream(in)){require(gzip.read()==10,400,"Expected compound NBT schematic");}}}return;
   }
-  // Bound central-directory allocation before constructing ZipFile; reject ZIP64.
-  boolean pack=kind.equals("resources")||kind.equals("shaders");int maxEntries=pack?65534:8192,maxDirectory=pack?16*1024*1024:4*1024*1024;
-  try(var input=new RandomAccessFile(file.toFile(),"r")){
-   int n=(int)Math.min(input.length(),65557);byte[] tail=new byte[n];input.seek(input.length()-n);input.readFully(tail);int end=-1;
-   for(int i=n-22;i>=0;i--)if(tail[i]==0x50&&tail[i+1]==0x4b&&tail[i+2]==5&&tail[i+3]==6&&i+22+u16(tail,i+20)==n){end=i;break;}
-   require(end>=0,400,"Missing ZIP directory");require(u16(tail,end+4)==0&&u16(tail,end+6)==0&&u16(tail,end+8)==u16(tail,end+10)&&u16(tail,end+10)<=maxEntries&&u32(tail,end+12)<=maxDirectory&&u32(tail,end+16)+u32(tail,end+12)<=input.length()-n+end,400,"ZIP directory limit exceeded or unsupported ZIP64/split archive");
-  }
+  long directoryEntries=directory(file,kind);
   try(var zip=new ZipFile(file.toFile())){
-   require(zip.size()>0&&zip.size()<=maxEntries,400,"Archive entry limit exceeded");
+   require(zip.size()==directoryEntries,400,"Archive directory count mismatch");
    require(!kind.equals("resources")||zip.getEntry("pack.mcmeta")!=null,400,"Resource pack needs pack.mcmeta");
    require(!kind.equals("mods")||zip.getEntry("fabric.mod.json")!=null,400,"Expected a Fabric mod JAR");
    boolean shader=false;for(var entries=zip.entries();entries.hasMoreElements();){var e=entries.nextElement();String n=e.getName();require(n.length()<=512&&!n.startsWith("/")&&!n.contains("\\")&&Arrays.stream(n.split("/")).noneMatch(p->p.equals("..")),400,"Unsafe archive paths");shader|=n.startsWith("shaders/");}
