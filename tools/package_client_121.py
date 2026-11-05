@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Local215 shared data storage and instance-settings Back candidate from exact accepted204 inputs. No releases.
+"""Local216 primary shared storage for content/reports/tmp with verified legacy fallback candidate from exact accepted204 inputs. No releases.
 
 Original343/OpenAL groups are retained byte for byte from the relink kit.
 Main, explicit libjava handle hook, SDL, graphics inventory and matched333 are rebuilt.
@@ -17,6 +17,7 @@ import zipfile
 
 from host_toolchain import ROOT, java_home
 from build_lwjgl333 import sha
+from storage_bootstrap_policy import normalize
 
 BASE_PACKAGE = '89167d01c7da0ece733b0dd8b7871a05ee38ff5f79ee45b4ce9beefc5d4c14a0'
 BASE_RELINK = '4351224b234d2b16a688afc4d31f23f0c6badc30670d034ad065cc629bce9f0f'
@@ -48,7 +49,7 @@ def main():
     parser.add_argument('--java-home', type=Path)
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--work-dir', type=Path, required=True)
-    parser.add_argument('--app-version', choices=('01.000.215',), default='01.000.215')
+    parser.add_argument('--app-version', choices=('01.000.216',), default='01.000.216')
     parser.add_argument('--check-only', action='store_true', help='Compile/link/convert without signing or a candidate ZIP')
     args = parser.parse_args()
     app_version = args.app_version
@@ -76,20 +77,25 @@ def main():
                 current = ROOT / original.relative_to(source_base)
                 if not current.is_file():
                     raise ValueError('Missing204 native bootstrap source: ' + str(current))
-                body = current.read_bytes()
+                body = normalize(str(original.relative_to(source_base)), current.read_text()).encode()
                 if str(original.relative_to(source_base)) == 'client/startup/bootstrap.cpp':
                     text, count = re.subn(r'^#ifdef PROSPERO_LWJGL333_CLOSURE_RESERVE\n.*?^#endif\n', '', body.decode(), flags=re.M | re.S)
                     if count != 2:
                         raise ValueError('Expected exactly the two explicit333 reserve bootstrap blocks')
-                    body = text.replace('Storage /download0: title-local reservation follows app manifest; actual capacity is unavailable, not zero', 'Storage /download0: title-local reservation requested4096MiB; actual capacity is unavailable, not zero').encode()
+                    body = text.encode()
                 if hashlib.sha256(body).hexdigest() != sha(original):
                     raise ValueError('204 native bootstrap/policy changed beyond explicit333 reserve: ' + str(current))
+    report_pin=json.loads((ROOT/'client/launcher/report-runtime.json').read_text())
     pin = json.loads((ROOT / 'client/ports/lwjgl333/runtime.json').read_text())
     for name, digest in pin['source_sha256'].items():
-        if sha(runtime / name) != digest:
-            raise ValueError('Wrong runtime namespace integration: ' + name)
+        expected=report_pin['source_sha256'].get(name,digest)
+        if sha(runtime / name) != expected:
+            raise ValueError('Wrong runtime namespace/report integration: ' + name)
     if sha(runtime / '.tools/java25/openjdk/build/ps5-bootstrap/support/native/java.base/libjava/NativeLibraries.o') != pin['nativeLibrariesObjectSha256']:
         raise ValueError('Target libjava needs the pinned137 build')
+    report_pin=json.loads((ROOT/'client/launcher/report-runtime.json').read_text())
+    for name,digest in report_pin['source_sha256'].items():
+        if sha(runtime/name)!=digest:raise ValueError('Report runtime integration mismatch')
     build = args.lwjgl333_build.resolve()
     native = build / 'ps5/lwjgl333.o'
     overlay = build / 'lwjgl-3.3.3-ps5-overlay.jar'
@@ -120,7 +126,7 @@ def main():
     if sha(sdl_object)!=sdl_audit['object_sha256']:raise ValueError('Stale SDL output')
     for name,digest in sdl_audit['port_sha256'].items():
         if sha(ROOT/'client/ports/sdl'/name)!=digest:raise ValueError('Stale SDL source: '+name)
-    sdl_scoped=work/'sdl215-scoped.o'
+    sdl_scoped=work/'sdl216-scoped.o'
     subprocess.run([str(llvm/'llvm-objcopy'),'--redefine-syms='+str(baseline/'provider-bindings.txt'),str(sdl_object),str(sdl_scoped)],check=True)
     os_build=args.oshi665_build.resolve();os_overlay=os_build/'oshi-6.6.5-ps5-platform.jar';os_audit=json.loads((os_build/'audit.json').read_text())
     if sha(os_overlay)!=os_audit['output_sha256']:raise ValueError('Stale OSHI665 overlay')
@@ -191,6 +197,7 @@ def main():
             for suffix in suffixes:
                 shutil.copyfile(icons / (replacement + suffix), destination / (replacement + suffix))
         shutil.copyfile(icons / 'attribution.json', destination / 'attribution.json')
+    shutil.copyfile(ROOT/'client/startup/log4j2-startup.xml',java/'log4j2-startup.xml')
     shutil.copyfile(overlay, java / 'ports' / overlay.name)
     (java/'graphics-resolution-audit.json').write_text(json.dumps(graphics_audit,indent=2)+'\n')
     shutil.copyfile(os_overlay,java/'ports'/os_overlay.name)
@@ -250,6 +257,9 @@ def main():
           runtime / 'native', work, ROOT / 'client/native', ROOT / 'client/launcher/toolkit/src',
           ROOT / '.tools/PS5_Mesa/include', runtime / 'java25/probe', runtime / 'java25/platform')],
         '-c', str(ROOT / 'client/save_headroom/bootstrap.cpp'), '-o', str(main_obj)], check=True)
+    storage_fault=work/'storage-fault.o'
+    fault_renames=['-Dps5shaderc_fault_'+suffix+'=prospero_storage_fault_'+suffix for suffix in ('begin','end','status','extended_status')]
+    subprocess.run([str(llvm/'clang'),*flags,'-fPIC',*fault_renames,'-c',str(ROOT/'client/ports/shaderc/fault.c'),'-o',str(storage_fault)],check=True)
     libraries = work / 'libraries'
     libraries.mkdir(exist_ok=True)
     for row in manifest['files']:
@@ -275,6 +285,7 @@ def main():
             link.append(str(baseline / item))
         else:
             link.append(item)
+    link.append(str(storage_fault))
     response = work / ('link'+candidate+'.rsp')
     response.write_text('\n'.join(json.dumps(x) for x in link) + '\n')
     subprocess.run([str(args.lld.absolute()), '@' + str(response)], check=True)
@@ -285,7 +296,7 @@ def main():
     subprocess.run([str(converter), 'link', '--in', str(pie), '--out', str(elf), '--stub-dir', str(sdk / 'target/lib'),
         *sum([['--stub', str(p)] for p in stubs], []), '--module-sdk', '0x02000009', '--companion-sdk', '0x08050001', '--file-name', 'eboot.elf'], check=True)
     if args.check_only:
-        print('PASS215 target compile/link/converter; no signed candidate ZIP')
+        print('PASS216 target compile/link/converter; no signed candidate ZIP')
         return
     subprocess.run([str(converter), 'self', '--sign', '--in', str(elf), '--out', str(app / 'eboot.bin'), '--magic', '0x1D3D154F'], check=True)
     subprocess.run([str(converter), 'self', '--inspect', '--file', str(app / 'eboot.bin')], check=True)
@@ -299,6 +310,12 @@ def main():
     (java/'native-presentation-audit.json').write_text(json.dumps({'runtime':presentation_pin,'build':presenter_audit},indent=2)+'\n')
     for name in presentation_pin['source_sha256']:
         destination=java/'native-presentation-source'/name;destination.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(runtime/name,destination)
+    storage_sources=('client/launcher/storage_paths.hpp','client/launcher/report-runtime.json','client/ports/shaderc/fault.c','client/ports/sdl/ps5_startup_boundary.h','client/startup/log4j2-startup.xml')
+    for name in storage_sources:
+        destination=java/'storage-source'/name;destination.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(ROOT/name,destination)
+    for name in report_pin['source_sha256']:
+        destination=java/'storage-source/runtime'/name;destination.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(runtime/name,destination)
+    (java/'storage-path-audit.json').write_text(json.dumps({'runtime':report_pin,'source_sha256':{name:sha(ROOT/name) for name in storage_sources},'fault_object_sha256':sha(storage_fault),'fault_symbols':'prospero_storage_fault_*; original shaderc group remains retained','default':'/data/ProsperoCraft for reports/tmp and verified library; legacy fallback on refused access/migration/load','console':'NOT TESTED'},indent=2)+'\n')
     shutil.copytree(ROOT/'client/ports/oshi665',java/'oshi665-source',dirs_exist_ok=True)
     source_sdl=java/'sdl-resolution-source';source_sdl.mkdir(exist_ok=True)
     shutil.copyfile(ROOT/'client/ports/mesa/0011-videoout-launcher-resolutions.patch',source_sdl/'0011-videoout-launcher-resolutions.patch')
@@ -323,13 +340,13 @@ def main():
         'newGroupSha256': sha(registry / 'embedded-lwjgl333.o'), 'overlaySha256': sha(overlay),
         'source_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
         'source_tree': 'modified' if subprocess.check_output(['git', 'status', '--porcelain'], text=True).strip() else 'clean',
-        'scope': 'Proven shared /data/ProsperoCraft root with verified resumable copy and retained originals;256MiB diagnostic request; instance-settings Back returns to detail;214large uploads/212game policies retained',
+        'scope': 'Primary shared content/reports/tmp with verified readable migration and legacy fallback; normal-card badges removed;215Back/214large uploads/212game policies retained',
         'nativePresenterSha256':sha(presenter),'presentationRuntime':presentation_pin,'graphicsSupportSha256':sha(graphics_object),'newSdlGroupSha256':sha(registry/'embedded-ps5sdl.o'),'oshi665Sha256':sha(os_overlay),
         'console': 'NOT TESTED', 'releaseStore': 'No action'}
     (output / 'build-audit.json').write_text(json.dumps(record, indent=2) + '\n')
     (output / 'SHA256SUMS').write_text(record['package_sha256'] + '  PPSA99874.zip\n')
     shutil.copyfile(pie, output / pie.name)
-    print('LOCAL215', package, 'SHA256', record['package_sha256'])
+    print('LOCAL216', package, 'SHA256', record['package_sha256'])
 
 
 if __name__ == '__main__':

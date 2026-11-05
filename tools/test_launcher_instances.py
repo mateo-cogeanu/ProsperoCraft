@@ -112,7 +112,7 @@ var store=new ProsperoLibrary(root.resolve("store"));if(!store.instances().isEmp
    try(var loaded=zi.loader(receiptZ)){if(!loaded.getURLs()[0].equals(binding.toUri().toURL()))throw new AssertionError("adapted binding priority");}
    var zl=new ProsperoLibrary(zr);var instanceZ=zl.add("Vanilla Zink",version,1);zl.settings().showIntro=false;zl.settings().showControls=false;zl.ready(instanceZ,true);zl.save();
    var zm=new ProsperoLauncher(testAuth,zr,InstanceCheck::open,()->{preparations.incrementAndGet();});zm.tick(0x4000);
-   if(!zm.tick(0)[6].equals("PLAY - Sign in")||!zm.tick(0)[69].equals("SUPPORTED")||!zm.tick(0)[35].equals("READY")||zm.tick(0)[65].contains("Development"))throw new AssertionError("normal Vanilla labels");
+   if(!zm.tick(0)[6].equals("PLAY - Sign in")||!zm.tick(0)[69].equals("SUPPORTED")||!zm.tick(0)[35].isEmpty()||zm.tick(0)[65].contains("Development"))throw new AssertionError("normal Vanilla labels");
    sessionField.set(zm,new ProsperoAuth.Session("OwnedPlayer","0123456789abcdef0123456789abcdef","SECRET_ZINK",System.currentTimeMillis()+3600000));
    zm.tick(0x4000);waitFor(zm);if(!zm.tick(0)[6].equals("PLAY"))throw new AssertionError("signed-in normal Play");if(!zm.tick(0)[10].equals("LAUNCH"))throw new AssertionError("normal Zink launcher did not prepare: "+zm.tick(0)[2]);
    List<String> zargs=List.of(zm.arguments(null,null));if(zargs.contains("--graphicsBackend")||zargs.contains("--demo")||!zargs.contains(version)||!zargs.contains("SECRET_ZINK"))throw new AssertionError("original GL/full account arguments");

@@ -63,10 +63,12 @@ milestone scopes. Public packages provision original downloads on console rather
 than bundling game payloads or preset instances. Keep isolated UUID game directories,
 shared hash-verified cache and old worlds/settings. Unsupported capacity queries
 mean unknown, not zero physical free space; `/download0/ProsperoCraft` and existing
-bulk-data policy now prefers verified `/data/ProsperoCraft` in [215](client-shared-storage-215.md),
-following the explicit shared-folder request.215 authorizes copy-before-switch with
-originals retained and256MiB diagnostic reservation. No elevation, deletion or
-backing-image shrink is authorized or claimed; physical shared access remains pending.
+primary storage now prefers `/data/ProsperoCraft` in [216](client-primary-shared-storage-216.md),
+following the clarified shared-folder request. All library/report/tmp paths prefer
+shared access; verified copy-before-switch retains originals, with readable legacy
+fallback explicitly authorized on transfer/load/verification failure.256MiB fallback
+reservation remains. No elevation/deletion/backing-image shrink is authorized or
+claimed; physical access/migration/reports/quit remain pending.
 
 Use approved artwork and pinned branding metadata via existing preparation and
 `apply_branding.py` hooks. Retain all original/v2/v3 masters and supplied corner

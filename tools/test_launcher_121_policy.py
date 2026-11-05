@@ -45,6 +45,7 @@ public class Policy121 {
   Files.writeString(work.resolve("prosperocraft-121.txt"),"vanilla-1.21.10-1.21.11-zink-v2\n");
   for(String version:Prospero121.RELEASES){check(Prospero121.available(version,"vanilla")==Set.of("1.21.10","1.21.11").contains(version),"208two explicit releases");check(!Prospero121.available(version,"fabric"),"208noFabric");}
   check(ProsperoGraphics.glfw("1.21.10")&&ProsperoGraphics.zink("1.21.10","vanilla"),"12110Zink");
+  var cards=new ProsperoLibrary(work.resolve("cards"));cards.settings().showIntro=false;cards.save();var normal=cards.add("Normal","26.3",1);cards.ready(normal,true);cards.add("Dev","1.21.11",1);cards.add("Soon","1.21.1",1);var cardModel=new ProsperoLauncher(new ProsperoAuth(),work.resolve("cards"),url->{throw new AssertionError("network");});String[] shown=cardModel.tick(0);check(shown[35].isEmpty()&&shown[39].equals("DEV TEST")&&shown[43].equals("COMING SOON"),"only dev/coming-soon card badges");
   var oldHardware=new ProsperoInstall.Receipt();oldHardware.classpath.add("libraries/com/github/oshi/oshi-core/6.6.5/oshi-core-6.6.5.jar");check(ProsperoInstall.hardwarePort(oldHardware).equals("oshi-6.6.5-ps5-platform.jar"),"exact665provider");
   Files.writeString(work.resolve("prosperocraft-121.txt"),"bad-token\n");
   check(!ProsperoLauncher.launchable("1.21.11","vanilla"),"bad-token refusal");

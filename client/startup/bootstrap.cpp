@@ -2,6 +2,12 @@
 #define PROSPERO_CLIENT_FIXTURE_TITLE "Minecraft Original Client Startup"
 #endif
 #define PS5_TRACK_FILE_ACTIVITY 1
+#ifndef PROSPERO_REPORT_PATH
+#define PROSPERO_REPORT_PATH(name) "/download0/" name
+#endif
+#ifndef PROSPERO_STORAGE_OPTION
+#define PROSPERO_STORAGE_OPTION(primary,fallback) fallback
+#endif
 #ifndef PROSPERO_ZIP_OPEN_BUDGET
 #define PROSPERO_ZIP_OPEN_BUDGET "64"
 #endif
@@ -101,7 +107,7 @@ extern "C" int __wrap_open(const char *path,int flags,...) {
  ps5::file_activity::open_result(fd,path);
  if(fd<0 && ps5_native_trace::enabled.load() &&
     pthread_equal(ps5_native_trace::owner,pthread_self()) &&
-    !ps5_vm_trace_io_active() && path && std::strncmp(path,"/download0/",11)==0) {
+    !ps5_vm_trace_io_active() && path && std::strncmp(path,PROSPERO_REPORT_PATH(""),std::strlen(PROSPERO_REPORT_PATH("")))==0) {
   // IO guard prevents the trace writer's own open from replacing this result.
   Ps5TraceIOScope guard;
   std::snprintf(native_open_error,sizeof(native_open_error),
@@ -139,7 +145,7 @@ constexpr const char* build_version=PROSPERO_APP_VERSION;
 char run_id[96]="No client run initialized";
 void session_status(const char* state) {
  char note[512];std::snprintf(note,sizeof(note),"Title: PPSA99874\nBuild: %s\nRun: %s\nState: %s\n",build_version,run_id,state);
- ps5::log_share::write_note("/download0/probe-session.txt",note);
+ ps5::log_share::write_note(PROSPERO_REPORT_PATH("probe-session.txt"),note);
 }
 char exception_detail[1536]{};
 char previous_log[7][160]={{},{},{},{},{},{},"No previous startup log."};
@@ -167,7 +173,7 @@ void network_checkpoint(JNIEnv *env,jclass,jstring stage) {
  env->ReleaseStringUTFChars(stage,utf);
 }
 void native_snapshot(JNIEnv *env,jclass,jlong elapsed,jint phase) {
- if(!startup_observer::append("/download0/process-usage.log",static_cast<long long>(elapsed),phase)) {
+ if(!startup_observer::append(PROSPERO_REPORT_PATH("process-usage.log"),static_cast<long long>(elapsed),phase)) {
   jclass error=env->FindClass("java/io/IOException");
   if(error)env->ThrowNew(error,"Native observer report append failed");
  }
@@ -238,8 +244,8 @@ bool read_last_line(const char *path) {
  std::fclose(file);return found;
 }
 void read_previous_log() {
- read_last_line("/download0/java25-startup.log");
- read_last_line("/download0/java25-vm-trace.log");
+ read_last_line(PROSPERO_REPORT_PATH("java25-startup.log"));
+ read_last_line(PROSPERO_REPORT_PATH("java25-vm-trace.log"));
 }
 
 void result(int i,int rc,const char *message) {
@@ -268,7 +274,7 @@ void java_failure(int i,int code,const char* phase) {
   java_env->DeleteLocalRef(original);
  }
  std::snprintf(exception_detail,sizeof(exception_detail),"%s: %s",phase,detail);
- ps5::log_share::write_note("/download0/probe-exception.txt",exception_detail);
+ ps5::log_share::write_note(PROSPERO_REPORT_PATH("probe-exception.txt"),exception_detail);
  char message[80];std::snprintf(message,sizeof(message),"%.20s: %.48s",phase,detail);
  if(startup_log) {std::fprintf(startup_log,"CLIENT FAILURE: %s: %s / code %08X\n",phase,detail,static_cast<unsigned>(code));std::fflush(startup_log);}
  result(i,code,message);
@@ -287,26 +293,26 @@ void run_test(int i) {
   // Explicit initialization starts a new run; menu-only relaunch preserves logs.
   // These are diagnostic files only. No world, save or configuration is touched.
   static char retained_tail[512*1024];
-  for(const char* path:{"/download0/java25-startup.log","/download0/java25-vm-trace.log"}) {
+  for(const char* path:{PROSPERO_REPORT_PATH("java25-startup.log"),PROSPERO_REPORT_PATH("java25-vm-trace.log")}) {
    if(!ps5::log_retention::retain_tail(path,retained_tail,sizeof(retained_tail))) {
     result(i,errno,"Cannot retain diagnostic tail; check storage");return;
    }
   }
   ps5::log_share::begin_session(build_version,run_id);
   char resource_identity[256];std::snprintf(resource_identity,sizeof(resource_identity),"Build: %s\nRun: %s\nNative startup observer;phase0 before stack collection,phase1 after publication;RSS units unspecified\n",build_version,run_id);
-  if(!ps5::log_share::write_note("/download0/process-usage.log",resource_identity))log_stage("Native observer identity write failed");
+  if(!ps5::log_share::write_note(PROSPERO_REPORT_PATH("process-usage.log"),resource_identity))log_stage("Native observer identity write failed");
   char native_identity[256];std::snprintf(native_identity,sizeof(native_identity),"Build: %s\nRun: %s\nNative stderr capture\n",build_version,run_id);
   int native_stderr_error=0;
-  if(!ps5::log_share::write_note("/download0/probe-native-stderr.log",native_identity))
+  if(!ps5::log_share::write_note(PROSPERO_REPORT_PATH("probe-native-stderr.log"),native_identity))
    native_stderr_error=errno?errno:EIO;
-  else native_stderr_error=ps5::native_stderr::begin("/download0/probe-native-stderr.log");
+  else native_stderr_error=ps5::native_stderr::begin(PROSPERO_REPORT_PATH("probe-native-stderr.log"));
   if(!native_stderr_error)std::fprintf(stderr,"Client083 native stderr stream active before embedded constructors\n");
   else notify("Client083 native stderr capture unavailable;continuing original startup. Inspect startup reports.");
-  startup_log=std::fopen("/download0/java25-startup.log","a");
+  startup_log=std::fopen(PROSPERO_REPORT_PATH("java25-startup.log"),"a");
   if(!startup_log) {result(i,errno,"Cannot open persistent startup log");return;}
   std::fprintf(startup_log,"\n=== CLIENT RUN %s BUILD %s ===\n",run_id,build_version);std::fflush(startup_log);
   {
-   FILE* prior_vm=std::fopen("/download0/java25-vm-trace.log","rb");
+   FILE* prior_vm=std::fopen(PROSPERO_REPORT_PATH("java25-vm-trace.log"),"rb");
    if(prior_vm){
     static char prior_tail[64*1024];
     if(std::fseek(prior_vm,0,SEEK_END)==0){
@@ -326,7 +332,7 @@ void run_test(int i) {
   const auto file_budget=ps5::file_limits::prepare(8192);
   char file_stage[256];std::snprintf(file_stage,sizeof(file_stage),"PS5_FILE_LIMIT query=%d change=%d errno=%d before=%llu after=%llu hard=%llu",file_budget.query,file_budget.change,file_budget.error,(unsigned long long)file_budget.before,(unsigned long long)file_budget.after,(unsigned long long)file_budget.hard);log_stage(file_stage);
   ps5::file_limits::snapshot(file_stage,sizeof(file_stage));log_stage(file_stage);
-  log_stage("Storage /download0: title-local reservation follows app manifest; actual capacity is unavailable, not zero");
+  log_stage("Storage roots selected by verified shared access; legacy fallback is explicit; no measured-capacity claim");
   prospero_hid_preload();
   log_stage("Begin embedded core constructors");
   size_t count=0;
@@ -431,7 +437,7 @@ void run_test(int i) {
    {const_cast<char *>("-XX:CompileCommand=MemLimit,*.*,2M"),nullptr},
    {const_cast<char *>("-XX:ReservedCodeCacheSize=96m"),nullptr},
    {const_cast<char *>("-XX:SweeperThreshold=50.0"),nullptr},
-   {const_cast<char *>("-Xlog:jit+compilation=debug,codecache=info:file=/download0/java25-jit.log:uptime,level,tags:filecount=1,filesize=4M"),nullptr},
+   {const_cast<char *>(PROSPERO_STORAGE_OPTION("-Xlog:jit+compilation=debug,codecache=info:file=/data/ProsperoCraft/reports/java25-jit.log:uptime,level,tags:filecount=1,filesize=4M","-Xlog:jit+compilation=debug,codecache=info:file=/download0/java25-jit.log:uptime,level,tags:filecount=1,filesize=4M")),nullptr},
    {const_cast<char *>("--enable-native-access=ALL-UNNAMED"),nullptr},
    {const_cast<char *>("--add-exports=java.base/jdk.internal.misc=ALL-UNNAMED"),nullptr},
    {const_cast<char *>("-XX:+UseCompactObjectHeaders"),nullptr},
@@ -449,7 +455,7 @@ void run_test(int i) {
    // Bootstrap class metadata needs far less than the default 1 GiB reservation.
    {const_cast<char *>("-XX:CompressedClassSpaceSize=64m"),nullptr},
    {const_cast<char *>("-Xshare:off"),nullptr},
-   {const_cast<char *>("-Xlog:gc=info,safepoint=info:file=/download0/java25-gc.log:uptimemillis,level,tags:filecount=1,filesize=4M"),nullptr},
+   {const_cast<char *>(PROSPERO_STORAGE_OPTION("-Xlog:gc=info,safepoint=info:file=/data/ProsperoCraft/reports/java25-gc.log:uptimemillis,level,tags:filecount=1,filesize=4M","-Xlog:gc=info,safepoint=info:file=/download0/java25-gc.log:uptimemillis,level,tags:filecount=1,filesize=4M")),nullptr},
    {const_cast<char *>("-XX:+UseG1GC"),nullptr},
    {const_cast<char *>("-XX:MaxGCPauseMillis=4"),nullptr},
    //120Hz: allow a smaller young minimum and spread mandatory mixed-GC work.
@@ -463,12 +469,12 @@ void run_test(int i) {
    {const_cast<char *>("-XX:G1ReservePercent=20"),nullptr},
    {const_cast<char *>("-XX:ActiveProcessorCount=4"),nullptr},
    {const_cast<char *>("-XX:-UsePerfData"),nullptr},
-   {const_cast<char *>("-XX:ErrorFile=/download0/hs_err_java25.log"),nullptr},
+   {const_cast<char *>(PROSPERO_STORAGE_OPTION("-XX:ErrorFile=/data/ProsperoCraft/reports/hs_err_java25.log","-XX:ErrorFile=/download0/hs_err_java25.log")),nullptr},
    {const_cast<char *>("-Dps5.startupObserver=" PROSPERO_STARTUP_OBSERVER),nullptr},
    {const_cast<char *>(CLIENT_CLASSPATH_OPTION),nullptr},
-   {const_cast<char *>("-Djava.io.tmpdir=/download0"),nullptr},
-   {const_cast<char *>("-Duser.home=/download0"),nullptr},
-   {const_cast<char *>("-Duser.dir=/download0/mc-client"),nullptr},
+   {const_cast<char *>(PROSPERO_STORAGE_OPTION("-Djava.io.tmpdir=/data/ProsperoCraft/tmp","-Djava.io.tmpdir=/download0")),nullptr},
+   {const_cast<char *>(PROSPERO_STORAGE_OPTION("-Duser.home=/data/ProsperoCraft","-Duser.home=/download0")),nullptr},
+   {const_cast<char *>(PROSPERO_STORAGE_OPTION("-Duser.dir=/data/ProsperoCraft/reports/mc-client","-Duser.dir=/download0/mc-client")),nullptr},
    {const_cast<char *>("-Dlog4j.configurationFile=/app0/assets/java25/log4j2-startup.xml"),nullptr},
    {const_cast<char *>("-Dlog4j2.disableJmx=true"),nullptr},
    // Always resolve relative paths against user.dir. UnixFileSystem then
@@ -492,7 +498,7 @@ void run_test(int i) {
   args.nOptions=option_count+(resume_library?1:0);args.options=session_options;args.ignoreUnrecognized=JNI_FALSE;
   // Verify the raw diagnostic write path before entering JVM code. Each
   // VM milestone then appends a line without stdio or JVM allocation.
-  int trace_fd=open("/download0/java25-vm-trace.log",O_CREAT|O_WRONLY|O_TRUNC,0600);
+  int trace_fd=open(PROSPERO_REPORT_PATH("java25-vm-trace.log"),O_CREAT|O_WRONLY|O_TRUNC,0600);
   if(trace_fd<0) {result(i,errno,"Before JVM: cannot open checkpoint trace");skip_vm_dependents();return;}
   const char begin[]="APP: entering JNI_CreateJavaVM\n";
   ssize_t traced=write(trace_fd,begin,sizeof(begin)-1);
@@ -623,12 +629,12 @@ static void notify(const char* text) {
 }
 int main(int argc,char** argv) {
  for(int i=0;i<argc;++i)if(argv[i]&&std::strcmp(argv[i],"--prospero-library")==0)resume_library=true;
- ps5::log_share::write_note("/download0/probe-build.txt",PROSPERO_CLIENT_FIXTURE_TITLE " " PROSPERO_APP_VERSION " / PPSA99874\n");
+ ps5::log_share::write_note(PROSPERO_REPORT_PATH("probe-build.txt"),PROSPERO_CLIENT_FIXTURE_TITLE " " PROSPERO_APP_VERSION " / PPSA99874\n");
  ps5::log_share::start();
  read_previous_log();
  prospero_menu::hardware::initialize();
  char model_status[320];std::snprintf(model_status,sizeof(model_status),PROSPERO_CLIENT_FIXTURE_TITLE " %s / PPSA99874\nPS5_HARDWARE model=%s source=launcher_soc soc_id=0x%llx\n",PROSPERO_APP_VERSION,ps5::console::name(prospero_menu::hardware::identity().model),prospero_menu::hardware::identity().id);
- ps5::log_share::write_note("/download0/probe-build.txt",model_status);
+ ps5::log_share::write_note(PROSPERO_REPORT_PATH("probe-build.txt"),model_status);
 
  sceUserServiceInitialize(nullptr);std::int32_t user=-1;
  if(sceUserServiceGetInitialUser(&user)>=0 && scePadInit()>=0) pad=scePadOpen(user,0,0,nullptr);

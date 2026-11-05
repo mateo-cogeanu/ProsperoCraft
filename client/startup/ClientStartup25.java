@@ -224,7 +224,9 @@ public final class ClientStartup25 {
  }
  public static void main(String[] args)throws Throwable{
   PrintStream previousOut=System.out,previousErr=System.err;
-  PrintStream console=new PrintStream(new FileOutputStream(Path.of("/download0/java25-exceptions.log").toFile(),false),true,StandardCharsets.UTF_8);
+  Path reports=Path.of(java.util.Objects.requireNonNullElse(System.getenv("PROSPERO_DIAGNOSTIC_ROOT"),"/download0"));
+  System.setProperty("ps5.report.root",reports.toString());
+  PrintStream console=new PrintStream(new FileOutputStream(reports.resolve("java25-exceptions.log").toFile(),false),true,StandardCharsets.UTF_8);
   System.setOut(console);System.setErr(console);
   StartupObserver observer=null;
   try{
@@ -306,7 +308,7 @@ public final class ClientStartup25 {
     try{observer=new StartupObserver(console,390,1000,5000);observer.start();}
     catch(Throwable unavailable){console.println("PS5 startup observer unavailable;continuing original Main: "+unavailable);observer=null;}
    }else console.println("PS5 startup observer disabled for performance run;enable ps5.startupObserver explicitly for stack sampling");
-   ProsperoSession session=new ProsperoSession(Path.of("/download0/mc-client/logs"),ProsperoLauncher.selectedShutdownAccessors());
+   ProsperoSession session=new ProsperoSession(reports.resolve("mc-client/logs"),ProsperoLauncher.selectedShutdownAccessors());
    Thread gameThread=Thread.currentThread();
    try(ProsperoExit exit=cleanSystemExit(false)?new ProsperoExit(
      ()->session.awaitCleanReturn(gameThread.getContextClassLoader(),2000,ClientStartup25::stage),

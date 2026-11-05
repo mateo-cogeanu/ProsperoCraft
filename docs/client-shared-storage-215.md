@@ -82,3 +82,7 @@ target package/static ABI and hosted checks are recorded in
 [validation](validation/client215-shared-storage-2026-11-05.json). Local215 only;
 released212, all older packages, original JARs and game/runtime groups are retained.
 No release, prerelease, Store update or new frozen milestone is authorized.
+
+Superseded before delivery by [216](client-primary-shared-storage-216.md), following
+explicit all-report/tmp routing and readable legacy fallback clarification.215
+bytes remain retained; its fail-closed/diagnostic policy is not216 behavior.

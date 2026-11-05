@@ -1,5 +1,15 @@
 # Changelog
 
+## Local216 — primary shared content/reports/tmp and clean cards,2026-11-05
+
+- Apply clarified default: all library data, logs and temporary files prefer
+  `/data/ProsperoCraft`; use the readable original download0 library only on
+  transfer/load/verification failure, preserving both locations and showing a notice.
+- Route native/JVM/Java/SDL/fault/audio-local diagnostics consistently, including
+  fixed LAN report URLs; no32GiB default bulk reservation or legacy shrink claim.
+- Remove normal card READY/DOWNLOAD badges; retain Coming soon/DEV TEST and
+  instance-settings Back to detail. Physical216 tests pending; release212 unchanged.
+
 ## Local215 — shared data folder and Settings Back,2026-11-05
 
 - Prefer proven `/data/ProsperoCraft` for bulk content on ShadowMountPlus; copy

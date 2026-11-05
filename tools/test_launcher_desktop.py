@@ -21,7 +21,7 @@ public class DesktopCheck {
   set(grid,"selected",11);grid.tick(0x4000);ok(grid.tick(0)[11].equals("4"));grid.tick(0x2000);ok(grid.tick(0)[11].equals("0")&&grid.tick(0)[9].equals("11")&&grid.tick(0)[14].equals("8"));
   set(grid,"selected",0);grid.tick(0x200);ok(grid.tick(0)[14].equals("8"));grid.tick(0x100);ok(grid.tick(0)[14].equals("0"));grid.tick(click(0,5,1));ok(grid.tick(0)[14].equals("8"));grid.tick(click(0,5,0));ok(grid.tick(0)[14].equals("0"));
   set(grid,"page",10);set(grid,"dropdownKind",7);set(grid,"row",7);set(grid,"listFirst",0);grid.tick(0x40);ok(grid.tick(0)[84].equals("1"));grid.tick(0x40);ok(grid.tick(0)[84].equals("2"));grid.tick(0x10);ok(grid.tick(0)[84].equals("2"));set(grid,"row",2);grid.tick(0x10);ok(grid.tick(0)[84].equals("1"));
-  ok(m.tick(0)[35].equals("READY"));m.tick(click(0,1,0));ok(m.tick(0)[11].equals("4"));ok(m.tick(0)[69].equals("SUPPORTED"));ok(!m.tick(0)[6].contains("DEV"));
+  ok(m.tick(0)[35].isEmpty());m.tick(click(0,1,0));ok(m.tick(0)[11].equals("4"));ok(m.tick(0)[69].equals("SUPPORTED"));ok(!m.tick(0)[6].contains("DEV"));
   m.tick(click(0,3,1));ok(m.tick(0)[11].equals("4")); // stale click ignored
   m.tick(click(4,3,1));ok(m.tick(0)[11].equals("5"));m.tick(click(5,3,0));ok(m.tick(0)[11].equals("6"));
   set(m,"keyboard","");m.tick(0x30000000|'A');m.tick(0x30000000|'z');m.tick(0x30000000|' ');ok(m.tick(0)[29].equals("Az "));ok(m.tick(0)[105].equals("PHYSICAL"));

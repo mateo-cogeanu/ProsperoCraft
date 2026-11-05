@@ -7,6 +7,8 @@
 #include <stdint.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #ifndef PS5_SHADERC_FAULT_LOG
 #define PS5_SHADERC_FAULT_LOG "/download0/java25-vm-trace.log"
@@ -66,7 +68,9 @@ static void handler(int sig,siginfo_t *info,void *context){
 int ps5shaderc_fault_begin(void){
  guard_lock();
  if(users++==0){
-  report_fd=open(PS5_SHADERC_FAULT_LOG,O_WRONLY|O_CREAT|O_APPEND,0600);
+  const char* root=getenv("PROSPERO_DIAGNOSTIC_ROOT");char path[640];
+  int n=root&&root[0]?snprintf(path,sizeof(path),"%s/java25-vm-trace.log",root):0;
+  report_fd=root&&root[0]?(n>0&&(unsigned)n<sizeof(path)?open(path,O_WRONLY|O_CREAT|O_APPEND,0600):-1):open(PS5_SHADERC_FAULT_LOG,O_WRONLY|O_CREAT|O_APPEND,0600);
   for(unsigned i=0;i<signal_count;i++){
    installed[i]=0;
    if(sigaction(signals[i],0,&previous[i])!=0)continue;

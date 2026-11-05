@@ -137,6 +137,14 @@
     "app_version": "01.000.215",
     "validation": "docs/validation/client215-shared-storage-2026-11-05.json",
     "scope": "Proven shared/data root with copy/resume and original backup,256MiB diagnostic request, instance-settings Back to detail",
-    "console": "Pending; no existing allocation reclaimed; released212 unchanged"
+    "console": "Pending; no existing allocation reclaimed; released212 unchanged",
+    "status": "Superseded by216 on all-reports/tmp and fallback clarification; signed ZIP retained"
+  },
+  "development_216": {
+    "app_version": "01.000.216",
+    "validation": "docs/validation/client216-primary-shared-storage-2026-11-05.json",
+    "scope": "Primary shared library/reports/tmp and verified readable legacy fallback, no normal card badges, settings Back retained",
+    "report_runtime": "39f71e103864ec79c5d64fb1e36d7aefd40099f8",
+    "console": "Pending; no existing allocation reclaimed; release212 unchanged"
   }
 }

@@ -1,0 +1,8 @@
+{
+  "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
+  "commit": "39f71e103864ec79c5d64fb1e36d7aefd40099f8",
+  "source_sha256": {
+    "java25/probe/log_share.hpp": "461badd5c63069a309c41f4a15d3fe07cb9835b22b8ebf1370d9b43e3fa385f3"
+  },
+  "scope": "Explicit bootstrap report directory; defaults and fixed URL allowlist retained; no JVM/image/native game implementation change"
+}

@@ -340,3 +340,10 @@ account+world bytes, conflict/source/link refusal, commit retry and sticky
 fail-closed root selection. Desktop model covers settings Circle/Back parent.
 These do not establish ShadowMountPlus Java capabilities or reclaim allocated
 console container space. See [215](client-shared-storage-215.md).
+
+216 adds portable native storage routing (13native checks total): real shared/
+fallback directory/env/SDL/fault/OpenAL operations, with only the external runtime
+report-root hook injected. Runtime-owned actual HTTP/root/archive/freeze and64KiB
+stack tests run separately. Storage Java tests add read-only library validation,
+corrupt-shared fallback, no fresh legacy writes and copied relative cache pins.
+Card model/real Vulkan fixtures verify normal badge absence and dev/coming labels.

@@ -326,3 +326,19 @@ allocation. Preserve private account backups and never publish their files.
 Circle/desktop Back from instance settings returns to the same detail page.
 Physical migration/capabilities/worlds/large packs pending; preserve212 and all
 local candidates/release gates. See docs/client-shared-storage-215.md.
+
+
+## All primary storage and explicit fallback —2026-11-05
+
+User clarifies all content/reports/tmp should prefer /data/ProsperoCraft, while
+download0 fallback is explicitly allowed if transfer/load/verification fails.
+216 supersedes215 fail-closed/always-legacy-diagnostic policy: native early proof,
+shared library/reports/tmp, verified readable migration, no legacy marker writes,
+readable original fallback with notice, all originals retained.256MiB fallback
+request stays; no existing container shrink/deletion claimed. Runtime report-root
+API is separately pinned39f71e1; defaults/VM/namespace/native game groups retained.
+SDL breadcrumbs and separately named fault recorder route selected immutable
+root; Log4j and shutdown evidence move together. User removes normal card READY
+badges (only Coming soon/DEV TEST);215 settings Back remains. Physical shared
+access/migration/reports/quit/large packs pending; preserve212 and all candidates/
+release gates. See docs/client-primary-shared-storage-216.md.

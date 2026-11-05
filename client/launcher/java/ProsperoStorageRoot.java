@@ -16,7 +16,8 @@ final class ProsperoStorageRoot {
  static Selection current()throws IOException {
   String explicit=System.getProperty("ps5.launcher.root");
   if(explicit!=null&&!explicit.isBlank())return new Selection(Path.of(explicit),"");
-  return select(Path.of("/download0/ProsperoCraft"),Path.of("/data/ProsperoCraft"),ProsperoStorageRoot::probe,ProsperoStorageRoot::copy);
+  if("/download0/ProsperoCraft".equals(System.getenv("PROSPERO_STORAGE_BASE")))return fallback(Path.of("/download0/ProsperoCraft"),"Shared storage access failed. Using the original download0 library; it may be older.");
+  return select(Path.of("/download0/ProsperoCraft"),Path.of("/data/ProsperoCraft/library"),ProsperoStorageRoot::probe,ProsperoStorageRoot::copy);
  }
  static BasicFileAttributes attributes(Path path)throws IOException {
   try{return Files.readAttributes(path,BasicFileAttributes.class,LinkOption.NOFOLLOW_LINKS);}catch(NoSuchFileException absent){return null;}
@@ -41,34 +42,30 @@ final class ProsperoStorageRoot {
    test.toRealPath();
   }finally{Files.deleteIfExists(first);Files.deleteIfExists(second);Files.delete(test);}
  }
+ static Selection fallback(Path legacy,String notice)throws IOException {
+  noLinks(legacy);ProsperoLibrary.verifyReadable(legacy);return new Selection(legacy,notice);
+ }
+ static boolean freshShared(Path root)throws IOException {
+  if(!marker(root.resolve(READY),"fresh-v1\n"))return false;
+  try(var entries=Files.newDirectoryStream(root)){for(Path entry:entries)if(!Set.of(READY,OWNER).contains(entry.getFileName().toString()))return false;}return true;
+ }
  static Selection select(Path legacy,Path preferred,Probe probe,Copier copier)throws IOException {
   legacy=legacy.toAbsolutePath().normalize();preferred=preferred.toAbsolutePath().normalize();
-  if(legacy.startsWith(preferred)||preferred.startsWith(legacy))throw new IOException("Storage locations overlap");noLinks(legacy);
-  boolean selected=marker(legacy.resolve(POINTER),"shared-v1\n");
-  if(attributes(legacy.resolve(POINTER))!=null&&!selected)throw new IOException("Storage selection marker is invalid. Both storage locations are preserved.");
-  try{probe.check(preferred);}catch(IOException unavailable){
-   if(selected)throw new IOException("Shared storage is unavailable. Reopen with ShadowMountPlus access to /data; shared worlds are preserved.");
-   if(nonempty(legacy))return new Selection(legacy,"Shared storage is unavailable. Your existing library remains in download0; update ShadowMountPlus to enable /data.");
-   throw new IOException("Shared storage is unavailable. Update ShadowMountPlus to enable /data/ProsperoCraft. Existing data is preserved.");
-  }
-  noLinks(preferred);
-  var library=attributes(preferred.resolve("library.json"));if(library!=null&&!library.isRegularFile())throw new IOException("Shared library metadata is not a regular file");
-  if(selected){if(!directory(preferred)||(library==null&&!marker(preferred.resolve(READY),"shared-v1\n")))throw new IOException("Selected shared storage is missing. The old backup was not opened.");return new Selection(preferred,"");}
-  if(nonempty(preferred)){
-   if(nonempty(legacy)&&!marker(preferred.resolve(READY),"shared-v1\n"))throw new IOException("Libraries already exist in both storage locations. Both are preserved; no merge was attempted.");
-   if(attributes(preferred.resolve("library.json"))==null&&!marker(preferred.resolve(READY),"shared-v1\n"))throw new IOException("Shared storage already contains files without a library. Both locations are preserved.");
-   remember(legacy);return new Selection(preferred,"");
-  }
-  boolean old=nonempty(legacy);
-  if(old){try{migrate(legacy,preferred,copier);}catch(IOException incomplete){if(directory(preferred)&&marker(preferred.resolve(READY),"shared-v1\n"))throw incomplete;return new Selection(legacy,"Shared-storage copy could not finish. Your original library is active; its files are preserved. Restart to retry.");}}
-  else{Files.createDirectories(preferred);privateMode(preferred,true);Files.writeString(preferred.resolve(READY),"shared-v1\n",StandardOpenOption.CREATE_NEW);}
-  remember(legacy);
-  return new Selection(preferred,old?"Storage moved to /data/ProsperoCraft. Your original download0 library is retained as a backup.":"");
- }
- static void remember(Path legacy)throws IOException {
-  Files.createDirectories(legacy);privateMode(legacy,true);Path marker=legacy.resolve(POINTER);noLinks(marker);
-  if(attributes(marker)!=null){if(!marker(marker,"shared-v1\n"))throw new IOException("Storage selection marker is invalid");return;}
-  Files.writeString(marker,"shared-v1\n",StandardOpenOption.CREATE_NEW);privateMode(marker,false);
+  if(legacy.startsWith(preferred)||preferred.startsWith(legacy))throw new IOException("Storage locations overlap");
+  try{probe.check(preferred);noLinks(preferred);}catch(IOException unavailable){return fallback(legacy,"Shared storage is unavailable. Using the original download0 library; it may be older.");}
+  try{
+   if(nonempty(preferred)){
+    boolean known=marker(preferred.resolve(READY),"shared-v1\n")||marker(preferred.resolve(READY),"fresh-v1\n");
+    if(!known&&nonempty(legacy))throw new IOException("Libraries exist in both locations; no automatic merge");
+    if(!freshShared(preferred))ProsperoLibrary.verifyReadable(preferred);return new Selection(preferred,"");
+   }
+   if(nonempty(legacy)){
+    ProsperoLibrary.verifyReadable(legacy);migrate(legacy,preferred,copier);
+    return new Selection(preferred,"Storage copied and verified in /data/ProsperoCraft. The original download0 library remains as a backup.");
+   }
+   Files.createDirectories(preferred);privateMode(preferred,true);Files.writeString(preferred.resolve(READY),"fresh-v1\n",StandardOpenOption.CREATE_NEW);
+   return new Selection(preferred,"");
+  }catch(IOException incomplete){return fallback(legacy,"Shared storage could not be loaded or verified. Using the original download0 library; shared files are preserved. Restart to retry.");}
  }
  static String digest(Path path)throws IOException {
   try{var digest=MessageDigest.getInstance("SHA-256");try(var in=Files.newInputStream(path,LinkOption.NOFOLLOW_LINKS)){byte[] buffer=new byte[65536];for(int n;(n=in.read(buffer))!=-1;)digest.update(buffer,0,n);}return HexFormat.of().formatHex(digest.digest());}catch(java.security.NoSuchAlgorithmException impossible){throw new AssertionError(impossible);}
@@ -90,7 +87,8 @@ final class ProsperoStorageRoot {
    }
    public FileVisitResult visitFile(Path file,BasicFileAttributes a)throws IOException {
     if(++entries[0]>MAX_ENTRIES||!a.isRegularFile())throw new IOException("Unsupported file in storage migration");String name=source.relativize(file).toString();
-    if(file.getParent().equals(source)&&Set.of(OWNER,PART,READY,POINTER).contains(name))throw new IOException("Reserved storage migration filename");
+    if(file.getParent().equals(source)&&name.equals(POINTER))return FileVisitResult.CONTINUE;
+    if(file.getParent().equals(source)&&Set.of(OWNER,PART,READY).contains(name))throw new IOException("Reserved storage migration filename");
     Path destination=stage.resolve(name);noLinks(destination);String expected=digest(file);var previous=attributes(destination);
     if(previous==null||!previous.isRegularFile()||previous.size()!=a.size()||!digest(destination).equals(expected)){
      Path part=stage.resolve(PART);noLinks(part);var partial=attributes(part);if(partial!=null&&!partial.isRegularFile())throw new IOException("Invalid storage migration partial");
@@ -106,7 +104,7 @@ final class ProsperoStorageRoot {
   Files.walkFileTree(source,EnumSet.noneOf(FileVisitOption.class),64,new SimpleFileVisitor<>(){
    public FileVisitResult preVisitDirectory(Path dir,BasicFileAttributes a)throws IOException {String name=source.relativize(dir).toString();if(!directories.contains(name))throw new IOException("Source directories changed during migration");checkedDirectories.add(name);return FileVisitResult.CONTINUE;}
    public FileVisitResult visitFile(Path file,BasicFileAttributes a)throws IOException {
-    String name=source.relativize(file).toString();Stamp before=files.get(name);if(before==null||!a.isRegularFile()||a.size()!=before.size()||!a.lastModifiedTime().equals(before.modified())||!digest(file).equals(before.digest())||!digest(stage.resolve(name)).equals(before.digest()))throw new IOException("Source data changed during storage migration");checkedFiles.add(name);return FileVisitResult.CONTINUE;
+    String name=source.relativize(file).toString();if(file.getParent().equals(source)&&name.equals(POINTER))return FileVisitResult.CONTINUE;Stamp before=files.get(name);if(before==null||!a.isRegularFile()||a.size()!=before.size()||!a.lastModifiedTime().equals(before.modified())||!digest(file).equals(before.digest())||!digest(stage.resolve(name)).equals(before.digest()))throw new IOException("Source data changed during storage migration");checkedFiles.add(name);return FileVisitResult.CONTINUE;
    }
   });
   if(!checkedFiles.equals(files.keySet())||!checkedDirectories.equals(directories))throw new IOException("Source data disappeared during storage migration");
@@ -114,6 +112,7 @@ final class ProsperoStorageRoot {
    public FileVisitResult preVisitDirectory(Path dir,BasicFileAttributes a)throws IOException {if(!directories.contains(stage.relativize(dir).toString()))throw new IOException("Unexpected staged directory");return FileVisitResult.CONTINUE;}
    public FileVisitResult visitFile(Path file,BasicFileAttributes a)throws IOException {String name=stage.relativize(file).toString();if(!a.isRegularFile()||(!name.equals(OWNER)&&!name.equals(READY)&&!files.containsKey(name)))throw new IOException("Unexpected staged file");return FileVisitResult.CONTINUE;}
   });
+  ProsperoLibrary.verifyReadable(stage);
   if(attributes(stage.resolve(READY))==null)Files.writeString(stage.resolve(READY),"shared-v1\n",StandardOpenOption.CREATE_NEW);
   if(!marker(stage.resolve(READY),"shared-v1\n"))throw new IOException("Invalid shared-storage commit marker");privateMode(stage.resolve(READY),false);
   // A single same-filesystem directory rename publishes only a verified complete tree.

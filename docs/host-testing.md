@@ -42,7 +42,7 @@ Vanilla development versions, adapted GLFW priority, original OpenGL arguments
 and unchanged default/Demo/Fabric/Vulkan boundaries with injected publisher data.
 
 The native runner forces UBSan errors to fail (`halt_on_error=1`), including local runs.
-The twelve optional native checks exercise actual scoped audio mutex/port/worker
+The thirteen optional native checks exercise actual scoped audio mutex/port/worker
 implementations, desktop HID/model policy and resident-library JNI loading, with
 controlled OS boundaries. The microphone check runs the actual bounded capture core with injected AudioIn calls, including silence/route changes, conversion, failure ownership and concurrent producer/consumer cleanup. It does not capture host or PS5 speech. The context-error check covers generation reuse, thread isolation, bounded context capacity and refused native-key setters. The Zink guard check combines the actual frontend guard body and existing mutex
 reserve under late-init refusal, contention, unprimed/exhausted pool and exact
@@ -153,3 +153,7 @@ bounded motor/trigger deadlines, disable/shutdown, refusal and no-replay control
 use injected native pad calls. Saved-account tests additionally block a refresh
 while navigating and assert that intro/page/tab/selection remain in place. Physical
 trigger feel, reset and console layout still require exact-build testing.
+
+The storage native fixture injects only the cross-repository report-root hook;
+actual consumer path selection, SDL/fault writes and OpenAL env adapter run with
+isolated host roots. Runtime HTTP/root tests are separate. See [216](client-primary-shared-storage-216.md).

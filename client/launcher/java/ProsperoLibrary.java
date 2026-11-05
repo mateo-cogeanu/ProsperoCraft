@@ -26,7 +26,13 @@ public final class ProsperoLibrary {
 
  }
  static String clean(String name){String value=name==null?"":name.strip();if(value.isEmpty()||value.length()>40||!value.matches("[A-Za-z0-9 ._()!+-]+"))throw new IllegalArgumentException("Use1-40 letters, numbers, spaces or ._()!+-");return value;}
- private void validate()throws Exception {
+ private void validate()throws Exception {validate(state);}
+ static void verifyReadable(Path root)throws IOException {
+  Path file=root.resolve("library.json");
+  try{var a=Files.readAttributes(file,java.nio.file.attribute.BasicFileAttributes.class,LinkOption.NOFOLLOW_LINKS);if(!a.isRegularFile()||a.size()>1024*1024)throw new IOException();validate(new Gson().fromJson(Files.readString(file),State.class));}
+  catch(Exception invalid){throw new IOException("Library metadata could not be verified; existing files are preserved.");}
+ }
+ private static void validate(State state)throws Exception {
   if(state==null||state.schema!=1||state.instances==null||state.settings==null||state.instances.size()>256)throw new IOException();if(state.favorites==null)state.favorites=new ArrayList<>();if(state.favorites.size()>1024)throw new IOException();
   for(var f:state.favorites)if(f==null||f.instance==null||!f.instance.matches("[a-f0-9-]{36}")||!ProsperoDestinations.valid(f.kind==null?"":f.kind,f.target)||f.name==null||f.name.length()>80)throw new IOException();
   Set<String> ids=new HashSet<>();

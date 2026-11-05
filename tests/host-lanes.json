@@ -29,6 +29,7 @@
     "test_openal_mixer_workers.py",
     "test_launcher_desktop.py",
     "test_launcher_haptics.py",
+    "test_launcher_storage_native.py",
     "test_client_library.py",
     "test_microphone_capture.py",
     "test_openal_thread_error.py",
