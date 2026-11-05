@@ -6,7 +6,7 @@ def normalize(name, text):
     if name == 'client/startup/bootstrap.cpp':
         progress_binding = (
             '\n#ifdef PROSPERO_LIBRARY_PROGRESS\n'
-            '   ,{const_cast<char *>("libraryProgress"),const_cast<char *>("(Ljava/lang/String;J)Z"),'
+            '   ,{const_cast<char *>("libraryProgress"),const_cast<char *>("(Ljava/lang/String;JJ)Z"),'
             'reinterpret_cast<void *>(&prospero_menu::library_progress)}\n#endif\n  '
         )
         if text.count(progress_binding) != 1:

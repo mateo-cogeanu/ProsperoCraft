@@ -33,7 +33,7 @@ public final class ProsperoLauncher {
  ProsperoLauncher(ProsperoAuth auth,Path root,ProsperoInstall.Source source,Microphone microphone)throws Exception{this.microphone=Objects.requireNonNull(microphone);this.auth=auth;library=new ProsperoLibrary(root);accounts=new ProsperoAccountStore(root);offlineAccount=ProsperoOfflineAccount.load(root,System.currentTimeMillis());fabric=new ProsperoFabric(root.resolve("cache"));installer=source==null?new ProsperoInstall(root.resolve("cache")):new ProsperoInstall(root.resolve("cache"),source);if(library.settings().showIntro&&!Boolean.getBoolean("ps5.launcher.resume")){page=7;row=1;}if(ProsperoChannel.tempGameTest()&&accounts.exists())restoreAccount();}
  static String[] run(Menu menu,ProsperoStorageRoot.Progress progress)throws Exception {
   var storage=ProsperoStorageRoot.current(progress);
-  progress.update("Loading instances and settings",0);
+  progress.update("Loading instances and settings",0,0);
   var auth=new ProsperoAuth();
   try {
    current=new ProsperoLauncher(auth,storage);

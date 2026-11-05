@@ -383,12 +383,44 @@ inline void compose_content(Canvas& c) noexcept {
   const char* edits[]={"BACKSPACE","SPACE","CASE","CANCEL","DONE"};for(int i=0;i<5;i++)if(!physical||i>=3)action(c,70+i*360,855,330,edits[i],chosen==40+i,i==4);
  }
 }
+inline Glide library_bar{};
+inline void compose_library_progress(Canvas& c) noexcept {
+ const auto now=now_ms();
+ const bool reduced=std::strcmp(fields[30].data(),"ON")==0;
+ const bool determinate=std::strcmp(fields[21].data(),"MEASURED")==0;
+ const int percent=std::clamp(number(20),0,1000);
+ c.rounded(430,337,1060,352,32,ink(0x10251d));
+ label(c,490,391,"PROSPEROCRAFT  /  LIBRARY",24,0x9bc8a9);
+ title(c,490,449,fields[2].data(),46,940);
+ constexpr int x=490,y=550,width=940,height=18;
+ c.rounded(x,y,width,height,9,ink(0x233c2c));
+ if(determinate){
+  if(percent<library_bar.target)library_bar.snap(0);
+  library_bar.to(float(percent),now,reduced);
+  int fill=int(width*library_bar.value(now)/1000);
+  if(fill>0)c.rounded(x,y,unsigned(fill),height,unsigned(std::min(9,fill/2)),ink(0xa9eab6));
+  animating=library_bar.moving(now);
+  char text[12];
+  std::snprintf(text,sizeof(text),"%d%%",percent/10);
+  label(c,1350,604,text,27,0xa9eab6);
+ }else{
+  library_bar.snap(0);
+  constexpr int segment=204;
+  const float cycle=float(now%2400)/2400.f;
+  const float position=reduced?0.5f:0.5f-0.5f*std::cos(cycle*6.2831853f);
+  c.rounded(x+int((width-segment)*position),y,segment,height,9,ink(0xa9eab6));
+  animating=!reduced;
+ }
+ if(fields[7][0])control_label(c,490,605,fields[7].data(),24,0xaac8b2);
+ label(c,1650,1020,PROSPERO_APP_VERSION,24,0x7d9f89);
+}
 inline void compose(Canvas& c) noexcept {
  animating=false;last_draw_time=now_ms();prospero_palette::selected=std::clamp(number(104),0,5);
 #ifdef PROSPERO_TOOLKIT
  c.context(fields,pressed_at);
 #endif
  c.gradient(ink(0x0b1815),ink(0x08120f));c.disc(1760,850,380,ink(0x0c211a));
+ if(std::strcmp(fields[8].data(),"PREPARING")==0){compose_library_progress(c);return;}
  const int page=number(11),tab=number(12);const bool top=std::strcmp(fields[28].data(),"TOP")==0;
  float elapsed=float(now_ms()-transition_start)/180.0f;if(elapsed<0)elapsed=0;if(elapsed>1)elapsed=1;
  const int slide=0;layout_slide=0;(void)slide;(void)elapsed;
@@ -591,8 +623,8 @@ inline void* ui_main(void*) noexcept {
 inline bool start_frontend() noexcept {
  visible=false;online=false;exit_requested=false;display_done=false;display_ok=false;
  desktop=DesktopInput{};pointer_kind=pointer_target=pointer_page=-1;
- selector_depth=0;selector_reveal.snap(1);page_turn={};card_open={};opening_slot=0;card_reverse=false;list_scroll={};tab_x={};tab_w={};tabs_ready=false;page_direction=1;page_direction_at=0;trigger_held=0;list_page=-1;updates=0;navigation.clear();pressed_at=0;focus={};transition_start=now_ms();animating=false;event_read=event_write=0;fields={};published={};
- const char* boot[]={"Instances","","Starting the Java runtime...","","","Not signed in","PLAY DEMO","L1 / R1  Top bar     X  Select","PREPARING","0","WAIT","0"};
+ selector_depth=0;selector_reveal.snap(1);page_turn={};card_open={};opening_slot=0;card_reverse=false;list_scroll={};tab_x={};tab_w={};tabs_ready=false;library_bar.snap(0);page_direction=1;page_direction_at=0;trigger_held=0;list_page=-1;updates=0;navigation.clear();pressed_at=0;focus={};transition_start=now_ms();animating=false;event_read=event_write=0;fields={};published={};
+ const char* boot[]={"Instances","","Starting the Java runtime...","","","Not signed in","","","PREPARING","0","WAIT","0"};
  for(int i=0;i<12;++i)std::snprintf(fields[i].data(),512,"%s",boot[i]);
  std::int32_t user=-1;if(sceUserServiceGetInitialUser(&user)<0)return false;controller=scePadOpen(user,0,0,nullptr);if(controller<0)return false;
  pthread_attr_t attrs;
@@ -615,17 +647,21 @@ inline void show_failure() noexcept {
  for(int i=0;i<12;++i)std::snprintf(text[i].data(),512,"%s",boot[i]);publish(text);online.store(true,std::memory_order_release);
 }
 #ifdef PROSPERO_LIBRARY_PROGRESS
-inline jboolean library_progress(JNIEnv* env,jclass,jstring phase,jlong bytes) noexcept {
+inline jboolean library_progress(JNIEnv* env,jclass,jstring phase,jlong done,jlong total) noexcept {
  const char* text=env->GetStringUTFChars(phase,nullptr);
  if(!text)return JNI_FALSE;
- const bool migrating=std::strcmp(text,"Moving your library")==0||
+ const bool migrating=std::strcmp(text,"Scanning your library")==0||std::strcmp(text,"Moving your library")==0||
      std::strcmp(text,"Verifying your library")==0||std::strcmp(text,"Checking copied files")==0||
      std::strcmp(text,"Finishing library move")==0;
  Fields state{};
  std::snprintf(state[0].data(),512,"Instances");
- if(migrating)std::snprintf(state[2].data(),512,"%s... %lld MiB processed. CIRCLE to pause.",
-     text,static_cast<long long>(bytes)/(1024*1024));
- else std::snprintf(state[2].data(),512,"%s...",text);
+ std::snprintf(state[2].data(),512,"%s",text);
+ if(migrating)std::snprintf(state[7].data(),512,"CIRCLE  Pause and use original library");
+ if(total>0){
+  const int value=int(std::clamp(double(done)/double(total),0.0,1.0)*1000);
+  std::snprintf(state[20].data(),512,"%d",value);
+  std::snprintf(state[21].data(),512,"MEASURED");
+ }
  std::snprintf(state[8].data(),512,"PREPARING");
  env->ReleaseStringUTFChars(phase,text);
  publish(state);

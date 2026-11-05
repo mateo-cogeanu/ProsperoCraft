@@ -108,6 +108,12 @@ source=source.replace(' assert(ps5::demo::run_ui_until(animation_check,update,st
 page_preview=r'''
   auto save_scene=[&](const char* name){assert(prospero_ui::surface->render());auto* px=static_cast<const unsigned char*>(prospero_ui::surface->pixels);std::ofstream f(std::string(argv[1])+"/"+name+".ppm",std::ios::binary);f<<"P6\n1920 1080\n255\n";for(int i=0;i<1920*1080;i++)f.write(reinterpret_cast<const char*>(px+i*4),3);};
   auto field=[&](int n,const char* value){snprintf(prospero_menu::fields[n].data(),prospero_menu::fields[n].size(),"%s",value);};
+  field(8,"PREPARING");field(2,"Scanning your library");field(7,"CIRCLE  Pause and use original library");
+  field(21,"");field(30,"ON");settle_preview();save_scene("library-scanning");
+  field(2,"Moving your library");field(20,"630");field(21,"MEASURED");field(104,"1");
+  settle_preview();assert(prospero_menu::library_bar.value(prospero_menu::now_ms())==630);save_scene("library-moving");
+  field(2,"Verifying your library");field(20,"280");settle_preview();save_scene("library-verifying");
+  field(8,"");field(20,"0");field(21,"");field(7,"");
   field(11,"0");field(13,"18");field(14,"0");field(9,"0");field(30,"OFF");field(28,"CONTENT");field(104,"0");
   for(int i=0;i<8;i++){char text[40];snprintf(text,sizeof(text),"Instance %d",i+1);field(32+i*4,text);field(33+i*4,"1.21.10 / Vanilla");field(34+i*4,"1");field(35+i*4,i==0?"DEV TEST":"");}
   settle_preview();prospero_menu::outgoing_fields=prospero_menu::fields;field(14,"8");field(9,"8");

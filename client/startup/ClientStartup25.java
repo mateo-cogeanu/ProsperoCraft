@@ -11,7 +11,7 @@ public final class ClientStartup25 {
  public static native void checkpoint(String text);
  public static native void nativeSnapshot(long elapsedMillis,int phase);
  public static native boolean launcherMenu();
- private static native boolean libraryProgress(String phase,long bytes);
+ private static native boolean libraryProgress(String phase,long done,long total);
  public static native String[] cpuInformation();
  public static native boolean cleanSystemExit(boolean arm);
  private static boolean normalQuit=false;
@@ -225,7 +225,7 @@ public final class ClientStartup25 {
  }
  public static void main(String[] args)throws Throwable{
   boolean showLibraryProgress="1".equals(System.getenv("PROSPERO_LIBRARY_PROGRESS"));
-  if(showLibraryProgress)libraryProgress("Opening startup reports",0);
+  if(showLibraryProgress)libraryProgress("Opening startup reports",0,0);
   PrintStream previousOut=System.out,previousErr=System.err;
   Path reports=Path.of(java.util.Objects.requireNonNullElse(System.getenv("PROSPERO_DIAGNOSTIC_ROOT"),"/download0"));
   System.setProperty("ps5.report.root",reports.toString());

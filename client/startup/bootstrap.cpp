@@ -562,7 +562,7 @@ void run_test(int i) {
    {const_cast<char *>("cpuInformation"),const_cast<char *>("()[Ljava/lang/String;"),reinterpret_cast<void *>(&cpu_information)},
    {const_cast<char *>("cleanSystemExit"),const_cast<char *>("(Z)Z"),reinterpret_cast<void *>(&clean_system_exit)}
 #ifdef PROSPERO_LIBRARY_PROGRESS
-   ,{const_cast<char *>("libraryProgress"),const_cast<char *>("(Ljava/lang/String;J)Z"),reinterpret_cast<void *>(&prospero_menu::library_progress)}
+   ,{const_cast<char *>("libraryProgress"),const_cast<char *>("(Ljava/lang/String;JJ)Z"),reinterpret_cast<void *>(&prospero_menu::library_progress)}
 #endif
   };
   if(java_env->RegisterNatives(klass,callbacks,i==3?static_cast<jint>(sizeof(callbacks)/sizeof(callbacks[0])):1)!=JNI_OK || java_env->ExceptionCheck()) {

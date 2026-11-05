@@ -1,5 +1,11 @@
 # Changelog
 
+## Local 219 · Library migration progress bar, 2026-11-05
+
+- Show a startup panel with measured percentages for moving and verifying the
+  library. Use a moving segment while scanning and during other startup phases
+  without a known total. Circle still pauses the move and opens the original library.
+
 ## Local 218 · Library startup progress, 2026-11-05
 
 - Show separate JVM, report, storage, copy, verification and library-load phases.
