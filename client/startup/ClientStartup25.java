@@ -195,7 +195,7 @@ public final class ClientStartup25 {
      text.append("PS5 END SNAPSHOT ").append(sample).append('\n');
      synchronized(console){if(running){console.print(text);console.flush();}}
      observeNative(1);
-     if(!transitionCaptured&&isLanguageApply(traces.get(owner))){transitionCaptured=true;captureMainTransitions(500,10);}
+     if(samples>=170&&!transitionCaptured&&isLanguageApply(traces.get(owner))){transitionCaptured=true;captureMainTransitions(500,10);}
      if(sample<samples)Thread.sleep(intervalAfter(sample));
     }
    }catch(InterruptedException stopped){Thread.currentThread().interrupt();}
@@ -309,7 +309,7 @@ public final class ClientStartup25 {
    stage("ENTER "+ProsperoLauncher.gameMain()+"; selected loader, PS5 gameplay validation pending");
    console.println("Original selected Minecraft Main entry;launcher-selected mode. Credentials are not logged.");
    if(startupObserverEnabled()){
-    try{observer=new StartupObserver(console,390,1000,5000);observer.start();}
+    try{observer=new StartupObserver(console,48,5000);observer.start();}
     catch(Throwable unavailable){console.println("PS5 startup observer unavailable;continuing original Main: "+unavailable);observer=null;}
    }else console.println("PS5 startup observer disabled for performance run;enable ps5.startupObserver explicitly for stack sampling");
    ProsperoSession session=new ProsperoSession(reports.resolve("mc-client/logs"),ProsperoLauncher.selectedShutdownAccessors());

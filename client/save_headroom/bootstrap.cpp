@@ -1,7 +1,7 @@
 #define PROSPERO_ZIP_OPEN_BUDGET "8"
 #define PROSPERO_FINAL_SDL_EXIT 1
 #define PROSPERO_MANAGEMENT_EXT 1
-#define PROSPERO_STARTUP_OBSERVER "false"
+#define PROSPERO_STARTUP_OBSERVER "true"
 #define PROSPERO_PREPARE_ZINK_SCREEN 1
 #define PROSPERO_CLEAN_SYSTEM_EXIT 1
 /* Candidate-only upstream synchronous flush/context policy; clean-exit gate retained. */
