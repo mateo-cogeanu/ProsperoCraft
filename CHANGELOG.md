@@ -1,5 +1,11 @@
 # Changelog
 
+## Local 217 · 26.2 startup repair, 2026-11-05
+
+- Restore the verified original LWJGL TinyFD 3.4.1 Java JAR on the shared
+  26.x classpath. The existing PS5 JNI adapter continues to report desktop
+  dialogs unavailable. Physical Vanilla and Fabric launch checks are pending.
+
 ## Local216 — primary shared content/reports/tmp and clean cards,2026-11-05
 
 - Apply clarified default: all library data, logs and temporary files prefer

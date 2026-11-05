@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Independently inspect local216 against accepted204 and original333 inputs.
+"""Independently inspect local217 against accepted204 and original333 inputs.
 
 Requires explicit SDK build outputs and publisher cache; not a portable CI lane
 or evidence of physical-console acceptance. Never modifies packages or game JARs.
@@ -15,7 +15,7 @@ import zipfile
 from audit_client_261 import jar_info, jni_mangle
 from build_lwjgl333 import publisher_jars
 from host_toolchain import ROOT
-from package_client_121 import BASE_PACKAGE
+from package_client_121 import BASE_PACKAGE, TINYFD_CLASSPATH, TINYFD_JAR, TINYFD_SHA256
 
 
 def sha(path):
@@ -63,11 +63,14 @@ def main():
         added = sorted(set(names) - set(old.namelist()))
         for n in added:
             if not (n in replacement_icons or n.startswith(prefix + 'lwjgl333-source/') or n.startswith(prefix + 'classes/') or n.startswith(prefix+'native-presentation-source/') or n.startswith(prefix+'storage-source/') or n.startswith(prefix+'oshi665-source/') or n.startswith(prefix+'sdl-resolution-source/') or
-                    n in {prefix+'native-presentation-audit.json',prefix+'storage-path-audit.json',prefix+'graphics-resolution-audit.json',prefix+'oshi665-platform-audit.json', prefix+'sdl-resolution-audit.json',prefix+'ports/oshi-6.6.5-ps5-platform.jar',prefix + 'lwjgl333-integration-audit.json', prefix + 'ports/lwjgl-3.3.3-ps5-overlay.jar',
+                    n in {prefix + 'ports/' + TINYFD_JAR, prefix+'native-presentation-audit.json',prefix+'storage-path-audit.json',prefix+'graphics-resolution-audit.json',prefix+'oshi665-platform-audit.json', prefix+'sdl-resolution-audit.json',prefix+'ports/oshi-6.6.5-ps5-platform.jar',prefix + 'lwjgl333-integration-audit.json', prefix + 'ports/lwjgl-3.3.3-ps5-overlay.jar',
                           'PPSA99874/licenses/LWJGL333-PORT.txt'}):
                 raise ValueError('Unexpected added file: ' + n)
+        tinyfd_bytes = new.read(prefix + 'ports/' + TINYFD_JAR)
+        if hashlib.sha256(tinyfd_bytes).hexdigest() != TINYFD_SHA256:
+            raise ValueError('Packaged TinyFD differs from the publisher artifact')
         param = json.loads(new.read('PPSA99874/sce_sys/param.json'))
-        if param['contentVersion'] != '01.000.216' or param['downloadDataSize'] != 256:
+        if param['contentVersion'] != '01.000.217' or param['downloadDataSize'] != 256:
             raise ValueError('Wrong identity')
         if new.read(prefix + 'classes/prosperocraft-121.txt') != b'vanilla-1.21.10-1.21.11-zink-v2\n':
             raise ValueError('Wrong per-release gate')
@@ -109,7 +112,7 @@ def main():
         if registry['library_symbol_prefixes'] != {'lwjgl333': 'lwjgl333_'}:
             raise ValueError('Wrong generation namespace')
     # The final image must contain selected-size routing and the new SDL group.
-    linked_text=(args.build_dir/'client121-216-symbols.elf').read_bytes()
+    linked_text=(args.build_dir/'client121-217-symbols.elf').read_bytes()
     for value in (b'PS5_RENDER_SIZE',b'PS5 selected render resolution is malformed or unavailable'):
         if value not in linked_text:raise ValueError('Missing selected-resolution native path')
     native = args.lwjgl333_build / 'ps5/lwjgl333.o'
@@ -124,12 +127,16 @@ def main():
                    'org/lwjgl/system/libc/LibCLocale', 'org/lwjgl/system/libc/LibCStdio'}
     counts, absent = {}, []
     tinyfd = jar_info(next(p for p in publisher_jars(args.publisher_cache) if p.name == 'lwjgl-tinyfd-3.3.3.jar'))[1]
+    tinyfd_jar = args.build_dir / 'PPSA99874/assets/java25/ports' / TINYFD_JAR
+    if tinyfd_jar.read_bytes() != tinyfd_bytes or set(jar_info(tinyfd_jar)[1]) != set(tinyfd):
+        raise ValueError('TinyFD 3.4.1 and 3.3.3 native declarations differ')
+    tinyfd_exports = symbols(args.llvm_nm, args.build_dir / 'registry/embedded-lwjgl_tinyfd.o')
     c = (ROOT / 'client/ports/tinyfd/ps5_dialogs.c').read_text()
     scalar = {'jlong': 'J', 'jint': 'I', 'void': 'V'}
     for owner, method, desc, static in tinyfd:
         name = 'Java_' + jni_mangle(owner) + '_' + jni_mangle(method)
         match = re.search(r'JNIEXPORT\s+(\w+)\s+JNICALL\s+' + re.escape(name) + r'\(([^)]*)\)', c)
-        if not match or not static:
+        if not match or not static or name not in tinyfd_exports:
             raise ValueError('TinyFD adapter method missing')
         types = [part.strip().split()[0] for part in match[2].split(',')]
         actual = '(' + ''.join(scalar[t] for t in types[2:]) + ')' + scalar[match[1]]
@@ -151,7 +158,7 @@ def main():
         counts[jar.name] = covered
     baseline = args.build_dir / 'baseline204'
     manifest = json.loads((baseline / 'manifest.json').read_text())
-    linked = [json.loads(line) for line in (args.build_dir / 'link216.rsp').read_text().splitlines()]
+    linked = [json.loads(line) for line in (args.build_dir / 'link217.rsp').read_text().splitlines()]
     replaced = {'inputs/022-renderer.o','inputs/110-graphics-support.o','inputs/104-main.o', 'inputs/044-embedded-ps5sdl.o', 'inputs/032-embedded-java.o', 'inputs/109-builtin-libraries.o'}
     retained = {}
     for item in manifest['arguments']:
@@ -180,13 +187,19 @@ def main():
     if linked.count(linked333) != 1:
         raise ValueError('Missing/duplicate333 native group')
     elf = (args.build_dir / 'eboot.elf').read_bytes()
+    classpath = re.findall(rb'-Djava\.class\.path=[^\x00]+\x00', elf)
+    original_main = (baseline / 'inputs/104-main.o').read_bytes()
+    original_classpath = re.findall(rb'-Djava\.class\.path=[^\x00]+\x00', original_main)
+    if len(original_classpath) != 1 or classpath != [
+            original_classpath[0][:-1] + b':' + TINYFD_CLASSPATH.encode() + b'\0']:
+        raise ValueError('Actual JVM classpath must append only the verified TinyFD JAR')
     if b'PS5_UI presentation requestedHz=120' not in elf or b'fpsMilli=' not in elf:raise ValueError('Missing actual presentation/timing path')
     for option in (b'-Dps5.zip.maxOpenFiles=8', b'-Xmx1536m', b'-XX:CompressedClassSpaceSize=64m',
                    b'-XX:ReservedCodeCacheSize=96m', b'-XX:ActiveProcessorCount=4'):
         if option + b'\0' not in elf:
-            raise ValueError('Retained option missing from actual216 ELF: ' + option.decode())
+            raise ValueError('Retained option missing from actual217 ELF: ' + option.decode())
     source = (args.build_dir / 'registry/builtin-libraries.cpp').read_text()
-    if 'lwjgl333_prospero_ffi_reserve_prime' not in symbols(args.llvm_nm, args.build_dir / 'client121-216-symbols.elf', external=False):
+    if 'lwjgl333_prospero_ffi_reserve_prime' not in symbols(args.llvm_nm, args.build_dir / 'client121-217-symbols.elf', external=False):
         raise ValueError('333 callback reserve not linked')
     if b'PS5 LWJGL333 pre-JVM closure reserve result=' not in elf:
         raise ValueError('Pre-JVM reserve priming missing from actual executable')
@@ -196,17 +209,17 @@ def main():
     boot = (ROOT / 'client/save_headroom/bootstrap.cpp').read_text()
     if '#define' not in boot or '"8"' not in boot:
         raise ValueError('Missing accepted ZIP budget8')
-    audit = {'package_sha256': sha(args.package), 'version': '01.000.216', 'title_id': 'PPSA99874',
+    audit = {'package_sha256': sha(args.package), 'version': '01.000.217', 'title_id': 'PPSA99874',
              'package_bytes': args.package.stat().st_size, 'zip_growth_bytes': args.package.stat().st_size - args.baseline_package.stat().st_size,
              'uncompressed_growth_bytes': growth, 'baseline_changed_files': changed, 'removed_logo_assets': sorted(retired_icons), 'added_files': added,
              'matched_native_declarations': counts, 'unsupported_nonplatform_native_declarations': sorted(absent),
-             'tinyfd': '11 original333 declarations match existing explicit-unavailable/cancel adapter; no new dialog implementation',
+             'tinyfd': 'Original 3.4.1 parent JAR and 3.3.3 instance binding match 11 retained adapter JNI declarations',
              'retained_link_input_sha256': retained,
              'native_symbols': '333 definitions prefixed; original lookup keys retained with scoped handle',
              'result': 'PASS scoped package/static ABI audit; no complete feature or console acceptance', 'console': 'NOT TESTED'}
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(audit, indent=2) + '\n')
-    print('PASS216 package audit; uncompressed growth', growth, 'bytes; SHA256', audit['package_sha256'])
+    print('PASS217 package audit; uncompressed growth', growth, 'bytes; SHA256', audit['package_sha256'])
 
 
 if __name__ == '__main__':

@@ -12,7 +12,7 @@ ProsperoCraft handles Minecraft installation, accounts, input and game integrati
 
 Release **01.000.212** adds Vanilla1.21.10/1.21.11 and a smoother launcher with a120Hz presentation target, horizontal page turns, adaptive page detents, in-place selectors, live theme previews and a larger icon grid. The physical tester accepts the launcher and explicitly authorizes release of the exact package. [Release notes](docs/releases/client-launcher-vanilla-212.md) · [Console acceptance and limits](docs/validation/client212-console-acceptance-2026-11-04.json). Existing26.x game paths and shader/quit/save repairs remain. Numeric FPS, broad game/mod/shader/device regressions and endurance are unmeasured; all1.21Fabric and earlier1.21 releases remain unavailable. [ProsperoStore update submitted](https://github.com/darkxex/ps5-homebrew-catalog/pull/1121); availability requires catalog approval and deployment.
 
-Development [216](docs/client-primary-shared-storage-216.md) tests primary shared content/reports/tmp with verified copy-before-switch and readable legacy fallback, clean card labels and correct instance-settings Back navigation. Physical console validation is pending; released212 remains unchanged.
+Development [217](docs/validation/client262-crash-report-2026-11-05.json) restores the TinyFD binding used during 26.2 startup. It carries forward the [216](docs/client-primary-shared-storage-216.md) changes for primary shared content/reports/tmp with verified copy-before-switch and readable legacy fallback, clean card labels and correct instance-settings Back navigation. Physical console validation is pending; released212 remains unchanged.
 
 ## What can I play?
 
@@ -22,7 +22,7 @@ Earlier release **01.000.167** added supported Minecraft26.2 Fabric, controller/
 | --- | --- | --- |
 | **26.1 / 26.1.1 / 26.1.2** | Supported with normal Play/Ready states in 204. | Supported; matching loader, mods and shader versions required. |
 | **26.3** | Established playable PS5 baseline, including game audio and server joining. | Released, with positive console feedback. Mods still need individual compatibility checks. |
-| **26.2** | Released with earlier positive play/keyboard feedback. [New crashes reported](docs/validation/client262-crash-report-2026-11-05.json); installed build not yet identified. | Supported since167; new crash report under investigation, current-run evidence pending. |
+| **26.2** | Released with earlier positive play/keyboard feedback. New launch crash reported. Console retest pending. | [Missing TinyFD binding confirmed on 212](docs/validation/client262-crash-report-2026-11-05.json). Candidate 217 restores it. Console retest pending. |
 | **26.4 snapshots 1–6** | Available; positive console feedback on 118/119. Use separate test worlds. | Selectable when matching loader/mod versions exist; snapshot-specific Fabric, Controlify and mod compatibility is not established. |
 | **1.21.10 / 1.21.11** | Available in212, with positive console feedback on207/208. Earlier1.21 releases remain Coming soon. | Coming soon for all1.21 releases. |
 | **Other versions** | Unsupported 26.x catalog entries may download, but Play stays blocked. 1.21.x requires the separate development candidate described above. | No additional compatibility claim. NeoForge is not enabled. |

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Local216 primary shared storage for content/reports/tmp with verified legacy fallback candidate from exact accepted204 inputs. No releases.
+"""Local217 restores the TinyFD parent binding in the shared-storage candidate from exact accepted204 inputs. No releases.
 
 Original343/OpenAL groups are retained byte for byte from the relink kit.
 Main, explicit libjava handle hook, SDL, graphics inventory and matched333 are rebuilt.
@@ -21,6 +21,11 @@ from storage_bootstrap_policy import normalize
 
 BASE_PACKAGE = '89167d01c7da0ece733b0dd8b7871a05ee38ff5f79ee45b4ce9beefc5d4c14a0'
 BASE_RELINK = '4351224b234d2b16a688afc4d31f23f0c6badc30670d034ad065cc629bce9f0f'
+
+
+TINYFD_JAR = 'lwjgl-tinyfd-3.4.1.jar'
+TINYFD_SHA256 = '3ffad01103b6cbc8c12c7156691fd87a96f063600a5ff5c9087d321c6736963a'
+TINYFD_CLASSPATH = '/app0/assets/java25/ports/' + TINYFD_JAR
 
 
 def extract(archive, directory, prefix=None):
@@ -46,12 +51,15 @@ def main():
     parser.add_argument('--graphics-build', type=Path, required=True)
     parser.add_argument('--sdl-build',type=Path,required=True)
     parser.add_argument('--oshi665-build',type=Path,required=True)
+    parser.add_argument('--tinyfd-jar', type=Path, required=True)
     parser.add_argument('--java-home', type=Path)
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--work-dir', type=Path, required=True)
-    parser.add_argument('--app-version', choices=('01.000.216',), default='01.000.216')
+    parser.add_argument('--app-version', choices=('01.000.217',), default='01.000.217')
     parser.add_argument('--check-only', action='store_true', help='Compile/link/convert without signing or a candidate ZIP')
     args = parser.parse_args()
+    if sha(args.tinyfd_jar) != TINYFD_SHA256:
+        raise ValueError('Wrong publisher TinyFD 3.4.1 artifact')
     app_version = args.app_version
     candidate = app_version.split('.')[-1]
     runtime, llvm, jdk = args.runtime_workspace.resolve(), args.llvm_home.resolve() / 'bin', java_home(args.java_home)
@@ -126,7 +134,7 @@ def main():
     if sha(sdl_object)!=sdl_audit['object_sha256']:raise ValueError('Stale SDL output')
     for name,digest in sdl_audit['port_sha256'].items():
         if sha(ROOT/'client/ports/sdl'/name)!=digest:raise ValueError('Stale SDL source: '+name)
-    sdl_scoped=work/'sdl216-scoped.o'
+    sdl_scoped=work/'sdl217-scoped.o'
     subprocess.run([str(llvm/'llvm-objcopy'),'--redefine-syms='+str(baseline/'provider-bindings.txt'),str(sdl_object),str(sdl_scoped)],check=True)
     os_build=args.oshi665_build.resolve();os_overlay=os_build/'oshi-6.6.5-ps5-platform.jar';os_audit=json.loads((os_build/'audit.json').read_text())
     if sha(os_overlay)!=os_audit['output_sha256']:raise ValueError('Stale OSHI665 overlay')
@@ -207,16 +215,21 @@ def main():
     shutil.copyfile(registry / 'builtin-resident-audit.json', java / 'resident-libraries-audit.json')
     (java / 'lwjgl333-integration-audit.json').write_text(json.dumps({'runtime': pin, 'java': java_audit, 'native': native_audit,
         'importsScopedSha256': sha(scoped), 'groupSha256': sha(registry / 'embedded-lwjgl333.o'), 'console': 'NOT RUN'}, indent=2) + '\n')
-    # All parent input JARs stay exact204; no official333 publisher JARs are bundled.
+    # Restore TinyFD to the parent that owns the other 26.x LWJGL bindings.
     header = args.base_header.read_text()
     cp_value = re.fullmatch(r'#pragma once\n#define CLIENT_CLASSPATH_OPTION "([^"\n]+)"\s*', header)
     if not cp_value or cp_value[1].encode() + b'\0' not in (baseline / 'inputs/104-main.o').read_bytes():
         raise ValueError('Classpath header differs from actual accepted204 main object')
-    (work / 'client_classpath.hpp').write_text(header)
+    if 'lwjgl-tinyfd' in cp_value[1]:
+        raise ValueError('Unexpected existing TinyFD classpath entry')
+    tinyfd = java / 'ports' / TINYFD_JAR
+    shutil.copyfile(args.tinyfd_jar, tinyfd)
+    (work / 'client_classpath.hpp').write_text(
+        header.replace(cp_value[1], cp_value[1] + ':' + TINYFD_CLASSPATH))
     from build_launcher_toolkit import dispatch
     dispatch(work)
     parent = [java / 'ports/lwjgl-3.4.3-ps5-modules.jar', java / 'ports/lwjgl-3.4.3-ps5-platform.jar',
-              java / 'ports/lwjgl-glfw-3.4.1-ps5-callback343.jar', *sorted((java / 'client/jars').glob('*.jar')), java / 'client-probe.jar']
+              java / 'ports/lwjgl-glfw-3.4.1-ps5-callback343.jar', tinyfd, *sorted((java / 'client/jars').glob('*.jar')), java / 'client-probe.jar']
     classes = work / 'classes'
     shutil.rmtree(classes, ignore_errors=True)
     classes.mkdir()
@@ -296,7 +309,7 @@ def main():
     subprocess.run([str(converter), 'link', '--in', str(pie), '--out', str(elf), '--stub-dir', str(sdk / 'target/lib'),
         *sum([['--stub', str(p)] for p in stubs], []), '--module-sdk', '0x02000009', '--companion-sdk', '0x08050001', '--file-name', 'eboot.elf'], check=True)
     if args.check_only:
-        print('PASS216 target compile/link/converter; no signed candidate ZIP')
+        print('PASS217 target compile/link/converter; no signed candidate ZIP')
         return
     subprocess.run([str(converter), 'self', '--sign', '--in', str(elf), '--out', str(app / 'eboot.bin'), '--magic', '0x1D3D154F'], check=True)
     subprocess.run([str(converter), 'self', '--inspect', '--file', str(app / 'eboot.bin')], check=True)
@@ -340,13 +353,14 @@ def main():
         'newGroupSha256': sha(registry / 'embedded-lwjgl333.o'), 'overlaySha256': sha(overlay),
         'source_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
         'source_tree': 'modified' if subprocess.check_output(['git', 'status', '--porcelain'], text=True).strip() else 'clean',
-        'scope': 'Primary shared content/reports/tmp with verified readable migration and legacy fallback; normal-card badges removed;215Back/214large uploads/212game policies retained',
+        'scope': 'Restore original TinyFD 3.4.1 Java binding to the shared 26.x parent classpath',
+        'tinyfd_sha256': TINYFD_SHA256,
         'nativePresenterSha256':sha(presenter),'presentationRuntime':presentation_pin,'graphicsSupportSha256':sha(graphics_object),'newSdlGroupSha256':sha(registry/'embedded-ps5sdl.o'),'oshi665Sha256':sha(os_overlay),
         'console': 'NOT TESTED', 'releaseStore': 'No action'}
     (output / 'build-audit.json').write_text(json.dumps(record, indent=2) + '\n')
     (output / 'SHA256SUMS').write_text(record['package_sha256'] + '  PPSA99874.zip\n')
     shutil.copyfile(pie, output / pie.name)
-    print('LOCAL216', package, 'SHA256', record['package_sha256'])
+    print('LOCAL217', package, 'SHA256', record['package_sha256'])
 
 
 if __name__ == '__main__':

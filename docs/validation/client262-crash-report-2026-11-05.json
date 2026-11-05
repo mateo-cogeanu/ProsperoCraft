@@ -5,11 +5,11 @@
     "26.2 Vanilla",
     "26.2 Fabric"
   ],
-  "installed_build": "UNKNOWN: current build/session reports not yet retrieved",
-  "reproduction_phase": "Not yet established: launcher, game menu, world load or in-world",
-  "evidence": "Human report only; no current-run log, crash PC or exception retrieved",
-  "retrieval": "Previously supplied FTP endpoint returns No route to host; current address/enabled FTP and reopened launcher requested. No historical run substituted.",
-  "status": "Active investigation pending current FTP access. Do not infer a shared native/Java/storage cause or change policies without concrete evidence.",
-  "relation_to216": "Reported while216 was being prepared; no exact216 physical test established. Local/CI/package success does not resolve these crashes.",
-  "publication": "Sanitized consumer report only; raw device paths/logs remain local. Release212 preserved."
+  "installed_build": "The archived Fabric exception and matching report set identify 01.000.212. Vanilla crash build is unconfirmed.",
+  "reproduction_phase": "Fabric failed during Minecraft native library bootstrap before the game menu. Vanilla phase is unconfirmed.",
+  "evidence": "The original 26.2 Fabric game reports NoClassDefFoundError for org.lwjgl.util.tinyfd.TinyFileDialogs from NativeLibrariesBootstrap.loadTinyFD. ProsperoGameLoader delegates 26.x LWJGL classes to the parent. The exact 212 package and embedded classpath lack the TinyFD Java binding. The retained native adapter was already linked.",
+  "retrieval": "Cyberduck FTP retrieved 11 files including the archived Fabric failure. FTP denied access to some current native reports. Cyberduck treated the report HTTP URL as WebDAV and received HTTP 405. Raw reports are local.",
+  "status": "Development 217 restores the unmodified publisher TinyFD 3.4.1 Java binding to the shared 26.x parent. Its existing native adapter reports desktop dialogs unavailable. Exact 217 console tests for both launch paths are pending.",
+  "relation_to216": "The identified failure is on 212. Development 217 carries the 216 storage and launcher changes forward.",
+  "publication": "Sanitized consumer evidence only. Local candidate and source publication are separate from release and Store publication."
 }
