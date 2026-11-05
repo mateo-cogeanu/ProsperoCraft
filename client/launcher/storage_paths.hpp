@@ -36,9 +36,11 @@ inline bool initialize()noexcept{
  shared=shared_access();
  if(!shared&&(!directory(PROSPERO_LEGACY_STORAGE "/mc-client")||!directory(PROSPERO_LEGACY_STORAGE "/mc-client/logs")))return false;
  // Set before core/library constructors and Java's environment snapshot.
+ if(::setenv("PROSPERO_LIBRARY_PROGRESS","1",1))return false;
  if(::setenv("PROSPERO_DIAGNOSTIC_ROOT",report_root(),1)||::setenv("PROSPERO_STORAGE_BASE",base_root(),1)||::setenv("ALSOFT_LOCAL_PATH",shared?PROSPERO_SHARED_STORAGE "":PROSPERO_LEGACY_STORAGE "/mc-client",1)||::setenv("HOME",base_root(),1)||::setenv("TMPDIR",shared?PROSPERO_SHARED_STORAGE "/tmp":PROSPERO_LEGACY_STORAGE "",1))return false;
  return ps5::log_share::configure_root(report_root());
 }
 }
+#define PROSPERO_LIBRARY_PROGRESS 1
 #define PROSPERO_REPORT_PATH(name) (prospero_storage::shared?PROSPERO_SHARED_STORAGE "/reports/" name:PROSPERO_LEGACY_STORAGE "/" name)
 #define PROSPERO_STORAGE_OPTION(primary,fallback) (prospero_storage::shared?primary:fallback)

@@ -592,7 +592,7 @@ inline bool start_frontend() noexcept {
  visible=false;online=false;exit_requested=false;display_done=false;display_ok=false;
  desktop=DesktopInput{};pointer_kind=pointer_target=pointer_page=-1;
  selector_depth=0;selector_reveal.snap(1);page_turn={};card_open={};opening_slot=0;card_reverse=false;list_scroll={};tab_x={};tab_w={};tabs_ready=false;page_direction=1;page_direction_at=0;trigger_held=0;list_page=-1;updates=0;navigation.clear();pressed_at=0;focus={};transition_start=now_ms();animating=false;event_read=event_write=0;fields={};published={};
- const char* boot[]={"Instances","","Opening your library...","","","Not signed in","PLAY DEMO","L1 / R1  Top bar     X  Select","PREPARING","0","WAIT","0"};
+ const char* boot[]={"Instances","","Starting the Java runtime...","","","Not signed in","PLAY DEMO","L1 / R1  Top bar     X  Select","PREPARING","0","WAIT","0"};
  for(int i=0;i<12;++i)std::snprintf(fields[i].data(),512,"%s",boot[i]);
  std::int32_t user=-1;if(sceUserServiceGetInitialUser(&user)<0)return false;controller=scePadOpen(user,0,0,nullptr);if(controller<0)return false;
  pthread_attr_t attrs;
@@ -614,6 +614,28 @@ inline void show_failure() noexcept {
  const char* boot[]={"Your next world.","Starts right here.","Account services could not start. Keep app open for startup logs.","","","Not signed in","STARTUP FAILED","Close and reopen after collecting the startup report","STARTUP FAILED","0","WAIT","0"};
  for(int i=0;i<12;++i)std::snprintf(text[i].data(),512,"%s",boot[i]);publish(text);online.store(true,std::memory_order_release);
 }
+#ifdef PROSPERO_LIBRARY_PROGRESS
+inline jboolean library_progress(JNIEnv* env,jclass,jstring phase,jlong bytes) noexcept {
+ const char* text=env->GetStringUTFChars(phase,nullptr);
+ if(!text)return JNI_FALSE;
+ const bool migrating=std::strcmp(text,"Moving your library")==0||
+     std::strcmp(text,"Verifying your library")==0||std::strcmp(text,"Checking copied files")==0||
+     std::strcmp(text,"Finishing library move")==0;
+ Fields state{};
+ std::snprintf(state[0].data(),512,"Instances");
+ if(migrating)std::snprintf(state[2].data(),512,"%s... %lld MiB processed. CIRCLE to pause.",
+     text,static_cast<long long>(bytes)/(1024*1024));
+ else std::snprintf(state[2].data(),512,"%s...",text);
+ std::snprintf(state[8].data(),512,"PREPARING");
+ env->ReleaseStringUTFChars(phase,text);
+ publish(state);
+ online.store(true,std::memory_order_release);
+ bool paused=false;
+ for(unsigned event=take_input();event;event=take_input())
+  if((event&0xffff0000u)==0&&(event&0x2000u))paused=true;
+ return !(migrating&&paused);
+}
+#endif
 inline jboolean menu(JNIEnv* env,jclass owner){
  const jmethodID tick=env->GetStaticMethodID(owner,"launcherTick","(I)[Ljava/lang/String;");if(!tick)return false;
  bool launch=false,failed=false;

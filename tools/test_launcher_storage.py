@@ -39,6 +39,18 @@ public class StorageCheck {
   Path conflict=folder.resolve("conflict"),conflictOld=conflict.resolve("download/ProsperoCraft"),conflictNew=conflict.resolve("data/ProsperoCraft");new ProsperoLibrary(conflictOld).add("Old world","26.3",1);new ProsperoLibrary(conflictNew).add("Separate world","26.3",1);if(!ProsperoStorageRoot.select(conflictOld,conflictNew,ProsperoStorageRoot::probe,ProsperoStorageRoot::copy).root().equals(conflictOld))throw new AssertionError("conflict did not fall back");if(!new ProsperoLibrary(conflictOld).instances().get(0).name.equals("Old world")||!new ProsperoLibrary(conflictNew).instances().get(0).name.equals("Separate world"))throw new AssertionError("conflicting library was modified");
   // Simulate failure after READY but before the directory rename, then retry.
   Path commitCase=folder.resolve("commit-case"),commitOld=commitCase.resolve("download/ProsperoCraft"),commitNew=commitCase.resolve("data/ProsperoCraft");Files.createDirectories(commitNew.getParent());new ProsperoLibrary(commitOld);var count=new java.util.concurrent.atomic.AtomicInteger();var notCommitted=ProsperoStorageRoot.select(commitOld,commitNew,ProsperoStorageRoot::probe,(from,to)->{ProsperoStorageRoot.copy(from,to);if(count.incrementAndGet()==1){Files.createDirectory(commitNew);Files.writeString(commitNew.resolve("race"),"KEEP");}});if(!notCommitted.root().equals(commitOld)||!Files.readString(commitNew.resolve("race")).equals("KEEP"))throw new AssertionError("commit raced overwrite");Files.delete(commitNew.resolve("race"));if(!ProsperoStorageRoot.select(commitOld,commitNew,ProsperoStorageRoot::probe,ProsperoStorageRoot::copy).root().equals(commitNew))throw new AssertionError("verified commit retry failed");
+  Path paused=folder.resolve("paused"),old=paused.resolve("download/ProsperoCraft"),next=paused.resolve("data/ProsperoCraft");
+  Files.createDirectories(next.getParent());new ProsperoLibrary(old).add("Paused world","26.3",1);
+  var phases=new java.util.ArrayList<String>();
+  var pause=ProsperoStorageRoot.select(old,next,ProsperoStorageRoot::probe,null,(phase,bytes)->{
+   phases.add(phase);return !phase.equals("Verifying your library");
+  });
+  if(!phases.contains("Moving your library")||!phases.contains("Verifying your library")||
+      !pause.root().equals(old)||!pause.notice().contains("paused")||Files.exists(next))
+   throw new AssertionError("pausing did not keep the verified original library active");
+  if(!ProsperoStorageRoot.select(old,next,ProsperoStorageRoot::probe,null,ProsperoStorageRoot.SILENT).root().equals(next)||
+      !new ProsperoLibrary(next).instances().getFirst().name.equals("Paused world")||
+      !Files.isRegularFile(old.resolve("library.json")))throw new AssertionError("resume lost library data");
   System.setProperty("ps5.launcher.root",folder.resolve("explicit").toString());try{if(!ProsperoStorageRoot.current().root().equals(folder.resolve("explicit")))throw new AssertionError("explicit root ignored");}finally{System.clearProperty("ps5.launcher.root");}
 
   System.out.println("PASS shared-root proof/verified-readable-fallback/no-legacy-writes/copy-resume/account+world verification/symlink+source-change refusal;256MiBmanifest/same title, typed ENOSPC/quota/access/read-only categories and app-local full message, unchanged library/world path and visible data root; no invented free-space or console resize claim");

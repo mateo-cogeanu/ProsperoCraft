@@ -11,6 +11,7 @@ public final class ClientStartup25 {
  public static native void checkpoint(String text);
  public static native void nativeSnapshot(long elapsedMillis,int phase);
  public static native boolean launcherMenu();
+ private static native boolean libraryProgress(String phase,long bytes);
  public static native String[] cpuInformation();
  public static native boolean cleanSystemExit(boolean arm);
  private static boolean normalQuit=false;
@@ -223,6 +224,8 @@ public final class ClientStartup25 {
   if(resident){System.setProperty("jna.boot.library.name","jnidispatch");System.setProperty("jna.noclasspath","true");System.setProperty("jna.nounpack","true");}
  }
  public static void main(String[] args)throws Throwable{
+  boolean showLibraryProgress="1".equals(System.getenv("PROSPERO_LIBRARY_PROGRESS"));
+  if(showLibraryProgress)libraryProgress("Opening startup reports",0);
   PrintStream previousOut=System.out,previousErr=System.err;
   Path reports=Path.of(java.util.Objects.requireNonNullElse(System.getenv("PROSPERO_DIAGNOSTIC_ROOT"),"/download0"));
   System.setProperty("ps5.report.root",reports.toString());
@@ -231,7 +234,8 @@ public final class ClientStartup25 {
   StartupObserver observer=null;
   try{
    stage("Opening ProsperoCraft launcher; account credentials remain in memory");
-   String[] selectedArguments=ProsperoLauncher.run(ClientStartup25::launcherMenu);
+   String[] selectedArguments=ProsperoLauncher.run(ClientStartup25::launcherMenu,
+       showLibraryProgress?ClientStartup25::libraryProgress:ProsperoStorageRoot.SILENT);
    stage("Launcher display closed; handing off to original Minecraft Main");
    if(!gamePreflight())throw new IllegalStateException("Original artifact preflight failed; inspect startup logs");
    stage("PS5_LAUNCH phase=PREPARE_INSTANCE");

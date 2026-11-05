@@ -1,5 +1,12 @@
 # Changelog
 
+## Local 218 · Library startup progress, 2026-11-05
+
+- Show separate JVM, report, storage, copy, verification and library-load phases.
+- Circle pauses migration before publication and opens the verified original library
+  for that session. Restart to resume. A shared library load error also retries
+  the verified original library. Console diagnosis and retest are pending.
+
 ## Local 217 · 26.2 startup repair, 2026-11-05
 
 - Restore the verified original LWJGL TinyFD 3.4.1 Java JAR on the shared

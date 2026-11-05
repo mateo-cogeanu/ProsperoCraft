@@ -31,8 +31,18 @@ public final class ProsperoLauncher {
  private ProsperoLauncher(ProsperoAuth auth,ProsperoStorageRoot.Selection storage)throws Exception{this(auth,storage.root(),null);message=storage.notice();}
  ProsperoLauncher(ProsperoAuth auth,Path root,ProsperoInstall.Source source)throws Exception{this(auth,root,source,()->ProsperoMicrophone.enable(true));}
  ProsperoLauncher(ProsperoAuth auth,Path root,ProsperoInstall.Source source,Microphone microphone)throws Exception{this.microphone=Objects.requireNonNull(microphone);this.auth=auth;library=new ProsperoLibrary(root);accounts=new ProsperoAccountStore(root);offlineAccount=ProsperoOfflineAccount.load(root,System.currentTimeMillis());fabric=new ProsperoFabric(root.resolve("cache"));installer=source==null?new ProsperoInstall(root.resolve("cache")):new ProsperoInstall(root.resolve("cache"),source);if(library.settings().showIntro&&!Boolean.getBoolean("ps5.launcher.resume")){page=7;row=1;}if(ProsperoChannel.tempGameTest()&&accounts.exists())restoreAccount();}
- static String[] run(Menu menu)throws Exception {
-  current=new ProsperoLauncher(new ProsperoAuth());
+ static String[] run(Menu menu,ProsperoStorageRoot.Progress progress)throws Exception {
+  var storage=ProsperoStorageRoot.current(progress);
+  progress.update("Loading instances and settings",0);
+  var auth=new ProsperoAuth();
+  try {
+   current=new ProsperoLauncher(auth,storage);
+  } catch(java.io.IOException unavailable) {
+   if(!storage.root().equals(Path.of("/data/ProsperoCraft/library")))throw unavailable;
+   var fallback=ProsperoStorageRoot.fallback(Path.of("/download0/ProsperoCraft"),
+       "The shared library could not be opened. Using the original library for this session.");
+   current=new ProsperoLauncher(auth,fallback);
+  }
   try{if(!menu.show()){current.cancel();throw new IllegalStateException("Launcher display handoff failed;game not started");}}finally{synchronized(current){current.stopWeb();}}
   synchronized(current){if(!current.launch)throw new IllegalStateException("No launch selected");}
   return current.arguments(null,null);

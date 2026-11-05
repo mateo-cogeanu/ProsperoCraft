@@ -4,6 +4,16 @@ import re
 
 def normalize(name, text):
     if name == 'client/startup/bootstrap.cpp':
+        progress_binding = (
+            '\n#ifdef PROSPERO_LIBRARY_PROGRESS\n'
+            '   ,{const_cast<char *>("libraryProgress"),const_cast<char *>("(Ljava/lang/String;J)Z"),'
+            'reinterpret_cast<void *>(&prospero_menu::library_progress)}\n#endif\n  '
+        )
+        if text.count(progress_binding) != 1:
+            raise ValueError('Library progress callback changed')
+        text = text.replace(progress_binding, '')
+        text = text.replace('callbacks,i==3?static_cast<jint>(sizeof(callbacks)/sizeof(callbacks[0])):1',
+                            'callbacks,i==3?5:1')
         blocks = ('#ifndef PROSPERO_REPORT_PATH\n#define PROSPERO_REPORT_PATH(name) "/download0/" name\n#endif\n',
                   '#ifndef PROSPERO_STORAGE_OPTION\n#define PROSPERO_STORAGE_OPTION(primary,fallback) fallback\n#endif\n')
         for block in blocks:

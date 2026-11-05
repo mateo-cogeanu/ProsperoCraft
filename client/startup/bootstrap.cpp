@@ -560,8 +560,12 @@ void run_test(int i) {
    {const_cast<char *>("nativeSnapshot"),const_cast<char *>("(JI)V"),reinterpret_cast<void *>(&native_snapshot)},
    {const_cast<char *>("launcherMenu"),const_cast<char *>("()Z"),reinterpret_cast<void *>(&prospero_menu::menu)},
    {const_cast<char *>("cpuInformation"),const_cast<char *>("()[Ljava/lang/String;"),reinterpret_cast<void *>(&cpu_information)},
-   {const_cast<char *>("cleanSystemExit"),const_cast<char *>("(Z)Z"),reinterpret_cast<void *>(&clean_system_exit)}};
-  if(java_env->RegisterNatives(klass,callbacks,i==3?5:1)!=JNI_OK || java_env->ExceptionCheck()) {
+   {const_cast<char *>("cleanSystemExit"),const_cast<char *>("(Z)Z"),reinterpret_cast<void *>(&clean_system_exit)}
+#ifdef PROSPERO_LIBRARY_PROGRESS
+   ,{const_cast<char *>("libraryProgress"),const_cast<char *>("(Ljava/lang/String;J)Z"),reinterpret_cast<void *>(&prospero_menu::library_progress)}
+#endif
+  };
+  if(java_env->RegisterNatives(klass,callbacks,i==3?static_cast<jint>(sizeof(callbacks)/sizeof(callbacks[0])):1)!=JNI_OK || java_env->ExceptionCheck()) {
    java_failure(i,-1317,"network trace binding");java_env->DeleteLocalRef(klass);return;
   }
   jmethodID method=java_env->GetStaticMethodID(klass,"main","([Ljava/lang/String;)V");
