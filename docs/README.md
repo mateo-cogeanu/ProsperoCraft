@@ -77,3 +77,5 @@ the documentation checker.
 Release212: [notes](releases/client-launcher-vanilla-212.md) and [console acceptance](validation/client212-console-acceptance-2026-11-04.json).
 
 [Release212 publication and Store submission](validation/client212-store-publication-2026-11-04.json).
+
+[Local213 larger browser uploads](client-browser-uploads-213.md).

@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-05",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.213",
+  "scope": "Browser upload limit1GiB with streaming,30minute total/30second idle/server-derived browser limits; larger bounded pack directories",
+  "checks": {
+    "web": "PASS129MiB real resource+shader HTTP uploads with64MiB heap and exact bytes;9001entry resource archive, unchanged mod bound, over-limit directory/ZIP sentinel controls; admitted1GiB header interrupted cleanup and1GiB+1 early413; injected3minute success/30minute408 staging/lock cleanup",
+    "fast": "PASS19 checks24.0s",
+    "source_only": "PASS19 checks23.3s, source-only copy with empty explicit dependency cache and --fetch-deps from /tmp",
+    "target_package": "Preparing; locally cleaned dependency objects restored/rebuilt using existing recipes; no source policy changes",
+    "hosted": "Pending source push"
+  },
+  "physical": "NOT RUN: actual browser/PS5 transfers above128MiB, disk quota/cancel/interruption, pack loading, launcher/game handoff; no network throughput/FPS/endurance claim",
+  "preservation": "Exact released212 retained; no runtime/graphics/game-JAR/native implementation changes",
+  "release_store": "No action; explicit exact-build physical/release gate retained"
+}

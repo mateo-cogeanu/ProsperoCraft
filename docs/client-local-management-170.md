@@ -86,7 +86,7 @@ enable/disable remain in the native launcher where supported; this service does
 not expose arbitrary filesystem operations. Reopening the native Installed view
 reads the real folders after browser changes.
 
-Each upload is limited to128MiB and streams through a64KiB buffer into an owned
+The original170 upload is limited to128MiB (superseded in [213](client-browser-uploads-213.md)) and streams through a64KiB buffer into an owned
 `.prospero-upload-*.part` in the destination. Same-directory move publishes the
 complete file without a replacement flag; filesystem atomicity remains platform
 specific. Failure, disconnect, quota/full-volume error and cancellation remove

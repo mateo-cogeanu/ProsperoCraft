@@ -1,5 +1,14 @@
 # Changelog
 
+## Local213 — larger browser uploads,2026-11-05
+
+- Raise per-file browser uploads from128MiB to1GiB, retaining64KiB streaming.
+- Allow30minute transfers and30second read stalls; derive browser label/limit/timeout
+  from server constants. Keep cancellation/staging cleanup and existing files.
+- Allow more entries in bounded resource/shader ZIP directories; keep mod limits,
+  ZIP64/split/path refusals and original archives. Physical213 tests pending;
+  release/Store212 remains unchanged.
+
 ## 01.000.212 — launcher polish and1.21 Vanilla, 2026-11-04
 
 - User accepts the exact212 launcher and authorizes GitHub/ProsperoStore release.

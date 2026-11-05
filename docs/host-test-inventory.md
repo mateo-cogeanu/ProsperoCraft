@@ -324,3 +324,8 @@ storage writes, cancel restore, invalid hover rejection, spatial icon choice and
 all32 pointer cells. The haptic fixture polls actual state within a deadline
 instead of assuming15ms hosted scheduling; explicit stale-poll tests stay unrefreshed.
 Manual Vulkan previews cover parent overlays, six theme previews and icon targets.
+
+213 web fixture adds actual129MiB resource/shader HTTP streams with64MiB heap,
+byte equality,9001entry pack and ZIP metadata controls, plus injected3minute
+success/30minute deadline cleanup. This does not validate PS5 upload throughput
+or pack/game compatibility. See [213](client-browser-uploads-213.md).

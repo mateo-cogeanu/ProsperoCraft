@@ -12,7 +12,9 @@ import com.google.gson.*;
 /** Menu-scoped administrative service. One worker/socket/upload; no diagnostics sharing. */
 final class ProsperoWeb implements AutoCloseable {
  static final long PAIRING_MS=5*60_000L;
- static final long MAX_UPLOAD=128L*1024*1024, SESSION_MS=15*60_000L;
+ static final long MAX_UPLOAD=1024L*1024*1024, UPLOAD_MS=30*60_000L, SESSION_MS=15*60_000L;
+ static final int UPLOAD_IDLE_MS=30_000;
+ static final String UPLOAD_LABEL="1 GiB";
  interface Owner {
   Object snapshot()throws Exception;
   default String selectedInstance(){return "";}
@@ -89,7 +91,7 @@ final class ProsperoWeb implements AutoCloseable {
    require(!headers.containsKey("transfer-encoding")&&!headers.containsKey("expect"),400,"Use a bounded Content-Length upload");
    String host=headers.getOrDefault("host","");require(hosts.contains(host),403,"Address changed. Reopen the launcher address");
    long length=0;try{String l=headers.getOrDefault("content-length","0");require(l.matches("[0-9]{1,10}"),400,"Invalid length");length=Long.parseLong(l);}catch(NumberFormatException bad){throw new Refused(400,"Invalid length");}
-   require(length<=MAX_UPLOAD,413,"Maximum file size is 128 MiB");
+   require(length<=MAX_UPLOAD,413,"Maximum file size is "+UPLOAD_LABEL);
    if(method.equals("GET"))require(length==0,400,"Unexpected body");
    if(!method.equals("GET")){require(("http://"+host).equals(headers.get("origin")),403,"Open this page directly from the launcher address");require("1".equals(headers.get("x-prospero-request")),403,"Browser request required");}
    if(method.equals("GET")&&path.matches("/icon/[0-9]{1,2}")){int icon=Integer.parseInt(path.substring(6));require(icon<ProsperoWebIcons.PNG.length,404,"Icon unavailable");respondBytes(out,200,"image/png",Base64.getDecoder().decode(ProsperoWebIcons.PNG[icon]),"");return;}
@@ -126,11 +128,11 @@ final class ProsperoWeb implements AutoCloseable {
      Path staging=Files.createTempFile(folder,".prospero-upload-",".part");
      try{
       // Capacity query is unsupported on the console; ENOSPC/quota write errors are authoritative.
-      byte[] buffer=new byte[65536];long left=length,until=clock.getAsLong()+120_000;socket.setSoTimeout(5000);
+      byte[] buffer=new byte[65536];long left=length,until=clock.getAsLong()+UPLOAD_MS;socket.setSoTimeout(UPLOAD_IDLE_MS);
       try(var file=sink.open(staging)){
-       while(left>0){require(!closed&&clock.getAsLong()<until,408,"Upload timed out");int count=in.read(buffer,0,(int)Math.min(buffer.length,left));if(count<0)throw new Refused(400,"Upload interrupted");file.write(buffer,0,count);left-=count;}
+       while(left>0){require(!closed&&clock.getAsLong()<until,408,"Upload timed out");int count=in.read(buffer,0,(int)Math.min(buffer.length,left));if(count<0)throw new Refused(400,"Upload interrupted");require(!closed&&clock.getAsLong()<until,408,"Upload timed out");file.write(buffer,0,count);left-=count;}
       }
-      require(!closed,409,"Service stopped; upload cancelled");inspect(staging,kind);noLink(target);require(!closed,409,"Service stopped; upload cancelled");require(!Files.exists(target,LinkOption.NOFOLLOW_LINKS),409,"Filename already exists");
+      require(!closed,409,"Service stopped; upload cancelled");require(clock.getAsLong()<until,408,"Upload timed out");inspect(staging,kind);noLink(target);require(!closed,409,"Service stopped; upload cancelled");require(!Files.exists(target,LinkOption.NOFOLLOW_LINKS),409,"Filename already exists");
       // No replacement flag: a racing existing filename is never overwritten.
       Files.move(staging,target);changed=true;
      }finally{Files.deleteIfExists(staging);}
@@ -138,6 +140,7 @@ final class ProsperoWeb implements AutoCloseable {
     respond(out,200,"application/json","{\"result\":\"Saved. Refresh the installed list. Compatibility is not established by upload.\"}","");
    }finally{if(entered)owner.end(changed);}
   }catch(Refused denied){respond(out,denied.status,"application/json",new Gson().toJson(Map.of("error",denied.getMessage())),"");}
+  catch(SocketTimeoutException timeout){respond(out,408,"application/json","{\"error\":\"Transfer stopped responding. Retry the upload.\"}","");}
   catch(Exception failure){String code=failure instanceof IOException io?ProsperoStorage.code(io):"IO";respond(out,500,"application/json",new Gson().toJson(Map.of("error",Set.of("ENOSPC","QUOTA").contains(code)?"Storage is full. The upload was not installed.":"Operation unavailable. Check storage and retry; existing files are preserved.")),"");}finally{
    // Deliver an early refusal before closing a socket with an unread upload body.
    // Discard only a small bounded tail; never allocate/read the advertised body.
@@ -165,13 +168,14 @@ final class ProsperoWeb implements AutoCloseable {
    try(var in=new java.io.PushbackInputStream(Files.newInputStream(file),2)){int a=in.read(),b=in.read();require(a==31&&b==139||a==10,400,"Expected gzip or compound NBT schematic");if(a==31){in.unread(new byte[]{(byte)a,(byte)b});try(var gzip=new java.util.zip.GZIPInputStream(in)){require(gzip.read()==10,400,"Expected compound NBT schematic");}}}return;
   }
   // Bound central-directory allocation before constructing ZipFile; reject ZIP64.
+  boolean pack=kind.equals("resources")||kind.equals("shaders");int maxEntries=pack?65534:8192,maxDirectory=pack?16*1024*1024:4*1024*1024;
   try(var input=new RandomAccessFile(file.toFile(),"r")){
    int n=(int)Math.min(input.length(),65557);byte[] tail=new byte[n];input.seek(input.length()-n);input.readFully(tail);int end=-1;
    for(int i=n-22;i>=0;i--)if(tail[i]==0x50&&tail[i+1]==0x4b&&tail[i+2]==5&&tail[i+3]==6&&i+22+u16(tail,i+20)==n){end=i;break;}
-   require(end>=0,400,"Missing ZIP directory");require(u16(tail,end+4)==0&&u16(tail,end+6)==0&&u16(tail,end+8)==u16(tail,end+10)&&u16(tail,end+10)<=8192&&u32(tail,end+12)<=4*1024*1024&&u32(tail,end+16)+u32(tail,end+12)<=input.length()-n+end,400,"ZIP directory limit exceeded or unsupported ZIP64/split archive");
+   require(end>=0,400,"Missing ZIP directory");require(u16(tail,end+4)==0&&u16(tail,end+6)==0&&u16(tail,end+8)==u16(tail,end+10)&&u16(tail,end+10)<=maxEntries&&u32(tail,end+12)<=maxDirectory&&u32(tail,end+16)+u32(tail,end+12)<=input.length()-n+end,400,"ZIP directory limit exceeded or unsupported ZIP64/split archive");
   }
   try(var zip=new ZipFile(file.toFile())){
-   require(zip.size()>0&&zip.size()<=100_000,400,"Archive entry limit exceeded");
+   require(zip.size()>0&&zip.size()<=maxEntries,400,"Archive entry limit exceeded");
    require(!kind.equals("resources")||zip.getEntry("pack.mcmeta")!=null,400,"Resource pack needs pack.mcmeta");
    require(!kind.equals("mods")||zip.getEntry("fabric.mod.json")!=null,400,"Expected a Fabric mod JAR");
    boolean shader=false;for(var entries=zip.entries();entries.hasMoreElements();){var e=entries.nextElement();String n=e.getName();require(n.length()<=512&&!n.startsWith("/")&&!n.contains("\\")&&Arrays.stream(n.split("/")).noneMatch(p->p.equals("..")),400,"Unsafe archive paths");shader|=n.startsWith("shaders/");}

@@ -18,6 +18,13 @@ public class WebCheck {
   try(Socket s=new Socket("127.0.0.1",web.port())){s.setSoTimeout(6000);var out=s.getOutputStream();String host="127.0.0.1:"+web.port();out.write((method+" "+path+" HTTP/1.1\r\nHost: "+host+"\r\nOrigin: http://"+host+"\r\nX-Prospero-Request: 1\r\nContent-Length: "+body.length+"\r\n"+headers+"\r\n").getBytes());out.write(body);out.flush();String response=new String(s.getInputStream().readAllBytes(),java.nio.charset.StandardCharsets.UTF_8);String cookie="",location="";for(String line:response.split("\r\n"))if(line.startsWith("Location: "))location=line.substring(10);else if(line.startsWith("Set-Cookie: "))cookie=line.substring(12).split(";")[0];return new Reply(Integer.parseInt(response.split(" ")[1]),response.substring(response.indexOf("\r\n\r\n")+4),cookie,location);}
  }
  static byte[] zip(String entry)throws Exception{var out=new ByteArrayOutputStream();try(var zip=new ZipOutputStream(out)){zip.putNextEntry(new ZipEntry(entry));zip.write("{}".getBytes());zip.closeEntry();}return out.toByteArray();}
+ static void largePack(Path path)throws Exception {
+  byte[] block=new byte[65536];Arrays.fill(block,(byte)37);long size=129L*1024*1024;var crc=new CRC32();for(long n=0;n<size;n+=block.length)crc.update(block,0,(int)Math.min(block.length,size-n));
+  try(var zip=new ZipOutputStream(Files.newOutputStream(path))){for(String name:List.of("pack.mcmeta","shaders/test.fsh")){zip.putNextEntry(new ZipEntry(name));zip.write("{}".getBytes());zip.closeEntry();}var entry=new ZipEntry("assets/test/payload.bin");entry.setMethod(ZipEntry.STORED);entry.setSize(size);entry.setCompressedSize(size);entry.setCrc(crc.getValue());zip.putNextEntry(entry);for(long n=0;n<size;n+=block.length)zip.write(block,0,(int)Math.min(block.length,size-n));zip.closeEntry();}
+ }
+ static int stream(ProsperoWeb web,String route,String auth,Path file)throws Exception {
+  try(Socket socket=new Socket("127.0.0.1",web.port())){socket.setSoTimeout(15000);String host="127.0.0.1:"+web.port();var out=socket.getOutputStream();out.write(("PUT "+route+" HTTP/1.1\r\nHost: "+host+"\r\nOrigin: http://"+host+"\r\nX-Prospero-Request: 1\r\nContent-Length: "+Files.size(file)+"\r\n"+auth+"\r\n").getBytes());try(var in=Files.newInputStream(file)){in.transferTo(out);}out.flush();return Integer.parseInt(new String(socket.getInputStream().readAllBytes()).split(" ")[1]);}
+ }
  static void waitReady(ProsperoWeb web)throws Exception {for(int i=0;i<100&&web.status().addresses().isEmpty();i++)Thread.sleep(10);ok(!web.status().addresses().isEmpty());}
  static void set(Object o,String key,Object value)throws Exception{var f=o.getClass().getDeclaredField(key);f.setAccessible(true);f.set(o,value);var cached=o.getClass().getDeclaredField("cached");cached.setAccessible(true);cached.set(o,null);}
  public static void main(String[] args)throws Exception{
@@ -48,10 +55,19 @@ public class WebCheck {
   ok(request(web,"PUT",base+"arbitrary/file.jar",auth,zip("fabric.mod.json")).code==400);
   owner.locked=true;ok(request(web,"PUT",base+"mods/locked.jar",auth,zip("fabric.mod.json")).code==409);owner.locked=false;
   Path outside=root.resolve("outside");Files.createDirectory(outside);Files.createSymbolicLink(lib.game(item).resolve("shaderpacks/link.zip"),outside);ok(request(web,"DELETE",base+"shaders/link.zip",auth+"X-Confirm-Delete: yes\r\n",new byte[0]).code==400);
+  // Actual uploads larger than the previous cap with a heap smaller than one file.
+  ok(ProsperoWeb.MAX_UPLOAD==1073741824L&&ProsperoWeb.UPLOAD_MS==1800000L&&ProsperoWeb.UPLOAD_IDLE_MS==30000);
+  ok(ProsperoWebPage.HTML.contains("Up to 1 GiB per file")&&ProsperoWebPage.HTML.contains("f.size>1073741824")&&ProsperoWebPage.HTML.contains("x.timeout=1860000")&&!ProsperoWebPage.HTML.contains("@@UPLOAD_"));
+  Path big=root.resolve("large.zip");largePack(big);ok(Files.size(big)>134217728L);
+  for(String kind:List.of("resources","shaders")){ok(stream(web,base+kind+"/large.zip",auth,big)==200);Path installed=lib.game(item).resolve(ProsperoWeb.DESTINATIONS.get(kind)).resolve("large.zip");ok(Files.mismatch(big,installed)==-1);Files.delete(installed);}Files.delete(big);
+  Path dense=root.resolve("dense.zip");try(var zip=new ZipOutputStream(Files.newOutputStream(dense))){zip.putNextEntry(new ZipEntry("pack.mcmeta"));zip.write("{}".getBytes());zip.closeEntry();for(int i=0;i<9000;i++){zip.putNextEntry(new ZipEntry("assets/test/"+i));zip.closeEntry();}}
+  ProsperoWeb.inspect(dense,"resources");try{ProsperoWeb.inspect(dense,"mods");throw new AssertionError();}catch(ProsperoWeb.Refused expected){ok(expected.status==400);}Files.delete(dense);
+  // Refuse ZIP64 sentinel counts and oversized directory metadata before ZipFile allocation.
+  for(int control=0;control<2;control++){byte[] bad=zip("pack.mcmeta");int end=bad.length-22;if(control==0){bad[end+8]=bad[end+9]=bad[end+10]=bad[end+11]=(byte)255;}else{int directory=16*1024*1024+1;for(int i=0;i<4;i++)bad[end+12+i]=(byte)(directory>>>(8*i));}ok(request(web,"PUT",base+"resources/bounded"+control+".zip",auth,bad).code==400);ok(!Files.exists(lib.game(item).resolve("resourcepacks/bounded"+control+".zip")));}
   // Oversized/ambiguous HTTP requests are refused before any body is consumed.
-  try(Socket s=new Socket("127.0.0.1",web.port())){s.getOutputStream().write(("PUT "+base+"mods/huge.jar HTTP/1.1\r\nHost: "+host+"\r\nContent-Length: 134217729\r\n\r\n").getBytes());ok(new String(s.getInputStream().readAllBytes()).startsWith("HTTP/1.1 413"));}
+  try(Socket s=new Socket("127.0.0.1",web.port())){s.getOutputStream().write(("PUT "+base+"mods/huge.jar HTTP/1.1\r\nHost: "+host+"\r\nContent-Length: 1073741825\r\n\r\n").getBytes());ok(new String(s.getInputStream().readAllBytes()).startsWith("HTTP/1.1 413"));}
   try(Socket s=new Socket("127.0.0.1",web.port())){s.getOutputStream().write(("POST /pair HTTP/1.1\r\nHost: "+host+"\r\nOrigin: http://evil.invalid\r\nX-Prospero-Request: 1\r\n\r\n").getBytes());ok(new String(s.getInputStream().readAllBytes()).startsWith("HTTP/1.1 403"));}
-  try(Socket s=new Socket("127.0.0.1",web.port())){s.getOutputStream().write(("PUT "+base+"mods/interrupted.jar HTTP/1.1\r\nHost: "+host+"\r\nOrigin: http://"+host+"\r\nX-Prospero-Request: 1\r\nContent-Length: 1000\r\n"+auth+"\r\nshort").getBytes());s.shutdownOutput();ok(new String(s.getInputStream().readAllBytes()).startsWith("HTTP/1.1 400"));}
+  try(Socket s=new Socket("127.0.0.1",web.port())){s.getOutputStream().write(("PUT "+base+"mods/interrupted.jar HTTP/1.1\r\nHost: "+host+"\r\nOrigin: http://"+host+"\r\nX-Prospero-Request: 1\r\nContent-Length: 1073741824\r\n"+auth+"\r\nshort").getBytes());s.shutdownOutput();ok(new String(s.getInputStream().readAllBytes()).startsWith("HTTP/1.1 400"));}
   ok(!owner.busy&&!Files.exists(lib.game(item).resolve("mods/interrupted.jar")));try(var files=Files.walk(lib.game(item))){ok(files.noneMatch(p->p.toString().endsWith(".part")));}
   clock.addAndGet(ProsperoWeb.SESSION_MS+1);ok(!web.pairing().equals(firstCode));ok(request(web,"POST","/pair","X-Pair-Code: "+firstCode+"\r\n",new byte[0]).code==401);ok(request(web,"GET","/api",auth,new byte[0]).code==401);
   pair=request(web,"POST","/pair","X-Pair-Code: "+web.pairing()+"\r\n",new byte[0]);ok(pair.code==200);auth="Cookie: "+pair.cookie+"\r\n";
@@ -59,15 +75,21 @@ public class WebCheck {
   addresses.set(List.of());clock.addAndGet(4000);request(web,"GET","/",auth,new byte[0]);Thread.sleep(1100);ok(web.status().addresses().isEmpty());web.close();ok(web.stopped());
   var full=new ProsperoWeb(lib,owner,0,()->List.of("127.0.0.1"),clock::get,p->new OutputStream(){public void write(int b)throws IOException{throw new IOException("No space left on device");}});waitReady(full);
   var fullPair=request(full,"POST","/pair","X-Pair-Code: "+full.pairing()+"\r\n",new byte[0]);var fullReply=request(full,"PUT",base+"mods/full.jar","Cookie: "+fullPair.cookie+"\r\n",zip("fabric.mod.json"));ok(fullReply.code==500&&fullReply.body.contains("Storage is full"));ok(!owner.busy&&!Files.exists(lib.game(item).resolve("mods/full.jar")));try(var paths=Files.walk(lib.game(item))){ok(paths.noneMatch(p->p.toString().endsWith(".part")));}full.close();ok(full.stopped());
+  // Inject elapsed time at the real streaming sink, without waiting minutes.
+  var firstWrite=new AtomicBoolean();var expireTransfer=new AtomicBoolean();
+  var slow=new ProsperoWeb(lib,owner,0,()->List.of("127.0.0.1"),clock::get,p->{var file=Files.newOutputStream(p);return new FilterOutputStream(file){public void write(byte[] b,int off,int len)throws IOException{ok(len<=65536);if(firstWrite.compareAndSet(false,true))clock.addAndGet(expireTransfer.get()?ProsperoWeb.UPLOAD_MS+1:180_000);out.write(b,off,len);}};});waitReady(slow);
+  String slowAuth="Cookie: "+request(slow,"POST","/pair","X-Pair-Code: "+slow.pairing()+"\r\n",new byte[0]).cookie+"\r\n";
+  ok(request(slow,"PUT",base+"resources/slow.zip",slowAuth,zip("pack.mcmeta")).code==200);ok(Files.exists(lib.game(item).resolve("resourcepacks/slow.zip")));
+  firstWrite.set(false);expireTransfer.set(true);ok(request(slow,"PUT",base+"resources/expired.zip",slowAuth,zip("pack.mcmeta")).code==408);ok(!Files.exists(lib.game(item).resolve("resourcepacks/expired.zip"))&&!owner.busy);try(var paths=Files.walk(lib.game(item))){ok(paths.noneMatch(p->p.toString().endsWith(".part")));}slow.close();ok(slow.stopped());
   for(int n=0;n<4;n++){var again=new ProsperoWeb(lib,owner,0,()->List.of("127.0.0.1"),clock::get);waitReady(again);again.close();ok(again.stopped());}
   var limited=new ProsperoWeb(lib,owner,0,()->List.of("127.0.0.1"),clock::get);waitReady(limited);for(int i=0;i<5;i++)ok(request(limited,"POST","/pair","X-Pair-Code: WRONG2\r\n",new byte[0]).code==401);ok(request(limited,"POST","/pair","X-Pair-Code: "+limited.pairing()+"\r\n",new byte[0]).code==429);clock.addAndGet(60_001);ok(request(limited,"POST","/pair","X-Pair-Code: "+limited.pairing()+"\r\n",new byte[0]).code==200);limited.close();ok(limited.stopped());
   // Real launcher screen owns service and blocks mutation when leaving/launching.
   lib.settings().showIntro=false;lib.save();var launcher=new ProsperoLauncher(new ProsperoAuth(),root,url->{throw new AssertionError();});launcher.tick(0x4000);launcher.tick(0x10008000|4<<20|3<<16|1);launcher.tick(0x10008000|5<<20|3<<16|8);ok(launcher.tick(0)[11].equals("15"));launcher.tick(0x2000);ok(launcher.tick(0)[11].equals("5"));launcher.tick(0x20);ok(launcher.tick(0)[15].equals("8"));launcher.tick(0x10);ok(launcher.tick(0)[15].equals("4"));launcher.tick(0x20);ok(launcher.tick(0)[15].equals("7"));launcher.tick(0x40);ok(launcher.tick(0)[15].equals("8"));launcher.tick(0x40);ok(launcher.tick(0)[15].equals("5"));launcher.tick(0x20);ok(launcher.tick(0)[15].equals("6"));launcher.tick(0x10);ok(launcher.tick(0)[15].equals("8"));
-  System.out.println("PASS real bounded HTTP/pair/session expiry/revoke/origin/traversal/formats/duplicates/staging/disconnect/locks/network changes/restarts/launcher lifecycle; shared themes current");
+  System.out.println("PASS129MiB resource+shader streaming with64MiB heap, dense pack directory, injected slow/deadline cleanup; real bounded HTTP/pair/session expiry/revoke/origin/traversal/formats/duplicates/staging/disconnect/locks/network changes/restarts/launcher lifecycle; shared themes current");
  }
 }
 '''
 with tempfile.TemporaryDirectory(prefix='prospero-web-') as td:
     w=Path(td).resolve();(w/'WebCheck.java').write_text(source);cp=launcher_classpath();jdk=java_home()
     subprocess.run([str(jdk/'bin/javac'),'--release','25','-cp',cp,'-d',str(w),*[str(p) for p in (ROOT/'client/launcher/java').glob('*.java')],str(w/'WebCheck.java')],check=True)
-    subprocess.run([str(jdk/'bin/java'),'-cp',str(w)+':'+cp,'WebCheck',str(w/'data')],check=True,timeout=60)
+    subprocess.run([str(jdk/'bin/java'),'-Xmx64m','-cp',str(w)+':'+cp,'WebCheck',str(w/'data')],check=True,timeout=60)

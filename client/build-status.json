@@ -114,5 +114,11 @@
     "scope": "User accepted launcher polish and explicitly authorized release; no exhaustive game regression/FPS/endurance inference",
     "store_submission": "https://github.com/darkxex/ps5-homebrew-catalog/pull/1121",
     "store_status": "Submitted; approval/deployment not monitored or claimed"
+  },
+  "development_213": {
+    "app_version": "01.000.213",
+    "validation": "docs/validation/client213-browser-uploads-2026-11-05.json",
+    "scope": "1GiB streamed browser imports, longer deadlines and bounded larger pack directory",
+    "console": "Pending; released212 retained"
   }
 }

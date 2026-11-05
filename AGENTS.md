@@ -286,3 +286,15 @@ No exhaustive212 shader/game/device/FPS/endurance or formal ALL PASS is inferred
 Earlier202shader/quit and204release acceptance remain scoped; future candidates
 retain explicit physical/release gates. Submit catalog PR, do not monitor after
 submission. See docs/validation/client212-console-acceptance-2026-11-04.json.
+
+
+## Larger streaming browser imports —2026-11-05
+
+213 raises browser file limit to1GiB,30minute total/30second idle with64KiB
+streaming. Derive browser size/label/timeout from server constants; retain owned
+staging, no-overwrite, cancellation/ENOSPC/timeout cleanup and mutation ownership.
+Resource/shader ZIP metadata bounds65534entries/16MiB; mods8192/4MiB unchanged,
+ZIP64/split/path rejection retained. Host129MiB real uploads with64MiB heap and
+injected deadlines are scoped evidence; physical large-pack transfers/loading
+remain pending. No USB implementation or release/Store change; preserve212 and
+future exact-build gates. See docs/client-browser-uploads-213.md.
