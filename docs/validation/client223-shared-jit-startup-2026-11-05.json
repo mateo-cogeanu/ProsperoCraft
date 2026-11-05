@@ -1,0 +1,19 @@
+{
+  "app_version": "01.000.223",
+  "title_id": "PPSA99874",
+  "package_sha256": "7442b0e335c728aab42f9c04337c5973188575eeaedb58d1cb797b834cb68125",
+  "package_bytes": 127577243,
+  "source_commit": "4aa625ebd20f154553b3310b4d98d8d49699869e",
+  "date": "2026-11-05",
+  "physical_failure": "Build 222 reported failed check 4 after Play. Current console HTTP reports identify an IllegalStateException from JitWarmup25 before original Minecraft Main. The gate looked for a current level-1 compilation in the legacy JIT log while the shared JIT report for that session recorded the actual level-1 kernel compilation.",
+  "change": "Set the existing ps5.probe.jitLog property from the same native storage selection as the HotSpot log writer. Keep the C1 verification and legacy fallback behavior.",
+  "checks": [
+    "Actual host C1 compilation, post-compile checksum, stale and missing log refusal, and interpreter refusal passed",
+    "13 native host checks passed",
+    "PS5 target build, signature, independent package audit and both reader/writer path pairs passed"
+  ],
+  "console_pending": [
+    "Confirm 223 reaches original Minecraft Main and the game menu on shared storage",
+    "Check Vanilla and Fabric launch, world save and launcher return"
+  ]
+}
