@@ -27,7 +27,8 @@ public final class ProsperoLauncher {
  private String fabricLoaderVersion="";private String avatar="";private final ProsperoAccountStore accounts;
  private ProsperoAuth.Session session;private Thread worker;private long completed,total,lastProgress;private String[] cached;
  private ProsperoInstall.Receipt receipt;private java.net.URLClassLoader loader;
- ProsperoLauncher(ProsperoAuth auth)throws Exception{this(auth,Path.of(System.getProperty("ps5.launcher.root","/download0/ProsperoCraft")),null);}
+ ProsperoLauncher(ProsperoAuth auth)throws Exception{this(auth,ProsperoStorageRoot.current());}
+ private ProsperoLauncher(ProsperoAuth auth,ProsperoStorageRoot.Selection storage)throws Exception{this(auth,storage.root(),null);message=storage.notice();}
  ProsperoLauncher(ProsperoAuth auth,Path root,ProsperoInstall.Source source)throws Exception{this(auth,root,source,()->ProsperoMicrophone.enable(true));}
  ProsperoLauncher(ProsperoAuth auth,Path root,ProsperoInstall.Source source,Microphone microphone)throws Exception{this.microphone=Objects.requireNonNull(microphone);this.auth=auth;library=new ProsperoLibrary(root);accounts=new ProsperoAccountStore(root);offlineAccount=ProsperoOfflineAccount.load(root,System.currentTimeMillis());fabric=new ProsperoFabric(root.resolve("cache"));installer=source==null?new ProsperoInstall(root.resolve("cache")):new ProsperoInstall(root.resolve("cache"),source);if(library.settings().showIntro&&!Boolean.getBoolean("ps5.launcher.resume")){page=7;row=1;}if(ProsperoChannel.tempGameTest()&&accounts.exists())restoreAccount();}
  static String[] run(Menu menu)throws Exception {
@@ -301,7 +302,7 @@ public final class ProsperoLauncher {
    if(page==6){keyboard(buttons);if(buttons!=0)cached=null;return state();}
    if((buttons&0x8)!=0){guideReturn=page;guideTab=tab;guideTop=top;guideSection=0;page=8;cached=null;return state();}
    if((buttons&0xc00)!=0){selectTab(tab+((buttons&0x800)!=0?1:-1));return state();}
-   if((buttons&0x2000)!=0){if(busy){cancel();message="Cancelled. Verified downloads are kept.";}int keep=(page==4||page==5)&&detail!=null?library.instances().indexOf(detail):0;page=tabPage();top=false;row=0;selected=Math.max(0,keep);cached=null;return state();}
+   if((buttons&0x2000)!=0){if(busy){cancel();message="Cancelled. Verified downloads are kept.";}if(page==5&&detail!=null){page=4;top=false;row=1;cached=null;return state();}int keep=(page==4||page==5)&&detail!=null?library.instances().indexOf(detail):0;page=tabPage();top=false;row=0;selected=Math.max(0,keep);cached=null;return state();}
    if(page==0&&(buttons&0x300)!=0){cardPage((buttons&0x200)!=0?1:-1);cached=null;return state();}
    if(top){if((buttons&0xa0)!=0){selectTab(tab+((buttons&0x20)!=0?1:-1));return state();}if((buttons&0x4040)!=0){top=false;row=0;}cached=null;return state();}
    if(page==0){navigateCards(buttons);

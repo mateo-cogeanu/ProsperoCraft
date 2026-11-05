@@ -11,7 +11,7 @@
   "contentBadgeType": 1,
   "contentId": "IV9999-PPSA99874_00-MCSERVERBOOT0001",
   "contentVersion": "01.000.204",
-  "downloadDataSize": 32768,
+  "downloadDataSize": 256,
   "gameIntent": {
     "permittedIntents": [
       {

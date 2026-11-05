@@ -1,5 +1,14 @@
 # Changelog
 
+## Local215 — shared data folder and Settings Back,2026-11-05
+
+- Prefer proven `/data/ProsperoCraft` for bulk content on ShadowMountPlus; copy
+  and verify existing library/accounts/worlds before switching, retaining originals.
+- Use a256MiB request for existing diagnostics instead of32GiB bulk reservation.
+  This does not reclaim a previously allocated container. Physical tests pending.
+- Return Circle/Back from instance settings to that instance. Keep16GiB uploads,
+  prior UI/game behavior and released212 unchanged; no release/Store action.
+
 ## Local214 — imports above10GB,2026-11-05
 
 - User requests10GB packs: supersede local213 with16GiB cap, long request lengths,

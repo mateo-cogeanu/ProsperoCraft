@@ -311,3 +311,18 @@ supersedes the earlier4GiB request for this large-pack goal. Loader expansion,
 actual10GB transfers/pack loading remain physical tests; sparse host10GiB offsets
 are not full transfer proof. Preserve213/212 and release gates. See
  docs/client-browser-uploads-214.md.
+
+
+## Shared storage and parent Back —2026-11-05
+
+User rejects thick32GiB allocation, requests ordinary homebrew data folder and
+identifies ShadowMountPlus.215 prefers /data/ProsperoCraft only after Java
+write/read/rename/list/attribute/canonical probes. Authorize verified/resumable
+copy-before-switch from legacy, retain all originals, bound traversal, reject
+links/conflicts and fail closed if selected shared data later disappears. No
+elevation/loader patch/backing-image manipulation/deletion.256MiB diagnostic-only
+downloadDataSize replaces32GiB request; lowering does not reclaim existing
+allocation. Preserve private account backups and never publish their files.
+Circle/desktop Back from instance settings returns to the same detail page.
+Physical migration/capabilities/worlds/large packs pending; preserve212 and all
+local candidates/release gates. See docs/client-shared-storage-215.md.

@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-05",
+  "title_id": "PPSA99874",
+  "app_version": "01.000.215",
+  "request": "Use normal homebrew folder instead of fixed download0 allocation; user identifies ShadowMountPlus. Circle/Back from instance settings must return to that instance.",
+  "scope": "Proven shared /data/ProsperoCraft root, verified copy/resume with original legacy backup retained, sticky fail-closed selection,256MiB diagnostic-only request and settings Back parent repair",
+  "checks": {
+    "storage": "PASS real host proof/copy/verification/resume/account+world preservation/access refusal/selected-root disappearance; conflicting libraries, links/source changes, foreign staging, commit race and READY retry; original trees preserved; invalid selection marker fails closed",
+    "desktop": "PASS actual Java Circle and pointer Back return to same detail/Settings focus; original subsequent tab/picker/keyboard behavior and native desktop sanitizer fixture",
+    "fast": "PASS19 checks34.7s",
+    "native": "PASS12 checks13.1s",
+    "source_only": "PASS19 checks38.1s, source-only copy with empty explicit verified cache/outside-root invocation; final invalid-marker/root fixture also passes outside root",
+    "target_package": "PASS initial215 target compile/link/converter; final root-marker change/signed candidate pending",
+    "hosted": "Pending source push"
+  },
+  "physical": "NOT RUN: actual ShadowMountPlus/data Java capability probe, initial copy/rename/persistence, existing account/settings/worlds, save/reload,16GiB policy/real10GB transfer/pack loading, Back behavior and game return",
+  "allocation_limit": "No thin-mode support for existing download0 was established. Ordinary shared files grow with data; lowered256MiB request does not claim to shrink/reclaim earlier32GiB allocation. Originals and account key/session backup remain private and untouched.",
+  "preservation": "Released212 and local213/214 retained; no JVM/runtime/native-game dependency or official game/mod JAR changes",
+  "release_store": "No action; exact-build physical/release approval gates remain"
+}

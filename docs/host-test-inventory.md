@@ -334,3 +334,9 @@ or pack/game compatibility. See [213](client-browser-uploads-213.md).
 archives, malformed64bit metadata and max-comment controls under64MiB heap;
 32GiB requested metadata identity and storage-error/path preservation checks.
 Sparse offsets are not a real10GiB upload or PS5 quota/pack-loading test.
+
+215 storage fixtures prove host read/write/list/rename, verified copy/resume,
+account+world bytes, conflict/source/link refusal, commit retry and sticky
+fail-closed root selection. Desktop model covers settings Circle/Back parent.
+These do not establish ShadowMountPlus Java capabilities or reclaim allocated
+console container space. See [215](client-shared-storage-215.md).

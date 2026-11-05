@@ -132,5 +132,11 @@
     "package_sha256": "996d6650152340fe43604ca1b6c54b82c68f0428d058e1f73f681c913cffee17",
     "package_bytes": 127478126,
     "package_audit": "PASS signed integrity and independent static audit; target storage request32768MiB"
+  },
+  "development_215": {
+    "app_version": "01.000.215",
+    "validation": "docs/validation/client215-shared-storage-2026-11-05.json",
+    "scope": "Proven shared/data root with copy/resume and original backup,256MiB diagnostic request, instance-settings Back to detail",
+    "console": "Pending; no existing allocation reclaimed; released212 unchanged"
   }
 }

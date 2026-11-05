@@ -12,6 +12,8 @@ ProsperoCraft handles Minecraft installation, accounts, input and game integrati
 
 Release **01.000.212** adds Vanilla1.21.10/1.21.11 and a smoother launcher with a120Hz presentation target, horizontal page turns, adaptive page detents, in-place selectors, live theme previews and a larger icon grid. The physical tester accepts the launcher and explicitly authorizes release of the exact package. [Release notes](docs/releases/client-launcher-vanilla-212.md) · [Console acceptance and limits](docs/validation/client212-console-acceptance-2026-11-04.json). Existing26.x game paths and shader/quit/save repairs remain. Numeric FPS, broad game/mod/shader/device regressions and endurance are unmeasured; all1.21Fabric and earlier1.21 releases remain unavailable. [ProsperoStore update submitted](https://github.com/darkxex/ps5-homebrew-catalog/pull/1121); availability requires catalog approval and deployment.
 
+Development [215](docs/client-shared-storage-215.md) tests shared `/data/ProsperoCraft` storage with verified copy-before-switch and correct instance-settings Back navigation. Physical console validation is pending; released212 remains unchanged.
+
 ## What can I play?
 
 Earlier release **01.000.167** added supported Minecraft26.2 Fabric, controller/keyboard/mouse handoff fixes, launcher mouse and keyboard controls, and a rounded vector cursor that follows the saved theme. The user accepts this exact build and explicitly requests release. [Release notes](docs/releases/client-input-fabric-167.md) · [Console acceptance](docs/validation/client167-console-acceptance-2026-10-30.json). Broader device coverage and long-session endurance remain unmeasured.
