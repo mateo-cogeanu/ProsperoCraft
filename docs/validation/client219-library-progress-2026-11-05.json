@@ -1,0 +1,17 @@
+{
+  "app_version": "01.000.219",
+  "title_id": "PPSA99874",
+  "package_sha256": "41d44bafea53cb6ce19745a5cc08497fb18f78a19437c503c62760f14469bb57",
+  "package_bytes": 127558614,
+  "source_commit": "a0c3d5a0756a9eb5858badb07ce46b169564226a",
+  "date": "2026-11-05",
+  "change": "A rounded progress bar shows measured percentages for copying and verifying the library. Scanning and phases without a total show a moving segment. Circle pauses migration and opens the verified original library.",
+  "measurement": "The metadata scan counts file bytes plus one unit for each file. Copying and verification use separate totals. Already verified staged bytes count when a migration resumes.",
+  "checks": [
+    "19 fast and 13 native host checks passed",
+    "Storage fixture verified exact totals including an empty file, completion, pause and resume",
+    "Actual Vulkan host preview rendered scanning, copying and verification",
+    "PS5 target compile, link, signature and independent package audit passed"
+  ],
+  "console_pending": "Check the progress panel, pause and resume with a real PS5 library. Exact-build acceptance is pending."
+}
