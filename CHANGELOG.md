@@ -1,5 +1,11 @@
 # Changelog
 
+## Local 222 · Shared folder browsing and cleanup recovery, 2026-11-05
+
+- Allow read and traverse access on the shared app and reports directories.
+  Private files, account storage, temporary files and staging retain their modes.
+- Keep the cleanup journal until the retired files have been removed.
+
 ## Local 221 · Incremental library move, 2026-11-05
 
 - Open the catalog first. Move existing instances and the shared cache in the

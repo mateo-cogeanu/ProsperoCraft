@@ -18,13 +18,20 @@ namespace prospero_storage {
 inline bool shared=false;
 inline const char* report_root()noexcept{return shared?PROSPERO_SHARED_STORAGE "/reports":PROSPERO_LEGACY_STORAGE "";}
 inline const char* base_root()noexcept{return shared?PROSPERO_SHARED_STORAGE "":PROSPERO_LEGACY_STORAGE "/ProsperoCraft";}
-inline bool directory(const char* path)noexcept{
+inline bool directory(const char* path,bool browse=false)noexcept{
  if(::mkdir(path,0700)!=0&&errno!=EEXIST)return false;
  int fd=::open(path,O_RDONLY|O_DIRECTORY|O_NOFOLLOW);if(fd<0)return false;
- struct stat value{};bool ok=::fstat(fd,&value)==0&&S_ISDIR(value.st_mode);if(::close(fd)!=0)ok=false;return ok;
+ struct stat value{};
+ bool ok=::fstat(fd,&value)==0&&S_ISDIR(value.st_mode);
+ // FTP can list these directories without write access or access to private children.
+ constexpr mode_t browse_bits=S_IRGRP|S_IXGRP|S_IROTH|S_IXOTH;
+ if(ok&&browse&&(value.st_mode&browse_bits)!=browse_bits)
+  (void)::fchmod(fd,(value.st_mode&0777)|browse_bits);
+ if(::close(fd)!=0)ok=false;
+ return ok;
 }
 inline bool shared_access()noexcept{
- if(!directory(PROSPERO_SHARED_STORAGE "")||!directory(PROSPERO_SHARED_STORAGE "/reports")||!directory(PROSPERO_SHARED_STORAGE "/tmp")||!directory(PROSPERO_SHARED_STORAGE "/reports/mc-client")||!directory(PROSPERO_SHARED_STORAGE "/reports/mc-client/logs"))return false;
+ if(!directory(PROSPERO_SHARED_STORAGE "",true)||!directory(PROSPERO_SHARED_STORAGE "/reports",true)||!directory(PROSPERO_SHARED_STORAGE "/tmp")||!directory(PROSPERO_SHARED_STORAGE "/reports/mc-client")||!directory(PROSPERO_SHARED_STORAGE "/reports/mc-client/logs"))return false;
  char name[160],renamed[160];std::snprintf(name,sizeof(name),PROSPERO_SHARED_STORAGE "/reports/.native-storage-check-%ld",static_cast<long>(::getpid()));std::snprintf(renamed,sizeof(renamed),"%s-moved",name);
  int fd=::open(name,O_CREAT|O_EXCL|O_RDWR|O_NOFOLLOW,0600);if(fd<0)return false;
  const char content[]="ProsperoCraft";char check[sizeof(content)]{};bool ok=::write(fd,content,sizeof(content))==static_cast<ssize_t>(sizeof(content))&&::lseek(fd,0,SEEK_SET)==0&&::read(fd,check,sizeof(check))==static_cast<ssize_t>(sizeof(check))&&std::memcmp(content,check,sizeof(content))==0;

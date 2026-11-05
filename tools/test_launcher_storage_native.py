@@ -19,7 +19,12 @@ int main(int argc,char**argv){
  int initial=::open(PROSPERO_REPORT_PATH("java25-startup.log"),O_CREAT|O_WRONLY,0600);assert(initial>=0);assert(::close(initial)==0);PS5_BOUNDARY("routing");
  assert(ps5shaderc_fault_begin()==4);ps5shaderc_fault_end();
  std::string fault=std::string(root)+"/java25-vm-trace.log";struct stat a{};assert(stat(fault.c_str(),&a)==0&&S_ISREG(a.st_mode));
- if(expected){std::string forbidden=std::string(PROSPERO_LEGACY_STORAGE)+"/java25-vm-trace.log";assert(stat(forbidden.c_str(),&a)!=0&&errno==ENOENT);}
+ if(expected){
+  for(const char* dir:{PROSPERO_SHARED_STORAGE,PROSPERO_SHARED_STORAGE "/reports"}){
+   assert(stat(dir,&a)==0&&(a.st_mode&0777)==0755);
+  }
+  assert(stat(PROSPERO_SHARED_STORAGE "/tmp",&a)==0&&(a.st_mode&0777)==0700);
+  std::string forbidden=std::string(PROSPERO_LEGACY_STORAGE)+"/java25-vm-trace.log";assert(stat(forbidden.c_str(),&a)!=0&&errno==ENOENT);}
  puts("PASS actual native shared/fallback report+tmp selection, report-root hook, SDL breadcrumb, shader-fault file and unchanged OpenAL env adapter routing");
 }
 '''
@@ -29,6 +34,9 @@ with tempfile.TemporaryDirectory(prefix='prospero-storage-native-')as td:
  for mode in ('shared','fallback'):
   case=root/mode;case.mkdir();primary=case/'data';legacy=case/'legacy';legacy.mkdir()
   if mode=='fallback':primary.write_text('unavailable-directory')
+  else:
+   primary.mkdir(mode=0o700)
+   (primary/'reports').mkdir(mode=0o700)
   (case/'log_share.hpp').write_text('#pragma once\nnamespace ps5::log_share {inline const char* selected=nullptr;inline bool configure_root(const char* root){selected=root;return true;}inline const char* report_root(){return selected;}}\n')
   objects=[]
   for name in ('client/ports/shaderc/fault.c','client/startup/openal_trace_env.c'):

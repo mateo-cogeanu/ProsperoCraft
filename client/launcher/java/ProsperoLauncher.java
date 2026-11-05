@@ -262,7 +262,7 @@ public final class ProsperoLauncher {
     }else library.publishInstance(instance,staged);
     retired=ProsperoMigration.retire(source,target);
    }
-   ProsperoMigration.purge(retired);
+   ProsperoMigration.finishRetirement(retired);
   }catch(java.io.IOException failure){
    synchronized(this){
     if(migrationAllowed(epoch)){

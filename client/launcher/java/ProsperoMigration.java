@@ -145,7 +145,14 @@ final class ProsperoMigration {
         ProsperoStorageRoot.noLinks(journal);
         if(!ProsperoStorageRoot.directory(journal)||
                 !ProsperoStorageRoot.marker(journal.resolve("owner"),identity(source,target)))return;
-        if(published(source,target)&&ProsperoStorageRoot.attributes(source)==null)purge(journal);
+        if(published(source,target)&&ProsperoStorageRoot.attributes(source)==null)finishRetirement(journal);
+    }
+
+    static void finishRetirement(Path journal)throws IOException{
+        Path files=journal.resolve("files");
+        if(ProsperoStorageRoot.attributes(files)!=null)purge(files);
+        Files.delete(journal.resolve("owner"));
+        Files.delete(journal);
     }
 
     static void retireCatalog(Path legacy, Path primary) throws IOException {
