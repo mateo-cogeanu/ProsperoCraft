@@ -1,7 +1,6 @@
 --- a/src/amd/vulkan/radv_shader_object.c
 +++ b/src/amd/vulkan/radv_shader_object.c
-@@ -379,7 +379,10 @@
-                                  const VkShaderCreateInfoEXT *pCreateInfo)
+@@ -380,5 +380,8 @@
  {
     mesa_shader_stage stage = vk_to_mesa_shader_stage(pCreateInfo->stage);
 -   struct radv_shader_stage stages[MESA_VULKAN_SHADER_STAGES];
@@ -11,12 +10,44 @@
 +      return VK_ERROR_OUT_OF_HOST_MEMORY;
  
     for (unsigned i = 0; i < MESA_VULKAN_SHADER_STAGES; i++) {
-       stages[i].stage = MESA_SHADER_NONE;
-@@ -473,6 +476,7 @@
-       }
+@@ -474,4 +477,5 @@
     }
  
 +   free(stages);
     return VK_SUCCESS;
  }
+@@ -712,5 +716,8 @@
+ {
+    VK_FROM_HANDLE(radv_device, device, _device);
+-   struct radv_shader_stage stages[MESA_VULKAN_SHADER_STAGES];
++   /* The shader-stage array can exhaust a native PS5 worker stack. */
++   struct radv_shader_stage *stages = malloc(MESA_VULKAN_SHADER_STAGES * sizeof(*stages));
++   if (!stages)
++      return vk_error(device, VK_ERROR_OUT_OF_HOST_MEMORY);
  
+    for (unsigned i = 0; i < MESA_VULKAN_SHADER_STAGES; i++) {
+@@ -808,6 +815,8 @@
+ 
+       shader_obj = vk_zalloc2(&device->vk.alloc, pAllocator, sizeof(*shader_obj), 8, VK_SYSTEM_ALLOCATION_SCOPE_OBJECT);
+-      if (shader_obj == NULL)
++      if (shader_obj == NULL) {
++         free(stages);
+          return vk_error(device, VK_ERROR_OUT_OF_HOST_MEMORY);
++      }
+ 
+       vk_object_base_init(&device->vk, &shader_obj->base, VK_OBJECT_TYPE_SHADER_EXT);
+@@ -851,10 +860,13 @@
+ 
+       const VkResult result = radv_shader_object_init_gs_compute(shader_obj, device, pCreateInfo);
+-      if (result != VK_SUCCESS)
++      if (result != VK_SUCCESS) {
++         free(stages);
+          return vk_error(device, result);
++      }
+    }
+ 
+    ralloc_free(stages[MESA_SHADER_GEOMETRY].gs_copy_shader);
+ 
++   free(stages);
+    return VK_SUCCESS;
+ }
