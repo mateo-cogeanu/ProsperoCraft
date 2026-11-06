@@ -1,5 +1,11 @@
 # Changelog
 
+## Local 240 · ZGC mapping into native reservations, 2026-11-06
+
+- Use checked direct mapping hints inside the collector-owned heap reservation.
+- Retain the native result and physical offset for mapping failures. Console
+  initialization and collection remain pending.
+
 ## Local 239 · Lower ZGC heap address window, 2026-11-06
 
 - Select PS5 ZGC heap offsets within35..37bits, placing the current heap window

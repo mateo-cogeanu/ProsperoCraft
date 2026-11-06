@@ -1,0 +1,35 @@
+{
+  "app_version": "01.000.240",
+  "title_id": "PPSA99874",
+  "package_sha256": "3da6a70552675a9be1820c04259bae4ecb105ce330e5301301dc07cbe89e5111",
+  "package_bytes": 127876232,
+  "extraMutexRuntime": {
+    "commit": "b6de85243dab1e707a1eb1061795a8d22475260a",
+    "patch": "java25/patches/0145-ps5-zgc-reserved-map-hints.patch",
+    "patch_sha256": "95ff8a02ae003bf04a0db05ae6ee5dc3330479939d1fc08bda9cf61e1494266b",
+    "object_sha256": "9848ae1c2057924de5d0072573fecbbac0836fbd6901e2fd332fdacd37d1a4b8",
+    "feature": "Experimental PS5 ZGC checked mapping hints within native-owned heap reservations"
+  },
+  "source_commit": "e799699d5b94182980c0f8e5571c8dbde38dc29c",
+  "compilerTlsBackendSha256": "69796e4650eb71d2e5284a4905540b162dc8aa5bcc1c3f814211b2a5bf30f647",
+  "prior_console_result": {
+    "build": "01.000.239",
+    "recovery": "User reopened238 to expose retained239 reports.",
+    "failure": "ZGC passed lower virtual reservation and initial commitment, then aborted in PS5 physical map at virtual0x818000000, backing offset0, length128MiB. Fatal report elapsed0.112seconds.",
+    "unresolved": "239 did not record the precise kernel return code for the failed mapping."
+  },
+  "change": "Use native direct mapping hints inside the collector-owned reservation. Verify exact placement, clean unexpected returned mappings and retain native mapping result/physical offset for fatal diagnostics.",
+  "checks": [
+    "Actual backing helper passed host ASan/UBSan alias, zeroing, bounds, remap/data preservation and native mapping refusal/result tests. Fixture requires hint flags0.",
+    "Changed target HotSpot objects compiled and embedded application linked and signed successfully.",
+    "Standalone JVM shared target retains its previously recorded SDK shared/PIE linker conflict.",
+    "ProsperoCraft native host lane passed13 checks.",
+    "Signed package audit verifies the actual new mapping diagnostic in the linked image. SHA-256 verification passed."
+  ],
+  "console_status": "pending",
+  "console_checks": [
+    "Verify physical heap mapping and JVM creation.",
+    "If startup succeeds, test Vanilla26.3 world entry/save/reload and frame pacing before Fabric."
+  ],
+  "releaseStore": "Held pending physical-console acceptance."
+}
