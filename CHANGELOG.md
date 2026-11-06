@@ -1,5 +1,10 @@
 # Changelog
 
+## Local 226 · Restore download0 defaults, 2026-11-06
+
+- Use download0 for the default library, reports and temporary files. Existing
+  migrated libraries stay accessible, with further automatic moves disabled.
+
 ## Local 223 · Repair Minecraft startup on shared storage, 2026-11-05
 
 - Read the C1 warmup proof from the same report location the JVM writes.

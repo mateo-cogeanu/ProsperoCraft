@@ -47,9 +47,23 @@ final class ProsperoStorageRoot {
  static Selection current(Progress progress)throws IOException {
   String explicit=System.getProperty("ps5.launcher.root");
   if(explicit!=null&&!explicit.isBlank())return new Selection(Path.of(explicit),"");
-  if("/download0/ProsperoCraft".equals(System.getenv("PROSPERO_STORAGE_BASE")))return fallback(Path.of("/download0/ProsperoCraft"),"Shared storage access failed. Using the original download0 library; it may be older.");
   progress.update("Opening library catalog",0,0);
-  return ProsperoMigration.open(Path.of("/download0/ProsperoCraft"),Path.of("/data/ProsperoCraft/library"));
+  return rollback(Path.of("/download0/ProsperoCraft"),Path.of("/data/ProsperoCraft/library"));
+ }
+ static Selection rollback(Path legacy,Path primary)throws IOException {
+  noLinks(legacy);
+  noLinks(primary);
+  if(ProsperoMigration.hasPublishedCatalog(primary)){
+   ProsperoLibrary.verifyReadable(primary);
+   return new Selection(primary,"",legacy);
+  }
+  if(marker(primary.resolve(READY),"shared-v1\n")||
+      (attributes(legacy.resolve("library.json"))==null&&attributes(primary.resolve("library.json"))!=null)){
+   ProsperoLibrary.verifyReadable(primary);
+   return new Selection(primary,"");
+  }
+  if(nonempty(legacy))ProsperoLibrary.verifyReadable(legacy);
+  return new Selection(legacy,"");
  }
  static BasicFileAttributes attributes(Path path)throws IOException {
   try{return Files.readAttributes(path,BasicFileAttributes.class,LinkOption.NOFOLLOW_LINKS);}catch(NoSuchFileException absent){return null;}

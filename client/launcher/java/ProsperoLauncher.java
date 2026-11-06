@@ -56,14 +56,8 @@ public final class ProsperoLauncher {
   var storage=ProsperoStorageRoot.current(progress);
   progress.update("Loading instances and settings",0,0);
   var auth=new ProsperoAuth();
-  try {
-   current=new ProsperoLauncher(auth,storage);
-  } catch(java.io.IOException unavailable) {
-   if(!storage.root().equals(Path.of("/data/ProsperoCraft/library")))throw unavailable;
-   var fallback=ProsperoStorageRoot.fallback(Path.of("/download0/ProsperoCraft"),
-       "The shared library could not be opened. Using the original library for this session.");
-   current=new ProsperoLauncher(auth,fallback);
-  }
+  current=new ProsperoLauncher(auth,storage);
+  current.migrationClosed=true;
   try{if(!menu.show()){current.cancel();throw new IllegalStateException("Launcher display handoff failed;game not started");}}finally{synchronized(current){current.migrationClosed=true;current.stopWeb();}}
   synchronized(current){if(!current.launch)throw new IllegalStateException("No launch selected");}
   return current.arguments(null,null);

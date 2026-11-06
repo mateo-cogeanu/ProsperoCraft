@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Local225 moves the library catalog first and migrates verified storage units in the background from exact accepted204 inputs. No releases.
+"""Local226 restores the default download0 storage policy from exact accepted204 inputs. No releases.
 
 Original343/OpenAL groups are retained byte for byte from the relink kit.
 Main, explicit libjava handle hook, SDL, graphics inventory and matched333 are rebuilt.
@@ -55,7 +55,7 @@ def main():
     parser.add_argument('--java-home', type=Path)
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--work-dir', type=Path, required=True)
-    parser.add_argument('--app-version', choices=('01.000.225',), default='01.000.225')
+    parser.add_argument('--app-version', choices=('01.000.226',), default='01.000.226')
     parser.add_argument('--check-only', action='store_true', help='Compile/link/convert without signing or a candidate ZIP')
     args = parser.parse_args()
     if sha(args.tinyfd_jar) != TINYFD_SHA256:
@@ -134,7 +134,7 @@ def main():
     if sha(sdl_object)!=sdl_audit['object_sha256']:raise ValueError('Stale SDL output')
     for name,digest in sdl_audit['port_sha256'].items():
         if sha(ROOT/'client/ports/sdl'/name)!=digest:raise ValueError('Stale SDL source: '+name)
-    sdl_scoped=work/'sdl225-scoped.o'
+    sdl_scoped=work/'sdl226-scoped.o'
     subprocess.run([str(llvm/'llvm-objcopy'),'--redefine-syms='+str(baseline/'provider-bindings.txt'),str(sdl_object),str(sdl_scoped)],check=True)
     os_build=args.oshi665_build.resolve();os_overlay=os_build/'oshi-6.6.5-ps5-platform.jar';os_audit=json.loads((os_build/'audit.json').read_text())
     if sha(os_overlay)!=os_audit['output_sha256']:raise ValueError('Stale OSHI665 overlay')
@@ -256,7 +256,7 @@ def main():
     param = json.loads((app / 'sce_sys/param.json').read_text())
     if not int(param.get('attribute3',0))&0x40:raise ValueError('120Hz title declaration missing')
     param['contentVersion'] = app_version
-    param['downloadDataSize'] = 256
+    param['downloadDataSize'] = 4096
     (app / 'sce_sys/param.json').write_text(json.dumps(param, indent=2) + '\n')
     sdk = runtime / '.tools/native-sdk/ps5-payload-sdk'
     flags = ['-target', 'x86_64-sie-ps5', '-fvisibility-nodllstorageclass=default', '-isysroot', str(sdk),
@@ -309,7 +309,7 @@ def main():
     subprocess.run([str(converter), 'link', '--in', str(pie), '--out', str(elf), '--stub-dir', str(sdk / 'target/lib'),
         *sum([['--stub', str(p)] for p in stubs], []), '--module-sdk', '0x02000009', '--companion-sdk', '0x08050001', '--file-name', 'eboot.elf'], check=True)
     if args.check_only:
-        print('PASS225 target compile/link/converter; no signed candidate ZIP')
+        print('PASS226 target compile/link/converter; no signed candidate ZIP')
         return
     subprocess.run([str(converter), 'self', '--sign', '--in', str(elf), '--out', str(app / 'eboot.bin'), '--magic', '0x1D3D154F'], check=True)
     subprocess.run([str(converter), 'self', '--inspect', '--file', str(app / 'eboot.bin')], check=True)
@@ -328,7 +328,7 @@ def main():
         destination=java/'storage-source'/name;destination.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(ROOT/name,destination)
     for name in report_pin['source_sha256']:
         destination=java/'storage-source/runtime'/name;destination.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(runtime/name,destination)
-    (java/'storage-path-audit.json').write_text(json.dumps({'runtime':report_pin,'source_sha256':{name:sha(ROOT/name) for name in storage_sources},'fault_object_sha256':sha(storage_fault),'fault_symbols':'prospero_storage_fault_*; original shaderc group remains retained','default':'/data/ProsperoCraft for reports/tmp and verified library; legacy fallback on refused access/migration/load','console':'NOT TESTED'},indent=2)+'\n')
+    (java/'storage-path-audit.json').write_text(json.dumps({'runtime':report_pin,'source_sha256':{name:sha(ROOT/name) for name in storage_sources},'fault_object_sha256':sha(storage_fault),'fault_symbols':'prospero_storage_fault_*; original shaderc group remains retained','default':'download0 for reports and temporary files; verified existing shared catalogs are preserved without further migration','console':'NOT TESTED'},indent=2)+'\n')
     shutil.copytree(ROOT/'client/ports/oshi665',java/'oshi665-source',dirs_exist_ok=True)
     source_sdl=java/'sdl-resolution-source';source_sdl.mkdir(exist_ok=True)
     shutil.copyfile(ROOT/'client/ports/mesa/0011-videoout-launcher-resolutions.patch',source_sdl/'0011-videoout-launcher-resolutions.patch')
@@ -353,14 +353,14 @@ def main():
         'newGroupSha256': sha(registry / 'embedded-lwjgl333.o'), 'overlaySha256': sha(overlay),
         'source_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
         'source_tree': 'modified' if subprocess.check_output(['git', 'status', '--porcelain'], text=True).strip() else 'clean',
-        'scope': 'Quiet OpenAL boundary and disabled startup stack sampling for the 26.3 slowdown comparison to the verified original library; retains TinyFD repair',
+        'scope': 'Restore download0 defaults while keeping access to previously moved instances to the verified original library; retains TinyFD repair',
         'tinyfd_sha256': TINYFD_SHA256,
         'nativePresenterSha256':sha(presenter),'presentationRuntime':presentation_pin,'graphicsSupportSha256':sha(graphics_object),'newSdlGroupSha256':sha(registry/'embedded-ps5sdl.o'),'oshi665Sha256':sha(os_overlay),
         'console': 'NOT TESTED', 'releaseStore': 'No action'}
     (output / 'build-audit.json').write_text(json.dumps(record, indent=2) + '\n')
     (output / 'SHA256SUMS').write_text(record['package_sha256'] + '  PPSA99874.zip\n')
     shutil.copyfile(pie, output / pie.name)
-    print('LOCAL225', package, 'SHA256', record['package_sha256'])
+    print('LOCAL226', package, 'SHA256', record['package_sha256'])
 
 
 if __name__ == '__main__':

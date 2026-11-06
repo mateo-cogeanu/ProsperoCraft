@@ -13,6 +13,10 @@ final class ProsperoMigration {
             "library.json", 1024L * 1024, "library.json.backup", 1024L * 1024,
             "account/key", 32L, "account/session", 70000L, "offline-account.json", 65536L);
 
+    static boolean hasPublishedCatalog(Path primary)throws IOException {
+        return ProsperoStorageRoot.marker(primary.resolve(CATALOG), VERSION);
+    }
+
     static ProsperoStorageRoot.Selection open(Path legacy, Path primary) throws IOException {
         try {
             ProsperoStorageRoot.probe(primary);

@@ -16,7 +16,7 @@
 #undef main
 #include "../ports/zink/submit_policy.hpp"
 int main(int argc,char** argv){
- if(!prospero_storage::initialize())return 1;
+ if(!prospero_storage::initialize(false))return 1;
  client_openal_boundary::disable();
  if(setenv("PROSPERO_GLFW_FINAL_SDL_QUIT","1",1)!=0)return 1;
  int rc=prospero_zink::enable_flushsync();

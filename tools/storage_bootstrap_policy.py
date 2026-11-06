@@ -52,7 +52,7 @@ def normalize(name, text):
                  '#define ps5shaderc_fault_end prospero_storage_fault_end\n',
                  '#define ps5shaderc_fault_status prospero_storage_fault_status\n',
                  '#define ps5shaderc_fault_extended_status prospero_storage_fault_extended_status\n',
-                 ' if(!prospero_storage::initialize())return 1;\n']
+                 ' if(!prospero_storage::initialize(false))return 1;\n']
         for line in lines:
             if text.count(line) != 1:
                 raise ValueError('Storage setup wrapper changed')

@@ -5,7 +5,7 @@ from host_toolchain import java_home, launcher_classpath
 import json,tempfile,subprocess
 ROOT=Path(__file__).resolve().parents[1];jdk=java_home()
 cp=launcher_classpath()
-param=json.loads((ROOT/'client/startup/param.json').read_text());assert param['downloadDataSize']==256 and param['titleId']=='PPSA99874'
+param=json.loads((ROOT/'client/startup/param.json').read_text());assert param['downloadDataSize']==4096 and param['titleId']=='PPSA99874'
 source=r'''
 import java.nio.file.*;import java.io.*;import java.lang.reflect.*;
 public class StorageCheck {
@@ -107,9 +107,16 @@ public class StorageCheck {
    throw new AssertionError("incremental publish, shared cache or scoped cleanup failed");
   if(!afterMigration.game(afterMigration.instances().get(1)).startsWith(primaryUnit))
    throw new AssertionError("second instance did not move independently");
+  var unmoved=ProsperoStorageRoot.rollback(freshLegacy.resolveSibling("other"),freshShared);
+  if(!unmoved.root().equals(freshLegacy.resolveSibling("other")))throw new AssertionError("empty shared root took precedence");
+  var rolled=ProsperoStorageRoot.rollback(legacyUnit,primaryUnit);
+  if(!rolled.root().equals(primaryUnit)||!rolled.legacy().equals(legacyUnit))
+   throw new AssertionError("rollback hid an already-migrated catalog");
+  if(!ProsperoStorageRoot.rollback(legacy,shared).root().equals(shared))
+   throw new AssertionError("rollback reopened a stale fully-migrated catalog");
   System.setProperty("ps5.launcher.root",folder.resolve("explicit").toString());try{if(!ProsperoStorageRoot.current().root().equals(folder.resolve("explicit")))throw new AssertionError("explicit root ignored");}finally{System.clearProperty("ps5.launcher.root");}
 
-  System.out.println("PASS shared-root proof/verified-readable-fallback/no-legacy-writes/copy-resume/account+world verification/symlink+source-change refusal;256MiBmanifest/same title, typed ENOSPC/quota/access/read-only categories and app-local full message, unchanged library/world path and visible data root; no invented free-space or console resize claim");
+  System.out.println("PASS shared-root proof/verified-readable-fallback/no-legacy-writes/copy-resume/account+world verification/symlink+source-change refusal;4096MiBmanifest/same title, typed ENOSPC/quota/access/read-only categories and app-local full message, unchanged library/world path and visible data root; no invented free-space or console resize claim");
  }
 }
 '''

@@ -39,8 +39,8 @@ inline bool shared_access()noexcept{
  if(ok){ok=::rename(name,renamed)==0;if(ok){ok=::unlink(renamed)==0;return ok;}}
  (void)::unlink(name);return false;
 }
-inline bool initialize()noexcept{
- shared=shared_access();
+inline bool initialize(bool enable_shared=true)noexcept{
+ shared=enable_shared&&shared_access();
  if(!shared&&(!directory(PROSPERO_LEGACY_STORAGE "/mc-client")||!directory(PROSPERO_LEGACY_STORAGE "/mc-client/logs")))return false;
  // Set before core/library constructors and Java's environment snapshot.
  if(::setenv("PROSPERO_LIBRARY_PROGRESS","1",1))return false;
