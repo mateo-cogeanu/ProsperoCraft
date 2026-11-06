@@ -56,7 +56,7 @@ def main():
     parser.add_argument('--java-home', type=Path)
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--work-dir', type=Path, required=True)
-    parser.add_argument('--app-version', choices=('01.000.248', '01.000.249', '01.000.250', '01.000.251', '01.000.252'), default='01.000.252')
+    parser.add_argument('--app-version', choices=('01.000.248', '01.000.249', '01.000.250', '01.000.251', '01.000.252', '01.000.253'), default='01.000.253')
     parser.add_argument('--check-only', action='store_true', help='Compile/link/convert without signing or a candidate ZIP')
     args = parser.parse_args()
     if sha(args.tinyfd_jar) != TINYFD_SHA256:
@@ -148,7 +148,7 @@ def main():
         raise ValueError('Stale graphics output')
     recipe = graphics_audit['wsi_diagnostics']['source_recipe']
     stack_patch = '0008-radv-shader-object-stage-storage.patch'
-    if (stack_patch in recipe['patches']) != (candidate in ('250', '251', '252')):
+    if (stack_patch in recipe['patches']) != (candidate in ('250', '251', '252', '253')):
         raise ValueError('Wrong RADV shader-stage storage for this build')
     for category, directory in (('patches','zink'),('wsi_patches','mesa'),('wsi_headers','mesa')):
         for name, digest in recipe[category].items():
@@ -277,8 +277,10 @@ def main():
              '-march=x86-64', '-mno-avx', '-mno-avx2', '-mno-fma', '-O2', '-fno-stack-protector',
              '-fno-plt', '-femulated-tls', '-ffunction-sections', '-fdata-sections']
     main_obj = work / ('main'+candidate+'.o')
-    gc_flags = ['-DPROSPERO_ZGC_SINGLE_OLD_WORKER=1'] if candidate in ('249', '250', '251', '252') else []
-    graphics_flags = ['-DPROSPERO_ZINK_PIPELINE_SHADERS=1'] if candidate == '252' else []
+    gc_flags = ['-DPROSPERO_ZGC_SINGLE_OLD_WORKER=1'] if candidate in ('249', '250', '251', '252', '253') else []
+    graphics_flags = ['-DPROSPERO_ZINK_PIPELINE_SHADERS=1'] if candidate in ('252', '253') else []
+    if candidate == '253':
+        graphics_flags.append('-DPROSPERO_ZINK_SYNC_COMPILE=1')
     subprocess.run([str(llvm / 'clang++'), *flags, *gc_flags, *graphics_flags, '-DPROSPERO_APP_VERSION="'+app_version+'"', '-DPROSPERO_LWJGL333_CLOSURE_RESERVE=1', '-std=c++20',
         '-Wall', '-Wextra', '-Werror', '-fno-exceptions', '-fno-rtti',
         *['-I' + str(p) for p in (runtime / 'native/renderer', runtime / 'build/native', runtime / 'src',

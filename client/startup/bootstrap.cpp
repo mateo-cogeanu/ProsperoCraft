@@ -727,6 +727,9 @@ int main(int argc,char** argv) {
 #ifdef PROSPERO_PREPARE_ZINK_SCREEN
  // Native reserves/core constructors are ready; the JVM and launcher are not started.
  prospero_graphics_init();
+#ifdef PROSPERO_ZINK_SYNC_COMPILE
+ log_stage("PS5_ZINK pipeline shaders with synchronous compilation");
+#endif
  log_stage("PS5_ZINK preparing genuine screen and queues before JVM");
  if(!clientgpu_ps5zink_prepare_screen()) {
   log_stage("PS5_ZINK pre-JVM screen preparation failed; no Java/game success");

@@ -41,6 +41,9 @@ int main(){
  assert(!prospero_zink::disable_shader_objects());
  assert(std::string(getenv("ZINK_DEBUG"))=="nir,flushsync,noshobj");
  assert(!prospero_zink::disable_shader_objects(refusal)&&calls==3);
+ assert(!prospero_zink::disable_background_compilation());
+ assert(std::string(getenv("ZINK_DEBUG"))=="nir,flushsync,noshobj,nobgc");
+ assert(!prospero_zink::disable_background_compilation(refusal)&&calls==3);
  setenv("ZINK_DEBUG","notnoshobj",1);
  assert(prospero_zink::disable_shader_objects(refusal)==ENOMEM&&calls==4);
  assert(std::string(getenv("ZINK_DEBUG"))=="notnoshobj");

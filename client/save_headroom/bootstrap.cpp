@@ -35,6 +35,10 @@ int main(int argc,char** argv){
  if(rc){std::fprintf(stderr,"PS5_ZINK shader object opt-out failed result=%d\n",rc);return 1;}
  std::fprintf(stderr,"PS5_ZINK using Vulkan pipelines for shaders\n");
 #endif
+#ifdef PROSPERO_ZINK_SYNC_COMPILE
+ rc=prospero_zink::disable_background_compilation();
+ if(rc){std::fprintf(stderr,"PS5_ZINK background compile opt-out failed result=%d\n",rc);return 1;}
+#endif
  rc=prospero_zink::enable_synchronous_context();
  if(rc){std::fprintf(stderr,"PS5_ZINK direct context setup failed result=%d\n",rc);return 1;}
  return prospero_zink_main(argc,argv);

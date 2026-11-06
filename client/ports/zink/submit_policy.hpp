@@ -29,6 +29,9 @@ inline int enable_flushsync(int (*setter)(const char*,const char*,int)=::setenv)
 inline int disable_shader_objects(int (*setter)(const char*,const char*,int)=::setenv){
  return enable_debug_option("noshobj",setter);
 }
+inline int disable_background_compilation(int (*setter)(const char*,const char*,int)=::setenv){
+ return enable_debug_option("nobgc",setter);
+}
 // Use Mesa's genuine direct pipe context; no gdrv queue or substitute GL calls.
 inline int enable_synchronous_context(int (*setter)(const char*,const char*,int)=::setenv){
  const char* current=std::getenv("GALLIUM_THREAD");

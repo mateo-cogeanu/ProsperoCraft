@@ -4,6 +4,14 @@ import re
 
 def normalize(name, text):
     if name == 'client/startup/bootstrap.cpp':
+        synchronous_compile = (
+            '#ifdef PROSPERO_ZINK_SYNC_COMPILE\n'
+            ' log_stage("PS5_ZINK pipeline shaders with synchronous compilation");\n'
+            '#endif\n'
+        )
+        if text.count(synchronous_compile) != 1:
+            raise ValueError('Candidate synchronous shader policy changed')
+        text = text.replace(synchronous_compile, '')
         zgc_policy = (
             '#ifdef PROSPERO_ZGC\n'
             '   {const_cast<char *>("-XX:+UseZGC"),nullptr},\n'
@@ -83,6 +91,15 @@ def normalize(name, text):
             text = text.replace(token, '"' + fallback + '"')
         text = text.replace('Storage roots selected by verified shared access; legacy fallback is explicit; no measured-capacity claim', 'Storage /download0: title-local reservation requested4096MiB; actual capacity is unavailable, not zero')
     elif name == 'client/save_headroom/bootstrap.cpp':
+        synchronous_compile = (
+            '#ifdef PROSPERO_ZINK_SYNC_COMPILE\n'
+            ' rc=prospero_zink::disable_background_compilation();\n'
+            ' if(rc){std::fprintf(stderr,"PS5_ZINK background compile opt-out failed result=%d\\n",rc);return 1;}\n'
+            '#endif\n'
+        )
+        if text.count(synchronous_compile) != 1:
+            raise ValueError('Candidate synchronous shader policy changed')
+        text = text.replace(synchronous_compile, '')
         shader_policy = (
             '#ifdef PROSPERO_ZINK_PIPELINE_SHADERS\n'
             ' rc=prospero_zink::disable_shader_objects();\n'
