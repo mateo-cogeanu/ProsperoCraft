@@ -17,9 +17,9 @@
     "PS5 target build, signature, independent package audit and embedded option checks passed"
   ],
   "console_pending": [
-    "Verify PS5 VM startup and real C2 warmup entry",
     "Measure 26.3 Vanilla startup and responsiveness and collect safepoint timeout reports",
     "Reproduce the 1.21.9 save failure in a disposable world and collect the live handle inventory",
     "Retest Fabric startup separately"
-  ]
+  ],
+  "physical_229": "User reports a very fast game and 120 FPS without Sodium. Current PPSA99874 build 229 reports identify 26.3 Vanilla, verify the current-run C2 level 4 kernel, and report Using Parallel. One live snapshot showed 64 open handles, 43 regular files. FPS is user-reported and is not an independent frame-time measurement."
 }
