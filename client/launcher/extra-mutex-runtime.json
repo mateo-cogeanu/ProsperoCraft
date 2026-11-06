@@ -1,7 +1,7 @@
 {
-  "commit": "4bfebc680e1d54c4132edf6fd988758b2dab198f",
-  "patch": "java25/patches/0144-ps5-zgc-address-window.patch",
-  "patch_sha256": "ac10a9d277120b6b962f89de95bdae3e0bcd1a0c90b0263c4e7b660c9453255a",
-  "object_sha256": "acdcf88e75523eb7fc85ec700927ac4ae9f06b37b07d8de881c6f9a986f5f5d0",
-  "feature": "Experimental PS5 ZGC lower heap address window with native reservations and direct backing"
+  "commit": "b6de85243dab1e707a1eb1061795a8d22475260a",
+  "patch": "java25/patches/0145-ps5-zgc-reserved-map-hints.patch",
+  "patch_sha256": "95ff8a02ae003bf04a0db05ae6ee5dc3330479939d1fc08bda9cf61e1494266b",
+  "object_sha256": "9848ae1c2057924de5d0072573fecbbac0836fbd6901e2fd332fdacd37d1a4b8",
+  "feature": "Experimental PS5 ZGC checked mapping hints within native-owned heap reservations"
 }
