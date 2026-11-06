@@ -1,7 +1,7 @@
 {
-  "commit": "a20645cbb90df8f5b85ef13b3da5eaa92be9457d",
-  "patch": "java25/patches/0142-opt-in-ps5-zgc-backing.patch",
-  "patch_sha256": "2988f490ae2cbd44c9bd763697281ab84a288cc7b02dfd2ea0ca915fd8454112",
-  "object_sha256": "b4c68049e655e0d07e9328c3147b61cf8209e1279e8594574016742d898ac8dc",
-  "feature": "Experimental PS5 generational ZGC physical backing; includes native capacity and synchronization changes"
+  "commit": "af2d07dc45df72c957e9b66cd093aa19a4f595b1",
+  "patch": "java25/patches/0143-ps5-zgc-native-reservation.patch",
+  "patch_sha256": "43aa43197e42307469e98d0c3c30878c52e90fc07c1a91dcc72fbc8734219ce5",
+  "object_sha256": "cd54d75c4656ae996175b266f8478d3f50c0af1dafc31e41426fc0aadcbbf11b",
+  "feature": "Experimental PS5 ZGC native virtual reservations and direct physical backing"
 }
