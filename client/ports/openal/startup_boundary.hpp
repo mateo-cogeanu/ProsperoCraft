@@ -5,6 +5,7 @@
 #include <cstdio>
 namespace client_openal_boundary {
 inline std::atomic<unsigned> issued{0};
+inline void disable() noexcept {issued.store(128,std::memory_order_relaxed);}
 inline unsigned reserve() {
  unsigned count=issued.load(std::memory_order_relaxed);
  while(count<128)if(issued.compare_exchange_weak(count,count+1,std::memory_order_relaxed))return count+1;

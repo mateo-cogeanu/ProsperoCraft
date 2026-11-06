@@ -45,9 +45,9 @@ def normalize(name, text):
             text = text.replace(token, '"' + fallback + '"')
         text = text.replace('Storage roots selected by verified shared access; legacy fallback is explicit; no measured-capacity claim', 'Storage /download0: title-local reservation requested4096MiB; actual capacity is unavailable, not zero')
     elif name == 'client/save_headroom/bootstrap.cpp':
-        text = text.replace('#define PROSPERO_STARTUP_OBSERVER "true"',
-                            '#define PROSPERO_STARTUP_OBSERVER "false"')
         lines = ['#include "../launcher/storage_paths.hpp"\n',
+                 '#include "../ports/openal/startup_boundary.hpp"\n',
+                 ' client_openal_boundary::disable();\n',
                  '#define ps5shaderc_fault_begin prospero_storage_fault_begin\n',
                  '#define ps5shaderc_fault_end prospero_storage_fault_end\n',
                  '#define ps5shaderc_fault_status prospero_storage_fault_status\n',
