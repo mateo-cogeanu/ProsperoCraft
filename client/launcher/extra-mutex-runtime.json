@@ -1,7 +1,7 @@
 {
-  "commit": "4d0218d3307287f7e77e9c7b9827450c19f9fc01",
-  "patch": "java25/patches/0147-ps5-zgc-native-reservation-restore.patch",
-  "patch_sha256": "2338374fb606e1d48fe84ca42a9102ed6b8cae00a1166ee507c2f1814d438ab8",
-  "object_sha256": "61c0061d4ac9b98031c5e5f74f353c20120b9a3c01f648b0b1e61d9abdc54972",
-  "feature": "Experimental PS5 ZGC native heap view detachment and reservation restoration"
+  "commit": "09bb8e0ca5e38903aa556f33d66130579292397f",
+  "patch": "java25/patches/0148-ps5-zgc-compiled-method-locks.patch",
+  "patch_sha256": "3f5786052738969fe15813668ab38a5842830c135a72ecd7b3bc4281ec3acb6d",
+  "object_sha256": "7889aebf8f435d912083b6eff176f1b82db329d172d3ac487539d76616bd932b",
+  "feature": "PS5 ZGC compiled-method reentrant atomic locks without per-method native mutex leases"
 }
