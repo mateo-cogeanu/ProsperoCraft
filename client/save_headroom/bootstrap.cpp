@@ -5,6 +5,8 @@
 #define PROSPERO_PREPARE_ZINK_SCREEN 1
 #define PROSPERO_CLEAN_SYSTEM_EXIT 1
 /* Candidate-only upstream synchronous flush/context policy; clean-exit gate retained. */
+// Enable tracking before storage_paths.hpp first includes log_share.hpp.
+#define PS5_TRACK_FILE_ACTIVITY 1
 #include "../launcher/storage_paths.hpp"
 #include "../ports/openal/startup_boundary.hpp"
 #define ps5shaderc_fault_begin prospero_storage_fault_begin
