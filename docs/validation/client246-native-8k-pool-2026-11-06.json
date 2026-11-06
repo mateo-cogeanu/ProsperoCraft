@@ -1,0 +1,36 @@
+{
+  "app_version": "01.000.246",
+  "title_id": "PPSA99874",
+  "package_sha256": "f1e46ab54da8e019de8d35a6c247aa7d3e7c0c4ff4d7ca811b9763ae9fa96077",
+  "package_bytes": 127877038,
+  "extraMutexRuntime": {
+    "commit": "aae21931d0284fa00c2dd215e80ed9b733b19add",
+    "patch": "java25/patches/0150-ps5-native-8k-slab-class.patch",
+    "patch_sha256": "f0d81771bd40dfbc85403c3cee633791f1dd672ff7756be8f3ecf002a240d04e",
+    "object_sha256": "0ee3a84811bf88f180d73081ef1aca52a0c9e3e11f2e49ca0ff971255a4b0a85",
+    "feature": "Pool native allocator requests through8KiB to reduce per-buffer direct mapping demand"
+  },
+  "source_commit": "3305199cf35e7c7c8c161f18dd5a34f6bc9d50a3",
+  "compilerTlsBackendSha256": "69796e4650eb71d2e5284a4905540b162dc8aa5bcc1c3f814211b2a5bf30f647",
+  "prior_console_result": {
+    "build": "01.000.245",
+    "instance": "Fabric26.2",
+    "user_feedback": "Played briefly before crash.",
+    "failure": "Native4112byte AllocateHeap failure in ZWorkerYoung. Direct ledger counters show4096 net live mappings, approximately360MiB held under512MiB budget and policy rejection.",
+    "other_findings": "Controlify logged SDL audio binding failures before gameplay. They are distinct from the retained fatal allocation failure and remain unresolved."
+  },
+  "change": "Extend native slab pooling through8192byte allocations with a ninth size class. Previously requests above4096bytes required independent mappings. Retain ownership, larger-slot borrowing, failed-growth semantics and bounded idle trimming.",
+  "checks": [
+    "Actual default/extended native allocator and ledger tests passed ASan/UBSan, including8192 simultaneously live4112byte buffers using fewer than1200 mappings with content and complete backing release verification.",
+    "Native heap tests passed ownership/growth/pressure/failure/concurrency and nine-class cleanup checks.",
+    "Changed target HotSpot objects compiled and embedded app linked/signed. Standalone shared JVM retains its documented SDK shared/PIE conflict.",
+    "Native host lane passed13 checks.",
+    "Signed package audit and SHA-256 verification passed."
+  ],
+  "console_status": "pending",
+  "console_checks": [
+    "Retest Fabric26.2 gameplay, streaming, save/exit and rejoin.",
+    "Check native mapping headroom and sustained performance, then Vanilla/Fabric26.3 regression."
+  ],
+  "releaseStore": "Held pending physical-console acceptance."
+}

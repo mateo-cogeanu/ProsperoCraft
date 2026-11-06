@@ -1,5 +1,10 @@
 # Changelog
 
+## Local 246 · Pool native buffers through 8 KiB, 2026-11-06
+
+- Add a ninth native slab class to reduce mapping demand for small buffers
+  above4KiB. Fabric26.2 gameplay and lifecycle tests remain pending on console.
+
 ## Local 245 · Fabric 26.2 Sodium startup test, 2026-11-06
 
 - Extend the candidate Sodium exact-version check opt-out to Fabric26.2, with
