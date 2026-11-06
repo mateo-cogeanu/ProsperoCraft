@@ -1,5 +1,11 @@
 # Changelog
 
+## Local 243 · ZGC compiled-method locks, 2026-11-06
+
+- Use per-object atomic reentrant locks for PS5 ZGC compiled-method data,
+  reducing native mutex demand. Fabric startup and contention/frame pacing
+  validation remain pending on console.
+
 ## Local 242 · Native ZGC view restoration, 2026-11-06
 
 - Detach heap views and restore their reservations with native PS5 APIs,

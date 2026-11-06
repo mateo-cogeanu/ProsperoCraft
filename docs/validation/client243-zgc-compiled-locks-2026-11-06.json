@@ -1,0 +1,36 @@
+{
+  "app_version": "01.000.243",
+  "title_id": "PPSA99874",
+  "package_sha256": "6265077fcd3fb03ebfe707eff0a53877800b0a751e688734b64bc4603308bbb7",
+  "package_bytes": 127876281,
+  "extraMutexRuntime": {
+    "commit": "09bb8e0ca5e38903aa556f33d66130579292397f",
+    "patch": "java25/patches/0148-ps5-zgc-compiled-method-locks.patch",
+    "patch_sha256": "3f5786052738969fe15813668ab38a5842830c135a72ecd7b3bc4281ec3acb6d",
+    "object_sha256": "7889aebf8f435d912083b6eff176f1b82db329d172d3ac487539d76616bd932b",
+    "feature": "PS5 ZGC compiled-method reentrant atomic locks without per-method native mutex leases"
+  },
+  "source_commit": "fc78e378e277480aef2aab2b67f7dab91185b2d5",
+  "compilerTlsBackendSha256": "69796e4650eb71d2e5284a4905540b162dc8aa5bcc1c3f814211b2a5bf30f647",
+  "prior_console_result": {
+    "build": "01.000.242",
+    "instance": "Fabric26.3",
+    "failure": "HotSpot exhausted12288 initialized native mutexes during C1 compilation of a generated LWJGL binding. The code cache contained14718 compiled methods.",
+    "source_finding": "ZGC embeds two reentrant locks in each compiled method data object. Each formerly leased a PlatformMutex. This is a substantial source of demand; the report is not a complete native owner census."
+  },
+  "change": "PS5 ZGC compiled-method reentrant locks retain distinct identities and existing owner/recursive-count behavior with an atomic word. Contention pauses briefly then yields. Release uses release-store. Other platform implementations retain their native locks.",
+  "checks": [
+    "Actual ZGC class/inline bodies passed ASan/UBSan with32768 identities, recursion, contention, publication,400000 concurrent updates and zero PS5 native leases. Desktop native-lock control passed.",
+    "Target ZGC object audit confirms SpinPause/native yield imports and no PlatformMutex constructor import in zNMethodData.o.",
+    "Changed target objects compiled; embedded application linked and signed.",
+    "Standalone JVM shared target retains the documented SDK shared/PIE linker conflict.",
+    "ProsperoCraft native host lane passed13 checks.",
+    "Signed package audit and SHA-256 verification passed."
+  ],
+  "console_status": "pending",
+  "console_checks": [
+    "Retest the same Fabric26.3 instance through startup, world entry, play, save/exit and rejoin.",
+    "Check Vanilla26.3 regression and lock contention/frame pacing under GC."
+  ],
+  "releaseStore": "Held pending physical-console acceptance."
+}
