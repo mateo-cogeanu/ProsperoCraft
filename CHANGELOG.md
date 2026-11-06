@@ -1,5 +1,11 @@
 # Changelog
 
+## Local 242 · Native ZGC view restoration, 2026-11-06
+
+- Detach heap views and restore their reservations with native PS5 APIs,
+  retaining backing ownership and other aliases. Rejoin and frame pacing
+  validation remain pending on console.
+
 ## Local 241 · Exact ZGC direct-memory views, 2026-11-06
 
 - Fall back to shared direct-memory device mappings when native heap mapping

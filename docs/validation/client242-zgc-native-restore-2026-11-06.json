@@ -1,0 +1,41 @@
+{
+  "app_version": "01.000.242",
+  "title_id": "PPSA99874",
+  "package_sha256": "30b8f9855207943e61a49e81ab56b2cf6f0b4d8e89651916c818b1c581871b63",
+  "package_bytes": 127876777,
+  "extraMutexRuntime": {
+    "commit": "4d0218d3307287f7e77e9c7b9827450c19f9fc01",
+    "patch": "java25/patches/0147-ps5-zgc-native-reservation-restore.patch",
+    "patch_sha256": "2338374fb606e1d48fe84ca42a9102ed6b8cae00a1166ee507c2f1814d438ab8",
+    "object_sha256": "61c0061d4ac9b98031c5e5f74f353c20120b9a3c01f648b0b1e61d9abdc54972",
+    "feature": "Experimental PS5 ZGC native heap view detachment and reservation restoration"
+  },
+  "source_commit": "0bdb7b6c4b941ae5cb8c607f7c0041d9ecb11701",
+  "compilerTlsBackendSha256": "69796e4650eb71d2e5284a4905540b162dc8aa5bcc1c3f814211b2a5bf30f647",
+  "prior_console_result": {
+    "build": "01.000.241",
+    "instance": "Vanilla26.3",
+    "user_feedback": "First world ran very well and saved quickly. Rejoining caused stutter followed by a crash.",
+    "failure": "ZWorkerOld aborted during heap-view reservation restoration. The implementation still used anonymous fixed mmap for that operation.",
+    "allocation_stalls_ms": [
+      139.806,
+      173.051,
+      175.224
+    ],
+    "unresolved": "Full causes of the allocation stalls and whether native restoration clears the stutter remain unverified."
+  },
+  "change": "Detach ZGC views with native unmap and restore them with exact-checked native virtual reservations, retaining physical backing and other aliases. Record native detach/reserve failure codes.",
+  "checks": [
+    "Actual backing helper passed ASan/UBSan with surviving-alias bytes, native detach refusal, native reservation refusal, moved-reservation cleanup and existing device mapping regressions.",
+    "Changed target HotSpot objects compiled; embedded application linked and signed.",
+    "Standalone JVM shared target retains the documented SDK shared/PIE linker conflict.",
+    "ProsperoCraft native host lane passed13 checks.",
+    "Signed package audit verifies native restoration diagnostics. SHA-256 verification passed."
+  ],
+  "console_status": "pending",
+  "console_checks": [
+    "Vanilla26.3 initial gameplay, save/exit and rejoin twice with repeated GC and frame pacing inspection.",
+    "Then test Fabric26.3 with the same lifecycle."
+  ],
+  "releaseStore": "Held pending physical-console acceptance."
+}
