@@ -1,0 +1,35 @@
+{
+  "app_version": "01.000.238",
+  "title_id": "PPSA99874",
+  "package_sha256": "faef16b0491085dd06201e4781a2493fc43f3a72686fc6a74e4b43ad99c7c9a5",
+  "package_bytes": 127875972,
+  "extraMutexRuntime": {
+    "commit": "af2d07dc45df72c957e9b66cd093aa19a4f595b1",
+    "patch": "java25/patches/0143-ps5-zgc-native-reservation.patch",
+    "patch_sha256": "43aa43197e42307469e98d0c3c30878c52e90fc07c1a91dcc72fbc8734219ce5",
+    "object_sha256": "cd54d75c4656ae996175b266f8478d3f50c0af1dafc31e41426fc0aadcbbf11b",
+    "feature": "Experimental PS5 ZGC native virtual reservations and direct physical backing"
+  },
+  "source_commit": "3a3c399835449d501b282fbeb8e149161bbea2cb",
+  "compilerTlsBackendSha256": "69796e4650eb71d2e5284a4905540b162dc8aa5bcc1c3f814211b2a5bf30f647",
+  "prior_console_result": {
+    "build": "01.000.237",
+    "failure": "Check2 failed. JNI_CreateJavaVM returned-4 after ZGC reported failure to reserve1536M heap address space. The Java heap had not been committed.",
+    "unresolved": "The previous reservation path did not record native per-attempt address/error details."
+  },
+  "change": "Use sceKernelReserveVirtualRange with a non-overwriting hint and exact returned-address validation. Clean up unexpected placements. Use native unreserve and bound failed-attempt diagnostic output.",
+  "checks": [
+    "Actual platform reservation body passed host ASan/UBSan controls for exact placement, refusal, relocated return cleanup and preservation of occupied bytes.",
+    "Changed target ZGC object compiled. Embedded application linked and signed successfully.",
+    "Standalone JVM shared target still has the recorded SDK shared/PIE linker conflict.",
+    "ProsperoCraft native host lane passed13 checks.",
+    "Signed package audit and SHA-256 verification passed."
+  ],
+  "console_status": "pending",
+  "console_checks": [
+    "Check JVM creation and inspect native reservation address/result traces.",
+    "If initialization succeeds, test Vanilla26.3 startup, world entry, save/reload and frame pacing.",
+    "Fabric26.3 follows successful Vanilla initialization and gameplay."
+  ],
+  "releaseStore": "Held pending physical-console acceptance."
+}

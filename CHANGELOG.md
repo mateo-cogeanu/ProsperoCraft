@@ -1,5 +1,10 @@
 # Changelog
 
+## Local 238 · Native ZGC heap reservation, 2026-11-06
+
+- Use the PS5 virtual reservation API for ZGC heap views, verify exact placement
+  and record native failure details. Console initialization remains pending.
+
 ## Local 237 · Experimental generational ZGC, 2026-11-06
 
 - Select OpenJDK generational ZGC with PS5 physical backing and retain C2 tier4.
