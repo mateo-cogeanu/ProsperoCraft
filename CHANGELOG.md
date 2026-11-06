@@ -1,5 +1,10 @@
 # Changelog
 
+## Local 233 · File descriptor exhaustion capture, 2026-11-06
+
+- Save the first tracked EMFILE inventory through the existing native stderr log
+  so it can be read after restarting the launcher.
+
 ## Local 232 · Bounded Fabric startup mutex use, 2026-11-06
 
 - Share 64 HotSpot profiling locks across methods on PS5 to reduce native

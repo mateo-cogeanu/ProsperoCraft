@@ -1,0 +1,27 @@
+{
+  "app_version": "01.000.233",
+  "title_id": "PPSA99874",
+  "package_sha256": "250363d13892951bc181cf11a79459d4fe25c0fb594a3c515c5c2dba43e2d541",
+  "package_bytes": 127584727,
+  "extraMutexRuntime": {
+    "commit": "1c50556b36ce87a01eb86a43c36d4b6d6b6d1767",
+    "patch": "java25/patches/0140-ps5-method-data-lock-stripes.patch",
+    "patch_sha256": "13891b982c3c0bf43293cb4b44bbf2253d7314c30b19e8099507709320941da6",
+    "object_sha256": "2d2f18dc7a52ed0d608a782b050dee2e1adaaca79d9b446afcae23bf9c1f2b26"
+  },
+  "source_commit": "8fe96fa242c2c6770e243456276473ba2df25006",
+  "previous_console_result": {
+    "build": "01.000.232",
+    "instance": "Minecraft 26.3 Fabric",
+    "failure": "Resource reload and title-screen recovery failed after file opens returned EMFILE. Affected reads included assets and mod JARs. Options and crash-report writes failed with the same error.",
+    "unresolved": "The retained native JVM fatal report is from 231. The 232 startup and Minecraft reports show file exhaustion. The owners of the occupied file descriptors are unknown."
+  },
+  "candidate_change": "Save the first wrapped open EMFILE inventory to the already-open native stderr report. The inventory is limited to tracked calls and up to 512 entries. The existing HotSpot, storage and game policies are retained.",
+  "verification": [
+    "Actual capture helper passed an ASan/UBSan host test with a real 48-descriptor limit, concurrent failure suppression, preserved errno and intact handle ownership.",
+    "ProsperoCraft native host lane passed all 13 checks.",
+    "Signed PS5 package audit and SHA-256 verification passed."
+  ],
+  "console_status": "pending",
+  "console_check": "Run the same Fabric 26.3 instance. If it exits, reopen the launcher once and inspect previous-native-stderr.log for the first EMFILE inventory before launching again."
+}
