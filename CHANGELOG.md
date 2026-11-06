@@ -1,5 +1,10 @@
 # Changelog
 
+## Local 244 · Sample successful allocation reports, 2026-11-06
+
+- Apply the selected startup diagnostic sampling interval to successful native
+  allocations, retaining every failure. Console frame pacing needs retesting.
+
 ## Local 243 · ZGC compiled-method locks, 2026-11-06
 
 - Use per-object atomic reentrant locks for PS5 ZGC compiled-method data,

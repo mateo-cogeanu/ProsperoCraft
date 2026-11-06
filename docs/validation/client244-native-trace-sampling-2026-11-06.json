@@ -1,0 +1,37 @@
+{
+  "app_version": "01.000.244",
+  "title_id": "PPSA99874",
+  "package_sha256": "8338b509d94bda48893bf0b07deabf602e80d727500cc974356dd28db1c54c83",
+  "package_bytes": 127877393,
+  "extraMutexRuntime": {
+    "commit": "1bc1480a8a95c5ceea42763f652c9cd494875dbd",
+    "patch": "java25/patches/0149-sample-native-allocation-success-traces.patch",
+    "patch_sha256": "d8759710e00741f6fb07f56c069e15d69a83d615c071fd017254e9c89dac7fc8",
+    "object_sha256": "1b079d27b73659e6b4cfb592d5d3adb88481844d97d73cb2aed34b68bd711a3b",
+    "feature": "Apply selected startup interval to successful native allocator reports; preserve complete errors"
+  },
+  "source_commit": "7fd66ea4469aa6bf0687f1d5b51d61a4836c0683",
+  "compilerTlsBackendSha256": "69796e4650eb71d2e5284a4905540b162dc8aa5bcc1c3f814211b2a5bf30f647",
+  "prior_console_result": {
+    "build": "01.000.243",
+    "instance": "Fabric26.3",
+    "user_feedback": "Severe stutters during gameplay.",
+    "finding": "Live VM trace HTTP size411750102 bytes. Partial local capture is dominated by successful native arena allocation diagnostic writes. GC safepoint entry delays include approximately0.47,0.58 and0.82seconds while actual safepoint work is tens of microseconds.",
+    "unresolved": "All sources of frame drops and delayed safepoint arrival remain unproven. Concurrent major collection elapsed time is not a stop-the-world pause."
+  },
+  "change": "Apply the existing consumer4096 startup trace interval to successful native allocator reports. Log first and periodic success reports; preserve every allocation failure and full associated native ledger diagnostics.",
+  "checks": [
+    "Actual trace hook passed ASan/UBSan default, first/periodic success, all-error and concurrent accounting checks.",
+    "Actual native allocator/direct ledger default and extended fault/lifecycle tests passed. Native heap lifecycle/accounting tests passed.",
+    "Historical compact-prefix benchmark reconstruction failed while reversing old0105 against the newer source. Its allocator portion did not run; not treated as a pass.",
+    "Changed target objects compiled; embedded application linked and signed. Standalone JVM shared target retains its SDK shared/PIE linker conflict.",
+    "ProsperoCraft native host lane passed13 checks.",
+    "Signed package audit and SHA-256 verification passed."
+  ],
+  "console_status": "pending",
+  "console_checks": [
+    "Retest Fabric26.3 gameplay and compare VM trace growth, safepoint delays and frame pacing.",
+    "Save, exit and rejoin; check Vanilla26.3 regression."
+  ],
+  "releaseStore": "Held pending physical-console acceptance."
+}
