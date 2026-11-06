@@ -1,0 +1,20 @@
+{
+  "app_version": "01.000.226",
+  "title_id": "PPSA99874",
+  "package_sha256": "89ace19d34c8e8f908490fd37901165c296e61e7503a1a47d64b5caae1786611",
+  "package_bytes": 127577728,
+  "source_commit": "e24a3199f5bdfbc1f45171a63b62d0f593368bb3",
+  "date": "2026-11-06",
+  "change": "Restore download0 as the default for the library, reports and temporary files. Disable automatic migration. Preserve an already published shared catalog, its instance and cache routing, and any staged files. Keep the launcher UI and the 16 GiB upload policy.",
+  "storage": "Restore the prior 4096 MiB title storage request. The upload policy is a per-file maximum. Actual writes depend on available console storage.",
+  "checks": [
+    "19 fast and 13 native host checks passed",
+    "Storage fixture covered unmigrated, incremental and fully migrated catalog selection",
+    "Large upload and package checks passed"
+  ],
+  "console_pending": [
+    "Compare 26.3 Vanilla startup and input response on 226",
+    "Check an already moved instance can launch, save and reopen",
+    "Confirm Fabric launch and the actual available upload capacity"
+  ]
+}
