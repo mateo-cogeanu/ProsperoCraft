@@ -87,6 +87,9 @@ extern "C" int JVM_PS5SetExtendedSyncReserveEnabled(int);
 #ifdef PROSPERO_EXTRA_MUTEX_RESERVE
 extern "C" int JVM_PS5SetExtraMutexReserveEnabled(int);
 #endif
+#ifdef PROSPERO_EXTENDED_NATIVE_DIRECT
+extern "C" int JVM_PS5SetExtendedNativeDirectBudgetEnabled(int);
+#endif
 extern "C" int JVM_PS5SetExtendedThreadStackBudgetEnabled(int);
 extern "C" void JNU_PS5SetVerifierSmallReserveEnabled(int);
 extern "C" void ps5_emutls_enable_direct(int);
@@ -683,6 +686,11 @@ int main(int argc,char** argv) {
  (void)sceSystemServiceHideSplashScreen();
  // Native UI owns VideoOut/controller on its thread before creating Java.
  // Core constructors and early AudioOut init stay on the original startup thread.
+#ifdef PROSPERO_EXTENDED_NATIVE_DIRECT
+ const int native_capacity_rc=JVM_PS5SetExtendedNativeDirectBudgetEnabled(1);
+ if(native_capacity_rc){log_stage("Extended native direct policy rejected before JVM");notify("Native memory configuration failed; inspect logs.");for(;;)(void)sceKernelUsleep(1000000);}
+ log_stage("PS5 native direct capacity requested4096slots/512MiB");
+#endif
  ps5_emutls_enable_direct(1);
  log_stage("PS5 compiler TLS direct fallback enabled after libc/anonymous ENOMEM; shared native-data ledger");
  JNU_PS5SetDirectScratchEnabled(1);

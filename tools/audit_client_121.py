@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Independently inspect local233 against accepted204 and original333 inputs.
+"""Independently inspect local234 against accepted204 and original333 inputs.
 
 Requires explicit SDK build outputs and publisher cache; not a portable CI lane
 or evidence of physical-console acceptance. Never modifies packages or game JARs.
@@ -70,7 +70,7 @@ def main():
         if hashlib.sha256(tinyfd_bytes).hexdigest() != TINYFD_SHA256:
             raise ValueError('Packaged TinyFD differs from the publisher artifact')
         param = json.loads(new.read('PPSA99874/sce_sys/param.json'))
-        if param['contentVersion'] != '01.000.233' or param['downloadDataSize'] != 4096:
+        if param['contentVersion'] != '01.000.234' or param['downloadDataSize'] != 4096:
             raise ValueError('Wrong identity')
         if new.read(prefix + 'classes/prosperocraft-121.txt') != b'vanilla-1.21.9-1.21.11-zink-v3\n':
             raise ValueError('Wrong per-release gate')
@@ -114,7 +114,7 @@ def main():
         if registry['library_symbol_prefixes'] != {'lwjgl333': 'lwjgl333_'}:
             raise ValueError('Wrong generation namespace')
     # The final image must contain selected-size routing and the new SDL group.
-    linked_text=(args.build_dir/'client121-233-symbols.elf').read_bytes()
+    linked_text=(args.build_dir/'client121-234-symbols.elf').read_bytes()
     if b'PS5 first EMFILE descriptor snapshot' not in linked_text:
         raise ValueError('First EMFILE capture is missing')
     for value in (b'PS5_RENDER_SIZE',b'PS5 selected render resolution is malformed or unavailable'):
@@ -162,7 +162,7 @@ def main():
         counts[jar.name] = covered
     baseline = args.build_dir / 'baseline204'
     manifest = json.loads((baseline / 'manifest.json').read_text())
-    linked = [json.loads(line) for line in (args.build_dir / 'link233.rsp').read_text().splitlines()]
+    linked = [json.loads(line) for line in (args.build_dir / 'link234.rsp').read_text().splitlines()]
     replaced = {'inputs/031-embedded-jvm.o', 'inputs/022-renderer.o','inputs/110-graphics-support.o','inputs/104-main.o', 'inputs/044-embedded-ps5sdl.o', 'inputs/032-embedded-java.o', 'inputs/109-builtin-libraries.o'}
     retained = {}
     for item in manifest['arguments']:
@@ -179,7 +179,8 @@ def main():
     if linked.count(str(hotspot.resolve())) != 1 or sha(hotspot) != sync_pin['object_sha256']:
         raise ValueError('Wrong HotSpot runtime in the link')
     synchronization_symbols = {'JVM_PS5SetExtraMutexReserveEnabled', '_ZN15PlatformMonitorC2Eb', '_ZN5MutexC2ENS_4RankEPKcbb',
-        '_ZN10MethodData27initialize_extra_data_locksEv'}
+        '_ZN10MethodData27initialize_extra_data_locksEv',
+        'JVM_PS5SetExtendedNativeDirectBudgetEnabled'}
     if not synchronization_symbols <= symbols(args.llvm_nm, hotspot, external=False):
         raise ValueError('PS5 synchronization runtime entry points missing')
     fault=args.build_dir/'storage-fault.o'
@@ -226,9 +227,9 @@ def main():
                    b'-XX:TieredStopAtLevel=4', b'-XX:CICompilerCount=2', b'-XX:+UseParallelGC',
                    b'-XX:+SafepointTimeout', b'-XX:SafepointTimeoutDelay=250', b'-XX:-AbortVMOnSafepointTimeout'):
         if option + b'\0' not in elf:
-            raise ValueError('Retained option missing from actual233 ELF: ' + option.decode())
+            raise ValueError('Retained option missing from actual234 ELF: ' + option.decode())
     source = (args.build_dir / 'registry/builtin-libraries.cpp').read_text()
-    if 'lwjgl333_prospero_ffi_reserve_prime' not in symbols(args.llvm_nm, args.build_dir / 'client121-233-symbols.elf', external=False):
+    if 'lwjgl333_prospero_ffi_reserve_prime' not in symbols(args.llvm_nm, args.build_dir / 'client121-234-symbols.elf', external=False):
         raise ValueError('333 callback reserve not linked')
     if b'PS5 LWJGL333 pre-JVM closure reserve result=' not in elf:
         raise ValueError('Pre-JVM reserve priming missing from actual executable')
@@ -238,7 +239,7 @@ def main():
     boot = (ROOT / 'client/save_headroom/bootstrap.cpp').read_text()
     if '#define' not in boot or '"8"' not in boot:
         raise ValueError('Missing accepted ZIP budget8')
-    audit = {'package_sha256': sha(args.package), 'version': '01.000.233', 'title_id': 'PPSA99874',
+    audit = {'package_sha256': sha(args.package), 'version': '01.000.234', 'title_id': 'PPSA99874',
              'package_bytes': args.package.stat().st_size, 'zip_growth_bytes': args.package.stat().st_size - args.baseline_package.stat().st_size,
              'uncompressed_growth_bytes': growth, 'baseline_changed_files': changed, 'removed_logo_assets': sorted(retired_icons), 'added_files': added,
              'matched_native_declarations': counts, 'unsupported_nonplatform_native_declarations': sorted(absent),
@@ -248,7 +249,7 @@ def main():
              'result': 'PASS scoped package/static ABI audit; no complete feature or console acceptance', 'console': 'NOT TESTED'}
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(audit, indent=2) + '\n')
-    print('PASS233 package audit; uncompressed growth', growth, 'bytes; SHA256', audit['package_sha256'])
+    print('PASS234 package audit; uncompressed growth', growth, 'bytes; SHA256', audit['package_sha256'])
 
 
 if __name__ == '__main__':

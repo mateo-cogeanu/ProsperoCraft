@@ -4,6 +4,10 @@ import re
 
 def normalize(name, text):
     if name == 'client/startup/bootstrap.cpp':
+        text, count = re.subn(r'^#ifdef PROSPERO_EXTENDED_NATIVE_DIRECT\n.*?^#endif\n',
+                              '', text, flags=re.M | re.S)
+        if count != 2:
+            raise ValueError('Native direct capacity hooks changed')
         text, count = re.subn(r'^#ifdef PROSPERO_FILE_PRESSURE_REPORT\n[^\n]+\n#endif\n',
                               '', text, flags=re.M)
         if count != 3:
@@ -65,7 +69,8 @@ def normalize(name, text):
             text = text.replace(token, '"' + fallback + '"')
         text = text.replace('Storage roots selected by verified shared access; legacy fallback is explicit; no measured-capacity claim', 'Storage /download0: title-local reservation requested4096MiB; actual capacity is unavailable, not zero')
     elif name == 'client/save_headroom/bootstrap.cpp':
-        lines = ['#define PROSPERO_TIERED_PARALLEL 1\n',
+        lines = ['#define PROSPERO_EXTENDED_NATIVE_DIRECT 1\n',
+                 '#define PROSPERO_TIERED_PARALLEL 1\n',
                  '#define PROSPERO_EXTRA_MUTEX_RESERVE 1\n',
                  '// Enable tracking before storage_paths.hpp first includes log_share.hpp.\n',
                  '#define PS5_TRACK_FILE_ACTIVITY 1\n',

@@ -1,6 +1,6 @@
 {
-  "commit": "1c50556b36ce87a01eb86a43c36d4b6d6b6d1767",
-  "patch": "java25/patches/0140-ps5-method-data-lock-stripes.patch",
-  "patch_sha256": "13891b982c3c0bf43293cb4b44bbf2253d7314c30b19e8099507709320941da6",
-  "object_sha256": "2d2f18dc7a52ed0d608a782b050dee2e1adaaca79d9b446afcae23bf9c1f2b26"
+  "commit": "b56b38a4669408a3548802cc2f1d16e12a2ef9f7",
+  "patch": "java25/patches/0141-opt-in-native-direct-capacity.patch",
+  "patch_sha256": "8ebbea8042d7dadc615253e9658452e714533f3f17a5bd65b44ae9829edd6aaa",
+  "object_sha256": "fa2c974206cacf3a1b6c7def1bc8751fd48cf187f6dfc08c8817a14dd2d86e20"
 }
