@@ -1,0 +1,16 @@
+{
+  "app_version": "01.000.225",
+  "title_id": "PPSA99874",
+  "package_sha256": "75336299800b3cb5e19e47954d389875c984dcb955ac5fc3db0f3a81163db19e",
+  "package_bytes": 127576766,
+  "source_commit": "cb69923ee8c4db1c96f1b251ca25b757c87b68c7",
+  "date": "2026-11-06",
+  "physical_224": "The user reported 26.3 Vanilla took several minutes to reach the menu and appeared frozen there. Snapshots place the render thread in sound initialization repeatedly from about 78 to 258 seconds after entry. Model loading and onGameLoadFinished follow at about 284 and 291 seconds. At about 298 and 305 seconds, the render thread is in OpenAL device polling in SoundEngine.tick. Later native records still show paired calls. The logs also contain long safepoint delays. The dominant cause of menu unresponsiveness is unproven.",
+  "change": "Disable synchronous per-call OpenAL boundary stderr records at bootstrap using the retained shared counter. Disable diagnostic startup snapshots for this comparison. The original audio implementation remains linked.",
+  "checks": [
+    "13 native host checks passed",
+    "Target build, signature and independent package audit passed",
+    "Final main disassembly sets the single retained OpenAL trace counter to its cutoff before startup"
+  ],
+  "console_pending": "Compare the same 26.3 Vanilla instance and resolution with 224. Check time to menu, input response, audio, save and quit. Fabric black screen remains a separate open report."
+}
