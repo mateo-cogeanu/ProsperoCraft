@@ -1,5 +1,10 @@
 # Changelog
 
+## Local 239 · Lower ZGC heap address window, 2026-11-06
+
+- Select PS5 ZGC heap offsets within35..37bits, placing the current heap window
+  at32GiB after native reservations at4TiB were refused. Console tests are pending.
+
 ## Local 238 · Native ZGC heap reservation, 2026-11-06
 
 - Use the PS5 virtual reservation API for ZGC heap views, verify exact placement

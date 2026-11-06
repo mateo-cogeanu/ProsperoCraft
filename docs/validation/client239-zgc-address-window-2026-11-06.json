@@ -1,0 +1,35 @@
+{
+  "app_version": "01.000.239",
+  "title_id": "PPSA99874",
+  "package_sha256": "e9b6c28556645f97c9d24640e6e382b027190aa442b322baff591af79979408b",
+  "package_bytes": 127876212,
+  "extraMutexRuntime": {
+    "commit": "4bfebc680e1d54c4132edf6fd988758b2dab198f",
+    "patch": "java25/patches/0144-ps5-zgc-address-window.patch",
+    "patch_sha256": "ac10a9d277120b6b962f89de95bdae3e0bcd1a0c90b0263c4e7b660c9453255a",
+    "object_sha256": "acdcf88e75523eb7fc85ec700927ac4ae9f06b37b07d8de881c6f9a986f5f5d0",
+    "feature": "Experimental PS5 ZGC lower heap address window with native reservations and direct backing"
+  },
+  "source_commit": "8737608f1909300e1e9ca7e1f693a81b9f4f1177",
+  "compilerTlsBackendSha256": "69796e4650eb71d2e5284a4905540b162dc8aa5bcc1c3f814211b2a5bf30f647",
+  "prior_console_result": {
+    "build": "01.000.238",
+    "failure": "Check2 failed. Native virtual reservation returned0x8002000c for24GiB requests starting at4TiB. ZGC could not reserve its heap address space.",
+    "unresolved": "This identifies rejected requests; it does not establish the complete supported PS5 address map."
+  },
+  "change": "PS5 x86 ZGC offset width is selected within35..37bits. The current1536MiB maximum heap selects a32GiB base and32GiB offset window to hold the24GiB virtual reservation. Desktop defaults stay42..44bits.",
+  "checks": [
+    "Actual platform address selection and OpenJDK color/uncolor functions passed host ASan/UBSan for all four remap phases, metadata combinations and window boundaries, with desktop-default controls.",
+    "Changed target ZGC object compiled; embedded application linked and signed successfully.",
+    "Standalone JVM shared target retains its previously recorded SDK shared/PIE linker conflict.",
+    "ProsperoCraft native host lane passed13 checks.",
+    "Signed package audit and SHA-256 verification passed."
+  ],
+  "console_status": "pending",
+  "console_checks": [
+    "Verify acceptance of the lower virtual address window and JVM creation.",
+    "Validate generated barriers, concurrent GC and Vanilla26.3 world entry/save/reload/frame pacing.",
+    "Retest Fabric26.3 after Vanilla reaches gameplay."
+  ],
+  "releaseStore": "Held pending physical-console acceptance."
+}
