@@ -6,7 +6,7 @@ import java.util.Set;
 final class Prospero121 {
  static final Set<String> RELEASES=Set.of("1.21","1.21.1","1.21.2","1.21.3","1.21.4","1.21.5","1.21.6","1.21.7","1.21.8","1.21.9","1.21.10","1.21.11");
  static boolean supported(String version,String loader){
-  return ("1.21.10".equals(version)||"1.21.11".equals(version))&&available(version,loader);
+  return available(version,loader);
  }
  static boolean available(String version,String loader){
   if(!("1.21.9".equals(version)||"1.21.10".equals(version)||"1.21.11".equals(version))||!"vanilla".equals(loader)||!ProsperoChannel.tempGameTest())return false;
