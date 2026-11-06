@@ -22,10 +22,24 @@
     "The embedded HotSpot object matches build 249 byte for byte.",
     "Native host lane passed 13 checks. Signed executable integrity, independent package audit and ZIP SHA-256 passed."
   ],
-  "console_status": "Pending",
+  "console_status": "Partial. Retained build 250 logs confirm Fabric 26.1.1 with Sodium entered a world, saved, rejoined and saved again. Fabric 26.1 with Sodium crashed during resource loading in a separate run.",
   "console_checks": [
-    "Launch the same Fabric 26.1.1 instance with Sodium 0.8.9 enabled.",
-    "After successful startup, enter a world and verify save/rejoin."
+    "Retry the same Fabric 26.1 instance on build 250 with Sodium disabled to isolate the mod path."
   ],
-  "release_store": "Held."
+  "release_store": "Held.",
+  "fabric_26_1_sodium_failure": {
+    "run": "client-01.000.250-1793982796-45110007",
+    "instance": {
+      "minecraft": "26.1",
+      "fabric_loader": "0.20.1",
+      "sodium": "0.8.9+mc26.1.1",
+      "renderer": "Zink"
+    },
+    "publisher_compatibility": "https://modrinth.com/mod/sodium/version/mc26.1.1-0.8.9-fabric",
+    "findings": [
+      "The process monitor corroborates the crash. The game reached resource reload after creating the GL context. The last logged major collection completed.",
+      "The retained trace includes an early WSI enqueue marker but no terminal signal or faulting instruction. This does not establish whether presentation, shader compilation, or another concurrent operation caused the crash.",
+      "Vanilla 26.1 reached a world and saved on build 250. The equivalent Fabric 26.1 launch with Sodium disabled remains untested."
+    ]
+  }
 }
