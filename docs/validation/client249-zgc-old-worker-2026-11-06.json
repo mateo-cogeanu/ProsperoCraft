@@ -1,0 +1,22 @@
+{
+  "app_version": "01.000.249",
+  "title_id": "PPSA99874",
+  "package_sha256": "55c01de7125d7cc7a091d8bb8570d3b48a578f9d5bad8a974fd152129a7387b8",
+  "package_bytes": 127876637,
+  "source_commit": "c4e98e2aa09fb6689c28451fa980fc2613cb3f76",
+  "source_provenance": "The package was built with these changes in the working tree before the source commit. The embedded HotSpot object matches build 248 byte for byte.",
+  "prior_console_record": "client248-fabric2611-resource-reload-crash-2026-11-06.json",
+  "change": "Set ZOldGCThreads=1 for candidate 249. Retain the young-generation worker ceiling of two, overall concurrent budget of two, parallel GC worker setting, ZGC heap, C2, and two-partition Mesa cache.",
+  "limitation": "This tests whether reducing old-generation worker concurrency changes the crash. The fatal fault is unresolved. A single old-generation worker may take longer during major collections.",
+  "checks": [
+    "Host JDK 25 accepts the options and reports one old and two young workers.",
+    "Native host lane passed all 13 checks.",
+    "PS5 target compile/link/signing and independent package audit passed. ZIP SHA-256 verified."
+  ],
+  "console_status": "Pending",
+  "console_checks": [
+    "Launch the same Fabric 26.1.1 instance through resource loading with Sodium disabled, then enabled.",
+    "Check frame pacing and world save/rejoin after startup succeeds."
+  ],
+  "release_store": "Held."
+}

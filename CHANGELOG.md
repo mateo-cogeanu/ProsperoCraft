@@ -1,5 +1,11 @@
 # Changelog
 
+## Local 249 · Limit old-generation ZGC workers, 2026-11-06
+
+- Test one old-generation worker after Fabric 26.1.1 repeatedly crashed during
+  resource loading. Retain the two-partition Mesa shader cache, ZGC, and C2.
+  Physical startup, frame pacing, and world save/rejoin remain pending.
+
 ## Local 248 · Preserve file handles for world I/O, 2026-11-06
 
 - Select two Mesa disk-cache partitions before graphics initialization after
