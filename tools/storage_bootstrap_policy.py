@@ -4,6 +4,10 @@ import re
 
 def normalize(name, text):
     if name == 'client/startup/bootstrap.cpp':
+        text, count = re.subn(r'^#ifdef PROSPERO_FILE_PRESSURE_REPORT\n[^\n]+\n#endif\n',
+                              '', text, flags=re.M)
+        if count != 3:
+            raise ValueError('File pressure reporting hooks changed')
         text, count = re.subn(r'^#ifdef PROSPERO_TIERED_PARALLEL\n.*?^#else\n(.*?)^#endif\n',
                               r'\1', text, flags=re.M | re.S)
         if count != 2:
@@ -65,6 +69,7 @@ def normalize(name, text):
                  '#define PROSPERO_EXTRA_MUTEX_RESERVE 1\n',
                  '// Enable tracking before storage_paths.hpp first includes log_share.hpp.\n',
                  '#define PS5_TRACK_FILE_ACTIVITY 1\n',
+                 '#define PROSPERO_FILE_PRESSURE_REPORT 1\n',
                  '#include "../launcher/storage_paths.hpp"\n',
                  '#include "../ports/openal/startup_boundary.hpp"\n',
                  ' client_openal_boundary::disable();\n',

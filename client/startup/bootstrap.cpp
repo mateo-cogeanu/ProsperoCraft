@@ -98,6 +98,9 @@ extern "C" int prospero_sdl_condition_preinit();
 extern "C" int prospero_sdl_tls_preinit();
 extern "C" int prospero_controlify_events_preinit();
 extern "C" int sceKernelUsleep(std::uint32_t);
+#ifdef PROSPERO_FILE_PRESSURE_REPORT
+#include "file_pressure_report.hpp"
+#endif
 // File-open diagnostics specific to this probe; the real platform API is used.
 static char native_open_error[192]{};
 #ifdef __PROSPERO__
@@ -108,6 +111,9 @@ extern "C" int __wrap_open(const char *path,int flags,...) {
  int fd=__real_open(path,flags,mode);
  int error=errno;
  ps5::file_activity::open_result(fd,path);
+#ifdef PROSPERO_FILE_PRESSURE_REPORT
+ if(fd<0)prospero_file_pressure::on_open_failure(error);
+#endif
  if(fd<0 && ps5_native_trace::enabled.load() &&
     pthread_equal(ps5_native_trace::owner,pthread_self()) &&
     !ps5_vm_trace_io_active() && path && std::strncmp(path,PROSPERO_REPORT_PATH(""),std::strlen(PROSPERO_REPORT_PATH("")))==0) {
@@ -309,6 +315,9 @@ void run_test(int i) {
   if(!ps5::log_share::write_note(PROSPERO_REPORT_PATH("probe-native-stderr.log"),native_identity))
    native_stderr_error=errno?errno:EIO;
   else native_stderr_error=ps5::native_stderr::begin(PROSPERO_REPORT_PATH("probe-native-stderr.log"));
+#ifdef PROSPERO_FILE_PRESSURE_REPORT
+  if(!native_stderr_error)prospero_file_pressure::arm(fileno(stderr));
+#endif
   if(!native_stderr_error)std::fprintf(stderr,"Client083 native stderr stream active before embedded constructors\n");
   else notify("Client083 native stderr capture unavailable;continuing original startup. Inspect startup reports.");
   startup_log=std::fopen(PROSPERO_REPORT_PATH("java25-startup.log"),"a");
