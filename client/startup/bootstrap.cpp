@@ -490,7 +490,12 @@ void run_test(int i) {
    {const_cast<char *>("-XX:CompressedClassSpaceSize=64m"),nullptr},
    {const_cast<char *>("-Xshare:off"),nullptr},
    {const_cast<char *>(PROSPERO_STORAGE_OPTION("-Xlog:gc=info,safepoint=info:file=/data/ProsperoCraft/reports/java25-gc.log:uptimemillis,level,tags:filecount=1,filesize=4M","-Xlog:gc=info,safepoint=info:file=/download0/java25-gc.log:uptimemillis,level,tags:filecount=1,filesize=4M")),nullptr},
-#ifdef PROSPERO_TIERED_PARALLEL
+#ifdef PROSPERO_ZGC
+   {const_cast<char *>("-XX:+UseZGC"),nullptr},
+   {const_cast<char *>("-XX:ParallelGCThreads=4"),nullptr},
+   {const_cast<char *>("-XX:ConcGCThreads=2"),nullptr},
+   {const_cast<char *>("-XX:-ZUncommit"),nullptr},
+#elif defined(PROSPERO_TIERED_PARALLEL)
    {const_cast<char *>("-XX:+UseParallelGC"),nullptr},
    {const_cast<char *>("-XX:ParallelGCThreads=4"),nullptr},
 #else

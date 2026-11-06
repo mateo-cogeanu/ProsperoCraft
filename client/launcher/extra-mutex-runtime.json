@@ -1,6 +1,7 @@
 {
-  "commit": "b56b38a4669408a3548802cc2f1d16e12a2ef9f7",
-  "patch": "java25/patches/0141-opt-in-native-direct-capacity.patch",
-  "patch_sha256": "8ebbea8042d7dadc615253e9658452e714533f3f17a5bd65b44ae9829edd6aaa",
-  "object_sha256": "fa2c974206cacf3a1b6c7def1bc8751fd48cf187f6dfc08c8817a14dd2d86e20"
+  "commit": "a20645cbb90df8f5b85ef13b3da5eaa92be9457d",
+  "patch": "java25/patches/0142-opt-in-ps5-zgc-backing.patch",
+  "patch_sha256": "2988f490ae2cbd44c9bd763697281ab84a288cc7b02dfd2ea0ca915fd8454112",
+  "object_sha256": "b4c68049e655e0d07e9328c3147b61cf8209e1279e8594574016742d898ac8dc",
+  "feature": "Experimental PS5 generational ZGC physical backing; includes native capacity and synchronization changes"
 }

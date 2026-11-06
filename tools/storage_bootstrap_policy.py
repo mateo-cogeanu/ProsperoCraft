@@ -4,6 +4,17 @@ import re
 
 def normalize(name, text):
     if name == 'client/startup/bootstrap.cpp':
+        zgc_policy = (
+            '#ifdef PROSPERO_ZGC\n'
+            '   {const_cast<char *>("-XX:+UseZGC"),nullptr},\n'
+            '   {const_cast<char *>("-XX:ParallelGCThreads=4"),nullptr},\n'
+            '   {const_cast<char *>("-XX:ConcGCThreads=2"),nullptr},\n'
+            '   {const_cast<char *>("-XX:-ZUncommit"),nullptr},\n'
+            '#elif defined(PROSPERO_TIERED_PARALLEL)\n'
+        )
+        if text.count(zgc_policy) != 1:
+            raise ValueError('ZGC policy selection changed')
+        text = text.replace(zgc_policy, '#ifdef PROSPERO_TIERED_PARALLEL\n')
         text, count = re.subn(r'^#ifdef PROSPERO_EXTENDED_NATIVE_DIRECT\n.*?^#endif\n',
                               '', text, flags=re.M | re.S)
         if count != 2:
@@ -69,7 +80,8 @@ def normalize(name, text):
             text = text.replace(token, '"' + fallback + '"')
         text = text.replace('Storage roots selected by verified shared access; legacy fallback is explicit; no measured-capacity claim', 'Storage /download0: title-local reservation requested4096MiB; actual capacity is unavailable, not zero')
     elif name == 'client/save_headroom/bootstrap.cpp':
-        lines = ['#define PROSPERO_EXTENDED_NATIVE_DIRECT 1\n',
+        lines = ['#define PROSPERO_ZGC 1\n',
+                 '#define PROSPERO_EXTENDED_NATIVE_DIRECT 1\n',
                  '#define PROSPERO_TIERED_PARALLEL 1\n',
                  '#define PROSPERO_EXTRA_MUTEX_RESERVE 1\n',
                  '// Enable tracking before storage_paths.hpp first includes log_share.hpp.\n',
