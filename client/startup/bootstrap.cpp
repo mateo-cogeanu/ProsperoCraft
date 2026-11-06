@@ -431,11 +431,25 @@ void run_test(int i) {
 #endif
    {const_cast<char *>("-Dps5.zip.maxOpenFiles=" PROSPERO_ZIP_OPEN_BUDGET),nullptr},
    {const_cast<char *>("-Xmixed"),nullptr},
+#ifdef PROSPERO_TIERED_PARALLEL
+   {const_cast<char *>("-Dps5.client.tieredParallel=true"),nullptr},
+   {const_cast<char *>("-XX:+TieredCompilation"),nullptr},
+   {const_cast<char *>("-XX:TieredStopAtLevel=4"),nullptr},
+   {const_cast<char *>("-XX:CICompilerCount=2"),nullptr},
+   {const_cast<char *>("-XX:CompileThresholdScaling=1.0"),nullptr},
+   {const_cast<char *>("-XX:CompileCommand=MemLimit,*.*,2M"),nullptr},
+   {const_cast<char *>("-XX:ReservedCodeCacheSize=144m"),nullptr},
+   {const_cast<char *>("-XX:+UnlockDiagnosticVMOptions"),nullptr},
+   {const_cast<char *>("-XX:+SafepointTimeout"),nullptr},
+   {const_cast<char *>("-XX:SafepointTimeoutDelay=250"),nullptr},
+   {const_cast<char *>("-XX:-AbortVMOnSafepointTimeout"),nullptr},
+#else
    {const_cast<char *>("-XX:TieredStopAtLevel=1"),nullptr},
    {const_cast<char *>("-XX:CICompilerCount=1"),nullptr},
    {const_cast<char *>("-XX:CompileThresholdScaling=4.0"),nullptr},
    {const_cast<char *>("-XX:CompileCommand=MemLimit,*.*,2M"),nullptr},
    {const_cast<char *>("-XX:ReservedCodeCacheSize=96m"),nullptr},
+#endif
    {const_cast<char *>("-XX:SweeperThreshold=50.0"),nullptr},
    {const_cast<char *>(PROSPERO_STORAGE_OPTION("-Xlog:jit+compilation=debug,codecache=info:file=/data/ProsperoCraft/reports/java25-jit.log:uptime,level,tags:filecount=1,filesize=4M","-Xlog:jit+compilation=debug,codecache=info:file=/download0/java25-jit.log:uptime,level,tags:filecount=1,filesize=4M")),nullptr},
    {const_cast<char *>(PROSPERO_STORAGE_OPTION("-Dps5.probe.jitLog=/data/ProsperoCraft/reports/java25-jit.log","-Dps5.probe.jitLog=/download0/java25-jit.log")),nullptr},
@@ -445,7 +459,9 @@ void run_test(int i) {
    {const_cast<char *>("-XX:UseAVX=0"),nullptr},
    {const_cast<char *>("-XX:UseSSE=2"),nullptr},
    {const_cast<char *>("-XX:MetaspaceSize=128m"),nullptr},
+#ifndef PROSPERO_TIERED_PARALLEL
    {const_cast<char *>("-XX:+ExplicitGCInvokesConcurrent"),nullptr},
+#endif
    {const_cast<char *>("-Djava.awt.headless=true"),nullptr},
    {const_cast<char *>("-Xms128m"),nullptr},
    {const_cast<char *>("-Xmx1536m"),nullptr},
@@ -457,6 +473,10 @@ void run_test(int i) {
    {const_cast<char *>("-XX:CompressedClassSpaceSize=64m"),nullptr},
    {const_cast<char *>("-Xshare:off"),nullptr},
    {const_cast<char *>(PROSPERO_STORAGE_OPTION("-Xlog:gc=info,safepoint=info:file=/data/ProsperoCraft/reports/java25-gc.log:uptimemillis,level,tags:filecount=1,filesize=4M","-Xlog:gc=info,safepoint=info:file=/download0/java25-gc.log:uptimemillis,level,tags:filecount=1,filesize=4M")),nullptr},
+#ifdef PROSPERO_TIERED_PARALLEL
+   {const_cast<char *>("-XX:+UseParallelGC"),nullptr},
+   {const_cast<char *>("-XX:ParallelGCThreads=4"),nullptr},
+#else
    {const_cast<char *>("-XX:+UseG1GC"),nullptr},
    {const_cast<char *>("-XX:MaxGCPauseMillis=4"),nullptr},
    //120Hz: allow a smaller young minimum and spread mandatory mixed-GC work.
@@ -468,6 +488,7 @@ void run_test(int i) {
    {const_cast<char *>("-XX:ParallelGCThreads=4"),nullptr},
    {const_cast<char *>("-XX:ConcGCThreads=1"),nullptr},
    {const_cast<char *>("-XX:G1ReservePercent=20"),nullptr},
+#endif
    {const_cast<char *>("-XX:ActiveProcessorCount=4"),nullptr},
    {const_cast<char *>("-XX:-UsePerfData"),nullptr},
    {const_cast<char *>(PROSPERO_STORAGE_OPTION("-XX:ErrorFile=/data/ProsperoCraft/reports/hs_err_java25.log","-XX:ErrorFile=/download0/hs_err_java25.log")),nullptr},

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Local228 restores file descriptor diagnostics from exact accepted204 inputs. No releases.
+"""Local229 tests tier 4 compilation and Parallel GC from exact accepted204 inputs. No releases.
 
 Original343/OpenAL groups are retained byte for byte from the relink kit.
 Main, explicit libjava handle hook, SDL, graphics inventory and matched333 are rebuilt.
@@ -55,7 +55,7 @@ def main():
     parser.add_argument('--java-home', type=Path)
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--work-dir', type=Path, required=True)
-    parser.add_argument('--app-version', choices=('01.000.228',), default='01.000.228')
+    parser.add_argument('--app-version', choices=('01.000.229',), default='01.000.229')
     parser.add_argument('--check-only', action='store_true', help='Compile/link/convert without signing or a candidate ZIP')
     args = parser.parse_args()
     if sha(args.tinyfd_jar) != TINYFD_SHA256:
@@ -134,7 +134,7 @@ def main():
     if sha(sdl_object)!=sdl_audit['object_sha256']:raise ValueError('Stale SDL output')
     for name,digest in sdl_audit['port_sha256'].items():
         if sha(ROOT/'client/ports/sdl'/name)!=digest:raise ValueError('Stale SDL source: '+name)
-    sdl_scoped=work/'sdl228-scoped.o'
+    sdl_scoped=work/'sdl229-scoped.o'
     subprocess.run([str(llvm/'llvm-objcopy'),'--redefine-syms='+str(baseline/'provider-bindings.txt'),str(sdl_object),str(sdl_scoped)],check=True)
     os_build=args.oshi665_build.resolve();os_overlay=os_build/'oshi-6.6.5-ps5-platform.jar';os_audit=json.loads((os_build/'audit.json').read_text())
     if sha(os_overlay)!=os_audit['output_sha256']:raise ValueError('Stale OSHI665 overlay')
@@ -230,14 +230,18 @@ def main():
     dispatch(work)
     parent = [java / 'ports/lwjgl-3.4.3-ps5-modules.jar', java / 'ports/lwjgl-3.4.3-ps5-platform.jar',
               java / 'ports/lwjgl-glfw-3.4.1-ps5-callback343.jar', tinyfd, *sorted((java / 'client/jars').glob('*.jar')), java / 'client-probe.jar']
+    jit_pin = json.loads((ROOT / 'client/launcher/jit-warmup-runtime.json').read_text())
+    jit_source = runtime / jit_pin['path']
+    if sha(jit_source) != jit_pin['sha256']:
+        raise ValueError('Tiered warmup source does not match runtime pin')
     classes = work / 'classes'
     shutil.rmtree(classes, ignore_errors=True)
     classes.mkdir()
     subprocess.run([str(jdk / 'bin/javac'), '--release', '25', '-cp', os.pathsep.join(map(str, parent)),
-                    '-d', str(classes), str(ROOT / 'client/startup/ClientStartup25.java'),
+                    '-d', str(classes), str(ROOT / 'client/startup/ClientStartup25.java'), str(jit_source),
                     *map(str, sorted((ROOT / 'client/launcher/java').glob('*.java')))], check=True)
-    files = list(classes.glob('*.class'))
-    names = {f.name for f in files}
+    files = list(classes.rglob('*.class'))
+    names = {f.relative_to(classes).as_posix() for f in files}
     jar = java / 'client-probe.jar'
     temporary = jar.with_suffix('.tmp')
     with zipfile.ZipFile(jar) as original, zipfile.ZipFile(temporary, 'w', zipfile.ZIP_DEFLATED) as out:
@@ -245,12 +249,14 @@ def main():
             if info.filename not in names and info.filename not in ('prosperocraft-build.properties', 'prosperocraft-121.txt'):
                 out.writestr(info, original.read(info))
         for file in files:
-            out.writestr(file.name, file.read_bytes())
+            out.writestr(file.relative_to(classes).as_posix(), file.read_bytes())
         out.writestr('prosperocraft-build.properties', ('app_version='+app_version+'\ntitle_id=PPSA99874\n').encode())
         out.writestr('prosperocraft-121.txt', b'vanilla-1.21.9-1.21.11-zink-v3\n')
     temporary.replace(jar)
     for file in files:
-        shutil.copyfile(file, java / 'classes' / file.name)
+        destination = java / 'classes' / file.relative_to(classes)
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(file, destination)
     (java / 'classes/prosperocraft-build.properties').write_text('app_version='+app_version+'\ntitle_id=PPSA99874\n')
     (java / 'classes/prosperocraft-121.txt').write_text('vanilla-1.21.9-1.21.11-zink-v3\n')
     param = json.loads((app / 'sce_sys/param.json').read_text())
@@ -309,7 +315,7 @@ def main():
     subprocess.run([str(converter), 'link', '--in', str(pie), '--out', str(elf), '--stub-dir', str(sdk / 'target/lib'),
         *sum([['--stub', str(p)] for p in stubs], []), '--module-sdk', '0x02000009', '--companion-sdk', '0x08050001', '--file-name', 'eboot.elf'], check=True)
     if args.check_only:
-        print('PASS228 target compile/link/converter; no signed candidate ZIP')
+        print('PASS229 target compile/link/converter; no signed candidate ZIP')
         return
     subprocess.run([str(converter), 'self', '--sign', '--in', str(elf), '--out', str(app / 'eboot.bin'), '--magic', '0x1D3D154F'], check=True)
     subprocess.run([str(converter), 'self', '--inspect', '--file', str(app / 'eboot.bin')], check=True)
@@ -353,14 +359,14 @@ def main():
         'newGroupSha256': sha(registry / 'embedded-lwjgl333.o'), 'overlaySha256': sha(overlay),
         'source_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
         'source_tree': 'modified' if subprocess.check_output(['git', 'status', '--porcelain'], text=True).strip() else 'clean',
-        'scope': 'Restore tracked descriptor reports for the 1.21.9 save failure to the verified original library; retains TinyFD repair',
-        'tinyfd_sha256': TINYFD_SHA256,
+        'scope': 'Tier 4 compilation, 144 MiB code cache, Parallel GC and safepoint diagnostics to the verified original library; retains TinyFD repair',
+        'tinyfd_sha256': TINYFD_SHA256, 'jitWarmupRuntime': jit_pin,
         'nativePresenterSha256':sha(presenter),'presentationRuntime':presentation_pin,'graphicsSupportSha256':sha(graphics_object),'newSdlGroupSha256':sha(registry/'embedded-ps5sdl.o'),'oshi665Sha256':sha(os_overlay),
         'console': 'NOT TESTED', 'releaseStore': 'No action'}
     (output / 'build-audit.json').write_text(json.dumps(record, indent=2) + '\n')
     (output / 'SHA256SUMS').write_text(record['package_sha256'] + '  PPSA99874.zip\n')
     shutil.copyfile(pie, output / pie.name)
-    print('LOCAL228', package, 'SHA256', record['package_sha256'])
+    print('LOCAL229', package, 'SHA256', record['package_sha256'])
 
 
 if __name__ == '__main__':

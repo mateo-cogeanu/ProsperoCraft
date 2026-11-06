@@ -297,9 +297,15 @@ public final class ClientStartup25 {
     stage(ProsperoLauncher.selectedZink()?"26.1 Vanilla Zink development: genuine GLFW, canonical resident GL resolver; original Main/JAR unchanged":"26.2 genuine GLFW with SDL PS5 backend; resident Vulkan loader configured; original game JAR unchanged");
    }
    stage("Menu inactivity FPS policy=minimized;other options retained,original backed up when migrated");
-   stage("Guarded C1 warmup:checking actual level1 compiled integer kernel before original Main");
-   ps5probe.JitWarmup25.check();
-   stage("PASS current-run C1 level1 kernel compiled and verified;performance/world stability still pending");
+   if(Boolean.getBoolean("ps5.client.tieredParallel")){
+    stage("Guarded tiered warmup: checking actual level 4 compilation before original Main");
+    ps5probe.JitWarmup25.checkTiered();
+    stage("PASS current-run C2 level 4 kernel compiled and verified");
+   }else{
+    stage("Guarded C1 warmup: checking actual level 1 compilation before original Main");
+    ps5probe.JitWarmup25.check();
+    stage("PASS current-run C1 level 1 kernel compiled and verified");
+   }
    stage(verifyNativeAllocation());
    Runtime heap=Runtime.getRuntime();stage("heap maxMiB="+(heap.maxMemory()/1048576)+" committedMiB="+(heap.totalMemory()/1048576)+" usedMiB="+((heap.totalMemory()-heap.freeMemory())/1048576));
    Thread.currentThread().setContextClassLoader(ProsperoLauncher.gameLoader());

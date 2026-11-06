@@ -4,6 +4,14 @@ import re
 
 def normalize(name, text):
     if name == 'client/startup/bootstrap.cpp':
+        text, count = re.subn(r'^#ifdef PROSPERO_TIERED_PARALLEL\n.*?^#else\n(.*?)^#endif\n',
+                              r'\1', text, flags=re.M | re.S)
+        if count != 2:
+            raise ValueError('Tiered and Parallel option blocks changed')
+        text = text.replace('#ifndef PROSPERO_TIERED_PARALLEL\n'
+                            '   {const_cast<char *>("-XX:+ExplicitGCInvokesConcurrent"),nullptr},\n'
+                            '#endif\n',
+                            '   {const_cast<char *>("-XX:+ExplicitGCInvokesConcurrent"),nullptr},\n')
         progress_binding = (
             '\n#ifdef PROSPERO_LIBRARY_PROGRESS\n'
             '   ,{const_cast<char *>("libraryProgress"),const_cast<char *>("(Ljava/lang/String;JJ)Z"),'
@@ -45,7 +53,8 @@ def normalize(name, text):
             text = text.replace(token, '"' + fallback + '"')
         text = text.replace('Storage roots selected by verified shared access; legacy fallback is explicit; no measured-capacity claim', 'Storage /download0: title-local reservation requested4096MiB; actual capacity is unavailable, not zero')
     elif name == 'client/save_headroom/bootstrap.cpp':
-        lines = ['// Enable tracking before storage_paths.hpp first includes log_share.hpp.\n',
+        lines = ['#define PROSPERO_TIERED_PARALLEL 1\n',
+                 '// Enable tracking before storage_paths.hpp first includes log_share.hpp.\n',
                  '#define PS5_TRACK_FILE_ACTIVITY 1\n',
                  '#include "../launcher/storage_paths.hpp"\n',
                  '#include "../ports/openal/startup_boundary.hpp"\n',
