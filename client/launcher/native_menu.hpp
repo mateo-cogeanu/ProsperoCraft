@@ -550,12 +550,19 @@ inline bool update() noexcept {
  if(++updates>=2)visible.store(true,std::memory_order_release);
  unsigned pressed=0;PadSample batch[64]{};const int count=scePadRead(controller,batch,64);
  const auto current_time=now_ms();bool connection_changed=false;
+ const int input_page=number(11);
+ const bool page_triggers=input_page==0||input_page==8||input_page==12;
  if(count<0||count>64){pad_connected=false;navigation.clear();}
  else for(int i=0;i<count;++i){
   pad_connected=batch[i].connected&&!(batch[i].buttons&0x80000000u);
   if(pad_generation!=batch[i].connection_generation){connection_changed=true;haptics.control(false,current_time);pad_generation=batch[i].connection_generation;}
-  if(!pad_connected)pressed=0;trigger_held=pad_connected?((batch[i].buttons>>8)&3u):3u;
-  pressed|=navigation.sample(batch[i].buttons,batch[i].lx,batch[i].ly,batch[i].connected,current_time);
+  if(!pad_connected)pressed=0;
+  const auto left=batch[i].l2,right=batch[i].r2;
+  const unsigned release=page_trigger_position(page_trigger_start_zone);
+  trigger_held=pad_connected?((left>=release?1u:0u)|(right>=release?2u:0u)):3u;
+  unsigned buttons=batch[i].buttons;
+  if(page_triggers)buttons=(buttons&~0x300u)|page_trigger_buttons(navigation.previous,left,right);
+  pressed|=navigation.sample(buttons,batch[i].lx,batch[i].ly,batch[i].connected,current_time);
  }
  unsigned repeated=navigation.repeat(current_time);if(std::strcmp(fields[105].data(),"PHYSICAL")!=0)pressed|=repeated;
  if(pressed&0x4000)pressed_at=current_time;

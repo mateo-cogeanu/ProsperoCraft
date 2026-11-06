@@ -26,6 +26,11 @@ static void pause(int ms){std::this_thread::sleep_for(std::chrono::milliseconds(
 static std::vector<Write> snapshot(){std::lock_guard guard(lock);return writes;}
 template<class Predicate>static void await_state(Predicate predicate,prospero_menu::Haptics* refresh=nullptr){auto until=std::chrono::steady_clock::now()+std::chrono::milliseconds(1500);while(!predicate()&&std::chrono::steady_clock::now()<until){if(refresh)refresh->control(true,now());pause(2);}assert(predicate());}
 int main(){
+ using prospero_menu::page_trigger_buttons;
+ assert(page_trigger_buttons(0,76,77)==0x200);
+ assert(page_trigger_buttons(0,77,76)==0x100);
+ assert(page_trigger_buttons(0x300,51,50)==0x100);
+ assert(page_trigger_buttons(0x100,50,0)==0);
  prospero_menu::Haptics h;assert(h.start(42));h.control(true,now());await_state([&]{return modes.load()>0;},&h);h.observe(0,"",true,now());h.observe(1,"confirm",true,now());
  // No UI polling/rendering for200ms: the motor must still stop on its deadline.
  pause(200);auto events=snapshot();assert(events.size()==2&&events[0].large==18&&events[0].small==64&&events[1].small==0&&events[1].large==0);assert(events[1].time-events[0].time<150);
@@ -33,7 +38,9 @@ int main(){
  h.observe(2,"success",true,now());pause(15);h.control(false,now());pause(20);events=snapshot();assert(events.back().small==0&&events.back().large==0); // opt-out/disconnect
  h.observe(3,"error",false,now());h.control(true,now());h.observe(3,"error",true,now());pause(20);assert(snapshot().size()==events.size()); // no replay
  h.control(true,now());h.page_ready(3,0);await_state([&]{return trigger_mask==3;},&h); // armed before any press/page change
- h.page_ready(3,1);await_state([&]{return trigger_mask==2;},&h);pause(70);assert(trigger_mask==2); // held side remains released
+ h.page_ready(2,1);pause(70);assert(trigger_mask==3); // keep the active wall through page turn
+ h.page_ready(2,0);await_state([&]{return trigger_mask==2;},&h);
+ h.page_ready(3,1);pause(20);assert(trigger_mask==2); // never arm a new wall mid-pull
  h.control(true,now());h.page_ready(3,0);await_state([&]{return trigger_mask==3;},&h); // neutral rearms
  h.page_ready(2,0);await_state([&]{return trigger_mask==2;},&h);h.page_ready(0,0);await_state([&]{return trigger_mask==0;},&h);
  h.control(true,now());h.page_ready(3,0);await_state([&]{return trigger_mask==3;},&h);pause(300);await_state([&]{return trigger_mask==0;}); // stalled UI watchdog

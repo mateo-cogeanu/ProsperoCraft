@@ -31,7 +31,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ('package', 'baseline-package', 'build-dir', 'lwjgl333-build', 'publisher-cache', 'llvm-nm', 'output'):
         parser.add_argument('--' + name, type=Path, required=True)
-    parser.add_argument('--app-version', choices=('01.000.248', '01.000.249', '01.000.250'), default='01.000.250')
+    parser.add_argument('--app-version', choices=('01.000.248', '01.000.249', '01.000.250', '01.000.251'), default='01.000.251')
     args = parser.parse_args()
     candidate = args.app_version.split('.')[-1]
     linked_symbols = args.build_dir / f'client121-{candidate}-symbols.elf'
@@ -217,7 +217,7 @@ def main():
         raise ValueError('Missing/duplicate rebuilt SDL group')
     stack_patch = '0008-radv-shader-object-stage-storage.patch'
     patches = graphics_audit['wsi_diagnostics']['source_recipe']['patches']
-    if (stack_patch in patches) != (candidate == '250'):
+    if (stack_patch in patches) != (candidate in ('250', '251')):
         raise ValueError('Wrong linked RADV shader-stage storage policy')
     graphics = [Path(n) for n in linked if n.endswith('/graphics-support.o')]
     if len(graphics) != 1 or sha(graphics[0]) != graphics_audit['objects_sha256']['graphics-support.o']:
@@ -256,7 +256,7 @@ def main():
                    b'-XX:+SafepointTimeout', b'-XX:SafepointTimeoutDelay=250', b'-XX:-AbortVMOnSafepointTimeout'):
         if option + b'\0' not in elf:
             raise ValueError(f'Retained option missing from actual{candidate} ELF: ' + option.decode())
-    if (b'-XX:ZOldGCThreads=1\0' in elf) != (candidate in ('249', '250')):
+    if (b'-XX:ZOldGCThreads=1\0' in elf) != (candidate in ('249', '250', '251')):
         raise ValueError('Unexpected ZGC old-generation worker policy')
     if b'-XX:ConcGCThreads=2\0' not in elf:
         raise ValueError('Missing ZGC concurrent worker budget')
