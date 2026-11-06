@@ -1,0 +1,32 @@
+{
+  "app_version": "01.000.255",
+  "title_id": "PPSA99874",
+  "package_sha256": "647a01b2f35f74c72cb05d115853ce7699dd07b01f5fec60d2f1709d67bddb08",
+  "package_bytes": 127912609,
+  "source_commit": "1274903f15604e931ac9ddfa7d78a9e811711b13",
+  "changes": [
+    "Show Experimental on launchable Fabric 26.1 instance cards.",
+    "Sample thread stacks every five seconds for approximately four minutes after Minecraft Main entry on 26.3 Vanilla or Fabric in this diagnostic candidate."
+  ],
+  "prior_console_result": {
+    "build": "01.000.254",
+    "renderer": "Native Vulkan via SDL",
+    "vanilla": {
+      "run": "client-01.000.254-1793987514-154384529",
+      "overworld_phase_seconds": 36,
+      "server_stop_to_client_stopping_seconds": 41
+    },
+    "fabric": {
+      "run": "client-01.000.254-1793987682-904973391",
+      "overworld_phase_seconds": 36,
+      "server_stop_to_client_stopping_seconds": 46
+    },
+    "timing_scope": "The 36-second measurements are from the overworld save log line to the next dimension save log line. They do not identify which operation inside the overworld phase consumed the time."
+  },
+  "checks": [
+    "Launcher policy fixture verifies exact Fabric 26.1 badge scope.",
+    "Target build, signing, package audit and SHA-256 passed."
+  ],
+  "console_status": "Pending. Join a 26.3 world and save and quit promptly while the observer is active. Collect server-thread snapshots to identify the wait.",
+  "release_store": "Held."
+}

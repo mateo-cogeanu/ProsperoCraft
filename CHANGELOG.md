@@ -1,5 +1,11 @@
 # Changelog
 
+## Local 255 · Mark Fabric 26.1 Experimental, 2026-11-06
+
+- Add the Experimental badge to Fabric 26.1 instance cards.
+- Sample server-thread stacks on 26.3 Vanilla and Fabric to investigate the
+  long overworld save phase. Physical reproduction remains pending.
+
 ## Local 254 · Capture Fabric 26.1 freeze stacks, 2026-11-06
 
 - Enable bounded thread snapshots for Fabric 26.1 in this diagnostic build
