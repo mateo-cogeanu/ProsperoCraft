@@ -1,5 +1,10 @@
 # Changelog
 
+## Local 231 · Fabric startup condition reserve, 2026-11-06
+
+- Keep native condition variables available for HotSpot monitors by skipping
+  their allocation for lock-only mutexes on PS5. Console validation is pending.
+
 ## Local 230 · Fabric startup mutex reserve, 2026-11-06
 
 - Request 12,288 HotSpot mutexes after 26.3 Fabric exhausted the 8,192-entry reserve.

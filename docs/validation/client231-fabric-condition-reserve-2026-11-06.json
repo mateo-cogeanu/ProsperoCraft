@@ -1,0 +1,31 @@
+{
+  "app_version": "01.000.231",
+  "title_id": "PPSA99874",
+  "package_sha256": "3b8066d5a6e55e34388d23c5cf6a7bce544e5338ea65d3c45fe3c9919b8c4f30",
+  "package_bytes": 127583124,
+  "extraMutexRuntime": {
+    "commit": "3c6f12d509e51ff7a9be5666f285dd722f1ec0a5",
+    "patch": "java25/patches/0139-ps5-mutex-without-condition.patch",
+    "patch_sha256": "222b3de95bf485033c99fd6f0ed97e609da95e25d14af9dcbec23dec9149b7e7",
+    "object_sha256": "318dfeae022db7e4807c09fd916a8412d26bdbd52eac030d66900104ff6c44aa"
+  },
+  "build_source_commit": "da7149a8d3442bd7febe614aca89786a3cbce4d3",
+  "previous_console_result": {
+    "build": "01.000.230",
+    "instance": "Minecraft 26.3 Fabric",
+    "failure": "HotSpot aborted after the relative condition reserve reached 8192 leased of 8192 initialized and native condition initialization returned ENOMEM. The failing thread was the C1 compiler thread.",
+    "unresolved": "The complete breakdown of lease owners and the cause of native allocation refusal are unknown."
+  },
+  "candidate_change": "PS5 lock-only HotSpot Mutex objects no longer allocate condition variables. Monitor retains a native condition variable. Build 230 reserve requests, tiered C2 and Parallel GC are retained.",
+  "verification": [
+    "Host ASan/UBSan test with actual PS5 platform constructors verified lock-only creation and teardown during relative pool exhaustion, and condition allocation and release for monitors.",
+    "PS5 HotSpot target build, signed package audit and SHA-256 verification passed.",
+    "ProsperoCraft native host lane passed all 13 checks."
+  ],
+  "console_status": "pending",
+  "console_checks": [
+    "Launch the same 26.3 Fabric instance and verify world entry and saving.",
+    "Retest Vanilla 26.3.",
+    "After the Fabric retest, separately validate 1.21.9 chunk saves."
+  ]
+}
