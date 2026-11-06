@@ -1,0 +1,14 @@
+{
+  "app_version": "01.000.251",
+  "title_id": "PPSA99874",
+  "package_sha256": "6a7785a28c7bea539bce8b17ea343831ff0688c692a0a2ee1bd4ad57cad2592c",
+  "package_bytes": 127909994,
+  "source_commit": "65fd1a3592145d2ce351d5e1c9d31f22e49ba298",
+  "change": "Use the analog trigger travel at the adaptive effect end zone for L2/R2 page actions. Keep resistance armed through an in-progress pull and release, and use hysteresis to prevent duplicate page turns.",
+  "checks": [
+    "Native host lane passed 13 checks, including analog threshold, release and adaptive effect lifecycle assertions.",
+    "Target build, signing, package audit and ZIP SHA-256 passed. The graphics object matches build 250."
+  ],
+  "console_status": "Physical L2/R2 click alignment and page boundaries pending. The Fabric 26.1 compute-shader fault remains open.",
+  "release_store": "Held."
+}

@@ -22,9 +22,9 @@
     "The embedded HotSpot object matches build 249 byte for byte.",
     "Native host lane passed 13 checks. Signed executable integrity, independent package audit and ZIP SHA-256 passed."
   ],
-  "console_status": "Partial. Fabric 26.1.1 with Sodium entered a world, saved, rejoined and saved again. Fabric 26.1 crashed during resource loading both with and without Sodium.",
+  "console_status": "Partial. Fabric 26.1.1 with Sodium saved and rejoined. Fabric 26.1 crashed during resource loading even with only Fabric API installed.",
   "console_checks": [
-    "Retry Fabric 26.1 on the same build with Sodium and Controlify disabled while keeping Fabric API installed."
+    "A future graphics fix needs a physical repeat of Fabric 26.1 with Fabric API alone."
   ],
   "release_store": "Held.",
   "fabric_26_1_sodium_failure": {
@@ -48,6 +48,14 @@
       "The same instance again reached resource reload before the process monitor recorded a crash. Sodium is absent from the active resource list and Indigo registers. Controlify and Fabric API remain loaded.",
       "The retained SIGSEGV records at address 0x8 show HotSpot selecting implicit-null continuations and resuming. The trace continues beyond them and does not establish a terminal fault.",
       "No matching JVM fatal report or abort marker identifies the crash. The final GC entry and OpenGL native lookup lines establish proximity only."
+    ]
+  },
+  "fabric_26_1_api_only_failure": {
+    "run": "client-01.000.250-1793983132-158309689",
+    "findings": [
+      "The active resource list excludes Sodium and Controlify.",
+      "After a completed ZGC major collection, a native SIGSEGV reports address 0xb. With the 0x400000 load adjustment, the RIP resolves to radv_shader_object_to_handle in the inlined compute-shader path. The instruction writes to RCX plus 0xc and the signal context records RCX as -1.",
+      "The trace identifies where the invalid pointer was used. Its origin is unresolved."
     ]
   }
 }

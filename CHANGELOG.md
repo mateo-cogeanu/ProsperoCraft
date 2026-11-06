@@ -1,5 +1,10 @@
 # Changelog
 
+## Local 251 · Align adaptive triggers with page turns, 2026-11-06
+
+- Turn pages at the configured analog click point and keep resistance active
+  through the pull. Physical trigger timing remains pending.
+
 ## Local 250 · Reduce native shader creation stack usage, 2026-11-06
 
 - Move the large RADV shader-stage arrays to checked heap storage after the
