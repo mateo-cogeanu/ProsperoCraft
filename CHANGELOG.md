@@ -1,5 +1,10 @@
 # Changelog
 
+## Local 252 · Use Zink's Vulkan pipeline path, 2026-11-06
+
+- Test Zink with shader objects disabled after Fabric 26.1 crashed in the
+  RADV compute-shader object path. Startup and frame pacing need PS5 validation.
+
 ## Local 251 · Align adaptive triggers with page turns, 2026-11-06
 
 - Turn pages at the configured analog click point and keep resistance active

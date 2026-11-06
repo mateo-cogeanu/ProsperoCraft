@@ -1,0 +1,21 @@
+{
+  "app_version": "01.000.252",
+  "title_id": "PPSA99874",
+  "package_sha256": "ad35eb2497cac8b58a4c1818816402d6cab1018e69fdaebd5fd5c7958903f976",
+  "package_bytes": 127911141,
+  "source_commit": "4476e78157b765c4edbfb867942a61dba76729a6",
+  "prior_console_record": "client250-radv-shader-stage-storage-2026-11-06.json",
+  "change": "Append the existing Zink noshobj option before the first Zink screen. Zink uses its upstream Vulkan shader-module and pipeline path instead of EXT_shader_object.",
+  "scope": "Candidate-wide for Zink. Existing driver and embedded HotSpot objects are byte-identical to build 251. Preserve the RADV stack fixes, shader cache handle budget and adaptive page trigger timing.",
+  "limitation": "This is a bypass for the faulting shader-object entry point. The source of the invalid pointer is unresolved. Pipeline compilation and frame pacing need PS5 measurement.",
+  "checks": [
+    "Native host lane passed all 13 checks including option token handling, idempotence and setter refusal.",
+    "PS5 target compile/link/signing and package audit passed. ZIP SHA-256 verified."
+  ],
+  "console_status": "Pending",
+  "console_checks": [
+    "Start Fabric 26.1 with only Fabric API, then load, save and rejoin a world if startup succeeds.",
+    "Retest Sodium and frame pacing after the baseline launch passes."
+  ],
+  "release_store": "Held."
+}
