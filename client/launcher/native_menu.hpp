@@ -72,8 +72,14 @@ inline unsigned updates=0;
 inline DesktopInput desktop{};inline int layout_slide=0;
 inline int pointer_kind=-1,pointer_target=-1,pointer_page=-1;
 inline Navigation navigation{};inline std::uint64_t pressed_at=0;
+inline bool delete_dialog(const Fields& values) noexcept {
+ return std::strcmp(values[11].data(),"9")==0;
+}
 inline void publish(const Fields& values) noexcept {
- pthread_mutex_lock(&mailbox);published=values;pthread_mutex_unlock(&mailbox);
+ pthread_mutex_lock(&mailbox);
+ if(delete_dialog(published)!=delete_dialog(values))event_read=event_write;
+ published=values;
+ pthread_mutex_unlock(&mailbox);
 }
 inline unsigned take_input() noexcept {
  pthread_mutex_lock(&mailbox);unsigned value=0;if(event_read!=event_write){value=events[event_read%64];++event_read;}pthread_mutex_unlock(&mailbox);return value;
@@ -83,7 +89,7 @@ inline void discard_input() noexcept {
 }
 inline void push_input(unsigned value) noexcept {
  if(!value)return;pthread_mutex_lock(&mailbox);
- if(event_write-event_read<64)events[event_write++%64]=value;
+ if(delete_dialog(fields)==delete_dialog(published)&&event_write-event_read<64)events[event_write++%64]=value;
  pthread_mutex_unlock(&mailbox);
 }
 inline void label(Canvas& c,int x,int y,const char* text,unsigned size=24,std::uint32_t rgb=0xeaf0e8){c.label(x,y,text,size,ink(rgb));}
@@ -452,7 +458,10 @@ inline void compose(Canvas& c) noexcept {
  auto& list=prospero_ui::surface->list;bool moving=page!=7&&page_turn.moving(now_ms())&&std::strcmp(fields[30].data(),"ON")!=0;
  prospero_ui::paging=moving;list.push_clip({0,155,1920,850});
  bool opening=(page==4||page==0)&&card_open.moving(now_ms())&&std::strcmp(fields[30].data(),"ON")!=0;
- if(page==10||page==13){
+ if(page==9){
+  swap_selector(selector_base);prospero_ui::outgoing=true;compose_content(c);prospero_ui::outgoing=false;swap_selector(selector_base);
+  list.pop_clip();compose_content(c);list.push_clip({0,155,1920,850});
+ }else if(page==10||page==13){
   bool theme_preview=page==10&&number(93)==8;float reveal=selector_reveal.value(now_ms());if(selector_reveal.moving(now_ms()))animating=true;
   swap_selector(selector_base);prospero_ui::outgoing=true;compose_content(c);prospero_ui::outgoing=false;swap_selector(selector_base);
   if(selector_depth==2){list.pop_clip();list.rounded_rect({0,0,1920,1080},0,prospero_ui::themed(0x000000,0.55f));list.push_clip({0,155,1920,850});swap_selector(selector_parent);prospero_ui::outgoing=true;compose_content(c);prospero_ui::outgoing=false;swap_selector(selector_parent);}
@@ -480,6 +489,7 @@ inline void compose(Canvas& c) noexcept {
  if(page==0){int start=number(14),count=number(13);if(start>0)c.chevron(31,540,-1);if(start+8<count)c.chevron(1889,540,1);if(count>8){char paging[48];std::snprintf(paging,sizeof(paging),"%d / %d",start/8+1,(count+7)/8);label(c,915,885,paging,22,0x91ad9b);}}
 
 #else
+ if(page==9){swap_selector(selector_base);compose_content(c);swap_selector(selector_base);}
  compose_content(c);
 #endif
 
@@ -578,12 +588,14 @@ inline bool update() noexcept {
   pthread_mutex_lock(&mailbox);changed=fields!=published;
   if(changed){
    int before=number(11),after=std::atoi(published[11].data());
+   bool delete_dialog_change=before!=after&&(before==9||after==9);
+   if(delete_dialog_change&&after==9)selector_base.text=fields.text;
    bool selector_change=before!=after&&(before==10||before==13||after==10||after==13);
    if(before!=after&&(after==10||after==13)){if(before==13&&after==10){selector_parent.text=fields.text;selector_depth=2;}else if(!(before==10&&after==13)){selector_base.text=fields.text;selector_depth=1;}else selector_depth=1;selector_reveal.snap(before==10&&after==13?1:0);selector_reveal.duration=140;selector_reveal.to(1,now_ms(),std::strcmp(published[30].data(),"ON")==0);}
-   if(selector_change){page_turn.enabled=false;card_open.enabled=false;focus.initialized=false;list_page=-1;}
+   if(selector_change||delete_dialog_change){page_turn.enabled=false;card_open.enabled=false;focus.initialized=false;list_page=-1;}
    bool opening=before==0&&after==4;
    bool closing=(before==4||before==5)&&after==0&&std::strcmp(fields[12].data(),published[12].data())==0;
-   bool turn=!selector_change&&!opening&&!closing&&(before!=7&&after!=7)&&(before!=after||(before==0&&std::strcmp(fields[14].data(),published[14].data())!=0)||(before==8&&std::strcmp(fields[74].data(),published[74].data())!=0));
+   bool turn=!selector_change&&!delete_dialog_change&&!opening&&!closing&&(before!=7&&after!=7)&&(before!=after||(before==0&&std::strcmp(fields[14].data(),published[14].data())!=0)||(before==8&&std::strcmp(fields[74].data(),published[74].data())!=0));
    if(before==7||after==7){page_turn.enabled=false;focus.initialized=false;}
    if(before!=after)card_open.enabled=false;
    if(opening||closing){card_reverse=closing;outgoing_fields=fields;std::snprintf(outgoing_fields[9].data(),512,"%s",published[9].data());opening_slot=std::clamp(std::atoi(published[9].data())-std::atoi((closing?published:fields)[14].data()),0,7);card_open.start(1,now_ms(),std::strcmp(published[30].data(),"ON")==0);page_turn.enabled=false;focus.initialized=false;}

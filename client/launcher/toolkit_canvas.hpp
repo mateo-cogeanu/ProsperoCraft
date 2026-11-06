@@ -29,7 +29,7 @@ struct Canvas {
  template<class F> void context(const F& fields,std::uint64_t press_time){
   auto num=[&](int i){return std::atoi(fields[i].data());};auto& e=*effects;reduced=std::strcmp(fields[30].data(),"ON")==0;e.feedback.clear();
   const int page=num(11),selected=num(9);e.page_changed=page!=e.page;
-  if(e.page_changed){e.previous_page=e.page;e.page=page;e.age=0;e.entrance.start(reduced?0.0f:0.48f);if(page!=9)e.dialog.close(e.feedback);}
+  if(e.page_changed){e.previous_page=e.page;e.page=page;e.age=0;e.entrance.start(reduced?0.0f:0.48f);if(page!=9)e.dialog.dismiss();}
   e.age+=dt;e.clock+=reduced?0.0f:dt;e.entrance.update(dt);e.press.update(dt,10);
   if(press_time&&press_time!=e.last_press){e.last_press=press_time;e.press_page=page;e.press_row=num(15);if(!reduced)e.press.trigger();}
   int icon=page==1?num(24):num(18);if(page==0){int slot=selected-num(14);icon=slot>=0&&slot<8?num(34+slot*4):0;}
@@ -42,7 +42,6 @@ struct Canvas {
 
  void begin_content(){}
  void end_content(){
-  if(effects->page!=9&&effects->dialog.visible()){effects->dialog.update(reduced?1:dt);hui::ui::Canvas c{surface->list,surface->fonts,surface->renderer.glass_texture(),effects->clock};effects->dialog.draw(c);}
   surface->list.gradient_rect({0,1005,1920,75},0,themed(0x03100c,0),themed(0x03100c,0.92f));
  }
  void chevron(float x,float y,int direction){auto col=theme().focus;float d=float(direction);surface->list.line(x-d*7,y-15,x+d*7,y,4,col);surface->list.line(x+d*7,y,x-d*7,y+15,4,col);}
