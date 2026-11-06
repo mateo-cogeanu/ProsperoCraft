@@ -37,10 +37,17 @@ int main(){
  assert(!prospero_zink::enable_synchronous_context());assert(std::string(getenv("GALLIUM_THREAD"))=="0");
  assert(!prospero_zink::enable_synchronous_context(refusal)&&calls==3);
  assert(std::string(getenv("ZINK_DEBUG"))==edge+",flushsync");
+ setenv("ZINK_DEBUG","nir,flushsync",1);
+ assert(!prospero_zink::disable_shader_objects());
+ assert(std::string(getenv("ZINK_DEBUG"))=="nir,flushsync,noshobj");
+ assert(!prospero_zink::disable_shader_objects(refusal)&&calls==3);
+ setenv("ZINK_DEBUG","notnoshobj",1);
+ assert(prospero_zink::disable_shader_objects(refusal)==ENOMEM&&calls==4);
+ assert(std::string(getenv("ZINK_DEBUG"))=="notnoshobj");
  unsetenv("GALLIUM_THREAD");unsetenv("ZINK_DEBUG");return 0;
 }
 ''')
   subprocess.run([cxx,'-std=c++20','-D_POSIX_C_SOURCE=200809L','-fsanitize=address,undefined','-I'+str(ROOT/'client/ports/zink'),source,'-o',w/'check'],check=True)
   subprocess.run([w/'check'],check=True,env=dict(os.environ,UBSAN_OPTIONS='halt_on_error=1'))
- print('PASS actual candidate flushsync and direct-context environment policy: exact token/idempotence/preserved flags/absent default/bounds/native setter refusal;ASan/UBSan;no PS5 inference')
+ print('PASS actual candidate flushsync, shader-object opt-out and direct-context policy: exact token/idempotence/preserved flags/absent default/bounds/native setter refusal;ASan/UBSan;no PS5 inference')
 if __name__=='__main__':main()

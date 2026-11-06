@@ -83,6 +83,16 @@ def normalize(name, text):
             text = text.replace(token, '"' + fallback + '"')
         text = text.replace('Storage roots selected by verified shared access; legacy fallback is explicit; no measured-capacity claim', 'Storage /download0: title-local reservation requested4096MiB; actual capacity is unavailable, not zero')
     elif name == 'client/save_headroom/bootstrap.cpp':
+        shader_policy = (
+            '#ifdef PROSPERO_ZINK_PIPELINE_SHADERS\n'
+            ' rc=prospero_zink::disable_shader_objects();\n'
+            ' if(rc){std::fprintf(stderr,"PS5_ZINK shader object opt-out failed result=%d\\n",rc);return 1;}\n'
+            ' std::fprintf(stderr,"PS5_ZINK using Vulkan pipelines for shaders\\n");\n'
+            '#endif\n'
+        )
+        if text.count(shader_policy) != 1:
+            raise ValueError('Candidate shader object policy changed')
+        text = text.replace(shader_policy, '')
         lines = ['#define PROSPERO_ZGC 1\n',
                  '#define PROSPERO_EXTENDED_NATIVE_DIRECT 1\n',
                  '#define PROSPERO_TIERED_PARALLEL 1\n',

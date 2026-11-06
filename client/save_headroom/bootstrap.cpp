@@ -30,6 +30,11 @@ int main(int argc,char** argv){
  if(setenv("PROSPERO_GLFW_FINAL_SDL_QUIT","1",1)!=0)return 1;
  int rc=prospero_zink::enable_flushsync();
  if(rc){std::fprintf(stderr,"PS5_ZINK flushsync setup failed result=%d\n",rc);return 1;}
+#ifdef PROSPERO_ZINK_PIPELINE_SHADERS
+ rc=prospero_zink::disable_shader_objects();
+ if(rc){std::fprintf(stderr,"PS5_ZINK shader object opt-out failed result=%d\n",rc);return 1;}
+ std::fprintf(stderr,"PS5_ZINK using Vulkan pipelines for shaders\n");
+#endif
  rc=prospero_zink::enable_synchronous_context();
  if(rc){std::fprintf(stderr,"PS5_ZINK direct context setup failed result=%d\n",rc);return 1;}
  return prospero_zink_main(argc,argv);
