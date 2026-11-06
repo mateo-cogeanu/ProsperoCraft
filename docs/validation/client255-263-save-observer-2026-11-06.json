@@ -27,6 +27,14 @@
     "Launcher policy fixture verifies exact Fabric 26.1 badge scope.",
     "Target build, signing, package audit and SHA-256 passed."
   ],
-  "console_status": "Pending. Join a 26.3 world and save and quit promptly while the observer is active. Collect server-thread snapshots to identify the wait.",
-  "release_store": "Held."
+  "console_status": "Vanilla 26.3 completed a quick save on build 255. The prolonged save was not reproduced in this run. Fabric 26.3 retest remains pending.",
+  "release_store": "Held.",
+  "build_255_vanilla_save": {
+    "run": "client-01.000.255-1793988216-382037433",
+    "overworld_phase_seconds": 2,
+    "findings": [
+      "The overworld save log line was followed by the remaining dimension save lines about two seconds later.",
+      "The observer captured the server thread during gameplay and the period after it exited. It did not capture a prolonged save wait."
+    ]
+  }
 }
