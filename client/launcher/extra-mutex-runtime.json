@@ -1,6 +1,6 @@
 {
-  "commit": "de3716c5dd497810da7e61e038fc165ee9315f9b",
-  "patch": "java25/patches/0138-opt-in-extra-mutex-reserve.patch",
-  "patch_sha256": "5e169033bee13895d5f2e4f8304835fa0a9b192d3279349e4b3b8cd5c36a4e20",
-  "object_sha256": "9dba6cb5ba381c9eb3c87fbd413dabebd73e166a60f755cd9b219c2575c5ab8b"
+  "commit": "3c6f12d509e51ff7a9be5666f285dd722f1ec0a5",
+  "patch": "java25/patches/0139-ps5-mutex-without-condition.patch",
+  "patch_sha256": "222b3de95bf485033c99fd6f0ed97e609da95e25d14af9dcbec23dec9149b7e7",
+  "object_sha256": "318dfeae022db7e4807c09fd916a8412d26bdbd52eac030d66900104ff6c44aa"
 }

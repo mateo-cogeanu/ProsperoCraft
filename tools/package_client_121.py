@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Local230 adds an opt-in extra HotSpot mutex reserve from exact accepted204 inputs. No releases.
+"""Local231 avoids allocating conditions for lock-only HotSpot mutexes from exact accepted204 inputs. No releases.
 
 Original343/OpenAL groups are retained byte for byte from the relink kit.
 Main, explicit libjava handle hook, SDL, graphics inventory and matched333 are rebuilt.
@@ -56,7 +56,7 @@ def main():
     parser.add_argument('--java-home', type=Path)
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--work-dir', type=Path, required=True)
-    parser.add_argument('--app-version', choices=('01.000.230',), default='01.000.230')
+    parser.add_argument('--app-version', choices=('01.000.231',), default='01.000.231')
     parser.add_argument('--check-only', action='store_true', help='Compile/link/convert without signing or a candidate ZIP')
     args = parser.parse_args()
     if sha(args.tinyfd_jar) != TINYFD_SHA256:
@@ -135,7 +135,7 @@ def main():
     if sha(sdl_object)!=sdl_audit['object_sha256']:raise ValueError('Stale SDL output')
     for name,digest in sdl_audit['port_sha256'].items():
         if sha(ROOT/'client/ports/sdl'/name)!=digest:raise ValueError('Stale SDL source: '+name)
-    sdl_scoped=work/'sdl230-scoped.o'
+    sdl_scoped=work/'sdl231-scoped.o'
     subprocess.run([str(llvm/'llvm-objcopy'),'--redefine-syms='+str(baseline/'provider-bindings.txt'),str(sdl_object),str(sdl_scoped)],check=True)
     os_build=args.oshi665_build.resolve();os_overlay=os_build/'oshi-6.6.5-ps5-platform.jar';os_audit=json.loads((os_build/'audit.json').read_text())
     if sha(os_overlay)!=os_audit['output_sha256']:raise ValueError('Stale OSHI665 overlay')
@@ -172,7 +172,7 @@ def main():
     registry.mkdir(exist_ok=True)
     sync_pin = json.loads((ROOT / 'client/launcher/extra-mutex-runtime.json').read_text())
     if sha(args.hotspot_object) != sync_pin['object_sha256'] or sha(runtime / sync_pin['patch']) != sync_pin['patch_sha256']:
-        raise ValueError('HotSpot object or source does not match extra mutex reserve pin')
+        raise ValueError('HotSpot object or source does not match the PS5 synchronization pin')
     shutil.copyfile(args.hotspot_object, registry / 'embedded-jvm.o')
     imageio = registry / 'imageio-target'
     if not imageio.exists():
@@ -319,7 +319,7 @@ def main():
     subprocess.run([str(converter), 'link', '--in', str(pie), '--out', str(elf), '--stub-dir', str(sdk / 'target/lib'),
         *sum([['--stub', str(p)] for p in stubs], []), '--module-sdk', '0x02000009', '--companion-sdk', '0x08050001', '--file-name', 'eboot.elf'], check=True)
     if args.check_only:
-        print('PASS230 target compile/link/converter; no signed candidate ZIP')
+        print('PASS231 target compile/link/converter; no signed candidate ZIP')
         return
     subprocess.run([str(converter), 'self', '--sign', '--in', str(elf), '--out', str(app / 'eboot.bin'), '--magic', '0x1D3D154F'], check=True)
     subprocess.run([str(converter), 'self', '--inspect', '--file', str(app / 'eboot.bin')], check=True)
@@ -370,7 +370,7 @@ def main():
     (output / 'build-audit.json').write_text(json.dumps(record, indent=2) + '\n')
     (output / 'SHA256SUMS').write_text(record['package_sha256'] + '  PPSA99874.zip\n')
     shutil.copyfile(pie, output / pie.name)
-    print('LOCAL230', package, 'SHA256', record['package_sha256'])
+    print('LOCAL231', package, 'SHA256', record['package_sha256'])
 
 
 if __name__ == '__main__':
