@@ -12,5 +12,6 @@
     "Target build, signature and independent package audit passed",
     "Final main disassembly sets the single retained OpenAL trace counter to its cutoff before startup"
   ],
-  "console_pending": "Compare the same 26.3 Vanilla instance and resolution with 224. Check time to menu, input response, audio, save and quit. Fabric black screen remains a separate open report."
+  "console_pending": "Compare the same 26.3 Vanilla instance and resolution with 224. Check time to menu, input response, audio, save and quit. Fabric black screen remains a separate open report.",
+  "physical_225": "The current 225 26.3 Vanilla run created its SDL window, started the sound engine and reached texture atlas creation. Native stderr showed no OpenAL per-call boundary records. The user still reported very slow loading. The collected GC log contains 19 waits of at least 500 ms to reach a safepoint and a maximum of about 1.89 seconds. The longest delays occur before the actual GC pause. Exact menu timing and the underlying cause are unknown."
 }
