@@ -1,7 +1,7 @@
 {
-  "commit": "09bb8e0ca5e38903aa556f33d66130579292397f",
-  "patch": "java25/patches/0148-ps5-zgc-compiled-method-locks.patch",
-  "patch_sha256": "3f5786052738969fe15813668ab38a5842830c135a72ecd7b3bc4281ec3acb6d",
-  "object_sha256": "7889aebf8f435d912083b6eff176f1b82db329d172d3ac487539d76616bd932b",
-  "feature": "PS5 ZGC compiled-method reentrant atomic locks without per-method native mutex leases"
+  "commit": "1bc1480a8a95c5ceea42763f652c9cd494875dbd",
+  "patch": "java25/patches/0149-sample-native-allocation-success-traces.patch",
+  "patch_sha256": "d8759710e00741f6fb07f56c069e15d69a83d615c071fd017254e9c89dac7fc8",
+  "object_sha256": "1b079d27b73659e6b4cfb592d5d3adb88481844d97d73cb2aed34b68bd711a3b",
+  "feature": "Apply selected startup interval to successful native allocator reports; preserve complete errors"
 }
