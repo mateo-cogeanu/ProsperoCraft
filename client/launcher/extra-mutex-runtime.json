@@ -1,0 +1,6 @@
+{
+  "commit": "de3716c5dd497810da7e61e038fc165ee9315f9b",
+  "patch": "java25/patches/0138-opt-in-extra-mutex-reserve.patch",
+  "patch_sha256": "5e169033bee13895d5f2e4f8304835fa0a9b192d3279349e4b3b8cd5c36a4e20",
+  "object_sha256": "9dba6cb5ba381c9eb3c87fbd413dabebd73e166a60f755cd9b219c2575c5ab8b"
+}

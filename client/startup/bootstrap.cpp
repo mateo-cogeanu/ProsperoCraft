@@ -84,6 +84,9 @@ extern "C" std::uint64_t sceKernelGetProcessTime();
 extern "C" void JNU_PS5SetDirectScratchEnabled(int);
 extern "C" void JNU_PS5SetNetworkScratchEnabled(int);
 extern "C" int JVM_PS5SetExtendedSyncReserveEnabled(int);
+#ifdef PROSPERO_EXTRA_MUTEX_RESERVE
+extern "C" int JVM_PS5SetExtraMutexReserveEnabled(int);
+#endif
 extern "C" int JVM_PS5SetExtendedThreadStackBudgetEnabled(int);
 extern "C" void JNU_PS5SetVerifierSmallReserveEnabled(int);
 extern "C" void ps5_emutls_enable_direct(int);
@@ -680,7 +683,13 @@ int main(int argc,char** argv) {
  log_stage("PS5 owned Java/compiler stack fallback budget requested64MiB;64slots;requested stack sizes and shared native ledger retained");
  const int extended_sync_rc=JVM_PS5SetExtendedSyncReserveEnabled(1);
  if(extended_sync_rc){log_stage("Extended native synchronization policy rejected beforeJVM");notify("Native synchronization configuration failed; inspect logs.");for(;;)(void)sceKernelUsleep(1000000);}
+#ifdef PROSPERO_EXTRA_MUTEX_RESERVE
+ const int extra_mutex_rc=JVM_PS5SetExtraMutexReserveEnabled(1);
+ if(extra_mutex_rc){log_stage("Extra HotSpot mutex reserve rejected before JVM");notify("Native mutex configuration failed; inspect logs.");for(;;)(void)sceKernelUsleep(1000000);}
+ log_stage("PS5 HotSpot sync reserve requested:12288mutex/8192relative/2048absolute;actual prime counts logged by runtime");
+#else
  log_stage("PS5 extended HotSpot sync reserve requested:8192mutex/8192relative/2048absolute;actual prime counts logged by runtime");
+#endif
  ps5_vm_trace("PS5 libnet node scratch enabled:three8MiB/64slot budgets;normal allocators first");
  JNU_PS5SetVerifierSmallReserveEnabled(1);
  log_stage("PS5 verifier variable reserve enabled: 4MiB contiguous 256-byte units after libc refusal");

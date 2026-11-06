@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Local229 tests tier 4 compilation and Parallel GC from exact accepted204 inputs. No releases.
+"""Local230 adds an opt-in extra HotSpot mutex reserve from exact accepted204 inputs. No releases.
 
 Original343/OpenAL groups are retained byte for byte from the relink kit.
 Main, explicit libjava handle hook, SDL, graphics inventory and matched333 are rebuilt.
@@ -51,11 +51,12 @@ def main():
     parser.add_argument('--graphics-build', type=Path, required=True)
     parser.add_argument('--sdl-build',type=Path,required=True)
     parser.add_argument('--oshi665-build',type=Path,required=True)
+    parser.add_argument('--hotspot-object', type=Path, required=True)
     parser.add_argument('--tinyfd-jar', type=Path, required=True)
     parser.add_argument('--java-home', type=Path)
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--work-dir', type=Path, required=True)
-    parser.add_argument('--app-version', choices=('01.000.229',), default='01.000.229')
+    parser.add_argument('--app-version', choices=('01.000.230',), default='01.000.230')
     parser.add_argument('--check-only', action='store_true', help='Compile/link/convert without signing or a candidate ZIP')
     args = parser.parse_args()
     if sha(args.tinyfd_jar) != TINYFD_SHA256:
@@ -134,7 +135,7 @@ def main():
     if sha(sdl_object)!=sdl_audit['object_sha256']:raise ValueError('Stale SDL output')
     for name,digest in sdl_audit['port_sha256'].items():
         if sha(ROOT/'client/ports/sdl'/name)!=digest:raise ValueError('Stale SDL source: '+name)
-    sdl_scoped=work/'sdl229-scoped.o'
+    sdl_scoped=work/'sdl230-scoped.o'
     subprocess.run([str(llvm/'llvm-objcopy'),'--redefine-syms='+str(baseline/'provider-bindings.txt'),str(sdl_object),str(sdl_scoped)],check=True)
     os_build=args.oshi665_build.resolve();os_overlay=os_build/'oshi-6.6.5-ps5-platform.jar';os_audit=json.loads((os_build/'audit.json').read_text())
     if sha(os_overlay)!=os_audit['output_sha256']:raise ValueError('Stale OSHI665 overlay')
@@ -169,7 +170,10 @@ def main():
     groups.append({'name': 'lwjgl333', 'objects': [str(scoped)]})
     registry = work / 'registry'
     registry.mkdir(exist_ok=True)
-    shutil.copyfile(old_groups['jvm'], registry / 'embedded-jvm.o')
+    sync_pin = json.loads((ROOT / 'client/launcher/extra-mutex-runtime.json').read_text())
+    if sha(args.hotspot_object) != sync_pin['object_sha256'] or sha(runtime / sync_pin['patch']) != sync_pin['patch_sha256']:
+        raise ValueError('HotSpot object or source does not match extra mutex reserve pin')
+    shutil.copyfile(args.hotspot_object, registry / 'embedded-jvm.o')
     imageio = registry / 'imageio-target'
     if not imageio.exists():
         imageio.symlink_to(runtime / 'build/java25/imageio-target', target_is_directory=True)
@@ -288,7 +292,7 @@ def main():
             if not destination.exists():
                 os.link(file, destination)
     pie = work / ('client121-'+candidate+'-symbols.elf')
-    replacements = {'inputs/022-renderer.o':presenter,'inputs/110-graphics-support.o': graphics_object, 'inputs/104-main.o': main_obj, 'inputs/044-embedded-ps5sdl.o': registry/'embedded-ps5sdl.o', 'inputs/032-embedded-java.o': registry / 'embedded-java.o',
+    replacements = {'inputs/031-embedded-jvm.o': registry / 'embedded-jvm.o', 'inputs/022-renderer.o':presenter,'inputs/110-graphics-support.o': graphics_object, 'inputs/104-main.o': main_obj, 'inputs/044-embedded-ps5sdl.o': registry/'embedded-ps5sdl.o', 'inputs/032-embedded-java.o': registry / 'embedded-java.o',
                     'inputs/109-builtin-libraries.o': registry / 'builtin-libraries.o'}
     link = []
     for item in manifest['arguments']:
@@ -315,7 +319,7 @@ def main():
     subprocess.run([str(converter), 'link', '--in', str(pie), '--out', str(elf), '--stub-dir', str(sdk / 'target/lib'),
         *sum([['--stub', str(p)] for p in stubs], []), '--module-sdk', '0x02000009', '--companion-sdk', '0x08050001', '--file-name', 'eboot.elf'], check=True)
     if args.check_only:
-        print('PASS229 target compile/link/converter; no signed candidate ZIP')
+        print('PASS230 target compile/link/converter; no signed candidate ZIP')
         return
     subprocess.run([str(converter), 'self', '--sign', '--in', str(elf), '--out', str(app / 'eboot.bin'), '--magic', '0x1D3D154F'], check=True)
     subprocess.run([str(converter), 'self', '--inspect', '--file', str(app / 'eboot.bin')], check=True)
@@ -354,19 +358,19 @@ def main():
     record = {'app_version': app_version, 'title_id': 'PPSA99874', 'package_sha256': sha(package),
         'package_bytes': package.stat().st_size, 'baseline_package_sha256': BASE_PACKAGE, 'baseline_relink_sha256': BASE_RELINK,
         'symbols_sha256': sha(pie), 'eboot_sha256': sha(app / 'eboot.bin'), 'runtime': pin,
-        'parentNativeGroupsRetainedSha256': {n: sha(p) for n, p in old_groups.items() if n not in ('java','ps5sdl')},
+        'parentNativeGroupsRetainedSha256': {n: sha(p) for n, p in old_groups.items() if n not in ('jvm','java','ps5sdl')},
         'javaRuntimeClassesAndImage': 'exact204 modules retained; native libjava handle hook rebuilt',
         'newGroupSha256': sha(registry / 'embedded-lwjgl333.o'), 'overlaySha256': sha(overlay),
         'source_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
         'source_tree': 'modified' if subprocess.check_output(['git', 'status', '--porcelain'], text=True).strip() else 'clean',
-        'scope': 'Tier 4 compilation, 144 MiB code cache, Parallel GC and safepoint diagnostics to the verified original library; retains TinyFD repair',
-        'tinyfd_sha256': TINYFD_SHA256, 'jitWarmupRuntime': jit_pin,
+        'scope': 'Opt-in extra HotSpot mutex reserve for the observed Fabric allocation failure to the verified original library; retains TinyFD repair',
+        'tinyfd_sha256': TINYFD_SHA256, 'jitWarmupRuntime': jit_pin, 'extraMutexRuntime': sync_pin,
         'nativePresenterSha256':sha(presenter),'presentationRuntime':presentation_pin,'graphicsSupportSha256':sha(graphics_object),'newSdlGroupSha256':sha(registry/'embedded-ps5sdl.o'),'oshi665Sha256':sha(os_overlay),
         'console': 'NOT TESTED', 'releaseStore': 'No action'}
     (output / 'build-audit.json').write_text(json.dumps(record, indent=2) + '\n')
     (output / 'SHA256SUMS').write_text(record['package_sha256'] + '  PPSA99874.zip\n')
     shutil.copyfile(pie, output / pie.name)
-    print('LOCAL229', package, 'SHA256', record['package_sha256'])
+    print('LOCAL230', package, 'SHA256', record['package_sha256'])
 
 
 if __name__ == '__main__':
