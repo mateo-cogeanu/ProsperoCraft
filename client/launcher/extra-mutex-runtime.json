@@ -1,7 +1,7 @@
 {
-  "commit": "fe5ff4744845015878f653a7b1062d27313f473e",
-  "patch": "java25/patches/0146-ps5-zgc-device-map-fallback.patch",
-  "patch_sha256": "d4986a676b58637322a4f7d952b089741ee8e36628e0eca9d9a61207e833e50a",
-  "object_sha256": "fa65c32226563d0c705fc032922c0d905df92d8d4f78ef9acac28bd1c55f1c15",
-  "feature": "Experimental PS5 ZGC direct-device fallback for exact heap view placement"
+  "commit": "4d0218d3307287f7e77e9c7b9827450c19f9fc01",
+  "patch": "java25/patches/0147-ps5-zgc-native-reservation-restore.patch",
+  "patch_sha256": "2338374fb606e1d48fe84ca42a9102ed6b8cae00a1166ee507c2f1814d438ab8",
+  "object_sha256": "61c0061d4ac9b98031c5e5f74f353c20120b9a3c01f648b0b1e61d9abdc54972",
+  "feature": "Experimental PS5 ZGC native heap view detachment and reservation restoration"
 }
