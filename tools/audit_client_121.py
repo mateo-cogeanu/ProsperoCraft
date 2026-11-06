@@ -31,7 +31,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ('package', 'baseline-package', 'build-dir', 'lwjgl333-build', 'publisher-cache', 'llvm-nm', 'output'):
         parser.add_argument('--' + name, type=Path, required=True)
-    parser.add_argument('--app-version', choices=('01.000.248', '01.000.249', '01.000.250', '01.000.251', '01.000.252', '01.000.253', '01.000.254'), default='01.000.254')
+    parser.add_argument('--app-version', choices=('01.000.248', '01.000.249', '01.000.250', '01.000.251', '01.000.252', '01.000.253', '01.000.254', '01.000.255'), default='01.000.255')
     args = parser.parse_args()
     candidate = args.app_version.split('.')[-1]
     linked_symbols = args.build_dir / f'client121-{candidate}-symbols.elf'
@@ -217,7 +217,7 @@ def main():
         raise ValueError('Missing/duplicate rebuilt SDL group')
     stack_patch = '0008-radv-shader-object-stage-storage.patch'
     patches = graphics_audit['wsi_diagnostics']['source_recipe']['patches']
-    if (stack_patch in patches) != (candidate in ('250', '251', '252', '253', '254')):
+    if (stack_patch in patches) != (candidate in ('250', '251', '252', '253', '254', '255')):
         raise ValueError('Wrong linked RADV shader-stage storage policy')
     graphics = [Path(n) for n in linked if n.endswith('/graphics-support.o')]
     if len(graphics) != 1 or sha(graphics[0]) != graphics_audit['objects_sha256']['graphics-support.o']:
@@ -249,6 +249,8 @@ def main():
         raise ValueError('Missing extra mutex reserve bootstrap policy')
     if (b'-Dps5.fabric261Observer=true\0' in elf) != (candidate == '254'):
         raise ValueError('Unexpected Fabric 26.1 observer policy')
+    if (b'-Dps5.save263Observer=true\0' in elf) != (candidate == '255'):
+        raise ValueError('Unexpected 26.3 save observer policy')
     if b'-Dps5.startupObserver=false\0' not in elf:
         raise ValueError('Unexpected startup snapshot policy')
     if b'PS5_UI presentation requestedHz=120' not in elf or b'fpsMilli=' not in elf:raise ValueError('Missing actual presentation/timing path')
@@ -258,11 +260,11 @@ def main():
                    b'-XX:+SafepointTimeout', b'-XX:SafepointTimeoutDelay=250', b'-XX:-AbortVMOnSafepointTimeout'):
         if option + b'\0' not in elf:
             raise ValueError(f'Retained option missing from actual{candidate} ELF: ' + option.decode())
-    if (b'-XX:ZOldGCThreads=1\0' in elf) != (candidate in ('249', '250', '251', '252', '253', '254')):
+    if (b'-XX:ZOldGCThreads=1\0' in elf) != (candidate in ('249', '250', '251', '252', '253', '254', '255')):
         raise ValueError('Unexpected ZGC old-generation worker policy')
-    if (b'PS5_ZINK using Vulkan pipelines for shaders\n' in elf) != (candidate in ('252', '253', '254')):
+    if (b'PS5_ZINK using Vulkan pipelines for shaders\n' in elf) != (candidate in ('252', '253', '254', '255')):
         raise ValueError('Unexpected Zink shader object opt-out policy')
-    if (b'PS5_ZINK pipeline shaders with synchronous compilation\0' in elf) != (candidate in ('253', '254')):
+    if (b'PS5_ZINK pipeline shaders with synchronous compilation\0' in elf) != (candidate in ('253', '254', '255')):
         raise ValueError('Unexpected Zink synchronous compilation policy')
     if b'-XX:ConcGCThreads=2\0' not in elf:
         raise ValueError('Missing ZGC concurrent worker budget')

@@ -521,6 +521,9 @@ void run_test(int i) {
 #ifdef PROSPERO_FABRIC261_OBSERVER
    {const_cast<char *>("-Dps5.fabric261Observer=true"),nullptr},
 #endif
+#ifdef PROSPERO_SAVE263_OBSERVER
+   {const_cast<char *>("-Dps5.save263Observer=true"),nullptr},
+#endif
    {const_cast<char *>(CLIENT_CLASSPATH_OPTION),nullptr},
    {const_cast<char *>(PROSPERO_STORAGE_OPTION("-Djava.io.tmpdir=/data/ProsperoCraft/tmp","-Djava.io.tmpdir=/download0")),nullptr},
    {const_cast<char *>(PROSPERO_STORAGE_OPTION("-Duser.home=/data/ProsperoCraft","-Duser.home=/download0")),nullptr},

@@ -58,6 +58,12 @@ public class Policy121 {
   Files.writeString(work.resolve("prosperocraft-zink.txt"),"all-loaders-26.1-zink-v2\n");
   for(String version:new String[]{"26.1","26.1.1","26.1.2"})for(String loader:new String[]{"vanilla","fabric"})
    check(ProsperoLauncher.launchable(version,loader)&&ProsperoGraphics.zink(version,loader),"existing26Zink unchanged");
+  var badgePath=work.resolve("experimental-cards");
+  var badges=new ProsperoLibrary(badgePath);badges.settings().showIntro=false;badges.save();
+  badges.add("Fabric","26.1",1,"fabric");badges.add("Vanilla","26.1",1);
+  badges.add("Fabric patch","26.1.1",1,"fabric");badges.add("Fabric newer","26.3",1,"fabric");
+  String[] badgeFields=new ProsperoLauncher(new ProsperoAuth(),badgePath,url->{throw new AssertionError("network");}).tick(0);
+  check(badgeFields[35].equals("EXPERIMENTAL")&&badgeFields[39].isEmpty()&&badgeFields[43].isEmpty()&&badgeFields[47].isEmpty(),"only Fabric 26.1 is experimental");
   check(ProsperoLauncher.supported("26.2")&&ProsperoLauncher.supported("26.3"),"existing26support");
   check(ProsperoGraphics.vulkan("26.2","GLFW")&&ProsperoGraphics.vulkan("26.3","SDL"),"existing26Vulkan");
   for(int i=1;i<=6;i++)check(ProsperoLauncher.supported("26.4-snapshot-"+i),"snapshot unchanged");

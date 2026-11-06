@@ -314,7 +314,7 @@ public final class ClientStartup25 {
    stage(ProsperoLauncher.launchIdentity());
    stage("ENTER "+ProsperoLauncher.gameMain()+"; selected loader, PS5 gameplay validation pending");
    console.println("Original selected Minecraft Main entry;launcher-selected mode. Credentials are not logged.");
-   if(startupObserverEnabled()||ProsperoLauncher.observeSelectedFabric261()){
+   if(startupObserverEnabled()||ProsperoLauncher.observeSelectedDiagnostics()){
     try{observer=new StartupObserver(console,48,5000);observer.start();}
     catch(Throwable unavailable){console.println("PS5 startup observer unavailable;continuing original Main: "+unavailable);observer=null;}
    }else console.println("PS5 startup observer disabled for performance run;enable ps5.startupObserver explicitly for stack sampling");

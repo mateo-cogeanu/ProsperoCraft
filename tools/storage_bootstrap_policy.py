@@ -20,6 +20,14 @@ def normalize(name, text):
         if text.count(fabric_observer) != 1:
             raise ValueError('Candidate Fabric observer option changed')
         text = text.replace(fabric_observer, '')
+        save_observer = (
+            '#ifdef PROSPERO_SAVE263_OBSERVER\n'
+            '   {const_cast<char *>("-Dps5.save263Observer=true"),nullptr},\n'
+            '#endif\n'
+        )
+        if text.count(save_observer) != 1:
+            raise ValueError('Candidate save observer option changed')
+        text = text.replace(save_observer, '')
         zgc_policy = (
             '#ifdef PROSPERO_ZGC\n'
             '   {const_cast<char *>("-XX:+UseZGC"),nullptr},\n'
