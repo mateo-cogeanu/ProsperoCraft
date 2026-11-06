@@ -12,6 +12,14 @@ def normalize(name, text):
         if text.count(synchronous_compile) != 1:
             raise ValueError('Candidate synchronous shader policy changed')
         text = text.replace(synchronous_compile, '')
+        fabric_observer = (
+            '#ifdef PROSPERO_FABRIC261_OBSERVER\n'
+            '   {const_cast<char *>("-Dps5.fabric261Observer=true"),nullptr},\n'
+            '#endif\n'
+        )
+        if text.count(fabric_observer) != 1:
+            raise ValueError('Candidate Fabric observer option changed')
+        text = text.replace(fabric_observer, '')
         zgc_policy = (
             '#ifdef PROSPERO_ZGC\n'
             '   {const_cast<char *>("-XX:+UseZGC"),nullptr},\n'

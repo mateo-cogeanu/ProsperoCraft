@@ -518,6 +518,9 @@ void run_test(int i) {
    {const_cast<char *>("-XX:-UsePerfData"),nullptr},
    {const_cast<char *>(PROSPERO_STORAGE_OPTION("-XX:ErrorFile=/data/ProsperoCraft/reports/hs_err_java25.log","-XX:ErrorFile=/download0/hs_err_java25.log")),nullptr},
    {const_cast<char *>("-Dps5.startupObserver=" PROSPERO_STARTUP_OBSERVER),nullptr},
+#ifdef PROSPERO_FABRIC261_OBSERVER
+   {const_cast<char *>("-Dps5.fabric261Observer=true"),nullptr},
+#endif
    {const_cast<char *>(CLIENT_CLASSPATH_OPTION),nullptr},
    {const_cast<char *>(PROSPERO_STORAGE_OPTION("-Djava.io.tmpdir=/data/ProsperoCraft/tmp","-Djava.io.tmpdir=/download0")),nullptr},
    {const_cast<char *>(PROSPERO_STORAGE_OPTION("-Duser.home=/data/ProsperoCraft","-Duser.home=/download0")),nullptr},

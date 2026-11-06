@@ -73,6 +73,9 @@ public final class ProsperoLauncher {
   if("fabric".equals(instance.loader))identity+=" fabric_loader="+current.fabricLoaderVersion;
   return identity;
  }
+ static boolean observeSelectedFabric261(){
+  return Boolean.getBoolean("ps5.fabric261Observer")&&"26.1".equals(current.detail.version)&&"fabric".equals(current.detail.loader);
+ }
  static boolean selected121(){return current.receipt!=null&&ProsperoVersions.release121(current.receipt.version);}
  static String[] selectedShutdownAccessors()throws java.io.IOException{return selected121()?Prospero121.shutdownAccessors(current.receipt.version):null;}
  static String gameMain(){return "fabric".equals(current.detail.loader)?ProsperoFabric.MAIN:"net.minecraft.client.main.Main";}
