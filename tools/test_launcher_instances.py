@@ -129,13 +129,13 @@ var store=new ProsperoLibrary(root.resolve("store"));if(!store.instances().isEmp
   Files.writeString(sodiumResource,"invalid\n");
   if(ProsperoGraphics.configureSodiumLwjglTest("26.1.2","fabric"))throw new AssertionError("invalid Sodium resource");
   Files.writeString(sodiumResource,"sodium-lwjgl-version-test-v1\n");
-  for(String version:List.of("26.1","26.1.1","26.1.2")){
+  for(String version:List.of("26.1","26.1.1","26.1.2","26.2")){
    if(ProsperoGraphics.configureSodiumLwjglTest(version,"vanilla"))throw new AssertionError("Vanilla Sodium scope");
    if(!ProsperoGraphics.configureSodiumLwjglTest(version,"fabric")||!"false".equals(System.getProperty("sodium.checks.issue2561")))throw new AssertionError("candidate Fabric Sodium opt-out");
    System.clearProperty("sodium.checks.issue2561");
   }
-  for(String version:List.of("26.2","26.3","26.4-snapshot-1"))if(ProsperoGraphics.configureSodiumLwjglTest(version,"fabric"))throw new AssertionError("Vulkan Sodium scope");
-  Files.writeString(channel,"demo");if(ProsperoGraphics.configureSodiumLwjglTest("26.1.2","fabric"))throw new AssertionError("release Sodium scope");Files.writeString(channel,"temp_gametest");
+  for(String version:List.of("26.3","26.4-snapshot-1"))if(ProsperoGraphics.configureSodiumLwjglTest(version,"fabric"))throw new AssertionError("Vulkan Sodium scope");
+  Files.writeString(channel,"demo");if(ProsperoGraphics.configureSodiumLwjglTest("26.1.2","fabric")||ProsperoGraphics.configureSodiumLwjglTest("26.2","fabric"))throw new AssertionError("release Sodium scope");Files.writeString(channel,"temp_gametest");
   System.setProperty("sodium.checks.issue899","true");System.setProperty("sodium.checks.issue2561","true");Files.delete(sodiumResource);
   if(ProsperoGraphics.configureSodiumLwjglTest("26.1.2","fabric")||!"true".equals(System.getProperty("sodium.checks.issue2561"))||!"true".equals(System.getProperty("sodium.checks.issue899")))throw new AssertionError("default mutated caller properties");
   System.clearProperty("sodium.checks.issue2561");System.clearProperty("sodium.checks.issue899");
