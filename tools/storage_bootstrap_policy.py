@@ -9,6 +9,9 @@ def normalize(name, text):
             '   {const_cast<char *>("-XX:+UseZGC"),nullptr},\n'
             '   {const_cast<char *>("-XX:ParallelGCThreads=4"),nullptr},\n'
             '   {const_cast<char *>("-XX:ConcGCThreads=2"),nullptr},\n'
+            '#ifdef PROSPERO_ZGC_SINGLE_OLD_WORKER\n'
+            '   {const_cast<char *>("-XX:ZOldGCThreads=1"),nullptr},\n'
+            '#endif\n'
             '   {const_cast<char *>("-XX:-ZUncommit"),nullptr},\n'
             '#elif defined(PROSPERO_TIERED_PARALLEL)\n'
         )

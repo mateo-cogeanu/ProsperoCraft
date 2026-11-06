@@ -494,6 +494,9 @@ void run_test(int i) {
    {const_cast<char *>("-XX:+UseZGC"),nullptr},
    {const_cast<char *>("-XX:ParallelGCThreads=4"),nullptr},
    {const_cast<char *>("-XX:ConcGCThreads=2"),nullptr},
+#ifdef PROSPERO_ZGC_SINGLE_OLD_WORKER
+   {const_cast<char *>("-XX:ZOldGCThreads=1"),nullptr},
+#endif
    {const_cast<char *>("-XX:-ZUncommit"),nullptr},
 #elif defined(PROSPERO_TIERED_PARALLEL)
    {const_cast<char *>("-XX:+UseParallelGC"),nullptr},
