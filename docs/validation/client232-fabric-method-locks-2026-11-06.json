@@ -1,0 +1,31 @@
+{
+  "app_version": "01.000.232",
+  "title_id": "PPSA99874",
+  "package_sha256": "4fdc214a359d8de12dfd6fcc33c5dbe7eb3ae64899746404c3f7617461353a12",
+  "package_bytes": 127583476,
+  "extraMutexRuntime": {
+    "commit": "1c50556b36ce87a01eb86a43c36d4b6d6b6d1767",
+    "patch": "java25/patches/0140-ps5-method-data-lock-stripes.patch",
+    "patch_sha256": "13891b982c3c0bf43293cb4b44bbf2253d7314c30b19e8099507709320941da6",
+    "object_sha256": "2d2f18dc7a52ed0d608a782b050dee2e1adaaca79d9b446afcae23bf9c1f2b26"
+  },
+  "build_source_commit": "a98f9c7a257d39269b03716ff5e85a4b5220b992",
+  "previous_console_result": {
+    "build": "01.000.231",
+    "instance": "Minecraft 26.3 Fabric",
+    "failure": "Reached loading. HotSpot aborted after 12288 of 12288 native mutexes were leased and native mutex initialization returned ENOMEM. The C1 thread was compiling SpriteContents.computeTransparency.",
+    "unresolved": "The report does not identify all pool lease owners or the cause of native allocation refusal."
+  },
+  "candidate_change": "Use 64 preinitialized padded PS5 HotSpot mutexes for MethodData profiling and trap synchronization. Profiling data stays per method. Reserve requests, C2 tier 4 and Parallel GC are unchanged.",
+  "verification": [
+    "Host ASan/UBSan used the actual stripe-selection and initialization functions with real pthread leases and concurrent access to 32768 simulated method profiles.",
+    "PS5 HotSpot target build, signed package audit and SHA-256 verification passed.",
+    "ProsperoCraft native host lane passed all 13 checks."
+  ],
+  "console_status": "pending",
+  "console_checks": [
+    "Launch the same 26.3 Fabric instance and verify world entry and saving.",
+    "Retest Vanilla 26.3 frame pacing and save.",
+    "After the Fabric retest, separately validate 1.21.9 chunk saves."
+  ]
+}

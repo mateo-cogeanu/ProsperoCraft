@@ -1,5 +1,10 @@
 # Changelog
 
+## Local 232 · Bounded Fabric startup mutex use, 2026-11-06
+
+- Share 64 HotSpot profiling locks across methods on PS5 to reduce native
+  mutex demand. Keep tiered C2 and Parallel GC. Console validation is pending.
+
 ## Local 231 · Fabric startup condition reserve, 2026-11-06
 
 - Keep native condition variables available for HotSpot monitors by skipping
