@@ -1,0 +1,14 @@
+{
+  "app_version": "01.000.256",
+  "title_id": "PPSA99874",
+  "package_sha256": "433fddadd77068e324e2118cd1d47988f9f46e5201fcf41535475de8ec0e3b9f",
+  "package_bytes": 127912091,
+  "source_commit": "f74dbc219ee682e196aa97fd4eb067d6172cb23e",
+  "change": "Show instance deletion as an overlay over the settings view. Dismiss the confirmation when the model leaves it and discard queued input across the modal boundary.",
+  "identity": "One-time reuse of the unpublished version 01.000.256 at the user\u2019s request. The original candidate and paused release assets remain local under their original checksums.",
+  "checks": [
+    "Host permanent deletion checks and signed package audit passed."
+  ],
+  "console_status": "Pending validation of this revised package on PS5.",
+  "release_store": "Paused by the user. Earlier confirmation belongs to the original 256 checksum."
+}
