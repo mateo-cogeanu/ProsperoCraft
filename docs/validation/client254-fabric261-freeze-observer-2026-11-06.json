@@ -1,0 +1,14 @@
+{
+  "app_version": "01.000.254",
+  "title_id": "PPSA99874",
+  "package_sha256": "1d0855489b30b465edaf52568fd1654a6e5698031a38d2fdc1bf612228fe2afe",
+  "package_bytes": 127912627,
+  "source_commit": "4006270dee949cf36e7dd52a10bfde76378ce700",
+  "change": "Enable the existing 48-sample startup observer at five-second intervals for Fabric 26.1 on this diagnostic build. It records thread stacks while retaining build 253 graphics policy.",
+  "checks": [
+    "The configuration observer fixture assertions passed against the candidate compiled classes. The standalone fixture classpath lacks the PS5 LWJGL adapter.",
+    "Target build, signing, package audit and SHA-256 passed."
+  ],
+  "console_status": "Pending physical reproduction of the Sodium freeze and collection of the render-thread snapshots. Sampling can affect timing.",
+  "release_store": "Held."
+}

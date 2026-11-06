@@ -1,5 +1,10 @@
 # Changelog
 
+## Local 254 · Capture Fabric 26.1 freeze stacks, 2026-11-06
+
+- Enable bounded thread snapshots for Fabric 26.1 in this diagnostic build
+  after the Sodium run joined a world and its rendering stopped advancing.
+
 ## Local 253 · Test synchronous Zink shader compilation, 2026-11-06
 
 - Keep the Vulkan pipeline path and compile synchronously after Fabric 26.1
