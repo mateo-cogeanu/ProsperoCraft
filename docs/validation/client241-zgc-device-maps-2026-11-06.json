@@ -1,0 +1,36 @@
+{
+  "app_version": "01.000.241",
+  "title_id": "PPSA99874",
+  "package_sha256": "505000611301995e597b2fbea135b28fc56516902bb7ea82e63008ea5f9e8b53",
+  "package_bytes": 127877063,
+  "extraMutexRuntime": {
+    "commit": "fe5ff4744845015878f653a7b1062d27313f473e",
+    "patch": "java25/patches/0146-ps5-zgc-device-map-fallback.patch",
+    "patch_sha256": "d4986a676b58637322a4f7d952b089741ee8e36628e0eca9d9a61207e833e50a",
+    "object_sha256": "fa65c32226563d0c705fc032922c0d905df92d8d4f78ef9acac28bd1c55f1c15",
+    "feature": "Experimental PS5 ZGC direct-device fallback for exact heap view placement"
+  },
+  "source_commit": "a673160adac7b6bb85fb0e1aa14571308b68ce32",
+  "compilerTlsBackendSha256": "69796e4650eb71d2e5284a4905540b162dc8aa5bcc1c3f814211b2a5bf30f647",
+  "prior_console_result": {
+    "build": "01.000.240",
+    "recovery": "User reopened238 and provided retained reports.",
+    "failure": "ZGC physical mapping failed. Result34 is the backend ERANGE check after native mapping returned success at an unexpected address. Recorded physical offset0x0d800000 and2MiB granule.",
+    "unresolved": "Native exact-placement behavior and direct-device title access are unverified."
+  },
+  "change": "After refusing or cleaning a moved native mapping, map the already-allocated physical offset through a lazily opened /dev/dmem0 descriptor with shared fixed placement inside the collector-owned range. Preserve physical ownership on failure and close the descriptor with the backing.",
+  "checks": [
+    "Actual backing helper passed ASan/UBSan with real shared aliases, byte preservation, native moved-address cleanup, device fallback, device-open refusal, device-mmap refusal and descriptor teardown.",
+    "Changed target HotSpot objects compiled; embedded application linked and signed.",
+    "Standalone JVM shared target retains the documented SDK shared/PIE linker conflict.",
+    "ProsperoCraft native host lane passed13 checks.",
+    "Signed package audit and SHA-256 verification passed."
+  ],
+  "console_status": "pending",
+  "console_checks": [
+    "Verify title access to the direct-memory device, exact heap placement and JVM creation.",
+    "If initialization succeeds, test Vanilla26.3 world entry, saves, repeated GC and frame pacing.",
+    "Then test Fabric26.3 with the same lifecycle."
+  ],
+  "releaseStore": "Held pending physical-console acceptance."
+}

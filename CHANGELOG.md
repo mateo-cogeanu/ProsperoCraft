@@ -1,5 +1,10 @@
 # Changelog
 
+## Local 241 · Exact ZGC direct-memory views, 2026-11-06
+
+- Fall back to shared direct-memory device mappings when native heap mapping
+  is refused or returns a different address. Console initialization is pending.
+
 ## Local 240 · ZGC mapping into native reservations, 2026-11-06
 
 - Use checked direct mapping hints inside the collector-owned heap reservation.
