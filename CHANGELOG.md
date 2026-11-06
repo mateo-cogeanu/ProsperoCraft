@@ -1,5 +1,10 @@
 # Changelog
 
+## Local 230 · Fabric startup mutex reserve, 2026-11-06
+
+- Request 12,288 HotSpot mutexes after 26.3 Fabric exhausted the 8,192-entry reserve.
+- Keep tiered C2 and Parallel GC. Physical console validation is pending.
+
 ## Local 229 · Tiered JIT and Parallel GC experiment, 2026-11-06
 
 - Test tier 4 C2 with two compiler threads and a 144 MiB code cache.

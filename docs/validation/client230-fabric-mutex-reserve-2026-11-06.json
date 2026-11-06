@@ -1,0 +1,37 @@
+{
+  "app_version": "01.000.230",
+  "title_id": "PPSA99874",
+  "package_sha256": "bd315489c8b54be3fbd4780b11d19f1f67ec97e099b489df8e0c1bfb6d93a160",
+  "package_bytes": 127582075,
+  "extraMutexRuntime": {
+    "commit": "de3716c5dd497810da7e61e038fc165ee9315f9b",
+    "patch": "java25/patches/0138-opt-in-extra-mutex-reserve.patch",
+    "patch_sha256": "5e169033bee13895d5f2e4f8304835fa0a9b192d3279349e4b3b8cd5c36a4e20",
+    "object_sha256": "9dba6cb5ba381c9eb3c87fbd413dabebd73e166a60f755cd9b219c2575c5ab8b"
+  },
+  "build_source_commit": "6032ab28cc2251ae4b7e151a404cdd020467a057",
+  "previous_console_result": {
+    "build": "01.000.229",
+    "instance": "Minecraft 26.3 Fabric",
+    "failure": "HotSpot aborted during startup after mutex initialization returned ENOMEM. All 8192 initialized reserve entries were leased. The failing compiler thread was compiling org.lwjgl.system.Checks::checkBuffer.",
+    "unresolved": "The reason for the accumulated mutex leases and the console's available native allocation capacity remain unverified."
+  },
+  "candidate_policy": {
+    "requested_mutexes": 12288,
+    "requested_relative_conditions": 8192,
+    "requested_absolute_conditions": 2048,
+    "jit": "Tiered compilation through C2 level 4",
+    "gc": "Parallel GC"
+  },
+  "verification": [
+    "Host HotSpot mutex pool tests passed with default, extended and extra policies under ASan and UBSan.",
+    "PS5 HotSpot build, signed package audit and SHA-256 verification passed.",
+    "ProsperoCraft native host lane passed all 13 checks."
+  ],
+  "console_status": "pending",
+  "console_checks": [
+    "Confirm reserve initialization counts and launch the same 26.3 Fabric instance.",
+    "Join a world, save and reopen, then check Vanilla 26.3 startup and performance.",
+    "Test Vanilla 1.21.9 chunk saves separately after the Fabric retest."
+  ]
+}
