@@ -1,5 +1,11 @@
 # Changelog
 
+## Local 237 · Experimental generational ZGC, 2026-11-06
+
+- Select OpenJDK generational ZGC with PS5 physical backing and retain C2 tier4.
+- Use four parallel and two concurrent GC workers with a 1536 MiB maximum heap.
+  Physical-console startup, frame pacing and world saves are pending.
+
 ## Local 235 · Native compilation headroom, 2026-11-06
 
 - Opt into 4096 direct mapping slots and a 512 MiB native fallback budget after

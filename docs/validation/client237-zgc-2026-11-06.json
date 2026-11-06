@@ -1,0 +1,48 @@
+{
+  "app_version": "01.000.237",
+  "title_id": "PPSA99874",
+  "package_sha256": "77f76e93d6cb63f86106c4a8307308a94c18e0dbe77b98ecdfd304b020c0f6f1",
+  "package_bytes": 127874350,
+  "extraMutexRuntime": {
+    "commit": "a20645cbb90df8f5b85ef13b3da5eaa92be9457d",
+    "patch": "java25/patches/0142-opt-in-ps5-zgc-backing.patch",
+    "patch_sha256": "2988f490ae2cbd44c9bd763697281ab84a288cc7b02dfd2ea0ca915fd8454112",
+    "object_sha256": "b4c68049e655e0d07e9328c3147b61cf8209e1279e8594574016742d898ac8dc",
+    "feature": "Experimental PS5 generational ZGC physical backing; includes native capacity and synchronization changes"
+  },
+  "source_commit": "9ad139ca6799e61e07bdde5faf0bb8d5418043ce",
+  "compilerTlsBackendSha256": "69796e4650eb71d2e5284a4905540b162dc8aa5bcc1c3f814211b2a5bf30f647",
+  "compilerTlsSourceSha256": "8f59b9248ee56a32cdbe0f5a61cd746dbb44975c5942134749de3a0f88b1df3a",
+  "collector": "OpenJDK 25 generational ZGC, explicitly selected with UseZGC",
+  "policy": {
+    "compiler": "Tiered C2 level4, two compiler threads",
+    "heap_min_MiB": 128,
+    "heap_max_MiB": 1536,
+    "parallel_gc_threads": 4,
+    "concurrent_gc_threads": 2,
+    "uncommit": false
+  },
+  "runtime_backend": "Pinned PS5 ZGC physical backing. Allocates and clears 2 MiB direct physical granules, maps at collector-owned reservations, detaches views and retains backing until uncommit.",
+  "prior_console_evidence": {
+    "build": "01.000.235",
+    "instance": "Vanilla 26.3",
+    "finding": "User reports severe frame drops. GC logs contain 0.4-0.77 second pauses, largely waiting for threads to reach safepoints, plus one approximately 744 ms young collection.",
+    "unresolved": "Exact causes of each delayed thread and the long collection remain unproven. ZGC frame pacing must be measured on PS5."
+  },
+  "local236": "Counted-loop polling source committed before the user redirected work to ZGC. Its package attempt failed due to local disk capacity. Disposable extracted build data was removed, preserving signed packages. No console pass is claimed.",
+  "host_checks": [
+    "Actual PS5 ZGC backing helper passed ASan/UBSan using real shared file mappings, cross-alias writes, initial zeroes, remap preservation and allocation/map/release refusal controls.",
+    "All configured ZGC HotSpot target objects compiled. Embedded relocatable JVM and signed application linked successfully.",
+    "Standalone libjvm.so shared link failed because the SDK driver selected shared and PIE together. This target remains unresolved.",
+    "Package audit verifies UseZGC selection, excludes competing collector flags and confirms the actual PS5 physical backing and matching compiler TLS integration.",
+    "Signed package integrity and SHA-256 checks passed.",
+    "Portable fast host lane passed19 checks and native host lane passed13 checks after disk capacity was recovered."
+  ],
+  "console_status": "pending",
+  "console_checks": [
+    "Start the exact237 package and verify ZGC initialization, virtual reservations and direct physical maps.",
+    "Launch Vanilla26.3 first, enter a world, inspect frame pacing and save/reload.",
+    "Then test Fabric26.3 with compilation, world streaming and save/reload."
+  ],
+  "releaseStore": "Held pending physical-console acceptance."
+}
