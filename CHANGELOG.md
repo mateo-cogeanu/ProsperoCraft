@@ -1,5 +1,11 @@
 # Changelog
 
+## Local 229 · Tiered JIT and Parallel GC experiment, 2026-11-06
+
+- Test tier 4 C2 with two compiler threads and a 144 MiB code cache.
+- Select Parallel GC and log threads that hold up long JVM pauses.
+- Keep live descriptor tracking for investigation of the 1.21.9 save failure.
+
 ## Local 227 · Vanilla 1.21 launcher labels and 1.21.9, 2026-11-06
 
 - Use normal labels for Vanilla 1.21.10 and 1.21.11. Add Vanilla 1.21.9

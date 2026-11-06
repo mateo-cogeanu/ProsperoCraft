@@ -1,0 +1,25 @@
+{
+  "app_version": "01.000.229",
+  "title_id": "PPSA99874",
+  "package_sha256": "b94b5dae5fbfe828fd69ee648be280ebf6783350183289c3dfc1c20cba1ee499",
+  "package_bytes": 127579316,
+  "source_commit": "93966b1353dae716c1fb87075f5126ca6373347e",
+  "jitWarmupRuntime": {
+    "commit": "f9d9670013ae106df1cd76f773db82f415d91dca",
+    "path": "java25/tests/ps5probe/JitWarmup25.java",
+    "sha256": "37fa911c5ed5376660e6bb4bdfba5059121d716d139ca82162b669ecd02c90b7"
+  },
+  "date": "2026-11-06",
+  "change": "Use tiered compilation through C2 level 4 with two compiler threads and a 144 MiB code cache. Select Parallel GC with four GC workers. Require a current-run level 4 kernel entry and verify the compiled kernel result before starting Minecraft.",
+  "diagnostics": "Report threads that hold up a safepoint for more than 250 ms without aborting the VM. Retain live file descriptor tracking and the existing ZIP budget of 8.",
+  "checks": [
+    "Host JDK 25 verified actual C2 level 4 compilation and results with Parallel GC active",
+    "PS5 target build, signature, independent package audit and embedded option checks passed"
+  ],
+  "console_pending": [
+    "Verify PS5 VM startup and real C2 warmup entry",
+    "Measure 26.3 Vanilla startup and responsiveness and collect safepoint timeout reports",
+    "Reproduce the 1.21.9 save failure in a disposable world and collect the live handle inventory",
+    "Retest Fabric startup separately"
+  ]
+}
