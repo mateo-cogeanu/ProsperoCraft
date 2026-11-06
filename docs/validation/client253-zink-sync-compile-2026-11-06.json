@@ -10,14 +10,16 @@
     "All 13 native host checks passed including Zink option tests.",
     "Target build, signing, package audit and SHA-256 passed."
   ],
-  "console_status": "Fabric 26.1 reached a world and saved with Fabric API alone and with Controlify. With Sodium also installed it joined the world, then the user reported a freeze.",
+  "console_status": "Fabric 26.1 entered a world and saved with Fabric API alone and with Controlify. With Sodium added, rendering resumed after a prolonged stall on the same run.",
   "release_store": "Held.",
   "sodium_freeze": {
     "run": "client-01.000.253-1793986102-575942300",
     "observations": [
       "The last game messages concern the first in-world frames and Dynamic Transforms UBO growth.",
       "RADV submission logs stayed unchanged across reads while JIT and GC logs continued to grow. The live report server answered and the VM abort marker remained empty.",
-      "The render-thread wait site is unknown. The freeze is separate from the prior startup crash."
+      "The render-thread wait site is unknown. The freeze is separate from the prior startup crash.",
+      "The same build 253 process resumed rendering, and RADV submissions and mouse mode changes appeared again. The game log has a 232-second gap between consecutive render-thread UBO growth messages after join.",
+      "JIT and GC continued during the stall. The longest logged safepoint in the captured run was about 5.8 ms. Build 253 did not capture render-thread stacks."
     ]
   }
 }
