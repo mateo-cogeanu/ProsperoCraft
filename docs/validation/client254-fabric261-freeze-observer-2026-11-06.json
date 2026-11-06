@@ -9,6 +9,14 @@
     "The configuration observer fixture assertions passed against the candidate compiled classes. The standalone fixture classpath lacks the PS5 LWJGL adapter.",
     "Target build, signing, package audit and SHA-256 passed."
   ],
-  "console_status": "Pending physical reproduction of the Sodium freeze and collection of the render-thread snapshots. Sampling can affect timing.",
-  "release_store": "Held."
+  "console_status": "Reproduced the Fabric 26.1 with Sodium world-entry stall on build 254. The user reported that rendering resumed in the same session.",
+  "release_store": "Held.",
+  "freeze_capture": {
+    "run": "client-01.000.254-1793986739-5004544",
+    "findings": [
+      "At approximately 35 to 50 seconds after Minecraft Main entry, four consecutive snapshots put the render thread inside native OpenGL draw calls. These include a Sodium chunk multi-draw and, at 45 and 50 seconds, the same vanilla particle draw stack.",
+      "At 55 seconds the render thread was in the normal frame limiter. Later snapshots show client simulation and GUI work.",
+      "The Java stacks locate the stall within native rendering. They do not distinguish synchronous pipeline compilation from a driver or GPU wait."
+    ]
+  }
 }
