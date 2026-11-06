@@ -450,6 +450,8 @@ void run_test(int i) {
    {const_cast<char *>("-Dps5.client.tieredParallel=true"),nullptr},
    {const_cast<char *>("-XX:+TieredCompilation"),nullptr},
    {const_cast<char *>("-XX:TieredStopAtLevel=4"),nullptr},
+   {const_cast<char *>("-XX:+UseCountedLoopSafepoints"),nullptr},
+   {const_cast<char *>("-XX:LoopStripMiningIter=1000"),nullptr},
    {const_cast<char *>("-XX:CICompilerCount=2"),nullptr},
    {const_cast<char *>("-XX:CompileThresholdScaling=1.0"),nullptr},
    {const_cast<char *>("-XX:CompileCommand=MemLimit,*.*,2M"),nullptr},
