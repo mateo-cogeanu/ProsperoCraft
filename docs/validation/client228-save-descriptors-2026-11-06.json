@@ -1,0 +1,16 @@
+{
+  "app_version": "01.000.228",
+  "title_id": "PPSA99874",
+  "package_sha256": "4c1716a47de15d5a64f923cf1816e313c21c5cd050a65b59013bc611cf028b8d",
+  "package_bytes": 127578942,
+  "source_commit": "5e37def36cd7c677dcf6e0a41749088e957c534f",
+  "date": "2026-11-06",
+  "failure": "Current build 227 Vanilla 1.21.9 entered a world. FTP reports confirm EMFILE on region reads, chunk writes and level, advancement and player metadata. The live HTTP status showed 277 open descriptors including 248 regular files. New report file opens also returned errno 24. The advertised rlimit does not identify the actual limiting resource.",
+  "change": "Restore file activity tracking by selecting it before the first include of the report headers. The already enabled ZIP budget remains 8. The existing live endpoint can return tracked opens without opening a new report file.",
+  "checks": [
+    "Actual file activity instrumentation host checks passed",
+    "Actual HTTP index and full inventory passed on 64 KiB worker stacks at O0 and O2",
+    "Signed PS5 package audit verified that file activity tracking is present"
+  ],
+  "console_pending": "Reproduce using a disposable world in 228, capture the live tracked descriptor inventory and identify the dominant owner before attempting a save repair."
+}
