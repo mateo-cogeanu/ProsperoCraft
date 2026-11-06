@@ -1,0 +1,19 @@
+{
+  "app_version": "01.000.227",
+  "title_id": "PPSA99874",
+  "package_sha256": "924b3bd6a59b130daf1ee8cac8dae25504a897350af23ae92a8fd8c4466498a0",
+  "package_bytes": 127577955,
+  "source_commit": "827656e404770b441862c4ed7698e3e4af43a1b8",
+  "date": "2026-11-06",
+  "change": "Vanilla 1.21.10 and 1.21.11 use the normal launcher labels. Enable 1.21.9 Vanilla as DEV TEST via the existing matched 3.3.3 LWJGL and Zink route.",
+  "checks": [
+    "Verified original 1.21.9 client, publisher metadata, library pins and asset index from the pinned cache",
+    "Verified 1.21.9 shutdown accessors with javap against the original client",
+    "Signed target package and independent package audit passed",
+    "All 19 fast host checks passed, including the launcher badge and renderer gates"
+  ],
+  "console_pending": [
+    "Launch 1.21.9 Vanilla, create or join a test world, save, quit and reopen",
+    "Check 1.21.10 and 1.21.11 cards and Play buttons and verify normal launch on 227"
+  ]
+}

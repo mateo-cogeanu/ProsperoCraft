@@ -1,5 +1,10 @@
 # Changelog
 
+## Local 227 · Vanilla 1.21 launcher labels and 1.21.9, 2026-11-06
+
+- Use normal labels for Vanilla 1.21.10 and 1.21.11. Add Vanilla 1.21.9
+  as a development test using the matched LWJGL and Zink path.
+
 ## Local 226 · Restore download0 defaults, 2026-11-06
 
 - Use download0 for the default library, reports and temporary files. Existing
