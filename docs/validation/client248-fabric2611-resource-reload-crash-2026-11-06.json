@@ -1,0 +1,22 @@
+{
+  "app_version": "01.000.248",
+  "title_id": "PPSA99874",
+  "package_sha256": "bbf58c19f25de66b26bd708d735f53c59de6b8797d8209c3d90e79a7362eb3d1",
+  "source_commit": "0c5da167ee09cea53d6560ce9be52c7140d6279d",
+  "runtime_commit": "ad81a0ddf0c3a6e989597050dfc9aefd0b6b9c18",
+  "instance": {
+    "minecraft": "26.1.1",
+    "fabric_loader": "0.20.1",
+    "sodium": "0.8.9+mc26.1.1",
+    "renderer": "Zink"
+  },
+  "failed_run": "client-01.000.248-1793980060-702813843",
+  "console_status": "Crash reported by user and corroborated by process monitor and retained game output.",
+  "findings": [
+    "The failed run reached OpenGL initialization and resource reload. The game log ends during resource loading before a world starts. A separate earlier 26.1.1 Fabric session had completed world saves.",
+    "The retained VM trace shows SIGSEGVs with selected HotSpot continuations and subsequent execution. The available trace does not identify the terminal fault.",
+    "The per-run abort and exception markers contain no captured fatal error. The retained hs_err report belongs to an older process and cannot establish the cause of this crash."
+  ],
+  "pending": "Reproduce the same configuration and isolate the Sodium variable on the same build. Capture a terminal native fault or matching JVM fatal report before attributing the crash. Build 248 remains unvalidated for release.",
+  "raw_reports": "Local only."
+}
