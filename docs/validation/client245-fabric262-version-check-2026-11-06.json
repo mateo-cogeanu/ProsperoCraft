@@ -1,0 +1,32 @@
+{
+  "app_version": "01.000.245",
+  "title_id": "PPSA99874",
+  "package_sha256": "49630e6f3518fc5cb51beb0296bd41b4044c095d049a199a9c1456cdbe6b006f",
+  "package_bytes": 127877493,
+  "extraMutexRuntime": {
+    "commit": "1bc1480a8a95c5ceea42763f652c9cd494875dbd",
+    "patch": "java25/patches/0149-sample-native-allocation-success-traces.patch",
+    "patch_sha256": "d8759710e00741f6fb07f56c069e15d69a83d615c071fd017254e9c89dac7fc8",
+    "object_sha256": "1b079d27b73659e6b4cfb592d5d3adb88481844d97d73cb2aed34b68bd711a3b",
+    "feature": "Apply selected startup interval to successful native allocator reports; preserve complete errors"
+  },
+  "source_commit": "50a6896661a22696c40aab54d33e3b76fdfe8eaf",
+  "prior_console_result": {
+    "build": "01.000.244",
+    "instance": "Fabric26.2",
+    "failure": "Original Sodium0.9.2+mc26.2 refused startup because installed LWJGL3.4.3+4 differs from required3.4.1. VM exited1. The retained native fatal report was from an older run."
+  },
+  "change": "Extend existing development-only sodium.checks.issue2561=false policy to Fabric26.2 with the explicit candidate resource marker. Actual LWJGL identity remains3.4.3. Original game/mod JARs stay intact.",
+  "limitation": "This skips the upstream exact-version check for a compatibility test. It does not establish matched LWJGL3.4.1 ABI, Sodium rendering or Vitrail compatibility.",
+  "checks": [
+    "Fast host lane passed19 checks including default/invalid marker, development Fabric26.2, Vanilla/release/26.3 refusal and caller property preservation.",
+    "Verified explicit candidate Sodium marker in packaged client-probe.jar.",
+    "Signed PS5 package audit and SHA-256 verification passed."
+  ],
+  "console_status": "pending",
+  "console_checks": [
+    "Launch the same Fabric26.2 instance, inspect rendering and controller behavior.",
+    "Enter a world, save/exit/rejoin and test sustained frame pacing."
+  ],
+  "releaseStore": "Held pending physical-console acceptance."
+}

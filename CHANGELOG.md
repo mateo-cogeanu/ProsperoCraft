@@ -1,5 +1,10 @@
 # Changelog
 
+## Local 245 · Fabric 26.2 Sodium startup test, 2026-11-06
+
+- Extend the candidate Sodium exact-version check opt-out to Fabric26.2, with
+  truthful LWJGL3.4.3 identity. Rendering and ABI compatibility remain pending.
+
 ## Local 244 · Sample successful allocation reports, 2026-11-06
 
 - Apply the selected startup diagnostic sampling interval to successful native
