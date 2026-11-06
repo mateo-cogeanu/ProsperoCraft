@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Local234 enables extended native direct capacity using exact accepted204 inputs. No releases.
+"""Local235 enables extended native direct capacity using exact accepted204 inputs. No releases.
 
 Original343/OpenAL groups are retained byte for byte from the relink kit.
 Main, explicit libjava handle hook, SDL, graphics inventory and matched333 are rebuilt.
@@ -20,7 +20,7 @@ from build_lwjgl333 import sha
 from storage_bootstrap_policy import normalize
 
 BASE_PACKAGE = '89167d01c7da0ece733b0dd8b7871a05ee38ff5f79ee45b4ce9beefc5d4c14a0'
-BASE_RELINK = '4351224b234d2b16a688afc4d31f23f0c6badc30670d034ad065cc629bce9f0f'
+BASE_RELINK = '4351224b235d2b16a688afc4d31f23f0c6badc30670d034ad065cc629bce9f0f'
 
 
 TINYFD_JAR = 'lwjgl-tinyfd-3.4.1.jar'
@@ -56,7 +56,7 @@ def main():
     parser.add_argument('--java-home', type=Path)
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--work-dir', type=Path, required=True)
-    parser.add_argument('--app-version', choices=('01.000.234',), default='01.000.234')
+    parser.add_argument('--app-version', choices=('01.000.235',), default='01.000.235')
     parser.add_argument('--check-only', action='store_true', help='Compile/link/convert without signing or a candidate ZIP')
     args = parser.parse_args()
     if sha(args.tinyfd_jar) != TINYFD_SHA256:
@@ -135,7 +135,7 @@ def main():
     if sha(sdl_object)!=sdl_audit['object_sha256']:raise ValueError('Stale SDL output')
     for name,digest in sdl_audit['port_sha256'].items():
         if sha(ROOT/'client/ports/sdl'/name)!=digest:raise ValueError('Stale SDL source: '+name)
-    sdl_scoped=work/'sdl234-scoped.o'
+    sdl_scoped=work/'sdl235-scoped.o'
     subprocess.run([str(llvm/'llvm-objcopy'),'--redefine-syms='+str(baseline/'provider-bindings.txt'),str(sdl_object),str(sdl_scoped)],check=True)
     os_build=args.oshi665_build.resolve();os_overlay=os_build/'oshi-6.6.5-ps5-platform.jar';os_audit=json.loads((os_build/'audit.json').read_text())
     if sha(os_overlay)!=os_audit['output_sha256']:raise ValueError('Stale OSHI665 overlay')
@@ -280,6 +280,12 @@ def main():
           runtime / 'native', work, ROOT / 'client/native', ROOT / 'client/launcher/toolkit/src',
           ROOT / '.tools/PS5_Mesa/include', runtime / 'java25/probe', runtime / 'java25/platform')],
         '-c', str(ROOT / 'client/save_headroom/bootstrap.cpp'), '-o', str(main_obj)], check=True)
+    emutls_backend = work / 'emutls-backend.o'
+    subprocess.run([str(llvm / 'clang++'), *flags, '-std=c++20',
+        '-Wall', '-Wextra', '-Werror', '-fno-exceptions', '-fno-rtti',
+        '-I' + str(runtime / '.tools/java25/openjdk/src/hotspot/share'),
+        '-c', str(runtime / 'java25/probe/emutls_alloc.cpp'),
+        '-o', str(emutls_backend)], check=True)
     storage_fault=work/'storage-fault.o'
     fault_renames=['-Dps5shaderc_fault_'+suffix+'=prospero_storage_fault_'+suffix for suffix in ('begin','end','status','extended_status')]
     subprocess.run([str(llvm/'clang'),*flags,'-fPIC',*fault_renames,'-c',str(ROOT/'client/ports/shaderc/fault.c'),'-o',str(storage_fault)],check=True)
@@ -292,7 +298,7 @@ def main():
             if not destination.exists():
                 os.link(file, destination)
     pie = work / ('client121-'+candidate+'-symbols.elf')
-    replacements = {'inputs/031-embedded-jvm.o': registry / 'embedded-jvm.o', 'inputs/022-renderer.o':presenter,'inputs/110-graphics-support.o': graphics_object, 'inputs/104-main.o': main_obj, 'inputs/044-embedded-ps5sdl.o': registry/'embedded-ps5sdl.o', 'inputs/032-embedded-java.o': registry / 'embedded-java.o',
+    replacements = {'inputs/062-backend.o': emutls_backend, 'inputs/031-embedded-jvm.o': registry / 'embedded-jvm.o', 'inputs/022-renderer.o':presenter,'inputs/110-graphics-support.o': graphics_object, 'inputs/104-main.o': main_obj, 'inputs/044-embedded-ps5sdl.o': registry/'embedded-ps5sdl.o', 'inputs/032-embedded-java.o': registry / 'embedded-java.o',
                     'inputs/109-builtin-libraries.o': registry / 'builtin-libraries.o'}
     link = []
     for item in manifest['arguments']:
@@ -319,7 +325,7 @@ def main():
     subprocess.run([str(converter), 'link', '--in', str(pie), '--out', str(elf), '--stub-dir', str(sdk / 'target/lib'),
         *sum([['--stub', str(p)] for p in stubs], []), '--module-sdk', '0x02000009', '--companion-sdk', '0x08050001', '--file-name', 'eboot.elf'], check=True)
     if args.check_only:
-        print('PASS234 target compile/link/converter; no signed candidate ZIP')
+        print('PASS235 target compile/link/converter; no signed candidate ZIP')
         return
     subprocess.run([str(converter), 'self', '--sign', '--in', str(elf), '--out', str(app / 'eboot.bin'), '--magic', '0x1D3D154F'], check=True)
     subprocess.run([str(converter), 'self', '--inspect', '--file', str(app / 'eboot.bin')], check=True)
@@ -360,6 +366,8 @@ def main():
         'symbols_sha256': sha(pie), 'eboot_sha256': sha(app / 'eboot.bin'), 'runtime': pin,
         'parentNativeGroupsRetainedSha256': {n: sha(p) for n, p in old_groups.items() if n not in ('jvm','java','ps5sdl')},
         'javaRuntimeClassesAndImage': 'exact204 modules retained; native libjava handle hook rebuilt',
+        'compilerTlsBackendSha256': sha(emutls_backend),
+        'compilerTlsSourceSha256': sha(runtime / 'java25/probe/emutls_alloc.cpp'),
         'newGroupSha256': sha(registry / 'embedded-lwjgl333.o'), 'overlaySha256': sha(overlay),
         'source_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
         'source_tree': 'modified' if subprocess.check_output(['git', 'status', '--porcelain'], text=True).strip() else 'clean',
@@ -370,7 +378,7 @@ def main():
     (output / 'build-audit.json').write_text(json.dumps(record, indent=2) + '\n')
     (output / 'SHA256SUMS').write_text(record['package_sha256'] + '  PPSA99874.zip\n')
     shutil.copyfile(pie, output / pie.name)
-    print('LOCAL234', package, 'SHA256', record['package_sha256'])
+    print('LOCAL235', package, 'SHA256', record['package_sha256'])
 
 
 if __name__ == '__main__':
