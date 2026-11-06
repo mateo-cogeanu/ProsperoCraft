@@ -1,7 +1,7 @@
 {
-  "commit": "1bc1480a8a95c5ceea42763f652c9cd494875dbd",
-  "patch": "java25/patches/0149-sample-native-allocation-success-traces.patch",
-  "patch_sha256": "d8759710e00741f6fb07f56c069e15d69a83d615c071fd017254e9c89dac7fc8",
-  "object_sha256": "1b079d27b73659e6b4cfb592d5d3adb88481844d97d73cb2aed34b68bd711a3b",
-  "feature": "Apply selected startup interval to successful native allocator reports; preserve complete errors"
+  "commit": "aae21931d0284fa00c2dd215e80ed9b733b19add",
+  "patch": "java25/patches/0150-ps5-native-8k-slab-class.patch",
+  "patch_sha256": "f0d81771bd40dfbc85403c3cee633791f1dd672ff7756be8f3ecf002a240d04e",
+  "object_sha256": "0ee3a84811bf88f180d73081ef1aca52a0c9e3e11f2e49ca0ff971255a4b0a85",
+  "feature": "Pool native allocator requests through8KiB to reduce per-buffer direct mapping demand"
 }
