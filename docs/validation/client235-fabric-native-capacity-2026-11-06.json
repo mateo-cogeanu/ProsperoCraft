@@ -1,0 +1,36 @@
+{
+  "app_version": "01.000.235",
+  "title_id": "PPSA99874",
+  "package_sha256": "d8048f2bcfc264d58beeb45eea71279acf6d2e71f54ebcc7e1b592596c632595",
+  "package_bytes": 127587760,
+  "extraMutexRuntime": {
+    "commit": "b56b38a4669408a3548802cc2f1d16e12a2ef9f7",
+    "patch": "java25/patches/0141-opt-in-native-direct-capacity.patch",
+    "patch_sha256": "8ebbea8042d7dadc615253e9658452e714533f3f17a5bd65b44ae9829edd6aaa",
+    "object_sha256": "fa2c974206cacf3a1b6c7def1bc8751fd48cf187f6dfc08c8817a14dd2d86e20"
+  },
+  "source_commit": "25defe1980df400c2350d74409bcd1bcea29980b",
+  "compilerTlsBackendSha256": "69796e4650eb71d2e5284a4905540b162dc8aa5bcc1c3f814211b2a5bf30f647",
+  "compilerTlsSourceSha256": "8f59b9248ee56a32cdbe0f5a61cd746dbb44975c5942134749de3a0f88b1df3a",
+  "previous_console_result": {
+    "build": "01.000.233",
+    "instance": "Minecraft 26.3 Fabric",
+    "user_feedback": "Entered a world and played briefly before crashing.",
+    "failure": "C2 native arena allocation of 32664 bytes failed while compiling a Sodium lighting method. The runtime recorded 2048 net live direct mappings, native held bytes near 248 MiB and policy rejections.",
+    "unresolved": "Complete mapping ownership and longer-term native demand remain unproven. No first-EMFILE capture was present in this run."
+  },
+  "candidate_change": "Opt into 4096 native mapping ledger slots and a 512 MiB native fallback budget. Rebuild the compiler TLS backend against the matching ledger layout. Java heap policy, tiered C2 and Parallel GC are retained.",
+  "local_candidate_234": "Superseded before console testing after integration review identified that the retained compiler TLS backend needed rebuilding for the new ledger layout. Its local package remains retained.",
+  "verification": [
+    "Actual native allocator host test passed default and extended policies under ASan/UBSan, including byte and slot exhaustion, late setter rejection, kernel failure rollback, conservative cleanup and concurrent lifetimes.",
+    "PS5 HotSpot target build and matching compiler TLS backend build passed.",
+    "ProsperoCraft native host lane passed all 13 checks.",
+    "Signed PS5 package audit and SHA-256 verification passed."
+  ],
+  "console_status": "pending",
+  "console_checks": [
+    "Launch the same Fabric instance and play long enough to exercise compilation and world streaming.",
+    "Save, exit and reload the world.",
+    "Check Vanilla startup, performance and saves before the separate 1.21.9 test."
+  ]
+}

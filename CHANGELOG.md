@@ -1,5 +1,12 @@
 # Changelog
 
+## Local 235 · Native compilation headroom, 2026-11-06
+
+- Opt into 4096 direct mapping slots and a 512 MiB native fallback budget after
+  C2 compilation exhausted the earlier mapping capacity during Fabric gameplay.
+- Rebuild the compiler TLS adapter against the matching runtime ledger layout.
+  Physical console validation is pending.
+
 ## Local 233 · File descriptor exhaustion capture, 2026-11-06
 
 - Save the first tracked EMFILE inventory through the existing native stderr log
