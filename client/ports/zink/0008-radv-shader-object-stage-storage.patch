@@ -1,0 +1,22 @@
+--- a/src/amd/vulkan/radv_shader_object.c
++++ b/src/amd/vulkan/radv_shader_object.c
+@@ -379,7 +379,10 @@
+                                  const VkShaderCreateInfoEXT *pCreateInfo)
+ {
+    mesa_shader_stage stage = vk_to_mesa_shader_stage(pCreateInfo->stage);
+-   struct radv_shader_stage stages[MESA_VULKAN_SHADER_STAGES];
++   /* The shader-stage array can exhaust a native PS5 worker stack. */
++   struct radv_shader_stage *stages = malloc(MESA_VULKAN_SHADER_STAGES * sizeof(*stages));
++   if (!stages)
++      return VK_ERROR_OUT_OF_HOST_MEMORY;
+ 
+    for (unsigned i = 0; i < MESA_VULKAN_SHADER_STAGES; i++) {
+       stages[i].stage = MESA_SHADER_NONE;
+@@ -473,6 +476,7 @@
+       }
+    }
+ 
++   free(stages);
+    return VK_SUCCESS;
+ }
+ 

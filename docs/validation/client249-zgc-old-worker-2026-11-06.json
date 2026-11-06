@@ -7,16 +7,22 @@
   "source_provenance": "The package was built with these changes in the working tree before the source commit. The embedded HotSpot object matches build 248 byte for byte.",
   "prior_console_record": "client248-fabric2611-resource-reload-crash-2026-11-06.json",
   "change": "Set ZOldGCThreads=1 for candidate 249. Retain the young-generation worker ceiling of two, overall concurrent budget of two, parallel GC worker setting, ZGC heap, C2, and two-partition Mesa cache.",
-  "limitation": "This tests whether reducing old-generation worker concurrency changes the crash. The fatal fault is unresolved. A single old-generation worker may take longer during major collections.",
+  "limitation": "This tests whether reducing old-generation worker concurrency changes startup. A single old-generation worker may take longer during major collections.",
   "checks": [
     "Host JDK 25 accepts the options and reports one old and two young workers.",
     "Native host lane passed all 13 checks.",
     "PS5 target compile/link/signing and independent package audit passed. ZIP SHA-256 verified."
   ],
-  "console_status": "Pending",
+  "console_status": "Fabric 26.1.1 passed startup, entered a world and saved without Sodium. The same instance crashed during resource loading with Sodium 0.8.9 enabled.",
   "console_checks": [
-    "Launch the same Fabric 26.1.1 instance through resource loading with Sodium disabled, then enabled.",
-    "Check frame pacing and world save/rejoin after startup succeeds."
+    "Retest with Sodium enabled after the shader-stage storage change.",
+    "Check frame pacing and repeated world save/rejoin after startup succeeds."
   ],
-  "release_store": "Held."
+  "release_store": "Held.",
+  "sodium_failure": {
+    "run": "client-01.000.249-1793981831-691811600",
+    "gc": "The final logged major collection completed before the native crash.",
+    "symbolization": "Using the in-image signal-handler anchor and a load adjustment of 0x400000, the reported RIP resolves to radv_shader_object_init_graphics, inlined into radv_shader_object_create. The instruction stores at RBP minus 0xe1c0, exactly the reported fault address, while initializing the local shader-stage array. The function reserves 0x182d8 bytes of stack.",
+    "scope": "This identifies the native fault in this run. It does not establish the cause of the earlier build 248 crashes."
+  }
 }
