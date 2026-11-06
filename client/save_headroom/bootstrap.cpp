@@ -22,7 +22,9 @@
 #include "../startup/bootstrap.cpp"
 #undef main
 #include "../ports/zink/submit_policy.hpp"
+#include "../startup/shader_cache_budget.hpp"
 int main(int argc,char** argv){
+ if(prospero_shader_cache::configure()!=0)return 1;
  if(!prospero_storage::initialize(false))return 1;
  client_openal_boundary::disable();
  if(setenv("PROSPERO_GLFW_FINAL_SDL_QUIT","1",1)!=0)return 1;

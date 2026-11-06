@@ -89,6 +89,8 @@ def normalize(name, text):
                  '#define PROSPERO_FILE_PRESSURE_REPORT 1\n',
                  '#include "../launcher/storage_paths.hpp"\n',
                  '#include "../ports/openal/startup_boundary.hpp"\n',
+                 '#include "../startup/shader_cache_budget.hpp"\n',
+                 ' if(prospero_shader_cache::configure()!=0)return 1;\n',
                  ' client_openal_boundary::disable();\n',
                  '#define ps5shaderc_fault_begin prospero_storage_fault_begin\n',
                  '#define ps5shaderc_fault_end prospero_storage_fault_end\n',

@@ -10,9 +10,19 @@ def main():
   w=Path(folder);source=w/'check.cpp';source.write_text(r'''#include <cassert>
 #include <string>
 #include "submit_policy.hpp"
+#include "../../startup/shader_cache_budget.hpp"
 static int calls;
 static int refusal(const char*,const char*,int){calls++;errno=ENOMEM;return -1;}
 int main(){
+ unsetenv("MESA_DISK_CACHE_DATABASE_NUM_PARTS");
+ assert(prospero_shader_cache::configure(refusal)==ENOMEM&&calls==1);
+ assert(!getenv("MESA_DISK_CACHE_DATABASE_NUM_PARTS"));
+ assert(!prospero_shader_cache::configure());
+ assert(std::string(getenv("MESA_DISK_CACHE_DATABASE_NUM_PARTS"))=="2");
+ setenv("MESA_DISK_CACHE_DATABASE_NUM_PARTS","50",1);
+ assert(!prospero_shader_cache::configure());
+ assert(std::string(getenv("MESA_DISK_CACHE_DATABASE_NUM_PARTS"))=="2");
+ calls=0;
  unsetenv("ZINK_DEBUG");assert(!getenv("ZINK_DEBUG"));
  assert(!prospero_zink::enable_flushsync());assert(std::string(getenv("ZINK_DEBUG"))=="flushsync");
  assert(!prospero_zink::enable_flushsync(refusal)&&calls==0);
