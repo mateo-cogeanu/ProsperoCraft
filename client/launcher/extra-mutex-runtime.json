@@ -1,7 +1,7 @@
 {
-  "commit": "af2d07dc45df72c957e9b66cd093aa19a4f595b1",
-  "patch": "java25/patches/0143-ps5-zgc-native-reservation.patch",
-  "patch_sha256": "43aa43197e42307469e98d0c3c30878c52e90fc07c1a91dcc72fbc8734219ce5",
-  "object_sha256": "cd54d75c4656ae996175b266f8478d3f50c0af1dafc31e41426fc0aadcbbf11b",
-  "feature": "Experimental PS5 ZGC native virtual reservations and direct physical backing"
+  "commit": "4bfebc680e1d54c4132edf6fd988758b2dab198f",
+  "patch": "java25/patches/0144-ps5-zgc-address-window.patch",
+  "patch_sha256": "ac10a9d277120b6b962f89de95bdae3e0bcd1a0c90b0263c4e7b660c9453255a",
+  "object_sha256": "acdcf88e75523eb7fc85ec700927ac4ae9f06b37b07d8de881c6f9a986f5f5d0",
+  "feature": "Experimental PS5 ZGC lower heap address window with native reservations and direct backing"
 }
