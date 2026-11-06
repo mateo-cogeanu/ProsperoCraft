@@ -12,10 +12,16 @@
     "Native host lane passed all 13 checks including option token handling, idempotence and setter refusal.",
     "PS5 target compile/link/signing and package audit passed. ZIP SHA-256 verified."
   ],
-  "console_status": "Pending",
+  "console_status": "Fabric 26.1 with Fabric API alone still crashes during resource loading.",
   "console_checks": [
     "Start Fabric 26.1 with only Fabric API, then load, save and rejoin a world if startup succeeds.",
     "Retest Sodium and frame pacing after the baseline launch passes."
   ],
-  "release_store": "Held."
+  "release_store": "Held.",
+  "failed_run": "client-01.000.252-1793984235-961344466",
+  "observations": [
+    "The last logged ZGC major collection completed.",
+    "Retained SIGSEGV records show HotSpot resuming. No terminal faulting instruction was retained.",
+    "The package selects noshobj, but its early startup message did not reach the persistent crash logs."
+  ]
 }

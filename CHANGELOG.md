@@ -1,5 +1,10 @@
 # Changelog
 
+## Local 253 · Test synchronous Zink shader compilation, 2026-11-06
+
+- Keep the Vulkan pipeline path and compile synchronously after Fabric 26.1
+  still crashed in build 252. Startup and frame pacing need PS5 validation.
+
 ## Local 252 · Use Zink's Vulkan pipeline path, 2026-11-06
 
 - Test Zink with shader objects disabled after Fabric 26.1 crashed in the

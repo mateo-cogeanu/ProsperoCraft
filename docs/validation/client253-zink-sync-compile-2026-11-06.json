@@ -1,0 +1,15 @@
+{
+  "app_version": "01.000.253",
+  "title_id": "PPSA99874",
+  "package_sha256": "048777d77d20499b62fe303612eae55a304090cbd7240c228a129cdf4c63c0e9",
+  "package_bytes": 127912561,
+  "source_commit": "0b11729d5592ac9142ef60ce5e7c45fa935a40e6",
+  "change": "Keep the Zink Vulkan pipeline path and add the upstream nobgc option to compile shaders synchronously. Record policy selection in the persistent startup log before Zink preparation.",
+  "limitation": "Tests whether asynchronous shader compilation contributes to the Fabric 26.1 failure. The root cause is unresolved. Synchronous compilation can increase first-use pauses.",
+  "checks": [
+    "All 13 native host checks passed including Zink option tests.",
+    "Target build, signing, package audit and SHA-256 passed."
+  ],
+  "console_status": "Pending Fabric 26.1 startup with Fabric API alone, then world save/rejoin and frame pacing.",
+  "release_store": "Held."
+}
