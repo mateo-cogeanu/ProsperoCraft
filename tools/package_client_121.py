@@ -20,7 +20,7 @@ from build_lwjgl333 import sha
 from storage_bootstrap_policy import normalize
 
 BASE_PACKAGE = '89167d01c7da0ece733b0dd8b7871a05ee38ff5f79ee45b4ce9beefc5d4c14a0'
-BASE_RELINK = '4351224b235d2b16a688afc4d31f23f0c6badc30670d034ad065cc629bce9f0f'
+BASE_RELINK = '4351224b234d2b16a688afc4d31f23f0c6badc30670d034ad065cc629bce9f0f'
 
 
 TINYFD_JAR = 'lwjgl-tinyfd-3.4.1.jar'
