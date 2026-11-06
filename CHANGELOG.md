@@ -1,5 +1,11 @@
 # Changelog
 
+## Local 248 · Preserve file handles for world I/O, 2026-11-06
+
+- Select two Mesa disk-cache partitions before graphics initialization after
+  shader databases dominated a live EMFILE inventory. Cache warmup and chunk
+  save/reload tests remain pending on console.
+
 ## Local 247 · Pool medium native buffers, 2026-11-06
 
 - Share slabs for native requests through64KiB to reduce mapping entries.

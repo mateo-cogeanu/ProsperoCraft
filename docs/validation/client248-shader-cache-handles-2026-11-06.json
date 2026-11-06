@@ -1,0 +1,43 @@
+{
+  "app_version": "01.000.248",
+  "title_id": "PPSA99874",
+  "package_sha256": "bbf58c19f25de66b26bd708d735f53c59de6b8797d8209c3d90e79a7362eb3d1",
+  "package_bytes": 127877009,
+  "extraMutexRuntime": {
+    "commit": "ad81a0ddf0c3a6e989597050dfc9aefd0b6b9c18",
+    "patch": "java25/patches/0151-ps5-native-medium-slab-classes.patch",
+    "patch_sha256": "f2b010da53d7a8a404ddc01667763ecc49ac534d21d60c763260c3e1a52d1bac",
+    "object_sha256": "5252146bf5c49e26a6f62efcb27dcdace85b775e8ed09913d762ece0b39e95d7",
+    "feature": "Pool medium native buffers through64KiB to reduce mapping ledger occupancy"
+  },
+  "source_commit": "0c5da167ee09cea53d6560ce9be52c7140d6279d",
+  "prior_console_result": {
+    "build": "01.000.247",
+    "instance": "Vanilla26.1.2",
+    "failure": "Chunk region reads and writes returned EMFILE. HTTP report-file opens returned503; raw FTP retrieved current exceptions.",
+    "inventory": {
+      "open_descriptors": 269,
+      "regular_files": 247,
+      "tracked_handles": 244,
+      "tracked_shader_cache_handles": 204,
+      "rlimit_soft": 12555,
+      "rlimit_hard": 12555
+    },
+    "finding": "Mesa multipart disk cache retained database/index handles across50 partitions, with multiple live cache owners. This dominates the tracked inventory. The advertised process rlimit does not explain the smaller effective file-open failure threshold."
+  },
+  "change": "Set MESA_DISK_CACHE_DATABASE_NUM_PARTS=2 before storage, native UI, graphics constructors and JVM initialization. This reduces partition retention without disabling the shader cache. Reuse the existing cache location and files.",
+  "tradeoffs": "A different partition count can cause shader cache misses and recompilation. Based on the inventory, approximately192 fewer shader cache handles are expected; actual remaining world/driver/native handle use needs console measurement.",
+  "checks": [
+    "Actual policy helper passed host ASan/UBSan tests for absent and prior50 values, exact2 selection, setter refusal and preserved surrounding environment policy.",
+    "Native host lane passed13 checks.",
+    "Signed package audit verifies the linked partition option and preserves retained inputs. SHA-256 verification passed."
+  ],
+  "console_status": "pending",
+  "console_checks": [
+    "Use Vanilla26.1.2, load the affected world, travel and inspect chunks, save/exit/rejoin.",
+    "Capture live file inventory to verify reduced cache handles and descriptor headroom.",
+    "Retest other Zink and Vulkan versions with cache warming and repeated world use."
+  ],
+  "unresolved": "No verified title/filesystem quota-raising mechanism has been identified. A complete long-run world-handle cap is not established.",
+  "releaseStore": "Held pending physical-console acceptance."
+}
