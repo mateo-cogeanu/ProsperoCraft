@@ -1,5 +1,10 @@
 # Changelog
 
+## Local 247 · Pool medium native buffers, 2026-11-06
+
+- Share slabs for native requests through64KiB to reduce mapping entries.
+  Sparse-class overhead and sustained Fabric gameplay need console validation.
+
 ## Local 246 · Pool native buffers through 8 KiB, 2026-11-06
 
 - Add a ninth native slab class to reduce mapping demand for small buffers

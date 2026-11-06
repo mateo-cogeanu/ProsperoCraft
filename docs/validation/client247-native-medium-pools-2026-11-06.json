@@ -1,0 +1,36 @@
+{
+  "app_version": "01.000.247",
+  "title_id": "PPSA99874",
+  "package_sha256": "3190a3c3ac36af5280110ab49be47cb393b3a58dd174c6c7307a4a97dad7a18d",
+  "package_bytes": 127877675,
+  "extraMutexRuntime": {
+    "commit": "ad81a0ddf0c3a6e989597050dfc9aefd0b6b9c18",
+    "patch": "java25/patches/0151-ps5-native-medium-slab-classes.patch",
+    "patch_sha256": "f2b010da53d7a8a404ddc01667763ecc49ac534d21d60c763260c3e1a52d1bac",
+    "object_sha256": "5252146bf5c49e26a6f62efcb27dcdace85b775e8ed09913d762ece0b39e95d7",
+    "feature": "Pool medium native buffers through64KiB to reduce mapping ledger occupancy"
+  },
+  "source_commit": "70af6e31be57ec1071cef59ed56166addd9eac19",
+  "compilerTlsBackendSha256": "69796e4650eb71d2e5284a4905540b162dc8aa5bcc1c3f814211b2a5bf30f647",
+  "prior_console_result": {
+    "build": "01.000.246",
+    "instance": "Fabric26.2",
+    "user_feedback": "Longer gameplay followed by crash.",
+    "failure": "Native64KiB ReallocateHeap failure. Direct ledger counters show4096 net live mappings, approximately426MiB held under512MiB budget and policy rejection."
+  },
+  "change": "Extend native slabs through16/32/64KiB classes, sharing eight-slot slabs across medium buffers. Existing pressure fallback can use a minimum single-slot slab. Larger buffers retain independent mappings.",
+  "tradeoffs": "Sparse medium classes consume extra backing. Pooled arena requests may require up to64KiB minimum mapping capacity rather than the previous two-page guarantee. At most one empty slab per class remains warm. Console bytes/mapping tradeoff needs validation.",
+  "checks": [
+    "Actual default/extended allocator tests passed ASan/UBSan, including6144 simultaneously live9000/32664/65536byte buffers in fewer than900 mappings with content and complete backing release verification. Prior8192buffer4112byte occupancy regression passed.",
+    "Native heap tests passed twelve-class ownership/growth/pressure/failure/concurrency, single-slot fallback and NMT accounting checks.",
+    "Changed target objects compiled and embedded app linked/signed. Standalone JVM shared target retains documented SDK shared/PIE conflict.",
+    "Native host lane passed13 checks.",
+    "Signed package audit and SHA-256 verification passed."
+  ],
+  "console_status": "pending",
+  "console_checks": [
+    "Retest sustained Fabric26.2 gameplay and streaming, save/exit/rejoin.",
+    "Check byte/mapping headroom and frame pacing. Then regress Vanilla/Fabric26.3."
+  ],
+  "releaseStore": "Held pending physical-console acceptance."
+}
