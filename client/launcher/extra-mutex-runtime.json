@@ -1,7 +1,7 @@
 {
-  "commit": "aae21931d0284fa00c2dd215e80ed9b733b19add",
-  "patch": "java25/patches/0150-ps5-native-8k-slab-class.patch",
-  "patch_sha256": "f0d81771bd40dfbc85403c3cee633791f1dd672ff7756be8f3ecf002a240d04e",
-  "object_sha256": "0ee3a84811bf88f180d73081ef1aca52a0c9e3e11f2e49ca0ff971255a4b0a85",
-  "feature": "Pool native allocator requests through8KiB to reduce per-buffer direct mapping demand"
+  "commit": "ad81a0ddf0c3a6e989597050dfc9aefd0b6b9c18",
+  "patch": "java25/patches/0151-ps5-native-medium-slab-classes.patch",
+  "patch_sha256": "f2b010da53d7a8a404ddc01667763ecc49ac534d21d60c763260c3e1a52d1bac",
+  "object_sha256": "5252146bf5c49e26a6f62efcb27dcdace85b775e8ed09913d762ece0b39e95d7",
+  "feature": "Pool medium native buffers through64KiB to reduce mapping ledger occupancy"
 }
