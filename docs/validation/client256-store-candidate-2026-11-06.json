@@ -1,0 +1,18 @@
+{
+  "app_version": "01.000.256",
+  "title_id": "PPSA99874",
+  "package_sha256": "06f78953a0c7648dda95b88b9de11ecb6c0ba357ba3a5312b6605ece1e9e3637",
+  "package_bytes": 127912902,
+  "source_commit": "41cc5b0b04fb376784586e40729585cbaa71bd02",
+  "change": "Promote the existing Vanilla 1.21.9 launch path to normal launcher status. Keep the Experimental badge for Fabric 26.1. Diagnostic thread sampling is off in this candidate.",
+  "checks": [
+    "Launcher policy assertions cover the unbadged Vanilla 1.21.9 card, exact 1.21 release gates and scoped Experimental badge.",
+    "PS5 target build, signing, package audit and ZIP SHA-256 passed."
+  ],
+  "console_status": "Pending exact-build physical PS5 validation, including supported versions and shader load/render acceptance.",
+  "store_changelog_draft": [
+    "Added Minecraft 1.21.9 Vanilla support.",
+    "Substantially improved gameplay performance."
+  ],
+  "release_store": "Held pending exact-build console validation."
+}

@@ -1,5 +1,10 @@
 # Changelog
 
+## Local 256 · Promote Vanilla 1.21.9, 2026-11-06
+
+- Show Vanilla 1.21.9 with the normal launcher status in the ProsperoStore
+  candidate. Physical validation of this exact package remains pending.
+
 ## Local 255 · Mark Fabric 26.1 Experimental, 2026-11-06
 
 - Add the Experimental badge to Fabric 26.1 instance cards.
