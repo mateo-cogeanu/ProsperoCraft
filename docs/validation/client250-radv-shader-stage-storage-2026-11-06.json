@@ -22,9 +22,9 @@
     "The embedded HotSpot object matches build 249 byte for byte.",
     "Native host lane passed 13 checks. Signed executable integrity, independent package audit and ZIP SHA-256 passed."
   ],
-  "console_status": "Partial. Retained build 250 logs confirm Fabric 26.1.1 with Sodium entered a world, saved, rejoined and saved again. Fabric 26.1 with Sodium crashed during resource loading in a separate run.",
+  "console_status": "Partial. Fabric 26.1.1 with Sodium entered a world, saved, rejoined and saved again. Fabric 26.1 crashed during resource loading both with and without Sodium.",
   "console_checks": [
-    "Retry the same Fabric 26.1 instance on build 250 with Sodium disabled to isolate the mod path."
+    "Retry Fabric 26.1 on the same build with Sodium and Controlify disabled while keeping Fabric API installed."
   ],
   "release_store": "Held.",
   "fabric_26_1_sodium_failure": {
@@ -39,7 +39,15 @@
     "findings": [
       "The process monitor corroborates the crash. The game reached resource reload after creating the GL context. The last logged major collection completed.",
       "The retained trace includes an early WSI enqueue marker but no terminal signal or faulting instruction. This does not establish whether presentation, shader compilation, or another concurrent operation caused the crash.",
-      "Vanilla 26.1 reached a world and saved on build 250. The equivalent Fabric 26.1 launch with Sodium disabled remains untested."
+      "Vanilla 26.1 reached a world and saved on build 250."
+    ]
+  },
+  "fabric_26_1_no_sodium_failure": {
+    "run": "client-01.000.250-1793982869-590769389",
+    "findings": [
+      "The same instance again reached resource reload before the process monitor recorded a crash. Sodium is absent from the active resource list and Indigo registers. Controlify and Fabric API remain loaded.",
+      "The retained SIGSEGV records at address 0x8 show HotSpot selecting implicit-null continuations and resuming. The trace continues beyond them and does not establish a terminal fault.",
+      "No matching JVM fatal report or abort marker identifies the crash. The final GC entry and OpenGL native lookup lines establish proximity only."
     ]
   }
 }
