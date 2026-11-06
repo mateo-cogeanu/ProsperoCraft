@@ -333,7 +333,7 @@ def main():
     (java/'native-presentation-audit.json').write_text(json.dumps({'runtime':presentation_pin,'build':presenter_audit},indent=2)+'\n')
     for name in presentation_pin['source_sha256']:
         destination=java/'native-presentation-source'/name;destination.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(runtime/name,destination)
-    storage_sources=('client/launcher/storage_paths.hpp','client/launcher/native_menu.hpp','client/launcher/report-runtime.json','client/ports/shaderc/fault.c','client/ports/openal/startup_boundary.hpp','client/ports/sdl/ps5_startup_boundary.h','client/startup/log4j2-startup.xml')
+    storage_sources=('client/launcher/storage_paths.hpp','client/launcher/native_menu.hpp','client/launcher/report-runtime.json','client/ports/shaderc/fault.c','client/ports/openal/startup_boundary.hpp','client/ports/sdl/ps5_startup_boundary.h','client/startup/log4j2-startup.xml','client/startup/file_pressure_report.hpp')
     for name in storage_sources:
         destination=java/'storage-source'/name;destination.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(ROOT/name,destination)
     for name in report_pin['source_sha256']:
@@ -363,7 +363,7 @@ def main():
         'newGroupSha256': sha(registry / 'embedded-lwjgl333.o'), 'overlaySha256': sha(overlay),
         'source_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
         'source_tree': 'modified' if subprocess.check_output(['git', 'status', '--porcelain'], text=True).strip() else 'clean',
-        'scope': 'Opt-in extra HotSpot mutex reserve for the observed Fabric allocation failure to the verified original library; retains TinyFD repair',
+        'scope': 'Retain the first tracked EMFILE snapshot in the preopened native stderr report.',
         'tinyfd_sha256': TINYFD_SHA256, 'jitWarmupRuntime': jit_pin, 'extraMutexRuntime': sync_pin,
         'nativePresenterSha256':sha(presenter),'presentationRuntime':presentation_pin,'graphicsSupportSha256':sha(graphics_object),'newSdlGroupSha256':sha(registry/'embedded-ps5sdl.o'),'oshi665Sha256':sha(os_overlay),
         'console': 'NOT TESTED', 'releaseStore': 'No action'}
