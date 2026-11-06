@@ -1,0 +1,31 @@
+{
+  "app_version": "01.000.250",
+  "title_id": "PPSA99874",
+  "package_sha256": "28038f5d05cf916f5b8cd8d74bfe8003c4822fa6c81be67990dc32ffd85c78ad",
+  "package_bytes": 127908633,
+  "source_commit": "a741468c0f735a970adc4c569c05096a767b3c93",
+  "prior_console_record": "client249-zgc-old-worker-2026-11-06.json",
+  "change": "Allocate temporary RADV shader-stage arrays in both shader-object creation paths on the heap. Check allocation and free the arrays on success and on existing error paths. Preserve build 249 JVM policy and build 248 file-handle policy.",
+  "stack_reservation_bytes": {
+    "radv_shader_object_create": {
+      "249": 99032,
+      "250": 8472
+    },
+    "radv_CreateShadersEXT": {
+      "249": 99048,
+      "250": 2712
+    }
+  },
+  "checks": [
+    "Rebuilt the pinned PS5 RADV/Zink component and scoped graphics provider.",
+    "Linked PS5 disassembly confirms both stack reductions and use of the scoped allocator and free.",
+    "The embedded HotSpot object matches build 249 byte for byte.",
+    "Native host lane passed 13 checks. Signed executable integrity, independent package audit and ZIP SHA-256 passed."
+  ],
+  "console_status": "Pending",
+  "console_checks": [
+    "Launch the same Fabric 26.1.1 instance with Sodium 0.8.9 enabled.",
+    "After successful startup, enter a world and verify save/rejoin."
+  ],
+  "release_store": "Held."
+}

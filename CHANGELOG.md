@@ -1,5 +1,11 @@
 # Changelog
 
+## Local 250 · Reduce native shader creation stack usage, 2026-11-06
+
+- Move the large RADV shader-stage arrays to checked heap storage after the
+  Fabric 26.1.1 Sodium crash resolved to a stack write in shader creation.
+  PS5 startup with Sodium and world save/rejoin remain pending.
+
 ## Local 249 · Limit old-generation ZGC workers, 2026-11-06
 
 - Test one old-generation worker after Fabric 26.1.1 repeatedly crashed during
