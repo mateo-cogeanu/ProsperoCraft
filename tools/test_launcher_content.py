@@ -43,6 +43,25 @@ public class ContentCheck {
   var bad=JsonParser.parseString(new String(bodies.get("version:modA"))).getAsJsonObject();bad.add("game_versions",JsonParser.parseString("[\"26.2\"]"));bodies.put("version:modA",bytes(bad.toString()));denied(()->api.version("modA","",ProsperoModrinth.Kind.MOD,"26.3",()->false));
   denied(()->ProsperoDownloads.safe("https://cdn.modrinth.com.evil.invalid/file"));denied(()->ProsperoDownloads.safe("http://cdn.modrinth.com/file"));denied(()->ProsperoDownloads.safe("https://u@cdn.modrinth.com/file"));denied(()->ProsperoDownloads.safe("https://api.modrinth.com:443/file"));
   bad.getAsJsonArray("files").get(0).getAsJsonObject().addProperty("filename","../escape.jar");denied(()->api.file(bad,ProsperoModrinth.Kind.MOD));
+
+  // Correct two publisher metadata mistakes without pinning all future releases.
+  JsonObject yacl=JsonParser.parseString(version("skcT0J9K","1eAoo2KR","fabric","yacl.jar","")).getAsJsonObject();
+  yacl.add("game_versions",JsonParser.parseString("[\"1.21.9\",\"1.21.10\"]"));
+  String newest=yacl.toString();yacl.addProperty("id","ORi1nScg");String second=yacl.toString();
+  yacl.addProperty("id","UZmV6xf4");String compatible=yacl.toString();
+  bodies.put("version:1eAoo2KR",bytes(newest+","+second+","+compatible));
+  check(api.version("1eAoo2KR","",ProsperoModrinth.Kind.MOD,"1.21.9",()->false).get("id").getAsString().equals("UZmV6xf4"),"1.21.9 YACL compatibility selection");
+  check(api.version("1eAoo2KR","",ProsperoModrinth.Kind.MOD,"1.21.10",()->false).get("id").getAsString().equals("skcT0J9K"),"1.21.10 selection changed");
+  bodies.put(ProsperoModrinth.API+"version/skcT0J9K",bytes(newest));
+  denied(()->api.version("1eAoo2KR","skcT0J9K",ProsperoModrinth.Kind.MOD,"1.21.9",()->false));
+  bodies.put(ProsperoModrinth.API+"version/UZmV6xf4",bytes(compatible));
+  check(api.version("1eAoo2KR","UZmV6xf4",ProsperoModrinth.Kind.MOD,"1.21.9",()->false).get("id").getAsString().equals("UZmV6xf4"),"compatible exact pin");
+  yacl.addProperty("id","futureYacl");String future=yacl.toString();
+  bodies.put("version:1eAoo2KR",bytes(future+","+newest+","+compatible));
+  check(api.version("1eAoo2KR","",ProsperoModrinth.Kind.MOD,"1.21.9",()->false).get("id").getAsString().equals("futureYacl"),"future release was frozen out");
+  bodies.put("version:1eAoo2KR",bytes(newest+","+second));
+  denied(()->api.version("1eAoo2KR","",ProsperoModrinth.Kind.MOD,"1.21.9",()->false));
+
   Path linked=root.resolve("linked");Files.createSymbolicLink(linked,game);denied(()->ProsperoDownloads.noLinks(linked.resolve("mods/a.jar")));
   Path modelRoot=root.resolve("library");var lib=new ProsperoLibrary(modelRoot);var vanilla=lib.add("Vanilla","26.3",1);var fabric=lib.add("Fabric","26.3",16,"fabric");lib.settings().showIntro=false;lib.save();check(new ProsperoLibrary(modelRoot).instances().get(1).loader.equals("fabric"),"loader not persistent");
   var old=JsonParser.parseString(Files.readString(modelRoot.resolve("library.json"))).getAsJsonObject();old.getAsJsonArray("instances").get(0).getAsJsonObject().remove("loader");Files.writeString(modelRoot.resolve("library.json"),old.toString());check(new ProsperoLibrary(modelRoot).instances().get(0).loader.equals("vanilla"),"old library migration");denied(()->lib.add("NeoForge","26.3",1,"neoforge"));

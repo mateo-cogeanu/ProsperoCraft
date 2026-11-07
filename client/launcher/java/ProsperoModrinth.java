@@ -104,11 +104,23 @@ final class ProsperoModrinth {
    String filter=kind==Kind.MOD?"&loaders="+ProsperoDownloads.encode(array("fabric")):"";
    var versions=download.json(API+"project/"+project+"/version?game_versions="+ProsperoDownloads.encode(array(game))+filter+"&include_changelog=false",cancel).getAsJsonArray();
    if(versions.isEmpty())throw new IOException("No compatible download for "+project+" on "+game);
-   version=versions.get(0).getAsJsonObject();
+   version=null;
+   for(var item:versions){
+    var candidate=item.getAsJsonObject();
+    if(!incompatibleRelease(candidate,kind,game)){version=candidate;break;}
+   }
+   if(version==null)throw new IOException("No compatible download for "+project+" on "+game);
   }
   if(!project.equals(ProsperoDownloads.text(version,"project_id"))||!ProsperoDownloads.contains(version,"game_versions",game)||(kind==Kind.MOD&&!ProsperoDownloads.contains(version,"loaders","fabric")))throw new IOException("Content version is incompatible with this instance");
+  if(incompatibleRelease(version,kind,game))throw new IOException("This YACL release requires a Fabric API unavailable for Minecraft "+game+". Choose a compatible YACL release.");
   if("unsupported".equals(ProsperoDownloads.text(version,"client_side"))||ProsperoDownloads.text(version,"environment").matches("server_only|dedicated_server_only|server_only_client_optional"))throw new IOException("This download is server-only");
   return version;
+ }
+ // These publisher releases list 1.21.9, but require Fabric API >=0.138.3+1.21.10.
+ // Keep exact required-version pins explicit and allow future publisher releases.
+ private static boolean incompatibleRelease(JsonObject version,Kind kind,String game){
+  return kind==Kind.MOD&&"1.21.9".equals(game)&&"1eAoo2KR".equals(ProsperoDownloads.text(version,"project_id"))
+    &&Set.of("skcT0J9K","ORi1nScg").contains(ProsperoDownloads.text(version,"id"));
  }
  File file(JsonObject version,Kind kind)throws Exception {
   JsonObject selected=null;for(var item:version.getAsJsonArray("files")){var f=item.getAsJsonObject();if(selected==null)selected=f;if(f.has("primary")&&f.get("primary").getAsBoolean()){selected=f;break;}}

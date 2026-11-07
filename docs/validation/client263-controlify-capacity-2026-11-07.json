@@ -31,6 +31,6 @@
     "Independent package audit verifies the actual 512-entry metadata size and adapter object hash, paired JNA providers, scoped JNI handles and existing policy.",
     "All 907 unpacked entries match the ZIP."
   ],
-  "console_status": "Exact build 263 DualSense detection, input handoff, haptics and world/save/quit remain pending. The reserve is bounded and broader native allocation pressure remains unresolved.",
+  "console_status": "User reports 1.21.11 Fabric and 1.21.10 Fabric are okay on build 263. This is scoped functional feedback, without separate endurance/haptics/save/quit measurements or formal ALL PASS. User reports 1.21.9 YACL download requires Fabric API for 1.21.10. Build 264 addresses that dependency selection.",
   "release_store": "Local test candidate only."
 }
