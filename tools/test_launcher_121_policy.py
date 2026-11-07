@@ -136,7 +136,7 @@ public class Policy121 {
   org.lwjgl.sdl.SDLInit.live=32;try{session.verifyCleanReturn(bindings);throw new AssertionError("live SDL accepted");}catch(ProsperoSession.NotClean expected){}org.lwjgl.sdl.SDLInit.live=0;
   Files.writeString(logs.resolve("latest.log"),"[Render thread/FATAL]: crash\n",StandardOpenOption.APPEND);
   try{session.verifyCleanReturn(bindings);throw new AssertionError("fatal accepted");}catch(ProsperoSession.NotClean expected){}
-  System.out.println("PASS121 bounded releases/catalog, exact Vanilla resource gates, all Fabric deferred, no Vulkan, finite shutdown names, unchanged26decisions and coherent333/343/SDL class owners without fallback");
+  System.out.println("PASS121 bounded releases/catalog, exact historical gates, candidate Fabric and Maven artifact precedence, no Vulkan, finite shutdown names, unchanged26decisions and coherent333/343/SDL class owners without fallback");
  }
 }
 ''')
