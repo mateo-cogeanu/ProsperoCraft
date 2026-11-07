@@ -1,0 +1,38 @@
+{
+  "app_version": "01.000.264",
+  "title_id": "PPSA99874",
+  "source_commit": "f94d50e7248e9cb63a98ac86c7d01722b9a692ed",
+  "source_tree": "clean",
+  "package_sha256": "5c858adb2d96a65dc0a96dee136bd554830252f94072a2c3aec7455b40f651be",
+  "package_bytes": 127927692,
+  "symbols_sha256": "ff63f91bc0418d3375faa2867a4e4530d97e47e79230ade76defda767f8817c8",
+  "eboot_sha256": "347a94924d23c6b08c8c6731acfe094103af2cde8e646ead2f0db710adab2bcd",
+  "reproduction": {
+    "minecraft": "1.21.9",
+    "loader": "Fabric",
+    "reported_error": "YACL requires a Fabric API version for1.21.10.",
+    "host_before_fix": "Normal default installation fails because yet_another_config_lib_v3 requires fabric-api >=0.138.3+1.21.10."
+  },
+  "selection": {
+    "scope": "Minecraft1.21.9 YACL only",
+    "excluded_publisher_version_ids": [
+      "skcT0J9K",
+      "ORi1nScg"
+    ],
+    "selected_yacl_version": "3.8.0+1.21.9-fabric",
+    "selected_yacl_id": "UZmV6xf4",
+    "fabric_api": "0.134.1+1.21.9",
+    "controlify": "3.0.1 LTS",
+    "future_releases": "Eligible by the existing ordered publisher list. Exact incompatible pins are rejected explicitly."
+  },
+  "checks": [
+    "All 19 deterministic fast checks passed, including version exclusions, 1.21.10 selection, explicit-pin controls and future-release eligibility.",
+    "Live normal default installation reproduced the original error before the change and succeeded after the change.",
+    "The complete installed original mod graph satisfies genuine Fabric 0.20.1 version predicates for Minecraft1.21.9. Every installed file matches its publisher hash.",
+    "Target compile/link/conversion and signed SELF integrity passed.",
+    "Independent package audit passed with the retained runtime, JNA provider and actual 512-page callback reserve.",
+    "All 907 unpacked entries match the candidate ZIP."
+  ],
+  "console_status": "User reports build263 Fabric1.21.11 and1.21.10 are okay. Exact264 console1.21.9 download, menu, DualSense, gameplay and save/quit remain pending. No formal ALL PASS inferred.",
+  "release_store": "Local test candidate only."
+}

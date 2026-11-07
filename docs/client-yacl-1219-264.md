@@ -28,3 +28,5 @@ Publisher version records are available for
 [3.8.2](https://api.modrinth.com/v2/version/skcT0J9K),
 [3.8.1](https://api.modrinth.com/v2/version/ORi1nScg) and
 [3.8.0](https://api.modrinth.com/v2/version/UZmV6xf4).
+
+See the [exact build validation](validation/client264-yacl-1219-2026-11-07.json).
