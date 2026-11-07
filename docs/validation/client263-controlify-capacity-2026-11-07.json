@@ -19,18 +19,18 @@
     "minecraft": "1.21.11",
     "loader": "Fabric 0.20.1",
     "controlify": "3.0.1 LTS",
-    "evidence": "SDL3.4.2 initializes successfully. JNA registerMethod then fails allocating closures for gamepad and event bindings. Matching native stderr records use of all64 reserve slots and ENOMEM after exhaustion. A subsequent mouse-handler OutOfMemoryError is recorded."
+    "evidence": "SDL 3.4.2 initializes successfully. JNA registerMethod then fails to allocate gamepad/event closures. Matching native stderr records reserve fallback and ENOMEM after exhaustion. A subsequent mouse-handler OutOfMemoryError is recorded."
   },
   "checks": [
-    "Original libsdl4j/JNA full-registration host test reproduces64-slot failure and registers all270 native methods with512 slots. Actual SDL3.4.12 and genuine host libffi are used; the capacity provider is controlled host code.",
-    "Original direct-registration closure retention after unregister is observed and recorded. Callback-object release remains separately checked. Existing upstream JNA bootstrap warning remains.",
-    "Real x86-64 closure adapter passes both default64 and explicit512 with denied mmap,exhaustion/reuse,3200 concurrent callbacks and partial/unprimed/EACCES/RX/RW controls under ASan/UBSan.",
-    "All19 fast and13 native consumer host checks passed.",
-    "Rebuilt209-unit matched333 target with explicit512 reserve; unchanged original publisher JARs.",
+    "Full original libsdl4j/JNA registration reproduces the 64-slot failure and registers all 270 native methods with 512 slots. This uses actual SDL 3.4.12 and host libffi with a controlled capacity provider.",
+    "Original direct-registration closure retention after unregister is observed. Callback-object release is separately checked. The existing upstream JNA bootstrap warning remains.",
+    "The real x86-64 closure adapter passes default 64 and explicit 512 capacities under denied mmap, exhaustion/reuse, 3200 concurrent callbacks and partial/unprimed/EACCES/RX/RW controls with ASan/UBSan.",
+    "All 19 fast and 13 native consumer host checks passed.",
+    "The 209-unit matched333 target was rebuilt with the explicit 512-page reserve. Publisher JARs remain unchanged.",
     "Target compile/link/conversion and signed SELF integrity passed.",
-    "Independent package audit checks actual512-entry target metadata size and adapter object hash,paired JNA provider group,scoped JNI handles and existing policy.",
-    "All907 unpacked entries match the ZIP."
+    "Independent package audit verifies the actual 512-entry metadata size and adapter object hash, paired JNA providers, scoped JNI handles and existing policy.",
+    "All 907 unpacked entries match the ZIP."
   ],
-  "console_status": "Exact build263 DualSense detection,input handoff,haptics,world/save/quit pending. Callback reserve remains bounded and native allocation pressure remains unresolved. No physical acceptance inferred.",
+  "console_status": "Exact build 263 DualSense detection, input handoff, haptics and world/save/quit remain pending. The reserve is bounded and broader native allocation pressure remains unresolved.",
   "release_store": "Local test candidate only."
 }
