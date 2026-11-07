@@ -161,7 +161,8 @@ def build_native(args, pin, jdk, cache, work):
         flags += ['-target', 'x86_64-sie-ps5', '-march=x86-64', '-msse2', '-mno-avx', '-mno-avx2', '-mno-fma',
                   '-fvisibility-nodllstorageclass=default', '-fno-stack-protector', '-femulated-tls',
                   '-isysroot', str(sdk), '-isystem', str(sdk / 'target/include'),
-                  '-I' + str(headers), '-I' + str(headers / 'freebsd'), '-DHAS_FFI_UNIX64=1', '-DPROSPERO_FFI_RESERVE_COUNT=64']
+                  '-I' + str(headers), '-I' + str(headers / 'freebsd'), '-DHAS_FFI_UNIX64=1',
+                  '-DPROSPERO_FFI_RESERVE_COUNT=' + str(args.closure_reserve_count)]
     output = work / ('host' if args.host else 'ps5')
     output.mkdir(exist_ok=True)
     def compile_unit(unit):
@@ -189,6 +190,7 @@ def build_native(args, pin, jdk, cache, work):
              'objectsSha256': {f.name: sha(f) for f in objects}, 'outputSha256': sha(merged),
              'units': len(units), 'target': 'host' if args.host else 'PS5 x86_64/SSE2/emulatedTLS',
              'residentGroup': pin['residentGroup'], 'symbolPrefixRequired': pin['symbolPrefix'],
+             'closureReserveCount': 0 if args.host else args.closure_reserve_count,
              'hostSanitizers': 'UBSan except generic C ABI JNI function-pointer casts' if args.host else None,
              'scope': 'Genuine333 core/callback/GL/STB; shares existing compatible libffi/provider C APIs; no343 replacement',
              'console': 'pending'}
@@ -210,6 +212,7 @@ def main():
     parser.add_argument('--lld')
     parser.add_argument('--part', choices=('java', 'native', 'all'), default='all')
     parser.add_argument('--host', action='store_true')
+    parser.add_argument('--closure-reserve-count', type=int, choices=(64, 512), default=64)
     parser.add_argument('--fetch-deps', action='store_true')
     args = parser.parse_args()
     pin = json.loads((PORT / 'sources.json').read_text())

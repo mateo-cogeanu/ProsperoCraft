@@ -23,6 +23,7 @@ def main():
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--cc')
     parser.add_argument('--x86-64', action='store_true')
+    parser.add_argument('--reserve-count', type=int, choices=(64, 512), default=64)
     args = parser.parse_args()
     source, work = args.ffi_source_dir.resolve(), args.output_dir.resolve()
     pin = json.loads((ROOT / 'client/ports/libffi/sources.json').read_text())
@@ -57,9 +58,9 @@ def main():
     subprocess.run([str(llvm / 'llvm-ar'), 'd', str(archive), 'ffi64.o'], check=True)
     subprocess.run([str(llvm / 'llvm-ar'), 'r', str(archive), str(renamed)], check=True)
     adapter, binary = check / 'adapter.o', check / 'test'
-    flags = [*arch, '-O1', '-g', '-fsanitize=address,undefined', '-std=c11', '-I' + str(target / 'include')]
+    flags = [*arch, '-O1', '-g', '-fsanitize=address,undefined', '-std=c11', '-DPROSPERO_FFI_RESERVE_COUNT=' + str(args.reserve_count), '-I' + str(target / 'include')]
     port = ROOT / 'client/ports/libffi'
-    subprocess.run([cc, *flags, '-DPROSPERO_FFI_RESERVE_COUNT=64', '-Dmmap=test_mmap', '-Dmprotect=test_mprotect',
+    subprocess.run([cc, *flags, '-Dmmap=test_mmap', '-Dmprotect=test_mprotect',
                     '-c', str(port / 'closures_wx.c'), '-o', str(adapter)], check=True)
     subprocess.run([cc, *flags, str(port / 'test_reserve.c'), str(adapter), str(archive), '-o', str(binary)], check=True)
     # The64 preallocated pages intentionally remain owned until process exit.
@@ -69,7 +70,8 @@ def main():
     (work / 'audit.json').write_text(json.dumps({'source_commit': pin['commit'], 'adapter_sha256': sha(port / 'closures_wx.c'),
         'fixture_sha256': sha(port / 'test_reserve.c'), 'original_archive_sha256': sha(target / '.libs/libffi.a'),
         'headers_sha256': {n: sha(target / 'include' / n) for n in ('ffi.h', 'ffitarget.h')},
-        'result': 'PASS real x86_64 callbacks/3200concurrent lifetimes;ENOMEM-only reserve64/exhaust/reuse;unprimed/EACCES/RX/RW-failure controls;ASan/UBSan',
+        'reserve_count': args.reserve_count,
+        'result': 'PASS real x86_64 callbacks/3200concurrent lifetimes;ENOMEM-only selected reserve/exhaust/reuse;unprimed/EACCES/RX/RW-failure controls;ASan/UBSan',
         'console': 'pending; no Java/PS5 integration acceptance'}, indent=2) + '\n')
 
 

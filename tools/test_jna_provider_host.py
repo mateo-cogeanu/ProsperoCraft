@@ -11,6 +11,9 @@ import os
 from pathlib import Path
 import subprocess
 import tempfile
+import zipfile
+
+from audit_client_261 import class_info
 
 from host_toolchain import ROOT, executable, java_home, jni_flags, shared_flags, library_name
 
@@ -22,6 +25,7 @@ PROVIDER = r'''
 #include <ffi.h>
 static _Atomic int mode;
 static _Atomic long allocated, released, closure_count;
+static _Atomic long closure_limit=512;
 void *clientgpu___wrap_malloc(size_t n){
  if(mode==1||mode==3)return NULL;
  void *p=malloc(n);if(p)allocated++;return p;
@@ -32,7 +36,9 @@ void *clientgpu___wrap_calloc(size_t n,size_t size){
 }
 void clientgpu___wrap_free(void *p){if(p)released++;free(p);}
 void *lwjgl333_ffi_closure_alloc(size_t n,void **code){
- void *p=ffi_closure_alloc(n,code);if(p)closure_count++;return p;
+ long used=atomic_fetch_add(&closure_count,1);
+ if(used>=closure_limit){closure_count--;*code=NULL;return NULL;}
+ void *p=ffi_closure_alloc(n,code);if(!p)closure_count--;return p;
 }
 void lwjgl333_ffi_closure_free(void *p){if(p)closure_count--;ffi_closure_free(p);}
 ffi_status lwjgl333_ffi_prep_closure_loc(ffi_closure *c,ffi_cif *cif,
@@ -40,6 +46,7 @@ ffi_status lwjgl333_ffi_prep_closure_loc(ffi_closure *c,ffi_cif *cif,
  return ffi_prep_closure_loc(c,cif,fn,data,code);
 }
 JNIEXPORT void JNICALL Java_JnaProviderProbe_mode(JNIEnv *e,jclass c,jint value){mode=value;}
+JNIEXPORT void JNICALL Java_JnaProviderProbe_limit(JNIEnv *e,jclass c,jint value){closure_limit=value;}
 JNIEXPORT jlong JNICALL Java_JnaProviderProbe_allocated(JNIEnv *e,jclass c){return allocated;}
 JNIEXPORT jlong JNICALL Java_JnaProviderProbe_released(JNIEnv *e,jclass c){return released;}
 JNIEXPORT jlong JNICALL Java_JnaProviderProbe_closures(JNIEnv *e,jclass c){return closure_count;}
@@ -49,6 +56,7 @@ JAVA = r'''
 import com.sun.jna.*;
 public class JnaProviderProbe {
  static native void mode(int value);
+ static native void limit(int value);
  static native long allocated();
  static native long released();
  static native long closures();
@@ -96,6 +104,7 @@ def main():
     parser.add_argument('--runtime-workspace', type=Path, required=True)
     parser.add_argument('--jna-jar', type=Path, required=True)
     parser.add_argument('--sdl-library', type=Path, required=True)
+    parser.add_argument('--libsdl4j-jar', type=Path)
     parser.add_argument('--ffi-include', type=Path, required=True)
     parser.add_argument('--ffi-library', type=Path, required=True)
     parser.add_argument('--java-home', type=Path)
@@ -143,6 +152,57 @@ def main():
                         '-Djna.noclasspath=true', '-Djna.nounpack=true',
                         '-cp', os.pathsep.join([str(work), str(jar)]),
                         'JnaProviderProbe', str(args.sdl_library.resolve())], check=True, timeout=60)
+        if args.libsdl4j_jar:
+            original = args.libsdl4j_jar.resolve()
+            pin = json.loads((ROOT / 'client/launcher/jna-provider.json').read_text())
+            assert hashlib.sha256(original.read_bytes()).hexdigest() == pin['libsdl4j_sha256']
+            classes = []
+            native_count = 0
+            with zipfile.ZipFile(original) as archive:
+                for name in sorted(archive.namelist()):
+                    if name.endswith('.class'):
+                        _, natives = class_info(archive.read(name))
+                        if natives:
+                            classes.append(name[:-6].replace('/', '.'))
+                            native_count += len(natives)
+            assert native_count == pin['libsdl4j_native_methods']
+            source = r'''
+import com.sun.jna.*;
+public class SDLBindingsProbe {
+ public static void main(String[] args)throws Exception {
+  if(Native.POINTER_SIZE!=8)throw new AssertionError("JNA init");
+  int limit=Integer.parseInt(args[1]);
+  JnaProviderProbe.mode(2);JnaProviderProbe.limit(limit);
+  Class<?> loader=Class.forName("dev.isxander.sdl3java.jna.SdlNativeLibraryLoader");
+  loader.getMethod("loadLibSDL3FromFilePathNow",String.class).invoke(null,args[0]);
+  String[] names={__CLASSES__};
+  try {
+   for(String name:names)Class.forName(name);
+   if(limit==64)throw new AssertionError("historical capacity unexpectedly sufficient");
+  }catch(ExceptionInInitializerError expected){
+   Throwable cause=expected.getCause();
+   if(limit!=64||!(cause instanceof UnsupportedOperationException)||
+      !"Failed to allocate closure".equals(cause.getMessage()))throw expected;
+   System.out.println("PASS original full SDL binding registration reproduces reserve64 exhaustion");
+   return;
+  }
+  if(JnaProviderProbe.closures()!=__COUNT__)throw new AssertionError("full binding count "+JnaProviderProbe.closures());
+  for(String name:names)Native.unregister(Class.forName(name));
+  if(JnaProviderProbe.closures()!=__COUNT__)throw new AssertionError("original direct-closure retention changed");
+  System.out.println("PASS original SDL bindings: __COUNT__ live direct JNI closures under reserve512; original direct closures remain resident after unregister");
+ }
+}
+'''.replace('__CLASSES__', ','.join(json.dumps(name) for name in classes)).replace('__COUNT__', str(native_count))
+            java = work / 'SDLBindingsProbe.java'
+            java.write_text(source)
+            cp = os.pathsep.join(map(str, [work, jar, original]))
+            subprocess.run([str(jdk / 'bin/javac'), '-cp', cp, '-d', str(work), str(java)], check=True)
+            for capacity in (64, 512):
+                subprocess.run([str(jdk / 'bin/java'), '-Xcheck:jni', '--enable-native-access=ALL-UNNAMED',
+                                '-Djna.boot.library.path=' + str(work), '-Djna.nosys=true',
+                                '-Djna.noclasspath=true', '-Djna.nounpack=true', '-cp', cp,
+                                'SDLBindingsProbe', str(args.sdl_library.resolve()), str(capacity)],
+                               check=True, timeout=60)
 
 
 if __name__ == '__main__':

@@ -39,6 +39,6 @@
     "Independent package audit verifies exact JNA provider/group, all 7 paired allocation/closure imports, no original raw imports, and retained scoped JNI handle policy.",
     "All 907 unpacked entries match the candidate ZIP."
   ],
-  "console_status": "Exact build262 SDL native load, DualSense enumeration, Controlify handoff, world play, haptics/save/quit pending. The controlled host provider test does not execute the PS5 allocator. Broader native allocation pressure remains unresolved.",
+  "console_status": "User reports no controller on exact build262. Retained matching game report confirms SDL3.4.2 loads and initializes its subsystems. JNA direct registration of gamepad/event APIs then exhausts the shared64-page closure reserve. Native stderr confirms fallback use and ENOMEM after exhaustion. Controlify manager does not initialize. A later mouse-handler OutOfMemoryError is also recorded. Build263 expands capacity to512 and adds full original270-method registration coverage.",
   "release_store": "Local test candidate only."
 }

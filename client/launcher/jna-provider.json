@@ -12,5 +12,7 @@
   "scoped_object_sha256": "ed71f66b0914c4ca81ccddc3fd57f385097523152680cc59c41661f5c864159d",
   "resident_group_sha256": "b903cfa866f3b2b71dbaa62ab0ec1efaf5cb4bde4437ba118dc07ab45bcd372f",
   "ffi_header_sha256": "961bf175d63b76aa7028f1d887824efe7a6599480791ab2ed1a9cef3624df7a2",
-  "scope": "Pair JNA allocation/string/free imports with existing consumer provider, and closure lifecycle with compatible existing333 W-to-X reserve. Raw runtime defaults and publisher JARs retained. PS5 validation pending."
+  "scope": "Pair JNA allocation/string/free imports with existing consumer provider, and closure lifecycle with compatible existing333 W-to-X reserve. Raw runtime defaults and publisher JARs retained. PS5 validation pending.",
+  "libsdl4j_sha256": "31dcf3d2a625b27548ffead0abe6f08af02a22835e1623c425ec8be2bfe97996",
+  "libsdl4j_native_methods": 270
 }

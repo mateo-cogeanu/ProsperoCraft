@@ -15,6 +15,7 @@
 #define PROSPERO_STARTUP_OBSERVER "true"
 #endif
 #ifdef PROSPERO_LWJGL333_CLOSURE_RESERVE
+static constexpr unsigned lwjgl333_closure_capacity=PROSPERO_LWJGL333_CLOSURE_RESERVE==1?64:PROSPERO_LWJGL333_CLOSURE_RESERVE;
 extern "C" int lwjgl333_prospero_ffi_reserve_prime(void);
 #endif
 extern "C" int prospero_haptic_reserve();
@@ -377,7 +378,7 @@ void run_test(int i) {
 
 #ifdef PROSPERO_LWJGL333_CLOSURE_RESERVE
   const int closure_reserve_rc=lwjgl333_prospero_ffi_reserve_prime();
-  char closure_note[128];std::snprintf(closure_note,sizeof(closure_note),"PS5 LWJGL333 pre-JVM closure reserve result=%d capacity64;independent RW->RX pages",closure_reserve_rc);log_stage(closure_note);
+  char closure_note[128];std::snprintf(closure_note,sizeof(closure_note),"PS5 LWJGL333 pre-JVM closure reserve result=%d capacity%u;independent RW->RX pages",closure_reserve_rc,lwjgl333_closure_capacity);log_stage(closure_note);
   if(closure_reserve_rc){result(i,closure_reserve_rc,"Cannot prepare LWJGL333 callback reserve before JVM");return;}
 #endif
   const int mixer_worker_rc=client_ps5_audio_worker_preinit();
