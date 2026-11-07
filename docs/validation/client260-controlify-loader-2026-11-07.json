@@ -39,6 +39,6 @@
     "Independent package audit passed, including exact checked JNA resident-group hash and linked failure message.",
     "All 907 unpacked candidate entries match the ZIP."
   ],
-  "console_status": "Exact build 260 Controlify title screen, input handoff, world play/save and Quit Game pending. Underlying native allocation-pressure cause remains unresolved.",
+  "console_status": "User reports a further crash on exact build 260. Matching reports show optional HID failure handled as HidException and later original Minecraft OutOfMemoryError from native mouse-button callback allocation. Native trace and exact symbols identify parent LWJGL ffi_closure_alloc dispatch instead of the namespaced 333 allocator. Build 261 scopes the other JNI libraries sharing that class loader. Physical validation pending.",
   "release_store": "Local candidate only."
 }

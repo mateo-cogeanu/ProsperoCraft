@@ -28,11 +28,11 @@ TINYFD_SHA256 = '3ffad01103b6cbc8c12c7156691fd87a96f063600a5ff5c9087d321c6736963
 TINYFD_CLASSPATH = '/app0/assets/java25/ports/' + TINYFD_JAR
 OSHI6410_PIN = ROOT / 'client/ports/oshi6410/sources.json'
 OSHI6410_JAR = 'oshi-6.4.10-ps5-platform.jar'
-APP_VERSIONS = tuple(f'01.000.{number}' for number in range(248, 261))
+APP_VERSIONS = tuple(f'01.000.{number}' for number in range(248, 262))
 
 
 def release121_gate(app_version):
-    if app_version in ('01.000.258', '01.000.259', '01.000.260'):
+    if app_version in ('01.000.258', '01.000.259', '01.000.260', '01.000.261'):
         return b'vanilla-fabric-1.21-1.21.11-zink-v5\n'
     if app_version == '01.000.257':
         return b'vanilla-1.21-1.21.11-zink-v4\n'
@@ -76,10 +76,10 @@ def main():
         raise ValueError('Wrong publisher TinyFD 3.4.1 artifact')
     app_version = args.app_version
     candidate = app_version.split('.')[-1]
-    if (candidate == '260') != (args.jna_build is not None):
-        parser.error('--jna-build is required only for build 260')
-    if (candidate in ('257', '258', '259', '260')) != (args.oshi6410_build is not None):
-        parser.error('--oshi6410-build is required for builds 257 through 260')
+    if (candidate in ('260', '261')) != (args.jna_build is not None):
+        parser.error('--jna-build is required only for builds 260 and 261')
+    if (candidate in ('257', '258', '259', '260', '261')) != (args.oshi6410_build is not None):
+        parser.error('--oshi6410-build is required for builds 257 through 261')
     runtime, llvm, jdk = args.runtime_workspace.resolve(), args.llvm_home.resolve() / 'bin', java_home(args.java_home)
     work, output = args.work_dir.resolve(), args.output_dir.resolve()
     work.mkdir(parents=True, exist_ok=True)
@@ -172,7 +172,7 @@ def main():
         raise ValueError('Stale graphics output')
     recipe = graphics_audit['wsi_diagnostics']['source_recipe']
     stack_patch = '0008-radv-shader-object-stage-storage.patch'
-    if (stack_patch in recipe['patches']) != (candidate in ('250', '251', '252', '253', '254', '255', '256', '257', '258', '259', '260')):
+    if (stack_patch in recipe['patches']) != (candidate in ('250', '251', '252', '253', '254', '255', '256', '257', '258', '259', '260', '261')):
         raise ValueError('Wrong RADV shader-stage storage for this build')
     for category, directory in (('patches','zink'),('wsi_patches','mesa'),('wsi_headers','mesa')):
         for name, digest in recipe[category].items():
@@ -227,6 +227,11 @@ def main():
         '--library-alias', 'libzstd-jni_dh-1.5.7-12=ps5zstddh',
         '--library-alias', 'zstd-jni_dh-1.5.7-12=ps5zstddh', '--library-alias', 'sqlitejdbc=ps5sqlitedh',
         '--external-libraries', str(spec)]
+    if candidate == '261':
+        if pin.get('scoped_jni_groups') != ['jnidispatch', 'ps5glfw', 'ps5openal']:
+            raise ValueError('Missing native lookup ownership policy')
+        for group in pin['scoped_jni_groups']:
+            command.extend(['--library-scoped-handle', group])
     # Select a separate output workspace without changing runtime generator defaults.
     driver = work / 'generate-registry.py'
     driver.write_text('import sys\nfrom pathlib import Path\nsys.path.insert(0,' + repr(str(runtime / 'tools')) + ')\n'
@@ -319,9 +324,9 @@ def main():
              '-march=x86-64', '-mno-avx', '-mno-avx2', '-mno-fma', '-O2', '-fno-stack-protector',
              '-fno-plt', '-femulated-tls', '-ffunction-sections', '-fdata-sections']
     main_obj = work / ('main'+candidate+'.o')
-    gc_flags = ['-DPROSPERO_ZGC_SINGLE_OLD_WORKER=1'] if candidate in ('249', '250', '251', '252', '253', '254', '255', '256', '257', '258', '259', '260') else []
-    graphics_flags = ['-DPROSPERO_ZINK_PIPELINE_SHADERS=1'] if candidate in ('252', '253', '254', '255', '256', '257', '258', '259', '260') else []
-    if candidate in ('253', '254', '255', '256', '257', '258', '259', '260'):
+    gc_flags = ['-DPROSPERO_ZGC_SINGLE_OLD_WORKER=1'] if candidate in ('249', '250', '251', '252', '253', '254', '255', '256', '257', '258', '259', '260', '261') else []
+    graphics_flags = ['-DPROSPERO_ZINK_PIPELINE_SHADERS=1'] if candidate in ('252', '253', '254', '255', '256', '257', '258', '259', '260', '261') else []
+    if candidate in ('253', '254', '255', '256', '257', '258', '259', '260', '261'):
         graphics_flags.append('-DPROSPERO_ZINK_SYNC_COMPILE=1')
     if candidate == '254':
         graphics_flags.append('-DPROSPERO_FABRIC261_OBSERVER=1')

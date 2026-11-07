@@ -1,13 +1,18 @@
 {
   "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
-  "commit": "62c583f145d82309e15758c460b3bd3e9a925bf4",
-  "feature": "137 native namespaces/scoped handles plus bounded report-server stack",
+  "commit": "51089be1c190354ac1a01a0ac04316773a939a11",
+  "feature": "Explicit resident JNI handle ownership for JNA, GLFW and OpenAL beside namespaced matched LWJGL333",
   "source_sha256": {
-    "tools/java25_builtin_runtime.py": "c800ce963654f2f0f65d01dd7b4e0ea86f197b6bf3888a5c7c237ed4ff9807c0",
-    "tools/java25_resident_libraries.py": "1dad25d792ddafa7036dc7ba7099f57c2cfecea4f974f4d057929a5b4f9de92b",
+    "tools/java25_builtin_runtime.py": "c4936e3a0d5ef31c14aac355e7c34407fc4666ae76e95d714aa79db846bc67a9",
+    "tools/java25_resident_libraries.py": "af8b8844bf1f47d97225082b981b0dace2da92e5f574c64058060a061c568fec",
     "java25/patches/0137-opt-in-resident-builtin-handle-scope.patch": "47f97ff6e43078cb4b82e27b6828d2a7286623158bd935cf59cb337ce2a4166e",
     "java25/probe/log_share.hpp": "59c5af28066867d1d1692ae856876c18a7253642020b620df77a13920e7e3ba2"
   },
   "nativeLibrariesObjectSha256": "e0383e15e8bbb4fe0e18ec221cadbe54c1ad538125a61f7b6f0694c24adf8f8b",
-  "console": "pending matched333consumer integration and physical validation"
+  "console": "Build 260 JNA error handling passed its former failure. Exact build 261 callback and game validation pending.",
+  "scoped_jni_groups": [
+    "jnidispatch",
+    "ps5glfw",
+    "ps5openal"
+  ]
 }
