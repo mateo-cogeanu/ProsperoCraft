@@ -1,0 +1,31 @@
+{
+  "app_version": "01.000.259",
+  "title_id": "PPSA99874",
+  "source_commit": "61b9c856b09a0aac95915f82e105588ba43279aa",
+  "source_tree": "clean",
+  "package_sha256": "ff24282664054f832c496d1529105576700b74a0a22605fce1052ecda9be3763",
+  "package_bytes": 127927056,
+  "symbols_sha256": "906429364533fa1f9be4e473b8f64a76e56d2fba1522b168586a8f24ea45e968",
+  "eboot_sha256": "724b837d20531f5a62a46e8c841c78d8c8c2d3e9d016a8d32490097bfa617dd3",
+  "reproduction": {
+    "build": "01.000.258",
+    "minecraft": "1.21.11",
+    "loader": "Fabric 0.20.1",
+    "controlify": "3.0.1 LTS",
+    "last_game_checkpoint": "Pre-initializing Controlify",
+    "native_fault": "Unknown. The retrieved retained native report describes a later launcher session."
+  },
+  "changes": [
+    "Install Controlify once by default on Fabric setup and pending existing installs. Keep explicitly installed copies and persist an explicit removal in the content receipt.",
+    "Use Controlify LTS\u2019s own SDL path option, keep original publisher JNA under one game launch owner and check the resident SDL version and three event symbols before game launch."
+  ],
+  "checks": [
+    "All 19 local fast host checks passed, including default setup, explicit removal and manually installed Controlify preservation.",
+    "Genuine Fabric Knot reached fixture mod preLaunch on all twelve 1.21.x clients with unified JNA ownership.",
+    "Original JNA Java 5.14.0, 5.15.0 and 5.17.0 with genuine 5.19.1 host dispatch and original libsdl4j called SDL 3.4.12 and agreed with FFM symbol addresses. Original optional HID4Java reported HidException when no host library was supplied.",
+    "Original libsdl4j and JNA 5.17.0 registered, invoked, queried and cleared a real host SDL event filter callback, including the SDL event structure round trip.",
+    "Target compile/link, signed SELF integrity, independent package/static ABI audit and unpacked file checks passed."
+  ],
+  "console_status": "Build 259 retest pending. The 1.21.11 native crash cause and controller behavior are not confirmed.",
+  "release_store": "Local candidate only."
+}

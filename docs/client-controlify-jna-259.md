@@ -29,3 +29,6 @@ On PS5, retry the same 1.21.11 Fabric instance and check that Controlify
 reaches the title screen, takes over from built-in controls, works in a world,
 and returns to the launcher on Quit Game. Check removal and Repair Download
 on a fresh instance. Physical startup and controller behavior are pending.
+
+See the [build validation](validation/client259-controlify-jna-2026-11-07.json)
+for the exact package and host checks.

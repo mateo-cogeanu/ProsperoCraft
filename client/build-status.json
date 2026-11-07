@@ -172,5 +172,15 @@
     "package_sha256": "f7eb7042bce01cbfb1bb03c20fc6647d9d7ec896dc6ad80c8a0377717655ee30",
     "package_bytes": 127922753,
     "package_audit": "PASS signed integrity and independent static audit"
+  },
+  "development_259": {
+    "app_version": "01.000.259",
+    "validation": "docs/validation/client259-controlify-jna-2026-11-07.json",
+    "scope": "Removable Controlify default and 1.21.x JNA SDL startup",
+    "console": "1.21.11 Controlify retest pending",
+    "source_commit": "61b9c856b09a0aac95915f82e105588ba43279aa",
+    "package_sha256": "ff24282664054f832c496d1529105576700b74a0a22605fce1052ecda9be3763",
+    "package_bytes": 127927056,
+    "package_audit": "PASS signed integrity and independent static audit"
   }
 }
