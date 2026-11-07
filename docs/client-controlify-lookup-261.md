@@ -28,3 +28,5 @@ No-options generated registry output compares byte for byte with the previous
 published generator. Physical 261 callback dispatch, title screen, controller
 handoff, world play/save and quit remain pending. The broader native allocation
 pressure remains unresolved.
+
+See the [exact build validation](validation/client261-controlify-lookup-2026-11-07.json).

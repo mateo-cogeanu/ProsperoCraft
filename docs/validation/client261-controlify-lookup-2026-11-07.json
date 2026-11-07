@@ -1,0 +1,49 @@
+{
+  "app_version": "01.000.261",
+  "title_id": "PPSA99874",
+  "source_commit": "05a970e00081a603449924809b3d80d6aa430701",
+  "source_tree": "clean",
+  "package_sha256": "72668321bbcb580cae866862743205fae55d9d0f3c3c342b6c4fb6c760709218",
+  "package_bytes": 127927206,
+  "symbols_sha256": "cb6095a5d739b6f530eda934e609ea967dee07362defef3b41e6ae299f8ca204",
+  "eboot_sha256": "6cda9411f26004c0ad77e01e5ae05988a8bf5859f6dc010f566016fd20229d46",
+  "runtime": {
+    "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
+    "commit": "51089be1c190354ac1a01a0ac04316773a939a11",
+    "feature": "Explicit resident JNI handle ownership for JNA, GLFW and OpenAL beside namespaced matched LWJGL333",
+    "source_sha256": {
+      "tools/java25_builtin_runtime.py": "c4936e3a0d5ef31c14aac355e7c34407fc4666ae76e95d714aa79db846bc67a9",
+      "tools/java25_resident_libraries.py": "af8b8844bf1f47d97225082b981b0dace2da92e5f574c64058060a061c568fec",
+      "java25/patches/0137-opt-in-resident-builtin-handle-scope.patch": "47f97ff6e43078cb4b82e27b6828d2a7286623158bd935cf59cb337ce2a4166e",
+      "java25/probe/log_share.hpp": "59c5af28066867d1d1692ae856876c18a7253642020b620df77a13920e7e3ba2"
+    },
+    "nativeLibrariesObjectSha256": "e0383e15e8bbb4fe0e18ec221cadbe54c1ad538125a61f7b6f0694c24adf8f8b",
+    "console": "Build 260 JNA error handling passed its former failure. Exact build 261 callback and game validation pending.",
+    "scoped_jni_groups": [
+      "jnidispatch",
+      "ps5glfw",
+      "ps5openal"
+    ]
+  },
+  "reproduction": {
+    "build": "01.000.260",
+    "minecraft": "1.21.11",
+    "loader": "Fabric 0.20.1",
+    "controlify": "3.0.1 LTS",
+    "previous_fix": "Optional HID native failure reaches the original HidException handler.",
+    "failure": "Original Minecraft reports OutOfMemoryError installing GLFW mouse-button callback. About 810 MiB Java heap free.",
+    "native_lookup": "Matching native trace and exact retained symbols show LibFFI closure allocation bound to parent LWJGL, while Callback handler binds to matched333. The namespaced333 reserve was primed but its closure allocator was not selected."
+  },
+  "checks": [
+    "Generated actual runtime tables and aliases execute with explicit unrenamed scoped handles, with and without symbol prefixes; invalid selections and foreign export lookup refused under sanitizers.",
+    "Actual patched NativeLibraries JNI load bodies pass default/scoped/nonbuiltin and missing-hook/non-PS5/initializer-error controls under Xcheck:jni/UBSan.",
+    "No-options generated registry source compares byte-for-byte with the previous published generator.",
+    "Existing resident-library schema, alias and alias-symbol tests pass.",
+    "All 19 fast and 13 native consumer host checks pass.",
+    "Target compile/link/conversion and signed SELF integrity pass.",
+    "Independent package audit verifies explicit jnidispatch/ps5glfw/ps5openal scoped handles, exact checked JNA native group, retained333 reserve and other build policy.",
+    "All 907 unpacked entries match the candidate ZIP."
+  ],
+  "console_status": "Exact261 title screen, actual333 callback dispatch, Controlify input handoff, world play/save and quit pending. Native allocation-pressure cause remains unresolved.",
+  "release_store": "Local test candidate only."
+}
