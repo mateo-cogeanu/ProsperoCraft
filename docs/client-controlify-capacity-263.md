@@ -31,3 +31,5 @@ bounded reserve. The existing upstream JNA bootstrap warning remains recorded.
 
 Exact build 263 SDL discovery, DualSense controls, haptics and gameplay/save/quit
 still require physical console confirmation.
+
+See the [exact build validation](validation/client263-controlify-capacity-2026-11-07.json).

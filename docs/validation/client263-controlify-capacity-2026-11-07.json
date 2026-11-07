@@ -1,0 +1,36 @@
+{
+  "app_version": "01.000.263",
+  "title_id": "PPSA99874",
+  "source_commit": "508e3d0c7eb64e8d96b8731a4123154e384ec678",
+  "source_tree": "clean",
+  "package_sha256": "7ab762b4cae79b30d8fe50552b4c37c8010ed9230a1b43ec64e41f3e3de4b2c7",
+  "package_bytes": 127926972,
+  "symbols_sha256": "4ad2ea9b498f6904537aceff607f7410390beb3b29b0f0276788db8eaa1c3e4a",
+  "eboot_sha256": "5a4ef8c17d586c104dce43e56cac8c8268a0c085df9a0fb9413b04b1c3aaf84c",
+  "capacity": {
+    "reserved_pages": 512,
+    "ps5_bytes": 8388608,
+    "original_libsdl4j_native_methods": 270,
+    "native_classes": 20,
+    "libsdl4j_sha256": "31dcf3d2a625b27548ffead0abe6f08af02a22835e1623c425ec8be2bfe97996"
+  },
+  "reproduction": {
+    "build": "01.000.262",
+    "minecraft": "1.21.11",
+    "loader": "Fabric 0.20.1",
+    "controlify": "3.0.1 LTS",
+    "evidence": "SDL3.4.2 initializes successfully. JNA registerMethod then fails allocating closures for gamepad and event bindings. Matching native stderr records use of all64 reserve slots and ENOMEM after exhaustion. A subsequent mouse-handler OutOfMemoryError is recorded."
+  },
+  "checks": [
+    "Original libsdl4j/JNA full-registration host test reproduces64-slot failure and registers all270 native methods with512 slots. Actual SDL3.4.12 and genuine host libffi are used; the capacity provider is controlled host code.",
+    "Original direct-registration closure retention after unregister is observed and recorded. Callback-object release remains separately checked. Existing upstream JNA bootstrap warning remains.",
+    "Real x86-64 closure adapter passes both default64 and explicit512 with denied mmap,exhaustion/reuse,3200 concurrent callbacks and partial/unprimed/EACCES/RX/RW controls under ASan/UBSan.",
+    "All19 fast and13 native consumer host checks passed.",
+    "Rebuilt209-unit matched333 target with explicit512 reserve; unchanged original publisher JARs.",
+    "Target compile/link/conversion and signed SELF integrity passed.",
+    "Independent package audit checks actual512-entry target metadata size and adapter object hash,paired JNA provider group,scoped JNI handles and existing policy.",
+    "All907 unpacked entries match the ZIP."
+  ],
+  "console_status": "Exact build263 DualSense detection,input handoff,haptics,world/save/quit pending. Callback reserve remains bounded and native allocation pressure remains unresolved. No physical acceptance inferred.",
+  "release_store": "Local test candidate only."
+}
