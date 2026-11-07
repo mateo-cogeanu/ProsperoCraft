@@ -106,6 +106,35 @@ public class Policy121 {
   badges.add("Fabric patch","26.1.1",1,"fabric");badges.add("Fabric newer","26.3",1,"fabric");
   String[] badgeFields=new ProsperoLauncher(new ProsperoAuth(),badgePath,url->{throw new AssertionError("network");}).tick(0);
   check(badgeFields[35].equals("EXPERIMENTAL")&&badgeFields[39].isEmpty()&&badgeFields[43].isEmpty()&&badgeFields[47].isEmpty(),"only Fabric 26.1 is experimental");
+
+  Files.writeString(work.resolve("prosperocraft-121.txt"),"vanilla-fabric-1.21-1.21.11-zink-v6\n");
+  Set<String> promoted=Set.of("1.21.7","1.21.8","1.21.9","1.21.10","1.21.11");
+  for(String version:Prospero121.RELEASES){
+   boolean stable=promoted.contains(version);
+   check(ProsperoLauncher.supported(version,"fabric")==stable,"requested Fabric promotion");
+   check(ProsperoLauncher.experimental(version,"fabric")==!stable,"remaining Fabric experimental");
+   check(ProsperoLauncher.launchable(version,"fabric"),"all implemented Fabric still launchable");
+   check(ProsperoLauncher.supported(version,"vanilla")&&!ProsperoLauncher.experimental(version,"vanilla"),"Vanilla status retained");
+  }
+  Path publishedCards=work.resolve("release-cards");var published=new ProsperoLibrary(publishedCards);
+  published.settings().showIntro=false;published.save();
+  for(String version:List.of("1.21.11","1.21.10","1.21.9","1.21.8","1.21.7","1.21.6","1.21.1","1.21"))
+   published.add(version,version,1,"fabric");
+  var releaseModel=new ProsperoLauncher(new ProsperoAuth(),publishedCards,url->{throw new AssertionError("network");});
+  String[] releaseCards=releaseModel.tick(0);
+  for(int i=0;i<8;i++)check(releaseCards[35+i*4].equals(i<5?"":"EXPERIMENTAL"),"exact requested card labels");
+  var sessionField=ProsperoLauncher.class.getDeclaredField("session");sessionField.setAccessible(true);
+  sessionField.set(releaseModel,new ProsperoAuth.Session("Fixture","fixture-id","fixture-token",System.currentTimeMillis()+3_600_000));
+  var detailField=ProsperoLauncher.class.getDeclaredField("detail");detailField.setAccessible(true);
+  var cachedField=ProsperoLauncher.class.getDeclaredField("cached");cachedField.setAccessible(true);
+  for(var instance:published.instances()){
+   instance.ready=true;detailField.set(releaseModel,instance);cachedField.set(releaseModel,null);
+   check(releaseModel.tick(0)[6].equals(promoted.contains(instance.version)?"PLAY":"EXPERIMENTAL - PLAY"),"detail launch status agrees with cards");
+  }
+  check(!ProsperoLauncher.experimental("1.21.12","fabric")&&!ProsperoLauncher.launchable("1.21.12","fabric"),"future Fabric still blocked");
+  check(ProsperoLauncher.experimental("26.1","fabric"),"existing26.1 experimental retained");
+  Files.writeString(work.resolve("prosperocraft-121.txt"),"vanilla-fabric-1.21-1.21.11-zink-v5\n");
+
   check(ProsperoLauncher.supported("26.2")&&ProsperoLauncher.supported("26.3"),"existing26support");
   check(ProsperoGraphics.vulkan("26.2","GLFW")&&ProsperoGraphics.vulkan("26.3","SDL"),"existing26Vulkan");
   for(int i=1;i<=6;i++)check(ProsperoLauncher.supported("26.4-snapshot-"+i),"snapshot unchanged");
