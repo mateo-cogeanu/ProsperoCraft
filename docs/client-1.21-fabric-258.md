@@ -25,3 +25,6 @@ save and rejoin, and Quit Game. Then try matching Fabric API and individual
 mods. Controlify auto-install is deferred for 1.21.x because these releases
 use the older JNA SDL path. Built-in controller emulation remains available.
 Sodium and Iris need separate PS5 validation.
+
+See [build validation](validation/client258-fabric-1.21-2026-11-07.json) for
+the exact package and host evidence.

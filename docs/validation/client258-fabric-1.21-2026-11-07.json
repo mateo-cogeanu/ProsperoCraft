@@ -1,0 +1,41 @@
+{
+  "app_version": "01.000.258",
+  "title_id": "PPSA99874",
+  "source_commit": "04be1caab065e59f334e3de1d9e367e73f0cf275",
+  "source_tree": "clean",
+  "package_sha256": "f7eb7042bce01cbfb1bb03c20fc6647d9d7ec896dc6ad80c8a0377717655ee30",
+  "package_bytes": 127922753,
+  "symbols_sha256": "0d7ab02b7e04fe201ccec970ce8a0f160322ea9ad088166b50fa1e9bb4404238",
+  "eboot_sha256": "ebe6590e51d3648af68a12911a476fb1dbc51d13c7b91305f80d72c95fd73bf5",
+  "fabric_dev_test": [
+    "1.21",
+    "1.21.1",
+    "1.21.2",
+    "1.21.3",
+    "1.21.4",
+    "1.21.5",
+    "1.21.6",
+    "1.21.7",
+    "1.21.8",
+    "1.21.9",
+    "1.21.10",
+    "1.21.11"
+  ],
+  "fabric_loader": "0.20.1",
+  "vanilla_console_baseline": "client257-vanilla-console-2026-11-07.json",
+  "publisher_lock_sha256": "552805e92ee78b765fd887f9d083b517cf3008a41255128fa215a31d0a7c0da8",
+  "runtime_namespace_commit": "62c583f145d82309e15758c460b3bd3e9a925bf4",
+  "hotspot_object_sha256": "5252146bf5c49e26a6f62efcb27dcdace85b775e8ed09913d762ece0b39e95d7",
+  "graphics_support_sha256": "3eadab2efe6513a8087d33caca1c29ae3962a8dbc01acaf5faaddbcc689a348f",
+  "lwjgl333_overlay_sha256": "5baae8699c219db87845132c159c421d12926de461fe8b90890e7f40a74d9d20",
+  "lwjgl333_group_sha256": "7bead679117a434fc0f2d893fb28e4c461c202d0f8f96734acacfaddb815db9a",
+  "checks": [
+    "All 19 local fast host checks passed. Focused launcher test and exact packaged launcher policy passed.",
+    "Genuine Fabric profiles, verified dependency downloads, upstream Knot and intact original clients reached a fixture mod preLaunch on all twelve releases. Host JDK 25 was limited to the PS5 image module set. The launcher classpath included the packaged parent LWJGL 3.4 bindings.",
+    "Knot delegated LWJGL 3.3.3 and OSHI to the matched loader on every release. Fabric MappingResolver mapped and resolved the original shutdown class and both methods in the intermediary game owner.",
+    "Target compile, link, signed SELF integrity, independent ZIP/native ABI audit and SHA-256 verification passed. Build 257 and 258 native/runtime/graphics input hashes match."
+  ],
+  "console_status": "Pending for all Fabric releases. Host checks stopped before original Main and did not run graphics, gameplay, save, rejoin or quit.",
+  "default_content": "Start with bare Fabric. 1.21.x Controlify auto-install is deferred pending its older JNA SDL compatibility; built-in controls remain available.",
+  "release_store": "Local candidate only."
+}

@@ -162,5 +162,15 @@
     "package_sha256": "9941b84dd830904f08cddbbc2c0ee624d56f1cfad791b505e1f7bcc966132461",
     "package_bytes": 127920041,
     "package_audit": "PASS signed integrity and independent static audit"
+  },
+  "development_258": {
+    "app_version": "01.000.258",
+    "validation": "docs/validation/client258-fabric-1.21-2026-11-07.json",
+    "scope": "All twelve Fabric 1.21.x releases as DEV TEST on Zink",
+    "console": "Fabric PS5 runs pending",
+    "source_commit": "04be1caab065e59f334e3de1d9e367e73f0cf275",
+    "package_sha256": "f7eb7042bce01cbfb1bb03c20fc6647d9d7ec896dc6ad80c8a0377717655ee30",
+    "package_bytes": 127922753,
+    "package_audit": "PASS signed integrity and independent static audit"
   }
 }
