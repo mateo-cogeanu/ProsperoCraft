@@ -279,7 +279,7 @@ public final class ClientStartup25 {
    if(ProsperoLauncher.selected121()){
     Class<?> matched=Class.forName("prosperocraft.lwjgl333.Bootstrap",true,ProsperoLauncher.gameLoader());
     matched.getMethod("configure").invoke(null);
-    stage("PS5_LWJGL333 matched original3.3.3 bindings and isolated native group configured; Vanilla only");
+    stage("PS5_LWJGL333 matched original3.3.3 bindings and isolated native group configured; Vanilla or Fabric");
    }else if(ProsperoLauncher.selectedGlfw()){
     Configuration.GLFW_LIBRARY_NAME.set(System.mapLibraryName("ps5glfw"));System.loadLibrary("ps5glfw");
     ClassLoader game=ProsperoLauncher.gameLoader();
@@ -318,7 +318,7 @@ public final class ClientStartup25 {
     try{observer=new StartupObserver(console,48,5000);observer.start();}
     catch(Throwable unavailable){console.println("PS5 startup observer unavailable;continuing original Main: "+unavailable);observer=null;}
    }else console.println("PS5 startup observer disabled for performance run;enable ps5.startupObserver explicitly for stack sampling");
-   ProsperoSession session=new ProsperoSession(reports.resolve("mc-client/logs"),ProsperoLauncher.selectedShutdownAccessors());
+   ProsperoSession session=new ProsperoSession(reports.resolve("mc-client/logs"),ProsperoLauncher.selectedShutdownAccessors(),ProsperoLauncher.selected121Fabric());
    Thread gameThread=Thread.currentThread();
    try(ProsperoExit exit=cleanSystemExit(false)?new ProsperoExit(
      ()->session.awaitCleanReturn(gameThread.getContextClassLoader(),2000,ClientStartup25::stage),

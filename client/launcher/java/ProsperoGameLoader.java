@@ -6,10 +6,18 @@ final class ProsperoGameLoader extends URLClassLoader {
  private final boolean lwjgl333;
  ProsperoGameLoader(URL[] urls,ClassLoader parent){this(urls,parent,false);}
  ProsperoGameLoader(URL[] urls,ClassLoader parent,boolean lwjgl333){super(urls,parent);this.lwjgl333=lwjgl333;}
+ private boolean ownsMatchedClass(String name){
+  return lwjgl333&&(name.startsWith("prosperocraft.lwjgl333.")||(name.startsWith("org.lwjgl.")&&!name.startsWith("org.lwjgl.sdl.")));
+ }
+ @Override public URL getResource(String name){
+  // Knot checks the resource's code source before delegating the class.
+  if(name.endsWith(".class")&&ownsMatchedClass(name.replace('/','.')))return findResource(name);
+  return super.getResource(name);
+ }
  @Override protected Class<?> loadClass(String name,boolean resolve)throws ClassNotFoundException {
   // A missing parent binding must fail; falling back to a publisher copy splits
   // packages/singletons across loaders and can break package-private linkage.
-  if(lwjgl333&&(name.startsWith("prosperocraft.lwjgl333.")||(name.startsWith("org.lwjgl.")&&!name.startsWith("org.lwjgl.sdl.")))){
+  if(ownsMatchedClass(name)){
    synchronized(getClassLoadingLock(name)){
     Class<?> type=findLoadedClass(name);if(type==null)type=findClass(name);if(resolve)resolveClass(type);return type;
    }

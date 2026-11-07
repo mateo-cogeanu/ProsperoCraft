@@ -1,0 +1,8 @@
+{
+  "app_version": "01.000.257",
+  "title_id": "PPSA99874",
+  "package_sha256": "9941b84dd830904f08cddbbc2c0ee624d56f1cfad791b505e1f7bcc966132461",
+  "user_console_result": "User reports all 1.21.x Vanilla releases work.",
+  "scope": "Positive version-wide playability report for build 257. No detailed per-version timing, shader, save, quit, or endurance results were supplied.",
+  "follow_up": "Use normal Vanilla launcher status in the next candidate and begin Fabric validation as requested."
+}

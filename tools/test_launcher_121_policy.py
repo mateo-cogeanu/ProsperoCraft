@@ -69,11 +69,37 @@ public class Policy121 {
   check("oshi-6.4.10-ps5-platform.jar".equals(ProsperoInstall.hardwarePort(oldHardware)),"exact6410provider");
   oldHardware.version="26.3";
   check(ProsperoInstall.hardwarePort(oldHardware)==null,"no6410 provider on 26.x");
+  Files.writeString(work.resolve("prosperocraft-121.txt"),"vanilla-fabric-1.21-1.21.11-zink-v5\n");
+  for(String version:Prospero121.RELEASES){
+   ProsperoFabric.game(version);
+   check(ProsperoLauncher.supported(version,"vanilla")&&!ProsperoLauncher.developmentTest(version,"vanilla"),"console-tested Vanilla normal status");
+   check(ProsperoLauncher.launchable(version,"fabric")&&ProsperoLauncher.developmentTest(version,"fabric"),"Fabric DEV TEST");
+   check(ProsperoGraphics.zink(version,"fabric")&&!ProsperoGraphics.vulkan(version,"GLFW"),"Fabric uses Zink and no Vulkan argument");
+   check(!ProsperoLauncher.launchable(version,"quilt"),"other loaders stay gated");
+  }
+  for(String bad:new String[]{"1.21.12","1.21.1-pre1","1.20.6"}){
+   try{ProsperoFabric.game(bad);throw new AssertionError("unsupported Fabric version");}
+   catch(java.io.IOException expected){}
+  }
+  Files.writeString(work.resolve("prosperocraft-sodium-lwjgl-test.txt"),"sodium-lwjgl-version-test-v1\n");
+  check(!ProsperoGraphics.configureSodiumLwjglTest("1.21.11","fabric"),"no 3.4 version-check override for 3.3.3");
   Files.writeString(work.resolve("prosperocraft-121.txt"),"bad-token\n");
   check(!ProsperoLauncher.launchable("1.21.11","vanilla"),"bad-token refusal");
   Files.writeString(work.resolve("prosperocraft-zink.txt"),"all-loaders-26.1-zink-v2\n");
   for(String version:new String[]{"26.1","26.1.1","26.1.2"})for(String loader:new String[]{"vanilla","fabric"})
    check(ProsperoLauncher.launchable(version,loader)&&ProsperoGraphics.zink(version,loader),"existing26Zink unchanged");
+  var fabricCache=work.toRealPath().resolve("fabric-policy");
+  var fabric=new ProsperoFabric(fabricCache);
+  var profile=new ProsperoFabric.Receipt();profile.game="1.21.3";profile.loader="0.20.1";profile.main=ProsperoFabric.MAIN;
+  String newAsm="fabric/libraries/org/ow2/asm/asm/9.10.1/asm-9.10.1.jar";
+  Path newPath=fabricCache.resolve(newAsm);Files.createDirectories(newPath.getParent());Files.writeString(newPath,"new ASM fixture");
+  profile.files.add(new ProsperoFabric.Entry(newAsm,new ProsperoDownloads.Pin("https://maven.fabricmc.net/fixture.jar","SHA-1",ProsperoDownloads.hash(newPath,"SHA-1"),Files.size(newPath))));
+  Path oldAsm=fabricCache.resolve("libraries/org/ow2/asm/asm/9.3/asm-9.3.jar");
+  Path other=fabricCache.resolve("libraries/org/ow2/asm/other/9.3/other-9.3.jar");
+  try(var vanilla=new URLClassLoader(new URL[]{oldAsm.toUri().toURL(),other.toUri().toURL()},Policy121.class.getClassLoader());
+      var merged=fabric.loader(profile,vanilla)){
+   check(List.of(merged.getURLs()).equals(List.of(newPath.toUri().toURL(),other.toUri().toURL())),"Fabric takes precedence only for matching Maven artifacts");
+  }
   var badgePath=work.resolve("experimental-cards");
   var badges=new ProsperoLibrary(badgePath);badges.settings().showIntro=false;badges.save();
   badges.add("Fabric","26.1",1,"fabric");badges.add("Vanilla","26.1",1);
@@ -88,6 +114,9 @@ public class Policy121 {
       var game=new ProsperoGameLoader(new URL[]{work.resolve("child").toUri().toURL()},parent,true);
       var legacy=new ProsperoGameLoader(new URL[]{work.resolve("child").toUri().toURL()},parent)){
    Class<?> own=game.loadClass("org.lwjgl.Fixture");check(own.getClassLoader()==game&&own.getMethod("version").invoke(null).equals("333"),"entire333 owner");
+   check(game.getResource("org/lwjgl/Fixture.class").toString().contains("/child/"),"Knot sees same 333 source as class owner");
+   check(game.getResource("org/lwjgl/ParentOnly.class")==null,"resource lookup cannot leak 343");
+   check(game.getResource("org/lwjgl/sdl/Fixture.class").toString().contains("/parent/"),"SDL resource stays parent");
    check(legacy.loadClass("org.lwjgl.Fixture")==parent.loadClass("org.lwjgl.Fixture"),"legacy parent unchanged");
    check(game.loadClass("org.lwjgl.sdl.Fixture")==parent.loadClass("org.lwjgl.sdl.Fixture"),"SDL stays parent");
    try{game.loadClass("org.lwjgl.ParentOnly");throw new AssertionError("343package fallback");}catch(ClassNotFoundException expected){}

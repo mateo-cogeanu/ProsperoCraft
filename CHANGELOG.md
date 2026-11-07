@@ -1,5 +1,10 @@
 # Changelog
 
+## Local 258 · Fabric 1.21 through 1.21.11, 2026-11-07
+
+- Add all twelve 1.21.x releases as Fabric DEV TEST candidates on Zink.
+- Show normal Vanilla status after the user reported all twelve working on PS5 in build 257.
+
 ## Local 257 · Vanilla 1.21 through 1.21.8, 2026-11-07
 
 - Enable nine older Vanilla releases as DEV TEST using the existing Zink and

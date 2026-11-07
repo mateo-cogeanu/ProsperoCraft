@@ -5,13 +5,17 @@ import java.util.*;
 
 /** Evidence for a single original Main call. Never mutates game classes/threads. */
 public final class ProsperoSession {
- private final Path logs;private final String marker;private final String[] accessors;
+ private final Path logs;private final String marker;private final String[] accessors;private final boolean fabricMappings;
  public ProsperoSession(Path logs)throws IOException {
   this(logs,null);
  }
  public ProsperoSession(Path logs,String[] accessors)throws IOException {
+  this(logs,accessors,false);
+ }
+ public ProsperoSession(Path logs,String[] accessors,boolean fabricMappings)throws IOException {
   if(accessors!=null&&(accessors.length!=3||Arrays.stream(accessors).anyMatch(s->s==null||!s.matches("[A-Za-z][A-Za-z0-9_.]{0,95}"))))throw new IllegalArgumentException("Invalid shutdown contract");
-  this.logs=logs;this.accessors=accessors==null?null:accessors.clone();marker="PS5_MAIN_SESSION "+UUID.randomUUID();
+  if(fabricMappings&&accessors==null)throw new IllegalArgumentException("Missing official shutdown contract");
+  this.fabricMappings=fabricMappings;this.logs=logs;this.accessors=accessors==null?null:accessors.clone();marker="PS5_MAIN_SESSION "+UUID.randomUUID();
   Files.createDirectories(logs);
   Files.writeString(logs.resolve("latest.log"),"\n"+marker+"\n",StandardCharsets.UTF_8,StandardOpenOption.CREATE,StandardOpenOption.APPEND);
  }
@@ -42,6 +46,19 @@ public final class ProsperoSession {
    }
   }
  }
+ static String[] mapShutdownAccessors(ClassLoader gameLoader,String[] official)throws ReflectiveOperationException {
+  Class<?> fabric=Class.forName("net.fabricmc.loader.api.FabricLoader",false,gameLoader);
+  Object loader=fabric.getMethod("getInstance").invoke(null);
+  Object resolver=fabric.getMethod("getMappingResolver").invoke(loader);
+  Class<?> mapping=Class.forName("net.fabricmc.loader.api.MappingResolver",false,gameLoader);
+  String owner=official[0];
+  var method=mapping.getMethod("mapMethodName",String.class,String.class,String.class,String.class);
+  return new String[]{
+   (String)mapping.getMethod("mapClassName",String.class,String.class).invoke(resolver,"official",owner),
+   (String)method.invoke(resolver,"official",owner,official[1],"()L"+owner.replace('.','/')+";"),
+   (String)method.invoke(resolver,"official",owner,official[2],"()Z")
+  };
+ }
  public void verifyCleanReturn(ClassLoader loader)throws ReflectiveOperationException,IOException {
   Evidence evidence=new Evidence();
   for(String name:List.of("previous-1.log","previous-2.log","latest.log")){
@@ -51,9 +68,10 @@ public final class ProsperoSession {
     for(String line;(line=lines.readLine())!=null;)evidence.line(line,marker);
    }
   }
-  Class<?> minecraft=Class.forName(accessors==null?"net.minecraft.client.Minecraft":accessors[0],false,loader);
-  var getter=minecraft.getMethod(accessors==null?"getInstance":accessors[1]);
-  var running=minecraft.getMethod(accessors==null?"isRunning":accessors[2]);
+  String[] names=fabricMappings?mapShutdownAccessors(loader,accessors):accessors;
+  Class<?> minecraft=Class.forName(names==null?"net.minecraft.client.Minecraft":names[0],false,loader);
+  var getter=minecraft.getMethod(names==null?"getInstance":names[1]);
+  var running=minecraft.getMethod(names==null?"isRunning":names[2]);
   if(accessors!=null&&(getter.getReturnType()!=minecraft||!java.lang.reflect.Modifier.isStatic(getter.getModifiers())||running.getReturnType()!=boolean.class||java.lang.reflect.Modifier.isStatic(running.getModifiers())))throw new ReflectiveOperationException("Shutdown contract signature mismatch");
   Object instance=getter.invoke(null);
   boolean stopped=instance!=null&&Boolean.FALSE.equals(running.invoke(instance));

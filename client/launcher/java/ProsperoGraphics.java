@@ -12,7 +12,7 @@ final class ProsperoGraphics {
  static boolean zink(String version,String loader){return (enabled()&&release261(version)&&("vanilla".equals(loader)||("fabric".equals(loader)&&fabricTest())))||Prospero121.available(version,loader);}
  // Candidate-only upstream Sodium opt-out; Version and original bindings stay truthful.
  static boolean configureSodiumLwjglTest(String version,String loader){
-  if(!ProsperoChannel.tempGameTest()||(!zink(version,loader)&&!"26.2".equals(version))||!"fabric".equals(loader))return false;
+  if(!ProsperoChannel.tempGameTest()||ProsperoVersions.release121(version)||(!zink(version,loader)&&!"26.2".equals(version))||!"fabric".equals(loader))return false;
   try(var in=ProsperoGraphics.class.getResourceAsStream("/prosperocraft-sodium-lwjgl-test.txt")){
    if(in==null||!"sodium-lwjgl-version-test-v1\n".equals(new String(in.readNBytes(64),java.nio.charset.StandardCharsets.US_ASCII)))return false;
   }catch(java.io.IOException unavailable){return false;}

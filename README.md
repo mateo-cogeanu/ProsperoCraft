@@ -26,8 +26,7 @@ Earlier release **01.000.167** added supported Minecraft26.2 Fabric, controller/
 | **26.3** | Established playable PS5 baseline, including game audio and server joining. | Released, with positive console feedback. Mods still need individual compatibility checks. |
 | **26.2** | Released with earlier positive play/keyboard feedback. New launch crash reported. Console retest pending. | [Missing TinyFD binding confirmed on 212](docs/validation/client262-crash-report-2026-11-05.json). Candidate 217 restores it. Console retest pending. |
 | **26.4 snapshots 1–6** | Available; positive console feedback on 118/119. Use separate test worlds. | Selectable when matching loader/mod versions exist; snapshot-specific Fabric, Controlify and mod compatibility is not established. |
-| **1.21.9 / 1.21.10 / 1.21.11** | Available in 256. | Coming soon. |
-| **1.21 through 1.21.8** | DEV TEST in local build 257. PS5 validation pending. | Coming soon. |
+| **1.21 through 1.21.11** | All reported working on PS5 in 257. 1.21.9–1.21.11 are available in release 256. | DEV TEST in local build 258. |
 | **Other versions** | Unsupported 26.x catalog entries may download, but Play stays blocked. 1.21.x requires the separate development candidate described above. | No additional compatibility claim. NeoForge is not enabled. |
 
 The user accepted166’s Controlify controller detection and physical input handoff repair, then accepted167’s launcher keyboard/mouse and cursor work.167 removes the Fabric26.2 development labels. Mod compatibility still depends on the exact game/mod versions; no universal compatibility or endurance claim is made. [Launcher input details](docs/client-launcher-desktop-167.md).

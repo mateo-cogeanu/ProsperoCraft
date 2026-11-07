@@ -79,6 +79,7 @@ public final class ProsperoLauncher {
     ("26.1".equals(instance.version)&&"fabric".equals(instance.loader)&&Boolean.getBoolean("ps5.fabric261Observer"));
  }
  static boolean selected121(){return current.receipt!=null&&ProsperoVersions.release121(current.receipt.version);}
+ static boolean selected121Fabric(){return selected121()&&"fabric".equals(current.detail.loader);}
  static String[] selectedShutdownAccessors()throws java.io.IOException{return selected121()?Prospero121.shutdownAccessors(current.receipt.version):null;}
  static String gameMain(){return "fabric".equals(current.detail.loader)?ProsperoFabric.MAIN:"net.minecraft.client.main.Main";}
  static ClassLoader runningGameLoader(){return "fabric".equals(current.detail.loader)?Thread.currentThread().getContextClassLoader():gameLoader();}
@@ -108,7 +109,7 @@ public final class ProsperoLauncher {
   if(version==null)version=installer.catalog(true,()->cancelled(attempt)).stream().filter(v->v.id().equals(instance.version)).findFirst().orElseThrow(()->new java.io.IOException("This version is not in the publisher catalog"));
   var installed=installer.install(version,library.settings().workers,(text,done,size)->{synchronized(this){if(!cancelled(attempt)){completed=done;total=size;long now=System.currentTimeMillis();if(now-lastProgress>100||done==size){message=text;lastProgress=now;cached=null;}}}},()->cancelled(attempt));
   if("fabric".equals(instance.loader))fabric.install(instance.version,(text,done,size)->{synchronized(this){if(!cancelled(attempt)){message=text;cached=null;}}},()->cancelled(attempt));
-  if(instance.defaultContentPending&&!ProsperoModrinth.defaultMods(instance.loader).isEmpty()){
+  if(instance.defaultContentPending&&!ProsperoVersions.release121(instance.version)&&!ProsperoModrinth.defaultMods(instance.loader).isEmpty()){
    try(var checker=fabric.dependencies(instance.version)){modrinth.installDefaults(library.game(instance),instance.version,instance.loader,checker,(text,done,size)->{synchronized(this){if(!cancelled(attempt)){message=text;completed=done;total=size;cached=null;}}},()->cancelled(attempt));}
    ProsperoInstall.active(()->cancelled(attempt));library.defaultContentInstalled(instance);
   }
