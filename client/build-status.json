@@ -152,5 +152,15 @@
     "package_bytes": 127519033,
     "package_audit": "PASS signed integrity and independent static audit",
     "known_report": "docs/validation/client262-crash-report-2026-11-05.json"
+  },
+  "development_257": {
+    "app_version": "01.000.257",
+    "validation": "docs/validation/client257-vanilla-1.21-2026-11-07.json",
+    "scope": "Vanilla 1.21 through 1.21.8 as DEV TEST",
+    "console": "Pending on PS5",
+    "source_commit": "315dcfbb294ab2c0e6c776f2f19a340eb3f7d60c",
+    "package_sha256": "9941b84dd830904f08cddbbc2c0ee624d56f1cfad791b505e1f7bcc966132461",
+    "package_bytes": 127920041,
+    "package_audit": "PASS signed integrity and independent static audit"
   }
 }

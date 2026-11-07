@@ -1,0 +1,42 @@
+{
+  "app_version": "01.000.257",
+  "title_id": "PPSA99874",
+  "source_commit": "315dcfbb294ab2c0e6c776f2f19a340eb3f7d60c",
+  "source_tree": "clean",
+  "package_sha256": "9941b84dd830904f08cddbbc2c0ee624d56f1cfad791b505e1f7bcc966132461",
+  "package_bytes": 127920041,
+  "symbols_sha256": "ce86745b465c3c7d306ecee4e34e8287f0c595a735aeef49407a6b4047147f61",
+  "eboot_sha256": "d69524f4d36ae8a8ad0c0c039f2100ee2473eb3c6559fdfaa109f34b21e628ea",
+  "vanilla_dev_test": [
+    "1.21",
+    "1.21.1",
+    "1.21.2",
+    "1.21.3",
+    "1.21.4",
+    "1.21.5",
+    "1.21.6",
+    "1.21.7",
+    "1.21.8"
+  ],
+  "retained_runtime": {
+    "namespace": "62c583f145d82309e15758c460b3bd3e9a925bf4",
+    "hotspot_patch": "ad81a0ddf0c3a6e989597050dfc9aefd0b6b9c18",
+    "hotspot_object_sha256": "5252146bf5c49e26a6f62efcb27dcdace85b775e8ed09913d762ece0b39e95d7"
+  },
+  "graphics_support_sha256": "3eadab2efe6513a8087d33caca1c29ae3962a8dbc01acaf5faaddbcc689a348f",
+  "lwjgl333_overlay_sha256": "5baae8699c219db87845132c159c421d12926de461fe8b90890e7f40a74d9d20",
+  "lwjgl333_group_sha256": "7bead679117a434fc0f2d893fb28e4c461c202d0f8f96734acacfaddb815db9a",
+  "oshi6410_overlay_sha256": "d5d7e7affd46736d3add806b4b331f20d4c8fd0e317e78272fa7ddcddef6ae8c",
+  "publisher_lock_sha256": "552805e92ee78b765fd887f9d083b517cf3008a41255128fa215a31d0a7c0da8",
+  "package_growth_bytes_vs_256": 7950,
+  "checks": [
+    "All 19 local fast and 13 local native host checks passed.",
+    "All 12 Mojang release inventory entries, original client and mapping files, selected libraries and asset indexes matched the publisher lock. Asset object bodies were outside this check.",
+    "All 12 mapped shutdown accessor names and method signatures checked against the original JARs.",
+    "Genuine OSHI 6.4.10 host CPU identity, missing identity, unsupported metrics, desktop dispatch and PS5 branch without desktop JNA initialization passed.",
+    "PS5 target compile, link and signing passed. Signed SELF integrity and independent ZIP/identity/static native ABI audit passed.",
+    "Compared with release 256: native runtime, retained resident group and graphics input hashes match; ZIP changes are confined to launcher policy, the 6.4.10 provider and metadata, and build identity."
+  ],
+  "console_status": "Pending for each DEV TEST release. No new exact-build console acceptance.",
+  "release_store": "Local candidate only."
+}
