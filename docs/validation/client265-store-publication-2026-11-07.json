@@ -1,0 +1,40 @@
+{
+  "app_version": "01.000.265",
+  "title_id": "PPSA99874",
+  "package_sha256": "321f17e96e25dcb39bce4f77d4cffa27935abf976af3db38ebd33b3e89e8ade1",
+  "release": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.265",
+  "catalog_pr": "https://github.com/darkxex/ps5-homebrew-catalog/pull/1179",
+  "uploaded_assets": [
+    {
+      "name": "client265-build-validation.json",
+      "bytes": 8794,
+      "sha256": "4c08a1fb5e6a8aa2f9211f3e1f348a75f9820d8d7bdfea8e8da19be10cb6c606"
+    },
+    {
+      "name": "client265-console-validation.json",
+      "bytes": 590,
+      "sha256": "d07dcc2c87291c9782d43eac8e6ed497b9b067c49567fd7173e4818aa7d25562"
+    },
+    {
+      "name": "client265-openal-source-relink.zip",
+      "bytes": 219348019,
+      "sha256": "a796fffdcaea500ec42dc1148d5eb9ab8b8dd2b302de12065ece60e192f0f496"
+    },
+    {
+      "name": "PPSA99874.zip",
+      "bytes": 127928066,
+      "sha256": "321f17e96e25dcb39bce4f77d4cffa27935abf976af3db38ebd33b3e89e8ade1"
+    },
+    {
+      "name": "SHA256SUMS",
+      "bytes": 379,
+      "sha256": "dbf56aebdc26bf60edc02451ae827c7ccb54bc920d8349519660867569a4e259"
+    }
+  ],
+  "checks": [
+    "All five release assets were independently downloaded and SHA-256 verified.",
+    "Normal and compatible OpenAL replacement relinks reproduce the exact tested native ELF.",
+    "Catalog tests passed:251 tests,two skipped. All193records passed offline validation. Online PPSA99874verification passed with no errors or warnings."
+  ],
+  "status": "GitHub release published. ProsperoStore update submitted. Catalog CI,merge and deployment are not monitored."
+}

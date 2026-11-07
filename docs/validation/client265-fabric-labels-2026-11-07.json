@@ -34,6 +34,6 @@
     "Independent package audit passed with the new resource policy and retained YACL/native callback integration.",
     "All 907 unpacked entries match the candidate ZIP."
   ],
-  "console_status": "Exact build 265 labels, launch, shader loading/rendering and world/save/quit await user confirmation. Requested label promotion does not establish independent validation of each version or formal ALL PASS.",
-  "publication": "Source and prepared release notes are published. GitHub binary release/prerelease and Store submission await the exact-build physical and shader acceptance required by AGENTS.md."
+  "console_status": "User confirmed build265 passes the requested label and shader-world checks. No exhaustive per-version/endurance or formal ALL PASS inferred.",
+  "publication": "GitHub release01.000.265 published after user confirmation and explicit authorization. ProsperoStore PR1179 submitted."
 }
