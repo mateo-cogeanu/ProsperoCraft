@@ -31,14 +31,14 @@
     "current_report": "Original SDL loader reaches JNA Native.open, which throws OutOfMemoryError allocating a C string; Controlify subsequently reports no controllers. Optional HID exception is caught earlier."
   },
   "checks": [
-    "Original JNA with explicit audited runtime source and original publisher5.17.0 JAR reproduces C-string allocation refusal. Controlled host provider opens real SDL3.4.12, passes direct registration,1000paired memory/string buffers,real libffi callback/release and refused-provider controls.",
-    "Xcheck:jni reports an upstream JNA JNI bootstrap unchecked-exception warning. Subsequent provider assertions pass; no warning-free claim.",
-    "Actual x86-64 closure reserve adapter passes real libffi3200concurrent callbacks with denied mmap,reserve64 exhaustion/reuse,partial/unprimed/EACCES/RX/RW cleanup controls under ASan/UBSan.",
-    "All19fast and13native consumer host checks pass.",
+    "Original JNA with explicit audited runtime source and original publisher 5.17.0 JAR reproduces C-string allocation refusal. Controlled host provider opens real SDL 3.4.12, passes direct registration, 1000 paired memory/string buffers, real libffi callback/release and refused-provider controls.",
+    "Xcheck:jni reports an upstream JNA JNI bootstrap unchecked-exception warning. The same warning reproduces with the original host dispatch before provider rebinding. Subsequent provider assertions pass.",
+    "Actual x86-64 closure reserve adapter passes real libffi 3200 concurrent callbacks with denied mmap, reserve64 exhaustion/reuse, partial/unprimed/EACCES/RX/RW cleanup controls under ASan/UBSan.",
+    "All 19 fast and 13 native consumer host checks pass.",
     "Target compile/link/conversion and signed SELF integrity pass.",
-    "Independent package audit verifies exact JNA provider/group,all7paired allocation/closure imports,no original raw imports,and retained scoped JNI handle policy.",
-    "All907unpacked entries match the candidate ZIP."
+    "Independent package audit verifies exact JNA provider/group, all 7 paired allocation/closure imports, no original raw imports, and retained scoped JNI handle policy.",
+    "All 907 unpacked entries match the candidate ZIP."
   ],
-  "console_status": "Exact262SDL native load,DualSense enumeration,Controlify handoff,world play,haptics/save/quit pending. The controlled host provider test does not execute the PS5 allocator. Broader native allocation pressure remains unresolved.",
+  "console_status": "Exact build262 SDL native load, DualSense enumeration, Controlify handoff, world play, haptics/save/quit pending. The controlled host provider test does not execute the PS5 allocator. Broader native allocation pressure remains unresolved.",
   "release_store": "Local test candidate only."
 }
