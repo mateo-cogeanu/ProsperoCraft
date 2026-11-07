@@ -6,11 +6,11 @@
 
 Download Minecraft on your console, keep separate instances for worlds and mods, and play with DualSense controls, native Vulkan graphics and game audio. ProsperoCraft includes Microsoft sign-in, a Modrinth content browser, controller remapping and six saved launcher themes.
 
-**[Download 01.000.256](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.256)** · [Latest release](https://github.com/mateo-cogeanu/ProsperoCraft/releases/latest) · [Changelog](CHANGELOG.md) · [Report an issue](https://github.com/mateo-cogeanu/ProsperoCraft/issues/new/choose)
+**[Download 01.000.265](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.265)** · [Latest release](https://github.com/mateo-cogeanu/ProsperoCraft/releases/latest) · [Changelog](CHANGELOG.md) · [Report an issue](https://github.com/mateo-cogeanu/ProsperoCraft/issues/new/choose)
 
 ProsperoCraft handles Minecraft installation, accounts, input and game integration. Its [Native Java 25 Runtime](https://github.com/mateo-cogeanu/ps5-java25-homebrew) is maintained separately. Official Minecraft game JARs and asset objects are downloaded and verified from the publisher, rather than bundled with the app.
 
-Release **01.000.256** adds Vanilla 1.21.9 support, substantially improved gameplay performance and bug fixes. Fabric 26.1 is marked Experimental. [Release notes](docs/releases/client-vanilla-1219-performance-256.md) · [Console acceptance](docs/validation/client256-console-acceptance-2026-11-06.json). [ProsperoStore update submitted](https://github.com/darkxex/ps5-homebrew-catalog/pull/1156). Catalog approval and deployment are pending.
+Release **01.000.265** adds Vanilla 1.21–1.21.8 and Fabric 1.21.7–1.21.11 support. Fabric 1.21–1.21.6 is Experimental. Controlify setup, YACL dependency selection and bug fixes are included. [Release notes](docs/releases/client-fabric-121-265.md) · [Console acceptance](docs/validation/client265-console-acceptance-2026-11-07.json). ProsperoStore submission is being prepared.
 
 Release **01.000.212** adds Vanilla1.21.10/1.21.11 and a smoother launcher with a120Hz presentation target, horizontal page turns, adaptive page detents, in-place selectors, live theme previews and a larger icon grid. The physical tester accepts the launcher and explicitly authorizes release of the exact package. [Release notes](docs/releases/client-launcher-vanilla-212.md) · [Console acceptance and limits](docs/validation/client212-console-acceptance-2026-11-04.json). Existing26.x game paths and shader/quit/save repairs remain. Numeric FPS, broad game/mod/shader/device regressions and endurance are unmeasured; all1.21Fabric and earlier1.21 releases remain unavailable. [ProsperoStore update submitted](https://github.com/darkxex/ps5-homebrew-catalog/pull/1121); availability requires catalog approval and deployment.
 
@@ -26,7 +26,7 @@ Earlier release **01.000.167** added supported Minecraft26.2 Fabric, controller/
 | **26.3** | Established playable PS5 baseline, including game audio and server joining. | Released, with positive console feedback. Mods still need individual compatibility checks. |
 | **26.2** | Released with earlier positive play/keyboard feedback. New launch crash reported. Console retest pending. | [Missing TinyFD binding confirmed on 212](docs/validation/client262-crash-report-2026-11-05.json). Candidate 217 restores it. Console retest pending. |
 | **26.4 snapshots 1–6** | Available; positive console feedback on 118/119. Use separate test worlds. | Selectable when matching loader/mod versions exist; snapshot-specific Fabric, Controlify and mod compatibility is not established. |
-| **1.21 through 1.21.11** | All reported working on PS5 in 257. 1.21.9–1.21.11 are available in release 256. | DEV TEST in local build 258. |
+| **1.21 through 1.21.11** | Supported. | 1.21.7–1.21.11 supported. 1.21–1.21.6 Experimental. |
 | **Other versions** | Unsupported 26.x catalog entries may download, but Play stays blocked. 1.21.x requires the separate development candidate described above. | No additional compatibility claim. NeoForge is not enabled. |
 
 The user accepted166’s Controlify controller detection and physical input handoff repair, then accepted167’s launcher keyboard/mouse and cursor work.167 removes the Fabric26.2 development labels. Mod compatibility still depends on the exact game/mod versions; no universal compatibility or endurance claim is made. [Launcher input details](docs/client-launcher-desktop-167.md).

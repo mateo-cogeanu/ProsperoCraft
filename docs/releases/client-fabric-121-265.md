@@ -1,7 +1,5 @@
 # ProsperoCraft 01.000.265
 
-Prepared release notes. Exact build 265 awaits physical-console confirmation.
-
 ## What's new
 
 - Added Vanilla support for Minecraft 1.21 through 1.21.8.

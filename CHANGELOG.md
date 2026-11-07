@@ -1,5 +1,13 @@
 # Changelog
 
+## 01.000.265 · Fabric 1.21.x, 2026-11-07
+
+- Add Vanilla 1.21–1.21.8 and Fabric 1.21.7–1.21.11 support.
+- Mark Fabric 1.21–1.21.6 Experimental.
+- Install removable Controlify defaults and repair native lookup, allocation and callback capacity.
+- Select compatible YACL dependencies for 1.21.9.
+- Bug fixes.
+
 ## Local 259 · Removable Controlify defaults and 1.21.x SDL setup, 2026-11-07
 
 - Install Controlify by default when setting up Fabric. Keep a user removal in

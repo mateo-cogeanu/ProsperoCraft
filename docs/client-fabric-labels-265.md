@@ -17,7 +17,7 @@ they do not validate the exact new 265 package.
 
 The release notes are prepared locally. AGENTS.md requires physical-console
 confirmation for the exact build before creating a GitHub release or prerelease.
-Build 265 needs that confirmation and the required shader loading/rendering
-acceptance before release and Store publication proceed.
+The user confirmed build 265 passes both the label and shader-world checks on
+2026-11-07 and authorized publication. Exact package bytes are retained.
 
 See the [exact build validation](validation/client265-fabric-labels-2026-11-07.json).

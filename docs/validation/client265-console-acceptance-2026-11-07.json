@@ -1,0 +1,9 @@
+{
+  "app_version": "01.000.265",
+  "title_id": "PPSA99874",
+  "package_sha256": "321f17e96e25dcb39bce4f77d4cffa27935abf976af3db38ebd33b3e89e8ade1",
+  "user_confirmation": "Build 265 passes both checks",
+  "confirmed_scope": "Requested launcher labels and a world using the usual shader pack on physical PS5. Explicit publication requested.",
+  "limits": "No formal exhaustive ALL PASS, measured FPS or endurance inferred.",
+  "relink_checks": "Normal and compatible OpenAL replacement reproduced exact accepted native ELF 53d16757be60f1a80f8fa8335314e6be102541dcb377fb52834819065041d040"
+}
