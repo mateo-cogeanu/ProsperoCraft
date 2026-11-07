@@ -31,3 +31,5 @@ sizes, error state, memory/string operations and real libffi calls.
 Physical title-screen startup, controller handoff, world play and quit on this
 exact candidate remain pending. An underlying allocation-pressure cause also
 remains unresolved.
+
+See the [exact candidate record](validation/client260-controlify-loader-2026-11-07.json).

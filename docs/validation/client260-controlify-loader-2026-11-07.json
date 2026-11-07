@@ -1,0 +1,44 @@
+{
+  "app_version": "01.000.260",
+  "title_id": "PPSA99874",
+  "source_commit": "bbdb04cbd825273f6e2a0d3d0c6b2163c008a938",
+  "source_tree": "clean",
+  "package_sha256": "b999c5edf2b2463162c471f4e80817ec8ae807c3144263f29525ad2f0338bc2c",
+  "package_bytes": 127926826,
+  "symbols_sha256": "8aa3baeac5b96d09b2368c4316ef02425e636c3f135de57d80071b38e4278c60",
+  "eboot_sha256": "2dda083402b9ca95bb07e270846f36180aa6a137e8896005a40e67c676b27023",
+  "runtime_loader_fix": {
+    "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
+    "commit": "8da0298efc155bc17577274d1d2c05a0199f7413",
+    "object_sha256": "8b8b405b0c2d0413d4f899181bbc33e97093a567f2d3a5f32da94c2d88c6d9f9",
+    "group_sha256": "dc3dd8389bae37e65627e483a769822fc5e9849294bbf93fb7d711d140e8c23d",
+    "patches_sha256": {
+      "java25/patches/jna/0001-checked-loader-errors.patch": "ef8b2d529ab9e4cd22844dc7b625e0eac16f0e5db671e73c529262c32d92b02a"
+    },
+    "source_sha256": {
+      "tools/java25_jna.py": "2fb266372a16b09bbbab7650efca971e3358ed64682584e3a2cd3487e0ac052f",
+      "java25/patches/jna/0001-checked-loader-errors.patch": "ef8b2d529ab9e4cd22844dc7b625e0eac16f0e5db671e73c529262c32d92b02a"
+    },
+    "scope": "Opt-in checked native JNA library errors. Console Controlify startup validation pending."
+  },
+  "reproduction": {
+    "build": "01.000.259",
+    "minecraft": "1.21.11",
+    "loader": "Fabric 0.20.1",
+    "controlify": "3.0.1 LTS",
+    "jna_preflight": "All three native startup checkpoints passed, SDL 3.4.2 and scoped event pointers verified.",
+    "last_game_checkpoint": "Pre-initializing Controlify",
+    "native_evidence": "Retained matching trace shows native allocation refusals and a final null destination pointer; the string source maps to the resident loader missing-library error message using the exact retained symbols. No complete Java fault stack was captured."
+  },
+  "checks": [
+    "ASan/UBSan actual extracted JNI open/close/findSymbol refusal matrix passed; historical allocation-refusal negative control faults.",
+    "Forced freshly built genuine host JNA dispatch passed native initialization/sizes/last-error/memory/string/libffi strlen and abs checks.",
+    "PS5 JNA target compiled with the checked loader patch and all 69 JNI exports.",
+    "All 19 fast and 13 native consumer host checks passed.",
+    "PS5 compile/link/conversion passed; signed SELF integrity valid.",
+    "Independent package audit passed, including exact checked JNA resident-group hash and linked failure message.",
+    "All 907 unpacked candidate entries match the ZIP."
+  ],
+  "console_status": "Exact build 260 Controlify title screen, input handoff, world play/save and Quit Game pending. Underlying native allocation-pressure cause remains unresolved.",
+  "release_store": "Local candidate only."
+}
