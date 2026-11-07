@@ -53,6 +53,22 @@ public class Policy121 {
   }
   var cards=new ProsperoLibrary(work.resolve("cards"));cards.settings().showIntro=false;cards.save();var normal=cards.add("Normal","26.3",1);cards.ready(normal,true);cards.add("Stable","1.21.11",1);cards.add("Vanilla 1.21.9","1.21.9",1);cards.add("Soon","1.21.1",1);var cardModel=new ProsperoLauncher(new ProsperoAuth(),work.resolve("cards"),url->{throw new AssertionError("network");});String[] shown=cardModel.tick(0);check(shown[35].isEmpty()&&shown[39].isEmpty()&&shown[43].isEmpty()&&shown[47].equals("COMING SOON"),"promoted releases have no badge; unsupported release remains Coming Soon");
   var oldHardware=new ProsperoInstall.Receipt();oldHardware.classpath.add("libraries/com/github/oshi/oshi-core/6.6.5/oshi-core-6.6.5.jar");check(ProsperoInstall.hardwarePort(oldHardware).equals("oshi-6.6.5-ps5-platform.jar"),"exact665provider");
+  Files.writeString(work.resolve("prosperocraft-121.txt"),"vanilla-1.21-1.21.11-zink-v4\n");
+  for(String version:Prospero121.RELEASES){
+   boolean released=Set.of("1.21.9","1.21.10","1.21.11").contains(version);
+   check(ProsperoLauncher.launchable(version,"vanilla")&&ProsperoGraphics.glfw(version)&&ProsperoGraphics.zink(version,"vanilla"),"all Vanilla versions use Zink/GLFW");
+   check(ProsperoLauncher.developmentTest(version,"vanilla")==!released,"only newly enabled versions show DEV TEST");
+   check(!ProsperoLauncher.launchable(version,"fabric"),"Fabric stays deferred");
+  }
+  var candidateCards=new ProsperoLauncher(new ProsperoAuth(),work.resolve("cards"),url->{throw new AssertionError("network");}).tick(0);
+  check(candidateCards[43].isEmpty()&&candidateCards[47].equals("DEV TEST"),"only newly enabled instance card has DEV TEST badge");
+  check(!ProsperoLauncher.launchable("1.21.12","vanilla"),"future releases stay blocked");
+  oldHardware.version="1.21.3";
+  oldHardware.classpath.clear();
+  oldHardware.classpath.add("libraries/com/github/oshi/oshi-core/6.4.10/oshi-core-6.4.10.jar");
+  check("oshi-6.4.10-ps5-platform.jar".equals(ProsperoInstall.hardwarePort(oldHardware)),"exact6410provider");
+  oldHardware.version="26.3";
+  check(ProsperoInstall.hardwarePort(oldHardware)==null,"no6410 provider on 26.x");
   Files.writeString(work.resolve("prosperocraft-121.txt"),"bad-token\n");
   check(!ProsperoLauncher.launchable("1.21.11","vanilla"),"bad-token refusal");
   Files.writeString(work.resolve("prosperocraft-zink.txt"),"all-loaders-26.1-zink-v2\n");

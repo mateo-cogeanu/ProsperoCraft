@@ -26,6 +26,15 @@ BASE_RELINK = '4351224b234d2b16a688afc4d31f23f0c6badc30670d034ad065cc629bce9f0f'
 TINYFD_JAR = 'lwjgl-tinyfd-3.4.1.jar'
 TINYFD_SHA256 = '3ffad01103b6cbc8c12c7156691fd87a96f063600a5ff5c9087d321c6736963a'
 TINYFD_CLASSPATH = '/app0/assets/java25/ports/' + TINYFD_JAR
+OSHI6410_PIN = ROOT / 'client/ports/oshi6410/sources.json'
+OSHI6410_JAR = 'oshi-6.4.10-ps5-platform.jar'
+APP_VERSIONS = tuple(f'01.000.{number}' for number in range(248, 258))
+
+
+def vanilla_gate(app_version):
+    if app_version == '01.000.257':
+        return b'vanilla-1.21-1.21.11-zink-v4\n'
+    return b'vanilla-1.21.9-1.21.11-zink-v3\n'
 
 
 def extract(archive, directory, prefix=None):
@@ -51,18 +60,21 @@ def main():
     parser.add_argument('--graphics-build', type=Path, required=True)
     parser.add_argument('--sdl-build',type=Path,required=True)
     parser.add_argument('--oshi665-build',type=Path,required=True)
+    parser.add_argument('--oshi6410-build', type=Path)
     parser.add_argument('--hotspot-object', type=Path, required=True)
     parser.add_argument('--tinyfd-jar', type=Path, required=True)
     parser.add_argument('--java-home', type=Path)
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--work-dir', type=Path, required=True)
-    parser.add_argument('--app-version', choices=('01.000.248', '01.000.249', '01.000.250', '01.000.251', '01.000.252', '01.000.253', '01.000.254', '01.000.255', '01.000.256'), default='01.000.256')
+    parser.add_argument('--app-version', choices=APP_VERSIONS, default=APP_VERSIONS[-1])
     parser.add_argument('--check-only', action='store_true', help='Compile/link/convert without signing or a candidate ZIP')
     args = parser.parse_args()
     if sha(args.tinyfd_jar) != TINYFD_SHA256:
         raise ValueError('Wrong publisher TinyFD 3.4.1 artifact')
     app_version = args.app_version
     candidate = app_version.split('.')[-1]
+    if (candidate == '257') != (args.oshi6410_build is not None):
+        parser.error('--oshi6410-build is required for build 257 only')
     runtime, llvm, jdk = args.runtime_workspace.resolve(), args.llvm_home.resolve() / 'bin', java_home(args.java_home)
     work, output = args.work_dir.resolve(), args.output_dir.resolve()
     work.mkdir(parents=True, exist_ok=True)
@@ -141,6 +153,13 @@ def main():
     if sha(os_overlay)!=os_audit['output_sha256']:raise ValueError('Stale OSHI665 overlay')
     for name,digest in os_audit['source_sha256'].items():
         if sha(ROOT/'client/ports/oshi665'/name)!=digest:raise ValueError('Stale OSHI665 source: '+name)
+    if args.oshi6410_build:
+        old_overlay = args.oshi6410_build / OSHI6410_JAR
+        old_audit = json.loads((args.oshi6410_build / 'audit.json').read_text())
+        if (old_audit['version'] != '6.4.10' or old_audit['source_pin_sha256'] != sha(OSHI6410_PIN)
+                or old_audit['output_sha256'] != sha(old_overlay)
+                or old_audit['source_sha256'] != os_audit['source_sha256']):
+            raise ValueError('Wrong or stale OSHI 6.4.10 overlay')
     graphics_build = args.graphics_build.resolve()
     graphics_object = graphics_build / 'graphics-support.o'
     graphics_audit = json.loads((graphics_build / 'audit.json').read_text())
@@ -148,7 +167,7 @@ def main():
         raise ValueError('Stale graphics output')
     recipe = graphics_audit['wsi_diagnostics']['source_recipe']
     stack_patch = '0008-radv-shader-object-stage-storage.patch'
-    if (stack_patch in recipe['patches']) != (candidate in ('250', '251', '252', '253', '254', '255', '256')):
+    if (stack_patch in recipe['patches']) != (candidate in ('250', '251', '252', '253', '254', '255', '256', '257')):
         raise ValueError('Wrong RADV shader-stage storage for this build')
     for category, directory in (('patches','zink'),('wsi_patches','mesa'),('wsi_headers','mesa')):
         for name, digest in recipe[category].items():
@@ -217,6 +236,10 @@ def main():
     (java/'graphics-resolution-audit.json').write_text(json.dumps(graphics_audit,indent=2)+'\n')
     shutil.copyfile(os_overlay,java/'ports'/os_overlay.name)
     (java/'oshi665-platform-audit.json').write_text(json.dumps(os_audit,indent=2)+'\n')
+    if args.oshi6410_build:
+        shutil.copyfile(old_overlay, java / 'ports' / OSHI6410_JAR)
+        shutil.copyfile(OSHI6410_PIN, java / 'oshi6410-source-pin.json')
+        (java / 'oshi6410-platform-audit.json').write_text(json.dumps(old_audit, indent=2) + '\n')
     (java/'sdl-resolution-audit.json').write_text(json.dumps(sdl_audit,indent=2)+'\n')
     shutil.copyfile(runtime / '.tools/java25/openjdk/build/ps5-bootstrap/support/modules_libs/java.base/libjava.so', java / 'lib/libjava.so')
     shutil.copyfile(registry / 'builtin-resident-audit.json', java / 'resident-libraries-audit.json')
@@ -258,14 +281,14 @@ def main():
         for file in files:
             out.writestr(file.relative_to(classes).as_posix(), file.read_bytes())
         out.writestr('prosperocraft-build.properties', ('app_version='+app_version+'\ntitle_id=PPSA99874\n').encode())
-        out.writestr('prosperocraft-121.txt', b'vanilla-1.21.9-1.21.11-zink-v3\n')
+        out.writestr('prosperocraft-121.txt', vanilla_gate(app_version))
     temporary.replace(jar)
     for file in files:
         destination = java / 'classes' / file.relative_to(classes)
         destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(file, destination)
     (java / 'classes/prosperocraft-build.properties').write_text('app_version='+app_version+'\ntitle_id=PPSA99874\n')
-    (java / 'classes/prosperocraft-121.txt').write_text('vanilla-1.21.9-1.21.11-zink-v3\n')
+    (java / 'classes/prosperocraft-121.txt').write_bytes(vanilla_gate(app_version))
     param = json.loads((app / 'sce_sys/param.json').read_text())
     if not int(param.get('attribute3',0))&0x40:raise ValueError('120Hz title declaration missing')
     param['contentVersion'] = app_version
@@ -277,9 +300,9 @@ def main():
              '-march=x86-64', '-mno-avx', '-mno-avx2', '-mno-fma', '-O2', '-fno-stack-protector',
              '-fno-plt', '-femulated-tls', '-ffunction-sections', '-fdata-sections']
     main_obj = work / ('main'+candidate+'.o')
-    gc_flags = ['-DPROSPERO_ZGC_SINGLE_OLD_WORKER=1'] if candidate in ('249', '250', '251', '252', '253', '254', '255', '256') else []
-    graphics_flags = ['-DPROSPERO_ZINK_PIPELINE_SHADERS=1'] if candidate in ('252', '253', '254', '255', '256') else []
-    if candidate in ('253', '254', '255', '256'):
+    gc_flags = ['-DPROSPERO_ZGC_SINGLE_OLD_WORKER=1'] if candidate in ('249', '250', '251', '252', '253', '254', '255', '256', '257') else []
+    graphics_flags = ['-DPROSPERO_ZINK_PIPELINE_SHADERS=1'] if candidate in ('252', '253', '254', '255', '256', '257') else []
+    if candidate in ('253', '254', '255', '256', '257'):
         graphics_flags.append('-DPROSPERO_ZINK_SYNC_COMPILE=1')
     if candidate == '254':
         graphics_flags.append('-DPROSPERO_FABRIC261_OBSERVER=1')
@@ -386,6 +409,9 @@ def main():
         'tinyfd_sha256': TINYFD_SHA256, 'jitWarmupRuntime': jit_pin, 'extraMutexRuntime': sync_pin,
         'nativePresenterSha256':sha(presenter),'presentationRuntime':presentation_pin,'graphicsSupportSha256':sha(graphics_object),'newSdlGroupSha256':sha(registry/'embedded-ps5sdl.o'),'oshi665Sha256':sha(os_overlay),
         'console': 'NOT TESTED', 'releaseStore': 'No action'}
+    if args.oshi6410_build:
+        record['oshi6410Sha256'] = sha(old_overlay)
+        record['publisher121LockSha256'] = sha(ROOT / 'client/1.21.lock.json')
     (output / 'build-audit.json').write_text(json.dumps(record, indent=2) + '\n')
     (output / 'SHA256SUMS').write_text(record['package_sha256'] + '  PPSA99874.zip\n')
     shutil.copyfile(pie, output / pie.name)

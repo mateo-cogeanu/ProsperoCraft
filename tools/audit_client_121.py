@@ -15,7 +15,8 @@ import zipfile
 from audit_client_261 import jar_info, jni_mangle
 from build_lwjgl333 import publisher_jars
 from host_toolchain import ROOT
-from package_client_121 import BASE_PACKAGE, TINYFD_CLASSPATH, TINYFD_JAR, TINYFD_SHA256
+from package_client_121 import (APP_VERSIONS, BASE_PACKAGE, OSHI6410_JAR, OSHI6410_PIN,
+                                TINYFD_CLASSPATH, TINYFD_JAR, TINYFD_SHA256, vanilla_gate)
 
 
 def sha(path):
@@ -31,7 +32,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ('package', 'baseline-package', 'build-dir', 'lwjgl333-build', 'publisher-cache', 'llvm-nm', 'output'):
         parser.add_argument('--' + name, type=Path, required=True)
-    parser.add_argument('--app-version', choices=('01.000.248', '01.000.249', '01.000.250', '01.000.251', '01.000.252', '01.000.253', '01.000.254', '01.000.255', '01.000.256'), default='01.000.256')
+    parser.add_argument('--app-version', choices=APP_VERSIONS, default=APP_VERSIONS[-1])
     args = parser.parse_args()
     candidate = args.app_version.split('.')[-1]
     linked_symbols = args.build_dir / f'client121-{candidate}-symbols.elf'
@@ -64,8 +65,10 @@ def main():
         if any(n not in allowed and not (n.startswith(prefix + 'classes/') and n.endswith('.class')) for n in changed):
             raise ValueError('Unexpected baseline change: ' + repr(changed))
         added = sorted(set(names) - set(old.namelist()))
+        older_provider = {prefix + n for n in ('ports/' + OSHI6410_JAR, 'oshi6410-source-pin.json',
+                                                'oshi6410-platform-audit.json')} if candidate == '257' else set()
         for n in added:
-            if not (n in replacement_icons or n.startswith(prefix + 'lwjgl333-source/') or n.startswith(prefix + 'classes/') or n.startswith(prefix+'native-presentation-source/') or n.startswith(prefix+'storage-source/') or n.startswith(prefix+'oshi665-source/') or n.startswith(prefix+'sdl-resolution-source/') or
+            if not (n in older_provider or n in replacement_icons or n.startswith(prefix + 'lwjgl333-source/') or n.startswith(prefix + 'classes/') or n.startswith(prefix+'native-presentation-source/') or n.startswith(prefix+'storage-source/') or n.startswith(prefix+'oshi665-source/') or n.startswith(prefix+'sdl-resolution-source/') or
                     n in {prefix + 'ports/' + TINYFD_JAR, prefix+'native-presentation-audit.json',prefix+'storage-path-audit.json',prefix+'graphics-resolution-audit.json',prefix+'oshi665-platform-audit.json', prefix+'sdl-resolution-audit.json',prefix+'ports/oshi-6.6.5-ps5-platform.jar',prefix + 'lwjgl333-integration-audit.json', prefix + 'ports/lwjgl-3.3.3-ps5-overlay.jar',
                           'PPSA99874/licenses/LWJGL333-PORT.txt'}):
                 raise ValueError('Unexpected added file: ' + n)
@@ -75,7 +78,7 @@ def main():
         param = json.loads(new.read('PPSA99874/sce_sys/param.json'))
         if param['contentVersion'] != args.app_version or param['downloadDataSize'] != 4096:
             raise ValueError('Wrong identity')
-        if new.read(prefix + 'classes/prosperocraft-121.txt') != b'vanilla-1.21.9-1.21.11-zink-v3\n':
+        if new.read(prefix + 'classes/prosperocraft-121.txt') != vanilla_gate(args.app_version):
             raise ValueError('Wrong per-release gate')
         if new.read(prefix + 'ports/lwjgl-3.3.3-ps5-overlay.jar') != (args.lwjgl333_build / 'lwjgl-3.3.3-ps5-overlay.jar').read_bytes():
             raise ValueError('Wrong overlay')
@@ -87,6 +90,14 @@ def main():
         for name, digest in os_audit['source_sha256'].items():
             if hashlib.sha256(new.read(prefix + 'oshi665-source/' + name)).hexdigest() != digest:
                 raise ValueError('OSHI665 packaged source mismatch')
+        if candidate == '257':
+            old_audit = json.loads(new.read(prefix + 'oshi6410-platform-audit.json'))
+            source_pin = new.read(prefix + 'oshi6410-source-pin.json')
+            if (old_audit['version'] != '6.4.10' or source_pin != OSHI6410_PIN.read_bytes()
+                    or old_audit['source_pin_sha256'] != hashlib.sha256(source_pin).hexdigest()
+                    or old_audit['source_sha256'] != os_audit['source_sha256']
+                    or old_audit['output_sha256'] != hashlib.sha256(new.read(prefix + 'ports/' + OSHI6410_JAR)).hexdigest()):
+                raise ValueError('OSHI 6.4.10 package mismatch')
         if new.read(prefix+'log4j2-startup.xml')!=(ROOT/'client/startup/log4j2-startup.xml').read_bytes():raise ValueError('Stale logging configuration')
         storage_audit=json.loads(new.read(prefix+'storage-path-audit.json'))
         for name,digest in storage_audit['source_sha256'].items():
@@ -101,6 +112,8 @@ def main():
         # remain byte-identical. Exploded updated classes must match their JAR.
         import io
         with zipfile.ZipFile(io.BytesIO(new.read(prefix + 'client-probe.jar'))) as probe:
+            if probe.read('prosperocraft-121.txt') != vanilla_gate(args.app_version):
+                raise ValueError('Wrong probe JAR release gate')
             for n in names:
                 if n.startswith(prefix + 'classes/'):
                     relative = n[len(prefix + 'classes/'):]
@@ -217,7 +230,7 @@ def main():
         raise ValueError('Missing/duplicate rebuilt SDL group')
     stack_patch = '0008-radv-shader-object-stage-storage.patch'
     patches = graphics_audit['wsi_diagnostics']['source_recipe']['patches']
-    if (stack_patch in patches) != (candidate in ('250', '251', '252', '253', '254', '255', '256')):
+    if (stack_patch in patches) != (candidate in ('250', '251', '252', '253', '254', '255', '256', '257')):
         raise ValueError('Wrong linked RADV shader-stage storage policy')
     graphics = [Path(n) for n in linked if n.endswith('/graphics-support.o')]
     if len(graphics) != 1 or sha(graphics[0]) != graphics_audit['objects_sha256']['graphics-support.o']:
@@ -260,11 +273,11 @@ def main():
                    b'-XX:+SafepointTimeout', b'-XX:SafepointTimeoutDelay=250', b'-XX:-AbortVMOnSafepointTimeout'):
         if option + b'\0' not in elf:
             raise ValueError(f'Retained option missing from actual{candidate} ELF: ' + option.decode())
-    if (b'-XX:ZOldGCThreads=1\0' in elf) != (candidate in ('249', '250', '251', '252', '253', '254', '255', '256')):
+    if (b'-XX:ZOldGCThreads=1\0' in elf) != (candidate in ('249', '250', '251', '252', '253', '254', '255', '256', '257')):
         raise ValueError('Unexpected ZGC old-generation worker policy')
-    if (b'PS5_ZINK using Vulkan pipelines for shaders\n' in elf) != (candidate in ('252', '253', '254', '255', '256')):
+    if (b'PS5_ZINK using Vulkan pipelines for shaders\n' in elf) != (candidate in ('252', '253', '254', '255', '256', '257')):
         raise ValueError('Unexpected Zink shader object opt-out policy')
-    if (b'PS5_ZINK pipeline shaders with synchronous compilation\0' in elf) != (candidate in ('253', '254', '255', '256')):
+    if (b'PS5_ZINK pipeline shaders with synchronous compilation\0' in elf) != (candidate in ('253', '254', '255', '256', '257')):
         raise ValueError('Unexpected Zink synchronous compilation policy')
     if b'-XX:ConcGCThreads=2\0' not in elf:
         raise ValueError('Missing ZGC concurrent worker budget')

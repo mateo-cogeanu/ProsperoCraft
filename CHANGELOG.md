@@ -1,5 +1,11 @@
 # Changelog
 
+## Local 257 · Vanilla 1.21 through 1.21.8, 2026-11-07
+
+- Enable nine older Vanilla releases as DEV TEST using the existing Zink and
+  LWJGL 3.3.3 path. Use the matching OSHI 6.4.10 CPU provider for 1.21–1.21.3.
+  PS5 validation is pending for each release.
+
 ## Local 256 · Promote Vanilla 1.21.9, 2026-11-06
 
 - Show Vanilla 1.21.9 with the normal launcher status in the ProsperoStore

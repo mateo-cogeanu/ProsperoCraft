@@ -1,0 +1,10 @@
+{
+  "version": "6.4.10",
+  "source": {
+    "url": "https://repo.maven.apache.org/maven2/com/github/oshi/oshi-core/6.4.10/oshi-core-6.4.10-sources.jar",
+    "size": 594277,
+    "sha256": "d148abd21415b0da8ac1dddc33af896d8751a2ba4b32ea9a84a0700be4c7eb52"
+  },
+  "license_sha256": "e5936ec705d2fb0515b0d3e9a76acb52c1eef3e8ff88c7b9f80269b7909c959c",
+  "scope": "Shared PS5 CPU provider and SystemInfo patch built against genuine OSHI 6.4.10 and its publisher dependencies for Vanilla 1.21 through 1.21.3."
+}
