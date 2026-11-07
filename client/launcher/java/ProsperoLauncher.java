@@ -80,6 +80,9 @@ public final class ProsperoLauncher {
  }
  static boolean selected121(){return current.receipt!=null&&ProsperoVersions.release121(current.receipt.version);}
  static boolean selected121Fabric(){return selected121()&&"fabric".equals(current.detail.loader);}
+ static boolean selected121Controlify()throws Exception{
+  return selected121Fabric()&&current.modrinth.hasControlify(selectedWork());
+ }
  static String[] selectedShutdownAccessors()throws java.io.IOException{return selected121()?Prospero121.shutdownAccessors(current.receipt.version):null;}
  static String gameMain(){return "fabric".equals(current.detail.loader)?ProsperoFabric.MAIN:"net.minecraft.client.main.Main";}
  static ClassLoader runningGameLoader(){return "fabric".equals(current.detail.loader)?Thread.currentThread().getContextClassLoader():gameLoader();}
@@ -109,10 +112,7 @@ public final class ProsperoLauncher {
   if(version==null)version=installer.catalog(true,()->cancelled(attempt)).stream().filter(v->v.id().equals(instance.version)).findFirst().orElseThrow(()->new java.io.IOException("This version is not in the publisher catalog"));
   var installed=installer.install(version,library.settings().workers,(text,done,size)->{synchronized(this){if(!cancelled(attempt)){completed=done;total=size;long now=System.currentTimeMillis();if(now-lastProgress>100||done==size){message=text;lastProgress=now;cached=null;}}}},()->cancelled(attempt));
   if("fabric".equals(instance.loader))fabric.install(instance.version,(text,done,size)->{synchronized(this){if(!cancelled(attempt)){message=text;cached=null;}}},()->cancelled(attempt));
-  if(instance.defaultContentPending&&!ProsperoVersions.release121(instance.version)&&!ProsperoModrinth.defaultMods(instance.loader).isEmpty()){
-   try(var checker=fabric.dependencies(instance.version)){modrinth.installDefaults(library.game(instance),instance.version,instance.loader,checker,(text,done,size)->{synchronized(this){if(!cancelled(attempt)){message=text;completed=done;total=size;cached=null;}}},()->cancelled(attempt));}
-   ProsperoInstall.active(()->cancelled(attempt));library.defaultContentInstalled(instance);
-  }
+  installDefaultContent(instance,attempt);
   if(play)repairDependencies(instance,attempt,false);
   synchronized(this){if(!cancelled(attempt)){library.ready(instance,true);if(session!=null&&avatar.isEmpty()&&auth.skin(session).isEmpty())try{avatar=ProsperoAvatar.defaultFace(library.root,session.id);}catch(Exception ignored){}message="Download complete. Ready for your next world.";feedback("success");if(play)prepareLaunch(instance,installed);cached=null;}}
  });}
@@ -121,6 +121,15 @@ public final class ProsperoLauncher {
   runTask("DUPLICATE",attempt->{var copy=library.duplicate(original,(text,done,size)->{synchronized(this){if(!cancelled(attempt)){message=text;completed=done;total=size;cached=null;}}},()->cancelled(attempt));
    synchronized(this){if(!cancelled(attempt)){detail=copy;selected=library.instances().indexOf(copy);page=4;row=0;top=false;message="Created "+copy.name;feedback("success");cached=null;}}
   });
+ }
+ private void installDefaultContent(ProsperoLibrary.Instance instance,int attempt)throws Exception {
+  if(!instance.defaultContentPending||ProsperoModrinth.defaultMods(instance.loader).isEmpty())return;
+  try(var checker=fabric.dependencies(instance.version)){
+   modrinth.installDefaults(library.game(instance),instance.version,instance.loader,checker,(text,done,size)->{
+    synchronized(this){if(!cancelled(attempt)){message=text;completed=done;total=size;cached=null;}}
+   },()->cancelled(attempt));
+  }
+  ProsperoInstall.active(()->cancelled(attempt));library.defaultContentInstalled(instance);
  }
  private void repairDependencies(ProsperoLibrary.Instance instance,int attempt,boolean offline)throws Exception {
   if(!"fabric".equals(instance.loader))return;
@@ -148,7 +157,7 @@ public final class ProsperoLauncher {
  static boolean configureSelectedSodiumLwjglTest(){return current.receipt!=null&&ProsperoGraphics.configureSodiumLwjglTest(current.receipt.version,current.detail.loader);}
  static boolean selectedGlfw(){return current.receipt!=null&&ProsperoGraphics.glfw(current.receipt.version)&&"GLFW".equals(current.receipt.window);}
  static boolean snapshot(String version){return java.util.Set.of("26.4-snapshot-1","26.4-snapshot-2","26.4-snapshot-3","26.4-snapshot-4","26.4-snapshot-5","26.4-snapshot-6").contains(version==null?"":version);}
- private void play(){if(detail==null||busy)return;if(!launchable(detail.version,detail.loader)){message="26.2".equals(detail.version)&&"fabric".equals(detail.loader)?"Fabric for Minecraft 26.2 is coming soon. Your downloads and worlds are kept.":ProsperoGraphics.release261(detail.version)?"26.1 Zink development testing is unavailable in this build. Downloads and worlds are kept.":"Coming soon for this version. Downloads and worlds are kept.";feedback("error");return;}if(ProsperoChannel.tempGameTest()&&(session==null||!session.valid(System.currentTimeMillis()))){page=3;tab=2;top=false;row=0;signIn();return;}awaitingTutorial=ProsperoChannel.tempGameTest()&&library.settings().showControls;if(awaitingTutorial){page=11;row=1;top=false;launchPrepared=false;}if(!detail.ready){install(true);return;}var instance=detail;runTask("VERIFY",attempt->{var installed=installer.receipt(instance.version);installer.verify(installed);repairDependencies(instance,attempt,false);synchronized(this){if(!cancelled(attempt))prepareLaunch(instance,installed);}});}
+ private void play(){if(detail==null||busy)return;if(!launchable(detail.version,detail.loader)){message="26.2".equals(detail.version)&&"fabric".equals(detail.loader)?"Fabric for Minecraft 26.2 is coming soon. Your downloads and worlds are kept.":ProsperoGraphics.release261(detail.version)?"26.1 Zink development testing is unavailable in this build. Downloads and worlds are kept.":"Coming soon for this version. Downloads and worlds are kept.";feedback("error");return;}if(ProsperoChannel.tempGameTest()&&(session==null||!session.valid(System.currentTimeMillis()))){page=3;tab=2;top=false;row=0;signIn();return;}awaitingTutorial=ProsperoChannel.tempGameTest()&&library.settings().showControls;if(awaitingTutorial){page=11;row=1;top=false;launchPrepared=false;}if(!detail.ready){install(true);return;}var instance=detail;runTask("VERIFY",attempt->{var installed=installer.receipt(instance.version);installer.verify(installed);installDefaultContent(instance,attempt);repairDependencies(instance,attempt,false);synchronized(this){if(!cancelled(attempt))prepareLaunch(instance,installed);}});}
  private void playOffline(){
   if(detail==null||busy)return;
   if(!ProsperoChannel.offline()){message="This is the Demo branch.";return;}

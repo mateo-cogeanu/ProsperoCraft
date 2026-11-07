@@ -1,5 +1,12 @@
 # Changelog
 
+## Local 259 · Removable Controlify defaults and 1.21.x SDL setup, 2026-11-07
+
+- Install Controlify by default when setting up Fabric. Keep a user removal in
+  the content receipt so a later install or repair honors it.
+- Route 1.21.x Controlify through the resident SDL path using its original JNA
+  library. Log the native binding checkpoints for the 1.21.11 startup crash.
+
 ## Local 258 · Fabric 1.21 through 1.21.11, 2026-11-07
 
 - Add all twelve 1.21.x releases as Fabric DEV TEST candidates on Zink.

@@ -22,6 +22,18 @@ public class DependencyCheck {
    defaultsClient.toggle(defaults,new ProsperoModrinth.Selection("userQueued","Keep queued",ProsperoModrinth.Kind.RESOURCE));
    defaultsClient.installDefaults(defaults,"26.3","fabric",versions,(m,d,t)->{},()->false);check(Files.exists(defaults.resolve("mods/controlify.jar"))&&Files.exists(defaults.resolve("mods/dependency.jar"))&&defaultsClient.queue(defaults).size()==1,"defaults missing dependency or changed user queue");
    defaultsClient.installDefaults(defaults,"26.3","fabric",versions,(m,d,t)->{},()->false);check(defaultsClient.installed(defaults).files.size()==2,"duplicate defaults");
+   var controlify=defaultsClient.local(defaults,ProsperoModrinth.Kind.MOD).stream().filter(i->i.project().equals("DOUdJVEm")).findFirst().orElseThrow();
+   defaultsClient.uninstall(defaults,controlify);
+   int afterUninstall=reads;
+   defaultsClient.installDefaults(defaults,"26.3","fabric",versions,(m,d,t)->{},()->false);
+   check(!Files.exists(defaults.resolve("mods/controlify.jar"))&&reads==afterUninstall,"default setup restored removed Controlify");
+   Path custom=root.resolve("manual/game");Files.createDirectories(custom.resolve("mods"));
+   Path customJar=custom.resolve("mods/custom-controller.jar");byte[] customMod=jar("controlify","9.0.0","{}",null);Files.write(customJar,customMod);
+   defaultsClient.installDefaults(custom,"26.3","fabric",versions,(m,d,t)->{},()->false);
+   check(Arrays.equals(customMod,Files.readAllBytes(customJar))&&reads==afterUninstall,"default setup duplicated a manually installed Controlify");
+   defaultsClient.uninstall(custom,defaultsClient.local(custom,ProsperoModrinth.Kind.MOD).getFirst());
+   defaultsClient.installDefaults(custom,"26.3","fabric",versions,(m,d,t)->{},()->false);
+   check(defaultsClient.local(custom,ProsperoModrinth.Kind.MOD).isEmpty()&&reads==afterUninstall,"manually removed Controlify reappeared");
    check(versions.accepts("0.20.1",List.of(">=0.18.4"))&&versions.accepts("26.3",List.of("~26.3"))&&!versions.accepts("1.0.0",List.of(">=2")),"official version predicates");
    byte[] mod=jar("vitrail","0.13.0-beta","{\"fabric-key-mapping-api-v1\":\"*\",\"minecraft\":\"~26.3\",\"java\":\">=25\"}",null);
    byte[] api=jar("fabric-api","0.165.0+26.3","{\"fabricloader\":\">=0.18\"}",jar("fabric-key-mapping-api-v1","3.0.0","{}",null));

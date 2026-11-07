@@ -7,12 +7,13 @@ import java.util.function.BooleanSupplier;
 /** Instance-scoped Modrinth browser and checksum-verified download queue. */
 final class ProsperoModrinth {
  static final String API="https://api.modrinth.com/v2/";
+ private static final String CONTROLIFY="DOUdJVEm";
  enum Kind {MOD("mod","mods","Mods"),SHADER("shader","shaderpacks","Shaders"),RESOURCE("resourcepack","resourcepacks","Resource packs");final String type,folder,title;Kind(String t,String f,String n){type=t;folder=f;title=n;}}
  record Hit(String id,String title,String description,long downloads,String icon){Hit(String id,String t,String d,long n){this(id,t,d,n,"");}}
  record Results(List<Hit> hits,int total){}
  record Selection(String project,String title,Kind kind){}
  record File(String project,String version,Kind kind,String filename,ProsperoDownloads.Pin pin){}
- static final class Installed {ArrayList<File> files=new ArrayList<>();}
+ static final class Installed {ArrayList<File> files=new ArrayList<>();boolean controlifyRemoved;}
  final ProsperoDownloads download;
  ProsperoModrinth(){this(new ProsperoDownloads());}
  ProsperoModrinth(ProsperoDownloads download){this.download=download;}
@@ -22,10 +23,20 @@ final class ProsperoModrinth {
   for(int cp:name.codePoints().toArray())if(Character.isISOControl(cp)||Character.getType(cp)==Character.FORMAT||Character.getType(cp)==Character.LINE_SEPARATOR||Character.getType(cp)==Character.PARAGRAPH_SEPARATOR||cp>=0xd800&&cp<=0xdfff||"/\\:<>\"|?*".indexOf(cp)>=0)return false;
   return true;
  }
- static List<Selection> defaultMods(String loader){return Set.of("fabric","neoforge").contains(loader)?List.of(new Selection("DOUdJVEm","Controlify",Kind.MOD)):List.of();}
+ static List<Selection> defaultMods(String loader){return Set.of("fabric","neoforge").contains(loader)?List.of(new Selection(CONTROLIFY,"Controlify",Kind.MOD)):List.of();}
  void installDefaults(Path game,String version,String loader,ProsperoDependencies.Versions checker,ProsperoInstall.Progress progress,BooleanSupplier cancel)throws Exception{
-  List<Selection> defaults=defaultMods(loader);if(defaults.isEmpty())return;
+  List<Selection> defaults=defaultMods(loader);
+  if(defaults.isEmpty()||installed(game).controlifyRemoved||hasControlify(game))return;
   installSelected(game,version,loader,progress,cancel,f->{},checker,defaults,Map.of(),false);
+ }
+ boolean hasControlify(Path game)throws Exception {
+  for(var file:local(game,Kind.MOD))
+   if(CONTROLIFY.equals(file.project)||isControlify(game.resolve("mods").resolve(file.filename)))return true;
+  return false;
+ }
+ private static boolean isControlify(Path jar){
+  try{return "controlify".equals(ProsperoDependencies.rootModule(jar).id());}
+  catch(Exception unavailable){return false;}
  }
  static String array(String s){return new Gson().toJson(List.of(s));}
  Results search(Kind kind,String game,String loader,String query,int offset,BooleanSupplier cancel)throws Exception {
@@ -57,6 +68,8 @@ final class ProsperoModrinth {
   Path target=game.resolve(item.kind.folder).resolve(item.filename);ProsperoDownloads.noLinks(target);
   if(!Files.isRegularFile(target,LinkOption.NOFOLLOW_LINKS))throw new IOException("Installed file is no longer available");
   Installed receipt=installed(game);for(File f:receipt.files)if(f==null||f.kind==null||f.filename==null)throw new IOException("Invalid content receipt");
+  if(item.kind==Kind.MOD&&(receipt.files.stream().anyMatch(f->f.kind==Kind.MOD&&f.filename.equals(item.filename)&&CONTROLIFY.equals(f.project))||isControlify(target)))
+   receipt.controlifyRemoved=true;
   receipt.files.removeIf(f->f.kind==item.kind&&f.filename.equals(item.filename));
   Path removed=state(game,"content-uninstall").resolve(UUID.randomUUID().toString());ProsperoDownloads.noLinks(removed);Files.createDirectories(removed);
   Path staged=removed.resolve("removed-file");Files.move(target,staged);
@@ -173,7 +186,7 @@ final class ProsperoModrinth {
     ProsperoInstall.active(cancel);Path target=game.resolve(f.kind.folder).resolve(f.filename);ProsperoDownloads.noLinks(target);Files.createDirectories(target.getParent());
     if(!Files.exists(target)){Path part=target.resolveSibling(f.filename+".part");ProsperoDownloads.noLinks(part);try{Files.copy(stage.resolve(f.pin.hash()+".bin"),part,StandardCopyOption.REPLACE_EXISTING);ProsperoInstall.active(cancel);Files.move(part,target);created.add(target);}finally{Files.deleteIfExists(part);}}
    }
-   Installed next=new Installed();next.files.addAll(receipt.files);
+   Installed next=new Installed();next.files.addAll(receipt.files);next.controlifyRemoved=receipt.controlifyRemoved;
    for(File f:plan.values()){next.files.removeIf(old->old.project.equals(f.project)&&old.kind==f.kind);next.files.add(f);}
    ProsperoInstall.active(cancel);ProsperoInstall.save(state(game,"content-installed.json"),new Gson().toJson(next));
   }catch(Exception failure){

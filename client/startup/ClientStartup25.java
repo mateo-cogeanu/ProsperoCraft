@@ -207,15 +207,31 @@ public final class ClientStartup25 {
  static void configureControlifyNative(){
   // The original FFM backend's supported path option uses libraryLookup(path),
   // avoiding loaderLookup's class-loader-wide first matching SDL export.
-  System.setProperty("dev.isxander.sdl.library","/app0/assets/java25/lib/libSDL3.so");
+  String path="/app0/assets/java25/lib/libSDL3.so";
+  System.setProperty("dev.isxander.sdl.library",path);
+  // Controlify's 1.21 LTS branch uses JNA and reads its own path option.
+  if(ProsperoLauncher.selected121Fabric())System.setProperty("controlify.debug.sdl_natives_override",path);
  }
- static void verifyControlifyLookup(){
+ static void verifyControlifyLookup()throws Exception{
+  String path=System.getProperty("dev.isxander.sdl.library");
   try(var arena=java.lang.foreign.Arena.ofConfined()){
-   var lookup=java.lang.foreign.SymbolLookup.libraryLookup(Path.of(System.getProperty("dev.isxander.sdl.library")),arena);
-   for(String name:new String[]{"PollEvent","SetEventFilter","GetEventFilter"}){
+   var lookup=java.lang.foreign.SymbolLookup.libraryLookup(Path.of(path),arena);
+   String[] events={"PollEvent","SetEventFilter","GetEventFilter"};
+   for(String name:events){
     long actual=lookup.find("SDL_"+name).orElseThrow().address();
     long expected=lookup.find("prospero_controlify_"+name).orElseThrow().address();
     if(actual!=expected)throw new IllegalStateException("Controlify resident event lookup is not scoped");
+   }
+   if(ProsperoLauncher.selected121Controlify()){
+    stage("PS5_CONTROLIFY_JNA phase=BOOTSTRAP");
+    var jna=ProsperoControlifyJna.open(ProsperoLauncher.gameLoader(),path);
+    stage("PS5_CONTROLIFY_JNA phase=SDL_RESIDENT_OPEN");
+    for(String name:events)
+     if(jna.address("SDL_"+name)!=lookup.find("SDL_"+name).orElseThrow().address())
+      throw new IllegalStateException("Controlify JNA event lookup is not scoped");
+    int version=jna.version();
+    if(version<3000000||version>=4000000)throw new IllegalStateException("Unexpected Controlify SDL version");
+    stage("PS5_CONTROLIFY_JNA phase=SDL_VERIFIED version="+version+" verified_events=3");
    }
   }
  }

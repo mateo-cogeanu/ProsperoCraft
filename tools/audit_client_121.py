@@ -66,7 +66,7 @@ def main():
             raise ValueError('Unexpected baseline change: ' + repr(changed))
         added = sorted(set(names) - set(old.namelist()))
         older_provider = {prefix + n for n in ('ports/' + OSHI6410_JAR, 'oshi6410-source-pin.json',
-                                                'oshi6410-platform-audit.json')} if candidate in ('257', '258') else set()
+                                                'oshi6410-platform-audit.json')} if candidate in ('257', '258', '259') else set()
         for n in added:
             if not (n in older_provider or n in replacement_icons or n.startswith(prefix + 'lwjgl333-source/') or n.startswith(prefix + 'classes/') or n.startswith(prefix+'native-presentation-source/') or n.startswith(prefix+'storage-source/') or n.startswith(prefix+'oshi665-source/') or n.startswith(prefix+'sdl-resolution-source/') or
                     n in {prefix + 'ports/' + TINYFD_JAR, prefix+'native-presentation-audit.json',prefix+'storage-path-audit.json',prefix+'graphics-resolution-audit.json',prefix+'oshi665-platform-audit.json', prefix+'sdl-resolution-audit.json',prefix+'ports/oshi-6.6.5-ps5-platform.jar',prefix + 'lwjgl333-integration-audit.json', prefix + 'ports/lwjgl-3.3.3-ps5-overlay.jar',
@@ -90,7 +90,7 @@ def main():
         for name, digest in os_audit['source_sha256'].items():
             if hashlib.sha256(new.read(prefix + 'oshi665-source/' + name)).hexdigest() != digest:
                 raise ValueError('OSHI665 packaged source mismatch')
-        if candidate in ('257', '258'):
+        if candidate in ('257', '258', '259'):
             old_audit = json.loads(new.read(prefix + 'oshi6410-platform-audit.json'))
             source_pin = new.read(prefix + 'oshi6410-source-pin.json')
             if (old_audit['version'] != '6.4.10' or source_pin != OSHI6410_PIN.read_bytes()
@@ -230,7 +230,7 @@ def main():
         raise ValueError('Missing/duplicate rebuilt SDL group')
     stack_patch = '0008-radv-shader-object-stage-storage.patch'
     patches = graphics_audit['wsi_diagnostics']['source_recipe']['patches']
-    if (stack_patch in patches) != (candidate in ('250', '251', '252', '253', '254', '255', '256', '257', '258')):
+    if (stack_patch in patches) != (candidate in ('250', '251', '252', '253', '254', '255', '256', '257', '258', '259')):
         raise ValueError('Wrong linked RADV shader-stage storage policy')
     graphics = [Path(n) for n in linked if n.endswith('/graphics-support.o')]
     if len(graphics) != 1 or sha(graphics[0]) != graphics_audit['objects_sha256']['graphics-support.o']:
@@ -273,11 +273,11 @@ def main():
                    b'-XX:+SafepointTimeout', b'-XX:SafepointTimeoutDelay=250', b'-XX:-AbortVMOnSafepointTimeout'):
         if option + b'\0' not in elf:
             raise ValueError(f'Retained option missing from actual{candidate} ELF: ' + option.decode())
-    if (b'-XX:ZOldGCThreads=1\0' in elf) != (candidate in ('249', '250', '251', '252', '253', '254', '255', '256', '257', '258')):
+    if (b'-XX:ZOldGCThreads=1\0' in elf) != (candidate in ('249', '250', '251', '252', '253', '254', '255', '256', '257', '258', '259')):
         raise ValueError('Unexpected ZGC old-generation worker policy')
-    if (b'PS5_ZINK using Vulkan pipelines for shaders\n' in elf) != (candidate in ('252', '253', '254', '255', '256', '257', '258')):
+    if (b'PS5_ZINK using Vulkan pipelines for shaders\n' in elf) != (candidate in ('252', '253', '254', '255', '256', '257', '258', '259')):
         raise ValueError('Unexpected Zink shader object opt-out policy')
-    if (b'PS5_ZINK pipeline shaders with synchronous compilation\0' in elf) != (candidate in ('253', '254', '255', '256', '257', '258')):
+    if (b'PS5_ZINK pipeline shaders with synchronous compilation\0' in elf) != (candidate in ('253', '254', '255', '256', '257', '258', '259')):
         raise ValueError('Unexpected Zink synchronous compilation policy')
     if b'-XX:ConcGCThreads=2\0' not in elf:
         raise ValueError('Missing ZGC concurrent worker budget')

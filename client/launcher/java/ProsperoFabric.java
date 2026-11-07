@@ -83,7 +83,7 @@ final class ProsperoFabric {
   if(ProsperoVersions.release121(version))System.setProperty("fabric.noGui","true");
   String existing=System.getProperty("java.class.path","");var entries=new LinkedHashSet<String>(List.of(existing.split(java.io.File.pathSeparator)));
   var systemLibraries=new LinkedHashSet<String>(entries);
-  for(URL url:loader.getURLs())try{Path path=Path.of(url.toURI());entries.add(path.toString());String file=path.getFileName().toString();if(file.startsWith("lwjgl-")||file.startsWith("oshi-"))systemLibraries.add(path.toString());}catch(Exception invalid){throw new IllegalArgumentException(invalid);}
+  for(URL url:loader.getURLs())try{Path path=Path.of(url.toURI());entries.add(path.toString());String file=path.getFileName().toString();if(file.startsWith("lwjgl-")||file.startsWith("oshi-")||(ProsperoVersions.release121(version)&&file.startsWith("jna-")))systemLibraries.add(path.toString());}catch(Exception invalid){throw new IllegalArgumentException(invalid);}
   systemLibraries.remove("");System.setProperty("fabric.systemLibraries",String.join(java.io.File.pathSeparator,systemLibraries));
   entries.remove("");System.setProperty("java.class.path",String.join(java.io.File.pathSeparator,entries));System.setProperty("fabric.gameVersion",version);
   System.setProperty("fabric.gameJarPath.client",game.toString());
