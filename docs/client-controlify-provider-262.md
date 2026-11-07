@@ -32,3 +32,5 @@ checked with denied anonymous mmap and its bounded reserve.
 
 Physical 262 SDL load, DualSense enumeration, Controlify handoff, gameplay,
 rumble/triggers and save/quit remain pending.
+
+See the [exact build validation](validation/client262-controlify-provider-2026-11-07.json).

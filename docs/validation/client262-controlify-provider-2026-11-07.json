@@ -1,0 +1,44 @@
+{
+  "app_version": "01.000.262",
+  "title_id": "PPSA99874",
+  "source_commit": "2f18f0f797a03b73a5049ef876088676f9d7c5ea",
+  "source_tree": "clean",
+  "package_sha256": "3bef8747e6f9b45b08cac395cd4c6d4fe975fbcd88e762479b26842a0beb273c",
+  "package_bytes": 127927302,
+  "symbols_sha256": "df398ab491cfdf26bdd9ba72e9d08828e22a13de4c0b16e945d22b52f42da5f0",
+  "eboot_sha256": "8732dac64e1bae8dcad60ab4f4d71a94e3345ad2aa4fbd76aba42d7dbaffc1cd",
+  "providers": {
+    "bindings": {
+      "malloc": "clientgpu___wrap_malloc",
+      "calloc": "clientgpu___wrap_calloc",
+      "free": "clientgpu___wrap_free",
+      "strdup": "clientgpu_strdup",
+      "ffi_closure_alloc": "lwjgl333_ffi_closure_alloc",
+      "ffi_closure_free": "lwjgl333_ffi_closure_free",
+      "ffi_prep_closure_loc": "lwjgl333_ffi_prep_closure_loc"
+    },
+    "input_sha256": "8b8b405b0c2d0413d4f899181bbc33e97093a567f2d3a5f32da94c2d88c6d9f9",
+    "scoped_object_sha256": "ed71f66b0914c4ca81ccddc3fd57f385097523152680cc59c41661f5c864159d",
+    "resident_group_sha256": "b903cfa866f3b2b71dbaa62ab0ec1efaf5cb4bde4437ba118dc07ab45bcd372f",
+    "ffi_header_sha256": "961bf175d63b76aa7028f1d887824efe7a6599480791ab2ed1a9cef3624df7a2",
+    "scope": "Pair JNA allocation/string/free imports with existing consumer provider, and closure lifecycle with compatible existing333 W-to-X reserve. Raw runtime defaults and publisher JARs retained. PS5 validation pending."
+  },
+  "reproduction": {
+    "build": "01.000.261",
+    "minecraft": "1.21.11",
+    "loader": "Fabric 0.20.1",
+    "controlify": "3.0.1 LTS",
+    "current_report": "Original SDL loader reaches JNA Native.open, which throws OutOfMemoryError allocating a C string; Controlify subsequently reports no controllers. Optional HID exception is caught earlier."
+  },
+  "checks": [
+    "Original JNA with explicit audited runtime source and original publisher5.17.0 JAR reproduces C-string allocation refusal. Controlled host provider opens real SDL3.4.12, passes direct registration,1000paired memory/string buffers,real libffi callback/release and refused-provider controls.",
+    "Xcheck:jni reports an upstream JNA JNI bootstrap unchecked-exception warning. Subsequent provider assertions pass; no warning-free claim.",
+    "Actual x86-64 closure reserve adapter passes real libffi3200concurrent callbacks with denied mmap,reserve64 exhaustion/reuse,partial/unprimed/EACCES/RX/RW cleanup controls under ASan/UBSan.",
+    "All19fast and13native consumer host checks pass.",
+    "Target compile/link/conversion and signed SELF integrity pass.",
+    "Independent package audit verifies exact JNA provider/group,all7paired allocation/closure imports,no original raw imports,and retained scoped JNI handle policy.",
+    "All907unpacked entries match the candidate ZIP."
+  ],
+  "console_status": "Exact262SDL native load,DualSense enumeration,Controlify handoff,world play,haptics/save/quit pending. The controlled host provider test does not execute the PS5 allocator. Broader native allocation pressure remains unresolved.",
+  "release_store": "Local test candidate only."
+}
