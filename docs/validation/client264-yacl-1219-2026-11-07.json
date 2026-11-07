@@ -10,11 +10,11 @@
   "reproduction": {
     "minecraft": "1.21.9",
     "loader": "Fabric",
-    "reported_error": "YACL requires a Fabric API version for1.21.10.",
+    "reported_error": "YACL requires a Fabric API version for 1.21.10.",
     "host_before_fix": "Normal default installation fails because yet_another_config_lib_v3 requires fabric-api >=0.138.3+1.21.10."
   },
   "selection": {
-    "scope": "Minecraft1.21.9 YACL only",
+    "scope": "Minecraft 1.21.9 YACL only",
     "excluded_publisher_version_ids": [
       "skcT0J9K",
       "ORi1nScg"
@@ -28,11 +28,11 @@
   "checks": [
     "All 19 deterministic fast checks passed, including version exclusions, 1.21.10 selection, explicit-pin controls and future-release eligibility.",
     "Live normal default installation reproduced the original error before the change and succeeded after the change.",
-    "The complete installed original mod graph satisfies genuine Fabric 0.20.1 version predicates for Minecraft1.21.9. Every installed file matches its publisher hash.",
+    "The complete installed original mod graph satisfies genuine Fabric 0.20.1 version predicates for Minecraft 1.21.9. Every installed file matches its publisher hash.",
     "Target compile/link/conversion and signed SELF integrity passed.",
     "Independent package audit passed with the retained runtime, JNA provider and actual 512-page callback reserve.",
     "All 907 unpacked entries match the candidate ZIP."
   ],
-  "console_status": "User reports build263 Fabric1.21.11 and1.21.10 are okay. Exact264 console1.21.9 download, menu, DualSense, gameplay and save/quit remain pending. No formal ALL PASS inferred.",
+  "console_status": "User reports build 263 Fabric 1.21.11 and 1.21.10 are okay. Exact build 264 console 1.21.9 download, menu, DualSense, gameplay and save/quit remain pending. No formal ALL PASS inferred.",
   "release_store": "Local test candidate only."
 }
