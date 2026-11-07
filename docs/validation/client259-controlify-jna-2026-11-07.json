@@ -26,6 +26,6 @@
     "Original libsdl4j and JNA 5.17.0 registered, invoked, queried and cleared a real host SDL event filter callback, including the SDL event structure round trip.",
     "Target compile/link, signed SELF integrity, independent package/static ABI audit and unpacked file checks passed."
   ],
-  "console_status": "Build 259 retest pending. The 1.21.11 native crash cause and controller behavior are not confirmed.",
+  "console_status": "User reports build 259 still crashes on 1.21.11 Fabric with Controlify. Retrieved matching retained run passes all JNA checkpoints and real SDL 3.4.2 call, then stops during mod pre-initialization. Native null destination/source pointing to the resident missing-library error string identifies the unsafe JNA loader-error copy. Candidate 260 repair awaits console validation.",
   "release_store": "Local candidate only."
 }

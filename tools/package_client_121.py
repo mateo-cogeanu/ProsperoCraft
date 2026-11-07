@@ -28,11 +28,11 @@ TINYFD_SHA256 = '3ffad01103b6cbc8c12c7156691fd87a96f063600a5ff5c9087d321c6736963
 TINYFD_CLASSPATH = '/app0/assets/java25/ports/' + TINYFD_JAR
 OSHI6410_PIN = ROOT / 'client/ports/oshi6410/sources.json'
 OSHI6410_JAR = 'oshi-6.4.10-ps5-platform.jar'
-APP_VERSIONS = tuple(f'01.000.{number}' for number in range(248, 260))
+APP_VERSIONS = tuple(f'01.000.{number}' for number in range(248, 261))
 
 
 def release121_gate(app_version):
-    if app_version in ('01.000.258', '01.000.259'):
+    if app_version in ('01.000.258', '01.000.259', '01.000.260'):
         return b'vanilla-fabric-1.21-1.21.11-zink-v5\n'
     if app_version == '01.000.257':
         return b'vanilla-1.21-1.21.11-zink-v4\n'
@@ -63,6 +63,7 @@ def main():
     parser.add_argument('--sdl-build',type=Path,required=True)
     parser.add_argument('--oshi665-build',type=Path,required=True)
     parser.add_argument('--oshi6410-build', type=Path)
+    parser.add_argument('--jna-build', type=Path)
     parser.add_argument('--hotspot-object', type=Path, required=True)
     parser.add_argument('--tinyfd-jar', type=Path, required=True)
     parser.add_argument('--java-home', type=Path)
@@ -75,8 +76,10 @@ def main():
         raise ValueError('Wrong publisher TinyFD 3.4.1 artifact')
     app_version = args.app_version
     candidate = app_version.split('.')[-1]
-    if (candidate in ('257', '258', '259')) != (args.oshi6410_build is not None):
-        parser.error('--oshi6410-build is required for builds 257 through 259')
+    if (candidate == '260') != (args.jna_build is not None):
+        parser.error('--jna-build is required only for build 260')
+    if (candidate in ('257', '258', '259', '260')) != (args.oshi6410_build is not None):
+        parser.error('--oshi6410-build is required for builds 257 through 260')
     runtime, llvm, jdk = args.runtime_workspace.resolve(), args.llvm_home.resolve() / 'bin', java_home(args.java_home)
     work, output = args.work_dir.resolve(), args.output_dir.resolve()
     work.mkdir(parents=True, exist_ok=True)
@@ -169,7 +172,7 @@ def main():
         raise ValueError('Stale graphics output')
     recipe = graphics_audit['wsi_diagnostics']['source_recipe']
     stack_patch = '0008-radv-shader-object-stage-storage.patch'
-    if (stack_patch in recipe['patches']) != (candidate in ('250', '251', '252', '253', '254', '255', '256', '257', '258', '259')):
+    if (stack_patch in recipe['patches']) != (candidate in ('250', '251', '252', '253', '254', '255', '256', '257', '258', '259', '260')):
         raise ValueError('Wrong RADV shader-stage storage for this build')
     for category, directory in (('patches','zink'),('wsi_patches','mesa'),('wsi_headers','mesa')):
         for name, digest in recipe[category].items():
@@ -188,9 +191,23 @@ def main():
         if match:
             old_groups[match[1]] = baseline / item
     core = {'jvm', 'java', 'zip', 'jimage', 'net', 'nio', 'verify', 'management', 'management_ext', 'awt', 'lcms'}
+    if args.jna_build:
+        jna_pin = json.loads((ROOT / 'client/launcher/jna-loader-runtime.json').read_text())
+        jna_object = args.jna_build / 'jnidispatch.o'
+        jna_audit = json.loads((args.jna_build / 'audit.json').read_text())
+        if (jna_audit['host'] or sha(jna_object) != jna_pin['object_sha256']
+                or jna_audit['output_sha256'] != sha(jna_object)
+                or jna_audit['patches_sha256'] != jna_pin['patches_sha256']):
+            raise ValueError('Wrong JNA checked-loader native build')
+        for name, digest in jna_pin['source_sha256'].items():
+            if sha(runtime / name) != digest:
+                raise ValueError('JNA runtime source pin mismatch: ' + name)
     for name, obj in old_groups.items():
         if name not in core:
-            groups.append({'name': name, 'objects': [str(sdl_scoped if name=='ps5sdl' else obj)]})
+            selected = sdl_scoped if name == 'ps5sdl' else obj
+            if name == 'jnidispatch' and args.jna_build:
+                selected = jna_object
+            groups.append({'name': name, 'objects': [str(selected)]})
     groups.append({'name': 'lwjgl333', 'objects': [str(scoped)]})
     registry = work / 'registry'
     registry.mkdir(exist_ok=True)
@@ -302,9 +319,9 @@ def main():
              '-march=x86-64', '-mno-avx', '-mno-avx2', '-mno-fma', '-O2', '-fno-stack-protector',
              '-fno-plt', '-femulated-tls', '-ffunction-sections', '-fdata-sections']
     main_obj = work / ('main'+candidate+'.o')
-    gc_flags = ['-DPROSPERO_ZGC_SINGLE_OLD_WORKER=1'] if candidate in ('249', '250', '251', '252', '253', '254', '255', '256', '257', '258', '259') else []
-    graphics_flags = ['-DPROSPERO_ZINK_PIPELINE_SHADERS=1'] if candidate in ('252', '253', '254', '255', '256', '257', '258', '259') else []
-    if candidate in ('253', '254', '255', '256', '257', '258', '259'):
+    gc_flags = ['-DPROSPERO_ZGC_SINGLE_OLD_WORKER=1'] if candidate in ('249', '250', '251', '252', '253', '254', '255', '256', '257', '258', '259', '260') else []
+    graphics_flags = ['-DPROSPERO_ZINK_PIPELINE_SHADERS=1'] if candidate in ('252', '253', '254', '255', '256', '257', '258', '259', '260') else []
+    if candidate in ('253', '254', '255', '256', '257', '258', '259', '260'):
         graphics_flags.append('-DPROSPERO_ZINK_SYNC_COMPILE=1')
     if candidate == '254':
         graphics_flags.append('-DPROSPERO_FABRIC261_OBSERVER=1')
@@ -336,6 +353,8 @@ def main():
     pie = work / ('client121-'+candidate+'-symbols.elf')
     replacements = {'inputs/062-backend.o': emutls_backend, 'inputs/031-embedded-jvm.o': registry / 'embedded-jvm.o', 'inputs/022-renderer.o':presenter,'inputs/110-graphics-support.o': graphics_object, 'inputs/104-main.o': main_obj, 'inputs/044-embedded-ps5sdl.o': registry/'embedded-ps5sdl.o', 'inputs/032-embedded-java.o': registry / 'embedded-java.o',
                     'inputs/109-builtin-libraries.o': registry / 'builtin-libraries.o'}
+    if args.jna_build:
+        replacements['inputs/048-embedded-jnidispatch.o'] = registry / 'embedded-jnidispatch.o'
     link = []
     for item in manifest['arguments']:
         if item == '{OUTPUT}':
@@ -400,7 +419,8 @@ def main():
     record = {'app_version': app_version, 'title_id': 'PPSA99874', 'package_sha256': sha(package),
         'package_bytes': package.stat().st_size, 'baseline_package_sha256': BASE_PACKAGE, 'baseline_relink_sha256': BASE_RELINK,
         'symbols_sha256': sha(pie), 'eboot_sha256': sha(app / 'eboot.bin'), 'runtime': pin,
-        'parentNativeGroupsRetainedSha256': {n: sha(p) for n, p in old_groups.items() if n not in ('jvm','java','ps5sdl')},
+        'jnaLoaderRuntime': jna_pin if args.jna_build else None,
+        'parentNativeGroupsRetainedSha256': {n: sha(p) for n, p in old_groups.items() if n not in ('jvm','java','ps5sdl') and not (args.jna_build and n == 'jnidispatch')},
         'javaRuntimeClassesAndImage': 'exact204 modules retained; native libjava handle hook rebuilt',
         'compilerTlsBackendSha256': sha(emutls_backend),
         'compilerTlsSourceSha256': sha(runtime / 'java25/probe/emutls_alloc.cpp'),

@@ -1,0 +1,14 @@
+{
+  "repository": "https://github.com/mateo-cogeanu/ps5-java25-homebrew",
+  "commit": "8da0298efc155bc17577274d1d2c05a0199f7413",
+  "object_sha256": "8b8b405b0c2d0413d4f899181bbc33e97093a567f2d3a5f32da94c2d88c6d9f9",
+  "group_sha256": "dc3dd8389bae37e65627e483a769822fc5e9849294bbf93fb7d711d140e8c23d",
+  "patches_sha256": {
+    "java25/patches/jna/0001-checked-loader-errors.patch": "ef8b2d529ab9e4cd22844dc7b625e0eac16f0e5db671e73c529262c32d92b02a"
+  },
+  "source_sha256": {
+    "tools/java25_jna.py": "2fb266372a16b09bbbab7650efca971e3358ed64682584e3a2cd3487e0ac052f",
+    "java25/patches/jna/0001-checked-loader-errors.patch": "ef8b2d529ab9e4cd22844dc7b625e0eac16f0e5db671e73c529262c32d92b02a"
+  },
+  "scope": "Opt-in checked native JNA library errors. Console Controlify startup validation pending."
+}
