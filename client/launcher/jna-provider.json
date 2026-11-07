@@ -1,0 +1,16 @@
+{
+  "bindings": {
+    "malloc": "clientgpu___wrap_malloc",
+    "calloc": "clientgpu___wrap_calloc",
+    "free": "clientgpu___wrap_free",
+    "strdup": "clientgpu_strdup",
+    "ffi_closure_alloc": "lwjgl333_ffi_closure_alloc",
+    "ffi_closure_free": "lwjgl333_ffi_closure_free",
+    "ffi_prep_closure_loc": "lwjgl333_ffi_prep_closure_loc"
+  },
+  "input_sha256": "8b8b405b0c2d0413d4f899181bbc33e97093a567f2d3a5f32da94c2d88c6d9f9",
+  "scoped_object_sha256": "ed71f66b0914c4ca81ccddc3fd57f385097523152680cc59c41661f5c864159d",
+  "resident_group_sha256": "b903cfa866f3b2b71dbaa62ab0ec1efaf5cb4bde4437ba118dc07ab45bcd372f",
+  "ffi_header_sha256": "961bf175d63b76aa7028f1d887824efe7a6599480791ab2ed1a9cef3624df7a2",
+  "scope": "Pair JNA allocation/string/free imports with existing consumer provider, and closure lifecycle with compatible existing333 W-to-X reserve. Raw runtime defaults and publisher JARs retained. PS5 validation pending."
+}

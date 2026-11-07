@@ -44,6 +44,6 @@
     "Independent package audit verifies explicit jnidispatch/ps5glfw/ps5openal scoped handles, exact checked JNA native group, retained333 reserve and other build policy.",
     "All 907 unpacked entries match the candidate ZIP."
   ],
-  "console_status": "Exact261 title screen, actual333 callback dispatch, Controlify input handoff, world play/save and quit pending. Native allocation-pressure cause remains unresolved.",
+  "console_status": "User reports controller not detected on build261. Current-run reports reach Controlify initialization, where JNA Native.open throws OutOfMemoryError: Cannot allocate C string. Controlify then reports no controllers. Title/world/input/endurance acceptance remains unconfirmed; build262 pairs JNA provider allocation and callback lifecycle.",
   "release_store": "Local test candidate only."
 }

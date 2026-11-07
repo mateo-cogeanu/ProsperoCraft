@@ -28,11 +28,11 @@ TINYFD_SHA256 = '3ffad01103b6cbc8c12c7156691fd87a96f063600a5ff5c9087d321c6736963
 TINYFD_CLASSPATH = '/app0/assets/java25/ports/' + TINYFD_JAR
 OSHI6410_PIN = ROOT / 'client/ports/oshi6410/sources.json'
 OSHI6410_JAR = 'oshi-6.4.10-ps5-platform.jar'
-APP_VERSIONS = tuple(f'01.000.{number}' for number in range(248, 262))
+APP_VERSIONS = tuple(f'01.000.{number}' for number in range(248, 263))
 
 
 def release121_gate(app_version):
-    if app_version in ('01.000.258', '01.000.259', '01.000.260', '01.000.261'):
+    if app_version in ('01.000.258', '01.000.259', '01.000.260', '01.000.261', '01.000.262'):
         return b'vanilla-fabric-1.21-1.21.11-zink-v5\n'
     if app_version == '01.000.257':
         return b'vanilla-1.21-1.21.11-zink-v4\n'
@@ -76,10 +76,10 @@ def main():
         raise ValueError('Wrong publisher TinyFD 3.4.1 artifact')
     app_version = args.app_version
     candidate = app_version.split('.')[-1]
-    if (candidate in ('260', '261')) != (args.jna_build is not None):
-        parser.error('--jna-build is required only for builds 260 and 261')
-    if (candidate in ('257', '258', '259', '260', '261')) != (args.oshi6410_build is not None):
-        parser.error('--oshi6410-build is required for builds 257 through 261')
+    if (candidate in ('260', '261', '262')) != (args.jna_build is not None):
+        parser.error('--jna-build is required only for builds 260 through 262')
+    if (candidate in ('257', '258', '259', '260', '261', '262')) != (args.oshi6410_build is not None):
+        parser.error('--oshi6410-build is required for builds 257 through 262')
     runtime, llvm, jdk = args.runtime_workspace.resolve(), args.llvm_home.resolve() / 'bin', java_home(args.java_home)
     work, output = args.work_dir.resolve(), args.output_dir.resolve()
     work.mkdir(parents=True, exist_ok=True)
@@ -172,7 +172,7 @@ def main():
         raise ValueError('Stale graphics output')
     recipe = graphics_audit['wsi_diagnostics']['source_recipe']
     stack_patch = '0008-radv-shader-object-stage-storage.patch'
-    if (stack_patch in recipe['patches']) != (candidate in ('250', '251', '252', '253', '254', '255', '256', '257', '258', '259', '260', '261')):
+    if (stack_patch in recipe['patches']) != (candidate in ('250', '251', '252', '253', '254', '255', '256', '257', '258', '259', '260', '261', '262')):
         raise ValueError('Wrong RADV shader-stage storage for this build')
     for category, directory in (('patches','zink'),('wsi_patches','mesa'),('wsi_headers','mesa')):
         for name, digest in recipe[category].items():
@@ -202,6 +202,30 @@ def main():
         for name, digest in jna_pin['source_sha256'].items():
             if sha(runtime / name) != digest:
                 raise ValueError('JNA runtime source pin mismatch: ' + name)
+        if candidate == '262':
+            provider = json.loads((ROOT / 'client/launcher/jna-provider.json').read_text())
+            if (sha(jna_object) != provider['input_sha256']
+                    or jna_audit['ffi_header_sha256'] != provider['ffi_header_sha256']
+                    or native_audit['ffiHeadersSha256']['ffi.h'] != provider['ffi_header_sha256']):
+                raise ValueError('JNA provider input or libffi ABI mismatch')
+            exports = subprocess.check_output([str(llvm / 'llvm-nm'), '--defined-only', str(graphics_object), str(old_groups['ps5clientgpu'])], text=True)
+            bindings = provider['bindings']
+            allocator_bindings = dict(line.split() for line in (baseline / 'provider-bindings.txt').read_text().splitlines())
+            for source, target in bindings.items():
+                if source in ('malloc', 'calloc', 'free', 'strdup'):
+                    if target != allocator_bindings[source] or not re.search(r'\b' + re.escape(target) + r'$', exports, re.M):
+                        raise ValueError('JNA allocator provider mismatch: ' + source)
+                elif target != 'lwjgl333_' + source or source not in ('ffi_closure_alloc', 'ffi_closure_free', 'ffi_prep_closure_loc'):
+                    raise ValueError('JNA closure provider mismatch')
+            if set(bindings) != {'malloc', 'calloc', 'free', 'strdup', 'ffi_closure_alloc', 'ffi_closure_free', 'ffi_prep_closure_loc'}:
+                raise ValueError('Incomplete JNA allocation ownership')
+            mapping = work / 'jna-provider-bindings.txt'
+            mapping.write_text(''.join(a + ' ' + b + '\n' for a, b in bindings.items()))
+            selected_jna = work / 'jnidispatch-scoped.o'
+            subprocess.run([str(llvm / 'llvm-objcopy'), '--redefine-syms=' + str(mapping), str(jna_object), str(selected_jna)], check=True)
+            if sha(selected_jna) != provider['scoped_object_sha256']:
+                raise ValueError('JNA provider object differs from pin')
+            jna_object = selected_jna
     for name, obj in old_groups.items():
         if name not in core:
             selected = sdl_scoped if name == 'ps5sdl' else obj
@@ -227,7 +251,7 @@ def main():
         '--library-alias', 'libzstd-jni_dh-1.5.7-12=ps5zstddh',
         '--library-alias', 'zstd-jni_dh-1.5.7-12=ps5zstddh', '--library-alias', 'sqlitejdbc=ps5sqlitedh',
         '--external-libraries', str(spec)]
-    if candidate == '261':
+    if candidate in ('261', '262'):
         if pin.get('scoped_jni_groups') != ['jnidispatch', 'ps5glfw', 'ps5openal']:
             raise ValueError('Missing native lookup ownership policy')
         for group in pin['scoped_jni_groups']:
@@ -324,9 +348,9 @@ def main():
              '-march=x86-64', '-mno-avx', '-mno-avx2', '-mno-fma', '-O2', '-fno-stack-protector',
              '-fno-plt', '-femulated-tls', '-ffunction-sections', '-fdata-sections']
     main_obj = work / ('main'+candidate+'.o')
-    gc_flags = ['-DPROSPERO_ZGC_SINGLE_OLD_WORKER=1'] if candidate in ('249', '250', '251', '252', '253', '254', '255', '256', '257', '258', '259', '260', '261') else []
-    graphics_flags = ['-DPROSPERO_ZINK_PIPELINE_SHADERS=1'] if candidate in ('252', '253', '254', '255', '256', '257', '258', '259', '260', '261') else []
-    if candidate in ('253', '254', '255', '256', '257', '258', '259', '260', '261'):
+    gc_flags = ['-DPROSPERO_ZGC_SINGLE_OLD_WORKER=1'] if candidate in ('249', '250', '251', '252', '253', '254', '255', '256', '257', '258', '259', '260', '261', '262') else []
+    graphics_flags = ['-DPROSPERO_ZINK_PIPELINE_SHADERS=1'] if candidate in ('252', '253', '254', '255', '256', '257', '258', '259', '260', '261', '262') else []
+    if candidate in ('253', '254', '255', '256', '257', '258', '259', '260', '261', '262'):
         graphics_flags.append('-DPROSPERO_ZINK_SYNC_COMPILE=1')
     if candidate == '254':
         graphics_flags.append('-DPROSPERO_FABRIC261_OBSERVER=1')
@@ -425,6 +449,7 @@ def main():
         'package_bytes': package.stat().st_size, 'baseline_package_sha256': BASE_PACKAGE, 'baseline_relink_sha256': BASE_RELINK,
         'symbols_sha256': sha(pie), 'eboot_sha256': sha(app / 'eboot.bin'), 'runtime': pin,
         'jnaLoaderRuntime': jna_pin if args.jna_build else None,
+        'jnaProvider': provider if candidate == '262' else None,
         'parentNativeGroupsRetainedSha256': {n: sha(p) for n, p in old_groups.items() if n not in ('jvm','java','ps5sdl') and not (args.jna_build and n == 'jnidispatch')},
         'javaRuntimeClassesAndImage': 'exact204 modules retained; native libjava handle hook rebuilt',
         'compilerTlsBackendSha256': sha(emutls_backend),

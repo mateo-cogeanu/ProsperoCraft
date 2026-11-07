@@ -66,7 +66,7 @@ def main():
             raise ValueError('Unexpected baseline change: ' + repr(changed))
         added = sorted(set(names) - set(old.namelist()))
         older_provider = {prefix + n for n in ('ports/' + OSHI6410_JAR, 'oshi6410-source-pin.json',
-                                                'oshi6410-platform-audit.json')} if candidate in ('257', '258', '259', '260', '261') else set()
+                                                'oshi6410-platform-audit.json')} if candidate in ('257', '258', '259', '260', '261', '262') else set()
         for n in added:
             if not (n in older_provider or n in replacement_icons or n.startswith(prefix + 'lwjgl333-source/') or n.startswith(prefix + 'classes/') or n.startswith(prefix+'native-presentation-source/') or n.startswith(prefix+'storage-source/') or n.startswith(prefix+'oshi665-source/') or n.startswith(prefix+'sdl-resolution-source/') or
                     n in {prefix + 'ports/' + TINYFD_JAR, prefix+'native-presentation-audit.json',prefix+'storage-path-audit.json',prefix+'graphics-resolution-audit.json',prefix+'oshi665-platform-audit.json', prefix+'sdl-resolution-audit.json',prefix+'ports/oshi-6.6.5-ps5-platform.jar',prefix + 'lwjgl333-integration-audit.json', prefix + 'ports/lwjgl-3.3.3-ps5-overlay.jar',
@@ -90,7 +90,7 @@ def main():
         for name, digest in os_audit['source_sha256'].items():
             if hashlib.sha256(new.read(prefix + 'oshi665-source/' + name)).hexdigest() != digest:
                 raise ValueError('OSHI665 packaged source mismatch')
-        if candidate in ('257', '258', '259', '260', '261'):
+        if candidate in ('257', '258', '259', '260', '261', '262'):
             old_audit = json.loads(new.read(prefix + 'oshi6410-platform-audit.json'))
             source_pin = new.read(prefix + 'oshi6410-source-pin.json')
             if (old_audit['version'] != '6.4.10' or source_pin != OSHI6410_PIN.read_bytes()
@@ -197,11 +197,19 @@ def main():
     manifest = json.loads((baseline / 'manifest.json').read_text())
     linked = [json.loads(line) for line in (args.build_dir / f'link{candidate}.rsp').read_text().splitlines()]
     replaced = {'inputs/062-backend.o', 'inputs/031-embedded-jvm.o', 'inputs/022-renderer.o','inputs/110-graphics-support.o','inputs/104-main.o', 'inputs/044-embedded-ps5sdl.o', 'inputs/032-embedded-java.o', 'inputs/109-builtin-libraries.o'}
-    if candidate in ('260', '261'):
+    if candidate in ('260', '261', '262'):
         replaced.add('inputs/048-embedded-jnidispatch.o')
         pin = json.loads((ROOT / 'client/launcher/jna-loader-runtime.json').read_text())
         jna = args.build_dir / 'registry/embedded-jnidispatch.o'
-        if linked.count(str(jna.resolve())) != 1 or sha(jna) != pin['group_sha256']:
+        expected_group = pin['group_sha256']
+        if candidate == '262':
+            provider = json.loads((ROOT / 'client/launcher/jna-provider.json').read_text())
+            expected_group = provider['resident_group_sha256']
+            undefined = {line.split()[-1] for line in subprocess.check_output(
+                [str(args.llvm_nm), '-u', str(jna)], text=True).splitlines() if line.split()}
+            if set(provider['bindings']) & undefined or not set(provider['bindings'].values()) <= undefined:
+                raise ValueError('JNA allocator/closure ownership imports are incomplete')
+        if linked.count(str(jna.resolve())) != 1 or sha(jna) != expected_group:
             raise ValueError('Wrong checked JNA loader object in the link')
         if b'Native library operation failed; error text allocation refused\0' not in linked_symbols.read_bytes():
             raise ValueError('Checked JNA loader error path missing from linked image')
@@ -238,7 +246,7 @@ def main():
         raise ValueError('Missing/duplicate rebuilt SDL group')
     stack_patch = '0008-radv-shader-object-stage-storage.patch'
     patches = graphics_audit['wsi_diagnostics']['source_recipe']['patches']
-    if (stack_patch in patches) != (candidate in ('250', '251', '252', '253', '254', '255', '256', '257', '258', '259', '260', '261')):
+    if (stack_patch in patches) != (candidate in ('250', '251', '252', '253', '254', '255', '256', '257', '258', '259', '260', '261', '262')):
         raise ValueError('Wrong linked RADV shader-stage storage policy')
     graphics = [Path(n) for n in linked if n.endswith('/graphics-support.o')]
     if len(graphics) != 1 or sha(graphics[0]) != graphics_audit['objects_sha256']['graphics-support.o']:
@@ -281,11 +289,11 @@ def main():
                    b'-XX:+SafepointTimeout', b'-XX:SafepointTimeoutDelay=250', b'-XX:-AbortVMOnSafepointTimeout'):
         if option + b'\0' not in elf:
             raise ValueError(f'Retained option missing from actual{candidate} ELF: ' + option.decode())
-    if (b'-XX:ZOldGCThreads=1\0' in elf) != (candidate in ('249', '250', '251', '252', '253', '254', '255', '256', '257', '258', '259', '260', '261')):
+    if (b'-XX:ZOldGCThreads=1\0' in elf) != (candidate in ('249', '250', '251', '252', '253', '254', '255', '256', '257', '258', '259', '260', '261', '262')):
         raise ValueError('Unexpected ZGC old-generation worker policy')
-    if (b'PS5_ZINK using Vulkan pipelines for shaders\n' in elf) != (candidate in ('252', '253', '254', '255', '256', '257', '258', '259', '260', '261')):
+    if (b'PS5_ZINK using Vulkan pipelines for shaders\n' in elf) != (candidate in ('252', '253', '254', '255', '256', '257', '258', '259', '260', '261', '262')):
         raise ValueError('Unexpected Zink shader object opt-out policy')
-    if (b'PS5_ZINK pipeline shaders with synchronous compilation\0' in elf) != (candidate in ('253', '254', '255', '256', '257', '258', '259', '260', '261')):
+    if (b'PS5_ZINK pipeline shaders with synchronous compilation\0' in elf) != (candidate in ('253', '254', '255', '256', '257', '258', '259', '260', '261', '262')):
         raise ValueError('Unexpected Zink synchronous compilation policy')
     if b'-XX:ConcGCThreads=2\0' not in elf:
         raise ValueError('Missing ZGC concurrent worker budget')
@@ -296,7 +304,7 @@ def main():
         raise ValueError('Pre-JVM reserve priming missing from actual executable')
     if 'std::strcmp(name,"lwjgl333") == 0' not in source:
         raise ValueError('No scoped builtin handle')
-    if candidate == '261':
+    if candidate in ('261', '262'):
         resident_audit = json.loads((args.build_dir / 'registry/builtin-resident-audit.json').read_text())
         expected = ['jnidispatch', 'ps5glfw', 'ps5openal']
         if resident_audit.get('library_scoped_handles') != expected:
