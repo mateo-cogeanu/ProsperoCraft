@@ -1,0 +1,39 @@
+{
+  "app_version": "01.000.265",
+  "title_id": "PPSA99874",
+  "source_commit": "4aeef4333bf92a6ebf88dc8dd073adb1928e3297",
+  "source_tree": "clean",
+  "package_sha256": "321f17e96e25dcb39bce4f77d4cffa27935abf976af3db38ebd33b3e89e8ade1",
+  "package_bytes": 127928066,
+  "symbols_sha256": "53d16757be60f1a80f8fa8335314e6be102541dcb377fb52834819065041d040",
+  "eboot_sha256": "0417409cc12b08f206a2909f5ceb25ba253f99c922e8e1a140e6be0664ec0791",
+  "requested_labels": {
+    "normal_fabric": [
+      "1.21.7",
+      "1.21.8",
+      "1.21.9",
+      "1.21.10",
+      "1.21.11"
+    ],
+    "experimental_fabric": [
+      "1.21",
+      "1.21.1",
+      "1.21.2",
+      "1.21.3",
+      "1.21.4",
+      "1.21.5",
+      "1.21.6"
+    ],
+    "normal_card_badge": "",
+    "experimental_card_badge": "EXPERIMENTAL",
+    "resource_policy": "vanilla-fabric-1.21-1.21.11-zink-v6"
+  },
+  "checks": [
+    "All 19 fast host checks passed. The policy test covers all twelve Fabric versions, actual instance-card fields, detail Play labels, historical resource modes, Vanilla status and the existing 26.1 Experimental decision.",
+    "Target compile/link/conversion and signed SELF integrity passed.",
+    "Independent package audit passed with the new resource policy and retained YACL/native callback integration.",
+    "All 907 unpacked entries match the candidate ZIP."
+  ],
+  "console_status": "Exact build 265 labels, launch, shader loading/rendering and world/save/quit await user confirmation. Requested label promotion does not establish independent validation of each version or formal ALL PASS.",
+  "publication": "Source and prepared release notes are published. GitHub binary release/prerelease and Store submission await the exact-build physical and shader acceptance required by AGENTS.md."
+}
