@@ -23,6 +23,8 @@ public class Policy121 {
   check(!ProsperoLauncher.observeDiagnostics("26.1.2","fabric"),"world observer disabled by default");
   System.setProperty("ps5.world2612Observer","true");
   check(ProsperoLauncher.observeDiagnostics("26.1.2","fabric"),"selected Fabric world observer");
+  check(ProsperoLauncher.observeDiagnostics("1.21.4","fabric"),"terrain observer scope");
+  check(!ProsperoLauncher.observeDiagnostics("1.21.4","vanilla"),"terrain observer Vanilla excluded");
   for(String v:new String[]{"26.1","26.1.1","26.2","26.3","1.21.11"})check(!ProsperoLauncher.observeDiagnostics(v,"fabric"),"observer version scope "+v);
   check(!ProsperoLauncher.observeDiagnostics("26.1.2","vanilla"),"observer loader scope");
   System.clearProperty("ps5.world2612Observer");

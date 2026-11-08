@@ -1,0 +1,16 @@
+{
+  "app_version": "01.000.268",
+  "title_id": "PPSA99874",
+  "package_sha256": "3f64fe96560d937ecaf97e5b5a8d7ffe394a7c4c7cee2d70b5697dbf19dab9b8",
+  "symbols_sha256": "8c80c19ca322a5cf00337bd27464f180ccd785c22deea2d9149f48c4537ca7ac",
+  "scope": "Bounded existing observer extended to1.21.4Fabric;26.1.2Fabric retained. No fix claimed.",
+  "checks": [
+    "PASS19host checks45.8s",
+    "PASS independent package audit",
+    "PASS exact ZIP/unpacked comparison 907 files",
+    "PASS documentation links and diff whitespace"
+  ],
+  "evidence": "267current-run integrated server logs player join; render ends at advancements. Safepoints approximately4ms maximum. Earlier JNA Internal TLS error during Controlify haptic and native getifaddrs allocation refusal; causal relationship to terrain freeze unproven. Raw reports local.",
+  "console": "PENDING reproduce on268 promptly within four-minute sampler window and retrieve stacks. No shader/game/endurance pass inferred.",
+  "release_store": "No release or Store update authorized;267 retained."
+}
