@@ -25,6 +25,7 @@ The manual native lane instead tests scoped native implementations against fixtu
 
 | Entrypoint in `tools/` | Dependencies and boundary |
 | --- | --- |
+| `test_restore_release_artifacts.py` | Required fast; actual-file checksum recovery, no implicit network, corruption/size/path/symlink/overwrite refusal |
 | `test_client_120_inputs.py` | Required fast; seven-release research lock, Java17/21 and LWJGL331/332/333 boundaries, no network |
 | `test_client_121_inputs.py` | Required fast; exact twelve-release lock/metadata/library corruption controls, no network |
 | `test_launcher_121_policy.py` | Required fast; Vanilla gates,333/343/SDL owner isolation and mapped shutdown rejection |

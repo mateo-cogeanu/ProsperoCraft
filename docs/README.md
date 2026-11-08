@@ -58,7 +58,7 @@ guides are in the linked history archive. Generated previews stay under ignored
 source and licenses; its omitted-upstream-file links are recorded separately by
 the documentation checker.
 
-[Local build storage cleanup](local-build-storage.md)
+[Local build storage cleanup](local-build-storage.md) · [Recover cold artifacts](local-artifact-recovery.md)
 
 - [193 clean System.exit handoff and screen wait diagnostics](client-zink-lifecycle-193.md)
 

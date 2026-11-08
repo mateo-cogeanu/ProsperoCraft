@@ -363,3 +363,19 @@ The research lock/verifier does not enable launcher availability. Preserve origi
 JARs, existing supported builds, symbol ownership and release gates. Runtime work
 belongs in the Java repository; integration/selection here. Compare measured
 matched workloads before claiming older Java is faster. See docs/client-1.20-plan.md.
+
+
+## Verified private dist retirement —2026-11-08
+
+The maintainer explicitly authorizes moving the complete consumer dist tree,
+including frozen full-local packages, off the Mac after exact recovery checks.
+All46949files were backed up to a new private NAS directory and independently
+read back with original SHA256/size/mode/symlink/inventory checks before local
+retirement. Existing NAS files were not overwritten, moved or deleted. Source,
+remote releases, frozen history and current build inputs remain. Optional old
+package regressions require explicit restoration of their original cold inputs;
+do not substitute a current rebuild or recreate the full cache automatically.
+See docs/local-artifact-recovery.md and the ignored local backup-location record.
+The public pinned recovery helper restores selected released copies only; unique
+full-local/private material stays in the private backup, never a public upload.
+Publication/console/shader gates remain unchanged; no app/runtime change is implied.

@@ -63,3 +63,13 @@ The consumer includes a hash-pinned subset of upstream toolkit documentation. It
 For current build identity and maintainer obligations see the [documentation index](README.md). The later [documentation migration](documentation-history.md) extends the same archive without changing these frozen-source pins or validation records.
 
 The documentation checker now includes image/HTML links: its [exact upstream omission inventory](validation/documentation-upstream-link-exceptions.json) records 580 pre-existing omissions (522 media links and 58 other targets); the earlier 81-link report used a different selection. These predate the documentation cleanup; maintained project links must resolve.
+
+## Off-Mac compiled-artifact storage —2026-11-08
+
+The maintainer later authorized clearing the complete local consumer `dist` tree
+once exact recovery was verified. Its frozen packages, symbols, source/relink
+materials and private records now live in a full private NAS backup with verified
+network read-back and unchanged original hashes. This supersedes the earlier
+local compiled-package retention state, while preserving frozen source history,
+remote releases and exact tested bytes. Optional historical package regressions
+require restoring their cold inputs. See [artifact recovery](local-artifact-recovery.md).

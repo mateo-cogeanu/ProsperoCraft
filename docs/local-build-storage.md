@@ -82,3 +82,19 @@ Detailed hash inventories and recovery information remain ignored under local
 `dist/candidate-archives`. No game/runtime behavior, app version, GitHub release
 or Store listing changed, and no physical-console retest is needed for this
 local-file cleanup. Only this maintenance record is published.
+
+## Complete dist retirement after verified NAS backup —2026-11-08
+
+The maintainer then explicitly requested recovery of the entire output folder,
+including frozen builds once recoverability was established. All 46,949 files
+(61.45 GB logical) were backed up to a new private NAS directory, with full
+network read-back and per-file SHA-256/size/mode verification before deletion.
+The local `dist` directory is now empty. The observed additional free-space gain
+was 42.8 GB; the Mac had about 56 GB free afterward. Existing NAS contents were
+untouched. Exact frozen bytes and private recovery archives remain in that backup.
+
+This supersedes the earlier local-availability statements above. Restore cold
+packages explicitly before historical prepared-package audits; see
+[artifact recovery](local-artifact-recovery.md) for private-backup instructions,
+pinned public recovery and validation. Source and current build inputs remain
+local. No remote release, Store listing or game/runtime behavior changed.

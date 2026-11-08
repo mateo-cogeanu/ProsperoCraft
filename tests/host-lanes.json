@@ -19,7 +19,8 @@
     "test_launcher_delete.py",
     "test_launcher_duplicate.py",
     "test_launcher_web.py",
-    "test_launcher_system_exit.py"
+    "test_launcher_system_exit.py",
+    "test_restore_release_artifacts.py"
   ],
   "zink": [
     "test_zink_host.py"
