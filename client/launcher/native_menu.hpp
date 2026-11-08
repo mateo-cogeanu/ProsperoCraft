@@ -72,6 +72,10 @@ inline std::atomic<bool> visible{false},online{false},exit_requested{false},disp
 inline int controller=-1;inline Haptics haptics;inline bool pad_connected=false;inline unsigned pad_generation=0;
 inline int pad_light_theme=-1;
 inline bool pad_light_owned=false;
+#ifdef PROSPERO_CHUNK_WORKER_TRIAL
+inline std::atomic<int> chunk_trial_choice{0};
+inline int chunk_trial_focus=3;
+#endif
 inline unsigned updates=0;
 inline DesktopInput desktop{};inline int layout_slide=0;
 inline int pointer_kind=-1,pointer_target=-1,pointer_page=-1;
@@ -439,6 +443,18 @@ inline void compose(Canvas& c) noexcept {
  c.context(fields,pressed_at);
 #endif
  c.gradient(ink(0x0b1815),ink(0x08120f));c.disc(1760,850,380,ink(0x0c211a));
+#ifdef PROSPERO_CHUNK_WORKER_TRIAL
+ if(chunk_trial_choice.load(std::memory_order_acquire)==0){
+  c.rounded(360,275,1200,500,28,ink(0x10221c));
+  label(c,420,330,"Chunk generation test",56);
+  label(c,423,427,"Choose the background workers for this session.",26,0xaac8b2);
+  action(c,420,520,510,"3 workers  /  Baseline",chunk_trial_focus==3,true);
+  action(c,990,520,510,"5 workers  /  Candidate",chunk_trial_focus==5,true);
+  control_label(c,423,674,"LEFT / RIGHT Choose     X Start launcher",22,0xaac8b2);
+  label(c,1650,1020,PROSPERO_APP_VERSION,24,0x7d9f89);
+  return;
+ }
+#endif
  if(std::strcmp(fields[8].data(),"PREPARING")==0){compose_library_progress(c);return;}
  const int page=number(11),tab=number(12);const bool top=std::strcmp(fields[28].data(),"TOP")==0;
  float elapsed=float(now_ms()-transition_start)/180.0f;if(elapsed<0)elapsed=0;if(elapsed>1)elapsed=1;
@@ -588,6 +604,14 @@ inline bool update() noexcept {
   pressed|=navigation.sample(buttons,batch[i].lx,batch[i].ly,batch[i].connected,current_time);
  }
  unsigned repeated=navigation.repeat(current_time);if(std::strcmp(fields[105].data(),"PHYSICAL")!=0)pressed|=repeated;
+#ifdef PROSPERO_CHUNK_WORKER_TRIAL
+ if(chunk_trial_choice.load(std::memory_order_relaxed)==0){
+  if((pressed&0xa0)==0x80)chunk_trial_focus=3;
+  if((pressed&0xa0)==0x20)chunk_trial_focus=5;
+  if(pressed&0x4000)chunk_trial_choice.store(chunk_trial_focus,std::memory_order_release);
+  return (pressed&0x40a0)!=0;
+ }
+#endif
  if(pressed&0x4000)pressed_at=current_time;
  if(pressed){desktop.cursor=false;pointer_kind=-1;}
  push_input(pressed);

@@ -1,0 +1,15 @@
+{
+  "app_version": "01.000.276",
+  "title_id": "PPSA99874",
+  "package_sha256": "e976ecc5fac17dbbe6fa69203da7669f5ffef9be0219cc5551798d304ee26d0c",
+  "symbols_sha256": "09fd723ef9235ac88350fdf88d8a9109a1fd5a793acb605365f4b6025087564f",
+  "scope": "Single-install PS5 A/B test under the normal ProsperoCraft title ID. Before JVM startup, choose the three-worker baseline or five-worker candidate with Left/Right and X. The JVM common pool is three for either choice. Uses the existing library and each instance\u2019s saved render and simulation distance. Normal clean Quit Game performs the existing fresh-process restart, which presents the chooser again.",
+  "controls": "The picker uses existing controller edge and neutral arming policy. A selection applies for the current process and is logged as PS5_CHUNK_TRIAL with the worker count and processor setting.",
+  "checks": [
+    "19 host policy and 13 native host checks passed.",
+    "Signed package and independent audit passed. The linked ELF contains both CPU configurations and log labels. 908 ZIP entries match the unpacked app.",
+    "Documentation and whitespace checks passed."
+  ],
+  "console": "Pending both picker paths, clean quit and return to picker, and timed chunk generation comparison on PS5.",
+  "release_store": "Local test candidate."
+}

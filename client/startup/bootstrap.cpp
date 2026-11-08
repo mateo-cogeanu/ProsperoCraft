@@ -515,7 +515,11 @@ void run_test(int i) {
    {const_cast<char *>("-XX:ConcGCThreads=1"),nullptr},
    {const_cast<char *>("-XX:G1ReservePercent=20"),nullptr},
 #endif
-#ifdef PROSPERO_CHUNK_WORKERS_5
+#if defined(PROSPERO_CHUNK_WORKER_TRIAL)
+   {const_cast<char *>(prospero_menu::chunk_trial_choice.load()==5?"-XX:ActiveProcessorCount=6":"-XX:ActiveProcessorCount=4"),nullptr},
+   {const_cast<char *>(prospero_menu::chunk_trial_choice.load()==5?"-Dmax.bg.threads=5":"-Dmax.bg.threads=3"),nullptr},
+   {const_cast<char *>("-Djava.util.concurrent.ForkJoinPool.common.parallelism=3"),nullptr},
+#elif defined(PROSPERO_CHUNK_WORKERS_5)
    // Vanilla sizes the shared terrain worker pool from availableProcessors minus one.
    {const_cast<char *>("-XX:ActiveProcessorCount=6"),nullptr},
    {const_cast<char *>("-Dmax.bg.threads=5"),nullptr},
@@ -757,6 +761,13 @@ int main(int argc,char** argv) {
  log_stage("PS5_ZINK pre-JVM screen and real queues ready; retaining for original GL context");
 #endif
  if(!prospero_menu::start_frontend()){notify("Client083 native launcher display could not start; inspect logs.");for(;;)(void)sceKernelUsleep(1000000);}
+#ifdef PROSPERO_CHUNK_WORKER_TRIAL
+ while(!prospero_menu::chunk_trial_choice.load(std::memory_order_acquire)&&!prospero_menu::display_done.load(std::memory_order_acquire))
+  (void)sceKernelUsleep(1000);
+ const int chunk_workers=prospero_menu::chunk_trial_choice.load(std::memory_order_acquire);
+ if(!chunk_workers){notify("Chunk generation test menu closed before selection.");return 1;}
+ log_stage(chunk_workers==5?"PS5_CHUNK_TRIAL workers=5 activeProcessors=6":"PS5_CHUNK_TRIAL workers=3 activeProcessors=4");
+#endif
  log_stage("Native launcher first frame presented; now creating Java account services, original Minecraft Main not invoked");
  // Downloaded instance receipts replace the legacy bundled artifact scan (2).
  for(int i:{1,3}) {

@@ -28,11 +28,11 @@ TINYFD_SHA256 = '3ffad01103b6cbc8c12c7156691fd87a96f063600a5ff5c9087d321c6736963
 TINYFD_CLASSPATH = '/app0/assets/java25/ports/' + TINYFD_JAR
 OSHI6410_PIN = ROOT / 'client/ports/oshi6410/sources.json'
 OSHI6410_JAR = 'oshi-6.4.10-ps5-platform.jar'
-APP_VERSIONS = tuple(f'01.000.{number}' for number in range(248, 276))
+APP_VERSIONS = tuple(f'01.000.{number}' for number in range(248, 277))
 
 
 def release121_gate(app_version):
-    if app_version in ("01.000.272", "01.000.273", "01.000.274", "01.000.275"):
+    if app_version in ("01.000.272", "01.000.273", "01.000.274", "01.000.275", "01.000.276"):
         return b"vanilla-fabric-1.21-1.21.11-zink-v7\n"
     if app_version in ("01.000.265", "01.000.266", "01.000.267", "01.000.268", "01.000.269", "01.000.270", "01.000.271"):
         return b"vanilla-fabric-1.21-1.21.11-zink-v6\n"
@@ -80,10 +80,10 @@ def main():
         raise ValueError('Wrong publisher TinyFD 3.4.1 artifact')
     app_version = args.app_version
     candidate = app_version.split('.')[-1]
-    if (candidate in ('260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275')) != (args.jna_build is not None):
-        parser.error('--jna-build is required only for builds 260 through 275')
-    if (candidate in ('257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275')) != (args.oshi6410_build is not None):
-        parser.error('--oshi6410-build is required for builds 257 through 275')
+    if (candidate in ('260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276')) != (args.jna_build is not None):
+        parser.error('--jna-build is required only for builds 260 through 276')
+    if (candidate in ('257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276')) != (args.oshi6410_build is not None):
+        parser.error('--oshi6410-build is required for builds 257 through 276')
     runtime, llvm, jdk = args.runtime_workspace.resolve(), args.llvm_home.resolve() / 'bin', java_home(args.java_home)
     work, output = args.work_dir.resolve(), args.output_dir.resolve()
     work.mkdir(parents=True, exist_ok=True)
@@ -113,10 +113,13 @@ def main():
                     if count != 2:
                         raise ValueError('Expected exactly the two explicit333 reserve bootstrap blocks')
                     text, count = re.subn(
-                        r'^#ifdef PROSPERO_CHUNK_WORKERS_5\n.*?^#else\n(   \{const_cast<char \*>\("-XX:ActiveProcessorCount=4"\),nullptr\},\n)^#endif\n',
+                        r'^#if defined\(PROSPERO_CHUNK_WORKER_TRIAL\)\n.*?^#else\n(   \{const_cast<char \*>\("-XX:ActiveProcessorCount=4"\),nullptr\},\n)^#endif\n',
                         r'\1', text, flags=re.M | re.S)
                     if count != 1:
                         raise ValueError('Expected exactly one chunk worker override block')
+                    text, count = re.subn(r'^#ifdef PROSPERO_CHUNK_WORKER_TRIAL\n.*?^#endif\n', '', text, flags=re.M | re.S)
+                    if count != 1:
+                        raise ValueError('Expected exactly one chunk worker selection block')
                     body = text.encode()
                 if hashlib.sha256(body).hexdigest() != sha(original):
                     raise ValueError('204 native bootstrap/policy changed beyond explicit overrides: ' + str(current))
@@ -136,7 +139,7 @@ def main():
     overlay = build / 'lwjgl-3.3.3-ps5-overlay.jar'
     native_audit = json.loads((native.parent / 'audit.json').read_text())
     java_audit = json.loads((build / 'java-audit.json').read_text())
-    if native_audit.get('closureReserveCount', 64) != (512 if candidate in ('263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275') else 64):
+    if native_audit.get('closureReserveCount', 64) != (512 if candidate in ('263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276') else 64):
         raise ValueError('Wrong callback reserve capacity for this candidate')
     if sha(native) != native_audit['outputSha256'] or sha(overlay) != java_audit['outputSha256']:
         raise ValueError('Stale333 native/overlay output')
@@ -183,7 +186,7 @@ def main():
         raise ValueError('Stale graphics output')
     recipe = graphics_audit['wsi_diagnostics']['source_recipe']
     stack_patch = '0008-radv-shader-object-stage-storage.patch'
-    if (stack_patch in recipe['patches']) != (candidate in ('250', '251', '252', '253', '254', '255', '256', '257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275')):
+    if (stack_patch in recipe['patches']) != (candidate in ('250', '251', '252', '253', '254', '255', '256', '257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276')):
         raise ValueError('Wrong RADV shader-stage storage for this build')
     for category, directory in (('patches','zink'),('wsi_patches','mesa'),('wsi_headers','mesa')):
         for name, digest in recipe[category].items():
@@ -213,7 +216,7 @@ def main():
         for name, digest in jna_pin['source_sha256'].items():
             if sha(runtime / name) != digest:
                 raise ValueError('JNA runtime source pin mismatch: ' + name)
-        if candidate in ('262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275'):
+        if candidate in ('262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276'):
             provider = json.loads((ROOT / 'client/launcher/jna-provider.json').read_text())
             if (sha(jna_object) != provider['input_sha256']
                     or jna_audit['ffi_header_sha256'] != provider['ffi_header_sha256']
@@ -262,7 +265,7 @@ def main():
         '--library-alias', 'libzstd-jni_dh-1.5.7-12=ps5zstddh',
         '--library-alias', 'zstd-jni_dh-1.5.7-12=ps5zstddh', '--library-alias', 'sqlitejdbc=ps5sqlitedh',
         '--external-libraries', str(spec)]
-    if candidate in ('261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275'):
+    if candidate in ('261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276'):
         if pin.get('scoped_jni_groups') != ['jnidispatch', 'ps5glfw', 'ps5openal']:
             raise ValueError('Missing native lookup ownership policy')
         for group in pin['scoped_jni_groups']:
@@ -359,18 +362,20 @@ def main():
              '-march=x86-64', '-mno-avx', '-mno-avx2', '-mno-fma', '-O2', '-fno-stack-protector',
              '-fno-plt', '-femulated-tls', '-ffunction-sections', '-fdata-sections']
     main_obj = work / ('main'+candidate+'.o')
-    gc_flags = ['-DPROSPERO_ZGC_SINGLE_OLD_WORKER=1'] if candidate in ('249', '250', '251', '252', '253', '254', '255', '256', '257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275') else []
-    graphics_flags = ['-DPROSPERO_ZINK_PIPELINE_SHADERS=1'] if candidate in ('252', '253', '254', '255', '256', '257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275') else []
-    if candidate in ('253', '254', '255', '256', '257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275'):
+    gc_flags = ['-DPROSPERO_ZGC_SINGLE_OLD_WORKER=1'] if candidate in ('249', '250', '251', '252', '253', '254', '255', '256', '257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276') else []
+    graphics_flags = ['-DPROSPERO_ZINK_PIPELINE_SHADERS=1'] if candidate in ('252', '253', '254', '255', '256', '257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276') else []
+    if candidate in ('253', '254', '255', '256', '257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276'):
         graphics_flags.append('-DPROSPERO_ZINK_SYNC_COMPILE=1')
     if candidate == '254':
         graphics_flags.append('-DPROSPERO_FABRIC261_OBSERVER=1')
-    if candidate in ('266', '267', '268', '269', '270', '271', '272', '273', '274', '275'):
+    if candidate in ('266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276'):
         graphics_flags.append('-DPROSPERO_WORLD2612_OBSERVER=1')
     if candidate == '255':
         graphics_flags.append('-DPROSPERO_SAVE263_OBSERVER=1')
     worker_flags = ['-DPROSPERO_CHUNK_WORKERS_5=1'] if candidate == '275' else []
-    subprocess.run([str(llvm / 'clang++'), *flags, *gc_flags, *graphics_flags, *worker_flags, '-DPROSPERO_APP_VERSION="'+app_version+'"', '-DPROSPERO_LWJGL333_CLOSURE_RESERVE=' + str(512 if candidate in ('263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275') else 64), '-std=c++20',
+    if candidate == '276':
+        worker_flags.append('-DPROSPERO_CHUNK_WORKER_TRIAL=1')
+    subprocess.run([str(llvm / 'clang++'), *flags, *gc_flags, *graphics_flags, *worker_flags, '-DPROSPERO_APP_VERSION="'+app_version+'"', '-DPROSPERO_LWJGL333_CLOSURE_RESERVE=' + str(512 if candidate in ('263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276') else 64), '-std=c++20',
         '-Wall', '-Wextra', '-Werror', '-fno-exceptions', '-fno-rtti',
         *['-I' + str(p) for p in (runtime / 'native/renderer', runtime / 'build/native', runtime / 'src',
           runtime / 'native', work, ROOT / 'client/native', ROOT / 'client/launcher/toolkit/src',
@@ -463,7 +468,7 @@ def main():
         'package_bytes': package.stat().st_size, 'baseline_package_sha256': BASE_PACKAGE, 'baseline_relink_sha256': BASE_RELINK,
         'symbols_sha256': sha(pie), 'eboot_sha256': sha(app / 'eboot.bin'), 'runtime': pin,
         'jnaLoaderRuntime': jna_pin if args.jna_build else None,
-        'jnaProvider': provider if candidate in ('262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275') else None,
+        'jnaProvider': provider if candidate in ('262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276') else None,
         'parentNativeGroupsRetainedSha256': {n: sha(p) for n, p in old_groups.items() if n not in ('jvm','java','ps5sdl') and not (args.jna_build and n == 'jnidispatch')},
         'javaRuntimeClassesAndImage': 'exact204 modules retained; native libjava handle hook rebuilt',
         'compilerTlsBackendSha256': sha(emutls_backend),
