@@ -1,0 +1,45 @@
+{
+  "app_version": "01.000.273",
+  "title_id": "PPSA99874",
+  "package_sha256": "86f3b3c921ba15f946d9368457cc2e7f806b2785085342a2845d2e048fc678d1",
+  "release": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.273",
+  "release_tag_commit": "71bb9a278b85a264367618eb59b9d2ac18adbf91",
+  "matching_build_source_commit": "7837597d32f8380e89e0097d4e93c3afe403ca75",
+  "catalog_pr": "https://github.com/darkxex/ps5-homebrew-catalog/pull/1197",
+  "uploaded_assets": [
+    {
+      "name": "client273-build-validation.json",
+      "bytes": 8797,
+      "sha256": "785af49e2cc621ea0f265efc62ec2b33c48cade74b7b792e34133c43e2707b0f"
+    },
+    {
+      "name": "client273-console-validation.json",
+      "bytes": 820,
+      "sha256": "7c19c4198808b14f02e731edc2dfb5b5d5cb03a8befcfd5f6cbeba532c382177"
+    },
+    {
+      "name": "client273-openal-source-relink.zip",
+      "bytes": 198331442,
+      "sha256": "a5e50bc85fe8937e0e93da7e6016e776794511a47244f69c3b4171f3c67498cb"
+    },
+    {
+      "name": "PPSA99874.zip",
+      "bytes": 127936586,
+      "sha256": "86f3b3c921ba15f946d9368457cc2e7f806b2785085342a2845d2e048fc678d1"
+    },
+    {
+      "name": "SHA256SUMS",
+      "bytes": 379,
+      "sha256": "aebcc5cc7dfbff2d8416a57f940e1ef223019d763b989c46ec6346d061c857c1"
+    }
+  ],
+  "checks": [
+    "All five assets independently downloaded and verified against local SHA-256 and GitHub asset digests.",
+    "Normal and compatible OpenAL replacement relinks from both the local and downloaded source kits reproduce the exact native ELF.",
+    "Hosted policy checks passed on macOS and Ubuntu. The initial Ubuntu duplicate-instance fixture timed out and passed on retry.",
+    "196 catalog records pass offline checks. Catalog suite ran 251 tests with two skips using loopback and no external network.",
+    "Online PPSA99874 verification passed with no errors or warnings. Verified content version 01.000.273 and matching release asset digest."
+  ],
+  "console": "User accepted exact build 273, the tuned light bar appearance and shader rendering on PS5.",
+  "status": "GitHub release published. ProsperoStore catalog update submitted."
+}
