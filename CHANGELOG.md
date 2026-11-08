@@ -1,5 +1,13 @@
 # Changelog
 
+## 01.000.267 · Cache recovery, 2026-11-08
+
+- Recover missing or invalid launch metadata automatically when pressing Play.
+- Add Quick refresh and retain Full repair under Repair download.
+- Reuse local files, selectively repair missing payloads and improve progress labels.
+- Preserve worlds, mods and settings.
+- Bug fixes.
+
 ## 01.000.265 · Fabric 1.21.x, 2026-11-07
 
 - Add Vanilla 1.21–1.21.8 and Fabric 1.21.7–1.21.11 support.

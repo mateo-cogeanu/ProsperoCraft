@@ -1,0 +1,10 @@
+{
+  "app_version": "01.000.267",
+  "title_id": "PPSA99874",
+  "package_sha256": "680e4342c974398158de1099249d0d83aae7cf778173863b484da65fa942cd28",
+  "user_confirmation": "all comepltly fixed, lets make a prosperostore release pronto",
+  "shader_confirmation": "Yes, shaders work on 267",
+  "confirmed_scope": "User accepts the exact267 cache-recovery build and separately confirms usual shader pack loading/rendering on PS5; explicitly authorizes release and ProsperoStore submission.",
+  "limits": "No formal exhaustive ALL PASS, measured performance, exact shader-pack/profile inventory or endurance inferred. Earlier freeze root cause was not established; user reports it fixed.",
+  "relink_checks": "Normal and compatible OpenAL replacement relinks reproduce the exact tested native ELF 36e7a464f9aa8b4f4095e37a2c326da280bdb448c2f5c59f03b6ab1d6d6f1bcf"
+}
