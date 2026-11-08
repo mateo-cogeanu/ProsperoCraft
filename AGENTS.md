@@ -392,3 +392,14 @@ ownership and consumer bootstrap must be implemented before a hardware candidate
 current25launcher/FFM code cannot run unchanged on17/21. Do not claim overhead
 improvement or switch defaults without matched physical tests. Reusable runtime
 implementation remains in the Java repository; integration/graphics/mods here.
+
+
+## Separate Java17 startup pass and Java21 candidate —2026-11-08
+
+Exact standalone Java17 PPSA99876/01.000.002 received user ALL PASS for interpreter
+startup/JNI/worker/destruction; frozen source and verified passing release live
+in the runtime/history repositories. Java21 PPSA99877/01.000.001 is a local matched
+startup candidate, physical result pending. Neither implies Minecraft/C2/shader/
+performance acceptance. Keep working Java25 and original JARs; matching consumer
+bootstrap and bindings remain required before runtime selection or1.20availability.
+See docs/client-1.20-plan.md; reusable implementations stay runtime-owned.

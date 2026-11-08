@@ -170,3 +170,29 @@ checks pass. Physical VM creation, Java/JNI/worker execution and destruction rem
 pending. No consumer availability, default runtime, Minecraft files, renderer,
 settings or supported instance changed. Java21 startup follows scoped Java17
 console results; no performance improvement is claimed from the native build.
+
+
+## Java17 console pass and Java21 startup handoff —2026-11-08
+
+The maintainer reported **ALL PASS** on standalone Java17 Startup PPSA99876,
+01.000.002. Its four rows cover actual interpreter VM creation, Java arithmetic/
+UTF16/StrictMath/exception/JNI checks, the joined Java worker and clean destruction.
+[Exact package, complete source and checksums](https://github.com/mateo-cogeanu/ps5-java25-homebrew/releases/tag/Java17_Startup-v01.000.002)
+are preserved; [frozen runtime source](https://github.com/mateo-cogeanu/ps5-homebrew-history/tree/279f6b84352064dd646864d3f59cd29c80422fee/runtime/Java17_Startup)
+records source d503c8336d1b4e55faf9e4dc5f147ce596d3ab1d and original evidence.
+The exact passing ZIP SHA256 is
+c2241e10bb8c0cb895c7fc02a8490cdd50b2be670e54bc561c90e98c43776c29.
+No C2, Minecraft, shader, endurance or performance acceptance follows.
+
+Runtime source051cbf7 also supplies [Java21 startup001](https://github.com/mateo-cogeanu/ps5-java25-homebrew/blob/051cbf7/Development/docs/java21-startup-probe.md),
+PPSA99877, as a separate signed local candidate with matched21 classes/native
+core. Actual host21 JNI/Java, image failure controls, resident registry, signal
+layout/target IR and signed package audits pass. Physical-console four-row result
+is pending; no unvalidated Java21 release was created. Its local ZIP SHA256 is
+33598afb949733eedfc328695d4fffcc81091ed46d1ff92654dc3611cc5d2260.
+
+Consumer launcher availability and default Java25 remain unchanged. Matching17/21
+consumer bootstrap/JNI bindings, original game execution, worlds/save/rejoin/quit,
+shaders and repeatable overhead comparisons are the remaining integration work.
+This is a documentation-only consumer update; previous scoped21fast/13native
+results are preserved and no new application build or console pass is claimed.
