@@ -1,0 +1,11 @@
+{
+  "app_version": "01.000.273",
+  "title_id": "PPSA99874",
+  "package_sha256": "86f3b3c921ba15f946d9368457cc2e7f806b2785085342a2845d2e048fc678d1",
+  "matching_build_source_commit": "7837597d32f8380e89e0097d4e93c3afe403ca75",
+  "user_confirmation": "User reports build 273 works, calls the light-bar tuning perfect, and requests publication.",
+  "shader_confirmation": "User confirms trying shaders successfully on build 273.",
+  "confirmed_scope": "Physical PS5 acceptance of the exact release candidate, including theme light-bar appearance and shader rendering.",
+  "limits": "Broader mod, controller, and endurance matrices were outside this confirmation.",
+  "relink_checks": "Normal and compatible OpenAL replacement relinks reproduce native ELF eb18da0da406445e7e7796beb31890b4a4954a9bab4d383c44b758b7d029c1a5"
+}

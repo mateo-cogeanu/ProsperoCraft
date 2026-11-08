@@ -1,5 +1,14 @@
 # Changelog
 
+## 01.000.273 · Launcher themes and Fabric 1.21.x, 2026-11-08
+
+- Fabric 1.21 through 1.21.11 now appears without Experimental badges. The 26.1 Fabric badge is also gone.
+- The DualSense light bar follows the launcher theme, including live theme previews.
+- Instance details use the instance name as the heading. Instance settings has a simpler layout, and the native Java credit now sits in the footer.
+- Downloads reuse HTTPS connections and report progress while files are transferring.
+- Improved YACL and Controlify dependency selection for Fabric 1.21.2.
+- Bug fixes.
+
 ## 01.000.267 · Cache recovery, 2026-11-08
 
 - Recover missing or invalid launch metadata automatically when pressing Play.
