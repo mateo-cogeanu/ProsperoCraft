@@ -20,6 +20,12 @@ public class Policy121 {
  static void check(boolean value,String message){if(!value)throw new AssertionError(message);}
  public static void main(String[]args)throws Exception{
   Path work=Path.of(args[0]);
+  check(!ProsperoLauncher.observeDiagnostics("26.1.2","fabric"),"world observer disabled by default");
+  System.setProperty("ps5.world2612Observer","true");
+  check(ProsperoLauncher.observeDiagnostics("26.1.2","fabric"),"selected Fabric world observer");
+  for(String v:new String[]{"26.1","26.1.1","26.2","26.3","1.21.11"})check(!ProsperoLauncher.observeDiagnostics(v,"fabric"),"observer version scope "+v);
+  check(!ProsperoLauncher.observeDiagnostics("26.1.2","vanilla"),"observer loader scope");
+  System.clearProperty("ps5.world2612Observer");
   for(String good:new String[]{"1.21","1.21.1","1.21.11","1.21.99"})check(ProsperoVersions.valid(good),"121valid "+good);
   for(String bad:new String[]{"1.20.6","1.21-pre1","1.21.11-rc1","1.21.","1.21.100","1.21.-1","1.21/escape","1.21.1\n"})check(!ProsperoVersions.valid(bad),"121invalid "+bad);
   check(!ProsperoVersions.valid(null),"null id");

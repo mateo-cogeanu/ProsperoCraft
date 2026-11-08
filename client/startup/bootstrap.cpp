@@ -522,6 +522,9 @@ void run_test(int i) {
 #ifdef PROSPERO_FABRIC261_OBSERVER
    {const_cast<char *>("-Dps5.fabric261Observer=true"),nullptr},
 #endif
+#ifdef PROSPERO_WORLD2612_OBSERVER
+   {const_cast<char *>("-Dps5.world2612Observer=true"),nullptr},
+#endif
 #ifdef PROSPERO_SAVE263_OBSERVER
    {const_cast<char *>("-Dps5.save263Observer=true"),nullptr},
 #endif

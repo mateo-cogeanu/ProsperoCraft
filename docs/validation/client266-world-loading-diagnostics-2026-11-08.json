@@ -1,0 +1,13 @@
+{
+  "app_version": "01.000.266",
+  "purpose": "Diagnostic only: bounded Java/native thread snapshots for 26.1.2 Fabric world-loading freeze",
+  "package_sha256": "9d42cd81e6db4caea5ffdd02d15a57517753607db8bab6725cbdfb618dfb696d",
+  "checks": {
+    "host": "PASS 19 checks in 49.2 seconds",
+    "package": "PASS independent package audit and exact unpacked-file comparison",
+    "documentation": "PASS local links and diff whitespace"
+  },
+  "console": "PENDING reproduce same 26.1.2 Fabric world-loading freeze within observer window; identify blocking stack. No fix or pass claimed.",
+  "publication": "Source development push only; no GitHub release or Store update",
+  "retained_evidence": "Server player join followed by occasional lag warnings; render log stops after UBO resize. Shaders disabled; native retained stderr contains no fatal stack. Raw reports stay local."
+}

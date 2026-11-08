@@ -75,8 +75,12 @@ public final class ProsperoLauncher {
  }
  static boolean observeSelectedDiagnostics(){
   var instance=current.detail;
-  return ("26.3".equals(instance.version)&&Boolean.getBoolean("ps5.save263Observer"))||
-    ("26.1".equals(instance.version)&&"fabric".equals(instance.loader)&&Boolean.getBoolean("ps5.fabric261Observer"));
+  return observeDiagnostics(instance.version,instance.loader);
+ }
+ static boolean observeDiagnostics(String version,String loader){
+  return ("26.1.2".equals(version)&&"fabric".equals(loader)&&Boolean.getBoolean("ps5.world2612Observer"))||
+    ("26.3".equals(version)&&Boolean.getBoolean("ps5.save263Observer"))||
+    ("26.1".equals(version)&&"fabric".equals(loader)&&Boolean.getBoolean("ps5.fabric261Observer"));
  }
  static boolean selected121(){return current.receipt!=null&&ProsperoVersions.release121(current.receipt.version);}
  static boolean selected121Fabric(){return selected121()&&"fabric".equals(current.detail.loader);}
