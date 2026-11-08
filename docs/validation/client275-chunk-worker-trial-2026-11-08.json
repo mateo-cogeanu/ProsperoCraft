@@ -1,0 +1,40 @@
+{
+  "app_version": "01.000.275",
+  "title_id": "PPSA99874",
+  "package_sha256": "92ca3abb0cd46e9aef535ebafb7307b201a9f13499fb83678a320996d8cfd739",
+  "symbols_sha256": "4cb2863170e2c3466006d66ec63b4f8f0edb5396e63df27bda9da0104222b164",
+  "scope": "Candidate only. Expose six active processors to the embedded JVM and cap Minecraft\u2019s shared background pool at five. Pin the Java common ForkJoinPool at its baseline parallelism of three. This is global to the game session, including Vanilla and Fabric. Other availableProcessors-dependent code can size differently. Existing heap, ZGC, compiler options and user render/simulation distances are preserved. Original game JARs are untouched.",
+  "evidence": "Original 26.3 and all twelve original 1.21.x client Util classes read availableProcessors and the max.bg.threads cap. Host execution of original 26.3 Util reports game background parallelism 3 versus 5 and Java common parallelism 3 for both settings. Retained PS5 1.21.x reports show Worker-Main-1 through Worker-Main-3; a live baseline trace was unavailable.",
+  "host_benchmark": {
+    "method": "Unmodified dedicated servers on macOS JDK 25. Two fresh worlds per policy in 4, 6, 6, 4 order, same seed and distances, no client, one warmup area, then a fresh 144-ticket area. Measured the time until all 16 sampled coordinates returned loaded. Dedicated-server startup times were also collected but do not measure integrated-world entry.",
+    "fresh_sample_seconds": {
+      "1.21.11": {
+        "baseline": [
+          5.93,
+          4.9
+        ],
+        "candidate": [
+          4.9,
+          4.7
+        ]
+      },
+      "26.3": {
+        "baseline": [
+          2.25,
+          2.27
+        ],
+        "candidate": [
+          2.26,
+          2.29
+        ]
+      }
+    },
+    "interpretation": "1.21.11 was about 11% faster by mean elapsed time in this small host sample. 26.3 had no meaningful change. Startup measurements varied. These results do not establish a console speedup or isolate render/meshing costs."
+  },
+  "checks": [
+    "19 host checks passed.",
+    "Signed target package and independent audit passed. The actual candidate ELF contains the five-worker options and 908 ZIP entries match the unpacked app."
+  ],
+  "console": "Pending same-seed, same-settings comparison of 274 and 275 on PS5. Test new-world creation and travel into fresh terrain, beginning with 1.21.11 and 26.3 Vanilla, then representative Fabric, save/rejoin, frame pacing and shader checks.",
+  "release_store": "Local experiment only."
+}

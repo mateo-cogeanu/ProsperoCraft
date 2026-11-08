@@ -515,7 +515,14 @@ void run_test(int i) {
    {const_cast<char *>("-XX:ConcGCThreads=1"),nullptr},
    {const_cast<char *>("-XX:G1ReservePercent=20"),nullptr},
 #endif
+#ifdef PROSPERO_CHUNK_WORKERS_5
+   // Vanilla sizes the shared terrain worker pool from availableProcessors minus one.
+   {const_cast<char *>("-XX:ActiveProcessorCount=6"),nullptr},
+   {const_cast<char *>("-Dmax.bg.threads=5"),nullptr},
+   {const_cast<char *>("-Djava.util.concurrent.ForkJoinPool.common.parallelism=3"),nullptr},
+#else
    {const_cast<char *>("-XX:ActiveProcessorCount=4"),nullptr},
+#endif
    {const_cast<char *>("-XX:-UsePerfData"),nullptr},
    {const_cast<char *>(PROSPERO_STORAGE_OPTION("-XX:ErrorFile=/data/ProsperoCraft/reports/hs_err_java25.log","-XX:ErrorFile=/download0/hs_err_java25.log")),nullptr},
    {const_cast<char *>("-Dps5.startupObserver=" PROSPERO_STARTUP_OBSERVER),nullptr},
