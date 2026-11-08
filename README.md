@@ -10,7 +10,7 @@ Download Minecraft on your console, keep separate instances for worlds and mods,
 
 ProsperoCraft handles Minecraft installation, accounts, input and game integration. Its [Native Java 25 Runtime](https://github.com/mateo-cogeanu/ps5-java25-homebrew) is maintained separately. Official Minecraft game JARs and asset objects are downloaded and verified from the publisher, rather than bundled with the app.
 
-Release **01.000.274** fixes Modrinth installs where a required dependency points to another loader’s build, including Mielon’s The Sift on 26.3 Fabric. The user confirmed the mod install improvements and shader rendering on PS5. [Release notes](docs/releases/client-fabric-dependencies-274.md) · [Console acceptance](docs/validation/client274-console-acceptance-2026-11-08.json).
+Release **01.000.274** fixes Modrinth installs where a required dependency points to another loader’s build, including Mielon’s The Sift on 26.3 Fabric. The user confirmed the mod install improvements and shader rendering on PS5. [Release notes](docs/releases/client-fabric-dependencies-274.md) · [Console acceptance](docs/validation/client274-console-acceptance-2026-11-08.json). [ProsperoStore update submitted](https://github.com/darkxex/ps5-homebrew-catalog/pull/1198).
 
 Release **01.000.273** removes the Experimental badges from the full 1.21.x Fabric range and 26.1 Fabric, adds theme colors to the DualSense light bar, and improves launcher labels and download progress. The user confirmed the exact build and shader rendering on PS5. [Release notes](docs/releases/client-themes-fabric-273.md) · [Console acceptance](docs/validation/client273-console-acceptance-2026-11-08.json). [ProsperoStore update submitted](https://github.com/darkxex/ps5-homebrew-catalog/pull/1197).
 

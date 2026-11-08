@@ -1,0 +1,45 @@
+{
+  "app_version": "01.000.274",
+  "title_id": "PPSA99874",
+  "package_sha256": "a7aa4a2aa87be9bf44fc8e32d4e2b057a4fb41c8541b83e20a898400303878ee",
+  "release": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.274",
+  "release_tag_commit": "183a301af30573613ed5d5e557741d54aabb5b81",
+  "matching_build_source_commit": "3ee7737c8f3905d7dd1563aa39d6b06b6ecb6605",
+  "catalog_pr": "https://github.com/darkxex/ps5-homebrew-catalog/pull/1198",
+  "uploaded_assets": [
+    {
+      "name": "client274-build-validation.json",
+      "bytes": 8797,
+      "sha256": "f715fcdc015ae74d0a39e71ee5674a211dfb1c667a08232fadda8024c322c21d"
+    },
+    {
+      "name": "client274-console-validation.json",
+      "bytes": 748,
+      "sha256": "454c9f7343a07ce9edd4336be89d095404e99810760f4f4a88a37e4adbf323af"
+    },
+    {
+      "name": "client274-openal-source-relink.zip",
+      "bytes": 198336577,
+      "sha256": "23c69afb546ac9623600c29a9285d49cfb291c5c872069c7568eea99cea5b9ef"
+    },
+    {
+      "name": "PPSA99874.zip",
+      "bytes": 127938099,
+      "sha256": "a7aa4a2aa87be9bf44fc8e32d4e2b057a4fb41c8541b83e20a898400303878ee"
+    },
+    {
+      "name": "SHA256SUMS",
+      "bytes": 379,
+      "sha256": "85dcf4916c3029536320f49554b3a66efd86f5d74429503240ffb39ce42a879c"
+    }
+  ],
+  "checks": [
+    "All five assets were independently downloaded and verified against SHA-256 and GitHub asset digests.",
+    "Normal and compatible OpenAL replacement relinks from the local and downloaded source kits reproduce the exact native ELF.",
+    "Hosted policy checks passed on macOS and Ubuntu.",
+    "196 catalog records pass offline checks. The catalog suite ran 251 tests with two skips using loopback and no external network.",
+    "Online PPSA99874 verification passed with no errors or warnings and verified content version 01.000.274 and the matching release asset digest."
+  ],
+  "console": "User reports improved mod behavior and confirms shaders work on exact build 274.",
+  "status": "GitHub release published. ProsperoStore catalog update submitted."
+}
