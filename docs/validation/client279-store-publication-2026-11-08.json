@@ -1,0 +1,44 @@
+{
+  "app_version": "01.000.279",
+  "title_id": "PPSA99874",
+  "package_sha256": "60a354e39a3a11b4bf0a4a4f62cba80220ea961781c846233929122197159cd2",
+  "release": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.279",
+  "release_tag_commit": "aa175cf7c59914ab8b014e2e9c1239f96a994f87",
+  "matching_build_source_commit": "7f7b662065c16e529abb0dac0095888a098f617d",
+  "catalog_pr": "https://github.com/darkxex/ps5-homebrew-catalog/pull/1201",
+  "uploaded_assets": [
+    {
+      "name": "client279-build-validation.json",
+      "bytes": 8797,
+      "sha256": "88c9d24a84c92cd793457b7493b1162fb51884dd00cf64ad4bbde2109c64e8cd"
+    },
+    {
+      "name": "client279-console-validation.json",
+      "bytes": 628,
+      "sha256": "997a4314629158e4cee541b08d48fd8354be1265552007fb539ca73e3c922621"
+    },
+    {
+      "name": "client279-openal-source-relink.zip",
+      "bytes": 198356025,
+      "sha256": "46ff657a97e5a5dc07349f045fc3d17ed96f74503754d0b4cb47a7919de5370e"
+    },
+    {
+      "name": "PPSA99874.zip",
+      "bytes": 127938217,
+      "sha256": "60a354e39a3a11b4bf0a4a4f62cba80220ea961781c846233929122197159cd2"
+    },
+    {
+      "name": "SHA256SUMS",
+      "bytes": 379,
+      "sha256": "dda52c61c98ef18246d9269c89b267c580279db801daf260c6682069110785a3"
+    }
+  ],
+  "checks": [
+    "All five uploaded assets were independently downloaded and verified against local SHA-256 and GitHub digests.",
+    "Downloaded source kit entries match local inputs. APFS clones reconstructed the verified kit to conserve local disk space. Both local and reconstructed kit normal and compatible OpenAL replacement relinks reproduce the tested native ELF.",
+    "Host policy CI passed on macOS and Ubuntu.",
+    "196 catalog records and 251 unit tests (two skipped) passed. Online release digest and content version verification passed with no errors or warnings."
+  ],
+  "console": "User authorizes publication of exact build 279 and confirms shaders work.",
+  "status": "GitHub release published. ProsperoStore catalog update submitted."
+}
