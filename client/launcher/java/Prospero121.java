@@ -10,6 +10,7 @@ final class Prospero121 {
  static boolean supported(String version,String loader){
   if(version==null||!RELEASES.contains(version))return false;
   String mode=mode();
+  if(ALL_RELEASED.equals(mode))return available(version,loader,mode);
   if(FABRIC_RELEASE_POLICY.equals(mode))return "vanilla".equals(loader)||"fabric".equals(loader)&&FABRIC_RELEASED.contains(version);
   if(!"vanilla".equals(loader))return false;
   return VANILLA_AND_FABRIC.equals(mode)||(RELEASED.contains(version)&&available(version,loader,mode));
@@ -22,13 +23,14 @@ final class Prospero121 {
   return available(version,loader,mode());
  }
  private static boolean available(String version,String loader,String mode){
-  if(VANILLA_AND_FABRIC.equals(mode)||FABRIC_RELEASE_POLICY.equals(mode))return "vanilla".equals(loader)||"fabric".equals(loader);
+  if(VANILLA_AND_FABRIC.equals(mode)||FABRIC_RELEASE_POLICY.equals(mode)||ALL_RELEASED.equals(mode))return "vanilla".equals(loader)||"fabric".equals(loader);
   if(!"vanilla".equals(loader))return false;
   return "vanilla-1.21-1.21.11-zink-v4\n".equals(mode)||
       (RELEASED.contains(version)&&"vanilla-1.21.9-1.21.11-zink-v3\n".equals(mode))||
       (("1.21.10".equals(version)||"1.21.11".equals(version))&&"vanilla-1.21.10-1.21.11-zink-v2\n".equals(mode))||
       ("1.21.11".equals(version)&&"vanilla-1.21.11-zink-v1\n".equals(mode));
  }
+ private static final String ALL_RELEASED="vanilla-fabric-1.21-1.21.11-zink-v7\n";
  private static final String FABRIC_RELEASE_POLICY="vanilla-fabric-1.21-1.21.11-zink-v6\n";
  private static final String VANILLA_AND_FABRIC="vanilla-fabric-1.21-1.21.11-zink-v5\n";
  private static String mode(){

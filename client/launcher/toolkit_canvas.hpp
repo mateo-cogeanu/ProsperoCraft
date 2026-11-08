@@ -23,7 +23,7 @@ inline unsigned button_index=0;
 inline std::array<std::uint32_t,prospero_icons::count> icon_textures{};
 inline hui::gfx::Color themed(std::uint32_t rgb,float alpha=1){return hui::gfx::Color::rgb(prospero_palette::rgb(rgb),alpha);}
 inline hui::gfx::Color color(std::uint32_t c){return {float(c&255)/255,float((c>>8)&255)/255,float((c>>16)&255)/255,float((c>>24)&255)/255};}
-inline hui::ui::Theme theme(){auto t=hui::ui::default_theme();t.style=hui::ui::SurfaceStyle::glass;t.page=themed(0x081a13);t.surface=themed(0x08251d,0.78f);t.primary=themed(0xb6f2be);t.on_primary=themed(0x102c1b);t.secondary=themed(0x142b24);t.on_secondary=t.text=themed(0xeaf0e8);t.focus=themed(0xa9eab6);t.accent=themed(0x81e6af);t.radius=20;t.radius_card=28;t.shadow_blur=30;t.focus_width=2;t.omega=18;t.damping=0.86f;t.outline=themed(0xb3efd4,0.2f);return t;}
+inline hui::ui::Theme theme(){auto t=hui::ui::default_theme();t.style=hui::ui::SurfaceStyle::glass;t.page=themed(0x081a13);t.surface=themed(0x08251d,0.78f);t.primary=themed(0xb6f2be);t.on_primary=themed(0x102c1b);t.secondary=themed(0x142b24);t.on_secondary=t.text=themed(0xeaf0e8);t.focus=themed(0xa9eab6);t.accent=themed(prospero_palette::accent);t.radius=20;t.radius_card=28;t.shadow_blur=30;t.focus_width=2;t.omega=18;t.damping=0.86f;t.outline=themed(0xb3efd4,0.2f);return t;}
 struct Canvas {
  void gradient(std::uint32_t,std::uint32_t){button_index=0;motion=false;}
  template<class F> void context(const F& fields,std::uint64_t press_time){

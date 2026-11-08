@@ -1,0 +1,16 @@
+{
+  "app_version": "01.000.272",
+  "title_id": "PPSA99874",
+  "package_sha256": "f47da322e57b21a5ca9e18dc9f43fb533a4bfea1e2d7934caea553963492537d",
+  "symbols_sha256": "14a7aff00d3da0b4b5df28193a6778d856fead29457c5579f95e3ae81cbadefa",
+  "scope": "Remove Experimental labels for all implemented 1.21.x Fabric releases and for 26.1 Fabric. Use the instance name as the details heading, simplify instance settings, and move the versionless native Java credit to its own footer row. Apply the active theme accent to the DualSense light bar in the launcher, including theme previews and reconnects, and reset the light bar before controller handoff.",
+  "checks": [
+    "PASS 19 host policy checks, including all 12 Vanilla and Fabric releases, exact historical policy gates and blocked future releases and loaders.",
+    "PASS 13 scoped native host checks.",
+    "PASS signed PS5 target package, independent package audit, and 908 ZIP to unpacked file comparisons.",
+    "PASS both native light-bar calls present in the compiled launcher object and versionless footer text present in the linked binary.",
+    "PASS documentation and diff whitespace checks."
+  ],
+  "console": "Pending exact-build PS5 checks for light bar on theme changes, preview and cancel, reconnect, game handoff, launcher layout, and shader rendering.",
+  "release_store": "Local candidate. ProsperoStore remains on build 267."
+}

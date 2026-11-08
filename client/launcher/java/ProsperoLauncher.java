@@ -167,7 +167,7 @@ public final class ProsperoLauncher {
  }
  static boolean supported(String version){return "26.2".equals(version)||"26.3".equals(version)||snapshot(version)||Prospero121.supported(version,"vanilla");}
  static boolean supported(String version,String loader){return ProsperoVersions.release121(version)?Prospero121.supported(version,loader):supported(version);}
- static boolean experimental(String version,String loader){return "26.1".equals(version)&&"fabric".equals(loader)||Prospero121.experimental(version,loader);}
+ static boolean experimental(String version,String loader){return Prospero121.experimental(version,loader);}
  static boolean developmentTest(String version,String loader){return ProsperoGraphics.zink(version,loader)&&!Prospero121.supported(version,loader);}
  static boolean launchable(String version,String loader){return supported(version,loader)||developmentTest(version,loader);}
  private boolean draftSupported(String version){return launchable(version,draftLoader==1?"fabric":"vanilla");}
