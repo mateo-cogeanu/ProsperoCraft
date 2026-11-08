@@ -24,9 +24,25 @@ public final class ProsperoInstall {
   URI uri;try{uri=URI.create(url);}catch(RuntimeException e){throw new IOException("Invalid publisher URL");}
   if(!"https".equals(uri.getScheme())||uri.getUserInfo()!=null||uri.getPort()!=-1||!Set.of("piston-meta.mojang.com","piston-data.mojang.com","libraries.minecraft.net","resources.download.minecraft.net","launchermeta.mojang.com","launcher.mojang.com").contains(uri.getHost()))throw new IOException("Untrusted publisher URL");
  }
- static InputStream network(String url)throws Exception {
-  safeUrl(url);HttpsURLConnection c=(HttpsURLConnection)URI.create(url).toURL().openConnection();c.setConnectTimeout(15000);c.setReadTimeout(20000);c.setInstanceFollowRedirects(false);c.setUseCaches(false);c.setRequestProperty("User-Agent",ProsperoBuild.USER_AGENT);
-  try{if(c.getResponseCode()!=200)throw new IOException("Publisher download HTTP "+c.getResponseCode());InputStream input=c.getInputStream();return new FilterInputStream(input){public void close()throws IOException{try{super.close();}finally{c.disconnect();}}};}catch(Exception error){c.disconnect();throw error;}
+ interface Connection {HttpsURLConnection open(URL url)throws Exception;}
+ static InputStream network(String url)throws Exception {return network(url,u->(HttpsURLConnection)u.openConnection());}
+ static InputStream network(String url,Connection connection)throws Exception {
+  safeUrl(url);HttpsURLConnection c=connection.open(URI.create(url).toURL());c.setConnectTimeout(15000);c.setReadTimeout(20000);c.setInstanceFollowRedirects(false);c.setUseCaches(false);c.setRequestProperty("User-Agent",ProsperoBuild.USER_AGENT);
+  try{if(c.getResponseCode()!=200)throw new IOException("Publisher download HTTP "+c.getResponseCode());return responseBody(c);}catch(Exception error){c.disconnect();throw error;}
+ }
+ // A completed GET may return its socket to the JDK keep-alive pool. Explicit
+ // disconnect is reserved for refused, truncated, failed or cancelled bodies.
+ static InputStream responseBody(HttpsURLConnection connection)throws IOException {
+  InputStream input=connection.getInputStream();long length=connection.getContentLengthLong();
+  return new FilterInputStream(input){long received;boolean ended,failed,closed;
+   private int count(int n){if(n<0)ended=true;else received+=n;return n;}
+   public int read()throws IOException{try{int b=in.read();count(b<0?-1:1);return b;}catch(IOException error){failed=true;throw error;}}
+   public int read(byte[] bytes,int offset,int count)throws IOException{try{return count(in.read(bytes,offset,count));}catch(IOException error){failed=true;throw error;}}
+   public void close()throws IOException{if(closed)return;closed=true;boolean reusable=!failed&&ended&&(length<0||received==length);
+    if(!reusable)connection.disconnect();
+    try{super.close();}catch(IOException error){connection.disconnect();throw error;}
+   }
+  };
  }
  static void active(BooleanSupplier cancelled)throws IOException {if(Thread.currentThread().isInterrupted()||cancelled.getAsBoolean())throw new IOException("Download cancelled. Verified files are kept for retry.");}
  static Path relative(Path base,String path)throws IOException {
@@ -53,15 +69,16 @@ public final class ProsperoInstall {
   return List.copyOf(versions);
  }
  private void obtain(FilePin pin,BooleanSupplier cancelled)throws Exception {obtain(pin,cancelled,false);}
- private void obtain(FilePin pin,BooleanSupplier cancelled,boolean offline)throws Exception {
+ private void obtain(FilePin pin,BooleanSupplier cancelled,boolean offline)throws Exception {obtain(pin,cancelled,offline,n->{});}
+ private void obtain(FilePin pin,BooleanSupplier cancelled,boolean offline,java.util.function.LongConsumer transferred)throws Exception {
   if(!pin.sha1.matches("[a-f0-9]{40}")||pin.size<0||pin.size>1024L*1024*1024)throw new IOException("Invalid publisher file pin");
   safeUrl(pin.url);Path path=relative(root,pin.path);ProsperoDownloads.noLinks(path);active(cancelled);
   if(Files.isRegularFile(path)&&Files.size(path)==pin.size&&hash(path).equals(pin.sha1))return;
   if(offline)throw new IOException("Required cache files are missing or damaged. Connect online to refresh this instance.");
   Files.createDirectories(path.getParent());Path temp=path.resolveSibling(path.getFileName()+".part");ProsperoDownloads.noLinks(temp);
   try{
-   var digest=MessageDigest.getInstance("SHA-1");long count=0;
-   try(var in=source.open(pin.url);var out=Files.newOutputStream(temp)){byte[] bytes=new byte[65536];for(int n;(n=in.read(bytes))!=-1;){active(cancelled);count+=n;if(count>pin.size)throw new IOException("Download exceeds publisher size");digest.update(bytes,0,n);out.write(bytes,0,n);}}
+   var digest=MessageDigest.getInstance("SHA-1");long count=0,reported=0;
+   try(var in=source.open(pin.url);var out=Files.newOutputStream(temp)){byte[] bytes=new byte[65536];for(int n;(n=in.read(bytes))!=-1;){active(cancelled);count+=n;if(count>pin.size)throw new IOException("Download exceeds publisher size");digest.update(bytes,0,n);out.write(bytes,0,n);long visible=Math.min(count,Math.max(0,pin.size-1));transferred.accept(visible-reported);reported=visible;}}
    if(count!=pin.size||!HexFormat.of().formatHex(digest.digest()).equals(pin.sha1))throw new IOException("Publisher checksum mismatch. Retry the download.");
    active(cancelled);Files.move(temp,path,StandardCopyOption.REPLACE_EXISTING);
   }finally{Files.deleteIfExists(temp);}
@@ -125,14 +142,18 @@ public final class ProsperoInstall {
    save(root.resolve("versions/"+version.id+"/receipt.json"),new Gson().toJson(receipt));return receipt;
   }
   long total=receipt.files.stream().mapToLong(FilePin::size).sum();
-  obtainAll(receipt.files,workers,progress,cancelled,false,false,0,total,"Checking and repairing "+version.id);
+  obtainAll(receipt.files,workers,progress,cancelled,false,false,0,total,"Preparing Minecraft "+version.id);
   active(cancelled);save(root.resolve("versions/"+version.id+"/metadata.json"),new String(metadata,StandardCharsets.UTF_8));save(root.resolve("versions/"+version.id+"/receipt.json"),new Gson().toJson(receipt));progress.update("Ready to play",total,total);return receipt;
  }
  private void obtainAll(List<FilePin> files,int workers,Progress progress,BooleanSupplier cancelled,boolean offline,boolean fileUnits,long initial,long total,String phase)throws Exception {
-  var completed=new java.util.concurrent.atomic.AtomicLong(initial);
+  var completed=new java.util.concurrent.atomic.AtomicLong(initial);long[] lastUpdate={0};
+  java.util.function.LongConsumer advance=bytes->{synchronized(completed){long done=completed.addAndGet(bytes),now=System.nanoTime();if(done==total||now-lastUpdate[0]>=100_000_000L){progress.update(phase,done,total);lastUpdate[0]=now;}}};
   ExecutorService pool=Executors.newFixedThreadPool(Math.max(1,Math.min(workers,6)),task->{Thread t=new Thread(task,"ProsperoCraft download");t.setDaemon(true);return t;});ArrayList<Future<?>> jobs=new ArrayList<>();
   try{
-   for(FilePin file:files)jobs.add(pool.submit(()->{try{obtain(file,cancelled,offline);synchronized(completed){progress.update(phase,completed.addAndGet(fileUnits?1:file.size),total);}}catch(Exception error){throw new CompletionException(error);}}));
+   for(FilePin file:files)jobs.add(pool.submit(()->{long[] staged={0};try{
+    obtain(file,cancelled,offline,bytes->{if(!fileUnits){staged[0]+=bytes;advance.accept(bytes);}});
+    advance.accept(fileUnits?1:file.size-staged[0]);
+   }catch(Exception error){throw new CompletionException(error);}}));
    for(var job:jobs){active(cancelled);try{job.get();}catch(ExecutionException error){Throwable cause=error.getCause();if(cause instanceof CompletionException&&cause.getCause()!=null)cause=cause.getCause();if(cause instanceof Exception checked)throw checked;throw error;}}
   }finally{for(var job:jobs)job.cancel(true);pool.shutdownNow();if(!pool.awaitTermination(25,TimeUnit.SECONDS))throw new IOException("Downloads are still stopping; reopen before retrying");}
  }

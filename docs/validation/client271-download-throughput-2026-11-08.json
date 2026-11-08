@@ -1,0 +1,17 @@
+{
+  "app_version": "01.000.271",
+  "title_id": "PPSA99874",
+  "package_sha256": "ce4af02d30ad3aeb0cda9bf25ce9403841f7c9f140e9cafac5017e399f6aee5f",
+  "symbols_sha256": "fa9556a66aee9a18e4c71f1504cb136b8997f5237f2dd1900992baad07dae358",
+  "scope": "Preserve healthy fully-consumed publisher/mod HTTPS connection reuse; disconnect early/failed/truncated responses. Stream staged-byte progress with100ms throttle and final-byte verification reserve. Neutral Preparing Minecraft label. Saved workers,auth,TLS verification,hash checks,staging/cache/world policies retained.",
+  "checks": [
+    "PASS19host checks67.2s on retry; prior full run timed out in unrelated duplicate fixture after60s",
+    "PASS real loopbackTLS four production-helper GETs share one connection; complete/early/truncated/readfailure cleanup controls",
+    "PASS partial-file progress before EOF with final original hash verification",
+    "PASS independent package audit and908ZIP/unpacked file comparisons",
+    "PASS docs links/diff whitespace"
+  ],
+  "evidence": "User1.21.1Fabric counter465/870MB later468MB establishes progress,not exact rate/cause. Current cacheFTP listing denied550. Per-file disconnect/progress-at-EOF identified in source. Raw reports local.",
+  "console": "PENDING exact271network speed,pooling/native descriptor lifecycle,visible progress,cancel/retry,normal/offline launch,shader and endurance. No measured PS5 speedup or root-cause claim.",
+  "release_store": "No new release or Store authorization;267preserved."
+}

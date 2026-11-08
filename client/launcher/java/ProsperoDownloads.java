@@ -18,9 +18,10 @@ final class ProsperoDownloads {
   URI u;try{u=URI.create(url);}catch(RuntimeException e){throw new IOException("Invalid content URL");}
   if(!"https".equals(u.getScheme())||u.getUserInfo()!=null||u.getPort()!=-1||u.getFragment()!=null||!HOSTS.contains(u.getHost()))throw new IOException("Untrusted content URL");
  }
- static InputStream network(String url)throws Exception {
-  safe(url);var c=(HttpsURLConnection)URI.create(url).toURL().openConnection();c.setConnectTimeout(15000);c.setReadTimeout(20000);c.setInstanceFollowRedirects(false);c.setUseCaches(false);c.setRequestProperty("User-Agent",AGENT);
-  try{int status=c.getResponseCode();if(status!=200)throw new IOException(status==429?"Content service is busy. Please retry shortly.":"Content service HTTP "+status);var in=c.getInputStream();return new FilterInputStream(in){public void close()throws IOException{try{super.close();}finally{c.disconnect();}}};}catch(Exception e){c.disconnect();throw e;}
+ static InputStream network(String url)throws Exception {return network(url,u->(HttpsURLConnection)u.openConnection());}
+ static InputStream network(String url,ProsperoInstall.Connection connection)throws Exception {
+  safe(url);var c=connection.open(URI.create(url).toURL());c.setConnectTimeout(15000);c.setReadTimeout(20000);c.setInstanceFollowRedirects(false);c.setUseCaches(false);c.setRequestProperty("User-Agent",AGENT);
+  try{int status=c.getResponseCode();if(status!=200)throw new IOException(status==429?"Content service is busy. Please retry shortly.":"Content service HTTP "+status);return ProsperoInstall.responseBody(c);}catch(Exception e){c.disconnect();throw e;}
  }
  byte[] bytes(String url,int max,BooleanSupplier cancel)throws Exception {
   safe(url);ProsperoInstall.active(cancel);try(var in=source.open(url)){byte[] b=in.readNBytes(max+1);if(b.length>max)throw new IOException("Content metadata too large");ProsperoInstall.active(cancel);return b;}

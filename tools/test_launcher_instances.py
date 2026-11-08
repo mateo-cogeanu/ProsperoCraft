@@ -19,6 +19,7 @@ public class InstanceCheck {
   files.put(META,bytes(meta));String entry="{\"id\":\"26.1\",\"type\":\"release\",\"url\":\""+META+"\",\"sha1\":\""+hash(files.get(META))+"\"}";files.put(ProsperoInstall.MANIFEST,bytes("{\"versions\":["+entry+"]}"));
  }
  static synchronized InputStream open(String url)throws Exception{reads++;byte[] b=files.get(url);if(b==null)throw new IOException("Unexpected fixture request");return new ByteArrayInputStream(b);}
+ static void checkStreaming(boolean value){if(!value)throw new AssertionError("No progress reported before file EOF");}
  interface Action{void run()throws Exception;}static void denied(Action action)throws Exception{try{action.run();throw new AssertionError("accepted invalid input");}catch(IOException|IllegalArgumentException expected){}}
  static void waitFor(ProsperoLauncher model)throws Exception{long end=System.nanoTime()+5_000_000_000L;while(model.tick(0)[64].equals("BUSY")&&System.nanoTime()<end)Thread.sleep(5);if(model.tick(0)[64].equals("BUSY"))throw new AssertionError("worker stuck");}
  public static void main(String[]args)throws Exception{
@@ -37,6 +38,10 @@ var store=new ProsperoLibrary(root.resolve("store"));if(!store.instances().isEmp
   var install=new ProsperoInstall(root.resolve("cache"),InstanceCheck::open);var versions=install.catalog(false,()->false);if(versions.size()!=1)throw new AssertionError();var receipt=install.install(versions.get(0),3,(s,d,t)->{},()->false);install.verify(receipt);
   if(!receipt.version.equals("26.1")||!receipt.assetIndex.equals("32")||receipt.classpath.size()!=2||receipt.files.size()!=4||!Files.readString(root.resolve("cache/versions/26.1/client.jar")).equals("original client bytes"))throw new AssertionError("wrong version/classifier/asset dedup");
   int before=reads;install.install(versions.get(0),3,(s,d,t)->{},()->false);if(reads!=before+1)throw new AssertionError("verified cache downloaded again");
+  Path streamingCache=root.resolve("streaming-cache");var streamed=new java.util.concurrent.atomic.AtomicBoolean();var sawProgress=new java.util.concurrent.atomic.AtomicBoolean();
+  var streaming=new ProsperoInstall(streamingCache,url->{if(!url.equals(JAR))return open(url);byte[] body=files.get(url);return new ByteArrayInputStream(body){public synchronized int read(byte[] b,int off,int len){if(pos>0&&pos<body.length&&sawProgress.get())streamed.set(true);return super.read(b,off,Math.min(len,4));}};});
+  streaming.install(versions.get(0),1,(t,d,n)->{if(d>0&&d<n){sawProgress.set(true);try{Thread.sleep(110);}catch(InterruptedException stopped){Thread.currentThread().interrupt();}}},()->false);
+  checkStreaming(streamed.get());streaming.verify(streaming.receipt("26.1"));
   // Missing receipt recovery reuses original publisher metadata and never requests
   // healthy payloads, including offline. Worlds/mods live outside this cache.
   Path receiptPath=root.resolve("cache/versions/26.1/receipt.json"),metaPath=root.resolve("cache/versions/26.1/metadata.json");
