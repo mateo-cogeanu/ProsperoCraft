@@ -1,0 +1,9 @@
+{
+  "app_version": "01.000.279",
+  "title_id": "PPSA99874",
+  "package_sha256": "60a354e39a3a11b4bf0a4a4f62cba80220ea961781c846233929122197159cd2",
+  "matching_build_source_commit": "7f7b662065c16e529abb0dac0095888a098f617d",
+  "user_confirmation": "User requests ProsperoStore publication of build 279 and confirms shaders work.",
+  "confirmed_scope": "Exact-build physical PS5 acceptance, including shader rendering. Earlier five-worker feedback reported satisfactory terrain generation after warmup.",
+  "limits": "No timed console throughput comparison, shader pack inventory or exhaustive endurance result was provided."
+}

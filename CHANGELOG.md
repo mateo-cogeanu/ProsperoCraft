@@ -1,5 +1,13 @@
 # Changelog
 
+## 01.000.279 · Chunk generation and menu headings, 2026-11-08
+
+- Increase Minecraft's background worker pool from three to five to improve chunk generation.
+- Apply the five-worker setting automatically when opening the launcher.
+- Replace decorative menu taglines with clear headings and simplify the startup introduction.
+- Keep the phone sign-in guidance on the Microsoft account screen.
+- Bug fixes.
+
 ## 01.000.274 · Fabric mod dependencies, 2026-11-08
 
 - Fixed Modrinth installs that rejected compatible Fabric mods because a required dependency pointed to a build for another loader.
