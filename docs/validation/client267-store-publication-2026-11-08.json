@@ -1,0 +1,44 @@
+{
+  "app_version": "01.000.267",
+  "title_id": "PPSA99874",
+  "package_sha256": "680e4342c974398158de1099249d0d83aae7cf778173863b484da65fa942cd28",
+  "release": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.267",
+  "release_tag_commit": "0ee3f81f57871d146b0803a95397a5b283fd8ecb",
+  "matching_build_source_commit": "c01d8abd8aaf3293b44ce10c5759fb462ebfb288",
+  "catalog_pr": "https://github.com/darkxex/ps5-homebrew-catalog/pull/1194",
+  "uploaded_assets": [
+    {
+      "name": "client267-build-validation.json",
+      "bytes": 9047,
+      "sha256": "c890366466830706f6b8cee8221c96a981f38cf93d0686144d184f20df296c8d"
+    },
+    {
+      "name": "client267-console-validation.json",
+      "bytes": 860,
+      "sha256": "3ac888d49c64a831238acdd1363969fad0e93e146a47d43e51a716b4aa2ed664"
+    },
+    {
+      "name": "client267-openal-source-relink.zip",
+      "bytes": 198313511,
+      "sha256": "bbb818ac157647549c7ff154d53ec3dacf4d8ce5f8336ed667021aaa28ca0c66"
+    },
+    {
+      "name": "PPSA99874.zip",
+      "bytes": 127933009,
+      "sha256": "680e4342c974398158de1099249d0d83aae7cf778173863b484da65fa942cd28"
+    },
+    {
+      "name": "SHA256SUMS",
+      "bytes": 379,
+      "sha256": "21accdd055306854532394ed14938e92d4cbd4c16f0fc893d57217e162f1ebc7"
+    }
+  ],
+  "checks": [
+    "All five assets independently downloaded and SHA-256 verified.",
+    "Normal and compatible OpenAL replacement relinks reproduce exact tested native ELF.",
+    "Catalog251tests passed,two skipped; external HTTP disabled,loopback enabled. Initial standard discovery run interrupted after fixture attempted live external ZIP access.",
+    "All196catalog records pass offline validation. Actual PPSA99874 online verification passes with0errors/0warnings; authenticated retry after anonymous GitHub504 responses."
+  ],
+  "console": "User accepts exact267 and separately confirms shaders load and render. No exhaustive ALL PASS/endurance inferred.",
+  "status": "GitHub release published; ProsperoStore update submitted. CI,merge and deployment are not monitored."
+}
