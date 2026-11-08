@@ -19,7 +19,7 @@ Regenerate from the repository root:
 python3 tools/draw_roadmap.py --font /path/to/Arial.ttf --bold-font /path/to/Arial-Bold.ttf --output assets/roadmap
 ```
 
-The planned rows follow the road right to left, left to right, then right to
-left. NeoForge precedes 1.21.x; Forge precedes 1.20.x; .mrpack imports sit between
-1.20.x and 1.19.x. Numbered planned milestones make the reading order
-explicit. No release dates are assigned.
+The lower rows follow the road right to left, left to right, then right to
+left. 1.21.x support is marked complete in its original position. Numbered
+milestones make the reading order explicit. The roadmap shows capabilities
+rather than release dates.

@@ -109,7 +109,7 @@ If Play says Coming soon, compare the **version and loader** with the compatibil
 
 ## Roadmap
 
-![ProsperoCraft roadmap: completed features in white, followed by planned NeoForge, older Minecraft versions, Forge and .mrpack imports](assets/roadmap/prosperocraft-roadmap.png)
+![ProsperoCraft roadmap showing 1.21.x support as complete alongside planned NeoForge, Forge, older Minecraft versions and .mrpack imports](assets/roadmap/prosperocraft-roadmap.png)
 
 ### Completed milestones
 

@@ -21,7 +21,7 @@ def main():
     draw = ImageDraw.Draw(canvas)
     svg = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
            '<title>ProsperoCraft roadmap</title>',
-           '<desc>White completed milestones: Full 26.x.x support, microphone support, shader support, OpenGL support. A winding road continues through dark planned milestones: NeoForge support, 1.21.x support, Forge support, 1.20.x support, .mrpack imports, 1.19.x support, 1.18.x support, 1.17.x support, 1.16.x support and older versions.</desc>',
+           '<desc>White completed milestones: Full 26.x.x support, microphone support, shader support, OpenGL support and 1.21.x support. Dark planned milestones: NeoForge support, Forge support, 1.20.x support, .mrpack imports, 1.19.x support, 1.18.x support, 1.17.x support, 1.16.x support and older versions.</desc>',
            f'<rect width="{width}" height="{height}" fill="{bg}"/>']
 
     def rect(x, y, w, h, fill, radius=0):
@@ -70,7 +70,10 @@ def main():
         rect(x,y,w,h,'#F4F6F3' if done else '#1A211D',20)
         circle(center,road_y,11,bg)
         circle(center,road_y,7,'#F4F6F3' if done else '#68786D')
-        text(x+26,y+23,'DONE' if done else f'{number:02d} / PLANNED',13,
+        status = 'DONE' if done else 'PLANNED'
+        if number:
+            status = f'{number:02d} / {status}'
+        text(x+26,y+23,status,13,
              '#617168' if done else '#84958A')
         for i,label in enumerate(title):
             text(x+26,y+64+i*37,label,30,ink if done else '#D0D9D2',True)
@@ -81,15 +84,15 @@ def main():
     completed[0]=['Full 26.x.x','support']
     completed[1]=['Microphone','support']
     for x,title in zip(xs,completed): card(x,330,title,True,550,0)
-    planned = [
+    milestones = [
         'NeoForge support', '1.21.x support', 'Forge support', '1.20.x support',
         '.mrpack imports', '1.19.x support', '1.18.x support', '1.17.x support',
         '1.16.x support', 'Older versions',
     ]
-    for index, title in enumerate(planned):
+    for index, title in enumerate(milestones):
         row, column = divmod(index, 4)
         x = xs[3-column] if row % 2 == 0 else xs[column]
-        card(x,690+row*360,[title],False,910+row*360,index+1)
+        card(x,690+row*360,[title],title == '1.21.x support',910+row*360,index+1)
     circle(1114,1630,4,'#84958A')
     circle(84,1740,5,'#F4F6F3')
     text(101,1730,'Completed',18,muted)
