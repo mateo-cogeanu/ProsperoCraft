@@ -1,0 +1,11 @@
+{
+  "app_version": "01.000.274",
+  "title_id": "PPSA99874",
+  "package_sha256": "a7aa4a2aa87be9bf44fc8e32d4e2b057a4fb41c8541b83e20a898400303878ee",
+  "matching_build_source_commit": "3ee7737c8f3905d7dd1563aa39d6b06b6ecb6605",
+  "user_confirmation": "The user reports improved mod behavior and requests publication of the tested update.",
+  "shader_confirmation": "Yes, shaders work on 274",
+  "confirmed_scope": "Physical PS5 acceptance of mod behavior and shader rendering on build 274.",
+  "limits": "The user did not identify the shader pack or profile, or enumerate every mod tested.",
+  "relink_checks": "Normal and compatible OpenAL replacement relinks reproduce native ELF cdaf24363d0ee29688dc387ad9451e6624b906de3f501acaafa6569128ed7ad9"
+}

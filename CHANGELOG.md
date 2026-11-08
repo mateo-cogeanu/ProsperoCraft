@@ -1,5 +1,12 @@
 # Changelog
 
+## 01.000.274 · Fabric mod dependencies, 2026-11-08
+
+- Fixed Modrinth installs that rejected compatible Fabric mods because a required dependency pointed to a build for another loader.
+- The installer now uses the matching Fabric build of the same dependency release when there is exactly one for the instance's Minecraft version.
+- Fixes installing Mielon's The Sift 2.0 on Minecraft 26.3 Fabric when its GeckoLib dependency points to NeoForge.
+- Bug fixes.
+
 ## 01.000.273 · Launcher themes and Fabric 1.21.x, 2026-11-08
 
 - Fabric 1.21 through 1.21.11 now appears without Experimental badges. The 26.1 Fabric badge is also gone.
