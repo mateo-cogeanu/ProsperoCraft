@@ -10,6 +10,12 @@
     "Signed package and independent audit passed. The linked ELF contains both CPU configurations and log labels. 908 ZIP entries match the unpacked app.",
     "Documentation and whitespace checks passed."
   ],
-  "console": "Pending both picker paths, clean quit and return to picker, and timed chunk generation comparison on PS5.",
-  "release_store": "Local test candidate."
+  "console": "The user compared Vanilla 26.3 and 1.21.11 on build 276. They report five workers felt faster and that chunk generation was fine after warmup. This is subjective feedback rather than a timed same-version comparison.",
+  "release_store": "Local test candidate.",
+  "retrieved_evidence": {
+    "retained_1_21_11": "Five-worker run reached the integrated world. The game reported 1713 ms for the spawn preparation phase. ZGC logged roughly 70 ms concurrent allocation stalls across all five Worker-Main threads, the render thread and the server thread later in the run.",
+    "current_26_3": "Five-worker run reached the integrated world. The game reported 1032 ms for the spawn preparation phase. No allocation stall appears in the retrieved log.",
+    "limits": "Both retrieved game runs were configured for five workers. Different versions, warmup and uncontrolled workload preclude a three-versus-five speed calculation or a broad performance claim. Raw logs stay local."
+  },
+  "disposition": "Five workers are preferred for this test. No GC tuning was integrated after the warmup clarification."
 }
