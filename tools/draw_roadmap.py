@@ -21,7 +21,7 @@ def main():
     draw = ImageDraw.Draw(canvas)
     svg = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
            '<title>ProsperoCraft roadmap</title>',
-           '<desc>White completed milestones: Full 26.x.x support, microphone support, shader support, OpenGL support and 1.21.x support. Dark planned milestones: NeoForge support, Forge support, 1.20.x support, .mrpack imports, 1.19.x support, 1.18.x support, 1.17.x support, 1.16.x support and older versions.</desc>',
+           '<desc>White completed milestones: Full 26.x.x support, microphone support, shader support, OpenGL support and 1.21.x support. Dark planned milestones: Forge support, 1.20.x support, NeoForge support, .mrpack imports, 1.19.x support, 1.18.x support, 1.17.x support, 1.16.x support and older versions.</desc>',
            f'<rect width="{width}" height="{height}" fill="{bg}"/>']
 
     def rect(x, y, w, h, fill, radius=0):
@@ -85,7 +85,7 @@ def main():
     completed[1]=['Microphone','support']
     for x,title in zip(xs,completed): card(x,330,title,True,550,0)
     milestones = [
-        'NeoForge support', '1.21.x support', 'Forge support', '1.20.x support',
+        '1.21.x support', 'Forge support', '1.20.x support', 'NeoForge support',
         '.mrpack imports', '1.19.x support', '1.18.x support', '1.17.x support',
         '1.16.x support', 'Older versions',
     ]

@@ -21,7 +21,7 @@ missing-dependency skips. Each process has a 180-second bound; workflows have
 existing checks use assertions. Imports of `host_toolchain.py` do no discovery,
 argument parsing or downloads. Individual migrated test entrypoints remain usable.
 
-The nineteen fast checks include121 publisher failure controls, Vanilla-only gates, coherent333/343/SDL ownership and mapped shutdown evidence, alongside real child-JVM clean System.exit observer/refusal checks, 26.1 publisher-input/class-parser failure controls, three bootstrap/audit/identity checks, discovery regressions and ten existing launcher
+The twenty fast checks include the seven-release 1.20 input/generation failure controls and 1.21 publisher failure controls, Vanilla-only gates, coherent333/343/SDL ownership and mapped shutdown evidence, alongside real child-JVM clean System.exit observer/refusal checks, 26.1 publisher-input/class-parser failure controls, three bootstrap/audit/identity checks, discovery regressions and ten existing launcher
 checks: auth state transitions/redaction, saved-login migration/refresh/sign-out,
 local TLS refusal/body/redirect behavior, storage errors, instance persistence and
 verified download/install/launch restrictions, Modrinth queues/recursive dependencies,

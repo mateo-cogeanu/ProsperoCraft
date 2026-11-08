@@ -25,6 +25,7 @@ The manual native lane instead tests scoped native implementations against fixtu
 
 | Entrypoint in `tools/` | Dependencies and boundary |
 | --- | --- |
+| `test_client_120_inputs.py` | Required fast; seven-release research lock, Java17/21 and LWJGL331/332/333 boundaries, no network |
 | `test_client_121_inputs.py` | Required fast; exact twelve-release lock/metadata/library corruption controls, no network |
 | `test_launcher_121_policy.py` | Required fast; Vanilla gates,333/343/SDL owner isolation and mapped shutdown rejection |
 | `test_libffi_reserve.py` | Manual explicit pinned libffi/LLVM inputs; real x86_64 W->X callbacks, denied allocation,64slot exhaustion/reuse and protection-failure ownership; Rosetta opt-in on ARM Macs |

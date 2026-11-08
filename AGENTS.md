@@ -352,3 +352,14 @@ current address/enabled service and reopened launcher requested. Retrieve curren
 reports and proceed with concrete repairs when access is restored; do not use old
 runs or host/static success as a26.2 fix. Preserve212 and exact local candidates.
 See docs/validation/client262-crash-report-2026-11-05.json.
+
+
+## Ascending 1.20.x before NeoForge —2026-11-08
+
+The maintainer prioritizes Vanilla1.20 upward through1.20.6 before NeoForge and
+requests investigation of both Java17 and21 runtime overhead. Publisher17 applies
+to1.20–1.20.4,21 to1.20.5–1.20.6; original LWJGL331/332/333 generations differ.
+The research lock/verifier does not enable launcher availability. Preserve original
+JARs, existing supported builds, symbol ownership and release gates. Runtime work
+belongs in the Java repository; integration/selection here. Compare measured
+matched workloads before claiming older Java is faster. See docs/client-1.20-plan.md.

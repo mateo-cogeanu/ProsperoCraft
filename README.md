@@ -113,6 +113,8 @@ If Play says Coming soon, compare the **version and loader** with the compatibil
 
 ![ProsperoCraft roadmap showing 1.21.x support as complete alongside planned NeoForge, Forge, older Minecraft versions and .mrpack imports](assets/roadmap/prosperocraft-roadmap.png)
 
+Next compatibility work proceeds from Vanilla 1.20 upward through 1.20.6, before NeoForge. See the [1.20.x and Java 17/21 investigation](docs/client-1.20-plan.md).
+
 ### Completed milestones
 
 The table links each capability to its first public release. Initial development builds are noted where useful; three-digit build numbers abbreviate 01.000.xxx. Console limitations above still apply. See the [changelog](CHANGELOG.md) for the full milestone archive.
