@@ -1,0 +1,60 @@
+{
+  "app_version": "01.000.269",
+  "title_id": "PPSA99874",
+  "package_sha256": "8b9c332f98fb8cbdbe3d7b3d2f40a7da97021ce328ebf0e79ff902d2220c7095",
+  "symbols_sha256": "7935ab18298fdc979c1d62053af260c49f85838795af69fbe33b51fe83d59e82",
+  "scope": "Exclude confirmed1.21.2incompatible YACL/Controlify publisher IDs; select original Controlify2.4.1,YACL3.6.6,Fabric API0.106.1; other games/future IDs remain eligible. No automatic installed-mod downgrade or JAR rewrite.",
+  "selected_publisher_records": [
+    {
+      "project": "yacl",
+      "version_id": "mHeau9Ek",
+      "version": "3.6.6+1.21.3-fabric",
+      "files": [
+        {
+          "filename": "yet_another_config_lib_v3-3.6.6+1.21.3-fabric.jar",
+          "hashes": {
+            "sha512": "df0b24cdaaf655fdb9220c43bd8602e1327a6b1e1129df532e28102e8a1352fc21d8cb647912e709679fe8a65546cd0a9210e9a3ecf3f5368a3e0c7e2e1e8f19",
+            "sha1": "9942b9aabe19e0ad852c8af863ecfa38ddc93e42"
+          }
+        }
+      ]
+    },
+    {
+      "project": "controlify",
+      "version_id": "qD2bMSgx",
+      "version": "2.4.1",
+      "files": [
+        {
+          "filename": "controlify-2.4.1+1.21.3-fabric.jar",
+          "hashes": {
+            "sha1": "2f2bc731bbb37391c993408fd928f199c1040968",
+            "sha512": "de3db0cf8d227015b8c4ff8121dc34cd40b24d4a524ff5c314eabbc207742e6104ff35576bf40eae53c451176155e03b2168473d3a4f92cc86e6e4c086796bf4"
+          }
+        }
+      ]
+    },
+    {
+      "project": "fabric-api",
+      "version_id": "UEjZZNue",
+      "version": "0.106.1+1.21.2",
+      "files": [
+        {
+          "filename": "fabric-api-0.106.1+1.21.2.jar",
+          "hashes": {
+            "sha1": "4ad6afcfb5353bf9b8ee84d744963fbe31762a93",
+            "sha512": "3c9f04933a71aac76bee6a71d3b48325b65896cb2935ed2c6476d0290d4810648b00e0cea856de0b08ab0086f442eb252c7e816381a0198f7a4b54a5472270bf"
+          }
+        }
+      ]
+    }
+  ],
+  "checks": [
+    "PASS actual live default installer with genuine Fabric predicates and original publisher hashes; world marker retained",
+    "PASS19host checks107.0s including exact exclusions/1.21.3unchanged/future IDs/refusal",
+    "PASS independent package audit",
+    "PASS907ZIP/unpacked file hash comparisons",
+    "PASS documentation links and diff whitespace"
+  ],
+  "console": "PENDING exact269fresh/default retry,controller detection,world/save/quit,shader and endurance; compatible dependencies do not establish olderControlify native behavior.",
+  "release_store": "No new release/Store authorization;267retained."
+}

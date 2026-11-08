@@ -112,15 +112,22 @@ final class ProsperoModrinth {
    if(version==null)throw new IOException("No compatible download for "+project+" on "+game);
   }
   if(!project.equals(ProsperoDownloads.text(version,"project_id"))||!ProsperoDownloads.contains(version,"game_versions",game)||(kind==Kind.MOD&&!ProsperoDownloads.contains(version,"loaders","fabric")))throw new IOException("Content version is incompatible with this instance");
-  if(incompatibleRelease(version,kind,game))throw new IOException("This YACL release requires a Fabric API unavailable for Minecraft "+game+". Choose a compatible YACL release.");
+  if(incompatibleRelease(version,kind,game))throw new IOException("This release requires dependencies unavailable for Minecraft "+game+". Choose a compatible YACL release.");
   if("unsupported".equals(ProsperoDownloads.text(version,"client_side"))||ProsperoDownloads.text(version,"environment").matches("server_only|dedicated_server_only|server_only_client_optional"))throw new IOException("This download is server-only");
   return version;
  }
  // These publisher releases list 1.21.9, but require Fabric API >=0.138.3+1.21.10.
  // Keep exact required-version pins explicit and allow future publisher releases.
  private static boolean incompatibleRelease(JsonObject version,Kind kind,String game){
-  return kind==Kind.MOD&&"1.21.9".equals(game)&&"1eAoo2KR".equals(ProsperoDownloads.text(version,"project_id"))
-    &&Set.of("skcT0J9K","ORi1nScg").contains(ProsperoDownloads.text(version,"id"));
+  if(kind!=Kind.MOD)return false;
+  String project=ProsperoDownloads.text(version,"project_id"),id=ProsperoDownloads.text(version,"id");
+  if("1.21.9".equals(game)&&"1eAoo2KR".equals(project))return Set.of("skcT0J9K","ORi1nScg").contains(id);
+  if(!"1.21.2".equals(game))return false;
+  // These YACL releases require API >=0.114.0+1.21.3; available1.21.2 API is0.106.1.
+  if("1eAoo2KR".equals(project))return Set.of("2lffyjXX","TG9vHGKh","xrdCTVnO","aJOxMQk8","vym5PKaA").contains(id);
+  // Their original Controlify manifests require YACL >=3.8.0.2.4.1 is the newest
+  // published candidate whose >=3.6.0 range admits compatible YACL3.6.6.
+  return CONTROLIFY.equals(project)&&Set.of("d9nhGuvB","e0PyDMI4","IIveIZKQ","6M9qathq","ppJgqqez","LOfUGltj","xbdIp3Iz","Am8xj680","EUYiUmew","xpxLpcU2","Yi0xzTJi").contains(id);
  }
  File file(JsonObject version,Kind kind)throws Exception {
   JsonObject selected=null;for(var item:version.getAsJsonArray("files")){var f=item.getAsJsonObject();if(selected==null)selected=f;if(f.has("primary")&&f.get("primary").getAsBoolean()){selected=f;break;}}

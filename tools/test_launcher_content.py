@@ -62,6 +62,17 @@ public class ContentCheck {
   bodies.put("version:1eAoo2KR",bytes(newest+","+second));
   denied(()->api.version("1eAoo2KR","",ProsperoModrinth.Kind.MOD,"1.21.9",()->false));
 
+  // Exact incompatible1.21.2 publisher versions are excluded,1.21.3/future releases remain eligible.
+  for(String project:List.of("1eAoo2KR","DOUdJVEm")){
+   List<String> excluded=project.equals("1eAoo2KR")?List.of("2lffyjXX","TG9vHGKh","xrdCTVnO","aJOxMQk8","vym5PKaA"):List.of("d9nhGuvB","e0PyDMI4","IIveIZKQ","6M9qathq","ppJgqqez","LOfUGltj","xbdIp3Iz","Am8xj680","EUYiUmew","xpxLpcU2","Yi0xzTJi");
+   String compatibleId=project.equals("1eAoo2KR")?"mHeau9Ek":"qD2bMSgx";
+   var candidates=new ArrayList<String>();
+   for(String id:excluded){var row=JsonParser.parseString(version(id,project,"fabric","fixture.jar","")).getAsJsonObject();row.add("game_versions",JsonParser.parseString("[\"1.21.2\",\"1.21.3\"]"));String json=row.toString();candidates.add(json);bodies.put(ProsperoModrinth.API+"version/"+id,bytes(json));denied(()->api.version(project,id,ProsperoModrinth.Kind.MOD,"1.21.2",()->false));check(api.version(project,id,ProsperoModrinth.Kind.MOD,"1.21.3",()->false).get("id").getAsString().equals(id),"1.21.3 exact selection changed");}
+   var row=JsonParser.parseString(candidates.getFirst()).getAsJsonObject();row.addProperty("id",compatibleId);String compatible212=row.toString();candidates.add(compatible212);bodies.put("version:"+project,bytes(String.join(",",candidates)));
+   check(api.version(project,"",ProsperoModrinth.Kind.MOD,"1.21.2",()->false).get("id").getAsString().equals(compatibleId),"1.21.2 compatible default selection");
+   row.addProperty("id","futureCompatible");bodies.put("version:"+project,bytes(row+","+String.join(",",candidates)));check(api.version(project,"",ProsperoModrinth.Kind.MOD,"1.21.2",()->false).get("id").getAsString().equals("futureCompatible"),"future1.21.2 release excluded");
+   bodies.put("version:"+project,bytes(String.join(",",candidates.subList(0,candidates.size()-1))));denied(()->api.version(project,"",ProsperoModrinth.Kind.MOD,"1.21.2",()->false));
+  }
   Path linked=root.resolve("linked");Files.createSymbolicLink(linked,game);denied(()->ProsperoDownloads.noLinks(linked.resolve("mods/a.jar")));
   Path modelRoot=root.resolve("library");var lib=new ProsperoLibrary(modelRoot);var vanilla=lib.add("Vanilla","26.3",1);var fabric=lib.add("Fabric","26.3",16,"fabric");lib.settings().showIntro=false;lib.save();check(new ProsperoLibrary(modelRoot).instances().get(1).loader.equals("fabric"),"loader not persistent");
   var old=JsonParser.parseString(Files.readString(modelRoot.resolve("library.json"))).getAsJsonObject();old.getAsJsonArray("instances").get(0).getAsJsonObject().remove("loader");Files.writeString(modelRoot.resolve("library.json"),old.toString());check(new ProsperoLibrary(modelRoot).instances().get(0).loader.equals("vanilla"),"old library migration");denied(()->lib.add("NeoForge","26.3",1,"neoforge"));
