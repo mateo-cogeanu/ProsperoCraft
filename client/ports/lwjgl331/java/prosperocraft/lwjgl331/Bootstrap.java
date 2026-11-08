@@ -19,9 +19,7 @@ public final class Bootstrap {
   Configuration.GLFW_LIBRARY_NAME.set("ps5glfw");
   Configuration.OPENAL_LIBRARY_NAME.set("ps5openal");
   Library.initialize();
-  int version=nativeGetVersion();
-  if((version!=0x00180000&&version!=0x00190000)||nativeInterfaceSize()!=236)
-   throw new LinkageError("LWJGL331 native JNI table does not match the Java25 integration");
+  RuntimeAbi.validate(System.getProperty("java.specification.version"), nativeGetVersion(), nativeInterfaceSize());
   // Separate group owns only its own native thread attachment/destructor state.
   Runtime.getRuntime().addShutdownHook(new Thread(Bootstrap::beginShutdown,"LWJGL331 native shutdown"));
   System.setProperty("ps5.opengl.provider","zink");

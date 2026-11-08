@@ -196,3 +196,57 @@ consumer bootstrap/JNI bindings, original game execution, worlds/save/rejoin/qui
 shaders and repeatable overhead comparisons are the remaining integration work.
 This is a documentation-only consumer update; previous scoped21fast/13native
 results are preserved and no new application build or console pass is claimed.
+
+
+## Both LTS startup passes and Java17 JNI integration —2026-11-08
+
+The maintainer reported **ALL PASS** for Java21 PPSA99877/01.000.001 immediately
+after its four-row test handoff. [Verified passing package, complete source and checksums](https://github.com/mateo-cogeanu/ps5-java25-homebrew/releases/tag/Java21_Startup-v01.000.001)
+and [frozen source](https://github.com/mateo-cogeanu/ps5-homebrew-history/tree/2468e3d5034b4c5122e14bf5a461fdc0db27ce0a/runtime/Java21_Startup)
+are preserved. Runtime source `e84566965b02346bf1cd646cb43d77fab1ffda7b` records the exact result.
+Both17and21 now pass interpreter startup/Java/JNI/joined-worker/destruction on
+PS5. C2, game integration, shaders, virtual threads/FFM, endurance and performance
+remain separate unvalidated scopes.
+
+The next consumer boundary is implemented without enabling1.20: the331 builder
+accepts explicit `--runtime-major 17` or21 (default25) and selects that major's
+actual target JNI headers. Every native unit has a compile-time table-size check;
+audits record the selected major and header hashes. The331 bootstrap checks real
+Java feature/JNI version and full table slots:17=234,21=235,25=236. Wrong native
+counts and foreign VM generations fail before the bootstrap is accepted.
+Default333 and working25 selections stay unchanged. Original publisher JARs are
+verified and retained, with a separate minimal source overlay compiled for Java8.
+
+Example isolated17 build (use matching prepared runtime/SDK and pinned libffi):
+
+```sh
+python3 tools/build_lwjgl331.py --runtime-major 17 --java-home /path/to/jdk17 \
+  --publisher-cache /path/to/verified-original-libraries --output-dir build/lwjgl331-j17 \
+  --runtime-workspace /path/to/runtime --ffi-include /path/to/target-libffi/include \
+  --cc /path/to/clang --lld /path/to/ld.lld
+python3 tools/test_lwjgl333_ownership.py --generation 331 --runtime-major 17 \
+  --java-home /path/to/jdk17 --build-dir build/lwjgl331-j17 \
+  --output-dir build/lwjgl331-j17/ownership-host17 --cc /path/to/host-clang
+```
+
+All208target native units compile with Java17 headers. Actual host17/21/25
+VMs validate their real table/version against the331 rule and reject wrong count/
+generation. The existing native ownership fixture passes32threads/3200cycles,
+attached callback allocation/key refusal, genuine native attachment/destructor,
+foreign table preservation, failed allocation/key rollback and balanced frees
+under ASan/UBSan/-Xcheck:jni. The host fixture alone uses256MiB heap and disables
+compressed pointer layouts because older host VMs'1GiB class-space reservation
+collides with ASan; no production VM/GC/heap policy changed. See the
+[scoped build record](validation/lts-jni-bindings-2026-11-08.json).
+
+A matching17 game bootstrap, resident/native integration and physical1.20
+menu/world/save/rejoin/quit/shader checks are still required. No consumer package,
+instance availability, default runtime or release/Store update is produced here.
+
+
+The current333 source also rebuilds all209target units with25headers and passes
+its unchanged ownership controls. A stale generated333 tree was encountered during
+verification; the fixture now rejects an obsolete patch audit before executing
+native code. Required21fast/13native checks pass, and all21fast checks pass again
+from outside a source-only checkout with an empty dependency cache and explicitly
+provisioned host pins. These remain scoped host/build results, not a game pass.

@@ -1,0 +1,98 @@
+{
+  "date": "2026-11-08",
+  "runtime_acceptance_commit": "e84566965b02346bf1cd646cb43d77fab1ffda7b",
+  "java17_console": "Standalone startup002 ALL PASS; separate runtime record",
+  "java21_console": "Standalone startup001 ALL PASS; separate runtime record",
+  "consumer_console": "NOT RUN; no new consumer package",
+  "target": {
+    "runtimeMajor": 17,
+    "jniHeadersSha256": {
+      "jni.h": "1266aea5b9f5d5db1cb6f8e5c6c43cfa7f80bc4f72d7fe42c6131bb939dc70f4",
+      "freebsd/jni_md.h": "88cb5c33e306900dd35a78d5a439087123b8e91b0986bb5acb42cc9bd2fcc42e"
+    },
+    "units": 208,
+    "outputSha256": "e3f28dd4126eaf00a79fcf090bcd380c8e088b4806420c5f27b18c7690cda79b",
+    "overlaySha256": "f8cd9f0c966d952985a831999bb6ca7ffc9a6184970f472215e65b29aafd9fcb",
+    "originalLibrariesSha256": {
+      "lwjgl-glfw-3.3.1.jar": "08bbc34eb752f863e37f83ab1c7b0c22f7cb26d0f8fb0a4a4a8c6028ac45b385",
+      "lwjgl-jemalloc-3.3.1.jar": "ee49fc0a8d9456452e54cd6f777823eda666e2c63fc14d65b2fd2cc2cfed5dbe",
+      "lwjgl-openal-3.3.1.jar": "7325ee1b91a8a10c0626c69b557a88f2df6ac1bdca0e52e2a92d324249f2cad0",
+      "lwjgl-opengl-3.3.1.jar": "e436d2144f3a36fff772fd64233316809b795f390defd4d55660fc686e7c2834",
+      "lwjgl-stb-3.3.1.jar": "64e5ccce2fc7cbcf0c834a5be8642d9e2498ce3fe31c14ff1df741878a3f8121",
+      "lwjgl-tinyfd-3.3.1.jar": "488f51ed95f0fac48d1d87cb0e3bac08c012dcbf6ef3c1688685d708cdbccd56",
+      "lwjgl-3.3.1.jar": "cf83f90e32fb973ff5edfca4ef35f55ca51bb70a579b6a1f290744f552e8e484"
+    }
+  },
+  "host_ownership": {
+    "17": {
+      "realJniSlots": 234,
+      "result": "PASS",
+      "vmOptions": "-Xint -Xcheck:jni -Xmx256m -XX:-UseCompressedOops -XX:-UseCompressedClassPointers",
+      "checks": [
+        "actual JNI GetVersion/sizeof header and331 runtime ABI rule",
+        "wrong native table count and foreign Java feature rejected",
+        "32threads/3200cycles; attached callback allocation/key refusal",
+        "real native thread attach/destructor, foreign tables, idempotence",
+        "allocation/calloc/key refusal rollback, exact-size refusal, balanced frees",
+        "ASan/UBSan"
+      ]
+    },
+    "21": {
+      "realJniSlots": 235,
+      "result": "PASS",
+      "vmOptions": "-Xint -Xcheck:jni -Xmx256m -XX:-UseCompressedOops -XX:-UseCompressedClassPointers",
+      "checks": [
+        "actual JNI GetVersion/sizeof header and331 runtime ABI rule",
+        "wrong native table count and foreign Java feature rejected",
+        "32threads/3200cycles; attached callback allocation/key refusal",
+        "real native thread attach/destructor, foreign tables, idempotence",
+        "allocation/calloc/key refusal rollback, exact-size refusal, balanced frees",
+        "ASan/UBSan"
+      ]
+    },
+    "25": {
+      "realJniSlots": 236,
+      "result": "PASS",
+      "vmOptions": "-Xint -Xcheck:jni -Xmx256m -XX:-UseCompressedOops -XX:-UseCompressedClassPointers",
+      "checks": [
+        "actual JNI GetVersion/sizeof header and331 runtime ABI rule",
+        "wrong native table count and foreign Java feature rejected",
+        "32threads/3200cycles; attached callback allocation/key refusal",
+        "real native thread attach/destructor, foreign tables, idempotence",
+        "allocation/calloc/key refusal rollback, exact-size refusal, balanced frees",
+        "ASan/UBSan"
+      ]
+    }
+  },
+  "pending": [
+    "Matching17 consumer bootstrap and native residency/graphics/input/audio integration",
+    "Original1.20 menu/world/save/rejoin/quit/shader physical tests",
+    "Java21 game integration and matched cold/warm performance comparison"
+  ],
+  "scope": "Build/JNI boundary only; no official game/mod JAR modification, availability/default selection, consumer package or release/Store action",
+  "host_lanes": {
+    "fast": {
+      "result": "PASS",
+      "checks": 21,
+      "seconds": 47.7
+    },
+    "native": {
+      "result": "PASS",
+      "checks": 13,
+      "seconds": 17.6
+    },
+    "source_only_outside_root_empty_cache": {
+      "result": "PASS",
+      "checks": 21,
+      "seconds": 42.3,
+      "dependencies": "Two verified pinned host libraries explicitly provisioned; no SDK/game/private cache used"
+    }
+  },
+  "unchanged333_regression": {
+    "targetUnits": 209,
+    "targetResult": "PASS with matching Java25 headers",
+    "ownershipResult": "PASS actual Java25 ASan/UBSan/-Xcheck:jni ownership fixture",
+    "stale_source_control": "PASS previous native-source snapshot with obsolete ownership patch refused before execution"
+  },
+  "documentation": "PASS local links/migration inventory and git diff --check"
+}

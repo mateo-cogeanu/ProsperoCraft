@@ -160,12 +160,21 @@ def build_native(args, pin, jdk, cache, work, *, port=PORT):
             raise ValueError('Target build requires --runtime-workspace')
         runtime = args.runtime_workspace.resolve()
         sdk = runtime / '.tools/native-sdk/ps5-payload-sdk'
-        headers = runtime / '.tools/java25/openjdk/build/ps5-bootstrap/support/modules_include/java.base'
+        major = getattr(args, 'runtime_major', 25)
+        headers = runtime / ('.tools/java' + str(major) + '/openjdk/build/ps5-bootstrap/support/modules_include/java.base')
+        for header in (headers / 'jni.h', headers / 'freebsd/jni_md.h'):
+            if not header.is_file():
+                raise FileNotFoundError('Missing matching target JNI header: ' + str(header))
         flags += ['-target', 'x86_64-sie-ps5', '-march=x86-64', '-msse2', '-mno-avx', '-mno-avx2', '-mno-fma',
                   '-fvisibility-nodllstorageclass=default', '-fno-stack-protector', '-femulated-tls',
                   '-isysroot', str(sdk), '-isystem', str(sdk / 'target/include'),
                   '-I' + str(headers), '-I' + str(headers / 'freebsd'), '-DHAS_FFI_UNIX64=1',
                   '-DPROSPERO_FFI_RESERVE_COUNT=' + str(args.closure_reserve_count)]
+    major = getattr(args, 'runtime_major', 25)
+    guard = work / 'jni-generation-check.h'
+    guard.write_text('#include <jni.h>\n_Static_assert(sizeof(struct JNINativeInterface_) == ' +
+                     str({17:234, 21:235, 25:236}[major]) + ' * sizeof(void*), "JNI generation mismatch");\n')
+    flags += ['-include', str(guard)]
     output = work / ('host' if args.host else 'ps5')
     output.mkdir(exist_ok=True)
     def compile_unit(unit):
@@ -193,6 +202,8 @@ def build_native(args, pin, jdk, cache, work, *, port=PORT):
              'objectsSha256': {f.name: sha(f) for f in objects}, 'outputSha256': sha(merged),
              'units': len(units), 'target': 'host' if args.host else 'PS5 x86_64/SSE2/emulatedTLS',
              'residentGroup': pin['residentGroup'], 'symbolPrefixRequired': pin['symbolPrefix'],
+             'jniRuntimeMajor': getattr(args, 'runtime_major', 25),
+             'jniHeadersSha256': {str(f.relative_to(headers)): sha(f) for f in (headers / 'jni.h', headers / 'freebsd/jni_md.h')} if not args.host else {str(f.relative_to(jdk)): sha(f) for f in (jdk / 'include').rglob('jni*.h')},
              'closureReserveCount': 0 if args.host else args.closure_reserve_count,
              'hostSanitizers': 'UBSan except generic C ABI JNI function-pointer casts' if args.host else None,
              'scope': 'Genuine' + group.removeprefix('lwjgl') + ' core/callback/GL/STB; shares existing compatible libffi/provider C APIs; no343 replacement',

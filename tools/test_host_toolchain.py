@@ -28,6 +28,18 @@ class Discovery(unittest.TestCase):
                 with self.assertRaisesRegex(RuntimeError, 'require JDK 25'):
                     h.java_home(actual)
 
+    def test_explicit_lts_major(self):
+        actual = h.java_home()
+        for major in (17, 21):
+            with patch.object(h.subprocess, 'run', return_value=subprocess.CompletedProcess([], 0, 'javac ' + str(major) + '.0.1', '')):
+                self.assertEqual(h.java_home(actual, required_major=major), actual)
+                with self.assertRaisesRegex(RuntimeError, 'require JDK 25'):
+                    h.java_home(actual)
+            with self.assertRaisesRegex(RuntimeError, 'require JDK ' + str(major)):
+                h.java_home(actual, required_major=major)
+        with self.assertRaises(ValueError):
+            h.java_home(actual, required_major=19)
+
     def test_tool_precedence(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

@@ -34,31 +34,33 @@ def executable(name, *, override=None, env=None):
     raise RuntimeError(f'Missing {name}; install it on PATH or set {env or "LLVM_HOME"}.')
 
 
-def java_home(override=None):
-    """Explicit home > JAVA_HOME > javac on PATH; require a complete JDK 25."""
+def java_home(override=None, *, required_major=25):
+    """Explicit home > JAVA_HOME > javac on PATH; require25 unless explicitly selecting17/21."""
+    if required_major not in (17, 21, 25):
+        raise ValueError('Supported explicit JDK majors are 17, 21 and 25')
     selected = override or os.environ.get('JAVA_HOME')
     if selected:
         home = Path(selected).expanduser().resolve()
     else:
         found = shutil.which('javac')
         if not found:
-            raise RuntimeError('Missing javac; install JDK 25 on PATH or set JAVA_HOME.')
+            raise RuntimeError(f'Missing javac; install JDK {required_major} on PATH or set JAVA_HOME.')
         javac = Path(found).resolve()
         home = javac.parent.parent
         # Apple's /usr/bin/javac is a launcher, not a JDK installation.
         if platform.system() == 'Darwin' and javac == Path('/usr/bin/javac'):
             home = Path(subprocess.check_output(
-                ['/usr/libexec/java_home', '-v', '25'], text=True).strip())
+                ['/usr/libexec/java_home', '-v', str(required_major)], text=True).strip())
     for name in ('java', 'javac', 'keytool'):
         if not (home / 'bin' / name).is_file():
-            raise RuntimeError(f'Incomplete JDK: {home}; missing bin/{name}. Set JAVA_HOME to JDK 25.')
+            raise RuntimeError(f'Incomplete JDK: {home}; missing bin/{name}. Set JAVA_HOME to JDK {required_major}.')
     for name in ('java', 'javac'):
         result = subprocess.run([str(home / 'bin' / name), '-version'],
                                 capture_output=True, text=True, check=True)
         version = result.stdout + result.stderr
         match = re.search(r'(?:version\s+"|javac\s+)(\d+)', version)
-        if not match or int(match[1]) != 25:
-            raise RuntimeError(f'Host tests require JDK 25; {name}: {version.strip()} ({home})')
+        if not match or int(match[1]) != required_major:
+            raise RuntimeError(f'Host tests require JDK {required_major}; {name}: {version.strip()} ({home})')
     return home
 
 

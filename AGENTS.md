@@ -403,3 +403,17 @@ startup candidate, physical result pending. Neither implies Minecraft/C2/shader/
 performance acceptance. Keep working Java25 and original JARs; matching consumer
 bootstrap and bindings remain required before runtime selection or1.20availability.
 See docs/client-1.20-plan.md; reusable implementations stay runtime-owned.
+
+
+## Java21 startup acceptance and explicit331 JNI generations —2026-11-08
+
+Standalone Java21 PPSA99877/01.000.001 received user ALL PASS for its four
+interpreter startup/JNI/worker/destruction rows; runtime source/history/release
+preserve exact bytes and checksums. Both17/21 startup now pass, with no game/C2/
+shader/performance claim.331 has explicit --runtime-major 17/21/25 (default25),
+matching native headers/audit/compile-time table size and actual feature/version/
+slot validation. Host17/21/25 ownership/failure tests and target17compile are
+scoped evidence only. Required host lanes retain25; no launcher availability or
+runtime default changes. Continue matching17 consumer bootstrap before original
+Vanilla1.20 physical testing. See docs/client-1.20-plan.md; preserve working25,
+original JARs and all release/Store/shader gates.

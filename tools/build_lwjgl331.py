@@ -13,6 +13,7 @@ def main():
     parser.add_argument('--publisher-cache', required=True, type=Path)
     parser.add_argument('--cache-dir', type=Path, default=ROOT / '.tools/lwjgl331')
     parser.add_argument('--output-dir', type=Path, default=ROOT / 'build/lwjgl331')
+    parser.add_argument('--runtime-major', type=int, choices=(17,21,25), default=25)
     parser.add_argument('--java-home', type=Path)
     parser.add_argument('--runtime-workspace', type=Path)
     parser.add_argument('--ffi-include', type=Path)
@@ -34,7 +35,7 @@ def main():
     cache, work = args.cache_dir.resolve(), args.output_dir.resolve()
     cache.mkdir(parents=True, exist_ok=True)
     work.mkdir(parents=True, exist_ok=True)
-    jdk = java_home(args.java_home)
+    jdk = java_home(args.java_home, required_major=args.runtime_major)
     if args.part in ('java', 'all'):
         build_java(args, pin, jdk, cache, work, port=port, publisher_row=row)
     if args.part in ('native', 'all'):

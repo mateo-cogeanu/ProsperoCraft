@@ -157,3 +157,16 @@ trigger feel, reset and console layout still require exact-build testing.
 The storage native fixture injects only the cross-repository report-root hook;
 actual consumer path selection, SDL/fault writes and OpenAL env adapter run with
 isolated host roots. Runtime HTTP/root tests are separate. See [216](client-primary-shared-storage-216.md).
+
+
+### Explicit LTS binding checks
+
+Required fast/native lanes still require JDK25. Specialized331 tools may explicitly
+select17or21 with `--runtime-major` plus a matching `--java-home`; the default is25.
+Discovery rejects a mismatched major rather than substituting another JDK. Target
+binding builds require the matching runtime's generated JNI headers and record
+hashes/major, with a compile-time native-table check. See
+[1.20 integration instructions](client-1.20-plan.md). The separate downloaded-input
+ownership fixture currently uses macOS ASan integration and is outside portable
+CI lanes; it does not establish target graphics/game compatibility. Its host-only
+small heap/uncompressed layout avoids older-JDK ASan address reservation conflicts.

@@ -17,14 +17,18 @@ def main():
     parser.add_argument('--java-home', type=Path)
     parser.add_argument('--cc')
     parser.add_argument('--generation', choices=('333', '331'), default='333')
+    parser.add_argument('--runtime-major', type=int, choices=(17,21,25), default=25)
     args = parser.parse_args()
-    jdk, cc = java_home(args.java_home), executable('clang', override=args.cc)
+    jdk, cc = java_home(args.java_home, required_major=args.runtime_major), executable('clang', override=args.cc)
     work = args.output_dir.resolve()
     work.mkdir(parents=True, exist_ok=True)
     generation = args.generation
     pin = json.loads((ROOT / ('client/ports/lwjgl' + generation) / 'sources.json').read_text())
     source = args.build_dir.resolve() / ('native-sources/lwjgl3-' + pin['commit'] + '/modules/lwjgl/core/src/main/c')
     audit = json.loads((args.build_dir / 'ps5/audit.json').read_text())
+    patch = ROOT / ('client/ports/lwjgl' + generation) / '0002-ps5-native-ownership.patch'
+    if audit['nativePatchSha256'] != sha(patch):
+        raise ValueError('Stale native source snapshot; rebuild the selected binding with its current ownership patch')
     for name in ('common_tools.c', 'org_lwjgl_system_ThreadLocalUtil.c'):
         assert sha(source / name) == audit['sourceUnitsSha256'][name]
     helper = work / 'ownership.c'
@@ -107,6 +111,30 @@ public class Ownership333 {
  }
 }
 ''')
+    extra_sources = []
+    if generation == '331':
+        abi = ROOT / 'client/ports/lwjgl331/java/prosperocraft/lwjgl331/RuntimeAbi.java'
+        extra_sources.append(str(abi))
+        helper.write_text(helper.read_text() + r'''
+JNIEXPORT jintArray JNICALL Java_Ownership333_abi(JNIEnv*e,jclass c){
+ (void)c;jint values[]={(*e)->GetVersion(e),sizeof(**e)/sizeof(void*)};
+ jintArray result=(*e)->NewIntArray(e,2);if(result)(*e)->SetIntArrayRegion(e,result,0,2,values);return result;
+}
+''')
+        java.write_text(java.read_text().replace(' static native void attachedCallback();',
+            ' static native int[] abi(); static native void attachedCallback();').replace('  nativeOwners();', r'''
+  int[] abi=abi();Class<?> rule=Class.forName("prosperocraft.lwjgl331.RuntimeAbi");
+  var validate=rule.getDeclaredMethod("validate",String.class,int.class,int.class);validate.setAccessible(true);
+  String feature=System.getProperty("java.specification.version");
+  validate.invoke(null,feature,abi[0],abi[1]);
+  try{validate.invoke(null,feature,abi[0],abi[1]+1);throw new AssertionError("wrong native JNI count accepted");}
+  catch(java.lang.reflect.InvocationTargetException expected){if(!(expected.getCause() instanceof LinkageError))throw expected;}
+  try{validate.invoke(null,feature.equals("17")?"25":"17",abi[0],abi[1]);throw new AssertionError("foreign VM generation accepted");}
+  catch(java.lang.reflect.InvocationTargetException expected){if(!(expected.getCause() instanceof LinkageError))throw expected;}
+  System.out.println("PASS331 real VM/JNI header generation: Java"+feature+" native table slots="+abi[1]+"; cross-generation/count refusal");
+  nativeOwners();
+'''))
+    helper.write_text(helper.read_text().replace('333', generation))
     flags = ['-std=c11', '-O1', '-g', '-fPIC', '-DLWJGL_PS5', '-I' + str(source), *jni_flags(jdk), '-fsanitize=address,undefined']
     objects = []
     for name in ('common_tools.c', 'org_lwjgl_system_ThreadLocalUtil.c'):
@@ -117,12 +145,14 @@ public class Ownership333 {
     java.write_text(java.read_text().replace('333', generation))
     library = work / ('libownership' + generation + '.dylib')
     subprocess.run([cc, *flags, '-dynamiclib', *map(str, objects), str(helper), '-o', str(library)], check=True)
-    subprocess.run([str(jdk / 'bin/javac'), str(java)], check=True)
+    subprocess.run([str(jdk / 'bin/javac'), '-d', str(work), *extra_sources, str(java)], check=True)
     asan = subprocess.check_output([cc, '-print-file-name=libclang_rt.asan_osx_dynamic.dylib'], text=True).strip()
     env = {**os.environ, 'DYLD_INSERT_LIBRARIES': asan,
            'ASAN_OPTIONS': 'detect_leaks=0:handle_segv=0:handle_sigbus=0:handle_sigfpe=0',
            'UBSAN_OPTIONS': 'halt_on_error=1:handle_segv=0:handle_sigbus=0:handle_sigfpe=0'}
-    result = subprocess.run([str(jdk / 'bin/java'), '-Xint', '-Xcheck:jni', '--enable-native-access=ALL-UNNAMED',
+    result = subprocess.run([str(jdk / 'bin/java'), '-Xint', '-Xcheck:jni', '-Xmx256m',
+                             '-XX:-UseCompressedOops', '-XX:-UseCompressedClassPointers',
+                             '--enable-native-access=ALL-UNNAMED',
                              '-cp', str(work), 'Ownership' + generation, str(library)], env=env, capture_output=True, text=True, timeout=90)
     text = result.stdout + result.stderr
     (work / 'result.log').write_text(text)
