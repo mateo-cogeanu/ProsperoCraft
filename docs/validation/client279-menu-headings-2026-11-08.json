@@ -1,0 +1,14 @@
+{
+  "app_version": "01.000.279",
+  "title_id": "PPSA99874",
+  "package_sha256": "60a354e39a3a11b4bf0a4a4f62cba80220ea961781c846233929122197159cd2",
+  "symbols_sha256": "df4df20eff673903695a29eb80e496d6978d1f1d55c3fe5aa13994342b7f6224",
+  "scope": "Replace decorative menu headings with Create instance, Settings, Microsoft account, Browser management, Basic controls and Getting started. Remove decorative create-instance and settings subtitles. Use direct startup introduction and browser pairing text. Preserve the requested Microsoft phone sign-in sentence. Carry forward the normal five-worker launcher.",
+  "checks": [
+    "19 host policy and 13 native host checks passed.",
+    "Signed target package and independent audit passed. Compiled menu text retains the Microsoft sign-in line and excludes removed taglines. All 908 ZIP entries match the unpacked app.",
+    "Documentation and whitespace checks passed."
+  ],
+  "console": "Pending exact 279 menu appearance and gameplay/shader check on PS5.",
+  "release_store": "Local candidate."
+}

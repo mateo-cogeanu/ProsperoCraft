@@ -267,13 +267,12 @@ inline void compose_content(Canvas& c) noexcept {
    for(int i=0;i<8&&start+i<count;i++){int x=70+(i%4)*450,y=342+(i/4)*272+slide,at=32+i*4;bool active=!top&&selected==start+i;if(active)selection(c,x,y,420,242);c.rounded(x,y,420,242,22,ink(active?0x1f3a2b:0x13291f));if(std::strcmp(fields[at+3].data(),"ADD")==0){c.rounded(x+184,y+118,52,6,3,ink(0xb6f2be));c.rounded(x+207,y+95,6,52,3,ink(0xb6f2be));}else{block(c,x+27,y+26,88,number(at+2));title(c,x+26,y+137,fields[at].data(),30,365);label(c,x+27,y+187,fields[at+1].data(),24,0x92b6a0);label(c,x+235,y+187,fields[at+3].data(),24,0xa7d4ae);}}
 #endif
  }else if(page==1||page==5){
-  label(c,70,185+slide,page==1?"A world of your own.":"Instance settings",64);
-  if(page==1)label(c,75,269+slide,"One instance. Its own settings, worlds and memories.",24,0x91ad9b);
+  label(c,70,185+slide,page==1?"Create instance":"Instance settings",64);
   c.rounded(70,338+slide,620,548,28,ink(0x10221c));block(c,275,402+slide,204,page==1?number(24):number(18));title(c,105,690+slide,page==1?fields[22].data():fields[16].data(),42,540);label(c,108,761+slide,"JAVA EDITION / INSTANCE",24,0x8db69a);
   if(page==1){row_control(c,320+slide,"VERSION",fields[23].data(),row==0);row_control(c,430+slide,"LOADER",fields[82].data(),row==1,true);row_control(c,540+slide,"NAME",fields[22].data(),row==2);row_control(c,650+slide,"ICON","Choose instance icon",row==3);action(c,760,774+slide,1080,"CREATE & DOWNLOAD",row==4,true);wrap(c,790,884+slide,fields[70].data(),1000,1);}
   else{row_control(c,310+slide,"INSTANCE NAME",fields[16].data(),row==0);row_control(c,420+slide,"INSTANCE ICON","Choose instance icon",row==1);action(c,760,535+slide,520,"MODS",row==2);action(c,1320,535+slide,520,"SHADERS",row==3);action(c,760,630+slide,520,"RESOURCE PACKS",row==4);action(c,1320,630+slide,520,"DUPLICATE INSTANCE",row==7);action(c,760,820+slide,520,"DONE",row==5,true);action(c,1320,820+slide,520,"DELETE INSTANCE",row==6);action(c,760,725+slide,1080,"BROWSER UPLOADS",row==8);}
  }else if(page==15){
-  label(c,70,185,"Manage from your browser",54);title(c,75,265,fields[16].data(),30,1700);
+  label(c,70,185,"Browser management",54);title(c,75,265,fields[16].data(),30,1700);
   label(c,75,345,fields[107].data(),30,0xa9eab6);
   if(fields[108][0]){
    const char* matrix=fields[102].data();int size=std::atoi(matrix);const char* bits=std::strchr(matrix,':');
@@ -316,14 +315,14 @@ inline void compose_content(Canvas& c) noexcept {
    }else if(installed)label(c,1640,y+31,"INSTALLED",18,0xa9eab6);}
 
  }else if(page==2){
-  label(c,70,185+slide,"Settle in.",64);label(c,75,270+slide,"A few thoughtful defaults. You're in control.",24,0x91ad9b);
+  label(c,70,185+slide,"Settings",64);
   c.rounded(70,340+slide,620,548,28,ink(0x10221c));label(c,112,391+slide,"YOUR SETUP",24,0x8fbb9b);label(c,112,459+slide,"Game settings",42);wrap(c,114,545+slide,"Choose your game window size. The pointer uses logical coordinates; the native display reports its actual framebuffer size. Video and audio options stay with each instance.",520,5);label(c,114,714+slide,"SQUARE  Change background",24,0xa9eab6);title(c,114,753+slide,fields[76][0]?fields[76].data():"Waves",30,510);label(c,114,804+slide,std::strcmp(fields[79].data(),"OFF")==0?"TRIANGLE  Vibration: OFF":"TRIANGLE  Vibration: ON",24,0xa9eab6);title(c,114,851+slide,fields[67].data(),18,510,0x83a58d);
   const char* themes[]={"Forest","Ocean","Amethyst","Rose","Amber","Graphite"};
   const char* names[]={"GAME RESOLUTION","PARALLEL DOWNLOADS","REDUCED MOTION","SHOW SNAPSHOTS","STARTUP NOTICE","INPUT & CONTROLLER KEYBINDS","COLOR THEME"};
   const char* values[]={fields[25].data(),fields[26].data(),fields[30].data(),fields[27].data(),fields[68].data(),"Configure controls",themes[prospero_palette::selected]};
   for(int i=0;i<7;i++)row_control(c,300+i*96+slide,names[i],values[i],row==i,true,86);
  }else if(page==3){
-  label(c,70,185+slide,"Your account. Your adventure.",64);label(c,75,270+slide,"Sign in on your phone. Your password stays with Microsoft.",24,0x91ad9b);
+  label(c,70,185+slide,"Microsoft account",64);label(c,75,270+slide,"Sign in on your phone. Your password stays with Microsoft.",24,0x91ad9b);
   c.rounded(70,340+slide,1000,548,28,ink(0x10221c));label(c,116,391+slide,"MICROSOFT ACCOUNT",24,0x8fbb9b);title(c,116,447+slide,fields[5].data(),42,750);if(signed_in)player_head(c,929,389+slide,96);
   if(fields[3][0]){login_qr(c,747,514+slide,7);label(c,116,539+slide,"ENTER THIS CODE",24,0x8eaf9a);label(c,115,584+slide,fields[3].data(),64,0xc9f5cd);wrap(c,117,699+slide,"https://www.microsoft.com/link",600,2);}
   else wrap(c,117,547+slide,"Sign in with your Microsoft account to play Minecraft Java. Your saved account reconnects on future launches. You can sign out on this console at any time.",850,5);
@@ -348,7 +347,7 @@ inline void compose_content(Canvas& c) noexcept {
 #endif
  }else if(page==8||page==11){
   const bool essentials=page==11;int section=essentials?0:number(74);
-  label(c,70,190,essentials?"Ready to play":"Controller guide",64);
+  label(c,70,190,essentials?"Basic controls":"Controller guide",64);
   const char* sections[]={"MOVEMENT & ACTIONS","INVENTORY & MENUS","TEXT KEYBOARD","WORLD SHORTCUTS","TOUCHPAD SHORTCUTS"};
   label(c,78,291,essentials?"THE ESSENTIALS":sections[std::clamp(section,0,4)],30,0xa9eab6);
   const char* basic[]={"Left stick   Move", "Right stick   Look", "X   Jump", "R2   Mine / attack", "L2   Use / place", "OPTIONS   Pause"};
@@ -372,8 +371,8 @@ inline void compose_content(Canvas& c) noexcept {
   }else{char counter[48];std::snprintf(counter,sizeof(counter),"%d / 5",section+1);label(c,1740,850,counter,30,0x94b69f);action(c,78,825,700,"PREVIOUS SECTION",false);action(c,1050,825,700,"NEXT SECTION",false);}
  }else if(page==7){
   c.rounded(170,190,1580,745,32,ink(0x142e23));
-  label(c,235,240,"Welcome to ProsperoCraft",64);
-  wrap(c,240,347,"Your Minecraft Java library, right here on your console. Create an instance, choose an icon and make yourself at home.",1390,3);
+  label(c,235,240,"Getting started",64);
+  wrap(c,240,347,"Create an instance to choose a Minecraft version, loader, name and icon.",1390,3);
   wrap(c,240,468,"Sign in with your Microsoft account, download 26.3, then choose PLAY. Your account, worlds and verified downloads are saved for future launches.",1390,3);
   wrap(c,240,570,"Use the shoulder buttons to explore Instances, Settings and your account. Press OPTIONS for the controller guide. All 26.x releases and snapshots are available to download; 26.2 and 26.3 Vanilla and Fabric are supported, alongside snapshots 1-6.",1390,5);
   action(c,240,773,330,"OK",row==1,true);
