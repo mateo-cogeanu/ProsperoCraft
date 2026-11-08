@@ -1,0 +1,15 @@
+{
+  "app_version": "01.000.267",
+  "title_id": "PPSA99874",
+  "package_sha256": "680e4342c974398158de1099249d0d83aae7cf778173863b484da65fa942cd28",
+  "symbols_sha256": "36e7a464f9aa8b4f4095e37a2c326da280bdb448c2f5c59f03b6ab1d6d6f1bcf",
+  "build_source_commit": "973e77d8f3535cd91dee6261690e86097fdaac98",
+  "build_source_tree": "modified",
+  "scope": "Automatic receipt/launch-cache recovery, in-place quick/full repair selector; retained 266 scoped world-freeze observer. No freeze fix claimed.",
+  "host": "PASS 19 checks in 39.3 seconds. Actual injected installer/launcher verifies zero-network local receipt recovery, selective metadata/code/asset requests, offline refusal, cancellation, full asset checksum repair, both menu actions/Cancel and automatic Play recovery. Offline fixture uses canonical temporary root for existing no-links policy.",
+  "package": "PASS independent 267 package audit; exact ZIP vs unpacked comparison of 907 files",
+  "documentation": "PASS local-link checker and git diff --check",
+  "console": "PENDING exact267 quick/full repair, reinstall recovery, normal/offline launch, inherited 26.1.2 Fabric freeze snapshot capture and later shader acceptance.",
+  "limits": "Quick checks asset presence/size; Full repair hashes all asset contents. Deleted payloads require downloading again. Existing cache selection and all world/mod data retained. Missing receipts cause and current world freeze unresolved.",
+  "publication": "Development source only. No release or Store update."
+}

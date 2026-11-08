@@ -17,7 +17,7 @@ public class OfflineCheck {
  static void set(Object object,String name,Object value)throws Exception{var f=object.getClass().getDeclaredField(name);f.setAccessible(true);f.set(object,value);}
  static void done(ProsperoLauncher model)throws Exception{for(int n=0;n<500&&model.tick(0)[64].equals("BUSY");n++)Thread.sleep(10);if(model.tick(0)[64].equals("BUSY"))throw new AssertionError("worker timed out");}
  public static void main(String[] args)throws Exception{
-  Path root=Path.of(args[0]);Files.createDirectories(root);var gen=KeyPairGenerator.getInstance("RSA");gen.initialize(2048);var key=gen.generateKeyPair();byte[] pub=key.getPublic().getEncoded();Files.write(Path.of(args[1]).resolve("offline-import-public-key.der"),pub);
+  Path root=Files.createDirectories(Path.of(args[0])).toRealPath();var gen=KeyPairGenerator.getInstance("RSA");gen.initialize(2048);var key=gen.generateKeyPair();byte[] pub=key.getPublic().getEncoded();Files.write(Path.of(args[1]).resolve("offline-import-public-key.der"),pub);
   Files.writeString(Path.of(args[1]).resolve("prosperocraft-channel.txt"),"offline");long now=System.currentTimeMillis();Path proof=root.resolve("offline-account.json");String good=record(key,now,now+86400000,"OwnedPlayer");Files.writeString(proof,good);
   var account=ProsperoOfflineAccount.load(root,now);if(account==null||!account.name.equals("OwnedPlayer"))throw new AssertionError("valid proof rejected");
   reject(()->ProsperoOfflineAccount.read(proof,gen.generateKeyPair().getPublic().getEncoded(),now));

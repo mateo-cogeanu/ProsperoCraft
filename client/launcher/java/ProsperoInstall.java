@@ -43,17 +43,22 @@ public final class ProsperoInstall {
   byte[] bytes;
   try{bytes=json(MANIFEST,cancelled);save(root.resolve("catalog.json"),new String(bytes,StandardCharsets.UTF_8));}
   catch(Exception offline){active(cancelled);Path cached=root.resolve("catalog.json");if(!Files.isRegularFile(cached))throw offline;bytes=Files.readAllBytes(cached);}
+  return versions(bytes,snapshots);
+ }
+ private List<Version> versions(byte[] bytes,boolean snapshots)throws Exception {
   ArrayList<Version> versions=new ArrayList<>();
   for(JsonElement item:object(bytes).getAsJsonArray("versions")){JsonObject row=item.getAsJsonObject();String id=row.get("id").getAsString(),type=row.get("type").getAsString();
    if(ProsperoVersions.catalog(id,type,snapshots)){String url=row.get("url").getAsString(),sha=row.get("sha1").getAsString();safeUrl(url);if(!sha.matches("[a-f0-9]{40}"))throw new IOException("Invalid metadata hash");versions.add(new Version(id,type,url,sha));}}
   versions.sort(java.util.Comparator.comparingInt(v->ProsperoVersions.release121(v.id())?1:0));
   return List.copyOf(versions);
  }
- private void obtain(FilePin pin,BooleanSupplier cancelled)throws Exception {
+ private void obtain(FilePin pin,BooleanSupplier cancelled)throws Exception {obtain(pin,cancelled,false);}
+ private void obtain(FilePin pin,BooleanSupplier cancelled,boolean offline)throws Exception {
   if(!pin.sha1.matches("[a-f0-9]{40}")||pin.size<0||pin.size>1024L*1024*1024)throw new IOException("Invalid publisher file pin");
-  safeUrl(pin.url);Path path=relative(root,pin.path);active(cancelled);
+  safeUrl(pin.url);Path path=relative(root,pin.path);ProsperoDownloads.noLinks(path);active(cancelled);
   if(Files.isRegularFile(path)&&Files.size(path)==pin.size&&hash(path).equals(pin.sha1))return;
-  Files.createDirectories(path.getParent());Path temp=path.resolveSibling(path.getFileName()+".part");
+  if(offline)throw new IOException("Required cache files are missing or damaged. Connect online to refresh this instance.");
+  Files.createDirectories(path.getParent());Path temp=path.resolveSibling(path.getFileName()+".part");ProsperoDownloads.noLinks(temp);
   try{
    var digest=MessageDigest.getInstance("SHA-1");long count=0;
    try(var in=source.open(pin.url);var out=Files.newOutputStream(temp)){byte[] bytes=new byte[65536];for(int n;(n=in.read(bytes))!=-1;){active(cancelled);count+=n;if(count>pin.size)throw new IOException("Download exceeds publisher size");digest.update(bytes,0,n);out.write(bytes,0,n);}}
@@ -66,9 +71,28 @@ public final class ProsperoInstall {
   if(!lib.has("rules"))return true;boolean allowed=false;
   for(var item:lib.getAsJsonArray("rules")){var rule=item.getAsJsonObject();boolean matches=!rule.has("features");if(rule.has("os")){var os=rule.getAsJsonObject("os");if(os.has("name"))matches&=os.get("name").getAsString().equals("linux");if(os.has("arch"))matches&=os.get("arch").getAsString().matches("x86_64|amd64");if(os.has("version"))matches=false;}if(matches)allowed=rule.get("action").getAsString().equals("allow");}return allowed;
  }
- Receipt install(Version version,int workers,Progress progress,BooleanSupplier cancelled)throws Exception {
+ Receipt install(Version version,int workers,Progress progress,BooleanSupplier cancelled)throws Exception {return install(version,workers,progress,cancelled,false,false);}
+ private byte[] cached(Path path)throws IOException {
+  ProsperoDownloads.noLinks(path);if(Files.size(path)>2*1024*1024)throw new IOException("Cached metadata too large");return Files.readAllBytes(path);
+ }
+ Receipt refresh(String id,int workers,Progress progress,BooleanSupplier cancelled,boolean offline)throws Exception {
+  if(!ProsperoVersions.valid(id))throw new IOException("Invalid version");
+  active(cancelled);progress.update("Rebuilding launch cache",0,1);Version selected=null;
+  try{selected=versions(cached(root.resolve("catalog.json")),true).stream().filter(v->v.id.equals(id)).findFirst().orElse(null);}catch(IOException|RuntimeException invalid){active(cancelled);}
+  if(selected==null){if(offline)throw new IOException("Cached publisher metadata is unavailable. Connect online to refresh this instance.");selected=catalog(true,cancelled).stream().filter(v->v.id.equals(id)).findFirst().orElseThrow(()->new IOException("This version is not in the publisher catalog"));}
+  return install(selected,workers,progress,cancelled,true,offline);
+ }
+ Receipt ensure(String id,int workers,Progress progress,BooleanSupplier cancelled,boolean offline)throws Exception {
+  active(cancelled);
+  try{Receipt r=receipt(id);verify(r);return r;}catch(IOException|RuntimeException invalid){active(cancelled);}
+  return refresh(id,workers,progress,cancelled,offline);
+ }
+ private Receipt install(Version version,int workers,Progress progress,BooleanSupplier cancelled,boolean quick,boolean offline)throws Exception {
   if(!ProsperoVersions.valid(version.id))throw new IOException("Invalid supported-family instance version");
-  byte[] metadata=json(version.url,cancelled);if(!HexFormat.of().formatHex(MessageDigest.getInstance("SHA-1").digest(metadata)).equals(version.sha1))throw new IOException("Version metadata checksum mismatch");
+  byte[] metadata=null;
+  if(quick)try{byte[] local=cached(root.resolve("versions/"+version.id+"/metadata.json"));if(HexFormat.of().formatHex(MessageDigest.getInstance("SHA-1").digest(local)).equals(version.sha1))metadata=local;}catch(IOException|RuntimeException unavailable){active(cancelled);}
+  if(metadata==null){if(offline)throw new IOException("Cached version metadata is unavailable. Connect online to refresh this instance.");metadata=json(version.url,cancelled);}
+  if(!HexFormat.of().formatHex(MessageDigest.getInstance("SHA-1").digest(metadata)).equals(version.sha1))throw new IOException("Version metadata checksum mismatch");
   JsonObject meta=object(metadata);if(!version.id.equals(meta.get("id").getAsString()))throw new IOException("Version metadata identity mismatch");
   int javaMajor=meta.getAsJsonObject("javaVersion").get("majorVersion").getAsInt();if((ProsperoVersions.release121(version.id)&&javaMajor!=21)||javaMajor<8||javaMajor>100)throw new IOException("Invalid publisher Java requirement");
   if(!"net.minecraft.client.main.Main".equals(meta.get("mainClass").getAsString()))throw new IOException("Unsupported client entry point");
@@ -79,21 +103,44 @@ public final class ProsperoInstall {
    JsonObject downloads=lib.getAsJsonObject("downloads");if(downloads==null||!downloads.has("artifact"))continue;JsonObject artifact=downloads.getAsJsonObject("artifact");String path="libraries/"+artifact.get("path").getAsString();relative(root,path);receipt.files.add(pin(path,artifact));receipt.classpath.add(path);
   }
   JsonObject index=meta.getAsJsonObject("assetIndex");FilePin indexPin=pin("assets/indexes/"+receipt.assetIndex+".json",index);receipt.files.add(indexPin);
-  progress.update("Reading asset list",0,1);obtain(indexPin,cancelled);JsonObject objects=object(Files.readAllBytes(relative(root,indexPin.path))).getAsJsonObject("objects");Set<String> unique=new HashSet<>();
+  progress.update("Reading asset list",0,1);obtain(indexPin,cancelled,offline);JsonObject objects=object(Files.readAllBytes(relative(root,indexPin.path))).getAsJsonObject("objects");Set<String> unique=new HashSet<>();
   for(var entry:objects.entrySet()){JsonObject row=entry.getValue().getAsJsonObject();String sha=row.get("hash").getAsString();if(!sha.matches("[a-f0-9]{40}"))throw new IOException("Invalid asset hash");if(unique.add(sha))receipt.files.add(new FilePin("assets/objects/"+sha.substring(0,2)+"/"+sha,"https://resources.download.minecraft.net/"+sha.substring(0,2)+"/"+sha,sha,row.get("size").getAsLong()));}
-  long total=receipt.files.stream().mapToLong(FilePin::size).sum();var completed=new java.util.concurrent.atomic.AtomicLong();
-  ExecutorService pool=Executors.newFixedThreadPool(Math.max(1,Math.min(workers,6)),task->{Thread t=new Thread(task,"ProsperoCraft download");t.setDaemon(true);return t;});ArrayList<Future<?>> jobs=new ArrayList<>();
-  try{
-   for(FilePin file:receipt.files)jobs.add(pool.submit(()->{try{obtain(file,cancelled);progress.update("Downloading "+version.id,completed.addAndGet(file.size),total);}catch(Exception error){throw new CompletionException(error);}}));
-   for(var job:jobs){active(cancelled);try{job.get();}catch(ExecutionException error){Throwable cause=error.getCause();if(cause instanceof CompletionException&&cause.getCause()!=null)cause=cause.getCause();if(cause instanceof Exception checked)throw checked;throw error;}}
-  }finally{for(var job:jobs)job.cancel(true);pool.shutdownNow();if(!pool.awaitTermination(25,TimeUnit.SECONDS))throw new IOException("Downloads are still stopping; reopen before retrying");}
+  if(quick){
+   long checked=0;ArrayList<FilePin> pending=new ArrayList<>();Set<Path> checkedParents=new HashSet<>();Set<String> required=new HashSet<>(receipt.classpath);required.add(indexPin.path);
+   for(FilePin file:receipt.files){
+    active(cancelled);Path path=relative(root,file.path);
+    if(checkedParents.add(path.getParent()))ProsperoDownloads.noLinks(path.getParent());
+    java.nio.file.attribute.BasicFileAttributes attributes=null;
+    try{attributes=Files.readAttributes(path,java.nio.file.attribute.BasicFileAttributes.class,LinkOption.NOFOLLOW_LINKS);}catch(NoSuchFileException missing){}
+    if(attributes!=null&&attributes.isSymbolicLink())throw new IOException("Linked cache is unavailable");
+    // Launch code and index always receive checksum verification. Large immutable
+    // assets get a presence/size check here; Full repair hashes every asset too.
+    if(required.contains(file.path)||attributes==null||!attributes.isRegularFile()||attributes.size()!=file.size){
+     pending.add(file);
+    }
+    progress.update("Checking cached files",++checked,receipt.files.size()*2L);
+   }
+   obtainAll(pending,workers,progress,cancelled,offline,true,receipt.files.size()*2L-pending.size(),receipt.files.size()*2L,"Verifying and repairing launch files");
+   active(cancelled);save(root.resolve("versions/"+version.id+"/metadata.json"),new String(metadata,StandardCharsets.UTF_8));
+   save(root.resolve("versions/"+version.id+"/receipt.json"),new Gson().toJson(receipt));return receipt;
+  }
+  long total=receipt.files.stream().mapToLong(FilePin::size).sum();
+  obtainAll(receipt.files,workers,progress,cancelled,false,false,0,total,"Checking and repairing "+version.id);
   active(cancelled);save(root.resolve("versions/"+version.id+"/metadata.json"),new String(metadata,StandardCharsets.UTF_8));save(root.resolve("versions/"+version.id+"/receipt.json"),new Gson().toJson(receipt));progress.update("Ready to play",total,total);return receipt;
  }
- Receipt receipt(String version)throws Exception {if(!ProsperoVersions.valid(version))throw new IOException("Invalid version");return new Gson().fromJson(Files.readString(root.resolve("versions/"+version+"/receipt.json")),Receipt.class);}
+ private void obtainAll(List<FilePin> files,int workers,Progress progress,BooleanSupplier cancelled,boolean offline,boolean fileUnits,long initial,long total,String phase)throws Exception {
+  var completed=new java.util.concurrent.atomic.AtomicLong(initial);
+  ExecutorService pool=Executors.newFixedThreadPool(Math.max(1,Math.min(workers,6)),task->{Thread t=new Thread(task,"ProsperoCraft download");t.setDaemon(true);return t;});ArrayList<Future<?>> jobs=new ArrayList<>();
+  try{
+   for(FilePin file:files)jobs.add(pool.submit(()->{try{obtain(file,cancelled,offline);synchronized(completed){progress.update(phase,completed.addAndGet(fileUnits?1:file.size),total);}}catch(Exception error){throw new CompletionException(error);}}));
+   for(var job:jobs){active(cancelled);try{job.get();}catch(ExecutionException error){Throwable cause=error.getCause();if(cause instanceof CompletionException&&cause.getCause()!=null)cause=cause.getCause();if(cause instanceof Exception checked)throw checked;throw error;}}
+  }finally{for(var job:jobs)job.cancel(true);pool.shutdownNow();if(!pool.awaitTermination(25,TimeUnit.SECONDS))throw new IOException("Downloads are still stopping; reopen before retrying");}
+ }
+ Receipt receipt(String version)throws Exception {if(!ProsperoVersions.valid(version))throw new IOException("Invalid version");Receipt r=new Gson().fromJson(new String(cached(root.resolve("versions/"+version+"/receipt.json")),StandardCharsets.UTF_8),Receipt.class);if(r==null||!version.equals(r.version))throw new IOException("Launch cache needs refresh");return r;}
  void verify(Receipt receipt)throws Exception {
-  if(receipt==null||receipt.classpath==null||receipt.classpath.isEmpty()||receipt.files==null)throw new IOException("Install this instance first");
-  for(String entry:receipt.classpath){FilePin pin=receipt.files.stream().filter(f->f.path.equals(entry)).findFirst().orElseThrow(()->new IOException("Unverified class path"));Path path=relative(root,entry);if(!Files.isRegularFile(path)||Files.size(path)!=pin.size||!hash(path).equals(pin.sha1))throw new IOException("Instance files need repair. Select Repair download.");}
-  String indexPath="assets/indexes/"+receipt.assetIndex+".json";FilePin index=receipt.files.stream().filter(f->f.path.equals(indexPath)).findFirst().orElseThrow(()->new IOException("Missing asset index pin"));Path path=relative(root,indexPath);
+  if(receipt==null||receipt.classpath==null||receipt.classpath.isEmpty()||receipt.classpath.size()>512||receipt.files==null||receipt.files.size()>100000||receipt.assetIndex==null||!receipt.assetIndex.matches("[A-Za-z0-9_.-]{1,100}"))throw new IOException("Install this instance first");
+  for(String entry:receipt.classpath){FilePin pin=receipt.files.stream().filter(f->f.path.equals(entry)).findFirst().orElseThrow(()->new IOException("Unverified class path"));Path path=relative(root,entry);ProsperoDownloads.noLinks(path);if(!Files.isRegularFile(path)||Files.size(path)!=pin.size||!hash(path).equals(pin.sha1))throw new IOException("Instance files need repair. Select Repair download.");}
+  String indexPath="assets/indexes/"+receipt.assetIndex+".json";FilePin index=receipt.files.stream().filter(f->f.path.equals(indexPath)).findFirst().orElseThrow(()->new IOException("Missing asset index pin"));Path path=relative(root,indexPath);ProsperoDownloads.noLinks(path);
   if(!Files.isRegularFile(path)||Files.size(path)!=index.size||!hash(path).equals(index.sha1))throw new IOException("Asset index needs repair download");
  }
  static String hardwarePort(Receipt receipt){if(ProsperoVersions.release121(receipt.version)&&receipt.classpath.stream().anyMatch(p->p.endsWith("/oshi-core-6.4.10.jar")))return "oshi-6.4.10-ps5-platform.jar";if(receipt.classpath.stream().anyMatch(p->p.endsWith("/oshi-core-6.6.5.jar")))return "oshi-6.6.5-ps5-platform.jar";if(receipt.classpath.stream().anyMatch(p->p.endsWith("/oshi-core-6.9.0.jar")))return "oshi-6.9.0-ps5-platform.jar";if(receipt.classpath.stream().anyMatch(p->p.endsWith("/oshi-common-7.7.2.jar")))return "oshi-7.7.2-ps5-provider.jar";return null;}

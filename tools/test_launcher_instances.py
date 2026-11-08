@@ -37,6 +37,34 @@ var store=new ProsperoLibrary(root.resolve("store"));if(!store.instances().isEmp
   var install=new ProsperoInstall(root.resolve("cache"),InstanceCheck::open);var versions=install.catalog(false,()->false);if(versions.size()!=1)throw new AssertionError();var receipt=install.install(versions.get(0),3,(s,d,t)->{},()->false);install.verify(receipt);
   if(!receipt.version.equals("26.1")||!receipt.assetIndex.equals("32")||receipt.classpath.size()!=2||receipt.files.size()!=4||!Files.readString(root.resolve("cache/versions/26.1/client.jar")).equals("original client bytes"))throw new AssertionError("wrong version/classifier/asset dedup");
   int before=reads;install.install(versions.get(0),3,(s,d,t)->{},()->false);if(reads!=before+1)throw new AssertionError("verified cache downloaded again");
+  // Missing receipt recovery reuses original publisher metadata and never requests
+  // healthy payloads, including offline. Worlds/mods live outside this cache.
+  Path receiptPath=root.resolve("cache/versions/26.1/receipt.json"),metaPath=root.resolve("cache/versions/26.1/metadata.json");
+  Files.delete(receiptPath);int refreshReads=reads;
+  var refreshed=install.ensure("26.1",3,(t,d,n)->{if(d<0||d>n)throw new AssertionError("refresh progress bounds");},()->false,true);
+  install.verify(refreshed);if(reads!=refreshReads)throw new AssertionError("offline receipt recovery made requests");
+  Files.writeString(receiptPath,"{invalid");install.ensure("26.1",2,(t,d,n)->{},()->false,true);
+  if(reads!=refreshReads)throw new AssertionError("malformed receipt redownloaded payloads");
+  Files.writeString(metaPath,"corrupt");Files.delete(receiptPath);
+  denied(()->install.ensure("26.1",2,(t,d,n)->{},()->false,true));
+  if(Files.exists(receiptPath)||reads!=refreshReads)throw new AssertionError("offline metadata refusal published receipt/network");
+  install.ensure("26.1",2,(t,d,n)->{},()->false,false);
+  if(reads!=refreshReads+1)throw new AssertionError("metadata recovery fetched healthy payloads");
+  String assetHash=hash(bytes("asset bytes"));Path assetPath=root.resolve("cache/assets/objects/"+assetHash.substring(0,2)+"/"+assetHash);
+  Files.delete(assetPath);refreshReads=reads;install.refresh("26.1",3,(t,d,n)->{},()->false,false);
+  if(reads!=refreshReads+1||!Files.readString(assetPath).equals("asset bytes"))throw new AssertionError("missing asset not selectively restored");
+  Files.writeString(root.resolve("cache/versions/26.1/client.jar"),"original client BYTEs");
+  refreshReads=reads;install.ensure("26.1",2,(t,d,n)->{},()->false,false);
+  if(reads!=refreshReads+1||!Files.readString(root.resolve("cache/versions/26.1/client.jar")).equals("original client bytes"))throw new AssertionError("damaged code not selectively repaired");
+  Files.writeString(assetPath,"ASSET BYTES");refreshReads=reads;install.refresh("26.1",2,(t,d,n)->{},()->false,false);
+  if(reads!=refreshReads||!Files.readString(assetPath).equals("ASSET BYTES"))throw new AssertionError("quick check unexpectedly read all asset contents");
+  install.install(versions.get(0),2,(t,d,n)->{},()->false);
+  if(!Files.readString(assetPath).equals("asset bytes"))throw new AssertionError("full checksum repair missed same-size corruption");
+  Files.delete(receiptPath);denied(()->install.refresh("26.1",2,(t,d,n)->{},()->true,false));
+  if(Files.exists(receiptPath))throw new AssertionError("cancelled refresh published receipt");
+  install.refresh("26.1",2,(t,d,n)->{},()->false,true);
+  if(!Files.readString(store.game(first).resolve("keep-world.txt")).equals("world"))throw new AssertionError("refresh changed world");
+  System.out.println("PASS fast offline/malformed receipt recovery, selective metadata/code/asset downloads, cancellation and full checksum repair escape hatch");
   Files.writeString(root.resolve("cache/versions/26.1/client.jar"),"tamper");denied(()->install.verify(receipt));install.install(versions.get(0),2,(s,d,t)->{},()->false);install.verify(install.receipt("26.1"));
   denied(()->install.install(versions.get(0),2,(s,d,t)->{},()->true));
   var corrupt=new ProsperoInstall(root.resolve("corrupt"),url->url.equals(JAR)?new ByteArrayInputStream(bytes("WRONG bytes")):open(url));denied(()->corrupt.install(versions.get(0),1,(s,d,t)->{},()->false));if(Files.exists(root.resolve("corrupt/versions/26.1/receipt.json")))throw new AssertionError("failed install marked ready");
@@ -62,9 +90,19 @@ var store=new ProsperoLibrary(root.resolve("store"));if(!store.instances().isEmp
   byte[] metadata=files.get(META);String catalog="{\"versions\":[{\"id\":\"26.3\",\"type\":\"release\",\"url\":\""+META+"\",\"sha1\":\""+hash(metadata)+"\"}]}";files.put(ProsperoInstall.MANIFEST,bytes(catalog));
   Path supportedRoot=root.resolve("supported");var supportedLibrary=new ProsperoLibrary(supportedRoot);var supportedInstance=supportedLibrary.add("Playable","26.3",1);supportedLibrary.settings().showIntro=false;supportedLibrary.save();var supportedInstaller=new ProsperoInstall(supportedRoot.resolve("cache"),InstanceCheck::open);var supportedReceipt=supportedInstaller.install(supportedInstaller.catalog(false,()->false).get(0),1,(t,d,n)->{},()->false);supportedLibrary.ready(supportedInstance,true);
   Files.writeString(supportedLibrary.game(supportedInstance).resolve("keep-world.txt"),"world");
+  var recoveryMenu=new ProsperoLauncher(new ProsperoAuth(),supportedRoot,InstanceCheck::open,()->{});
+  recoveryMenu.tick(0x4000);recoveryMenu.tick(0x40);recoveryMenu.tick(0x40);recoveryMenu.tick(0x4000);
+  if(!recoveryMenu.tick(0)[11].equals("10")||!recoveryMenu.tick(0)[85].contains("Quick refresh")||!recoveryMenu.tick(0)[86].contains("Full repair"))throw new AssertionError("recovery selector missing");
+  recoveryMenu.tick(0x2000);if(!recoveryMenu.tick(0)[11].equals("4")||!recoveryMenu.tick(0)[15].equals("2"))throw new AssertionError("recovery cancel lost instance focus");
+  recoveryMenu.tick(0x4000);int menuReads=reads;recoveryMenu.tick(0x4000);waitFor(recoveryMenu);
+  if(!recoveryMenu.tick(0)[2].contains("Launch cache refreshed")||!recoveryMenu.tick(0)[11].equals("4")||reads!=menuReads)throw new AssertionError("quick menu not local/in-place");
+  recoveryMenu.tick(0x4000);recoveryMenu.tick(0x40);recoveryMenu.tick(0x4000);waitFor(recoveryMenu);
+  if(!recoveryMenu.tick(0)[2].contains("Download complete")||reads!=menuReads+2)throw new AssertionError("full repair route lost: "+recoveryMenu.tick(0)[2]+" requests="+(reads-menuReads));
+  Files.delete(supportedRoot.resolve("cache/versions/26.3/receipt.json"));int automaticReads=reads;
+
   var preparations=new java.util.concurrent.atomic.AtomicInteger();
   var legacy=JsonParser.parseString(Files.readString(supportedRoot.resolve("library.json"))).getAsJsonObject();legacy.getAsJsonObject("settings").addProperty("microphoneEnabled",false);Files.writeString(supportedRoot.resolve("library.json"),legacy.toString());
-  var supportedModel=new ProsperoLauncher(new ProsperoAuth(),supportedRoot,InstanceCheck::open,()->{preparations.incrementAndGet();});supportedModel.tick(0x4000);supportedModel.tick(0x4000);waitFor(supportedModel);if(!supportedModel.tick(0)[10].equals("LAUNCH"))throw new AssertionError("supported launch "+supportedModel.tick(0)[2]);if(preparations.get()!=1)throw new AssertionError("automatic mic preparation ignored legacyfalse");List<String> launch=List.of(supportedModel.arguments(null,null));if(!launch.contains("--demo")||!launch.contains("26.3")||!launch.contains("--graphicsBackend"))throw new AssertionError("supported original demo arguments");if(!launch.get(launch.indexOf("--width")+1).equals("1920")||!launch.get(launch.indexOf("--height")+1).equals("1080"))throw new AssertionError("launch not1080p");
+  var supportedModel=new ProsperoLauncher(new ProsperoAuth(),supportedRoot,InstanceCheck::open,()->{preparations.incrementAndGet();});supportedModel.tick(0x4000);supportedModel.tick(0x4000);waitFor(supportedModel);if(!supportedModel.tick(0)[10].equals("LAUNCH"))throw new AssertionError("supported launch "+supportedModel.tick(0)[2]);if(preparations.get()!=1)throw new AssertionError("automatic mic preparation ignored legacyfalse");if(reads!=automaticReads||!Files.isRegularFile(supportedRoot.resolve("cache/versions/26.3/receipt.json")))throw new AssertionError("Play failed local automatic recovery");List<String> launch=List.of(supportedModel.arguments(null,null));if(!launch.contains("--demo")||!launch.contains("26.3")||!launch.contains("--graphicsBackend"))throw new AssertionError("supported original demo arguments");if(!launch.get(launch.indexOf("--width")+1).equals("1920")||!launch.get(launch.indexOf("--height")+1).equals("1080"))throw new AssertionError("launch not1080p");
   // Returning is a fresh process/model; every launch gets a new loader.
   for(int cycle=0;cycle<3;cycle++){
    System.setProperty("ps5.launcher.resume","true");supportedLibrary.settings().showIntro=true;supportedLibrary.save();
