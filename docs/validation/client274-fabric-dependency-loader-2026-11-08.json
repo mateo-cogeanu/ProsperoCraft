@@ -1,0 +1,14 @@
+{
+  "app_version": "01.000.274",
+  "title_id": "PPSA99874",
+  "package_sha256": "a7aa4a2aa87be9bf44fc8e32d4e2b057a4fb41c8541b83e20a898400303878ee",
+  "symbols_sha256": "cdaf24363d0ee29688dc387ad9451e6624b906de3f501acaafa6569128ed7ad9",
+  "evidence": "Modrinth marks The Sift 2.0.1 (PrUXXDu2) and 2.0.0 (IkFjLhR1) for Minecraft 26.3 Fabric, but both pin required GeckoLib 5.5.6 to the NeoForge build uGEFXLKA. Fabric 5.5.6 is 1VWnZPbQ. The Sift 2.0.1 original manifest requires GeckoLib >=5.5.6.",
+  "scope": "Resolve wrong-loader required pins to a unique same-project, same-release client Fabric build for the instance game version. Strict explicit pins, normal dependency validation, hash checks and install transactions still apply.",
+  "checks": [
+    "Production host replay with original publisher metadata reproduces the 273 rejection and installs exact publisher JARs for The Sift 2.0.1, GeckoLib Fabric 5.5.6 and Fabric API 0.165.2+26.3 on 274. JARs remain local.",
+    "19 host checks pass, including same-release resolution and refusal for missing or ambiguous siblings, with queue and files preserved on failure.",
+    "Signed target package, independent package audit, and all 908 ZIP to unpacked file comparisons pass."
+  ],
+  "console": "Pending build 274 install and launch on a physical PS5. The other reported mods have not been identified."
+}

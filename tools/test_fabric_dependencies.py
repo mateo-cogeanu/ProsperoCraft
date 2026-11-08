@@ -95,6 +95,43 @@ public class DependencyCheck {
    try{client.downloadAll(incompatible,"26.3","fabric",(m,d,t)->{},()->false,f->{},versions);throw new AssertionError("incompatible exact dependency pins accepted");}catch(IOException expected){check(expected.getMessage().contains("sodium")&&expected.getMessage().contains("oldSodium")&&expected.getMessage().contains("newSodium"),"conflicting dependency not identified");}
    check(client.local(incompatible,ProsperoModrinth.Kind.MOD).isEmpty()&&client.queue(incompatible).size()==2,"conflict published files or lost queue");
 
+   // The Sift pins GeckoLib's NeoForge release despite offering a Fabric build.
+   var siftDeps="[{\"project_id\":\"gecko\",\"version_id\":\"geckoNeo\",\"dependency_type\":\"required\"}]";
+   version("sift","siftFabric","sift.jar",jar("sift","2.0.1","{\"geckolib\":\">=5.5.6\",\"minecraft\":\"~26.3\"}",null),siftDeps);
+   byte[] geckoFabric=jar("geckolib","5.5.6","{}",null);
+   version("gecko","geckoNeo","gecko-neoforge.jar",bytes("wrong loader"),"[]");
+   version("gecko","geckoFabric","gecko-fabric.jar",geckoFabric,"[]");
+   version("gecko","geckoLatest","gecko-newer.jar",jar("geckolib","5.5.7","{}",null),"[]");
+   JsonObject neo=JsonParser.parseString(new String(network.get(ProsperoModrinth.API+"version/geckoNeo"))).getAsJsonObject();
+   neo.addProperty("version_number","5.5.6");neo.add("loaders",JsonParser.parseString("[\"neoforge\"]"));
+   network.put(ProsperoModrinth.API+"version/geckoNeo",bytes(neo.toString()));
+   JsonObject fabric=JsonParser.parseString(new String(network.get(ProsperoModrinth.API+"version/geckoFabric"))).getAsJsonObject();
+   fabric.addProperty("version_number","5.5.6");
+   network.put(ProsperoModrinth.API+"version/geckoFabric",bytes(fabric.toString()));
+   JsonObject newer=JsonParser.parseString(new String(network.get(ProsperoModrinth.API+"version/geckoLatest"))).getAsJsonObject();
+   newer.addProperty("version_number","5.5.7");
+   network.put("meta:gecko",bytes("["+neo+","+newer+","+fabric+"]"));
+   Path sift=root.resolve("cross-loader-pin/game");Files.createDirectories(sift);
+   client.toggle(sift,new ProsperoModrinth.Selection("sift","The Sift",ProsperoModrinth.Kind.MOD));
+   client.downloadAll(sift,"26.3","fabric",(m,d,t)->{},()->false,f->{},versions);
+   check(client.queue(sift).isEmpty()&&Arrays.equals(geckoFabric,Files.readAllBytes(sift.resolve("mods/gecko-fabric.jar")))
+         &&Files.isRegularFile(sift.resolve("mods/sift.jar"))&&!Files.exists(sift.resolve("mods/gecko-newer.jar"))
+         &&!Files.exists(sift.resolve("mods/gecko-neoforge.jar")),"same-release Fabric sibling only");
+   try{client.version("gecko","geckoNeo",ProsperoModrinth.Kind.MOD,"26.3",()->false);throw new AssertionError("explicit wrong-loader pin accepted");}
+   catch(IOException expected){check(expected.getMessage().contains("does not support 26.3 Fabric"),"explicit pin diagnostic");}
+   var ambiguous=fabric.deepCopy();ambiguous.addProperty("id","otherFabricBuild");
+   var wrongGame=fabric.deepCopy();wrongGame.add("game_versions",JsonParser.parseString("[\"26.2\"]"));
+   var wrongProject=fabric.deepCopy();wrongProject.addProperty("project_id","different");
+   var server=fabric.deepCopy();server.addProperty("environment","dedicated_server_only");
+   Path rejected=root.resolve("invalid-cross-loader-pin/game");Files.createDirectories(rejected);
+   client.toggle(rejected,new ProsperoModrinth.Selection("sift","The Sift",ProsperoModrinth.Kind.MOD));
+   for(var candidates:List.of("["+newer+","+wrongGame+","+wrongProject+","+server+"]","["+fabric+","+ambiguous+"]")){
+    network.put("meta:gecko",bytes(candidates));
+    try{client.downloadAll(rejected,"26.3","fabric",(m,d,t)->{},()->false,f->{},versions);throw new AssertionError("unverifiable sibling accepted");}
+    catch(IOException expected){check(expected.getMessage().contains("Required dependency gecko 5.5.6"),"blocked dependency not identified");}
+    check(client.queue(rejected).size()==1&&client.local(rejected,ProsperoModrinth.Kind.MOD).isEmpty(),"rejected dependency changed mods or queue");
+   }
+
    for(boolean sameName:List.of(false,true)){
     Path updateGame=root.resolve("update-"+sameName+"/game");Files.createDirectories(updateGame);Files.writeString(updateGame.resolve("world-marker"),"KEEP");
     byte[] oldLib=jar("library","1.0.0","{}",null),newLib=jar("library","2.0.0","{}",null);

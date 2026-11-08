@@ -97,24 +97,60 @@ final class ProsperoModrinth {
   id(selection.project);var list=new ArrayList<>(queue(game));boolean removed=list.removeIf(s->s.project.equals(selection.project)&&s.kind==selection.kind);
   if(!removed){if(list.size()>=128)throw new IOException("Download queue is full");list.add(selection);}ProsperoInstall.save(state(game,"content-queue.json"),new Gson().toJson(list));
  }
- JsonObject version(String project,String pinned,Kind kind,String game,BooleanSupplier cancel)throws Exception {
-  id(project);JsonObject version;
-  if(!pinned.isEmpty()){id(pinned);version=download.json(API+"version/"+pinned,cancel).getAsJsonObject();}
-  else{
-   String filter=kind==Kind.MOD?"&loaders="+ProsperoDownloads.encode(array("fabric")):"";
-   var versions=download.json(API+"project/"+project+"/version?game_versions="+ProsperoDownloads.encode(array(game))+filter+"&include_changelog=false",cancel).getAsJsonArray();
-   if(versions.isEmpty())throw new IOException("No compatible download for "+project+" on "+game);
-   version=null;
-   for(var item:versions){
-    var candidate=item.getAsJsonObject();
-    if(!incompatibleRelease(candidate,kind,game)){version=candidate;break;}
-   }
-   if(version==null)throw new IOException("No compatible download for "+project+" on "+game);
-  }
-  if(!project.equals(ProsperoDownloads.text(version,"project_id"))||!ProsperoDownloads.contains(version,"game_versions",game)||(kind==Kind.MOD&&!ProsperoDownloads.contains(version,"loaders","fabric")))throw new IOException("Content version is incompatible with this instance");
-  if(incompatibleRelease(version,kind,game))throw new IOException("This release requires dependencies unavailable for Minecraft "+game+". Choose a compatible YACL release.");
-  if("unsupported".equals(ProsperoDownloads.text(version,"client_side"))||ProsperoDownloads.text(version,"environment").matches("server_only|dedicated_server_only|server_only_client_optional"))throw new IOException("This download is server-only");
+ private JsonArray projectVersions(String project,Kind kind,String game,BooleanSupplier cancel)throws Exception {
+  String filter=kind==Kind.MOD?"&loaders="+ProsperoDownloads.encode(array("fabric")):"";
+  return download.json(API+"project/"+project+"/version?game_versions="+ProsperoDownloads.encode(array(game))+filter+"&include_changelog=false",cancel).getAsJsonArray();
+ }
+ private JsonObject pinnedVersion(String project,String pinned,BooleanSupplier cancel)throws Exception {
+  id(pinned);
+  var version=download.json(API+"version/"+pinned,cancel).getAsJsonObject();
+  String owner=ProsperoDownloads.text(version,"project_id");id(owner);
+  if(!pinned.equals(ProsperoDownloads.text(version,"id"))||!project.isEmpty()&&!project.equals(owner))
+   throw new IOException("Modrinth version "+pinned+" does not match the requested project or version");
   return version;
+ }
+ private static boolean matchesInstance(JsonObject version,String project,Kind kind,String game){
+  return project.equals(ProsperoDownloads.text(version,"project_id"))&&ProsperoDownloads.contains(version,"game_versions",game)
+      &&(kind!=Kind.MOD||ProsperoDownloads.contains(version,"loaders","fabric"));
+ }
+ private static boolean serverOnly(JsonObject version){
+  return "unsupported".equals(ProsperoDownloads.text(version,"client_side"))
+      ||ProsperoDownloads.text(version,"environment").matches("server_only|dedicated_server_only|server_only_client_optional");
+ }
+ private static JsonObject verifyVersion(JsonObject version,String project,Kind kind,String game)throws IOException {
+  if(!matchesInstance(version,project,kind,game))throw new IOException("Modrinth version "+ProsperoDownloads.text(version,"id")+" of "+project+" does not support "+game+(kind==Kind.MOD?" Fabric":""));
+  if(incompatibleRelease(version,kind,game))throw new IOException("This release requires dependencies unavailable for Minecraft "+game+". Choose a compatible YACL release.");
+  if(serverOnly(version))throw new IOException("This download is server-only");
+  return version;
+ }
+ JsonObject version(String project,String pinned,Kind kind,String game,BooleanSupplier cancel)throws Exception {
+  id(project);
+  if(!pinned.isEmpty())return verifyVersion(pinnedVersion(project,pinned,cancel),project,kind,game);
+  for(var item:projectVersions(project,kind,game,cancel)){
+   var candidate=item.getAsJsonObject();
+   if(matchesInstance(candidate,project,kind,game)&&!incompatibleRelease(candidate,kind,game))
+    return verifyVersion(candidate,project,kind,game);
+  }
+  throw new IOException("No compatible download for "+project+" on "+game+(kind==Kind.MOD?" Fabric":""));
+ }
+ private JsonObject requiredVersion(String project,String pinned,String game,BooleanSupplier cancel)throws Exception {
+  var version=pinnedVersion(project,pinned,cancel);
+  project=ProsperoDownloads.text(version,"project_id");
+  // A publisher may accidentally pin another loader's build of the same release.
+  // Only a unique Fabric sibling for the same project, release and game can stand in.
+  String release=ProsperoDownloads.text(version,"version_number");
+  if(release.isBlank()||!ProsperoDownloads.contains(version,"game_versions",game)||ProsperoDownloads.contains(version,"loaders","fabric"))
+   return verifyVersion(version,project,Kind.MOD,game);
+  JsonObject match=null;
+  for(var item:projectVersions(project,Kind.MOD,game,cancel)){
+   var candidate=item.getAsJsonObject();
+   if(!release.equals(ProsperoDownloads.text(candidate,"version_number"))||!matchesInstance(candidate,project,Kind.MOD,game)
+      ||incompatibleRelease(candidate,Kind.MOD,game)||serverOnly(candidate))continue;
+   if(match!=null)throw new IOException("Required dependency "+project+" "+release+" has multiple Fabric builds for "+game);
+   match=candidate;
+  }
+  if(match==null)throw new IOException("Required dependency "+project+" "+release+" has no matching Fabric build for "+game+" (pinned "+pinned+")");
+  return match;
  }
  // These publisher releases list 1.21.9, but require Fabric API >=0.138.3+1.21.10.
  // Keep exact required-version pins explicit and allow future publisher releases.
@@ -137,21 +173,23 @@ final class ProsperoModrinth {
   JsonObject hashes=selected.getAsJsonObject("hashes");String algorithm=hashes.has("sha512")?"SHA-512":"SHA-1",hash=hashes.get(algorithm.equals("SHA-512")?"sha512":"sha1").getAsString();
   return new File(project,id,kind,name,new ProsperoDownloads.Pin(selected.get("url").getAsString(),algorithm,hash,selected.get("size").getAsLong()));
  }
- private void resolve(Selection s,String pinned,String game,LinkedHashMap<String,File> plan,Set<String> active,List<JsonObject> versions,BooleanSupplier cancel,Map<String,String> constraints,Map<String,String> required)throws Exception {
+ private void resolve(Selection s,JsonObject dependency,String game,LinkedHashMap<String,File> plan,Set<String> active,List<JsonObject> versions,BooleanSupplier cancel,Map<String,String> constraints,Map<String,String> required)throws Exception {
   String key=s.kind+":"+s.project;
+  String pinned=dependency==null?"":ProsperoDownloads.text(dependency,"id");
+  if(dependency!=null){id(pinned);}
   if(!pinned.isEmpty()){String other=required.putIfAbsent(s.project,pinned);if(other!=null&&!other.equals(pinned))throw new IOException("Required mod versions conflict for "+s.project+": "+other+" and "+pinned);}
   File prior=plan.get(key);if(prior!=null)return;
-  if(pinned.isEmpty())pinned=constraints.getOrDefault(s.project,"");
   if(plan.size()+active.size()>=128)throw new IOException("Too many required dependencies");if(!active.add(key))throw new IOException("Dependency cycle in Modrinth metadata");
-  var v=version(s.project,pinned,s.kind,game,cancel);File f=file(v,s.kind);versions.add(v);
+  var v=dependency==null?version(s.project,constraints.getOrDefault(s.project,""),s.kind,game,cancel):dependency;File f=file(v,s.kind);versions.add(v);
   if(v.has("dependencies"))for(var element:v.getAsJsonArray("dependencies")){
    var dep=element.getAsJsonObject();if(!"required".equals(ProsperoDownloads.text(dep,"dependency_type")))continue;
    String project=ProsperoDownloads.text(dep,"project_id"),id=ProsperoDownloads.text(dep,"version_id");
-   if(project.isEmpty()&&!id.isEmpty()){ProsperoModrinth.id(id);project=download.json(API+"version/"+id,cancel).getAsJsonObject().get("project_id").getAsString();}
-   if(project.isEmpty())throw new IOException("A required dependency needs manual installation");
    // Modrinth libraries required by Fabric mods are mods, never desktop natives.
    if(s.kind!=Kind.MOD)throw new IOException("This pack has required dependencies; install them separately first");
-   resolve(new Selection(project,project,Kind.MOD),id,game,plan,active,versions,cancel,constraints,required);
+   var pinnedDependency=id.isEmpty()?null:requiredVersion(project,id,game,cancel);
+   if(pinnedDependency!=null)project=ProsperoDownloads.text(pinnedDependency,"project_id");
+   if(project.isEmpty())throw new IOException("A required dependency needs manual installation");
+   resolve(new Selection(project,project,Kind.MOD),pinnedDependency,game,plan,active,versions,cancel,constraints,required);
   }
   active.remove(key);plan.put(key,f);
  }
@@ -161,7 +199,7 @@ final class ProsperoModrinth {
    ProsperoInstall.active(cancel);
    if(!seen.add(Map.copyOf(constraints)))throw new IOException("Required mod versions do not converge; change the conflicting selection");
    plan.clear();versions.clear();Map<String,String> required=new HashMap<>();
-   for(var s:selected)resolve(s,"",game,plan,new HashSet<>(),versions,cancel,constraints,required);
+   for(var s:selected)resolve(s,null,game,plan,new HashSet<>(),versions,cancel,constraints,required);
    boolean matches=true;for(var entry:required.entrySet()){
     File f=plan.get("MOD:"+entry.getKey());if(f==null||!f.version.equals(entry.getValue())){matches=false;break;}
    }
