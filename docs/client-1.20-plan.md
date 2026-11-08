@@ -139,3 +139,22 @@ under native sanitizers. All21 portable host checks pass in43.4seconds. These ar
 scoped library checks; no original1.20 graphics/game/world execution or PS5 pass
 is claimed. The current331 bootstrap explicitly targets the Java25 JNI table;
 matching Java17 headers/table validation will be needed for that runtime.
+
+## Separate Java17/21 cross-build result —2026-11-08
+
+Runtime commit `320fd6a` publishes the reusable, version-pinned baseline work:
+[Java17/21 scope and reproduction](https://github.com/mateo-cogeanu/ps5-java25-homebrew/blob/320fd6a/Development/docs/java-lts-runtimes.md).
+Both genuine HotSpot server VMs (C1/C2), matching java.base classes/native libraries
+and class-only core images build. Original target Object/Runtime/StrictMath image
+bytes were read back and verified. These are not complete PS5 runtime ports or
+installable consumer builds. Image/native lookup, sandbox properties, memory,
+CPU/signals, threads/TLS, native packaging and a matching consumer bootstrap
+remain pending before console testing. The current Java25 launcher uses APIs and
+classfile generation unavailable unchanged on17/21; runtime selection requires
+an explicit integration design. No version selector or default VM changed here.
+
+The unchanged333 ownership fixture also passes after sharing its builder with331;
+all13 native host-lane checks pass in14.1seconds. The earlier21 fast checks passed
+in43.4seconds. These checks cover their stated scoped libraries/policies, not a
+Java17/21 VM executing a world or shaders on the PS5. Full runtime build outputs
+stay local; source changes are published separately to their owning repository.

@@ -379,3 +379,16 @@ See docs/local-artifact-recovery.md and the ignored local backup-location record
 The public pinned recovery helper restores selected released copies only; unique
 full-local/private material stays in the private backup, never a public upload.
 Publication/console/shader gates remain unchanged; no app/runtime change is implied.
+
+
+## Explicit Java17-first then Java21 comparison —2026-11-08
+
+The maintainer explicitly chooses a separate Java17 runtime before the Vanilla1.20
+candidate and also requests Java21 for1.21.x. This supersedes the earlier order
+that tried1.20 onJava25 first. Runtime320fd6a contains initial genuine17/21 target
+cross-build baselines/class-only images, not a complete console runtime. Preserve
+working Java25 and original game JARs. Matching sandbox services/JNI/class/native
+ownership and consumer bootstrap must be implemented before a hardware candidate;
+current25launcher/FFM code cannot run unchanged on17/21. Do not claim overhead
+improvement or switch defaults without matched physical tests. Reusable runtime
+implementation remains in the Java repository; integration/graphics/mods here.
