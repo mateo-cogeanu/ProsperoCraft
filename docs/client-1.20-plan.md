@@ -158,3 +158,15 @@ all13 native host-lane checks pass in14.1seconds. The earlier21 fast checks pass
 in43.4seconds. These checks cover their stated scoped libraries/policies, not a
 Java17/21 VM executing a world or shaders on the PS5. Full runtime build outputs
 stay local; source changes are published separately to their owning repository.
+
+## Isolated Java17 startup handoff —2026-11-08
+
+Runtime commit `d503c83` adds the first local standalone startup candidate:
+[Java17 startup probe002](https://github.com/mateo-cogeanu/ps5-java25-homebrew/blob/d503c83/Development/docs/java17-startup-probe.md).
+PPSA99876 version01.000.002 uses a separate title and matched Java17 VM/core
+natives/image. Scoped host JNI, image failure/ownership, resident lookup,
+register-context and source tests pass. Signed package/native integrity and CRC
+checks pass. Physical VM creation, Java/JNI/worker execution and destruction remain
+pending. No consumer availability, default runtime, Minecraft files, renderer,
+settings or supported instance changed. Java21 startup follows scoped Java17
+console results; no performance improvement is claimed from the native build.
