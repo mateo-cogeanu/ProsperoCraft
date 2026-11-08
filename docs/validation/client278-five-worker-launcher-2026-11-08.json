@@ -1,0 +1,15 @@
+{
+  "app_version": "01.000.278",
+  "title_id": "PPSA99874",
+  "package_sha256": "020e4a2fb8546d32305c093a76e0da71164b91c0ee519d5072a87b46194a7d65",
+  "symbols_sha256": "7bb4d48c6870fd53e634307817eede5f849802d00289abeb5b35d8abbaa354f1",
+  "scope": "Normal launcher with the five-worker policy from 275. ActiveProcessorCount=6, max.bg.threads=5 and Java common ForkJoinPool parallelism=3. The A/B picker is compiled out. Other availableProcessors-based heuristics can also size differently. User render and simulation distances follow their saved settings.",
+  "basis": "User reports five-worker Vanilla 26.3 and 1.21.11 gameplay feels faster and sustained chunk generation is satisfactory after warmup. See the 276 record for retrieved reports and limits.",
+  "checks": [
+    "19 host checks passed.",
+    "Signed target package and independent audit passed. Actual ELF has five-worker options, normal launcher and existing GC policy. All 908 ZIP entries match the unpacked app.",
+    "Documentation and diff whitespace checks passed."
+  ],
+  "console": "Pending exact 278 startup, world generation, save/rejoin, Fabric and shader checks on PS5.",
+  "release_store": "Local candidate. No release or catalog submission for 278."
+}
