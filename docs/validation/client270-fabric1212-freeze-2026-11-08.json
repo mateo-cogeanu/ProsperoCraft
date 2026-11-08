@@ -1,0 +1,16 @@
+{
+  "app_version": "01.000.270",
+  "title_id": "PPSA99874",
+  "package_sha256": "bf71f3f404f8c231ac27bf31cc9eb01573d820f5b4b18a9c88806336be116645",
+  "symbols_sha256": "d2bb8598a54435cbd2dca1d1bf5038af8032263ff4ca25ae601b0e49809a133a",
+  "scope": "Extend bounded Java/native observer to1.21.2Fabric; retain existing26.1.2/1.21.4Fabric selection and269 dependency fix. No freeze fix or graphics/GC/JAR change.",
+  "evidence": "Current1.21.2Fabric run has Controlify2.4.1,Sodium0.6.13,joined world and renderer worker. User5-10+second freezes; longest captured safepoint6.7ms,no allocation stalls. Haptic JNA Internal TLS error recurs; cause of render freezes unproven.",
+  "checks": [
+    "PASS19host checks50.2s",
+    "PASS independent package audit",
+    "PASS exact ZIP/unpacked hashes 907 files",
+    "PASS documentation and whitespace"
+  ],
+  "console": "PENDING reproduce freeze promptly within approximately four-minute bounded capture and retrieve stacks;startup/world/shader/save/endurance not established.",
+  "release_store": "Held;released267preserved;no release authorization."
+}

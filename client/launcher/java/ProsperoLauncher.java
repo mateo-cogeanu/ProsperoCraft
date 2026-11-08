@@ -78,7 +78,7 @@ public final class ProsperoLauncher {
   return observeDiagnostics(instance.version,instance.loader);
  }
  static boolean observeDiagnostics(String version,String loader){
-  return (("26.1.2".equals(version)||"1.21.4".equals(version))&&"fabric".equals(loader)&&Boolean.getBoolean("ps5.world2612Observer"))||
+  return (("26.1.2".equals(version)||"1.21.4".equals(version)||"1.21.2".equals(version))&&"fabric".equals(loader)&&Boolean.getBoolean("ps5.world2612Observer"))||
     ("26.3".equals(version)&&Boolean.getBoolean("ps5.save263Observer"))||
     ("26.1".equals(version)&&"fabric".equals(loader)&&Boolean.getBoolean("ps5.fabric261Observer"));
  }
