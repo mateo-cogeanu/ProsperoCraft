@@ -623,7 +623,7 @@ inline bool update() noexcept {
  if(pad_connected&&online.load(std::memory_order_acquire)&&!exit_requested.load()){
   const int theme=std::clamp(number(104),0,5);
   if(theme!=pad_light_theme){
-   const auto rgb=prospero_palette::rgb(prospero_palette::accent,theme);
+   const auto rgb=prospero_palette::controller_rgb[theme];
    const std::uint8_t color[]={std::uint8_t(rgb>>16),std::uint8_t(rgb>>8),std::uint8_t(rgb),0};
    pad_light_theme=theme;
    if(scePadSetLightBar(controller,color)>=0)pad_light_owned=true;

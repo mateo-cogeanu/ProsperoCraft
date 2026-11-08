@@ -1,0 +1,24 @@
+{
+  "app_version": "01.000.273",
+  "title_id": "PPSA99874",
+  "package_sha256": "86f3b3c921ba15f946d9368457cc2e7f806b2785085342a2845d2e048fc678d1",
+  "symbols_sha256": "eb18da0da406445e7e7796beb31890b4a4954a9bab4d383c44b758b7d029c1a5",
+  "scope": "Tune the launcher DualSense light bar with its own RGB palette. Keep the on-screen theme and existing preview, reconnect and game handoff behavior.",
+  "evidence": "The user described Forest as white, Ocean as purple, and Amber as visually similar to Rose, with Graphite also lacking distinction. This is a subjective report from the previous build.",
+  "light_bar_rgb": {
+    "Forest": "00b418",
+    "Ocean": "002adc",
+    "Amethyst": "c0a4e6",
+    "Rose": "eb0e41",
+    "Amber": "f05500",
+    "Graphite": "2a2a2a"
+  },
+  "checks": [
+    "PASS 19 host policy and 13 scoped native checks.",
+    "PASS host palette fixture for channel separation and all six unchanged on-screen accents. Exact tuned palette verified in compiled object and linked ELF.",
+    "PASS signed PS5 build, independent package audit and 908 ZIP to unpacked file comparisons.",
+    "PASS documentation and diff whitespace checks."
+  ],
+  "console": "Exact-build PS5 light-bar appearance, theme preview and shader rendering are pending. The RGB values are initial tuning targets.",
+  "release_store": "Local candidate only."
+}
