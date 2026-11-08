@@ -1,0 +1,10 @@
+{
+  "version": "6.2.2",
+  "source": {
+    "url": "https://repo.maven.apache.org/maven2/com/github/oshi/oshi-core/6.2.2/oshi-core-6.2.2-sources.jar",
+    "size": 814475,
+    "sha256": "89d43fcef54a5ac2883342ae1676abc2824750910c7affa376880210e1ccf08a"
+  },
+  "license_sha256": "e5936ec705d2fb0515b0d3e9a76acb52c1eef3e8ff88c7b9f80269b7909c959c",
+  "scope": "Shared PS5 CPU provider compiled against genuine publisher OSHI6.2.2/JNA5.12.1/SLF4J2.0.1 for original Vanilla1.20; console pending"
+}

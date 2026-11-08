@@ -42,8 +42,9 @@ def obtain(pin, path, fetch=False):
     return path
 
 
-def publisher_jars(cache):
-    row = json.loads((ROOT / 'client/1.21.lock.json').read_text())['versions'][-1]
+def publisher_jars(cache, row=None):
+    if row is None:
+        row = json.loads((ROOT / 'client/1.21.lock.json').read_text())['versions'][-1]
     jars = []
     for lib in row['libraries']:
         if lib['name'] not in row['lwjgl']:
@@ -53,12 +54,13 @@ def publisher_jars(cache):
         if path.stat().st_size != pin['size'] or hashlib.sha1(path.read_bytes()).hexdigest() != pin['sha1']:
             raise ValueError('Original333 publisher input mismatch: ' + path.name)
         jars.append(path)
-    if len(jars) != 8:
-        raise ValueError('Expected all eight genuine333 publisher modules')
+    if len(jars) != len(row['lwjgl']) or len(jars) != len(set(row['lwjgl'])):
+        raise ValueError('Expected all exact genuine publisher modules')
     return jars
 
 
-def build_java(args, pin, jdk, cache, work):
+def build_java(args, pin, jdk, cache, work, *, port=PORT, publisher_row=None):
+    group = pin['residentGroup']
     source = work / 'java-sources'
     classes = work / 'classes'
     for directory in (source, classes):
@@ -79,13 +81,13 @@ def build_java(args, pin, jdk, cache, work):
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_bytes(jar.read(name))
     subprocess.run(['git', 'apply', '--unsafe-paths', '--directory=' + str(source),
-                    str(PORT / '0001-ps5-java-dispatch.patch')], check=True)
+                    str(port / '0001-ps5-java-dispatch.patch')], check=True)
     path = source / 'org/lwjgl/system/ps5/PS5Library.java'
     path.parent.mkdir(parents=True)
-    shutil.copyfile(PORT / 'PS5Library.java', path)
-    shutil.copytree(PORT / 'java', source, dirs_exist_ok=True)
+    shutil.copyfile(port / 'PS5Library.java', path)
+    shutil.copytree(port / 'java', source, dirs_exist_ok=True)
     annotations = obtain(pin['compileOnlyAnnotations'], cache / pin['compileOnlyAnnotations']['file'], args.fetch_deps)
-    originals = publisher_jars(args.publisher_cache.resolve())
+    originals = publisher_jars(args.publisher_cache.resolve(), publisher_row)
     subprocess.run([str(jdk / 'bin/javac'), '--release', '8', '-proc:none', '-implicit:none',
                     '-cp', os.pathsep.join(map(str, [*originals, annotations])), '-d', str(classes),
                     *map(str, sorted(source.rglob('*.java')))], check=True)
@@ -93,30 +95,31 @@ def build_java(args, pin, jdk, cache, work):
     owners = ('org/lwjgl/system/Platform', 'org/lwjgl/system/APIUtil', 'org/lwjgl/system/Library',
               'org/lwjgl/system/ThreadLocalUtil', 'org/lwjgl/system/ps5/PS5Library',
               'org/lwjgl/opengl/GL', 'org/lwjgl/openal/ALC')
-    if not emitted or any(not str(f.relative_to(classes)).startswith((*owners, 'prosperocraft/lwjgl333/')) for f in emitted):
+    if not emitted or any(not str(f.relative_to(classes)).startswith((*owners, 'prosperocraft/' + group + '/')) for f in emitted):
         raise ValueError('Unexpected Java overlay output')
-    output = work / 'lwjgl-3.3.3-ps5-overlay.jar'
+    output = work / ('lwjgl-' + pin['version'] + '-ps5-overlay.jar')
     with zipfile.ZipFile(output, 'w', zipfile.ZIP_DEFLATED) as jar:
         for file in emitted:
             info = zipfile.ZipInfo(file.relative_to(classes).as_posix())
             info.compress_type = zipfile.ZIP_DEFLATED
             jar.writestr(info, file.read_bytes())
-        jar.writestr('META-INF/PS5-PORT-LICENSE.txt', (PORT / 'LICENSE.md').read_bytes())
+        jar.writestr('META-INF/PS5-PORT-LICENSE.txt', (port / 'LICENSE.md').read_bytes())
     audit = {'version': pin['version'], 'versionStringUnmodified': pin['javaVersionString'],
              'originalJarsSha256': {f.name: sha(f) for f in originals},
              'javaSourceArchives': pin['javaSources'],
-             'patchSha256': sha(PORT / '0001-ps5-java-dispatch.patch'),
-             'localSourceSha256': {str(f.relative_to(PORT)): sha(f) for f in [PORT / 'PS5Library.java', *sorted((PORT / 'java').rglob('*.java'))]},
+             'patchSha256': sha(port / '0001-ps5-java-dispatch.patch'),
+             'localSourceSha256': {str(f.relative_to(port)): sha(f) for f in [port / 'PS5Library.java', *sorted((port / 'java').rglob('*.java'))]},
              'classes': [f.relative_to(classes).as_posix() for f in emitted],
              'outputSha256': sha(output), 'gameJarModified': False,
-             'scope': 'Separate original-source PS5 platform/dispatch overlay; entire333 package owner required',
+             'scope': 'Separate original-source PS5 platform/dispatch overlay; entire' + group.removeprefix('lwjgl') + ' package owner required',
              'console': 'pending'}
     (work / 'java-audit.json').write_text(json.dumps(audit, indent=2) + '\n')
-    print('Built333 overlay', output, flush=True)
+    print('Built', group, 'overlay', output, flush=True)
     return output
 
 
-def build_native(args, pin, jdk, cache, work):
+def build_native(args, pin, jdk, cache, work, *, port=PORT):
+    group = pin['residentGroup']
     archive = obtain(pin['sourceArchive'], cache / pin['sourceArchive']['file'], args.fetch_deps)
     extraction = work / 'native-sources'
     shutil.rmtree(extraction, ignore_errors=True)
@@ -125,7 +128,7 @@ def build_native(args, pin, jdk, cache, work):
         tar.extractall(extraction, filter='data')
     source = extraction / ('lwjgl3-' + pin['commit'])
     for patch in ('0002-ps5-native-ownership.patch', '0003-explicit-libffi-abi-selection.patch'):
-        subprocess.run(['git', 'apply', '--unsafe-paths', '--directory=' + str(source), str(PORT / patch)], check=True)
+        subprocess.run(['git', 'apply', '--unsafe-paths', '--directory=' + str(source), str(port / patch)], check=True)
     core = source / 'modules/lwjgl/core/src/main/c'
     generated = source / 'modules/lwjgl/core/src/generated/c'
     gl = source / 'modules/lwjgl/opengl/src/generated/c'
@@ -139,7 +142,7 @@ def build_native(args, pin, jdk, cache, work):
                    'org_lwjgl_system_libc_LibCString.c', 'org_lwjgl_system_libffi_FFICIF.c',
                    'org_lwjgl_system_libffi_FFIClosure.c', 'org_lwjgl_system_libffi_LibFFI.c')]
     units = [*core_units, *sorted(f for f in gl.glob('*.c') if not f.name.startswith(('org_lwjgl_opengl_WGL', 'org_lwjgl_opengl_GLX'))),
-             *sorted(stb.glob('*.c')), ROOT / 'client/native/lwjgl_resident.c', PORT / 'bridge.c']
+             *sorted(stb.glob('*.c')), ROOT / 'client/native/lwjgl_resident.c', port / 'bridge.c']
     if not args.host:
         units.append(ROOT / 'client/ports/libffi/closures_wx.c')
     compiler = executable('clang', override=args.cc)
@@ -174,16 +177,16 @@ def build_native(args, pin, jdk, cache, work):
     if args.host:
         if args.ffi_library is None:
             raise ValueError('Host link requires --ffi-library matching --ffi-include')
-        merged = output / library_name('lwjgl333')
+        merged = output / library_name(group)
         subprocess.run([compiler, *shared_flags(), '-fsanitize=undefined', *map(str, objects),
                         str(args.ffi_library.resolve()), '-o', str(merged)], check=True)
     else:
         linker = executable('ld.lld', override=args.lld)
-        merged = output / 'lwjgl333.o'
+        merged = output / (group + '.o')
         subprocess.run([linker, '-r', *map(str, objects), '-o', str(merged)], check=True)
     audit = {'version': pin['version'], 'source': pin['sourceArchive'], 'sourceCommit': pin['commit'],
-             'nativePatchSha256': sha(PORT / '0002-ps5-native-ownership.patch'),
-             'ffiAbiPatchSha256': sha(PORT / '0003-explicit-libffi-abi-selection.patch'),
+             'nativePatchSha256': sha(port / '0002-ps5-native-ownership.patch'),
+             'ffiAbiPatchSha256': sha(port / '0003-explicit-libffi-abi-selection.patch'),
              'sharedConfigSha256': sha(config),
              'sourceUnitsSha256': {f.name: sha(f) for f in units},
              'ffiHeadersSha256': {n: sha(args.ffi_include / n) for n in ('ffi.h', 'ffitarget.h')},
@@ -192,10 +195,10 @@ def build_native(args, pin, jdk, cache, work):
              'residentGroup': pin['residentGroup'], 'symbolPrefixRequired': pin['symbolPrefix'],
              'closureReserveCount': 0 if args.host else args.closure_reserve_count,
              'hostSanitizers': 'UBSan except generic C ABI JNI function-pointer casts' if args.host else None,
-             'scope': 'Genuine333 core/callback/GL/STB; shares existing compatible libffi/provider C APIs; no343 replacement',
+             'scope': 'Genuine' + group.removeprefix('lwjgl') + ' core/callback/GL/STB; shares existing compatible libffi/provider C APIs; no343 replacement',
              'console': 'pending'}
     (output / 'audit.json').write_text(json.dumps(audit, indent=2) + '\n')
-    print('Built333 native group', merged, len(units), 'units', flush=True)
+    print('Built', group, 'native group', merged, len(units), 'units', flush=True)
     return merged
 
 

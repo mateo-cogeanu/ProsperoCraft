@@ -117,3 +117,25 @@ run failed while creating the browser test ZIP because the host disk filled;
 a complete rerun passed after the duplicate-output cleanup described above.
 Native implementation was not changed, and no native lane or physical PS5 test
 was performed for this research change. Hosted CI is separate evidence.
+
+## Runtime-first priority and disabled binding work —2026-11-08
+
+The maintainer subsequently prioritizes a separate genuine Java17 runtime first,
+then requests a Java21 comparison for1.21.x. No older-runtime performance benefit
+or application compatibility is established by this change. Runtime source/build
+work remains in the Java repository; the working Java25 application stays intact.
+
+Initial independent consumer groundwork remains disabled: genuine publisher
+LWJGL3.3.1 build7 inputs, a rebased PS5 dispatch overlay, and isolated native331
+objects compile on host and target. The shared builder retains its default333
+generation and gains explicit port/input parameters for331. OSHI6.2.2 compiles
+against the original1.20 dependencies, omitting only a newer unsupported cache
+API whose type is absent from that version. Original game/dependency JARs remain
+unchanged. No launcher availability or package version was changed.
+
+The actual331 JNI ownership fixture passes allocation/key-refusal controls,
+foreign-table preservation,3200concurrent lifecycle cycles and paired destruction
+under native sanitizers. All21 portable host checks pass in43.4seconds. These are
+scoped library checks; no original1.20 graphics/game/world execution or PS5 pass
+is claimed. The current331 bootstrap explicitly targets the Java25 JNI table;
+matching Java17 headers/table validation will be needed for that runtime.

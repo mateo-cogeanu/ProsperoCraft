@@ -16,11 +16,14 @@ def main():
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--java-home', type=Path)
     parser.add_argument('--cc')
+    parser.add_argument('--generation', choices=('333', '331'), default='333')
     args = parser.parse_args()
     jdk, cc = java_home(args.java_home), executable('clang', override=args.cc)
     work = args.output_dir.resolve()
     work.mkdir(parents=True, exist_ok=True)
-    source = args.build_dir.resolve() / 'native-sources/lwjgl3-f0ec1437a6149dae00eaa27c47268e5e4efb129f/modules/lwjgl/core/src/main/c'
+    generation = args.generation
+    pin = json.loads((ROOT / ('client/ports/lwjgl' + generation) / 'sources.json').read_text())
+    source = args.build_dir.resolve() / ('native-sources/lwjgl3-' + pin['commit'] + '/modules/lwjgl/core/src/main/c')
     audit = json.loads((args.build_dir / 'ps5/audit.json').read_text())
     for name in ('common_tools.c', 'org_lwjgl_system_ThreadLocalUtil.c'):
         assert sha(source / name) == audit['sourceUnitsSha256'][name]
@@ -83,7 +86,8 @@ JNIEXPORT void JNICALL Java_Ownership333_wrongSize(JNIEnv*e,jclass c){
  JNIEnv original=*e;assert(Java_org_lwjgl_system_ThreadLocalUtil_nsetupEnvData(e,c,1)==0);assert(*e==original&&(*e)->ExceptionCheck(e));
 }
 ''')
-    java = work / 'Ownership333.java'
+    helper.write_text(helper.read_text().replace('333', generation))
+    java = work / ('Ownership' + generation + '.java')
     java.write_text(r'''
 import java.util.concurrent.atomic.AtomicReference;
 public class Ownership333 {
@@ -110,7 +114,8 @@ public class Ownership333 {
         subprocess.run([cc, *flags, '-Dmalloc=checked_malloc', '-Dcalloc=checked_calloc', '-Dfree=checked_free',
                         '-Dpthread_setspecific=checked_setspecific', '-c', str(source / name), '-o', str(obj)], check=True)
         objects.append(obj)
-    library = work / 'libownership333.dylib'
+    java.write_text(java.read_text().replace('333', generation))
+    library = work / ('libownership' + generation + '.dylib')
     subprocess.run([cc, *flags, '-dynamiclib', *map(str, objects), str(helper), '-o', str(library)], check=True)
     subprocess.run([str(jdk / 'bin/javac'), str(java)], check=True)
     asan = subprocess.check_output([cc, '-print-file-name=libclang_rt.asan_osx_dynamic.dylib'], text=True).strip()
@@ -118,10 +123,10 @@ public class Ownership333 {
            'ASAN_OPTIONS': 'detect_leaks=0:handle_segv=0:handle_sigbus=0:handle_sigfpe=0',
            'UBSAN_OPTIONS': 'halt_on_error=1:handle_segv=0:handle_sigbus=0:handle_sigfpe=0'}
     result = subprocess.run([str(jdk / 'bin/java'), '-Xint', '-Xcheck:jni', '--enable-native-access=ALL-UNNAMED',
-                             '-cp', str(work), 'Ownership333', str(library)], env=env, capture_output=True, text=True, timeout=90)
+                             '-cp', str(work), 'Ownership' + generation, str(library)], env=env, capture_output=True, text=True, timeout=90)
     text = result.stdout + result.stderr
     (work / 'result.log').write_text(text)
-    if result.returncode or 'PASS333 actual JNI ownership' not in text or any(s in text for s in ('runtime error:', 'ERROR: AddressSanitizer', 'WARNING in native method')):
+    if result.returncode or ('PASS' + generation + ' actual JNI ownership') not in text or any(s in text for s in ('runtime error:', 'ERROR: AddressSanitizer', 'WARNING in native method')):
         raise RuntimeError(text[-6000:])
     print(text)
 

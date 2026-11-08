@@ -1,0 +1,58 @@
+{
+  "version": "3.3.1",
+  "javaVersionString": "3.3.1 build 7",
+  "repository": "https://github.com/LWJGL/lwjgl3",
+  "commit": "ad602750ad87939276d1889b28a757061e90715b",
+  "tag": "3.3.1",
+  "sourceArchive": {
+    "file": "lwjgl331.tar.gz",
+    "url": "https://codeload.github.com/LWJGL/lwjgl3/tar.gz/ad602750ad87939276d1889b28a757061e90715b",
+    "size": 12549693,
+    "sha256": "56c87d8f4c7c96c13d337ae39046750340fd08549698e6f1f5d4aed9bb515f4b"
+  },
+  "javaSources": [
+    {
+      "module": "lwjgl",
+      "file": "lwjgl-3.3.1-sources.jar",
+      "url": "https://libraries.minecraft.net/org/lwjgl/lwjgl/3.3.1/lwjgl-3.3.1-sources.jar",
+      "size": 572854,
+      "sha256": "30cb8190660bcbe9ce5761690a5abbf45735c9af4d58f61bd568203025fd3a36"
+    },
+    {
+      "module": "lwjgl-opengl",
+      "file": "lwjgl-opengl-3.3.1-sources.jar",
+      "url": "https://libraries.minecraft.net/org/lwjgl/lwjgl-opengl/3.3.1/lwjgl-opengl-3.3.1-sources.jar",
+      "size": 1274449,
+      "sha256": "42434482dffbcdbc5716c53b33eb0475c13e2c34106e0e1d0766cae20386e092"
+    },
+    {
+      "module": "lwjgl-openal",
+      "file": "lwjgl-openal-3.3.1-sources.jar",
+      "url": "https://libraries.minecraft.net/org/lwjgl/lwjgl-openal/3.3.1/lwjgl-openal-3.3.1-sources.jar",
+      "size": 85417,
+      "sha256": "81dfbe6b391fdf77808fbbecff87a840430c88b79a0cc5f90862f1a155e68665"
+    },
+    {
+      "module": "lwjgl-glfw",
+      "file": "lwjgl-glfw-3.3.1-sources.jar",
+      "url": "https://libraries.minecraft.net/org/lwjgl/lwjgl-glfw/3.3.1/lwjgl-glfw-3.3.1-sources.jar",
+      "size": 125778,
+      "sha256": "f38ad2082374248561825df491b1d3cda76c85a9496ac4db0d0c2cf24e3bc7c8"
+    }
+  ],
+  "compileOnlyAnnotations": {
+    "url": "https://repo.maven.apache.org/maven2/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar",
+    "file": "jsr305-3.0.2.jar",
+    "size": 19936,
+    "sha1": "25ea2e8b0c338a877313bd4672d3fe056ea78f0d",
+    "sha256": "766ad2a0783f2687962c8ad74ceecc38a28b9f72a2d085ee438b7813e928d0c7",
+    "license": "Apache-2.0; compile only, not bundled"
+  },
+  "residentGroup": "lwjgl331",
+  "symbolPrefix": "lwjgl331_",
+  "scope": "Matched genuine331 core/callback/JNI/GL/STB for Vanilla1.20; separate closed class owner; no game modifications or changes to333/343",
+  "licenses": {
+    "LICENSE.md": "4c2f770897d0cfda4d9a65bb4d6d6983dccfd57d4c7eb74ea5ded0762cbc0e75",
+    "STB-LICENSE-NOTICES.txt": "e88835d1f9839f6ad7148cb6c462494a4ec92f02753d4201eb0d52657816fec9"
+  }
+}
