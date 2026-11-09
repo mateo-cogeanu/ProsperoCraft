@@ -273,3 +273,8 @@ is unproven and original Minecraft was not reached; physical002results pending.
 [003](client-java17-bootstrap-003.md) follows002's narrower init_globals failure.
 It retains modules/bindings and tests128MiB maximum heap with finer runtime phases
 and bounded fatal entry records. Heap cause and physical result remain unproven.
+
+
+[004](client-java17-bootstrap-004.md) follows003's confirmed VM creation but row3
+failure before a Java stage file. It adds JNI/native Java-entry markers and a
+bounded fault scope around row3.128MiB/modules/331stay, cause/gamepass pending.

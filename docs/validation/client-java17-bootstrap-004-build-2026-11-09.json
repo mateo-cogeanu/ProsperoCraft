@@ -1,0 +1,38 @@
+{
+  "date": "2026-11-09",
+  "title_id": "PPSA99878",
+  "version": "01.000.004",
+  "package_sha256": "6151dccd27cde0592101c064fa56b96f590d984d18ef79d3bea6ec3cdec2383e",
+  "package_bytes": 114237031,
+  "symbols_sha256": "46cdf39d12d56c6cd79c92f27d788790abedb1a401a55a5ae525e54ccd548313",
+  "class_image_sha256": "6ca3a65c2eec7e3963b65ba67f93b35713309afd23bdb412896783ee7088ca46",
+  "runtime_source_commit": "c850651f528eb3cb3f0412558cda8e29d6638e40",
+  "consumer_source_sha256": {
+    "param.json": "729213bd72de94fda0486bd518fa0b5ebe8a20d7424cab0c36b08785d39db4c8",
+    "HelloLts.java": "f433acdf9aff9c0785211367228be532ccf9bdf00af44c2dedfd41357dad5af9",
+    "startup.cpp": "2f1e67cd194bfec76e40ecf4a731ab640dc9a308bebb61ea295cca1ac2b1d93b"
+  },
+  "linked_objects": {
+    "ffi-core.o": "a20e6db4034a24bf1be1b714665cd9f33f0dd669ba4fb9dc80cc5e6b4bb07690",
+    "startup-fault.o": "978ef7a83720c22b812728cee00ff29206d0240ccd8dbcbdfd82835ec950027e"
+  },
+  "fault_source_sha256": "87c2b21b6ee7a09e2be75a0106ce50299e3b657964f77dd693fed288e5fd7870",
+  "profile": "Same128MiB/extended image/331/SerialGC/interpreter as003; diagnostics only",
+  "changes": [
+    "Optional JNI fixed-phase/on-class registration hooks defaultnull for old probes",
+    "Consumer nativeStage checkpoints before Java Path/writer and later management/binding/Main boundaries",
+    "Row3fault scope chains current VM handlers without recovery/context changes",
+    "Opt-in16report signal budget, zero/unlimited default retained; forwarding continues after budget"
+  ],
+  "checks": [
+    "Actual host17 exact consumer Java/JNI entry with explicit nativeStage registration, management and unchanged Main argument gate; PS5specific331path explicitly skipped",
+    "Original17/21standalone JNI/Java/thread/destruction regressions",
+    "Target link/signed containers/ZIP/image/metadata/consumer source snapshot",
+    "Required21fast checks50.5s;14native checks19.4s",
+    "Real20SIGFPEsignals forwarded with2report budget and previous handler restored; ASan/UBSan, context capture disabled only in host policy fixture",
+    "Fault-budget fixture passes outside root in source-only copy with no dependency cache/SDK/JDK/game inputs"
+  ],
+  "console": "PENDING exact004row3diagnostic result; no crash resolution or gameplay pass",
+  "preservation": "Failed001/002/003ZIP/title/symbols and frozen17/21passing milestones retained; working25 unchanged",
+  "publication": "Local original publisher payload only; no release/Store publication"
+}

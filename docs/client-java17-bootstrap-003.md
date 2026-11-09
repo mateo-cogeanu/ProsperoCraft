@@ -25,3 +25,9 @@ Local`dist/PPSA99878.zip` SHA256`9cebd2659c11b170d377b694db32f1fa7dac39a6b184dc6
 Files/active FTP path remain as documented in[002](client-java17-bootstrap-002.md).
 001/002packages/symbols and frozen17/21startup stay preserved; working Java25 is
 unchanged. No release/Store publication; original publisher payload stays local.
+
+
+The user reported003row3crash; retained logs confirm VM creation and module/language
+initialization now return. See the[003record](validation/client-java17-bootstrap-003-crash-2026-11-09.json)
+and[004row3diagnostics](client-java17-bootstrap-004.md). Complete boot/game behavior
+is still unvalidated; original003bytes remain preserved.

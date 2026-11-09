@@ -42,7 +42,7 @@ Vanilla development versions, adapted GLFW priority, original OpenGL arguments
 and unchanged default/Demo/Fabric/Vulkan boundaries with injected publisher data.
 
 The native runner forces UBSan errors to fail (`halt_on_error=1`), including local runs.
-The thirteen optional native checks exercise actual scoped audio mutex/port/worker
+The fourteen optional native checks exercise actual scoped audio mutex/port/worker
 implementations, desktop HID/model policy and resident-library JNI loading, with
 controlled OS boundaries. The microphone check runs the actual bounded capture core with injected AudioIn calls, including silence/route changes, conversion, failure ownership and concurrent producer/consumer cleanup. It does not capture host or PS5 speech. The context-error check covers generation reuse, thread isolation, bounded context capacity and refused native-key setters. The Zink guard check combines the actual frontend guard body and existing mutex
 reserve under late-init refusal, contention, unprimed/exhausted pool and exact
@@ -170,3 +170,10 @@ hashes/major, with a compile-time native-table check. See
 ownership fixture currently uses macOS ASan integration and is outside portable
 CI lanes; it does not establish target graphics/game compatibility. Its host-only
 small heap/uncompressed layout avoids older-JDK ASan address reservation conflicts.
+
+
+The fault-budget check sends20real host SIGFPE signals through the existing
+scoped recorder with a2report budget, verifies all20prior-handler forwards and
+post-scope restoration under ASan/UBSan. It disables raw context copying solely
+because host signal frames differ from PS5; it does not validate target frames.
+It requires no SDK/JDK/game cache and passes from outside a source-only checkout.

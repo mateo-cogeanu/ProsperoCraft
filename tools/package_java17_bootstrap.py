@@ -77,6 +77,7 @@ def main():
     subprocess.run([str(a.llvm_home.resolve() / 'bin/clang'), '-target','x86_64-sie-ps5',
         '-std=c11','-O2','-fPIC','-femulated-tls','-fno-stack-protector',
         '-fvisibility-nodllstorageclass=default','-isysroot',str(sdk),'-isystem',str(sdk / 'target/include'),
+        '-DPS5_SHADERC_MAX_REPORTS=16',
         '-DPS5_SHADERC_FAULT_LOG="/download0/mc120-java17-fault.log"',
         '-c',str(ROOT / 'client/ports/shaderc/fault.c'),'-o',str(fault)], check=True)
     subprocess.run([sys.executable, str(runtime / 'tools/package_java_lts_probe.py'),

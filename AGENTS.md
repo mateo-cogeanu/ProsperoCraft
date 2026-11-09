@@ -453,3 +453,16 @@ production settings. Runtime owns inner phase and bounded numeric fatal entry
 records; no recovery/error semantics change. Preserve001/002bytes and frozen17/21.
 Exact003PS5result pending; no game/menu/world/C2/shader/Store/release pass.
 See docs/client-java17-bootstrap-003.md; raw reports remain local.
+
+
+## Java17 bootstrap003 VM pass and004row3capture —2026-11-09
+
+003creates the extended VM successfully at128MiB, then crashes row3before Java
+stage output. No row3cause or complete bootstrap/gamepass established.004keeps
+VM/image/binding policy, adds default-null runtime JNI checkpoints/on-class hook,
+consumer nativeStage breadcrumbs before Java filesystem and bounded fault scope
+around row3. Optional16report budget leaves default logging/forwarding semantics
+unchanged elsewhere. Native lane14adds actual20signal/2report/restore sanitizer
+fixture; host frame capture explicitly disabled there. Exact004console pending;
+preserve previous/frozenbytes, working25and original JARs. No release/Store pass.
+See docs/client-java17-bootstrap-004.md; raw reports stay local.

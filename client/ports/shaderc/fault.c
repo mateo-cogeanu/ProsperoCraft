@@ -16,6 +16,10 @@
 #ifndef PS5_SHADERC_CONTEXT_WORDS
 #define PS5_SHADERC_CONTEXT_WORDS 96
 #endif
+#ifndef PS5_SHADERC_MAX_REPORTS
+#define PS5_SHADERC_MAX_REPORTS 0
+#endif
+static unsigned report_count;
 /* First four positions preserve the existing scope/status ABI. */
 static const int signals[] = {SIGSEGV,SIGBUS,SIGILL,SIGABRT,SIGFPE,SIGTRAP,SIGSYS};
 enum { signal_count=sizeof(signals)/sizeof(signals[0]) };
@@ -41,7 +45,8 @@ static void value(const char *label,uint64_t number){
  line[n++]='\n';(void)write(report_fd,line,n);
 }
 static void handler(int sig,siginfo_t *info,void *context){
- if(report_fd>=0){
+ if(report_fd>=0 && (PS5_SHADERC_MAX_REPORTS==0 ||
+       __atomic_fetch_add(&report_count,1u,__ATOMIC_RELAXED)<PS5_SHADERC_MAX_REPORTS)){
   value("SHADERC FAULT signal=",(unsigned)sig);
   value("SHADERC FAULT code=",info?(unsigned)info->si_code:0);
   value("SHADERC FAULT address=",info?(uintptr_t)info->si_addr:0);
@@ -68,6 +73,7 @@ static void handler(int sig,siginfo_t *info,void *context){
 int ps5shaderc_fault_begin(void){
  guard_lock();
  if(users++==0){
+  report_count=0;
   const char* root=getenv("PROSPERO_DIAGNOSTIC_ROOT");char path[640];
   int n=root&&root[0]?snprintf(path,sizeof(path),"%s/java25-vm-trace.log",root):0;
   report_fd=root&&root[0]?(n>0&&(unsigned)n<sizeof(path)?open(path,O_WRONLY|O_CREAT|O_APPEND,0600):-1):open(PS5_SHADERC_FAULT_LOG,O_WRONLY|O_CREAT|O_APPEND,0600);

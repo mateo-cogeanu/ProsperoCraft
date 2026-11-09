@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-09",
+  "title_id": "PPSA99878",
+  "version": "01.000.003",
+  "user_report": "Crashed on row3",
+  "reports": {
+    "java17-vm-trace.log": {
+      "bytes": 3442,
+      "sha256": "d8a05c58be90ab90952cbe431dab9723e702330a9bf6368dff95d3208e5a8d9d"
+    },
+    "mc120-java17-fault.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "mc120-java17-bootstrap.log": {
+      "bytes": 727,
+      "sha256": "82e087c4dfa9319a113486b4b31b57aea3fc483305696d64f34ffbed3043ef82"
+    }
+  },
+  "observed": [
+    "Native constructors, universe/global subsystems, Java language and module initialization return",
+    "JNI_CreateJavaVM returned JNI_OK at128MiB with extended image and331 linked",
+    "Row3entered, then no result or Java stage file; native fault file remains empty",
+    "003fault scope only covered VM creation, not row3"
+  ],
+  "partial_console_result": "VM creation passes for exact003profile; complete bootstrap not passed",
+  "cause": "UNPROVEN; row3JNI/class registration/Java file-init boundary not yet identified. 512MiB causal failure remains unproven.",
+  "raw_reports": "Local only; no raw logs uploaded",
+  "followup": "004adds optional JNI phase/on-class callback, nativeStage before Java filesystem operations and bounded scoped row3fault capture; keeps128MiB/image/binding policies"
+}

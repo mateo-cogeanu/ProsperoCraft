@@ -29,6 +29,14 @@ char details[4][120]{};
 const char*names[]={"Initialize matched Java17 + LWJGL331", "Create real Java17 VM (-Xint)", "Initialize LWJGL331 and original Minecraft1.20 entry", "Destroy Java17 VM"};
 unsigned color(unsigned r,unsigned g,unsigned b){return 0xff000000u|r|(g<<8)|(b<<16);}
 void stage(const char*text){if(logfile){std::fprintf(logfile,"%s\n",text);std::fflush(logfile);}}
+void JNICALL java_stage(JNIEnv*,jclass,jint index){
+ const char*points[]={"JAVA: entered run", "JAVA: before Path.of", "JAVA: before writer open", "JAVA: writer opened", "JAVA: basics passed", "JAVA: before RuntimeMXBean", "JAVA: RuntimeMXBean passed", "JAVA: before LWJGL331", "JAVA: LWJGL331 passed", "JAVA: before original Main"};
+ if(index>=0&&index<10)stage(points[index]);else stage("JAVA: unknown diagnostic stage");
+}
+int register_stage(JNIEnv*e,jclass klass){
+ JNINativeMethod n{const_cast<char*>("nativeStage"),const_cast<char*>("(I)V"),reinterpret_cast<void*>(&java_stage)};
+ return e->RegisterNatives(klass,&n,1)==JNI_OK?0:-1722;
+}
 int print_vm(FILE*,const char*format,va_list args){if(!logfile)return 0;int n=std::vfprintf(logfile,format,args);std::fflush(logfile);return n;}
 void exit_vm(int n){if(logfile){std::fprintf(logfile,"VM exit status %d\n",n);std::fflush(logfile);}}
 void abort_vm(){stage("VM abort hook");}
@@ -38,7 +46,7 @@ void run(int i){
   if(initialized){finish(i,-1710,"Already initialized; relaunch to repeat");return;}
   logfile=std::fopen("/download0/mc120-java17-bootstrap.log","a");
   if(!logfile){finish(i,errno?errno:-1711,"Cannot create private probe log");return;}
-  stage("ProsperoCraft1.20 Java17 bootstrap003; original game entry, no renderer/world");
+  stage("ProsperoCraft1.20 Java17 bootstrap004; original game entry, no renderer/world");
   for(auto*p=__jvm_init_array_start;p!=__jvm_init_array_end;++p)if(*p)(*p)();
   initialized=true;finish(i,0,"Core constructors completed");return;
  }
@@ -82,8 +90,12 @@ void run(int i){
   static unsigned char bytes[65536];FILE*f=std::fopen("/app0/assets/java17/classes/HelloLts.class","rb");
   size_t n=f?std::fread(bytes,1,sizeof(bytes),f):0;bool bad=!f||std::ferror(f)||!std::feof(f);if(f)std::fclose(f);
   if(bad){finish(i,-1717,"Probe class read failed");return;}
-  stage("Running original Minecraft1.20 argument/bootstrap and genuine331 JNI");int rc=ps5_lts_probe::run(env,bytes,n);
+  stage("Installing row3 fault scope and entering JNI consumer checks");
+  int handlers=ps5shaderc_fault_begin();
+  if(handlers!=4){ps5shaderc_fault_end();finish(i,-1723,"Incomplete row3 fault recorder");return;}
+  int rc=ps5_lts_probe::run(env,bytes,n,stage,register_stage);
   if(env->ExceptionCheck()){env->ExceptionDescribe();env->ExceptionClear();}
+  ps5shaderc_fault_end();
   finish(i,rc,"Original1.20 entry, exact331 owner, native memory and Java17 modules");return;
  }
  stage("Entering DestroyJavaVM");int rc=vm->DestroyJavaVM();if(rc==JNI_OK){vm=nullptr;env=nullptr;}
@@ -106,7 +118,7 @@ bool update()noexcept{
 }
 void draw(Canvas&c)noexcept{
  c.gradient(color(16,28,42),color(8,13,22));
- c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.003",54,color(235,243,250));
+ c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.004",54,color(235,243,250));
  c.label(103,151,"BOOT TEST ONLY: original1.20 initialization. No playable menu/world yet.",24,color(157,175,193));
  for(int i=0;i<4;++i){int y=245+i*125;
   if(selected==i)c.rounded(95,y-5,1730,106,20,color(101,170,215));

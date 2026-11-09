@@ -12,13 +12,17 @@ import java.util.Arrays;
 
 /** Original-game bootstrap only; no authentication, game replacement or rendering. */
 public final class HelloLts {
+ private static native void nativeStage(int value);
  private static native int nativeMultiply(int a,int b);
  private static PrintWriter log;
  private static void stage(String value) { log.println(value); log.flush(); }
  public static int run() throws Exception {
+  nativeStage(0);
+  nativeStage(1);
   Path root=Path.of(System.getProperty("ps5.mc17.testRoot","/download0"));
+  nativeStage(2);
   try(PrintWriter output=new PrintWriter(Files.newBufferedWriter(root.resolve("mc120-java17-stages.log")))) {
-   log=output;
+   log=output;nativeStage(3);
    if(Runtime.version().feature()!=17)throw new AssertionError("Actual Java17 required");
         if (nativeMultiply(6, 7) != 42) throw new AssertionError("JNI arguments/result");
         long value = 0;
@@ -38,10 +42,13 @@ public final class HelloLts {
         thread.join(5000);
         if (thread.isAlive() || worker[0] != 51) throw new AssertionError("Java thread/JNI");
 
+   nativeStage(4);
    stage("Java17 real runtime; modules: desktop beans, XML, logging, management, unsupported");
    Class.forName("java.beans.PropertyChangeEvent");Class.forName("javax.xml.parsers.DocumentBuilderFactory");
    Class.forName("sun.misc.Unsafe");
+   nativeStage(5);
    if(ManagementFactory.getRuntimeMXBean().getVmName().isBlank())throw new AssertionError("VM management identity");
+   nativeStage(6);
    stage("Actual management/native RuntimeMXBean identity passed");
    File folder=new File(System.getProperty("ps5.mc17.jars","/app0/assets/java17/extra"));
    File[] files=folder.listFiles((d,n)->n.endsWith(".jar"));
@@ -54,14 +61,17 @@ public final class HelloLts {
     Thread.currentThread().setContextClassLoader(loader);
     try {
     if(!Boolean.getBoolean("ps5.mc17.hostEntryOnly")) {
+     nativeStage(7);
      stage("Initialize truthful PS5 LWJGL331 with Java17 JNI table");
      loader.loadClass("prosperocraft.lwjgl331.Bootstrap").getMethod("configure").invoke(null);
      Class<?> memory=loader.loadClass("org.lwjgl.system.MemoryUtil");
      ByteBuffer buffer=(ByteBuffer)memory.getMethod("memAlloc",int.class).invoke(null,32);
      try { buffer.putLong(0,0x123456789abcdefL);if(buffer.getLong(0)!=0x123456789abcdefL)throw new AssertionError("Native memory roundtrip"); }
      finally { memory.getMethod("memFree",java.nio.Buffer.class).invoke(null,buffer); }
+     nativeStage(8);
      stage("Actual331 native allocation/read/write/free passed");
     } else stage("HOST ONLY: native PS5 binding skipped explicitly");
+    nativeStage(9);
     stage("Invoke unchanged Minecraft1.20 Main with no auth/game arguments");
     try { loader.loadClass("net.minecraft.client.main.Main").getMethod("main",String[].class).invoke(null,(Object)new String[0]);
      throw new AssertionError("Original argument gate unexpectedly returned");

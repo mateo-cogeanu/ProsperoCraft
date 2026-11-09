@@ -349,3 +349,12 @@ report-root hook injected. Runtime-owned actual HTTP/root/archive/freeze and64Ki
 stack tests run separately. Storage Java tests add read-only library validation,
 corrupt-shared fallback, no fresh legacy writes and copied relative cache pins.
 Card model/real Vulkan fixtures verify normal badge absence and dev/coming labels.
+
+
+## Java17 bootstrap004 bounded fault capture
+
+Native selection now includes14checks: `test_shaderc_fault_budget.py` joins the
+existing13and proves real signal forwarding/report cap/handler restoration with
+native sanitizers and no game/SDK/JDK cache. Raw context decoding remains a PS5
+check; the host fixture explicitly disables context capture. See
+[004](client-java17-bootstrap-004.md) for exact consumer evidence/pending tests.
