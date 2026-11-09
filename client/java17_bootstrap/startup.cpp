@@ -30,8 +30,8 @@ const char*names[]={"Initialize matched Java17 + LWJGL331", "Create real Java17 
 unsigned color(unsigned r,unsigned g,unsigned b){return 0xff000000u|r|(g<<8)|(b<<16);}
 void stage(const char*text){if(logfile){std::fprintf(logfile,"%s\n",text);std::fflush(logfile);}}
 void JNICALL java_stage(JNIEnv*,jclass,jint index){
- const char*points[]={"JAVA: entered run", "JAVA: before Path.of", "JAVA: before writer open", "JAVA: writer opened", "JAVA: basics passed", "JAVA: before RuntimeMXBean", "JAVA: RuntimeMXBean passed", "JAVA: before LWJGL331", "JAVA: LWJGL331 passed", "JAVA: before original Main", "JAVA: before classpath manifest", "JAVA: verified manifest parsed", "JAVA: before game classloader", "JAVA: game classloader ready"};
- if(index>=0&&index<14)stage(points[index]);else stage("JAVA: unknown diagnostic stage");
+ const char*points[]={"JAVA: entered run", "JAVA: before Path.of", "JAVA: before writer open", "JAVA: writer opened", "JAVA: basics passed", "JAVA: before RuntimeMXBean", "JAVA: RuntimeMXBean passed", "JAVA: before LWJGL331", "JAVA: LWJGL331 passed", "JAVA: before original Main", "JAVA: before classpath manifest", "JAVA: verified manifest parsed", "JAVA: before game classloader", "JAVA: game classloader ready", "JAVA: original Main class initialized"};
+ if(index>=0&&index<15)stage(points[index]);else stage("JAVA: unknown diagnostic stage");
 }
 void report_exception(JNIEnv*e,jthrowable error,int depth){
  if(!error||depth>2)return;
@@ -65,7 +65,7 @@ void run(int i){
   if(initialized){finish(i,-1710,"Already initialized; relaunch to repeat");return;}
   logfile=std::fopen("/download0/mc120-java17-bootstrap.log","a");
   if(!logfile){finish(i,errno?errno:-1711,"Cannot create private probe log");return;}
-  stage("ProsperoCraft1.20 Java17 bootstrap006; original game entry, no renderer/world");
+  stage("ProsperoCraft1.20 Java17 bootstrap007; original game entry, no renderer/world");
   for(auto*p=__jvm_init_array_start;p!=__jvm_init_array_end;++p)if(*p)(*p)();
   initialized=true;finish(i,0,"Core constructors completed");return;
  }
@@ -138,7 +138,7 @@ bool update()noexcept{
 }
 void draw(Canvas&c)noexcept{
  c.gradient(color(16,28,42),color(8,13,22));
- c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.006",54,color(235,243,250));
+ c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.007",54,color(235,243,250));
  c.label(103,151,"BOOT TEST ONLY: original1.20 initialization. No playable menu/world yet.",24,color(157,175,193));
  for(int i=0;i<4;++i){int y=245+i*125;
   if(selected==i)c.rounded(95,y-5,1730,106,20,color(101,170,215));

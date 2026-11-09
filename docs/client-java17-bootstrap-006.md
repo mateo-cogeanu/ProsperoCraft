@@ -36,3 +36,5 @@ Host17entry with the manifest reaches original Main's argument gate; PS5specific
 331is explicitly skipped on host. Target signatures/ZIP/image/manifest hashes pass;
 exact006console result is pending. Previous candidate/frozen bytes and working25
 are retained. No release/Store action; original publisher payload stays local.
+
+[PS5 result and build 007](client-java17-bootstrap-007.md)

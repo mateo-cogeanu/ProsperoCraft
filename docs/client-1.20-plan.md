@@ -289,3 +289,7 @@ without fake filesystem answers or changes to working25/production defaults.
 success and normal Java error during classpath prep. It uses an exact verified47JAR
 manifest instead of directory enumeration and reports only allowlisted throwable
 class tags. Actual331/original Main/full boot on PS5 remain pending.
+
+[Bootstrap 007](client-java17-bootstrap-007.md) follows a PS5 pass through 006's
+classpath and native LWJGL checks. Original Main initialization still needs
+diagnosis and console validation.

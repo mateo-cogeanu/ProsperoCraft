@@ -1,5 +1,4 @@
 /* SPDX-License-Identifier: GPL-3.0-or-later */
-import java.io.File;
 import java.io.PrintWriter;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.InvocationTargetException;
@@ -8,7 +7,6 @@ import java.net.URLClassLoader;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 
 /** Original-game bootstrap only; no authentication, game replacement or rendering. */
 public final class HelloLts {
@@ -16,6 +14,21 @@ public final class HelloLts {
  private static native int nativeMultiply(int a,int b);
  private static PrintWriter log;
  private static void stage(String value) { log.println(value); log.flush(); }
+ // Only report bounded code locations. Exception messages and source paths stay out of the log.
+ private static void reportMainFailure(Throwable failure) {
+  for (int depth = 0; failure != null && depth < 5; depth++) {
+   StackTraceElement[] frames = failure.getStackTrace();
+   for (int i = 0; i < Math.min(frames.length, 8); i++) {
+    StackTraceElement frame = frames[i];
+    String owner = frame.getClassName();
+    String method = frame.getMethodName();
+    if (owner.matches("[A-Za-z0-9_.$]{1,160}") && method.matches("[A-Za-z0-9_$<>]{1,80}"))
+     stage("Main failure depth " + depth + " frame " + i + ": " + owner + "." + method
+         + " line " + frame.getLineNumber());
+   }
+   failure = failure.getCause();
+  }
+ }
  public static int run() throws Exception {
   nativeStage(0);
   nativeStage(1);
@@ -83,12 +96,21 @@ public final class HelloLts {
     } else stage("HOST ONLY: native PS5 binding skipped explicitly");
     nativeStage(9);
     stage("Invoke unchanged Minecraft1.20 Main with no auth/game arguments");
-    try { loader.loadClass("net.minecraft.client.main.Main").getMethod("main",String[].class).invoke(null,(Object)new String[0]);
+    try {
+     Class<?> main = Class.forName("net.minecraft.client.main.Main", true, loader);
+     nativeStage(14);
+     main.getMethod("main", String[].class).invoke(null, (Object) new String[0]);
      throw new AssertionError("Original argument gate unexpectedly returned");
-    } catch(InvocationTargetException expected) {
-     Throwable cause=expected.getCause();
-     if(!cause.getClass().getName().equals("joptsimple.MissingRequiredOptionsException"))throw expected;
+    } catch (InvocationTargetException invocation) {
+     Throwable cause = invocation.getCause();
+     if (cause == null || !cause.getClass().getName().equals("joptsimple.MissingRequiredOptionsException")) {
+      reportMainFailure(invocation);
+      throw invocation;
+     }
      stage("Original Minecraft1.20 parser reached required accessToken/version gate, as intended");
+    } catch (ReflectiveOperationException | LinkageError failure) {
+     reportMainFailure(failure);
+     throw failure;
     }
     stage("PASS original1.20 bootstrap; no menu/world/rendering claim");
     } finally { Thread.currentThread().setContextClassLoader(previous); }
