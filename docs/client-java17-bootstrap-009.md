@@ -27,3 +27,5 @@ The builder takes the exact object and stub paths through repeated
 `--graphics-input NAME=PATH` options and verifies each against
 `client/java17_bootstrap/graphics-pins.json`. The original game inputs
 and signed test ZIP stay local.
+
+[Console result and build 010](client-java17-bootstrap-010.md)

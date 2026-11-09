@@ -22,6 +22,15 @@ extern "C" void glfwInitHint(int, int);
 extern "C" void glfwInitVulkanLoader(VulkanLoader);
 extern "C" void (*vkGetInstanceProcAddr(VkInstance_T*, const char*))();
 extern "C" void prospero_graphics_init();
+extern "C" int clientgpu_present_worker_preinit();
+extern "C" int clientgpu_mutex_preinit();
+extern "C" int clientgpu_condition_preinit();
+extern "C" int prospero_sdl_mutex_preinit();
+extern "C" int prospero_sdl_condition_preinit();
+extern "C" int prospero_sdl_tls_preinit();
+using GlfwErrorCallback = void (*)(int, const char*);
+extern "C" GlfwErrorCallback glfwSetErrorCallback(GlfwErrorCallback);
+extern "C" int sceKernelSendNotificationRequest(unsigned, void*, size_t, int);
 namespace {
 using ps5::demo::Canvas;
 JavaVM*vm=nullptr;
@@ -35,6 +44,38 @@ char details[4][120]{};
 const char*names[]={"Initialize matched Java17 + LWJGL331", "Create real Java17 VM (-Xint)", "Original Minecraft entry and Zink graphics", "Automatic Java17 VM shutdown"};
 unsigned color(unsigned r,unsigned g,unsigned b){return 0xff000000u|r|(g<<8)|(b<<16);}
 void stage(const char*text){if(logfile){std::fprintf(logfile,"%s\n",text);std::fflush(logfile);}}
+void notify_result(const char* text) {
+ struct Notification { unsigned char reserved[45]; char message[3075]; };
+ Notification notification{};
+ std::snprintf(notification.message, sizeof(notification.message), "%s", text);
+ (void)sceKernelSendNotificationRequest(0, &notification, sizeof(notification), 0);
+}
+int prepare_graphics() {
+ struct Reserve { const char* name; int (*prepare)(); };
+ const Reserve reserves[] = {
+  {"VideoOut worker", clientgpu_present_worker_preinit},
+  {"RADV mutexes", clientgpu_mutex_preinit},
+  {"RADV conditions", clientgpu_condition_preinit},
+  {"SDL mutexes", prospero_sdl_mutex_preinit},
+  {"SDL conditions", prospero_sdl_condition_preinit},
+  {"SDL thread-ID TLS", prospero_sdl_tls_preinit},
+ };
+ for (const auto& reserve : reserves) {
+  const int result = reserve.prepare();
+  std::fprintf(logfile, "Graphics pre-JVM reserve: %s result=%d\n", reserve.name, result);
+  std::fflush(logfile);
+  if (result != 0) return result;
+ }
+ return 0;
+}
+void glfw_error(int code, const char* description) {
+ static unsigned count;
+ if (logfile && __atomic_fetch_add(&count, 1, __ATOMIC_RELAXED) < 16) {
+  std::fprintf(logfile, "GLFW error 0x%x: %.256s\n", static_cast<unsigned>(code),
+               description ? description : "");
+  std::fflush(logfile);
+ }
+}
 void JNICALL java_stage(JNIEnv*,jclass,jint index){
  const char*points[]={"JAVA: entered run", "JAVA: before Path.of", "JAVA: before writer open", "JAVA: writer opened", "JAVA: basics passed", "JAVA: before RuntimeMXBean", "JAVA: RuntimeMXBean passed", "JAVA: before LWJGL331", "JAVA: LWJGL331 passed", "JAVA: before original Main", "JAVA: before classpath manifest", "JAVA: verified manifest parsed", "JAVA: before game classloader", "JAVA: game classloader ready", "JAVA: original Main class initialized"};
  if(index>=0&&index<15)stage(points[index]);else stage("JAVA: unknown diagnostic stage");
@@ -71,9 +112,13 @@ void run(int i){
   if(initialized){finish(i,-1710,"Already initialized; relaunch to repeat");return;}
   logfile=std::fopen("/download0/mc120-java17-bootstrap.log","a");
   if(!logfile){finish(i,errno?errno:-1711,"Cannot create private probe log");return;}
-  stage("ProsperoCraft1.20 Java17 bootstrap009; original game entry and graphics handoff");
+  stage("ProsperoCraft1.20 Java17 bootstrap010; original game entry and graphics handoff");
   for(auto*p=__jvm_init_array_start;p!=__jvm_init_array_end;++p)if(*p)(*p)();
-  initialized=true;finish(i,0,"Core constructors completed");return;
+  const int graphics_result = prepare_graphics();
+  initialized = graphics_result == 0;
+  finish(i, graphics_result, initialized ? "Core constructors and graphics reserves ready"
+                                         : "Graphics reserve initialization failed");
+  return;
  }
  if(!initialized){finish(i,-1712,"Run core initialization first");return;}
  if(i==1){
@@ -122,10 +167,12 @@ void run(int i){
   if(handlers!=4){ps5shaderc_fault_end();finish(i,-1723,"Incomplete row3 fault recorder");return;}
   stage("Native display closed; preparing resident GLFW and Zink");
   prospero_graphics_init();
+  glfwSetErrorCallback(glfw_error);
   glfwInitHint(0x00050003, 0x00060005); // GLFW_PLATFORM, GLFW_PLATFORM_NULL
   glfwInitVulkanLoader(vkGetInstanceProcAddr);
   int rc=ps5_lts_probe::run(env,bytes,n,stage,register_stage);
   if(env->ExceptionCheck()){jthrowable failure=env->ExceptionOccurred();env->ExceptionClear();report_exception(env,failure,0);env->DeleteLocalRef(failure);if(env->ExceptionCheck())env->ExceptionClear();}
+  glfwSetErrorCallback(nullptr);
   ps5shaderc_fault_end();
   finish(i,rc,"Original1.20 entry and Java17/LWJGL331 Zink frames");return;
  }
@@ -152,7 +199,7 @@ bool update()noexcept{
 }
 void draw(Canvas&c)noexcept{
  c.gradient(color(16,28,42),color(8,13,22));
- c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.009",54,color(235,243,250));
+ c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.010",54,color(235,243,250));
  c.label(103,151,"Graphics test: the probe hands VideoOut to Java 17 on row 3.",24,color(157,175,193));
  for(int i=0;i<4;++i){int y=245+i*125;
   if(selected==i)c.rounded(95,y-5,1730,106,20,color(101,170,215));
@@ -195,12 +242,15 @@ int main(){
                                                "Java 17 graphics handoff ready");
  if (!released) {
   stage("FAIL: native VideoOut cleanup; Java graphics was not started");
+  notify_result("Java 17 test failed to release the display.");
   for (;;) sleep(1);
  }
  if (pad >= 0) { scePadClose(pad); pad=-1; }
  run(2);
  run(3);
- stage(status[2]==1 && status[3]==1 ? "PASS: graphics and VM shutdown" : "FAIL: graphics or VM shutdown");
+ const bool passed = status[2] == 1 && status[3] == 1;
+ stage(passed ? "PASS: graphics and VM shutdown" : "FAIL: graphics or VM shutdown");
+ notify_result(passed ? "Java 17 graphics test passed." : "Java 17 graphics test failed. Logs are ready.");
  // Leave the process available for FTP report retrieval after the display closes.
  for (;;) sleep(1);
 }
