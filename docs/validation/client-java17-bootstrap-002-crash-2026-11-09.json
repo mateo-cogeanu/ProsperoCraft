@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-09",
+  "title_id": "PPSA99878",
+  "version": "01.000.002",
+  "user_report": "Crashed on row2, reopened",
+  "reports": {
+    "java17-vm-trace.log": {
+      "bytes": 1463,
+      "sha256": "cff8dda35a7fa90939b13f27965e711b92ca056cd9bf194c0da0c71503d4157d"
+    },
+    "mc120-java17-fault.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "mc120-java17-bootstrap.log": {
+      "bytes": 392,
+      "sha256": "22a1429f9d7c6f77b9456fef639f10001b3172dc82581e81da06e2591dd9ee4a"
+    }
+  },
+  "evidence": [
+    "002prefix and fault handler installation4/owned0x7f/errors0 recorded",
+    "Arguments/ergonomics/OS init2/VM globals complete",
+    "Last phase enters init_globals (broad universe initialization), does not return",
+    "Native fault file empty; no fault PC available",
+    "Java module/Java classes/original Minecraft entry not reached"
+  ],
+  "cause": "UNPROVEN; larger test heap is a hypothesis, not a proven cause",
+  "retrieval": "Cyberduck default Download; all three files now readable without permission repair; first local bytes retained",
+  "raw_reports": "Local only; no raw logs uploaded",
+  "followup": "003tests128MiB instead of512, retains module image and331bindings, and adds inner runtime/fatal markers"
+}

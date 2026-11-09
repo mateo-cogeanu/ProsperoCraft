@@ -442,3 +442,14 @@ truncation/directory/account permissions. FTP SITE CHMOD644 enabled the original
 trace retrieval; direct active path/mount is recorded in docs. No crash resolution
 or game/menu/world/C2/shader pass, release/Store approval. Physical002pending;
 see docs/client-java17-bootstrap-002.md. Preserve working25 and17/21frozenstartup.
+
+
+## Java17 bootstrap002 boundary and003heap isolation —2026-11-09
+
+002passes argument/ergonomics/OS init2/VM globals, crashes within init_globals;
+external fault report empty, no proven PC or heap cause.003tests128MiB max heap
+instead of512only in this standalone diagnostic, preserving modules/331and all
+production settings. Runtime owns inner phase and bounded numeric fatal entry
+records; no recovery/error semantics change. Preserve001/002bytes and frozen17/21.
+Exact003PS5result pending; no game/menu/world/C2/shader/Store/release pass.
+See docs/client-java17-bootstrap-003.md; raw reports remain local.

@@ -40,3 +40,9 @@ keep the first retrieval locally. Raw logs remain local. Reproduction uses the
 same explicit [package helper](../tools/package_java17_bootstrap.py) and reviewed
 original inputs as001; the helper additionally compiles the existing diagnostic
 Csource with this probe's dedicated path. It does not link a Java25VM or343JNI.
+
+
+The user also reported002row2crash. The [retained record](validation/client-java17-bootstrap-002-crash-2026-11-09.json)
+now narrows it to init_globals without a PC. [003](client-java17-bootstrap-003.md)
+is a128MiB test-heap isolation plus finer phases/fatal entry records. No fix is
+claimed without its exact console result;002bytes remain retained.

@@ -268,3 +268,8 @@ owned-account/provisioning remain next, followed by exact game/shader validation
 crash after native image setup. It retains VM/image choices and adds runtime
 phases plus scoped fault capture and targeted diagnostic read permissions. Cause
 is unproven and original Minecraft was not reached; physical002results pending.
+
+
+[003](client-java17-bootstrap-003.md) follows002's narrower init_globals failure.
+It retains modules/bindings and tests128MiB maximum heap with finer runtime phases
+and bounded fatal entry records. Heap cause and physical result remain unproven.
