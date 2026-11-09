@@ -250,3 +250,15 @@ verification; the fixture now rejects an obsolete patch audit before executing
 native code. Required21fast/13native checks pass, and all21fast checks pass again
 from outside a source-only checkout with an empty dependency cache and explicitly
 provisioned host pins. These remain scoped host/build results, not a game pass.
+
+
+## First original1.20 Java17 bootstrap candidate —2026-11-09
+
+[Standalone boot test001](client-java17-bootstrap-001.md), PPSA99878, now checks
+extended genuine17modules, matched331JNI/native memory and unchanged1.20Main up
+to its expected required-argument refusal, then VM destruction. It has no playable
+menu/world yet. Host entry/package/21fast/13native checks pass; exact physical
+four-row result is pending. The local ZIP contains verified publisher inputs and
+is not a public release artifact. No launcher/default runtime/instance/world or
+Store update is made. Matching full game/graphics/input/audio/bootstrap and
+owned-account/provisioning remain next, followed by exact game/shader validation.

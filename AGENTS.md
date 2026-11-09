@@ -417,3 +417,15 @@ scoped evidence only. Required host lanes retain25; no launcher availability or
 runtime default changes. Continue matching17 consumer bootstrap before original
 Vanilla1.20 physical testing. See docs/client-1.20-plan.md; preserve working25,
 original JARs and all release/Store/shader gates.
+
+
+## Java17 original1.20 entry boot test —2026-11-09
+
+Standalone PPSA99878/01.000.001 is a local interpreter bootstrap candidate only.
+Its four rows test constructors, real17VM, actual management/331JNI/native memory
+and unchanged1.20Main required-argument gate, then destruction. It is not a
+playable menu/world/C2/shader/performance pass. Preserve Java17/21 frozen startup
+and working25 consumer. Supplemental runtime code remains runtime-owned; original
+publisher JARs are verified/unmodified and local candidate only, never source or
+public release. No credentials/game arguments/accounts/worlds/NAS touched. Exact
+PS5 result pending; no release/Store action. See docs/client-java17-bootstrap-001.md.
