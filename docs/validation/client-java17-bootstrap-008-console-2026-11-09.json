@@ -1,0 +1,20 @@
+{
+  "title_id": "PPSA99878",
+  "version": "01.000.008",
+  "tested_date": "2026-11-09",
+  "console": "PS5",
+  "evidence": "Maintainer reported ALL PASSS in response to the instructions to run all four rows of build 008.",
+  "package_file": "PPSA99878.zip",
+  "sha256": "c20840a332bbf5f94d23d90d6860d2b96989b442e256d0388455f7bbd0acd00c",
+  "consumer_build_commit": "cf1bda5aa86621b191af7245577048b3c576dc03",
+  "runtime_image_commit": "f9b5c6dc481e0885585dc4fc5f7b790bd0c13184",
+  "class_image_sha256": "79789f0a48be410def84605f3ff1189b51ab0e3580c7f1b9735b8ca41c82472f",
+  "results": {
+    "staged_native_constructors": "PASS",
+    "java17_vm_creation": "PASS",
+    "java_jni_management_lwjgl_and_original_minecraft_required_argument_gate": "PASS",
+    "destroy_java_vm": "PASS"
+  },
+  "unverified": ["Minecraft menu and world startup", "Rendering, audio and controller input", "JIT and performance"],
+  "package_storage": "Local frozen ZIP. Contains original publisher payload and is not a public release asset."
+}

@@ -15,6 +15,8 @@ ps5-java25-homebrew.
 
 Local signed PPSA99878 ZIP, version 01.000.008, SHA-256
 `c20840a332bbf5f94d23d90d6860d2b96989b442e256d0388455f7bbd0acd00c`.
-Run rows 1 through 4 on PS5. If a row fails, leave it open for log retrieval.
-Console confirmation of provider discovery and the original argument check
-is pending. This remains an entry test before menu and world startup.
+The maintainer reported all four rows passed on PS5. The original game
+reached its required argument check after ZIP filesystem provider discovery,
+and the JVM shut down successfully. See the
+[console record](validation/client-java17-bootstrap-008-console-2026-11-09.json).
+Menu, rendering and world startup are the next validation steps.
