@@ -25,3 +25,5 @@ Its runtime and publisher inputs match 006. The host Java 17 entry check
 reaches the original argument gate with the PS5 binding check skipped, and
 a focused host check verifies nested exception locations and message/path
 redaction. Physical validation of 007 is pending.
+
+[Build 007 result and ZIP filesystem fix](client-java17-bootstrap-008.md)
