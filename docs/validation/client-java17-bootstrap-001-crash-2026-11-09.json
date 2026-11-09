@@ -1,0 +1,28 @@
+{
+  "date": "2026-11-09",
+  "title_id": "PPSA99878",
+  "version": "01.000.001",
+  "package_sha256": "05395a8cf57c59b2bf35183eb9173baafea19fff8c1dbfaa464648598069ea45",
+  "user_report": "Crashed on row2, reopened",
+  "retrieval": "Both current-run files collected through Cyberduck. Initial folder-picker handoff completed by user; default Download succeeds for main log. Trace initially refused FTP RETR; SITE CHMOD644 for that diagnostic file returned200, then download completed.",
+  "reports": {
+    "mc120-java17-bootstrap.log": {
+      "bytes": 165,
+      "sha256": "929543ed35401148ea0e53d91a0a854810805a8a7dba9e02ab04201187ec46ee"
+    },
+    "java17-vm-trace.log": {
+      "bytes": 534,
+      "sha256": "96764d638201bca6304e5e4e979f86065e7312824d1c54ed2c5e74ece584d884"
+    }
+  },
+  "observed": [
+    "Core constructors return success",
+    "JNI_CreateJavaVM entered and never returned in retained log",
+    "29546570byte JIMAGE allocated at29556736aligned bytes, read completely and set read-only successfully",
+    "Last retained trace is completion of JIMAGE read-only setup; no fault PC or HotSpot error file retrieved"
+  ],
+  "cause": "UNPROVEN; cannot attribute to heap/module/JNI from this trace",
+  "original_minecraft_entry": "Not reached",
+  "raw_reports": "Local only; no raw log publication",
+  "followup": "Local002 keeps VM options/image constant, adds fixed17phase markers and scoped native fault capture, and precreates/chmods only its diagnostic files0644 for FTP."
+}

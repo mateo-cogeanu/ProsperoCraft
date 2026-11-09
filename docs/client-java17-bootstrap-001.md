@@ -65,3 +65,11 @@ The supplemental libffi core comes from the existing pinned target builder;
 343JNI output is excluded, retaining genuine331JNI and its own closure adapter.
 The package records that object's exact hash. No implicit private cache fallback.
 The default25 application/package and launcher version availability stay intact.
+
+
+## Physical result and diagnostic follow-up
+
+The user reported a row2crash. The [retrieved001record](validation/client-java17-bootstrap-001-crash-2026-11-09.json)
+keeps observed boundaries and unknown cause separate. [002](client-java17-bootstrap-002.md)
+adds phase/fault diagnostics and probe-only FTP-readable reports; physical results
+remain pending. Original001bytes and prior17/21startup passes stay preserved.

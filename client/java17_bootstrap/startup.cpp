@@ -7,7 +7,12 @@
 #include <cstdio>
 #include <cstring>
 #include <fcntl.h>
+#include <sys/stat.h>
+#include <cstdlib>
 #include <unistd.h>
+extern "C" int ps5shaderc_fault_begin(void);
+extern "C" unsigned ps5shaderc_fault_extended_status(unsigned*);
+extern "C" void ps5shaderc_fault_end(void);
 using Initializer=void(*)();
 extern "C" Initializer __jvm_init_array_start[],__jvm_init_array_end[];
 extern "C" unsigned ps5DemoPresentationTargetHz() noexcept { return 60; }
@@ -33,7 +38,7 @@ void run(int i){
   if(initialized){finish(i,-1710,"Already initialized; relaunch to repeat");return;}
   logfile=std::fopen("/download0/mc120-java17-bootstrap.log","a");
   if(!logfile){finish(i,errno?errno:-1711,"Cannot create private probe log");return;}
-  stage("ProsperoCraft1.20 Java17 bootstrap001; original game entry, no renderer/world");
+  stage("ProsperoCraft1.20 Java17 bootstrap002; original game entry, no renderer/world");
   for(auto*p=__jvm_init_array_start;p!=__jvm_init_array_end;++p)if(*p)(*p)();
   initialized=true;finish(i,0,"Core constructors completed");return;
  }
@@ -59,8 +64,15 @@ void run(int i){
    {const_cast<char*>("exit"),reinterpret_cast<void*>(&exit_vm)},{const_cast<char*>("abort"),reinterpret_cast<void*>(&abort_vm)}
   };
   JavaVMInitArgs args{};args.version=JNI_VERSION_1_8;args.options=options;args.nOptions=sizeof(options)/sizeof(options[0]);args.ignoreUnrecognized=JNI_FALSE;
+  // This diagnostic-only process uses its own title-local fault report.
+  if(getenv("PROSPERO_DIAGNOSTIC_ROOT")&&unsetenv("PROSPERO_DIAGNOSTIC_ROOT")!=0){finish(i,-1720,"Cannot select private fault log");return;}
+  int handlers=ps5shaderc_fault_begin();unsigned errors=0;
+  unsigned owned=ps5shaderc_fault_extended_status(&errors);
+  if(logfile){std::fprintf(logfile,"Fault recorder handlers=%d owned=0x%x errors=0x%x anchor=%p\n",handlers,owned,errors,reinterpret_cast<void*>(&run));std::fflush(logfile);}
+  if(handlers!=4){ps5shaderc_fault_end();finish(i,-1721,"Incomplete startup fault recorder");return;}
   stage("Entering genuine Java17 JNI_CreateJavaVM");
   int rc=JNI_CreateJavaVM(&vm,reinterpret_cast<void**>(&env),&args);
+  ps5shaderc_fault_end();
   if(rc==JNI_OK&&(!vm||!env))rc=-1715;
   if(rc!=JNI_OK){vm=nullptr;env=nullptr;}
   finish(i,rc,"VM creation returned");return;
@@ -94,7 +106,7 @@ bool update()noexcept{
 }
 void draw(Canvas&c)noexcept{
  c.gradient(color(16,28,42),color(8,13,22));
- c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.001",54,color(235,243,250));
+ c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.002",54,color(235,243,250));
  c.label(103,151,"BOOT TEST ONLY: original1.20 initialization. No playable menu/world yet.",24,color(157,175,193));
  for(int i=0;i<4;++i){int y=245+i*125;
   if(selected==i)c.rounded(95,y-5,1730,106,20,color(101,170,215));
@@ -109,6 +121,13 @@ void draw(Canvas&c)noexcept{
 }
 }
 int main(){
+ // Preserve prior bytes and make this unauthenticated probe's diagnostics readable
+ // by the FTP service. Never touch account files or another title's storage.
+ const char*diagnostics[]={"/download0/mc120-java17-bootstrap.log","/download0/java17-vm-trace.log","/download0/mc120-java17-fault.log"};
+ for(const char*path:diagnostics){
+  int fd=open(path,O_CREAT|O_WRONLY|O_APPEND,0644);if(fd>=0){(void)fchmod(fd,0644);close(fd);}
+ }
+
  sceUserServiceInitialize(nullptr);int user=-1;
  if(sceUserServiceGetInitialUser(&user)>=0&&scePadInit()>=0)pad=scePadOpen(user,0,0,nullptr);
  ps5::demo::run_ui(draw,update,"Minecraft1.20 Java17 bootstrap ready");

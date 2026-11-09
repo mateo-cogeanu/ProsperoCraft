@@ -429,3 +429,16 @@ and working25 consumer. Supplemental runtime code remains runtime-owned; origina
 publisher JARs are verified/unmodified and local candidate only, never source or
 public release. No credentials/game arguments/accounts/worlds/NAS touched. Exact
 PS5 result pending; no release/Store action. See docs/client-java17-bootstrap-001.md.
+
+
+## Java17 bootstrap001 crash and002diagnostics —2026-11-09
+
+001crashes on VM row2after complete extended JIMAGE allocation/read/protection;
+no faultPC and no proven heap/module/JNI cause. Preserve exact failed001bytes.
+002keeps its VM settings/image, adds runtime-owned17phase markers and the existing
+scoped native fault handler around VM creation with binary anchor and forwarding.
+On reopen, only three unauthenticated probe diagnostic files become0644, no
+truncation/directory/account permissions. FTP SITE CHMOD644 enabled the original
+trace retrieval; direct active path/mount is recorded in docs. No crash resolution
+or game/menu/world/C2/shader pass, release/Store approval. Physical002pending;
+see docs/client-java17-bootstrap-002.md. Preserve working25 and17/21frozenstartup.

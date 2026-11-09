@@ -72,11 +72,18 @@ def main():
     if a.prepare_only:
         return
     runtime = a.runtime_workspace.resolve()
+    sdk = runtime / '.tools/native-sdk/ps5-payload-sdk'
+    fault = work / 'startup-fault.o'
+    subprocess.run([str(a.llvm_home.resolve() / 'bin/clang'), '-target','x86_64-sie-ps5',
+        '-std=c11','-O2','-fPIC','-femulated-tls','-fno-stack-protector',
+        '-fvisibility-nodllstorageclass=default','-isysroot',str(sdk),'-isystem',str(sdk / 'target/include'),
+        '-DPS5_SHADERC_FAULT_LOG="/download0/mc120-java17-fault.log"',
+        '-c',str(ROOT / 'client/ports/shaderc/fault.c'),'-o',str(fault)], check=True)
     subprocess.run([sys.executable, str(runtime / 'tools/package_java_lts_probe.py'),
         '--major','17','--probe-dir',str(ROOT / 'client/java17_bootstrap'),
         '--extra-assets',str(work / 'publisher'),'--management',
         '--library','lwjgl331=' + str(a.lwjgl331_build.resolve() / 'ps5/lwjgl331.o'),
-        '--link-object',str(a.ffi_core.resolve()),'--llvm-home',str(a.llvm_home.resolve()),
+        '--link-object',str(a.ffi_core.resolve()),'--link-object',str(fault),'--llvm-home',str(a.llvm_home.resolve()),
         '--lld',str(a.lld.absolute()),'--boot-jdk',str(jdk),'--image-dir',str(a.image_dir.resolve()),
         '--work-dir',str(work / 'package')], check=True)
 

@@ -262,3 +262,9 @@ four-row result is pending. The local ZIP contains verified publisher inputs and
 is not a public release artifact. No launcher/default runtime/instance/world or
 Store update is made. Matching full game/graphics/input/audio/bootstrap and
 owned-account/provisioning remain next, followed by exact game/shader validation.
+
+
+[Bootstrap002](client-java17-bootstrap-002.md) follows001's physical VM-create
+crash after native image setup. It retains VM/image choices and adds runtime
+phases plus scoped fault capture and targeted diagnostic read permissions. Cause
+is unproven and original Minecraft was not reached; physical002results pending.

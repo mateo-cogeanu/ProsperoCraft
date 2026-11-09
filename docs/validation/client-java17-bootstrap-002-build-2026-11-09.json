@@ -1,0 +1,38 @@
+{
+  "date": "2026-11-09",
+  "title_id": "PPSA99878",
+  "version": "01.000.002",
+  "package_sha256": "879b00a744efa59530533b5d55c37c4b9bf756e4eb5473bb30e7a65049bd10ce",
+  "package_bytes": 114231219,
+  "symbols_sha256": "76635c276517331eea513d539fd04480a3851d96b443f9023e5ea3c754f026cd",
+  "class_image_sha256": "6ca3a65c2eec7e3963b65ba67f93b35713309afd23bdb412896783ee7088ca46",
+  "runtime_source_commit": "3c1ac7426072e90eec7171e67b4df23839e70f45",
+  "consumer_source_hashes": {
+    "param.json": "3506941204b99eab0f788a282f72907eca1eb3ae10bedd0049da5e7402647183",
+    "HelloLts.java": "3a4edd931b0d1dc88402c0f80545befa3e21335435314d7df004122cec5815e5",
+    "startup.cpp": "ee7a9fae705c291fa22130d048ee47fe04e7deec124614b34fd3693ef649c2a8"
+  },
+  "linked_objects": {
+    "ffi-core.o": "a20e6db4034a24bf1be1b714665cd9f33f0dd669ba4fb9dc80cc5e6b4bb07690",
+    "startup-fault.o": "3fc9f883c20abd797e9be2c2d70b34e2c6b210e7c41188d3bd7a151f2156a365"
+  },
+  "fault_source_sha256": "f9cb8092f24ff7983dee0c0b983611c6aec7cf8ff23b450f991ad1a192296152",
+  "profile": "Same512MiB/-Xint/SerialGC/2processors/32MiB class space/ALL-SYSTEM and identical nine-module image as001; diagnostics only",
+  "changes": [
+    "Runtime17 phase markers around create_vm initialization boundaries",
+    "Existing scoped native fault handler around JNI_CreateJavaVM, original handler forwarding and image anchor",
+    "Precreate/chmod only three probe-local diagnostic files0644 without truncation, including on reopen",
+    "Original001 package/title/symbols and17/21frozen passing milestones retained"
+  ],
+  "checks": {
+    "source": "PASS complete17/21pin/patch replay/idempotence and refusal controls",
+    "host": "PASS actual17standalone interpreter JNI/Java/thread/destruction regression",
+    "target": "PASS17core build/ELF audit; matching native link/constructor ownership and VM text bounds",
+    "package": "PASS signed eboot/libc integrity and ZIP CRC/image/metadata; original game/overlay bytes retained",
+    "fast": "PASS21checks48.3s",
+    "native": "PASS13checks18.4s, including existing fault capture and handler-root fixture"
+  },
+  "console": "PENDING002exact VM row2/fault/phase result; no crash resolution claimed",
+  "scope": "Diagnostic bootstrap only, no menu/world/C2/shader/performance acceptance",
+  "publication": "Source only. Local test contains original publisher payload, no release/Store action."
+}
