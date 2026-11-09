@@ -10,7 +10,7 @@
   "conceptId": "99878",
   "contentBadgeType": 1,
   "contentId": "IV9999-PPSA99878_00-MC120JAVA17BOOT1",
-  "contentVersion": "01.000.012",
+  "contentVersion": "01.000.013",
   "downloadDataSize": 256,
   "gameIntent": {
     "permittedIntents": [
@@ -22,7 +22,7 @@
   "localizedParameters": {
     "defaultLanguage": "en-US",
     "en-US": {
-      "titleName": "ProsperoCraft1.20 - Java17 Boot Test"
+      "titleName": "ProsperoCraft 1.20 - Java 17 Demo Test"
     }
   },
   "masterVersion": "01.00",

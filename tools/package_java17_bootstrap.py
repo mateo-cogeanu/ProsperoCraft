@@ -13,15 +13,20 @@ import sys
 
 from host_toolchain import ROOT, java_home
 from prepare_client_261 import verified, allowed, artifact_path
-from verify_client_120 import validate_metadata
+from verify_client_120 import prepare_assets, validate_metadata
 from build_lwjgl333 import sha
 
 
-def prepare(cache, output, binding, *, offline=False):
+def metadata_120(cache, *, offline):
     row = json.loads((ROOT / 'client/1.20.lock.json').read_text())['versions'][0]
     if row['id'] != '1.20' or row['javaMajor'] != 17:
-        raise ValueError('Reviewed original1.20/Java17 inputs required')
-    metadata = validate_metadata(row, verified(row['metadata'], cache / '1.20.json', offline=offline))
+        raise ValueError('Reviewed original 1.20 / Java 17 inputs required')
+    data = verified(row['metadata'], cache / '1.20.json', offline=offline)
+    return validate_metadata(row, data)
+
+
+def prepare(cache, output, binding, *, offline=False):
+    metadata = metadata_120(cache, offline=offline)
     jars = [cache / '1.20-client.jar']
     verified(metadata['downloads']['client'], jars[0], offline=offline)
     for library in metadata['libraries']:
@@ -147,6 +152,24 @@ def stage_openal_iostream(work, llvm, sdk):
     return staged
 
 
+def stage_demo_assets(cache, assets, output):
+    metadata = metadata_120(cache, offline=True)
+    count = prepare_assets(metadata, assets, offline=True, objects=True)
+    index = assets / 'indexes' / (metadata['assetIndex']['id'] + '.json')
+    game_assets = output / 'game-assets'
+    target_index = game_assets / 'indexes' / index.name
+    target_index.parent.mkdir(parents=True)
+    shutil.copyfile(index, target_index)
+    objects = {entry['hash'] for entry in json.loads(index.read_bytes())['objects'].values()}
+    for digest in sorted(objects):
+        relative = Path('objects') / digest[:2] / digest
+        target = game_assets / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(assets / relative, target)
+    shutil.copyfile(ROOT / 'client/java17_bootstrap/log4j2-demo.xml', output / 'log4j2-demo.xml')
+    return {'indexSha256': sha(target_index), 'verifiedObjects': count}
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     for name in ('runtime-workspace', 'llvm-home', 'lld', 'java-home', 'cache-dir',
@@ -154,17 +177,23 @@ def main():
         p.add_argument('--' + name, type=Path, required=True)
     p.add_argument('--graphics-input', action='append', default=[], metavar='NAME=PATH')
     p.add_argument('--offline', action='store_true')
+    p.add_argument('--game-assets', type=Path, help='Verified original Minecraft 1.20 asset tree')
     p.add_argument('--prepare-only', action='store_true')
     a = p.parse_args()
+    if not a.prepare_only and not a.game_assets:
+        p.error('--game-assets is required to package the demo test')
     jdk = java_home(a.java_home, required_major=17)
     work = a.work_dir.resolve()
     if work.exists():
         raise FileExistsError('Preserve existing candidate work; select a fresh directory')
     work.mkdir(parents=True)
     inputs = prepare(a.cache_dir.resolve(), work / 'publisher', a.lwjgl331_build.resolve(), offline=a.offline)
-    (work / 'publisher-audit.json').write_text(json.dumps({'gameJarModified':False,
-        'scope':'Local-only original1.20 entry/331 JNI and graphics handoff probe; no world acceptance',
-        'filesSha256':inputs}, indent=2) + '\n')
+    audit = {'gameJarModified': False, 'scope': 'Local-only original 1.20 demo test',
+             'filesSha256': inputs}
+    if a.game_assets:
+        audit['demoAssets'] = stage_demo_assets(a.cache_dir.resolve(), a.game_assets.resolve(),
+                                               work / 'publisher')
+    (work / 'publisher-audit.json').write_text(json.dumps(audit, indent=2) + '\n')
     if a.prepare_only:
         return
     runtime = a.runtime_workspace.resolve()

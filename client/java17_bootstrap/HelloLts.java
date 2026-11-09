@@ -29,132 +29,30 @@ public final class HelloLts {
    failure = failure.getCause();
   }
  }
- private static void verifyGraphics(ClassLoader loader) throws ReflectiveOperationException {
-  Class<?> glfw = loader.loadClass("org.lwjgl.glfw.GLFW");
-  stage("Graphics: initialize resident GLFW");
-  if (!(boolean) glfw.getMethod("glfwInit").invoke(null))
-   throw new IllegalStateException("GLFW initialization failed");
-  long window = 0;
+ private static void launchDemo(ClassLoader loader, Path root, Path assets) throws Exception {
+  Path game = Files.createDirectories(root.resolve("mc120-demo"));
+  if (!Files.isRegularFile(assets.resolve("indexes/5.json")))
+   throw new IllegalStateException("Verified 1.20 asset index missing");
+
+  String[] args = {
+   "--demo", "--disableMultiplayer", "--disableChat",
+   "--username", "Player", "--uuid", "00000000-0000-0000-0000-000000000000",
+   "--accessToken", "0", "--version", "1.20", "--versionType", "release",
+   "--gameDir", game.toString(), "--assetsDir", assets.toString(), "--assetIndex", "5",
+   "--width", "1280", "--height", "720"
+  };
+  stage("Invoking original Minecraft 1.20 Main in demo mode");
   try {
-   Class<?> gl = loader.loadClass("org.lwjgl.opengl.GL");
-   var hint = glfw.getMethod("glfwWindowHint", int.class, int.class);
-   hint.invoke(null, 0x00022002, 3); // GLFW_CONTEXT_VERSION_MAJOR
-   hint.invoke(null, 0x00022003, 3); // GLFW_CONTEXT_VERSION_MINOR
-   hint.invoke(null, 0x00022008, 0x00032001); // GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE
-   stage("Graphics: create GLFW window");
-   window = (long) glfw.getMethod("glfwCreateWindow", int.class, int.class, CharSequence.class,
-       long.class, long.class).invoke(null, 1280, 720, "ProsperoCraft Java 17 graphics test", 0L, 0L);
-   if (window == 0) throw new IllegalStateException("GLFW window creation failed");
-   glfw.getMethod("glfwMakeContextCurrent", long.class).invoke(null, window);
-   gl.getMethod("createCapabilities").invoke(null);
-   Class<?> gl11 = loader.loadClass("org.lwjgl.opengl.GL11C");
-   String renderer = (String) gl11.getMethod("glGetString", int.class).invoke(null, 0x1F01);
-   if (renderer == null || !renderer.toLowerCase(java.util.Locale.ROOT).contains("zink"))
-    throw new IllegalStateException("Unexpected renderer");
-   stage("Graphics: Zink context confirmed");
-   var color = gl11.getMethod("glClearColor", float.class, float.class, float.class, float.class);
-   var clear = gl11.getMethod("glClear", int.class);
-   var error = gl11.getMethod("glGetError");
-   var swap = glfw.getMethod("glfwSwapBuffers", long.class);
-   var glfwError = glfw.getMethod("nglfwGetError", long.class);
-   var poll = glfw.getMethod("glfwPollEvents");
-   glfw.getMethod("glfwSwapInterval", int.class).invoke(null, 1);
-   for (int channel = 0; channel < 3; channel++) {
-    long start = System.nanoTime();
-    do {
-     poll.invoke(null);
-     color.invoke(null, channel == 0 ? 0.75f : 0.05f, channel == 1 ? 0.75f : 0.05f,
-                  channel == 2 ? 0.75f : 0.05f, 1f);
-     clear.invoke(null, 0x4000);
-     if ((int) error.invoke(null) != 0) throw new IllegalStateException("OpenGL clear failed");
-     swap.invoke(null, window);
-     if ((int) glfwError.invoke(null, 0L) != 0) throw new IllegalStateException("GLFW frame error");
-    } while (System.nanoTime() - start < 1_000_000_000L);
-   }
-   gl11.getMethod("glFinish").invoke(null);
-   if ((int) error.invoke(null) != 0) throw new IllegalStateException("OpenGL finish failed");
-   stage("Graphics: submitted red, green and blue frames");
-  } finally {
-   try {
-    if (window != 0) {
-     glfw.getMethod("glfwMakeContextCurrent", long.class).invoke(null, 0L);
-     loader.loadClass("org.lwjgl.opengl.GL")
-       .getMethod("setCapabilities", loader.loadClass("org.lwjgl.opengl.GLCapabilities"))
-       .invoke(null, (Object) null);
-     glfw.getMethod("glfwDestroyWindow", long.class).invoke(null, window);
-    }
-   } finally {
-    glfw.getMethod("glfwTerminate").invoke(null);
-   }
+   Class<?> main = Class.forName("net.minecraft.client.main.Main", true, loader);
+   nativeStage(14);
+   main.getMethod("main", String[].class).invoke(null, (Object) args);
+  } catch (ReflectiveOperationException | LinkageError failure) {
+   reportMainFailure(failure);
+   throw failure;
   }
-  stage("Graphics: GLFW teardown completed");
+  stage("Original Minecraft Main returned");
  }
- private static void verifyAudio(ClassLoader loader) throws ReflectiveOperationException, InterruptedException {
-  Class<?> alc = loader.loadClass("org.lwjgl.openal.ALC");
-  Class<?> alc10 = loader.loadClass("org.lwjgl.openal.ALC10");
-  Class<?> al = loader.loadClass("org.lwjgl.openal.AL");
-  Class<?> al10 = loader.loadClass("org.lwjgl.openal.AL10");
-  Class<?> alcCaps = loader.loadClass("org.lwjgl.openal.ALCCapabilities");
-  Class<?> alCaps = loader.loadClass("org.lwjgl.openal.ALCapabilities");
-  stage("Audio: open default OpenAL playback device");
-  long device = (long) alc10.getMethod("alcOpenDevice", ByteBuffer.class).invoke(null, (Object) null);
-  if (device == 0) throw new IllegalStateException("OpenAL playback device failed");
-  long context = 0;
-  int buffer = 0;
-  int source = 0;
-  var makeCurrent = alc10.getMethod("alcMakeContextCurrent", long.class);
-  try {
-   context = (long) alc10.getMethod("alcCreateContext", long.class, java.nio.IntBuffer.class)
-       .invoke(null, device, null);
-   if (context == 0 || !(boolean) makeCurrent.invoke(null, context))
-    throw new IllegalStateException("OpenAL context failed");
-   Object capabilities = alc.getMethod("createCapabilities", long.class).invoke(null, device);
-   al.getMethod("createCapabilities", alcCaps).invoke(null, capabilities);
-   int rate = 48_000;
-   var pcm = ByteBuffer.allocateDirect(rate * Short.BYTES)
-       .order(java.nio.ByteOrder.nativeOrder()).asShortBuffer();
-   for (int i = 0; i < rate; i++) {
-    double envelope = Math.min(1.0, Math.min(i, rate - 1 - i) / 480.0);
-    pcm.put(i, (short) (6000 * envelope * Math.sin(2 * Math.PI * 440 * i / rate)));
-   }
-   buffer = (int) al10.getMethod("alGenBuffers").invoke(null);
-   source = (int) al10.getMethod("alGenSources").invoke(null);
-   al10.getMethod("alBufferData", int.class, int.class, java.nio.ShortBuffer.class, int.class)
-       .invoke(null, buffer, 0x1101, pcm, rate); // AL_FORMAT_MONO16
-   al10.getMethod("alSourcei", int.class, int.class, int.class).invoke(null, source, 0x1009, buffer);
-   al10.getMethod("alSourcePlay", int.class).invoke(null, source);
-   var error = al10.getMethod("alGetError");
-   var sourceState = al10.getMethod("alGetSourcei", int.class, int.class);
-   if ((int) error.invoke(null) != 0 || (int) sourceState.invoke(null, source, 0x1010) != 0x1012)
-    throw new IllegalStateException("OpenAL did not start the tone");
-   stage("Audio: OpenAL playing a one-second tone");
-   long start = System.nanoTime();
-   int state;
-   do {
-    Thread.sleep(20);
-    state = (int) sourceState.invoke(null, source, 0x1010);
-   } while (state == 0x1012 && System.nanoTime() - start < 3_000_000_000L);
-   if (state != 0x1014 || (int) error.invoke(null) != 0)
-    throw new IllegalStateException("OpenAL did not finish the tone");
-  } finally {
-   try {
-    if (source != 0) al10.getMethod("alDeleteSources", int.class).invoke(null, source);
-    if (buffer != 0) al10.getMethod("alDeleteBuffers", int.class).invoke(null, buffer);
-   } finally {
-    try {
-     if (context != 0) {
-      al.getMethod("setCurrentProcess", alCaps).invoke(null, (Object) null);
-      if (!(boolean) makeCurrent.invoke(null, 0L)) throw new IllegalStateException("OpenAL detach failed");
-      alc10.getMethod("alcDestroyContext", long.class).invoke(null, context);
-     }
-    } finally {
-     if (!(boolean) alc10.getMethod("alcCloseDevice", long.class).invoke(null, device))
-      throw new IllegalStateException("OpenAL device close failed");
-    }
-   }
-  }
-  stage("Audio: playback and OpenAL teardown completed");
- }
+
  public static int run() throws Exception {
   nativeStage(0);
   nativeStage(1);
@@ -221,33 +119,27 @@ public final class HelloLts {
      stage("Actual331 native allocation/read/write/free passed");
     } else stage("HOST ONLY: native PS5 binding skipped explicitly");
     nativeStage(9);
-    stage("Invoke unchanged Minecraft1.20 Main with no auth/game arguments");
-    try {
-     Class<?> main = Class.forName("net.minecraft.client.main.Main", true, loader);
-     nativeStage(14);
-     main.getMethod("main", String[].class).invoke(null, (Object) new String[0]);
-     throw new AssertionError("Original argument gate unexpectedly returned");
-    } catch (InvocationTargetException invocation) {
-     Throwable cause = invocation.getCause();
-     if (cause == null || !cause.getClass().getName().equals("joptsimple.MissingRequiredOptionsException")) {
-      reportMainFailure(invocation);
-      throw invocation;
-     }
-     stage("Original Minecraft1.20 parser reached required accessToken/version gate, as intended");
-    } catch (ReflectiveOperationException | LinkageError failure) {
-     reportMainFailure(failure);
-     throw failure;
-    }
-    if (Boolean.getBoolean("ps5.mc17.graphicsProbe")) {
+    if (Boolean.getBoolean("ps5.mc17.hostEntryOnly")) {
+     stage("Invoke unchanged Minecraft1.20 Main with no auth/game arguments");
      try {
-      verifyGraphics(loader);
-      verifyAudio(loader);
-     } catch (ReflectiveOperationException | InterruptedException | RuntimeException | LinkageError failure) {
+      Class<?> main = Class.forName("net.minecraft.client.main.Main", true, loader);
+      nativeStage(14);
+      main.getMethod("main", String[].class).invoke(null, (Object) new String[0]);
+      throw new AssertionError("Original argument gate unexpectedly returned");
+     } catch (InvocationTargetException invocation) {
+      Throwable cause = invocation.getCause();
+      if (cause == null || !cause.getClass().getName().equals("joptsimple.MissingRequiredOptionsException")) {
+       reportMainFailure(invocation);
+       throw invocation;
+      }
+      stage("Original Minecraft1.20 parser reached required accessToken/version gate, as intended");
+     } catch (ReflectiveOperationException | LinkageError failure) {
       reportMainFailure(failure);
       throw failure;
      }
+    } else {
+     launchDemo(loader, root, folder.resolve("game-assets"));
     }
-    stage("PASS original1.20 bootstrap; no menu/world/rendering claim");
     } finally { Thread.currentThread().setContextClassLoader(previous); }
    }
    return 17;

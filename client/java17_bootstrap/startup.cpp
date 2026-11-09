@@ -52,7 +52,7 @@ unsigned previous=0;
 bool initialized=false,attempted=false;
 int status[4]{};
 char details[4][120]{};
-const char*names[]={"Initialize matched Java17 + LWJGL331", "Create real Java17 VM (-Xint)", "Original Minecraft entry and Zink graphics", "Automatic Java17 VM shutdown"};
+const char*names[]={"Initialize matched Java17 + LWJGL331", "Create real Java17 VM (-Xint)", "Launch Minecraft 1.20 demo", "Automatic Java17 VM shutdown"};
 unsigned color(unsigned r,unsigned g,unsigned b){return 0xff000000u|r|(g<<8)|(b<<16);}
 void stage(const char*text){if(logfile){std::fprintf(logfile,"%s\n",text);std::fflush(logfile);}}
 void notify_result(const char* text) {
@@ -135,7 +135,7 @@ void run(int i){
   if(initialized){finish(i,-1710,"Already initialized; relaunch to repeat");return;}
   logfile=std::fopen("/download0/mc120-java17-bootstrap.log","a");
   if(!logfile){finish(i,errno?errno:-1711,"Cannot create private probe log");return;}
-  stage("ProsperoCraft1.20 Java17 bootstrap012; original game entry and graphics handoff");
+  stage("ProsperoCraft1.20 Java17 bootstrap013; original Minecraft demo title-screen test");
   for(auto*p=__jvm_init_array_start;p!=__jvm_init_array_end;++p)if(*p)(*p)();
   const int graphics_result = prepare_graphics();
   initialized = graphics_result == 0;
@@ -152,8 +152,9 @@ void run(int i){
   size_t n=f?std::fread(magic,1,4,f):0;if(f)std::fclose(f);
   if(n!=4||magic[0]!=0xda||magic[1]!=0xda||magic[2]!=0xfe||magic[3]!=0xca){finish(i,-1714,"Packaged Java17 image preflight failed");return;}
   JavaVMOption options[]={
-   {const_cast<char*>("-Dps5.mc17.graphicsProbe=true"),nullptr},
-   {const_cast<char*>("-Xint"),nullptr},{const_cast<char*>("-Xms16m"),nullptr},{const_cast<char*>("-Xmx128m"),nullptr},
+   {const_cast<char*>("-Dlog4j.configurationFile=/app0/assets/java17/extra/log4j2-demo.xml"),nullptr},
+   {const_cast<char*>("-Djava.awt.headless=true"),nullptr},
+   {const_cast<char*>("-Xint"),nullptr},{const_cast<char*>("-Xms16m"),nullptr},{const_cast<char*>("-Xmx384m"),nullptr},
    {const_cast<char*>("-XX:UseAVX=0"),nullptr},{const_cast<char*>("-XX:UseSSE=2"),nullptr},
    {const_cast<char*>("-XX:+UseSerialGC"),nullptr},{const_cast<char*>("-XX:ActiveProcessorCount=2"),nullptr},
    {const_cast<char*>("-XX:CompressedClassSpaceSize=32m"),nullptr},{const_cast<char*>("-XX:-UsePerfData"),nullptr},
@@ -201,7 +202,7 @@ void run(int i){
   if(env->ExceptionCheck()){jthrowable failure=env->ExceptionOccurred();env->ExceptionClear();report_exception(env,failure,0);env->DeleteLocalRef(failure);if(env->ExceptionCheck())env->ExceptionClear();}
   glfwSetErrorCallback(nullptr);
   ps5shaderc_fault_end();
-  finish(i,rc,"Original1.20 entry and Java17/LWJGL331 Zink frames");return;
+  finish(i,rc,"Original Minecraft 1.20 demo returned");return;
  }
  stage("Entering DestroyJavaVM");int rc=vm->DestroyJavaVM();if(rc==JNI_OK){vm=nullptr;env=nullptr;}
  finish(i,rc,"DestroyJavaVM returned; relaunch for another VM");
@@ -226,8 +227,8 @@ bool update()noexcept{
 }
 void draw(Canvas&c)noexcept{
  c.gradient(color(16,28,42),color(8,13,22));
- c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.012",54,color(235,243,250));
- c.label(103,151,"Graphics test: the probe hands VideoOut to Java 17 on row 3.",24,color(157,175,193));
+ c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.013",54,color(235,243,250));
+ c.label(103,151,"Title screen test: row 3 launches Minecraft 1.20 in demo mode.",24,color(157,175,193));
  for(int i=0;i<4;++i){int y=245+i*125;
   if(selected==i)c.rounded(95,y-5,1730,106,20,color(101,170,215));
   c.rounded(100,y,1720,96,18,color(26,38,54));
@@ -235,7 +236,7 @@ void draw(Canvas&c)noexcept{
   c.label(126,y+57,details[i][0]?details[i]:"D-pad to select, X to run",20,color(157,175,193));
   c.label(1650,y+26,status[i]==1?"PASS":status[i]<0?"FAIL":status[i]==2?"RUN":"--",24,status[i]==1?color(100,219,160):color(235,191,115));
  }
- c.label(103,837,"Run rows 1 through 3. Look for red, green and blue, then listen for a short tone.",25,color(157,175,193));
+ c.label(103,837,"Run rows 1 through 3. Wait for the Minecraft title screen.",25,color(157,175,193));
  c.label(103,897,"Reports: download0/mc120-java17-bootstrap.log and java17-vm-trace.log",22,color(157,175,193));
  c.label(103,967,"If a stage hangs or crashes: close with PS, reopen, and report the stage.",22,color(157,175,193));
 }
@@ -258,7 +259,7 @@ extern "C" const char* prospero_gpu_display_name() { return "PS5 AMD Radeon"; }
 int main(){
  // Preserve prior bytes and make this unauthenticated probe's diagnostics readable
  // by the FTP service. Never touch account files or another title's storage.
- const char*diagnostics[]={"/download0/mc120-java17-bootstrap.log","/download0/java17-vm-trace.log","/download0/mc120-java17-fault.log"};
+ const char*diagnostics[]={"/download0/mc120-java17-bootstrap.log","/download0/java17-vm-trace.log","/download0/mc120-java17-fault.log","/download0/mc120-java17-game.log"};
  for(const char*path:diagnostics){
   int fd=open(path,O_CREAT|O_WRONLY|O_APPEND,0644);if(fd>=0){(void)fchmod(fd,0644);close(fd);}
  }
@@ -281,8 +282,8 @@ int main(){
   client_ps5_audio_early_port = -1;
  }
  const bool passed = status[2] == 1 && status[3] == 1;
- stage(passed ? "PASS: graphics and VM shutdown" : "FAIL: graphics or VM shutdown");
- notify_result(passed ? "Java 17 graphics and audio test passed." : "Java 17 graphics or audio test failed. Logs are ready.");
+ stage(passed ? "Minecraft returned and JVM shut down" : "FAIL: Minecraft launch or VM shutdown");
+ notify_result(passed ? "Minecraft demo ended." : "Minecraft demo failed. Logs are ready.");
  // Leave the process available for FTP report retrieval after the display closes.
  for (;;) sleep(1);
 }

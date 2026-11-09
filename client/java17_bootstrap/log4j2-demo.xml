@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Appenders>
+    <File name="Demo" fileName="/download0/mc120-java17-game.log" append="false">
+      <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level] %msg%n%throwable"/>
+    </File>
+  </Appenders>
+  <Loggers>
+    <Root level="info"><AppenderRef ref="Demo"/></Root>
+  </Loggers>
+</Configuration>
