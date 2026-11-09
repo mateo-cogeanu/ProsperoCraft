@@ -19,6 +19,7 @@ crashes, reopen the probe once so the retained logs are accessible.
 
 The original Java class, runtime image and publisher inputs match 011.
 Target packaging and a host check of paired aligned allocation and free
-passed. AudioOut playback and the Minecraft title screen remain pending.
+passed. The maintainer reported PASS on PS5. The Minecraft title screen
+remains pending. See the [console record](validation/client-java17-bootstrap-012-console-2026-11-09.json).
 
 Signed local ZIP SHA-256 `9942be1469b05c258113014af725bac0265a597f361a1817d841d36c4ad77faf`.

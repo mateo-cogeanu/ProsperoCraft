@@ -1,0 +1,13 @@
+{
+  "title_id": "PPSA99878",
+  "version": "01.000.012",
+  "tested_date": "2026-11-09",
+  "console": "PS5",
+  "evidence": "Maintainer reported pass in response to the exact build 012 graphics and audio test. Tone audibility and the shutdown report were not independently verified.",
+  "results": {"graphics_and_openal_probe": "PASS (user report)"},
+  "sha256": "9942be1469b05c258113014af725bac0265a597f361a1817d841d36c4ad77faf",
+  "consumer_build_commit": "f29833dc7d0e9ebbb5ca00aa038951ff0d117339",
+  "package_file": "PPSA99878.zip",
+  "package_storage": "Local signed ZIP contains original publisher inputs.",
+  "unverified": ["Minecraft title screen", "Minecraft world startup"]
+}
