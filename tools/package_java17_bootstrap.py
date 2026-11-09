@@ -54,11 +54,44 @@ def prepare(cache, output, binding, *, offline=False):
     return {p.name: sha(p) for p in sorted(output.iterdir()) if p.is_file()}
 
 
+def graphics_options(bindings, work, llvm):
+    pins = json.loads((ROOT / 'client/java17_bootstrap/graphics-pins.json').read_text())
+    inputs = {}
+    for binding in bindings:
+        name, sep, path = binding.partition('=')
+        if not sep or name not in pins or name in inputs:
+            raise ValueError('Expected one path for each pinned graphics input')
+        file = Path(path).resolve(strict=True)
+        if sha(file) != pins[name]:
+            raise ValueError('Graphics input differs from the reviewed build: ' + name)
+        inputs[name] = file
+    if set(inputs) != set(pins):
+        raise ValueError('Missing pinned graphics inputs: ' + ', '.join(sorted(set(pins) - set(inputs))))
+
+    # This LTS application has no Java 25 process-wide allocator/thread wrappers.
+    renames = work / 'graphics-imports.txt'
+    symbols = ('calloc', 'free', 'malloc', 'pthread_create', 'pthread_join', 'realloc')
+    renames.write_text(''.join(f'__real_{name} {name}\n' for name in symbols))
+    graphics = work / 'graphics-support.o'
+    subprocess.run([str(llvm / 'bin/llvm-objcopy'), '--redefine-syms=' + str(renames),
+                    str(inputs['graphics']), str(graphics)], check=True)
+    options = ['--staged-constructors', 'client_gpu=.data.rel.ro.clientgpu.init_array',
+               '--thread-atexit-provider', 'clientgpu_ps5___cxa_thread_atexit_impl',
+               '--link-object', str(graphics), '--link-object', str(inputs['sdl'])]
+    for group in ('ps5clientgpu', 'ps5glfw', 'ps5zink'):
+        options += ['--library', f'{group}={inputs[group]}']
+    for name, path in inputs.items():
+        if name.endswith('.so'):
+            options += ['--import-stub', str(path)]
+    return options
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     for name in ('runtime-workspace', 'llvm-home', 'lld', 'java-home', 'cache-dir',
                  'lwjgl331-build', 'ffi-core', 'image-dir', 'work-dir'):
         p.add_argument('--' + name, type=Path, required=True)
+    p.add_argument('--graphics-input', action='append', default=[], metavar='NAME=PATH')
     p.add_argument('--offline', action='store_true')
     p.add_argument('--prepare-only', action='store_true')
     a = p.parse_args()
@@ -69,10 +102,11 @@ def main():
     work.mkdir(parents=True)
     inputs = prepare(a.cache_dir.resolve(), work / 'publisher', a.lwjgl331_build.resolve(), offline=a.offline)
     (work / 'publisher-audit.json').write_text(json.dumps({'gameJarModified':False,
-        'scope':'Local-only original1.20 entry/331 JNI; no rendering or world acceptance',
+        'scope':'Local-only original1.20 entry/331 JNI and graphics handoff probe; no world acceptance',
         'filesSha256':inputs}, indent=2) + '\n')
     if a.prepare_only:
         return
+    graphics = graphics_options(a.graphics_input, work, a.llvm_home.resolve())
     runtime = a.runtime_workspace.resolve()
     sdk = runtime / '.tools/native-sdk/ps5-payload-sdk'
     fault = work / 'startup-fault.o'
@@ -88,7 +122,7 @@ def main():
         '--library','lwjgl331=' + str(a.lwjgl331_build.resolve() / 'ps5/lwjgl331.o'),
         '--link-object',str(a.ffi_core.resolve()),'--link-object',str(fault),'--llvm-home',str(a.llvm_home.resolve()),
         '--lld',str(a.lld.absolute()),'--boot-jdk',str(jdk),'--image-dir',str(a.image_dir.resolve()),
-        '--work-dir',str(work / 'package')], check=True)
+        '--work-dir',str(work / 'package'), *graphics], check=True)
 
 
 if __name__ == '__main__':

@@ -16,6 +16,12 @@ extern "C" void ps5shaderc_fault_end(void);
 using Initializer=void(*)();
 extern "C" Initializer __jvm_init_array_start[],__jvm_init_array_end[];
 extern "C" unsigned ps5DemoPresentationTargetHz() noexcept { return 60; }
+struct VkInstance_T;
+using VulkanLoader = void (*(*)(VkInstance_T*, const char*))();
+extern "C" void glfwInitHint(int, int);
+extern "C" void glfwInitVulkanLoader(VulkanLoader);
+extern "C" void (*vkGetInstanceProcAddr(VkInstance_T*, const char*))();
+extern "C" void prospero_graphics_init();
 namespace {
 using ps5::demo::Canvas;
 JavaVM*vm=nullptr;
@@ -26,7 +32,7 @@ unsigned previous=0;
 bool initialized=false,attempted=false;
 int status[4]{};
 char details[4][120]{};
-const char*names[]={"Initialize matched Java17 + LWJGL331", "Create real Java17 VM (-Xint)", "Initialize LWJGL331 and original Minecraft1.20 entry", "Destroy Java17 VM"};
+const char*names[]={"Initialize matched Java17 + LWJGL331", "Create real Java17 VM (-Xint)", "Original Minecraft entry and Zink graphics", "Automatic Java17 VM shutdown"};
 unsigned color(unsigned r,unsigned g,unsigned b){return 0xff000000u|r|(g<<8)|(b<<16);}
 void stage(const char*text){if(logfile){std::fprintf(logfile,"%s\n",text);std::fflush(logfile);}}
 void JNICALL java_stage(JNIEnv*,jclass,jint index){
@@ -65,7 +71,7 @@ void run(int i){
   if(initialized){finish(i,-1710,"Already initialized; relaunch to repeat");return;}
   logfile=std::fopen("/download0/mc120-java17-bootstrap.log","a");
   if(!logfile){finish(i,errno?errno:-1711,"Cannot create private probe log");return;}
-  stage("ProsperoCraft1.20 Java17 bootstrap008; original game entry, no renderer/world");
+  stage("ProsperoCraft1.20 Java17 bootstrap009; original game entry and graphics handoff");
   for(auto*p=__jvm_init_array_start;p!=__jvm_init_array_end;++p)if(*p)(*p)();
   initialized=true;finish(i,0,"Core constructors completed");return;
  }
@@ -77,6 +83,7 @@ void run(int i){
   size_t n=f?std::fread(magic,1,4,f):0;if(f)std::fclose(f);
   if(n!=4||magic[0]!=0xda||magic[1]!=0xda||magic[2]!=0xfe||magic[3]!=0xca){finish(i,-1714,"Packaged Java17 image preflight failed");return;}
   JavaVMOption options[]={
+   {const_cast<char*>("-Dps5.mc17.graphicsProbe=true"),nullptr},
    {const_cast<char*>("-Xint"),nullptr},{const_cast<char*>("-Xms16m"),nullptr},{const_cast<char*>("-Xmx128m"),nullptr},
    {const_cast<char*>("-XX:UseAVX=0"),nullptr},{const_cast<char*>("-XX:UseSSE=2"),nullptr},
    {const_cast<char*>("-XX:+UseSerialGC"),nullptr},{const_cast<char*>("-XX:ActiveProcessorCount=2"),nullptr},
@@ -113,15 +120,20 @@ void run(int i){
   stage("Installing row3 fault scope and entering JNI consumer checks");
   int handlers=ps5shaderc_fault_begin();
   if(handlers!=4){ps5shaderc_fault_end();finish(i,-1723,"Incomplete row3 fault recorder");return;}
+  stage("Native display closed; preparing resident GLFW and Zink");
+  prospero_graphics_init();
+  glfwInitHint(0x00050003, 0x00060005); // GLFW_PLATFORM, GLFW_PLATFORM_NULL
+  glfwInitVulkanLoader(vkGetInstanceProcAddr);
   int rc=ps5_lts_probe::run(env,bytes,n,stage,register_stage);
   if(env->ExceptionCheck()){jthrowable failure=env->ExceptionOccurred();env->ExceptionClear();report_exception(env,failure,0);env->DeleteLocalRef(failure);if(env->ExceptionCheck())env->ExceptionClear();}
   ps5shaderc_fault_end();
-  finish(i,rc,"Original1.20 entry, exact331 owner, native memory and Java17 modules");return;
+  finish(i,rc,"Original1.20 entry and Java17/LWJGL331 Zink frames");return;
  }
  stage("Entering DestroyJavaVM");int rc=vm->DestroyJavaVM();if(rc==JNI_OK){vm=nullptr;env=nullptr;}
  finish(i,rc,"DestroyJavaVM returned; relaunch for another VM");
 }
 bool update()noexcept{
+  if(pending==2)return false; // Row 3 runs after run_ui_until releases VideoOut.
  if(pending>=0){int i=pending;pending=-1;run(i);return true;}
  if(pad<0)return false;
  PadSample samples[64]{};int count=scePadRead(pad,samples,64);
@@ -132,14 +144,16 @@ bool update()noexcept{
   unsigned pressed=buttons&~previous;previous=buttons;
   if(pressed&0x10){selected=(selected+3)%4;changed=true;}
   if(pressed&0x40){selected=(selected+1)%4;changed=true;}
-  if((pressed&0x4000)&&status[selected]==0){status[selected]=2;pending=selected;return true;}
+  if((pressed&0x4000)&&status[selected]==0
+     && selected<3 && (selected==0||status[selected-1]==1)
+   ){status[selected]=2;pending=selected;return true;}
  }
  return changed;
 }
 void draw(Canvas&c)noexcept{
  c.gradient(color(16,28,42),color(8,13,22));
- c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.008",54,color(235,243,250));
- c.label(103,151,"BOOT TEST ONLY: original1.20 initialization. No playable menu/world yet.",24,color(157,175,193));
+ c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.009",54,color(235,243,250));
+ c.label(103,151,"Graphics test: the probe hands VideoOut to Java 17 on row 3.",24,color(157,175,193));
  for(int i=0;i<4;++i){int y=245+i*125;
   if(selected==i)c.rounded(95,y-5,1730,106,20,color(101,170,215));
   c.rounded(100,y,1720,96,18,color(26,38,54));
@@ -147,11 +161,26 @@ void draw(Canvas&c)noexcept{
   c.label(126,y+57,details[i][0]?details[i]:"D-pad to select, X to run",20,color(157,175,193));
   c.label(1650,y+26,status[i]==1?"PASS":status[i]<0?"FAIL":status[i]==2?"RUN":"--",24,status[i]==1?color(100,219,160):color(235,191,115));
  }
- c.label(103,837,"Run all four rows in order. This checks startup, not rendering or worlds.",25,color(157,175,193));
+ c.label(103,837,"Run rows 1 through 3. Look for red, green and blue, then automatic shutdown.",25,color(157,175,193));
  c.label(103,897,"Reports: download0/mc120-java17-bootstrap.log and java17-vm-trace.log",22,color(157,175,193));
  c.label(103,967,"If a stage hangs or crashes: close with PS, reopen, and report the stage.",22,color(157,175,193));
 }
 }
+extern "C" void client_gpu_stage(const char* message, int code) {
+ if (logfile) {
+  std::fprintf(logfile, "GPU: %s (%d)\n", message, code);
+  std::fflush(logfile);
+ }
+}
+extern "C" void client_sdl_diagnostic(const char* message) {
+ static unsigned count;
+ if (__atomic_fetch_add(&count, 1, __ATOMIC_RELAXED) < 64) stage(message);
+}
+extern "C" void client_input_change(unsigned) {}
+extern "C" int client_input_present_trace(int) { return 0; }
+extern "C" void client_input_present_note(const char*, unsigned, long long) {}
+extern "C" const char* prospero_gpu_display_name() { return "PS5 AMD Radeon"; }
+
 int main(){
  // Preserve prior bytes and make this unauthenticated probe's diagnostics readable
  // by the FTP service. Never touch account files or another title's storage.
@@ -162,6 +191,16 @@ int main(){
 
  sceUserServiceInitialize(nullptr);int user=-1;
  if(sceUserServiceGetInitialUser(&user)>=0&&scePadInit()>=0)pad=scePadOpen(user,0,0,nullptr);
- ps5::demo::run_ui(draw,update,"Minecraft1.20 Java17 bootstrap ready");
- return 0;
+ const bool released = ps5::demo::run_ui_until(draw,update,[]() noexcept { return pending==2; },
+                                               "Java 17 graphics handoff ready");
+ if (!released) {
+  stage("FAIL: native VideoOut cleanup; Java graphics was not started");
+  for (;;) sleep(1);
+ }
+ if (pad >= 0) { scePadClose(pad); pad=-1; }
+ run(2);
+ run(3);
+ stage(status[2]==1 && status[3]==1 ? "PASS: graphics and VM shutdown" : "FAIL: graphics or VM shutdown");
+ // Leave the process available for FTP report retrieval after the display closes.
+ for (;;) sleep(1);
 }

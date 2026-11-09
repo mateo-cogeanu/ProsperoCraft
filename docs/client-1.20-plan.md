@@ -321,3 +321,6 @@ game's expected `objects/<prefix>/<sha1>` layout. Add `--offline` to
 verify an existing cache without network access. The 1.20 index was
 verified online and offline and lists 3,575 unique objects. Keep all
 downloaded publisher content in local storage.
+
+[Build 009 graphics handoff test](client-java17-bootstrap-009.md) adds a real
+LWJGL/Zink frame test after the accepted argument gate.

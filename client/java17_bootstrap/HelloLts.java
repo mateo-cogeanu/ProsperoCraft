@@ -29,6 +29,66 @@ public final class HelloLts {
    failure = failure.getCause();
   }
  }
+ private static void verifyGraphics(ClassLoader loader) throws ReflectiveOperationException {
+  Class<?> glfw = loader.loadClass("org.lwjgl.glfw.GLFW");
+  stage("Graphics: initialize resident GLFW");
+  if (!(boolean) glfw.getMethod("glfwInit").invoke(null))
+   throw new IllegalStateException("GLFW initialization failed");
+  long window = 0;
+  try {
+   Class<?> gl = loader.loadClass("org.lwjgl.opengl.GL");
+   var hint = glfw.getMethod("glfwWindowHint", int.class, int.class);
+   hint.invoke(null, 0x00022002, 3); // GLFW_CONTEXT_VERSION_MAJOR
+   hint.invoke(null, 0x00022003, 3); // GLFW_CONTEXT_VERSION_MINOR
+   hint.invoke(null, 0x00022008, 0x00032001); // GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE
+   stage("Graphics: create GLFW window");
+   window = (long) glfw.getMethod("glfwCreateWindow", int.class, int.class, CharSequence.class,
+       long.class, long.class).invoke(null, 1280, 720, "ProsperoCraft Java 17 graphics test", 0L, 0L);
+   if (window == 0) throw new IllegalStateException("GLFW window creation failed");
+   glfw.getMethod("glfwMakeContextCurrent", long.class).invoke(null, window);
+   gl.getMethod("createCapabilities").invoke(null);
+   Class<?> gl11 = loader.loadClass("org.lwjgl.opengl.GL11C");
+   String renderer = (String) gl11.getMethod("glGetString", int.class).invoke(null, 0x1F01);
+   if (renderer == null || !renderer.toLowerCase(java.util.Locale.ROOT).contains("zink"))
+    throw new IllegalStateException("Unexpected renderer");
+   stage("Graphics: Zink context confirmed");
+   var color = gl11.getMethod("glClearColor", float.class, float.class, float.class, float.class);
+   var clear = gl11.getMethod("glClear", int.class);
+   var error = gl11.getMethod("glGetError");
+   var swap = glfw.getMethod("glfwSwapBuffers", long.class);
+   var glfwError = glfw.getMethod("nglfwGetError", long.class);
+   var poll = glfw.getMethod("glfwPollEvents");
+   glfw.getMethod("glfwSwapInterval", int.class).invoke(null, 1);
+   for (int channel = 0; channel < 3; channel++) {
+    long start = System.nanoTime();
+    do {
+     poll.invoke(null);
+     color.invoke(null, channel == 0 ? 0.75f : 0.05f, channel == 1 ? 0.75f : 0.05f,
+                  channel == 2 ? 0.75f : 0.05f, 1f);
+     clear.invoke(null, 0x4000);
+     if ((int) error.invoke(null) != 0) throw new IllegalStateException("OpenGL clear failed");
+     swap.invoke(null, window);
+     if ((int) glfwError.invoke(null, 0L) != 0) throw new IllegalStateException("GLFW frame error");
+    } while (System.nanoTime() - start < 1_000_000_000L);
+   }
+   gl11.getMethod("glFinish").invoke(null);
+   if ((int) error.invoke(null) != 0) throw new IllegalStateException("OpenGL finish failed");
+   stage("Graphics: submitted red, green and blue frames");
+  } finally {
+   try {
+    if (window != 0) {
+     glfw.getMethod("glfwMakeContextCurrent", long.class).invoke(null, 0L);
+     loader.loadClass("org.lwjgl.opengl.GL")
+       .getMethod("setCapabilities", loader.loadClass("org.lwjgl.opengl.GLCapabilities"))
+       .invoke(null, (Object) null);
+     glfw.getMethod("glfwDestroyWindow", long.class).invoke(null, window);
+    }
+   } finally {
+    glfw.getMethod("glfwTerminate").invoke(null);
+   }
+  }
+  stage("Graphics: GLFW teardown completed");
+ }
  public static int run() throws Exception {
   nativeStage(0);
   nativeStage(1);
@@ -111,6 +171,14 @@ public final class HelloLts {
     } catch (ReflectiveOperationException | LinkageError failure) {
      reportMainFailure(failure);
      throw failure;
+    }
+    if (Boolean.getBoolean("ps5.mc17.graphicsProbe")) {
+     try {
+      verifyGraphics(loader);
+     } catch (ReflectiveOperationException | RuntimeException | LinkageError failure) {
+      reportMainFailure(failure);
+      throw failure;
+     }
     }
     stage("PASS original1.20 bootstrap; no menu/world/rendering claim");
     } finally { Thread.currentThread().setContextClassLoader(previous); }
