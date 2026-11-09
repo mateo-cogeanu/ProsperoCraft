@@ -466,3 +466,15 @@ unchanged elsewhere. Native lane14adds actual20signal/2report/restore sanitizer
 fixture; host frame capture explicitly disabled there. Exact004console pending;
 preserve previous/frozenbytes, working25and original JARs. No release/Store pass.
 See docs/client-java17-bootstrap-004.md; raw reports stay local.
+
+
+## Java17 bootstrap004 Path boundary and005directory mode —2026-11-09
+
+004enters actual Java/nativeStage, crashes at first Path.of expression before Java
+file log/management/331/Main. Captured SIGSEGV PC not region-resolved; getcwd cause
+unproven.005tests genuine upstream sun.nio.fs.chdirAllowed=true in this harness,
+resolving relative paths against configured Java default directory without native
+cwd comparison. Runtime owns fixed NIO init/getcwd markers only; no fabricated
+cwd/filesystem answer or default/return/capability change. Preserve128MiB/image/
+331policy and all prior/frozenbytes/working25. Exact005console/fix/game acceptance
+pending; no release/Store action. See docs/client-java17-bootstrap-005.md.

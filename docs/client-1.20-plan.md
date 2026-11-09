@@ -278,3 +278,8 @@ and bounded fatal entry records. Heap cause and physical result remain unproven.
 [004](client-java17-bootstrap-004.md) follows003's confirmed VM creation but row3
 failure before a Java stage file. It adds JNI/native Java-entry markers and a
 bounded fault scope around row3.128MiB/modules/331stay, cause/gamepass pending.
+
+
+[005](client-java17-bootstrap-005.md) follows004's proven Java-entry/first Path.of
+expression fault. It tests upstream chdirAllowed mode and native NIO markers,
+without fake filesystem answers or changes to working25/production defaults.

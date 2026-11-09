@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-09",
+  "title_id": "PPSA99878",
+  "version": "01.000.004",
+  "user_report": "Crashed on row3",
+  "reports": {
+    "java17-vm-trace.log": {
+      "bytes": 5421,
+      "sha256": "ce0488f6babb9888245fd69d6fec188c1b7b1d11f537813d44300d2c6dbc7bb7"
+    },
+    "mc120-java17-fault.log": {
+      "bytes": 9047,
+      "sha256": "4a6f9d40142cd1e325fde7a1eef4dc56dde63902d2a917b16862c31404695f6d"
+    },
+    "mc120-java17-bootstrap.log": {
+      "bytes": 1335,
+      "sha256": "e5b4e53e661fbbe66cab585351f1ca76df30d2ea4d15eb9f4a45cf9f4752f8cd"
+    }
+  },
+  "observed": [
+    "VM creation successful",
+    "Class definition, original/diagnostic native registration and run-method lookup pass",
+    "CallStaticIntMethod enters Java and its nativeStage call succeeds",
+    "Last native marker is before Path.of expression (includes root property lookup and default filesystem initialization), before Java log writer",
+    "Scoped fault recorder captures SIGSEGV; no reliable generated/resident region assignment for its PC yet",
+    "Management,331configure and original Main have not been reached"
+  ],
+  "cause": "UNPROVEN; Path.of-expression boundary established, actual syscall/generated/resident faulting function unresolved",
+  "raw_reports": "Local only; no raw logs/context/address dump published",
+  "followup": "005tests genuine upstream chdirAllowed=true mode and adds native NIO init/getcwd markers; no fabricated filesystem result or production default change"
+}

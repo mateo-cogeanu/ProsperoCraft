@@ -37,3 +37,10 @@ Store update; original publisher payload stays local.
 The portable native lane now has14checks, adding the actual signal-budget/
 forwarding/restoration fixture alongside all prior13. Required21fast and14native
 checks pass; hosted CI and exact physical004results are separate evidence.
+
+
+004also crashes on row3, now after proven Java entry/nativeStage. The
+[retained record](validation/client-java17-bootstrap-004-crash-2026-11-09.json)
+locates the Path.of-expression boundary and a SIGSEGV without a region-resolved PC.
+[005](client-java17-bootstrap-005.md) tests upstream default-directory resolution
+mode plus native NIO markers; cause and fix remain pending exact console evidence.

@@ -46,7 +46,7 @@ void run(int i){
   if(initialized){finish(i,-1710,"Already initialized; relaunch to repeat");return;}
   logfile=std::fopen("/download0/mc120-java17-bootstrap.log","a");
   if(!logfile){finish(i,errno?errno:-1711,"Cannot create private probe log");return;}
-  stage("ProsperoCraft1.20 Java17 bootstrap004; original game entry, no renderer/world");
+  stage("ProsperoCraft1.20 Java17 bootstrap005; original game entry, no renderer/world");
   for(auto*p=__jvm_init_array_start;p!=__jvm_init_array_end;++p)if(*p)(*p)();
   initialized=true;finish(i,0,"Core constructors completed");return;
  }
@@ -64,6 +64,7 @@ void run(int i){
    {const_cast<char*>("-XX:CompressedClassSpaceSize=32m"),nullptr},{const_cast<char*>("-XX:-UsePerfData"),nullptr},
    {const_cast<char*>("-Xshare:off"),nullptr},{const_cast<char*>("-Duser.timezone=UTC"),nullptr},
    {const_cast<char*>("-Dlog4j2.disableJmx=true"),nullptr},
+   {const_cast<char*>("-Dsun.nio.fs.chdirAllowed=true"),nullptr},
    {const_cast<char*>("--add-modules=ALL-SYSTEM"),nullptr},
    {const_cast<char*>("-Djava.io.tmpdir=/download0"),nullptr},{const_cast<char*>("-Duser.home=/download0"),nullptr},
    {const_cast<char*>("-Djava.class.path=/app0/assets/java17/classes"),nullptr},
@@ -118,7 +119,7 @@ bool update()noexcept{
 }
 void draw(Canvas&c)noexcept{
  c.gradient(color(16,28,42),color(8,13,22));
- c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.004",54,color(235,243,250));
+ c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.005",54,color(235,243,250));
  c.label(103,151,"BOOT TEST ONLY: original1.20 initialization. No playable menu/world yet.",24,color(157,175,193));
  for(int i=0;i<4;++i){int y=245+i*125;
   if(selected==i)c.rounded(95,y-5,1730,106,20,color(101,170,215));

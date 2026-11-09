@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-09",
+  "title_id": "PPSA99878",
+  "version": "01.000.005",
+  "package_sha256": "258e21ebf133d977c10b840d62dc09b9af91a01892f2374428f678974d4738f5",
+  "package_bytes": 114238090,
+  "symbols_sha256": "ec10e26c2c7de157bfba96b17612eb913d8b539074e9035213fbb8b0f08b0475",
+  "class_image_sha256": "6ca3a65c2eec7e3963b65ba67f93b35713309afd23bdb412896783ee7088ca46",
+  "runtime_source_commit": "2cb439a76ab79b13d0cff39cea9c56c51704e859",
+  "consumer_source_sha256": {
+    "param.json": "1bbeda416cabba16af512ebbb950cbc8b99590df440a8cb949439245dd0e90db",
+    "HelloLts.java": "f433acdf9aff9c0785211367228be532ccf9bdf00af44c2dedfd41357dad5af9",
+    "startup.cpp": "d83ef77c9f315985c7c1ac89f7612a7f36c6ee6086e1dd9ee4d1ebc5356d2fcf"
+  },
+  "linked_objects": {
+    "ffi-core.o": "a20e6db4034a24bf1be1b714665cd9f33f0dd669ba4fb9dc80cc5e6b4bb07690",
+    "startup-fault.o": "978ef7a83720c22b812728cee00ff29206d0240ccd8dbcbdfd82835ec950027e"
+  },
+  "change": "Standalone test opts into genuine sun.nio.fs.chdirAllowed=true; native relative paths resolve against configured Java default directory without getcwd comparison",
+  "runtime_change": "Fixed UnixNativeDispatcher init/getcwd markers only; preserves native return/capability/syscall/default semantics",
+  "retained": "Same128MiB,image,331,SerialGC,interpreter and bounded row3fault policy; prior candidates/frozen17/21/working25 preserved",
+  "checks": [
+    "Pinned17/21source replay/refusal/idempotence",
+    "Target17core/native build and native ELF audit",
+    "Actual host17embedded consumer JNI/nativeStage/Java/management/original Main argument gate with new mode; PS5specific331path skipped explicitly",
+    "Signed app/companion, full native link/constructor/VM bounds, ZIP CRC/image/metadata/source bytes",
+    "21required consumer fast checks49.8s"
+  ],
+  "console": "PENDING005; no crash resolution or game/menu/world/shader/performance claim",
+  "publication": "Source only; local original publisher payload is not a public release artifact"
+}
