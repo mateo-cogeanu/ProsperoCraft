@@ -89,6 +89,72 @@ public final class HelloLts {
   }
   stage("Graphics: GLFW teardown completed");
  }
+ private static void verifyAudio(ClassLoader loader) throws ReflectiveOperationException, InterruptedException {
+  Class<?> alc = loader.loadClass("org.lwjgl.openal.ALC");
+  Class<?> alc10 = loader.loadClass("org.lwjgl.openal.ALC10");
+  Class<?> al = loader.loadClass("org.lwjgl.openal.AL");
+  Class<?> al10 = loader.loadClass("org.lwjgl.openal.AL10");
+  Class<?> alcCaps = loader.loadClass("org.lwjgl.openal.ALCCapabilities");
+  Class<?> alCaps = loader.loadClass("org.lwjgl.openal.ALCapabilities");
+  stage("Audio: open default OpenAL playback device");
+  long device = (long) alc10.getMethod("alcOpenDevice", ByteBuffer.class).invoke(null, (Object) null);
+  if (device == 0) throw new IllegalStateException("OpenAL playback device failed");
+  long context = 0;
+  int buffer = 0;
+  int source = 0;
+  var makeCurrent = alc10.getMethod("alcMakeContextCurrent", long.class);
+  try {
+   context = (long) alc10.getMethod("alcCreateContext", long.class, java.nio.IntBuffer.class)
+       .invoke(null, device, null);
+   if (context == 0 || !(boolean) makeCurrent.invoke(null, context))
+    throw new IllegalStateException("OpenAL context failed");
+   Object capabilities = alc.getMethod("createCapabilities", long.class).invoke(null, device);
+   al.getMethod("createCapabilities", alcCaps).invoke(null, capabilities);
+   int rate = 48_000;
+   var pcm = ByteBuffer.allocateDirect(rate * Short.BYTES)
+       .order(java.nio.ByteOrder.nativeOrder()).asShortBuffer();
+   for (int i = 0; i < rate; i++) {
+    double envelope = Math.min(1.0, Math.min(i, rate - 1 - i) / 480.0);
+    pcm.put(i, (short) (6000 * envelope * Math.sin(2 * Math.PI * 440 * i / rate)));
+   }
+   buffer = (int) al10.getMethod("alGenBuffers").invoke(null);
+   source = (int) al10.getMethod("alGenSources").invoke(null);
+   al10.getMethod("alBufferData", int.class, int.class, java.nio.ShortBuffer.class, int.class)
+       .invoke(null, buffer, 0x1101, pcm, rate); // AL_FORMAT_MONO16
+   al10.getMethod("alSourcei", int.class, int.class, int.class).invoke(null, source, 0x1009, buffer);
+   al10.getMethod("alSourcePlay", int.class).invoke(null, source);
+   var error = al10.getMethod("alGetError");
+   var sourceState = al10.getMethod("alGetSourcei", int.class, int.class);
+   if ((int) error.invoke(null) != 0 || (int) sourceState.invoke(null, source, 0x1010) != 0x1012)
+    throw new IllegalStateException("OpenAL did not start the tone");
+   stage("Audio: OpenAL playing a one-second tone");
+   long start = System.nanoTime();
+   int state;
+   do {
+    Thread.sleep(20);
+    state = (int) sourceState.invoke(null, source, 0x1010);
+   } while (state == 0x1012 && System.nanoTime() - start < 3_000_000_000L);
+   if (state != 0x1014 || (int) error.invoke(null) != 0)
+    throw new IllegalStateException("OpenAL did not finish the tone");
+  } finally {
+   try {
+    if (source != 0) al10.getMethod("alDeleteSources", int.class).invoke(null, source);
+    if (buffer != 0) al10.getMethod("alDeleteBuffers", int.class).invoke(null, buffer);
+   } finally {
+    try {
+     if (context != 0) {
+      al.getMethod("setCurrentProcess", alCaps).invoke(null, (Object) null);
+      if (!(boolean) makeCurrent.invoke(null, 0L)) throw new IllegalStateException("OpenAL detach failed");
+      alc10.getMethod("alcDestroyContext", long.class).invoke(null, context);
+     }
+    } finally {
+     if (!(boolean) alc10.getMethod("alcCloseDevice", long.class).invoke(null, device))
+      throw new IllegalStateException("OpenAL device close failed");
+    }
+   }
+  }
+  stage("Audio: playback and OpenAL teardown completed");
+ }
  public static int run() throws Exception {
   nativeStage(0);
   nativeStage(1);
@@ -175,7 +241,8 @@ public final class HelloLts {
     if (Boolean.getBoolean("ps5.mc17.graphicsProbe")) {
      try {
       verifyGraphics(loader);
-     } catch (ReflectiveOperationException | RuntimeException | LinkageError failure) {
+      verifyAudio(loader);
+     } catch (ReflectiveOperationException | InterruptedException | RuntimeException | LinkageError failure) {
       reportMainFailure(failure);
       throw failure;
      }

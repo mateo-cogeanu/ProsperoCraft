@@ -76,14 +76,33 @@ def graphics_options(bindings, work, llvm):
     subprocess.run([str(llvm / 'bin/llvm-objcopy'), '--redefine-syms=' + str(renames),
                     str(inputs['graphics']), str(graphics)], check=True)
     options = ['--staged-constructors', 'client_gpu=.data.rel.ro.clientgpu.init_array',
+               '--staged-constructors', 'client_openal=.data.rel.ro.clientopenal.init_array',
                '--thread-atexit-provider', 'clientgpu_ps5___cxa_thread_atexit_impl',
                '--link-object', str(graphics), '--link-object', str(inputs['sdl'])]
-    for group in ('ps5clientgpu', 'ps5glfw', 'ps5zink'):
+    for group in ('ps5clientgpu', 'ps5glfw', 'ps5zink', 'ps5openal'):
         options += ['--library', f'{group}={inputs[group]}']
     for name, path in inputs.items():
         if name.endswith('.so'):
             options += ['--import-stub', str(path)]
     return options
+
+
+def stage_openal_iostream(work, llvm, sdk):
+    # OpenAL pulls the SDK's iostream object into the link. Keep its original
+    # priority-100 initializer in the explicit OpenAL range, ahead of OpenAL.
+    original = work / 'iostream-original.o'
+    with original.open('wb') as output:
+        subprocess.run([str(llvm / 'bin/llvm-ar'), 'p', str(sdk / 'target/lib/libc++.a'),
+                        'iostream.cpp.o'], stdout=output, check=True)
+    sections = subprocess.check_output([str(llvm / 'bin/llvm-readelf'), '-SW', str(original)],
+                                       text=True)
+    if ' .ctors.65435 ' not in sections:
+        raise ValueError('Review the SDK iostream constructor before staging it')
+    staged = work / 'iostream-openal.o'
+    subprocess.run([str(llvm / 'bin/llvm-objcopy'), '--rename-section',
+                    '.ctors.65435=.data.rel.ro.clientopenal.init_array.00100.ctors',
+                    str(original), str(staged)], check=True)
+    return staged
 
 
 def main():
@@ -109,6 +128,7 @@ def main():
     graphics = graphics_options(a.graphics_input, work, a.llvm_home.resolve())
     runtime = a.runtime_workspace.resolve()
     sdk = runtime / '.tools/native-sdk/ps5-payload-sdk'
+    iostream = stage_openal_iostream(work, a.llvm_home.resolve(), sdk)
     fault = work / 'startup-fault.o'
     subprocess.run([str(a.llvm_home.resolve() / 'bin/clang'), '-target','x86_64-sie-ps5',
         '-std=c11','-O2','-fPIC','-femulated-tls','-fno-stack-protector',
@@ -120,7 +140,7 @@ def main():
         '--major','17','--probe-dir',str(ROOT / 'client/java17_bootstrap'),
         '--extra-assets',str(work / 'publisher'),'--management',
         '--library','lwjgl331=' + str(a.lwjgl331_build.resolve() / 'ps5/lwjgl331.o'),
-        '--link-object',str(a.ffi_core.resolve()),'--link-object',str(fault),'--llvm-home',str(a.llvm_home.resolve()),
+        '--link-object',str(a.ffi_core.resolve()),'--link-object',str(fault),'--link-object',str(iostream),'--llvm-home',str(a.llvm_home.resolve()),
         '--lld',str(a.lld.absolute()),'--boot-jdk',str(jdk),'--image-dir',str(a.image_dir.resolve()),
         '--work-dir',str(work / 'package'), *graphics], check=True)
 

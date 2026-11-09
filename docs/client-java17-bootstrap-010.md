@@ -21,3 +21,5 @@ Local signed ZIP SHA-256: `bf739a2d8951f0477b8e69ba68c72af13ce0216c3372f1e5e6a6e
 The maintainer reported PASS on PS5. See the
 [console record](validation/client-java17-bootstrap-010-console-2026-11-09.json).
 OpenAL audio and the Minecraft title screen still need console tests.
+
+[Build 011 OpenAL playback test](client-java17-bootstrap-011.md)

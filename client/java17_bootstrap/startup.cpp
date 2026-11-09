@@ -28,6 +28,17 @@ extern "C" int clientgpu_condition_preinit();
 extern "C" int prospero_sdl_mutex_preinit();
 extern "C" int prospero_sdl_condition_preinit();
 extern "C" int prospero_sdl_tls_preinit();
+extern "C" int client_ps5_audio_worker_preinit();
+extern "C" int client_ps5_audio_event_preinit();
+extern "C" int sceAudioOutInit();
+extern "C" int sceAudioOutOpen(int, int, int, unsigned, unsigned, unsigned);
+extern "C" int sceAudioOutClose(int);
+extern "C" jint ps5_ps5openal_JNI_OnLoad(JavaVM*, void*);
+extern "C" {
+int client_ps5_audio_early_init_result = INT32_MIN;
+int client_ps5_audio_early_port = -1;
+int client_ps5_audio_secondary_port = -1;
+}
 using GlfwErrorCallback = void (*)(int, const char*);
 extern "C" GlfwErrorCallback glfwSetErrorCallback(GlfwErrorCallback);
 extern "C" int sceKernelSendNotificationRequest(unsigned, void*, size_t, int);
@@ -59,6 +70,8 @@ int prepare_graphics() {
   {"SDL mutexes", prospero_sdl_mutex_preinit},
   {"SDL conditions", prospero_sdl_condition_preinit},
   {"SDL thread-ID TLS", prospero_sdl_tls_preinit},
+  {"OpenAL mixer workers", client_ps5_audio_worker_preinit},
+  {"OpenAL event workers", client_ps5_audio_event_preinit},
  };
  for (const auto& reserve : reserves) {
   const int result = reserve.prepare();
@@ -67,6 +80,16 @@ int prepare_graphics() {
   if (result != 0) return result;
  }
  return 0;
+}
+void prepare_audio_output() {
+ client_ps5_audio_early_init_result = sceAudioOutInit();
+ if (client_ps5_audio_early_init_result >= 0 ||
+     static_cast<unsigned>(client_ps5_audio_early_init_result) == 0x8026000eu) {
+  client_ps5_audio_early_port = sceAudioOutOpen(0xff, 0, 0, 256, 48000, 1);
+ }
+ std::fprintf(logfile, "Pre-JVM AudioOut init=%d playback port=%d\n",
+              client_ps5_audio_early_init_result, client_ps5_audio_early_port);
+ std::fflush(logfile);
 }
 void glfw_error(int code, const char* description) {
  static unsigned count;
@@ -112,10 +135,11 @@ void run(int i){
   if(initialized){finish(i,-1710,"Already initialized; relaunch to repeat");return;}
   logfile=std::fopen("/download0/mc120-java17-bootstrap.log","a");
   if(!logfile){finish(i,errno?errno:-1711,"Cannot create private probe log");return;}
-  stage("ProsperoCraft1.20 Java17 bootstrap010; original game entry and graphics handoff");
+  stage("ProsperoCraft1.20 Java17 bootstrap011; original game entry and graphics handoff");
   for(auto*p=__jvm_init_array_start;p!=__jvm_init_array_end;++p)if(*p)(*p)();
   const int graphics_result = prepare_graphics();
   initialized = graphics_result == 0;
+  if (initialized) prepare_audio_output();
   finish(i, graphics_result, initialized ? "Core constructors and graphics reserves ready"
                                          : "Graphics reserve initialization failed");
   return;
@@ -170,7 +194,10 @@ void run(int i){
   glfwSetErrorCallback(glfw_error);
   glfwInitHint(0x00050003, 0x00060005); // GLFW_PLATFORM, GLFW_PLATFORM_NULL
   glfwInitVulkanLoader(vkGetInstanceProcAddr);
-  int rc=ps5_lts_probe::run(env,bytes,n,stage,register_stage);
+  const jint audio_version = setenv("ALSOFT_DRIVERS", "ps5", 1) == 0
+      ? ps5_ps5openal_JNI_OnLoad(vm, nullptr) : JNI_ERR;
+  int rc = audio_version == JNI_VERSION_1_8
+      ? ps5_lts_probe::run(env,bytes,n,stage,register_stage) : -1724;
   if(env->ExceptionCheck()){jthrowable failure=env->ExceptionOccurred();env->ExceptionClear();report_exception(env,failure,0);env->DeleteLocalRef(failure);if(env->ExceptionCheck())env->ExceptionClear();}
   glfwSetErrorCallback(nullptr);
   ps5shaderc_fault_end();
@@ -199,7 +226,7 @@ bool update()noexcept{
 }
 void draw(Canvas&c)noexcept{
  c.gradient(color(16,28,42),color(8,13,22));
- c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.010",54,color(235,243,250));
+ c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.011",54,color(235,243,250));
  c.label(103,151,"Graphics test: the probe hands VideoOut to Java 17 on row 3.",24,color(157,175,193));
  for(int i=0;i<4;++i){int y=245+i*125;
   if(selected==i)c.rounded(95,y-5,1730,106,20,color(101,170,215));
@@ -208,7 +235,7 @@ void draw(Canvas&c)noexcept{
   c.label(126,y+57,details[i][0]?details[i]:"D-pad to select, X to run",20,color(157,175,193));
   c.label(1650,y+26,status[i]==1?"PASS":status[i]<0?"FAIL":status[i]==2?"RUN":"--",24,status[i]==1?color(100,219,160):color(235,191,115));
  }
- c.label(103,837,"Run rows 1 through 3. Look for red, green and blue, then automatic shutdown.",25,color(157,175,193));
+ c.label(103,837,"Run rows 1 through 3. Look for red, green and blue, then listen for a short tone.",25,color(157,175,193));
  c.label(103,897,"Reports: download0/mc120-java17-bootstrap.log and java17-vm-trace.log",22,color(157,175,193));
  c.label(103,967,"If a stage hangs or crashes: close with PS, reopen, and report the stage.",22,color(157,175,193));
 }
@@ -248,9 +275,14 @@ int main(){
  if (pad >= 0) { scePadClose(pad); pad=-1; }
  run(2);
  run(3);
+ // An adopted port belongs to OpenAL. Close only an unclaimed reservation.
+ if (client_ps5_audio_early_port >= 0) {
+  (void)sceAudioOutClose(client_ps5_audio_early_port);
+  client_ps5_audio_early_port = -1;
+ }
  const bool passed = status[2] == 1 && status[3] == 1;
  stage(passed ? "PASS: graphics and VM shutdown" : "FAIL: graphics or VM shutdown");
- notify_result(passed ? "Java 17 graphics test passed." : "Java 17 graphics test failed. Logs are ready.");
+ notify_result(passed ? "Java 17 graphics and audio test passed." : "Java 17 graphics or audio test failed. Logs are ready.");
  // Leave the process available for FTP report retrieval after the display closes.
  for (;;) sleep(1);
 }
