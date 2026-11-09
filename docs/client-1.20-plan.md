@@ -293,3 +293,31 @@ class tags. Actual331/original Main/full boot on PS5 remain pending.
 [Bootstrap 007](client-java17-bootstrap-007.md) follows a PS5 pass through 006's
 classpath and native LWJGL checks. Original Main initialization still needs
 diagnosis and console validation.
+
+## Title screen preparation
+
+[Build 008 passed all four PS5 checks](client-java17-bootstrap-008.md).
+The next probe needs to hand the display from the test UI to Minecraft and
+launch the original client with demo arguments and verified publisher assets.
+
+A local link experiment combined the 008 Java 17 VM and LWJGL 3.3.1 with
+the current ProsperoCraft GLFW, SDL and Zink/RADV objects. It linked and
+converted to the PS5 ELF format after retaining the graphics constructor
+table, resolving the scoped allocator and thread imports, and wiring test
+diagnostic callbacks. OpenAL was omitted from this experiment because it
+also needs the launcher's audio lifecycle callbacks. This was a link check
+only. Resident symbol lookup, display handoff, rendering and audio on PS5
+still need an integrated test package.
+
+To stage the original publisher asset index, use:
+
+```sh
+python3 tools/verify_client_120.py --version 1.20 \
+  --cache-dir /path/to/publisher-cache --assets-dir /path/to/assets
+```
+
+Add `--asset-objects` to stage the full set of original objects in the
+game's expected `objects/<prefix>/<sha1>` layout. Add `--offline` to
+verify an existing cache without network access. The 1.20 index was
+verified online and offline and lists 3,575 unique objects. Keep all
+downloaded publisher content in local storage.
