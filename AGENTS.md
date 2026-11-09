@@ -478,3 +478,15 @@ cwd comparison. Runtime owns fixed NIO init/getcwd markers only; no fabricated
 cwd/filesystem answer or default/return/capability change. Preserve128MiB/image/
 331policy and all prior/frozenbytes/working25. Exact005console/fix/game acceptance
 pending; no release/Store action. See docs/client-java17-bootstrap-005.md.
+
+
+## Java17 bootstrap005 partial pass and006manifest —2026-11-09
+
+005passes Path/writer/basic-Java/JNI/worker/RuntimeMXBean and shutdown; row3returns
+-1708during classpath prep before331. No new native crash or proven directory-API
+cause.006uses exact verified47JAR manifest, bounded unique ASCII filenames/file
+URLs and existing coherent loader; no game rewrite or filesystem success stub.
+Native reporting logs allowlisted exception/cause class tags only, depth0..2, no
+messages/stack/auth/user paths. Keep chdirAllowed/128MiB/image/binding policy.
+Exact006console/331/Main/fullboot pending; preserve prior/frozen/working25bytes,
+original JARs and all release/Store gates. See docs/client-java17-bootstrap-006.md.

@@ -33,3 +33,10 @@ Local`dist/PPSA99878.zip` SHA256`258e21ebf133d977c10b840d62dc09b9af91a01892f2374
 Retained report paths and active FTP mount are in[002](client-java17-bootstrap-002.md).
 All prior candidates/symbols and frozen17/21startup remain; working25launcher is
 unchanged. No binary release/Store action; original publisher payload stays local.
+
+
+[005's physical result](validation/client-java17-bootstrap-005-result-2026-11-09.json)
+now confirms Path/log writing, basic Java/JNI and actual management succeed, with
+row3Java error before331and successful shutdown. [006](client-java17-bootstrap-006.md)
+uses an explicit classpath manifest and bounded exception-class reporting; complete
+boot/game acceptance is still pending and005bytes remain preserved.

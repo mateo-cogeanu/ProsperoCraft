@@ -50,13 +50,23 @@ public final class HelloLts {
    if(ManagementFactory.getRuntimeMXBean().getVmName().isBlank())throw new AssertionError("VM management identity");
    nativeStage(6);
    stage("Actual management/native RuntimeMXBean identity passed");
-   File folder=new File(System.getProperty("ps5.mc17.jars","/app0/assets/java17/extra"));
-   File[] files=folder.listFiles((d,n)->n.endsWith(".jar"));
-   if(files==null||files.length<2)throw new AssertionError("Verified publisher JAR directory missing");
-   Arrays.sort(files);URL[] urls=new URL[files.length];
-   for(int i=0;i<files.length;i++)urls[i]=files[i].toURI().toURL();
+   nativeStage(10);
+   Path folder=Path.of(System.getProperty("ps5.mc17.jars","/app0/assets/java17/extra"));
+   java.util.List<String> names=Files.readAllLines(folder.resolve("classpath.list"));
+   if(names.size()<2||names.size()>128)throw new AssertionError("Invalid verified classpath count");
+   java.util.HashSet<String> unique=new java.util.HashSet<>();
+   URL[] urls=new URL[names.size()];
+   for(int i=0;i<names.size();i++){
+    String name=names.get(i);
+    if(!name.matches("[0-9]{3}-[A-Za-z0-9_.-]+\\.jar")||!unique.add(name))
+     throw new AssertionError("Invalid verified classpath entry");
+    urls[i]=new URL("file","",folder.toAbsolutePath().toString()+"/"+name);
+   }
+   nativeStage(11);
    // One coherent owner for the complete old binding, overlay and original game.
+   nativeStage(12);
    try(URLClassLoader loader=new URLClassLoader(urls,ClassLoader.getPlatformClassLoader())) {
+    nativeStage(13);
     ClassLoader previous=Thread.currentThread().getContextClassLoader();
     Thread.currentThread().setContextClassLoader(loader);
     try {

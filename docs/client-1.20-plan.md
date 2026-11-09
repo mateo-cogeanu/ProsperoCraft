@@ -283,3 +283,9 @@ bounded fault scope around row3.128MiB/modules/331stay, cause/gamepass pending.
 [005](client-java17-bootstrap-005.md) follows004's proven Java-entry/first Path.of
 expression fault. It tests upstream chdirAllowed mode and native NIO markers,
 without fake filesystem answers or changes to working25/production defaults.
+
+
+[006](client-java17-bootstrap-006.md) follows005's filesystem/basic-JNI/management
+success and normal Java error during classpath prep. It uses an exact verified47JAR
+manifest instead of directory enumeration and reports only allowlisted throwable
+class tags. Actual331/original Main/full boot on PS5 remain pending.

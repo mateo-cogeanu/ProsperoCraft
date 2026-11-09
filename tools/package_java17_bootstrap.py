@@ -49,7 +49,9 @@ def prepare(cache, output, binding, *, offline=False):
     shutil.copy2(overlay, output / '000-lwjgl331-ps5-overlay.jar')
     for i,path in enumerate(jars):
         shutil.copy2(path, output / (f'{i+1:03d}-' + path.name))
-    return {p.name: sha(p) for p in sorted(output.glob('*.jar'))}
+    names = [p.name for p in sorted(output.glob('*.jar'))]
+    (output / 'classpath.list').write_text(''.join(n + '\n' for n in names), encoding='utf-8')
+    return {p.name: sha(p) for p in sorted(output.iterdir()) if p.is_file()}
 
 
 def main():

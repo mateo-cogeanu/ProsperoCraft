@@ -1,0 +1,35 @@
+{
+  "date": "2026-11-09",
+  "title_id": "PPSA99878",
+  "version": "01.000.005",
+  "user_report": "Fail on row3",
+  "reports": {
+    "mc120-java17-stages.log": {
+      "bytes": 138,
+      "sha256": "1c46ce3cd3f591a1ccdf29f943c2db09762df714a7b94db9617bfd8a46a4ed61"
+    },
+    "java17-vm-trace.log": {
+      "bytes": 7490,
+      "sha256": "7db5508a721734af011b1d9ae0c2e7b2b577b3a2603d4d7457561360dd265b3d"
+    },
+    "mc120-java17-fault.log": {
+      "bytes": 9047,
+      "sha256": "4a6f9d40142cd1e325fde7a1eef4dc56dde63902d2a917b16862c31404695f6d"
+    },
+    "mc120-java17-bootstrap.log": {
+      "bytes": 2296,
+      "sha256": "0d627a053d597b64d4b24f777738b35bbc4a638a55f37905c17b2f117d61a32e"
+    }
+  },
+  "partial_console_result": [
+    "VM creation success",
+    "Path.of and actual Java log writer open/flush now succeed",
+    "Basic arithmetic/strings/StrictMath/exceptions/registered JNI/worker checks pass",
+    "Actual RuntimeMXBean identity query passes",
+    "Row3returns -1708 after management, before331checkpoint; shutdown row4returns success"
+  ],
+  "boundary": "Classpath directory enumeration/sorting/URL/classloader preparation; exact exception class not captured",
+  "cause": "UNPROVEN normal Java exception; no complete bootstrap/game pass or broad directory API failure assertion",
+  "raw_reports": "Local only. Native fault file retains004data, not new005crash evidence.",
+  "followup": "006uses deterministic builder-generated verified classpath manifest and logs only allowlisted throwable/cause class tags up to depth2, never messages/stack text."
+}

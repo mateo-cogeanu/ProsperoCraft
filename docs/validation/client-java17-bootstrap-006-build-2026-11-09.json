@@ -1,0 +1,29 @@
+{
+  "date": "2026-11-09",
+  "title_id": "PPSA99878",
+  "version": "01.000.006",
+  "package_sha256": "d92dee967515b464dc9b627f00f1014b1fcb3210090250cd4c3fde5c7cc9b994",
+  "package_bytes": 114241827,
+  "symbols_sha256": "e31f25ff324df0eb469d3763adb2c8ab04738803157192c7547d6a7d0b79fd28",
+  "class_image_sha256": "6ca3a65c2eec7e3963b65ba67f93b35713309afd23bdb412896783ee7088ca46",
+  "runtime_source_commit": "2cb439a76ab79b13d0cff39cea9c56c51704e859",
+  "consumer_source_sha256": {
+    "param.json": "210916d2b678812d1ea8fc6fb98d30e379562279b225212e72969b1ebf140a52",
+    "HelloLts.java": "89fa946613a073af3914502455907744584829fa3097d823a96b6ee89648ec2d",
+    "startup.cpp": "574c4b68002bd48f38fb72b1296237a9918d27ca828ae9f3dfb7d3d02fcf462c"
+  },
+  "classpath_manifest_sha256": "69f4c009953fe5f8157af7c66ad638ab18a039f825eb0ecaba04a1700b81c747",
+  "scope": "Deterministic47JAR classpath; no directory enumeration or File.toURI metadata query; genuine NIO manifest read and URL loader remain",
+  "diagnostics": "Fixed classpath checkpoints and allowlisted throwable/cause class labels with depth0..2; no exception message, stack, user path or auth data",
+  "checks": [
+    "Exact host17embedded consumer with diagnostic JNI and manifest reaches management/original Main argument gate; host PS5binding path explicitly skipped",
+    "Native target/signatures/constructor/VM bounds, ZIP CRC/metadata/image/source and all48JAR/manifest hashes",
+    "Manifest exactly enumerates47unique ordered packaged JARs",
+    "Portable launcher fast lane: all21checks pass in48.8s",
+    "Scoped native lane: all14checks pass in17.2s",
+    "Documentation links and git diff whitespace checks pass"
+  ],
+  "console": "PENDING006row3/complete boot;005partial results recorded separately",
+  "preserved": "All previous local candidates and frozen17/21, working25 retained; original publisher/game bytes unchanged",
+  "publication": "Source only, local original publisher payload not public release/Store artifact"
+}
