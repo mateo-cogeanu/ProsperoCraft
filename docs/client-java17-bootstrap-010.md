@@ -18,5 +18,6 @@ red, green and blue frames and the final notification. Leave the app
 open for log retrieval.
 
 Local signed ZIP SHA-256: `bf739a2d8951f0477b8e69ba68c72af13ce0216c3372f1e5e6a6eb7d49d57672`.
-The package passed target linking, signing and verification. Physical
-graphics, teardown, audio and the Minecraft title screen remain pending.
+The maintainer reported PASS on PS5. See the
+[console record](validation/client-java17-bootstrap-010-console-2026-11-09.json).
+OpenAL audio and the Minecraft title screen still need console tests.

@@ -1,0 +1,14 @@
+{
+  "title_id": "PPSA99878",
+  "version": "01.000.010",
+  "tested_date": "2026-11-09",
+  "console": "PS5",
+  "evidence": "Maintainer reported PASS in response to the exact build 010 graphics handoff test. The individual colors and shutdown log were not independently verified.",
+  "results": {"java17_lwjgl331_zink_graphics_handoff": "PASS (user report)"},
+  "sha256": "bf739a2d8951f0477b8e69ba68c72af13ce0216c3372f1e5e6a6eb7d49d57672",
+  "consumer_build_commit": "1cc61c393340691058cf400d709eaa297cc91858",
+  "runtime_packager_commit": "0bad566ab56d9c51b97442c22baf9eba95b0e511",
+  "package_file": "PPSA99878.zip",
+  "package_storage": "Local signed ZIP contains original publisher inputs.",
+  "unverified": ["OpenAL audio", "Minecraft title screen and world startup"]
+}
