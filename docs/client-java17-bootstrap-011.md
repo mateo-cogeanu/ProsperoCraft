@@ -20,3 +20,5 @@ Signed local ZIP SHA-256
 The Java image and publisher inputs match build 010. Target packaging,
 the host original-game entry check and both host test lanes passed.
 Console playback and the Minecraft title screen remain pending.
+
+[PS5 failure and build 012](client-java17-bootstrap-012.md)

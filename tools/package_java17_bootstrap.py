@@ -54,7 +54,7 @@ def prepare(cache, output, binding, *, offline=False):
     return {p.name: sha(p) for p in sorted(output.iterdir()) if p.is_file()}
 
 
-def graphics_options(bindings, work, llvm):
+def graphics_options(bindings, work, llvm, runtime, sdk):
     pins = json.loads((ROOT / 'client/java17_bootstrap/graphics-pins.json').read_text())
     inputs = {}
     for binding in bindings:
@@ -79,12 +79,54 @@ def graphics_options(bindings, work, llvm):
                '--staged-constructors', 'client_openal=.data.rel.ro.clientopenal.init_array',
                '--thread-atexit-provider', 'clientgpu_ps5___cxa_thread_atexit_impl',
                '--link-object', str(graphics), '--link-object', str(inputs['sdl'])]
-    for group in ('ps5clientgpu', 'ps5glfw', 'ps5zink', 'ps5openal'):
+    for group in ('ps5clientgpu', 'ps5glfw', 'ps5zink'):
         options += ['--library', f'{group}={inputs[group]}']
+    openal, operators = scope_openal_allocator(inputs['ps5openal'], work, llvm, runtime, sdk)
+    options += ['--library', f'ps5openal={openal}', '--link-object', str(operators)]
     for name, path in inputs.items():
         if name.endswith('.so'):
             options += ['--import-stub', str(path)]
     return options
+
+
+def scope_openal_allocator(original, work, llvm, runtime, sdk):
+    """Bind OpenAL's C++ new/delete pairs to its existing scoped allocator."""
+    llvm_bin = llvm / 'bin'
+    source = runtime / '.tools/native-app/tooling/native/app_cpp_runtime.cpp'
+    compiled = work / 'openal-operators-original.o'
+    subprocess.run([
+        str(llvm_bin / 'clang++'), '-target', 'x86_64-sie-ps5',
+        '-fvisibility-nodllstorageclass=default', '-isysroot', str(sdk),
+        '-isystem', str(sdk / 'target/include/c++/v1'),
+        '-isystem', str(sdk / 'target/include'), '-std=c++20', '-O2',
+        '-fno-exceptions', '-fno-rtti', '-fno-builtin', '-fno-stack-protector',
+        '-fno-plt', '-march=x86-64',
+        '-Dmalloc=clientgpu___wrap_malloc', '-Dfree=clientgpu___wrap_free',
+        '-Dposix_memalign=clientgpu___wrap_posix_memalign',
+        '-c', str(source), '-o', str(compiled),
+    ], check=True)
+    nm = str(llvm_bin / 'llvm-nm')
+    def allocation_symbols(flag, path):
+        symbols = subprocess.check_output([nm, flag, '--extern-only', str(path)], text=True)
+        return {line.split()[-1] for line in symbols.splitlines()
+                if line.split() and line.split()[-1].startswith(('_Zn', '_Zd'))}
+
+    defined = allocation_symbols('--defined-only', compiled)
+    required = allocation_symbols('--undefined-only', original)
+    if '_ZnamSt11align_val_t' not in required or not required <= defined:
+        raise ValueError('OpenAL allocation ABI changed; review paired new/delete')
+    renames = work / 'openal-operator-symbols.txt'
+    renames.write_text(''.join(f'{name} ps5openal_{name}\n'
+                               for name in sorted(defined | {'ps5ObserveOwnedAllocation'})))
+    objcopy = str(llvm_bin / 'llvm-objcopy')
+    openal = work / 'openal-scoped.o'
+    operators = work / 'openal-operators.o'
+    for before, after in ((original, openal), (compiled, operators)):
+        subprocess.run([objcopy, '--redefine-syms=' + str(renames), str(before), str(after)],
+                       check=True)
+    if allocation_symbols('--undefined-only', openal):
+        raise ValueError('An OpenAL allocation symbol still uses the process allocator')
+    return openal, operators
 
 
 def stage_openal_iostream(work, llvm, sdk):
@@ -125,9 +167,9 @@ def main():
         'filesSha256':inputs}, indent=2) + '\n')
     if a.prepare_only:
         return
-    graphics = graphics_options(a.graphics_input, work, a.llvm_home.resolve())
     runtime = a.runtime_workspace.resolve()
     sdk = runtime / '.tools/native-sdk/ps5-payload-sdk'
+    graphics = graphics_options(a.graphics_input, work, a.llvm_home.resolve(), runtime, sdk)
     iostream = stage_openal_iostream(work, a.llvm_home.resolve(), sdk)
     fault = work / 'startup-fault.o'
     subprocess.run([str(a.llvm_home.resolve() / 'bin/clang'), '-target','x86_64-sie-ps5',
