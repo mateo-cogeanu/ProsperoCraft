@@ -20,3 +20,8 @@ comparison passed.
 
 Signed full ZIP SHA-256
 `08354e31bcf8fc59a65db62725240150f352d7b90a6d6cfaee202c839e7a56de`.
+
+The PS5 run failed row 3 with InvocationTargetException and
+ClassFormatError. The VM trace captured the latter before returning
+through JNI, then VM shutdown succeeded. The rejected class and the
+class format reason were not recorded.
