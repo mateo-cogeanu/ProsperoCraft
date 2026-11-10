@@ -20,3 +20,5 @@ every file that differs from 014. Merge its contents into the title
 directory at their corresponding paths.
 
 Signed full ZIP SHA-256 `8fe8f47196206e011b1943eb346d849992e2f92cab7033d54478b8b2fafa45fa`.
+
+[Build 016 crash and build 017](client-java17-bootstrap-017.md)
