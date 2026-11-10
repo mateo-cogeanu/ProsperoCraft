@@ -16,3 +16,8 @@ Signed full ZIP SHA-256
 `86b98afb20d88383dd8c6d3a9ee3006139aefc84ec997c13bb8e9c0d74e6d752`.
 
 All 21 consumer host checks passed.
+
+The PS5 run crashed after original Main initialized. It logged native
+pthread_create EINVAL for a detached 1024 KiB stack, then SIGABRT.
+The preceding RandomAccessFile buffer OOM was absent. Exact abort
+ownership and the cause of the thread refusal are unresolved.
