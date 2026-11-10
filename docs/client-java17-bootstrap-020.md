@@ -16,3 +16,8 @@ update comparison passed. The update contains no changed game assets.
 
 Signed full ZIP SHA-256
 `5eef46d1c036b77754b321ef04f0923ab5f982d0ca88dc8360849122144389f9`.
+
+On the PS5, row 3 returned a pending Java exception after Main class
+initialization. The native report could not classify it. DestroyJavaVM
+returned successfully. The fault log did not grow, and the game log
+was empty. The probe was still available over FTP with its display off.

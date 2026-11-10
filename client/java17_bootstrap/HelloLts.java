@@ -17,6 +17,9 @@ public final class HelloLts {
  // Only report bounded code locations. Exception messages and source paths stay out of the log.
  private static void reportMainFailure(Throwable failure) {
   for (int depth = 0; failure != null && depth < 5; depth++) {
+   String type = failure.getClass().getName();
+   if (type.length() <= 160)
+    stage("Main failure depth " + depth + " type: " + type);
    if (failure instanceof OutOfMemoryError) {
     String message = failure.getMessage();
     if (message == null) message = "";
@@ -74,8 +77,12 @@ public final class HelloLts {
    Class<?> main = Class.forName("net.minecraft.client.main.Main", true, loader);
    nativeStage(14);
    main.getMethod("main", String[].class).invoke(null, (Object) args);
-  } catch (ReflectiveOperationException | LinkageError failure) {
-   reportMainFailure(failure);
+  } catch (Throwable failure) {
+   try {
+    reportMainFailure(failure);
+   } catch (Throwable diagnosticFailure) {
+    // Keep the original failure pending even if reporting runs out of memory.
+   }
    throw failure;
   }
   stage("Original Minecraft Main returned");

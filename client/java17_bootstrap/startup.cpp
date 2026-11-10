@@ -18,6 +18,7 @@ extern "C" Initializer __jvm_init_array_start[],__jvm_init_array_end[];
 extern "C" unsigned ps5DemoPresentationTargetHz() noexcept { return 60; }
 struct VkInstance_T;
 using VulkanLoader = void (*(*)(VkInstance_T*, const char*))();
+extern "C" void glfwTerminate();
 extern "C" void glfwInitHint(int, int);
 extern "C" void glfwInitVulkanLoader(VulkanLoader);
 extern "C" void (*vkGetInstanceProcAddr(VkInstance_T*, const char*))();
@@ -108,12 +109,21 @@ void report_exception(JNIEnv*e,jthrowable error,int depth){
  jclass type=e->GetObjectClass(error),class_type=e->FindClass("java/lang/Class");
  jmethodID name=class_type?e->GetMethodID(class_type,"getName","()Ljava/lang/String;"):nullptr;
  jstring text=name?static_cast<jstring>(e->CallObjectMethod(type,name)):nullptr;
- const char*utf=text&&!e->ExceptionCheck()?e->GetStringUTFChars(text,nullptr):nullptr;
- const char*allow[]={"java.lang.AssertionError","java.lang.LinkageError","java.lang.UnsatisfiedLinkError","java.lang.NoSuchMethodError","java.lang.NoClassDefFoundError","java.lang.OutOfMemoryError","java.lang.ExceptionInInitializerError","java.lang.IllegalStateException","java.lang.IllegalArgumentException","java.lang.UnsupportedOperationException","java.lang.reflect.InvocationTargetException","java.io.IOException","java.io.FileNotFoundException","java.nio.file.NoSuchFileException","java.nio.file.AccessDeniedException","java.lang.NullPointerException"};
- const char*label="other/unclassified throwable";
- if(utf)for(const char*v:allow)if(std::strcmp(utf,v)==0){label=v;break;}
+ char name_bytes[241]{};
+ const char*label="exception class unavailable";
+ if(text&&!e->ExceptionCheck()){
+  const jsize length=e->GetStringLength(text);
+  if(length>0&&length<=80){
+   e->GetStringUTFRegion(text,0,length,name_bytes);
+   bool valid=!e->ExceptionCheck();
+   for(jsize i=0;valid&&i<length;++i){
+    const char ch=name_bytes[i];
+    valid=(ch>='A'&&ch<='Z')||(ch>='a'&&ch<='z')||(ch>='0'&&ch<='9')||ch=='.'||ch=='_'||ch=='$';
+   }
+   if(valid)label=name_bytes;
+  }
+ }
  if(logfile){std::fprintf(logfile,"JAVA exception class depth%d: %s\n",depth,label);std::fflush(logfile);}
- if(utf)e->ReleaseStringUTFChars(text,utf);
  if(text)e->DeleteLocalRef(text);if(class_type)e->DeleteLocalRef(class_type);
  if(e->ExceptionCheck())e->ExceptionClear();
  jmethodID getter=type?e->GetMethodID(type,"getCause","()Ljava/lang/Throwable;"):nullptr;
@@ -135,7 +145,7 @@ void run(int i){
   if(initialized){finish(i,-1710,"Already initialized; relaunch to repeat");return;}
   logfile=std::fopen("/download0/mc120-java17-bootstrap.log","a");
   if(!logfile){finish(i,errno?errno:-1711,"Cannot create private probe log");return;}
-  stage("ProsperoCraft1.20 Java17 bootstrap020; original Minecraft demo title-screen test");
+  stage("ProsperoCraft1.20 Java17 bootstrap021; original Minecraft demo title-screen test");
   for(auto*p=__jvm_init_array_start;p!=__jvm_init_array_end;++p)if(*p)(*p)();
   const int graphics_result = prepare_graphics();
   initialized = graphics_result == 0;
@@ -198,6 +208,7 @@ void run(int i){
   int rc = audio_version == JNI_VERSION_1_8
       ? ps5_lts_probe::run(env,bytes,n,stage,register_stage) : -1724;
   if(env->ExceptionCheck()){jthrowable failure=env->ExceptionOccurred();env->ExceptionClear();report_exception(env,failure,0);env->DeleteLocalRef(failure);if(env->ExceptionCheck())env->ExceptionClear();}
+  glfwTerminate();
   glfwSetErrorCallback(nullptr);
   ps5shaderc_fault_end();
   finish(i,rc,"Original Minecraft 1.20 demo returned");return;
@@ -225,7 +236,7 @@ bool update()noexcept{
 }
 void draw(Canvas&c)noexcept{
  c.gradient(color(16,28,42),color(8,13,22));
- c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.020",54,color(235,243,250));
+ c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.021",54,color(235,243,250));
  c.label(103,151,"Title screen test: row 3 launches Minecraft 1.20 in demo mode.",24,color(157,175,193));
  for(int i=0;i<4;++i){int y=245+i*125;
   if(selected==i)c.rounded(95,y-5,1730,106,20,color(101,170,215));
@@ -282,6 +293,5 @@ int main(){
  const bool passed = status[2] == 1 && status[3] == 1;
  stage(passed ? "Minecraft returned and JVM shut down" : "FAIL: Minecraft launch or VM shutdown");
  notify_result(passed ? "Minecraft demo ended." : "Minecraft demo failed. Logs are ready.");
- // Leave the process available for FTP report retrieval after the display closes.
- for (;;) sleep(1);
+ ps5::demo::run(draw, passed ? "Minecraft demo ended" : "Minecraft demo failed");
 }
