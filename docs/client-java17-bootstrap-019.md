@@ -15,3 +15,8 @@ The remaining host checks passed.
 
 Signed full ZIP SHA-256
 `07a59545ee0abbbd3c8cf7819fccdd647f5a4082aef0aad3d31be007dc4e0ef7`.
+
+The PS5 run crashed after entering original Main. The runtime logged a
+libjava OOM request, and the fault address mapped to the application
+array allocator's deliberate trap after malloc returned null. The
+individual callers remain unconfirmed.
