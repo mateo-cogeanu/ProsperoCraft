@@ -21,7 +21,10 @@ public final class HelloLts {
     String message = failure.getMessage();
     if (message == null) message = "";
     String reason = switch (message) {
-     case "Java heap space" -> "Java heap space";
+     case "Java heap space", "Java heap space: failed retryable allocation",
+          "Java heap space: failed reallocation of scalar replaced objects" -> "Java heap space";
+     case "C heap space" -> "C heap space";
+     case "" -> "No detail";
      case "GC overhead limit exceeded" -> "GC overhead limit";
      case "Metaspace" -> "Metaspace";
      case "Compressed class space" -> "Compressed class space";

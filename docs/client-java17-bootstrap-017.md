@@ -14,3 +14,8 @@ and the Minecraft title screen still need validation.
 
 Signed full ZIP SHA-256
 `aec349e4b501b45318dfa9a0f34553fcb4dfad35afc0c84afa254236decf327b`.
+
+On the PS5, 017 passed VM startup and clean shutdown. The original Main
+failed at `aoi.<clinit>` line 113 with an unclassified OutOfMemoryError.
+The Java heap showed 55,340,048 bytes used, 83,509,248 committed and
+194,641,920 maximum. The failing resource was not identified.
