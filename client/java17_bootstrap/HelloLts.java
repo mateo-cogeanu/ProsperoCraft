@@ -17,6 +17,24 @@ public final class HelloLts {
  // Only report bounded code locations. Exception messages and source paths stay out of the log.
  private static void reportMainFailure(Throwable failure) {
   for (int depth = 0; failure != null && depth < 5; depth++) {
+   if (failure instanceof OutOfMemoryError) {
+    String message = failure.getMessage();
+    if (message == null) message = "";
+    String reason = switch (message) {
+     case "Java heap space" -> "Java heap space";
+     case "GC overhead limit exceeded" -> "GC overhead limit";
+     case "Metaspace" -> "Metaspace";
+     case "Compressed class space" -> "Compressed class space";
+     case "Requested array size exceeds VM limit" -> "Array size limit";
+     case "unable to create native thread: possibly out of memory or process/resource limits reached" -> "Native thread allocation";
+     default -> message.startsWith("Cannot reserve ") && message.contains("direct buffer memory")
+         ? "Direct buffer memory" : "Unclassified";
+    };
+    Runtime runtime = Runtime.getRuntime();
+    stage("Memory failure: " + reason + "; Java heap used=" +
+        (runtime.totalMemory() - runtime.freeMemory()) + " committed=" +
+        runtime.totalMemory() + " max=" + runtime.maxMemory());
+   }
    StackTraceElement[] frames = failure.getStackTrace();
    for (int i = 0; i < Math.min(frames.length, 8); i++) {
     StackTraceElement frame = frames[i];

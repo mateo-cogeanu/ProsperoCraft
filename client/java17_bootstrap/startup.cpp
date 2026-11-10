@@ -135,7 +135,7 @@ void run(int i){
   if(initialized){finish(i,-1710,"Already initialized; relaunch to repeat");return;}
   logfile=std::fopen("/download0/mc120-java17-bootstrap.log","a");
   if(!logfile){finish(i,errno?errno:-1711,"Cannot create private probe log");return;}
-  stage("ProsperoCraft1.20 Java17 bootstrap015; original Minecraft demo title-screen test");
+  stage("ProsperoCraft1.20 Java17 bootstrap016; original Minecraft demo title-screen test");
   for(auto*p=__jvm_init_array_start;p!=__jvm_init_array_end;++p)if(*p)(*p)();
   const int graphics_result = prepare_graphics();
   initialized = graphics_result == 0;
@@ -152,7 +152,7 @@ void run(int i){
   size_t n=f?std::fread(magic,1,4,f):0;if(f)std::fclose(f);
   if(n!=4||magic[0]!=0xda||magic[1]!=0xda||magic[2]!=0xfe||magic[3]!=0xca){finish(i,-1714,"Packaged Java17 image preflight failed");return;}
   JavaVMOption options[]={
-   {const_cast<char*>("-Xint"),nullptr},{const_cast<char*>("-Xms16m"),nullptr},{const_cast<char*>("-Xmx128m"),nullptr},
+   {const_cast<char*>("-Xint"),nullptr},{const_cast<char*>("-Xms16m"),nullptr},{const_cast<char*>("-Xmx192m"),nullptr},
    {const_cast<char*>("-XX:UseAVX=0"),nullptr},{const_cast<char*>("-XX:UseSSE=2"),nullptr},
    {const_cast<char*>("-XX:+UseSerialGC"),nullptr},{const_cast<char*>("-XX:ActiveProcessorCount=2"),nullptr},
    {const_cast<char*>("-XX:CompressedClassSpaceSize=32m"),nullptr},{const_cast<char*>("-XX:-UsePerfData"),nullptr},
@@ -225,7 +225,7 @@ bool update()noexcept{
 }
 void draw(Canvas&c)noexcept{
  c.gradient(color(16,28,42),color(8,13,22));
- c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.015",54,color(235,243,250));
+ c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.016",54,color(235,243,250));
  c.label(103,151,"Title screen test: row 3 launches Minecraft 1.20 in demo mode.",24,color(157,175,193));
  for(int i=0;i<4;++i){int y=245+i*125;
   if(selected==i)c.rounded(95,y-5,1730,106,20,color(101,170,215));

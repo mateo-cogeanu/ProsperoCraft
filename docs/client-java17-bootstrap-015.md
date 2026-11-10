@@ -18,3 +18,5 @@ Run rows 1 through 3. If the app crashes, reopen the probe once to
 expose the VM trace. The fallback and title screen need PS5 validation.
 
 Signed full ZIP SHA-256 `02eec0fb5fae83b0b51d1cd39960552acf10336728f3cae7871e1f88039a0cf0`.
+
+[Build 015 result and build 016](client-java17-bootstrap-016.md)
