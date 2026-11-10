@@ -19,3 +19,8 @@ signed package integrity and the update comparison.
 
 Signed full ZIP SHA-256
 `01d8811a6ea86704c42cd2d89ee6664a6a2c0a86cb8e6f6a9431b4f942b38ad3`.
+
+The PS5 report identifies zero magic in the runtime classes
+DirectMethodHandle$EnsureInitialized, BoundMethodHandle$Species_LLLLLLLLLLLL
+and ClassSpecializer$Factory$1Var. Main returned ClassFormatError and
+the VM shut down cleanly.
