@@ -20,3 +20,8 @@ comparison passed.
 
 Signed full ZIP SHA-256
 `c7691d14bc4660f7711efe4791fe1fdd3df8a234aa05fe02a40f0916a49d2675`.
+
+The PS5 run progressed past the zero-magic rejection and failed with
+a native buffer allocation OOM in RandomAccessFile.readBytes while
+reading a JAR. Java heap use was 38,494,032 bytes. The VM returned and
+shut down cleanly.
