@@ -41,6 +41,8 @@ public final class HelloLts {
    "--gameDir", game.toString(), "--assetsDir", assets.toString(), "--assetIndex", "5",
    "--width", "1280", "--height", "720"
   };
+  System.setProperty("log4j.configurationFile", assets.resolveSibling("log4j2-demo.xml").toString());
+  System.setProperty("java.awt.headless", "true");
   stage("Invoking original Minecraft 1.20 Main in demo mode");
   try {
    Class<?> main = Class.forName("net.minecraft.client.main.Main", true, loader);

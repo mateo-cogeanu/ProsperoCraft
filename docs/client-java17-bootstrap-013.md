@@ -28,3 +28,5 @@ Signed local ZIP SHA-256
 `604192a70317f49a8978b163684d3464fc9cd488ab19416086df4bba71bb5003`.
 Every packaged asset and classpath input was checked against its
 recorded digest. Both host lanes passed.
+
+[Row 2 crash report and build 014](client-java17-bootstrap-014.md)
