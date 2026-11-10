@@ -20,3 +20,6 @@ integrity, and update byte comparison passed. The update retains the
 
 Signed full ZIP SHA-256
 `975c7cf3b09cb17b89e8db6e56532305e5555ffef12c1c0872ff9151f70d7931`.
+
+On the PS5, 018 reproduced row 3 at the same frame and heap usage.
+The trace recorded none of the new OOM or commit refusal markers.

@@ -30,8 +30,13 @@ public final class HelloLts {
      case "Compressed class space" -> "Compressed class space";
      case "Requested array size exceeds VM limit" -> "Array size limit";
      case "unable to create native thread: possibly out of memory or process/resource limits reached" -> "Native thread allocation";
-     default -> message.startsWith("Cannot reserve ") && message.contains("direct buffer memory")
-         ? "Direct buffer memory" : "Unclassified";
+     default -> {
+      if (message.startsWith("Cannot reserve ") && message.contains("direct buffer memory"))
+       yield "Direct buffer memory";
+      if (message.startsWith("(class: "))
+       yield "Legacy verifier context";
+      yield "Unclassified";
+     }
     };
     Runtime runtime = Runtime.getRuntime();
     stage("Memory failure: " + reason + "; Java heap used=" +
