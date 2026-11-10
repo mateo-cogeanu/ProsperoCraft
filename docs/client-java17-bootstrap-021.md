@@ -20,3 +20,8 @@ exception messages.
 
 Signed full ZIP SHA-256
 `99daae9a8c18182f0bd92b2958e14552e595fba5e449b828ce460359882d7f16`.
+
+The PS5 run stopped after the original Main class initialized. Neither
+the JNI return nor the new Java failure report ran. The fault log is
+byte-identical to 020 and supplies no current-run address. The cause
+and display restoration remain unvalidated.

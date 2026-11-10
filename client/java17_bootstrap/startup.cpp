@@ -11,6 +11,7 @@
 #include <cstdlib>
 #include <unistd.h>
 extern "C" int ps5shaderc_fault_begin(void);
+extern "C" void JVM_PS5SetExceptionTraceEnabled(bool);
 extern "C" unsigned ps5shaderc_fault_extended_status(unsigned*);
 extern "C" void ps5shaderc_fault_end(void);
 using Initializer=void(*)();
@@ -102,6 +103,7 @@ void glfw_error(int code, const char* description) {
 }
 void JNICALL java_stage(JNIEnv*,jclass,jint index){
  const char*points[]={"JAVA: entered run", "JAVA: before Path.of", "JAVA: before writer open", "JAVA: writer opened", "JAVA: basics passed", "JAVA: before RuntimeMXBean", "JAVA: RuntimeMXBean passed", "JAVA: before LWJGL331", "JAVA: LWJGL331 passed", "JAVA: before original Main", "JAVA: before classpath manifest", "JAVA: verified manifest parsed", "JAVA: before game classloader", "JAVA: game classloader ready", "JAVA: original Main class initialized"};
+ if(index==14)JVM_PS5SetExceptionTraceEnabled(true);
  if(index>=0&&index<15)stage(points[index]);else stage("JAVA: unknown diagnostic stage");
 }
 void report_exception(JNIEnv*e,jthrowable error,int depth){
@@ -145,7 +147,7 @@ void run(int i){
   if(initialized){finish(i,-1710,"Already initialized; relaunch to repeat");return;}
   logfile=std::fopen("/download0/mc120-java17-bootstrap.log","a");
   if(!logfile){finish(i,errno?errno:-1711,"Cannot create private probe log");return;}
-  stage("ProsperoCraft1.20 Java17 bootstrap021; original Minecraft demo title-screen test");
+  stage("ProsperoCraft1.20 Java17 bootstrap022; original Minecraft demo title-screen test");
   for(auto*p=__jvm_init_array_start;p!=__jvm_init_array_end;++p)if(*p)(*p)();
   const int graphics_result = prepare_graphics();
   initialized = graphics_result == 0;
@@ -207,6 +209,7 @@ void run(int i){
       ? ps5_ps5openal_JNI_OnLoad(vm, nullptr) : JNI_ERR;
   int rc = audio_version == JNI_VERSION_1_8
       ? ps5_lts_probe::run(env,bytes,n,stage,register_stage) : -1724;
+  JVM_PS5SetExceptionTraceEnabled(false);
   if(env->ExceptionCheck()){jthrowable failure=env->ExceptionOccurred();env->ExceptionClear();report_exception(env,failure,0);env->DeleteLocalRef(failure);if(env->ExceptionCheck())env->ExceptionClear();}
   glfwTerminate();
   glfwSetErrorCallback(nullptr);
@@ -236,7 +239,7 @@ bool update()noexcept{
 }
 void draw(Canvas&c)noexcept{
  c.gradient(color(16,28,42),color(8,13,22));
- c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.021",54,color(235,243,250));
+ c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.022",54,color(235,243,250));
  c.label(103,151,"Title screen test: row 3 launches Minecraft 1.20 in demo mode.",24,color(157,175,193));
  for(int i=0;i<4;++i){int y=245+i*125;
   if(selected==i)c.rounded(95,y-5,1730,106,20,color(101,170,215));
