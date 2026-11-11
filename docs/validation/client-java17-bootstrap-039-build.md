@@ -31,6 +31,11 @@ All 21 fast and 14 native host checks passed.
 | Update from 038 | `08b4b8e204060deb5d4e17df66e42a3111fdfdb5a616b020e0060bdf0e5582c2` |
 | Matching symbol ELF | `fe6db59d5660fb05a37e4be28369da63b65197679098b3d0f7241be145445bce` |
 
-PS5 testing is pending. Run rows 1–3, check whether the title screen
-appears, and confirm row 4 after quitting. If row 3 fails, reopen the
-same build and leave it at the menu to preserve the reports.
+The maintainer reported a failure. The 039 reports show three successful
+16 MiB aligned metaspace reservations. The earlier renderer allocation
+exception did not recur in the retained Java stages. Row 3 reached
+`UnixFileSystem.getBooleanAttributes0` while opening a classpath JAR
+and returned `-1708` with an OutOfMemoryError. The runtime recorded
+libjava requesting the exception. The specific allocation remains
+unproven. Row 4 confirmed successful VM destruction. The signal and
+fatal error reports did not grow, and the title screen remains unverified.
