@@ -7,7 +7,9 @@ exception in that code during Minecraft startup. The target build and
 host sanitizer fixture passed, including IPv4, IPv6 and partial allocation
 cleanup under forced native memory refusal.
 
-Exact PS5 row 3 and title-screen validation remain pending.
+The user reported that row 3 failed on PS5. The failure code and cause
+remain pending retrieval of the build 032 reports. Title-screen startup
+remains unverified.
 
 All 21 launcher host checks passed. The signed full package passed
 integrity verification. Its nine changed entries match the update ZIP.
