@@ -32,7 +32,17 @@ verification, and all eight update ZIP entries match the full archive.
 | Update from 034 | `032d66eb18695fd56e525e2c569b3f8a3c722177101540b030488a8e0cd4ea05` |
 | Matching symbol ELF | `cd028691e97312284680156e623d5cb5fbca4b6efc8397aa74288ef777dcb251` |
 
-Console testing is pending. Run rows 1–3. If the title screen opens,
-quit normally and record the automatic VM shutdown result. If row 3
-crashes, reopen the same build, leave it at its menu and retain all
-five reports before running another test.
+The maintainer reported a row 3 crash. The five retrieved reports
+identify 035 and show that constructors and VM creation passed.
+Original Minecraft Main initialized. Row 3 and VM destruction
+produced no results, and the game log was empty.
+
+The registered worker stack scan captured the same external SIGBUS
+PC as 034. With the exact 035 symbol ELF, the closest application
+return address is immediately after the call to the PlatformParker
+destructor in the JavaThread destructor. The subsequent candidates
+include the deleting destructor, SMR deletion and native thread entry.
+Disassembly shows two native condition destroy calls and a tail jump
+to the imported mutex destroy routine. This narrows the crash to the
+Parker teardown path. The faulting native routine and its input state
+remain unconfirmed.
