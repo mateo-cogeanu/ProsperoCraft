@@ -33,6 +33,14 @@ native host checks passed.
 | Update from 040 | `5d69b582674ef018e833948c7a6b89fb6be504c6ddecc79c1a3405d02c17f4c3` |
 | Matching symbol ELF | `d84944610d9954fef68b6e91335888eb845bec112765f6d86aaee7f3c8412eb8` |
 
-Physical console validation is pending. Run rows 1–3. If the title screen
-appears, quit normally and report whether the probe menu returns or the
-title closes. If row 3 fails, preserve the probe menu and retained reports.
+The maintainer reported that row 3 failed. The preflight recorded an
+`ExceptionInInitializerError` from `Cipher.getInstance`. The deepest
+retained cause is a `SecurityException` at
+`JceSecurity.setupJurisdictionPolicies` line 356, where the genuine
+JCE requires its policy path to be a readable directory. The signed
+package contains the original policy files. The trace does not
+distinguish the directory check from the read check or give its errno.
+
+Minecraft Main was not invoked in this run. Row 3 returned -1708,
+row 4 confirmed successful VM destruction, and the signal and fatal
+error reports did not grow. The terminal exit hook was not exercised.
