@@ -7,7 +7,9 @@ in build 033's JAR manifest failure. The PS5 target and host sanitizer
 fixture with real zlib passed, including the lazy history window and
 cleanup under forced allocation refusal.
 
-Exact PS5 row 3 and title-screen checks remain pending.
+The user reported a crash on PS5 row 3. The current crash report is
+pending retrieval. The inflater failure and title-screen startup remain
+unverified on build 034.
 
 All 21 launcher host checks passed. The signed package passed integrity
 verification and its eight changed entries match the update ZIP.
