@@ -15,11 +15,11 @@ public final class HelloLts {
  private static PrintWriter log;
  private static void stage(String value) { log.println(value); log.flush(); }
  // Only report bounded code locations. Exception messages and source paths stay out of the log.
- private static void reportMainFailure(Throwable failure) {
+ private static void reportFailure(String phase, Throwable failure) {
   for (int depth = 0; failure != null && depth < 5; depth++) {
    String type = failure.getClass().getName();
    if (type.length() <= 160)
-    stage("Main failure depth " + depth + " type: " + type);
+    stage(phase + " failure depth " + depth + " type: " + type);
    if (failure instanceof OutOfMemoryError) {
     String message = failure.getMessage();
     if (message == null) message = "";
@@ -52,10 +52,26 @@ public final class HelloLts {
     String owner = frame.getClassName();
     String method = frame.getMethodName();
     if (owner.matches("[A-Za-z0-9_.$]{1,160}") && method.matches("[A-Za-z0-9_$<>]{1,80}"))
-     stage("Main failure depth " + depth + " frame " + i + ": " + owner + "." + method
+     stage(phase + " failure depth " + depth + " frame " + i + ": " + owner + "." + method
          + " line " + frame.getLineNumber());
    }
    failure = failure.getCause();
+  }
+ }
+ private static void checkTlsProviders() throws Exception {
+  try {
+   stage("Initializing the default JCE cipher provider");
+   javax.crypto.Cipher.getInstance("AES/GCM/NoPadding");
+   stage("Initializing the default JSSE context");
+   javax.net.ssl.SSLContext.getDefault();
+   stage("Default JCE and JSSE initialization passed");
+  } catch (Throwable failure) {
+   try {
+    reportFailure("TLS provider", failure);
+   } catch (Throwable diagnosticFailure) {
+    // Keep the original failure pending even if reporting runs out of memory.
+   }
+   throw failure;
   }
  }
  private static void launchDemo(ClassLoader loader, Path root, Path assets) throws Exception {
@@ -79,7 +95,7 @@ public final class HelloLts {
    main.getMethod("main", String[].class).invoke(null, (Object) args);
   } catch (Throwable failure) {
    try {
-    reportMainFailure(failure);
+    reportFailure("Main", failure);
    } catch (Throwable diagnosticFailure) {
     // Keep the original failure pending even if reporting runs out of memory.
    }
@@ -164,15 +180,16 @@ public final class HelloLts {
      } catch (InvocationTargetException invocation) {
       Throwable cause = invocation.getCause();
       if (cause == null || !cause.getClass().getName().equals("joptsimple.MissingRequiredOptionsException")) {
-       reportMainFailure(invocation);
+       reportFailure("Main", invocation);
        throw invocation;
       }
       stage("Original Minecraft1.20 parser reached required accessToken/version gate, as intended");
      } catch (ReflectiveOperationException | LinkageError failure) {
-      reportMainFailure(failure);
+      reportFailure("Main", failure);
       throw failure;
      }
     } else {
+     checkTlsProviders();
      launchDemo(loader, root, folder.resolve("game-assets"));
     }
     } finally { Thread.currentThread().setContextClassLoader(previous); }

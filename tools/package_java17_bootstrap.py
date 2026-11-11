@@ -264,6 +264,7 @@ def main():
         '--library','lwjgl331=' + str(lwjgl),
         '--link-object',str(a.ffi_core.resolve()),'--link-object',str(fault),'--link-object',str(iostream),'--llvm-home',str(a.llvm_home.resolve()),
         '--lld',str(a.lld.absolute()),'--boot-jdk',str(jdk),'--image-dir',str(a.image_dir.resolve()),
+        '--import-stub',str(sdk / 'target/lib/libSceSystemService.so'),
         '--work-dir',str(work / 'package'), *graphics], check=True)
 
 

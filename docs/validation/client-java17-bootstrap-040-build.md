@@ -20,6 +20,15 @@ full archive.
 | Update from 039 | `af4ab534e5595f5d104a58d45d0c9f987f156b5359f6b11edd23dd777cf5047a` |
 | Matching symbol ELF | `bc7330929c8b765106af6fa8eb012dca707c73c2ce0ee5f6c832abf858c8629f` |
 
-Console testing is pending. Run rows 1–3. If the title screen opens,
-quit normally and check row 4. If row 3 fails, leave the probe at its
-menu so the reports can be retrieved.
+The maintainer reported a crash. The build 040 logs reached original
+Minecraft Main. Minecraft wrote its own crash report during game
+construction. It shows that the default JSSE context could not
+initialize, with an earlier initializer error in `Cipher.getInstance`
+on the Yggdrasil key fetcher thread. The deepest provider cause is
+absent from that report. The earlier native file attribute OOM did
+not recur in the retained run.
+
+HotSpot's exit hook logged status -1. The subsequent SIGSYS worker
+stack includes `VM_Exit::doit` and the instruction immediately after
+the libc `exit` import call in `os::exit`. The title screen and normal
+VM destruction remain unverified.
