@@ -169,7 +169,7 @@ void run(int i){
   if(initialized){finish(i,-1710,"Already initialized; relaunch to repeat");return;}
   logfile=std::fopen("/download0/mc120-java17-bootstrap.log","a");
   if(!logfile){finish(i,errno?errno:-1711,"Cannot create private probe log");return;}
-  stage("ProsperoCraft1.20 Java17 bootstrap032; original Minecraft demo title-screen test");
+  stage("ProsperoCraft1.20 Java17 bootstrap033; original Minecraft demo title-screen test");
   stage(fault_stack_ready ? "Main stack capture configured" : "Main stack capture unavailable");
   std::fprintf(logfile, "Native entry addresses memcpy=%p memmove=%p memcmp=%p strlen=%p malloc=%p pthread_create=%p\n",
       reinterpret_cast<void*>(&std::memcpy), reinterpret_cast<void*>(&std::memmove),
@@ -267,7 +267,7 @@ bool update()noexcept{
 }
 void draw(Canvas&c)noexcept{
  c.gradient(color(16,28,42),color(8,13,22));
- c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.032",54,color(235,243,250));
+ c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.033",54,color(235,243,250));
  c.label(103,151,"Title screen test: row 3 launches Minecraft 1.20 in demo mode.",24,color(157,175,193));
  for(int i=0;i<4;++i){int y=245+i*125;
   if(selected==i)c.rounded(95,y-5,1730,106,20,color(101,170,215));
