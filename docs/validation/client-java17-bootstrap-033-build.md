@@ -7,8 +7,11 @@ errors using stack storage. This addresses two paths relevant to build
 032's `NetworkInterface.getAll` failure.
 
 The Java 17 target build, sanitizer route parser fixture and host JNI
-formatter checks passed. Exact PS5 row 3 and title-screen validation
-remain pending.
+formatter checks passed. The recovered 033 console report shows that row 3
+returned `-1708` with an `OutOfMemoryError` in `Inflater.inflateBytesBytes`
+while reading a JAR manifest. This is a later failure than 032's interface
+enumeration exception. The runtime trace also records socket exceptions,
+and VM destruction returned successfully. The title screen was not reached.
 
 All 21 launcher host checks passed. The signed package passed integrity
 verification and its 12 changed entries match the update ZIP.
