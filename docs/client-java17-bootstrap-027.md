@@ -25,3 +25,8 @@ All 21 launcher host checks passed. The scoped signal forwarding and
 report budget check passed. The full native lane stopped at a haptics
 timing assertion on the first run and an OpenAL worker timeout on the
 isolated retry.
+
+The PS5 fault capture identified an application return address directly
+after pthread_mutex_lock in HotSpot. Further candidates resolve to
+class metadata allocation, including ConstantPool and ClassFileParser.
+The native initialization status was not captured.
