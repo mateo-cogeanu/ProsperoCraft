@@ -15,7 +15,8 @@ compared with the full package, and the 028 and 029 game asset entries match.
 | Signed full ZIP | `863531dcb47d8f92113e9b5270f62df6f3c00f9938319378259b35ec6820eca2` |
 | Update ZIP from 028 | `77abe02bd68597fb512c8aa3e0f18c8f10364883f642cd009bb16428410833e0` |
 
-Build 028's retained reports show a native abort after entering the original
-Minecraft Main. The abort caller is unresolved. Exact 029 hardware validation
-is pending, starting with probe row 3 and the title screen. Play, shader
-rendering, stability and performance have not been validated.
+Builds 028 and 029 aborted at row 3 after initializing the original
+Minecraft Main. The saved registers from both runs match the SDK emulated
+TLS abort branch after a failed initial 128-byte allocation for HotSpot's
+current-thread storage. The underlying allocator refusal is unresolved.
+Play, shader rendering, stability and performance have not been validated.
