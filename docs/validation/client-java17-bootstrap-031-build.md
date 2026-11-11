@@ -18,8 +18,10 @@ for byte.
 | Signed full ZIP | `1b332019ad9acb808fc8c7fa5b52aa1d4a810c44b32c7cc288f5bbe4a3f94dbb` |
 | Update ZIP from 030 | `8221d3cc7178e39d2c3312da58f5b9913d742d30d1a6b425605679de3a1949f5` |
 
-The user reported row 3 failure with code `-1708` on PS5. The JNI harness
-emits that code after calling the Java probe's `run()` with a pending Java
-exception. The exception class, failing stage and cause remain unknown
-because the 031 console logs could not be retrieved. Title-screen startup,
-native allocation pressure and longer-running gameplay remain unverified.
+The user reported row 3 failure with code `-1708` on PS5. The recovered
+report shows Minecraft's original Main throwing a Java `OutOfMemoryError`
+from native `NetworkInterface.getAll` during security provider initialization.
+The Java heap was about 42 MB used against a 195 MB maximum. The compiler
+TLS key fallback retained its value, the Java exception reached the harness,
+and VM destruction returned successfully. The title screen was not reached.
+The exact native allocation that failed remains unconfirmed.
