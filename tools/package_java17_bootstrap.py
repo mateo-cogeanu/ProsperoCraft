@@ -209,7 +209,7 @@ def main():
         '-c',str(ROOT / 'client/ports/shaderc/fault.c'),'-o',str(fault)], check=True)
     subprocess.run([sys.executable, str(runtime / 'tools/package_java_lts_probe.py'),
         '--major','17','--probe-dir',str(ROOT / 'client/java17_bootstrap'),
-        '--extra-assets',str(work / 'publisher'),'--management',
+        '--extra-assets',str(work / 'publisher'),'--management','--compiler-tls',
         '--library','lwjgl331=' + str(a.lwjgl331_build.resolve() / 'ps5/lwjgl331.o'),
         '--link-object',str(a.ffi_core.resolve()),'--link-object',str(fault),'--link-object',str(iostream),'--llvm-home',str(a.llvm_home.resolve()),
         '--lld',str(a.lld.absolute()),'--boot-jdk',str(jdk),'--image-dir',str(a.image_dir.resolve()),

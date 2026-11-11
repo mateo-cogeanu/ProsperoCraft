@@ -8,8 +8,11 @@ for that pointer. The 029 class image, heap, graphics and original game assets
 carry forward.
 
 The Java 17 target, exact HotSpot/POSIX thread storage fixtures, Java 25
-fixture regression and all 21 launcher host checks passed. Exact PS5 row 3
-and title-screen validation are pending.
+fixture regression and all 21 launcher host checks passed. On PS5, row 3
+reached the original Main. The native thread key returned ENOMEM and the
+current-thread fallback succeeded. The subsequent abort resolves to a
+failed 128-byte SDK compiler TLS allocation for the symbol table's
+`_lookup_shared_first` flag. The title screen was not reached.
 
 The signed full ZIP passed integrity checks. Its eight changed entries
 match the update ZIP byte for byte, and the original game asset entries
