@@ -29,6 +29,16 @@ when run separately, so all 21 checks passed across the split runs.
 | Update from 037 | `1a63961777f822391973101cffd8b453d70cac31540651fd633cfc7a9fc071f8` |
 | Matching symbol ELF | `38a6ba70567da231864be46f7261f8958712fd48eff931d368976c0f105d15f1` |
 
-Physical console validation is pending. Run rows 1–3. If the title screen
-opens, quit normally and check row 4. If it crashes, reopen the same
-build and leave it at the menu to preserve the reports.
+The maintainer reported that row 3 failed. The retained 038 reports show
+that three aligned 16 MiB metaspace reservations succeeded. The fatal error
+and signal files did not grow. Row 3 returned `-1708` during
+`RenderSystem` initialization, and row 4 confirmed successful VM
+destruction. The game log was empty and the title screen remains unverified.
+
+The exception chain is `InvocationTargetException` →
+`NoClassDefFoundError` → `ExceptionInInitializerError`. Its earliest
+retained renderer frame is `ehh.a` line 13. The exact original 1.20
+class's line table and bytecode put that line in the branch that throws
+`OutOfMemoryError` after LWJGL returns a null pointer. The caller
+multiplies the initial capacity of 2,097,152 by six, yielding a 12 MiB native
+request. The underlying libc allocation refusal is unexplained.

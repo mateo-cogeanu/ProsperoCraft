@@ -152,6 +152,56 @@ def stage_openal_iostream(work, llvm, sdk):
     return staged
 
 
+def scope_lwjgl_allocator(binding, work, llvm, linker):
+    """Rebind the generated LWJGL allocation API as one ownership family."""
+    native = binding / 'ps5'
+    audit = json.loads((native / 'audit.json').read_text())
+    units = {
+        'org_lwjgl_system_MemoryAccessJNI.c.o',
+        'org_lwjgl_system_libc_LibCStdlib.c.o',
+    }
+    names = ('malloc', 'calloc', 'realloc', 'free', 'posix_memalign')
+    renames = {name: 'clientgpu___wrap_' + name for name in names}
+    pins = audit['objectsSha256']
+    if not units <= pins.keys():
+        raise ValueError('Missing reviewed LWJGL allocation units')
+
+    def undefined(path):
+        output = subprocess.check_output(
+            [str(llvm / 'bin/llvm-nm'), '--undefined-only', str(path)], text=True)
+        return {line.split()[-1] for line in output.splitlines() if line.strip()}
+
+    inputs = []
+    originals = []
+    for name, digest in pins.items():
+        if Path(name).name != name or not name.endswith('.c.o'):
+            raise ValueError('Invalid audited LWJGL object name: ' + name)
+        original = native / name
+        if sha(original) != digest:
+            raise ValueError('LWJGL object differs from its audit: ' + name)
+        originals.append(original)
+        if name not in units:
+            inputs.append(original)
+            continue
+        if undefined(original) != renames.keys():
+            raise ValueError('Review changed allocation imports in ' + name)
+        scoped = work / name
+        subprocess.run([str(llvm / 'bin/llvm-objcopy'),
+                        *('--redefine-sym=' + name + '=' + target for name, target in renames.items()),
+                        str(original), str(scoped)], check=True)
+        if undefined(scoped) != set(renames.values()):
+            raise ValueError('Incomplete LWJGL allocation rebinding: ' + name)
+        inputs.append(scoped)
+
+    original_group = work / 'lwjgl331-original.o'
+    subprocess.run([str(linker), '-r', *map(str, originals), '-o', str(original_group)], check=True)
+    if sha(original_group) != audit['outputSha256']:
+        raise ValueError('Reviewed LWJGL inputs do not reconstruct the original group')
+    output = work / 'lwjgl331-scoped.o'
+    subprocess.run([str(linker), '-r', *map(str, inputs), '-o', str(output)], check=True)
+    return output
+
+
 def stage_demo_assets(cache, assets, output):
     metadata = metadata_120(cache, offline=True)
     count = prepare_assets(metadata, assets, offline=True, objects=True)
@@ -200,6 +250,7 @@ def main():
     sdk = runtime / '.tools/native-sdk/ps5-payload-sdk'
     graphics = graphics_options(a.graphics_input, work, a.llvm_home.resolve(), runtime, sdk)
     iostream = stage_openal_iostream(work, a.llvm_home.resolve(), sdk)
+    lwjgl = scope_lwjgl_allocator(a.lwjgl331_build.resolve(), work, a.llvm_home.resolve(), a.lld.absolute())
     fault = work / 'startup-fault.o'
     subprocess.run([str(a.llvm_home.resolve() / 'bin/clang'), '-target','x86_64-sie-ps5',
         '-std=c11','-O2','-fPIC','-femulated-tls','-fno-stack-protector',
@@ -210,7 +261,7 @@ def main():
     subprocess.run([sys.executable, str(runtime / 'tools/package_java_lts_probe.py'),
         '--major','17','--probe-dir',str(ROOT / 'client/java17_bootstrap'),
         '--extra-assets',str(work / 'publisher'),'--management','--compiler-tls',
-        '--library','lwjgl331=' + str(a.lwjgl331_build.resolve() / 'ps5/lwjgl331.o'),
+        '--library','lwjgl331=' + str(lwjgl),
         '--link-object',str(a.ffi_core.resolve()),'--link-object',str(fault),'--link-object',str(iostream),'--llvm-home',str(a.llvm_home.resolve()),
         '--lld',str(a.lld.absolute()),'--boot-jdk',str(jdk),'--image-dir',str(a.image_dir.resolve()),
         '--work-dir',str(work / 'package'), *graphics], check=True)
