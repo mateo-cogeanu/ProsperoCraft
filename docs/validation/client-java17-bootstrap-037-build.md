@@ -27,6 +27,17 @@ verification, and all eight update entries match the full archive.
 | Update from 036 | `665a3d51896b1c7df94880f81758eb870d2173a4bcc67f71b7d9d5ca1cc556f9` |
 | Matching symbol ELF | `bd47857abd5ec2bc995f31dc6ddeed9b627e64700a5eb3214696c0b02a44759b` |
 
-Physical console validation is pending. Run rows 1–3. If the title
-screen appears, quit normally and check row 4. If row 3 fails, reopen
-the same build at its menu to preserve the reports.
+The maintainer reported that row 3 ran for a while before crashing.
+All six reports were recovered, including HotSpot's fatal error log.
+The trace identifies 037 and records two successful aligned 16 MiB
+mappings. The third returned `ENOMEM` and the original reservation
+path also failed. HotSpot reported the failure while defining a class
+in Minecraft startup, about 38 seconds after VM startup. The core
+dump path was skipped and the VM reached the abort hook. There was
+no title-screen, row 3 completion or VM shutdown result.
+
+The report shows 31.69 MiB of non-class metaspace committed across two
+16 MiB nodes, about 5.13 MiB of class space committed out of 32 MiB
+reserved, and 717 KiB of code cache used out of 48 MiB reserved.
+The Java heap had about 126 MiB in use. The kernel resource that caused
+`ENOMEM` remains unknown.
