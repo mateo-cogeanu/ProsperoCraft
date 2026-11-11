@@ -7,9 +7,11 @@ exception in that code during Minecraft startup. The target build and
 host sanitizer fixture passed, including IPv4, IPv6 and partial allocation
 cleanup under forced native memory refusal.
 
-The user reported that row 3 failed on PS5. The failure code and cause
-remain pending retrieval of the build 032 reports. Title-screen startup
-remains unverified.
+The user reported row 3 failure with code `-1708` on PS5. This
+identifies a pending Java exception after the harness called the probe.
+The exception class and failing stage remain unknown because the 032
+console reports could not be retrieved. Title-screen startup remains
+unverified.
 
 All 21 launcher host checks passed. The signed full package passed
 integrity verification. Its nine changed entries match the update ZIP.
