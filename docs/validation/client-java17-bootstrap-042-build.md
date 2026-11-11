@@ -26,7 +26,10 @@ verification. The eight update entries match the full archive.
 | Update from 041 | `cd8319af3692690d7f1a89a009dd7ecf5810bf8d0dcb373bfde2cdd561c50b8f` |
 | Matching symbol ELF | `2e52bf91353d05cb8afb8038600c44fbb656a1c3ea2921d10153ca2e53453b80` |
 
-Physical console testing is pending. Run rows 1–3 and check whether
-provider initialization and the title screen complete. If the title
-screen appears, quit normally and record whether the probe returns
-to its menu or the title closes.
+The maintainer reported that row 3 failed. The retained provider
+preflight passed the policy directory type and readability checks.
+The failure moved to a `FileSystemException` from
+`UnixFileSystemProvider.newDirectoryStream` line 420. That line
+reports a native `opendir` failure. Its errno was not captured.
+Minecraft Main was not invoked. Row 3 returned -1708 and row 4
+confirmed successful VM destruction. The native fault file did not grow.
