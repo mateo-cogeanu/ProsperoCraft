@@ -169,7 +169,7 @@ void run(int i){
   if(initialized){finish(i,-1710,"Already initialized; relaunch to repeat");return;}
   logfile=std::fopen("/download0/mc120-java17-bootstrap.log","a");
   if(!logfile){finish(i,errno?errno:-1711,"Cannot create private probe log");return;}
-  stage("ProsperoCraft1.20 Java17 bootstrap036; original Minecraft demo title-screen test");
+  stage("ProsperoCraft1.20 Java17 bootstrap037; original Minecraft demo title-screen test");
   stage(fault_stack_ready ? "Main stack capture configured" : "Main stack capture unavailable");
   std::fprintf(logfile, "Native entry addresses memcpy=%p memmove=%p memcmp=%p strlen=%p malloc=%p pthread_create=%p\n",
       reinterpret_cast<void*>(&std::memcpy), reinterpret_cast<void*>(&std::memmove),
@@ -202,6 +202,7 @@ void run(int i){
    {const_cast<char*>("--add-modules=ALL-SYSTEM"),nullptr},
    {const_cast<char*>("-Djava.io.tmpdir=/download0"),nullptr},{const_cast<char*>("-Duser.home=/download0"),nullptr},
    {const_cast<char*>("-Djava.class.path=/app0/assets/java17/classes"),nullptr},
+   {const_cast<char*>("-XX:-CreateCoredumpOnCrash"),nullptr},
    {const_cast<char*>("-XX:ErrorFile=/download0/java17-hs-error-%p.log"),nullptr},
    {const_cast<char*>("vfprintf"),reinterpret_cast<void*>(&print_vm)},
    {const_cast<char*>("exit"),reinterpret_cast<void*>(&exit_vm)},{const_cast<char*>("abort"),reinterpret_cast<void*>(&abort_vm)}
@@ -267,7 +268,7 @@ bool update()noexcept{
 }
 void draw(Canvas&c)noexcept{
  c.gradient(color(16,28,42),color(8,13,22));
- c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.036",54,color(235,243,250));
+ c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.037",54,color(235,243,250));
  c.label(103,151,"Title screen test: row 3 launches Minecraft 1.20 in demo mode.",24,color(157,175,193));
  for(int i=0;i<4;++i){int y=245+i*125;
   if(selected==i)c.rounded(95,y-5,1730,106,20,color(101,170,215));

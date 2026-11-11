@@ -30,6 +30,16 @@ eight entries match the full archive.
 | Update from 035 | `2451ada37b7fe2f71423bcb7f2a622633061014aa08e0246da27235392d0cdc0` |
 | Matching symbol ELF | `e26172bb75bed81ee5bf3cab75456aafbae377d3ba683ad3c868ae7e70054b19` |
 
-On the PS5, run rows 1–3. If the title screen appears, quit normally
-and check row 4. If row 3 fails, reopen the same build at its menu and
-preserve the reports before repeating the test.
+The maintainer reported that row 3 ran longer before crashing. All five
+reports were recovered and the append-only records identify 036.
+Rows 1 and 2 passed, the 256 absolute condition slots initialized,
+and original Minecraft Main initialized. The earlier Parker SIGBUS
+did not recur in this run. Row 3 and VM destruction recorded no
+results and the game log remained empty.
+
+The VM trace reports `OOM_MMAP_ERROR` for 16 MiB at source line 249,
+which matches the failed reservation of a metaspace node in the
+matching runtime. The subsequent SIGSEGV stack has candidates in
+`os::get_core_path` and `os::check_core_dump_prerequisites`.
+The exact native reservation refusal and the title screen remain
+unverified. No Parker failure marker appeared in this run.
