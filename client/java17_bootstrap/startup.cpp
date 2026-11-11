@@ -7,6 +7,8 @@
 #include <cstdio>
 #include <cstring>
 #include <fcntl.h>
+#include <pthread.h>
+#include <pthread_np.h>
 #include <sys/stat.h>
 #include <cstdlib>
 #include <unistd.h>
@@ -14,6 +16,8 @@ extern "C" int ps5shaderc_fault_begin(void);
 extern "C" void JVM_PS5SetExceptionTraceEnabled(bool);
 extern "C" unsigned ps5shaderc_fault_extended_status(unsigned*);
 extern "C" void ps5shaderc_fault_end(void);
+extern "C" void ps5shaderc_fault_set_probe_stack(uintptr_t, uintptr_t, uintptr_t, uintptr_t);
+extern "C" char __lts_jvm_text_start[], __eh_frame_start[];
 using Initializer=void(*)();
 extern "C" Initializer __jvm_init_array_start[],__jvm_init_array_end[];
 extern "C" unsigned ps5DemoPresentationTargetHz() noexcept { return 60; }
@@ -51,7 +55,7 @@ JNIEnv*env=nullptr;
 FILE*logfile=nullptr;
 int selected=0,pending=-1,pad=-1;
 unsigned previous=0;
-bool initialized=false,attempted=false;
+bool initialized=false,attempted=false,fault_stack_ready=false;
 int status[4]{};
 char details[4][120]{};
 const char*names[]={"Initialize matched Java17 + LWJGL331", "Create real Java17 VM (-Xint)", "Launch Minecraft 1.20 demo", "Automatic Java17 VM shutdown"};
@@ -92,6 +96,24 @@ void prepare_audio_output() {
  std::fprintf(logfile, "Pre-JVM AudioOut init=%d playback port=%d\n",
               client_ps5_audio_early_init_result, client_ps5_audio_early_port);
  std::fflush(logfile);
+}
+bool configure_fault_stack() {
+ pthread_attr_t attributes;
+ if (pthread_attr_init(&attributes) != 0) return false;
+ void* base = nullptr;
+ size_t size = 0;
+ const bool found = pthread_attr_get_np(pthread_self(), &attributes) == 0 &&
+                    pthread_attr_getstack(&attributes, &base, &size) == 0;
+ pthread_attr_destroy(&attributes);
+ const uintptr_t bottom = reinterpret_cast<uintptr_t>(base);
+ constexpr size_t window = 128 * 1024;
+ if (!found || !base || size < 2 * window || size > UINTPTR_MAX - bottom) return false;
+
+ const uintptr_t top = bottom + size;
+ ps5shaderc_fault_set_probe_stack(top - window, top,
+     reinterpret_cast<uintptr_t>(__lts_jvm_text_start),
+     reinterpret_cast<uintptr_t>(__eh_frame_start));
+ return true;
 }
 void glfw_error(int code, const char* description) {
  static unsigned count;
@@ -147,7 +169,13 @@ void run(int i){
   if(initialized){finish(i,-1710,"Already initialized; relaunch to repeat");return;}
   logfile=std::fopen("/download0/mc120-java17-bootstrap.log","a");
   if(!logfile){finish(i,errno?errno:-1711,"Cannot create private probe log");return;}
-  stage("ProsperoCraft1.20 Java17 bootstrap026; original Minecraft demo title-screen test");
+  stage("ProsperoCraft1.20 Java17 bootstrap027; original Minecraft demo title-screen test");
+  stage(fault_stack_ready ? "Main stack capture configured" : "Main stack capture unavailable");
+  std::fprintf(logfile, "Native entry addresses memcpy=%p memmove=%p memcmp=%p strlen=%p malloc=%p pthread_create=%p\n",
+      reinterpret_cast<void*>(&std::memcpy), reinterpret_cast<void*>(&std::memmove),
+      reinterpret_cast<void*>(&std::memcmp), reinterpret_cast<void*>(&std::strlen),
+      reinterpret_cast<void*>(&std::malloc), reinterpret_cast<void*>(&pthread_create));
+  std::fflush(logfile);
   for(auto*p=__jvm_init_array_start;p!=__jvm_init_array_end;++p)if(*p)(*p)();
   const int graphics_result = prepare_graphics();
   initialized = graphics_result == 0;
@@ -239,7 +267,7 @@ bool update()noexcept{
 }
 void draw(Canvas&c)noexcept{
  c.gradient(color(16,28,42),color(8,13,22));
- c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.026",54,color(235,243,250));
+ c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.027",54,color(235,243,250));
  c.label(103,151,"Title screen test: row 3 launches Minecraft 1.20 in demo mode.",24,color(157,175,193));
  for(int i=0;i<4;++i){int y=245+i*125;
   if(selected==i)c.rounded(95,y-5,1730,106,20,color(101,170,215));
@@ -269,6 +297,7 @@ extern "C" void client_input_present_note(const char*, unsigned, long long) {}
 extern "C" const char* prospero_gpu_display_name() { return "PS5 AMD Radeon"; }
 
 int main(){
+ fault_stack_ready = configure_fault_stack();
  // Preserve prior bytes and make this unauthenticated probe's diagnostics readable
  // by the FTP service. Never touch account files or another title's storage.
  const char*diagnostics[]={"/download0/mc120-java17-bootstrap.log","/download0/java17-vm-trace.log","/download0/mc120-java17-fault.log","/download0/mc120-java17-game.log"};

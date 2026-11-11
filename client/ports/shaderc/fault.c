@@ -44,6 +44,39 @@ static void value(const char *label,uint64_t number){
  for(int shift=60;shift>=0;shift-=4)line[n++]=hex[(number>>shift)&15];
  line[n++]='\n';(void)write(report_fd,line,n);
 }
+#ifdef PS5_SHADERC_PROBE_STACK
+/* The caller initializes these once, before installing any handlers. */
+static uintptr_t probe_stack_low, probe_stack_high;
+static uintptr_t probe_text_low, probe_text_high;
+
+void ps5shaderc_fault_set_probe_stack(uintptr_t low, uintptr_t high,
+                                    uintptr_t text_low, uintptr_t text_high) {
+ probe_stack_low = low;
+ probe_stack_high = high;
+ probe_text_low = text_low;
+ probe_text_high = text_high;
+}
+
+static void report_probe_stack(const volatile uint64_t *context_words) {
+ /* Same target x86-64 RSP slot as the Java 17 PS5 signal context. */
+ const uintptr_t sp = context_words[31];
+ if (probe_stack_high <= probe_stack_low ||
+     probe_stack_high - probe_stack_low < sizeof(uint64_t) ||
+     sp < probe_stack_low || sp > probe_stack_high - sizeof(uint64_t) ||
+     (sp & (sizeof(uint64_t) - 1)) != 0) return;
+
+ const size_t available = (probe_stack_high - sp) / sizeof(uint64_t);
+ const size_t count = available < 64 ? available : 64;
+ const volatile uint64_t *stack_words = (const volatile uint64_t *)sp;
+ for (size_t i = 0; i < count; ++i) {
+  const uint64_t address = stack_words[i];
+  if (address >= probe_text_low && address < probe_text_high) {
+   value("PROBE STACK slot=", i);
+   value("PROBE STACK image offset=", address - probe_text_low);
+  }
+ }
+}
+#endif
 static void handler(int sig,siginfo_t *info,void *context){
  if(report_fd>=0 && (PS5_SHADERC_MAX_REPORTS==0 ||
        __atomic_fetch_add(&report_count,1u,__ATOMIC_RELAXED)<PS5_SHADERC_MAX_REPORTS)){
@@ -54,6 +87,9 @@ static void handler(int sig,siginfo_t *info,void *context){
    * the same bounded96-word region inspected by the pinned SDK signal probe. */
   if(context){
    const volatile uint64_t *words=(const volatile uint64_t*)context;
+#ifdef PS5_SHADERC_PROBE_STACK
+   report_probe_stack(words);
+#endif
    for(unsigned i=0;i<PS5_SHADERC_CONTEXT_WORDS;i++){
     value("SHADERC FAULT context-index=",i);
     value("SHADERC FAULT context-word=",words[i]);
