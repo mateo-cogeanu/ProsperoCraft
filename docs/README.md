@@ -8,6 +8,7 @@ history; a development entry does not imply a public release.
 | --- | --- |
 | Contribute or report a reproducible bug | [CONTRIBUTING](../CONTRIBUTING.md) |
 | Report a vulnerability privately | [SECURITY](../SECURITY.md) |
+| Current work, launcher design, Store releases and Cyberduck | [Maintainer handoff](prosperocraft-handoff.md) |
 | Current maintainer policies | [AGENTS](../AGENTS.md) and [compatibility constraints/open work](maintainer-constraints.md) |
 | Fast portable checks and optional lanes | [Host testing](host-testing.md), [inventory](host-test-inventory.md) |
 | Full target preparation, ownership and archived source | [Source organization](source-organization.md) |
