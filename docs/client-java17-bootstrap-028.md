@@ -7,8 +7,11 @@ and conditions with checked initialization and release.
 The 027 fault report points to a pthread_mutex_lock call during class
 metadata allocation. The native mutex initialization result was not
 captured. The 028 trace records native pool counts and explicit
-initialization refusals. Physical row 3 and title-screen validation
-remain pending.
+initialization refusals. Physical tests reached the original Minecraft Main entry on two retained
+runs and then aborted in native code during row 3. Both runs initialized
+all 4096 mutex and 4096 condition slots. Neither retained trace shows a
+checked synchronization initialization refusal. The abort caller is
+unresolved and the title screen was not reached.
 
 The Java 17 target, ordered patch checks, host sanitizer pool checks
 and all 21 launcher host checks passed.
