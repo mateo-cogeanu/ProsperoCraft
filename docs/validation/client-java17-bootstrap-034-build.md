@@ -7,9 +7,22 @@ in build 033's JAR manifest failure. The PS5 target and host sanitizer
 fixture with real zlib passed, including the lazy history window and
 cleanup under forced allocation refusal.
 
-The user reported a crash on PS5 row 3. The current crash report is
-pending retrieval. The inflater failure and title-screen startup remain
-unverified on build 034.
+The user reported a crash on PS5 row 3. All five retained reports were
+recovered. The append-only bootstrap, VM trace and fault logs preserve
+the 033 bytes as exact prefixes. The new bootstrap section identifies
+034 and records successful constructor and VM checks, JNI and LWJGL
+checks, and initialization of original Minecraft Main. The Java stages
+file ends as the probe invokes Main. The game log is empty. There is no
+row 3 result or VM destruction result for 034.
+
+The new fault record is SIGBUS, code 3, with a saved PC outside the
+probe executable. The matching symbol ELF and the probe's load anchor
+resolve the saved R12 value to `Monitor::wait_without_safepoint_check`.
+Several HotSpot callers load that address into R12. The main-stack
+recorder produced no candidate return addresses for this fault, so the
+calling thread, external function and cause remain unconfirmed. The
+033 inflater exception was not repeated in the retained 034 reports.
+Title-screen startup remains unverified.
 
 All 21 launcher host checks passed. The signed package passed integrity
 verification and its eight changed entries match the update ZIP.

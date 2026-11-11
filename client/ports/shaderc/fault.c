@@ -48,6 +48,12 @@ static void value(const char *label,uint64_t number){
 /* The caller initializes these once, before installing any handlers. */
 static uintptr_t probe_stack_low, probe_stack_high;
 static uintptr_t probe_text_low, probe_text_high;
+/* One atomic top per live worker. A fixed window lets the handler read
+ * a complete range without a lock or a second independently updated word. */
+static uintptr_t probe_worker_tops[128];
+static const uintptr_t probe_worker_window = 128 * 1024;
+_Static_assert(__atomic_always_lock_free(sizeof(uintptr_t), 0),
+               "Fault reporting requires lock-free worker stack bounds");
 
 void ps5shaderc_fault_set_probe_stack(uintptr_t low, uintptr_t high,
                                     uintptr_t text_low, uintptr_t text_high) {
@@ -57,15 +63,39 @@ void ps5shaderc_fault_set_probe_stack(uintptr_t low, uintptr_t high,
  probe_text_high = text_high;
 }
 
+/* Optional Java 17 worker lifecycle callback. A zero size retires the range. */
+void ps5_lts_observe_worker_stack(const void *top, size_t size) {
+ const uintptr_t high = (uintptr_t)top;
+ if (high < probe_worker_window || (size && (size < probe_worker_window || size > high))) return;
+ for (size_t i = 0; i < sizeof(probe_worker_tops) / sizeof(probe_worker_tops[0]); ++i) {
+  uintptr_t expected = size ? 0 : high;
+  if (__atomic_compare_exchange_n(&probe_worker_tops[i], &expected, size ? high : 0,
+                                  0, __ATOMIC_RELAXED, __ATOMIC_RELAXED)) return;
+ }
+}
+
+static int probe_stack_contains(uintptr_t sp, uintptr_t low, uintptr_t high) {
+ return high > low && high - low >= sizeof(uint64_t) &&
+        sp >= low && sp <= high - sizeof(uint64_t);
+}
+
 static void report_probe_stack(const volatile uint64_t *context_words) {
  /* Same target x86-64 RSP slot as the Java 17 PS5 signal context. */
  const uintptr_t sp = context_words[31];
- if (probe_stack_high <= probe_stack_low ||
-     probe_stack_high - probe_stack_low < sizeof(uint64_t) ||
-     sp < probe_stack_low || sp > probe_stack_high - sizeof(uint64_t) ||
-     (sp & (sizeof(uint64_t) - 1)) != 0) return;
+ if ((sp & (sizeof(uint64_t) - 1)) != 0) return;
+ uintptr_t high = probe_stack_high;
+ if (!probe_stack_contains(sp, probe_stack_low, high)) {
+  for (size_t i = 0; i < sizeof(probe_worker_tops) / sizeof(probe_worker_tops[0]); ++i) {
+   high = __atomic_load_n(&probe_worker_tops[i], __ATOMIC_RELAXED);
+   if (high >= probe_worker_window &&
+       probe_stack_contains(sp, high - probe_worker_window, high)) break;
+   high = 0;
+  }
+  if (!high) return;
+  value("PROBE STACK worker=", 1);
+ }
 
- const size_t available = (probe_stack_high - sp) / sizeof(uint64_t);
+ const size_t available = (high - sp) / sizeof(uint64_t);
  const size_t count = available < 64 ? available : 64;
  const volatile uint64_t *stack_words = (const volatile uint64_t *)sp;
  for (size_t i = 0; i < count; ++i) {
