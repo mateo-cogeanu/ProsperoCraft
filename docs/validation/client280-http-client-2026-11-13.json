@@ -22,10 +22,12 @@
     "Signed PS5 target build, SELF integrity and independent package audit passed.",
     "Decompressed image comparison retained all previous entries and changed only the system module table while adding java.net.http.",
     "Host construction and loopback HTTP request using the extracted target module classes passed; absent-module control failed.",
+    "The original OpSec SessionAccount initializer reproduced the exact missing-class error on the host without java.net.http and succeeded with the classes from the candidate image.",
     "Patched JIMAGE reader host checks passed against the expanded image.",
     "Package comparison against the published 279 verified unchanged publisher payloads and trust data.",
     "All 21 host policy and 14 native checks passed. The first policy run timed out in the launcher instance worker check; the full retry passed."
   ],
   "console": "Pending exact PS5 launch with OpSec on Fabric 26.3, HTTP/TLS behavior, world/save/quit and shaders.",
-  "release_store": "Local candidate."
+  "release_store": "Local candidate.",
+  "build_source_commit": "7b95f1077b9eabe4977869d022310709d43a932d"
 }

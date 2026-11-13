@@ -27,8 +27,10 @@ The module adds 363 image entries. Comparing decompressed images against
 build 279 found only the added module and the regenerated
 `java.base/jdk/internal/module/SystemModules$all.class`. Tests on a host JDK
 built an HTTP client with the same target-built module classes and received
-the expected response over loopback. With the HTTP module absent, the class
-failed to resolve. The patched JIMAGE reader also passed its host
+the expected response over loopback. The original OpSec class also initialized
+with those module classes on the host and reproduced the console’s
+`NoClassDefFoundError` when the HTTP module was omitted. The patched JIMAGE
+reader also passed its host
 resource-identity and allocation-failure tests with the expanded image.
 
 The Java 25 build derives from current ProsperoCraft source, which includes
