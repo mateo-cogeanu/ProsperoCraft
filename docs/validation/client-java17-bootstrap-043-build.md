@@ -21,7 +21,10 @@ checks passed.
 | Update from 042 | `9a563c93427b60d93f7a96c3e384dbde2a495a708fd6d75aed49ddb5b592d3b9` |
 | Matching symbol ELF | `009832b730b710542580152a6cce06de933b5b6586dbd47e7c9a5560b876a29d` |
 
-Physical console testing is pending. Run rows 1–3 and check whether
-provider initialization and the title screen complete. If the title
-screen appears, quit normally and record whether the probe returns
-to its menu or the title closes.
+The maintainer reported a crash. The retained build 043 reports show
+that both genuine JCE and JSSE initialized, and the probe reached
+the original Main call. There is no row 3 return, row 4 result or
+VM exit status for this run. The game log is empty. The fault and
+fatal JVM reports did not grow, and the game crash directory contained
+only the earlier build 040 report. The failure boundary within Main
+and the cause remain unknown.

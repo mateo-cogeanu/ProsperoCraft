@@ -162,7 +162,16 @@ int register_stage(JNIEnv*e,jclass klass){
  JNINativeMethod n{const_cast<char*>("nativeStage"),const_cast<char*>("(I)V"),reinterpret_cast<void*>(&java_stage)};
  return e->RegisterNatives(klass,&n,1)==JNI_OK?0:-1722;
 }
-int print_vm(FILE*,const char*format,va_list args){if(!logfile)return 0;int n=std::vfprintf(logfile,format,args);std::fflush(logfile);return n;}
+int print_vm(FILE* requested, const char* format, va_list args) {
+ // Keep dedicated HotSpot log streams separate from the bootstrap report.
+ FILE* target = logfile && (requested == stdout || requested == stderr) ? logfile : requested;
+ if (!target) {
+  errno = EINVAL;
+  return -1;
+ }
+ const int count = std::vfprintf(target, format, args);
+ return std::fflush(target) == 0 ? count : -1;
+}
 void exit_vm(int n) {
  if (logfile) {
   std::fprintf(logfile, "VM exit status %d\n", n);
@@ -185,7 +194,7 @@ void run(int i){
   if(initialized){finish(i,-1710,"Already initialized; relaunch to repeat");return;}
   logfile=std::fopen("/download0/mc120-java17-bootstrap.log","a");
   if(!logfile){finish(i,errno?errno:-1711,"Cannot create private probe log");return;}
-  stage("ProsperoCraft1.20 Java17 bootstrap043; original Minecraft demo title-screen test");
+  stage("ProsperoCraft1.20 Java17 bootstrap044; original Minecraft demo title-screen test");
   stage(fault_stack_ready ? "Main stack capture configured" : "Main stack capture unavailable");
   std::fprintf(logfile, "Native entry addresses memcpy=%p memmove=%p memcmp=%p strlen=%p malloc=%p pthread_create=%p\n",
       reinterpret_cast<void*>(&std::memcpy), reinterpret_cast<void*>(&std::memmove),
@@ -221,6 +230,7 @@ void run(int i){
    {const_cast<char*>("-Djava.class.path=/app0/assets/java17/classes"),nullptr},
    {const_cast<char*>("-XX:-CreateCoredumpOnCrash"),nullptr},
    {const_cast<char*>("-XX:ErrorFile=/download0/java17-hs-error-%p.log"),nullptr},
+   {const_cast<char*>("-Xlog:class+init=info,gc=info:file=/download0/java17-startup-044-%p.log:uptimemillis,tid,tags:filecount=0"),nullptr},
    {const_cast<char*>("vfprintf"),reinterpret_cast<void*>(&print_vm)},
    {const_cast<char*>("exit"),reinterpret_cast<void*>(&exit_vm)},{const_cast<char*>("abort"),reinterpret_cast<void*>(&abort_vm)}
   };
@@ -285,7 +295,7 @@ bool update()noexcept{
 }
 void draw(Canvas&c)noexcept{
  c.gradient(color(16,28,42),color(8,13,22));
- c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.043",54,color(235,243,250));
+ c.label(100,65,"Minecraft1.20 / Java17 bootstrap - 01.000.044",54,color(235,243,250));
  c.label(103,151,"Title screen test: row 3 launches Minecraft 1.20 in demo mode.",24,color(157,175,193));
  for(int i=0;i<4;++i){int y=245+i*125;
   if(selected==i)c.rounded(95,y-5,1730,106,20,color(101,170,215));
