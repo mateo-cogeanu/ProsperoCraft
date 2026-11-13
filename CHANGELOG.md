@@ -1,5 +1,10 @@
 # Changelog
 
+## Local 280 · Java HTTP client for mods, 2026-11-13
+
+- Bundle OpenJDK's `java.net.http` module so OpSec can initialize its HTTP client
+  on Minecraft 26.3 Fabric. [Build notes and PS5 test](docs/client-280-http-client.md).
+
 ## 01.000.279 · Chunk generation and menu headings, 2026-11-08
 
 - Increase Minecraft's background worker pool from three to five to improve chunk generation.

@@ -1,0 +1,31 @@
+{
+  "app_version": "01.000.280",
+  "title_id": "PPSA99874",
+  "package_sha256": "6f7b87d566be48c168cabc37ec73cb51a37a1dfca1742fc1133cfb79f5a4c279",
+  "package_bytes": 128556697,
+  "symbols_sha256": "a45ec0ffe34f6511cfe170f09a27552d2ceb6b32c3926dd066f7efe1e4576cbc",
+  "eboot_sha256": "7de2fd75db04f14857a33a6f6f047798d979eb6706407002d4c54d951e79bc64",
+  "httpModuleImage": {
+    "module": "java.net.http",
+    "module_entries": 363,
+    "http_client_class_sha256": "b7dc02f2db10e98e0caecc6e4c3a47af9c27342c42872849cc93280ef10718c2",
+    "baseline_image_sha256": "775a5141c1d63af2568ff2d4cdf49bb55b953d4cac7d24a43e23980f52a789a3",
+    "image_sha256": "998041d89c473145ca3124a136dae964188e74fae88b1cdeefb5e3f96217e652"
+  },
+  "runtime_image_source": {
+    "upstream_tree": "b219cdec88ca2e165711f63b8158ab78303facc8",
+    "builder_sha256": "0ca07d8be6aa2a020a3af2a4d04ce8f4ef859be4a0890efb32f516fc04fc66f2",
+    "hotspot_runtime_pin": "ad81a0ddf0c3a6e989597050dfc9aefd0b6b9c18"
+  },
+  "observed_failure": "01.000.279 with Fabric 26.3 and OpSec 1.1.7.4 failed in SessionAccount.<clinit> with NoClassDefFoundError for java/net/http/HttpClient.",
+  "checks": [
+    "Signed PS5 target build, SELF integrity and independent package audit passed.",
+    "Decompressed image comparison retained all previous entries and changed only the system module table while adding java.net.http.",
+    "Host construction and loopback HTTP request using the extracted target module classes passed; absent-module control failed.",
+    "Patched JIMAGE reader host checks passed against the expanded image.",
+    "Package comparison against the published 279 verified unchanged publisher payloads and trust data.",
+    "All 21 host policy and 14 native checks passed. The first policy run timed out in the launcher instance worker check; the full retry passed."
+  ],
+  "console": "Pending exact PS5 launch with OpSec on Fabric 26.3, HTTP/TLS behavior, world/save/quit and shaders.",
+  "release_store": "Local candidate."
+}

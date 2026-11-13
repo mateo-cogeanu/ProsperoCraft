@@ -13,6 +13,7 @@ import re
 import shutil
 import struct
 import subprocess
+from tempfile import TemporaryDirectory
 import zipfile
 
 from host_toolchain import ROOT, java_home
@@ -28,11 +29,11 @@ TINYFD_SHA256 = '3ffad01103b6cbc8c12c7156691fd87a96f063600a5ff5c9087d321c6736963
 TINYFD_CLASSPATH = '/app0/assets/java25/ports/' + TINYFD_JAR
 OSHI6410_PIN = ROOT / 'client/ports/oshi6410/sources.json'
 OSHI6410_JAR = 'oshi-6.4.10-ps5-platform.jar'
-APP_VERSIONS = tuple(f'01.000.{number}' for number in (*range(248, 277), 278, 279))
+APP_VERSIONS = tuple(f'01.000.{number}' for number in (*range(248, 277), 278, 279, 280))
 
 
 def release121_gate(app_version):
-    if app_version in ("01.000.272", "01.000.273", "01.000.274", "01.000.275", "01.000.276", "01.000.278", "01.000.279"):
+    if app_version in ("01.000.272", "01.000.273", "01.000.274", "01.000.275", "01.000.276", "01.000.278", "01.000.279", "01.000.280"):
         return b"vanilla-fabric-1.21-1.21.11-zink-v7\n"
     if app_version in ("01.000.265", "01.000.266", "01.000.267", "01.000.268", "01.000.269", "01.000.270", "01.000.271"):
         return b"vanilla-fabric-1.21-1.21.11-zink-v6\n"
@@ -58,6 +59,46 @@ def extract(archive, directory, prefix=None):
             target.write_bytes(source.read(info))
 
 
+HTTP_MODULE = 'java.net.http'
+HTTP_IMAGE_AUDIT = 'http-client-image-audit.json'
+
+
+def image_contents(jdk, image, destination):
+    subprocess.run([str(jdk / 'bin/jimage'), 'extract', '--dir', str(destination), str(image)], check=True)
+    return {path.relative_to(destination): sha(path) for path in destination.rglob('*') if path.is_file()}
+
+
+def verify_http_image(jdk, original, expanded):
+    with TemporaryDirectory(prefix='prosperocraft-http-image-') as temporary:
+        work = Path(temporary)
+        old = image_contents(jdk, original, work / 'original')
+        new = image_contents(jdk, expanded, work / 'expanded')
+    added = new.keys() - old.keys()
+    changed = {path for path in old.keys() & new.keys() if old[path] != new[path]}
+    module_table = Path('java.base/jdk/internal/module/SystemModules$all.class')
+    http_client = Path(HTTP_MODULE, 'java/net/http/HttpClient.class')
+    if (old.keys() - new.keys() or changed != {module_table}
+            or http_client not in added or Path(HTTP_MODULE, 'module-info.class') not in added
+            or any(path.parts[0] != HTTP_MODULE for path in added)):
+        raise ValueError('Expected only the java.net.http module and updated system module table')
+    return {
+        'module': HTTP_MODULE,
+        'module_entries': len(added),
+        'http_client_class_sha256': new[http_client],
+        'baseline_image_sha256': sha(original),
+        'image_sha256': sha(expanded),
+    }
+
+
+def release_with_http_module(release):
+    declaration = re.search(r'^MODULES="([^"]+)"$', release, re.M)
+    if declaration is None or HTTP_MODULE in declaration[1].split():
+        raise ValueError('Unexpected baseline Java module declaration')
+    names = declaration[1].split()
+    names.insert(names.index('java.naming') + 1, HTTP_MODULE)
+    return release[:declaration.start(1)] + ' '.join(names) + release[declaration.end(1):]
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ('runtime-workspace', 'baseline-package', 'baseline-relink', 'base-header', 'llvm-home', 'lld', 'lwjgl333-build'):
@@ -71,6 +112,7 @@ def main():
     parser.add_argument('--hotspot-object', type=Path, required=True)
     parser.add_argument('--tinyfd-jar', type=Path, required=True)
     parser.add_argument('--java-home', type=Path)
+    parser.add_argument('--http-module-image', type=Path, help='Target-built Java 25 image for build 280 (lib/modules)')
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--work-dir', type=Path, required=True)
     parser.add_argument('--app-version', choices=APP_VERSIONS, default=APP_VERSIONS[-1])
@@ -80,10 +122,12 @@ def main():
         raise ValueError('Wrong publisher TinyFD 3.4.1 artifact')
     app_version = args.app_version
     candidate = app_version.split('.')[-1]
-    if (candidate in ('260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279')) != (args.jna_build is not None):
-        parser.error('--jna-build is required only for builds 260 through 279')
-    if (candidate in ('257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279')) != (args.oshi6410_build is not None):
-        parser.error('--oshi6410-build is required for builds 257 through 279')
+    if (candidate == '280') != (args.http_module_image is not None):
+        parser.error('--http-module-image is required only for build 280')
+    if (candidate in ('260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280')) != (args.jna_build is not None):
+        parser.error('--jna-build is required only for builds 260 through 280')
+    if (candidate in ('257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280')) != (args.oshi6410_build is not None):
+        parser.error('--oshi6410-build is required for builds 257 through 280')
     runtime, llvm, jdk = args.runtime_workspace.resolve(), args.llvm_home.resolve() / 'bin', java_home(args.java_home)
     work, output = args.work_dir.resolve(), args.output_dir.resolve()
     work.mkdir(parents=True, exist_ok=True)
@@ -139,7 +183,7 @@ def main():
     overlay = build / 'lwjgl-3.3.3-ps5-overlay.jar'
     native_audit = json.loads((native.parent / 'audit.json').read_text())
     java_audit = json.loads((build / 'java-audit.json').read_text())
-    if native_audit.get('closureReserveCount', 64) != (512 if candidate in ('263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279') else 64):
+    if native_audit.get('closureReserveCount', 64) != (512 if candidate in ('263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280') else 64):
         raise ValueError('Wrong callback reserve capacity for this candidate')
     if sha(native) != native_audit['outputSha256'] or sha(overlay) != java_audit['outputSha256']:
         raise ValueError('Stale333 native/overlay output')
@@ -186,7 +230,7 @@ def main():
         raise ValueError('Stale graphics output')
     recipe = graphics_audit['wsi_diagnostics']['source_recipe']
     stack_patch = '0008-radv-shader-object-stage-storage.patch'
-    if (stack_patch in recipe['patches']) != (candidate in ('250', '251', '252', '253', '254', '255', '256', '257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279')):
+    if (stack_patch in recipe['patches']) != (candidate in ('250', '251', '252', '253', '254', '255', '256', '257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280')):
         raise ValueError('Wrong RADV shader-stage storage for this build')
     for category, directory in (('patches','zink'),('wsi_patches','mesa'),('wsi_headers','mesa')):
         for name, digest in recipe[category].items():
@@ -216,7 +260,7 @@ def main():
         for name, digest in jna_pin['source_sha256'].items():
             if sha(runtime / name) != digest:
                 raise ValueError('JNA runtime source pin mismatch: ' + name)
-        if candidate in ('262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279'):
+        if candidate in ('262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280'):
             provider = json.loads((ROOT / 'client/launcher/jna-provider.json').read_text())
             if (sha(jna_object) != provider['input_sha256']
                     or jna_audit['ffi_header_sha256'] != provider['ffi_header_sha256']
@@ -265,7 +309,7 @@ def main():
         '--library-alias', 'libzstd-jni_dh-1.5.7-12=ps5zstddh',
         '--library-alias', 'zstd-jni_dh-1.5.7-12=ps5zstddh', '--library-alias', 'sqlitejdbc=ps5sqlitedh',
         '--external-libraries', str(spec)]
-    if candidate in ('261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279'):
+    if candidate in ('261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280'):
         if pin.get('scoped_jni_groups') != ['jnidispatch', 'ps5glfw', 'ps5openal']:
             raise ValueError('Missing native lookup ownership policy')
         for group in pin['scoped_jni_groups']:
@@ -281,6 +325,14 @@ def main():
         shutil.rmtree(app)
     extract(args.baseline_package, work, prefix='PPSA99874/')
     java = app / 'assets/java25'
+    http_image_audit = None
+    if args.http_module_image:
+        image = java / 'lib/modules'
+        http_image_audit = verify_http_image(jdk, image, args.http_module_image)
+        shutil.copyfile(args.http_module_image, image)
+        (java / HTTP_IMAGE_AUDIT).write_text(json.dumps(http_image_audit, indent=2) + '\n')
+        release = java / 'release'
+        release.write_text(release_with_http_module(release.read_text()))
     # Replace retired logo payloads too, not only the compiled picker pixels.
     shutil.copyfile(ROOT / 'client/launcher/instance_icons.hpp', java / 'launcher-toolkit/instance_icons.hpp')
     icons = ROOT / 'assets/launcher-icons'
@@ -362,20 +414,20 @@ def main():
              '-march=x86-64', '-mno-avx', '-mno-avx2', '-mno-fma', '-O2', '-fno-stack-protector',
              '-fno-plt', '-femulated-tls', '-ffunction-sections', '-fdata-sections']
     main_obj = work / ('main'+candidate+'.o')
-    gc_flags = ['-DPROSPERO_ZGC_SINGLE_OLD_WORKER=1'] if candidate in ('249', '250', '251', '252', '253', '254', '255', '256', '257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279') else []
-    graphics_flags = ['-DPROSPERO_ZINK_PIPELINE_SHADERS=1'] if candidate in ('252', '253', '254', '255', '256', '257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279') else []
-    if candidate in ('253', '254', '255', '256', '257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279'):
+    gc_flags = ['-DPROSPERO_ZGC_SINGLE_OLD_WORKER=1'] if candidate in ('249', '250', '251', '252', '253', '254', '255', '256', '257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280') else []
+    graphics_flags = ['-DPROSPERO_ZINK_PIPELINE_SHADERS=1'] if candidate in ('252', '253', '254', '255', '256', '257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280') else []
+    if candidate in ('253', '254', '255', '256', '257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280'):
         graphics_flags.append('-DPROSPERO_ZINK_SYNC_COMPILE=1')
     if candidate == '254':
         graphics_flags.append('-DPROSPERO_FABRIC261_OBSERVER=1')
-    if candidate in ('266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279'):
+    if candidate in ('266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280'):
         graphics_flags.append('-DPROSPERO_WORLD2612_OBSERVER=1')
     if candidate == '255':
         graphics_flags.append('-DPROSPERO_SAVE263_OBSERVER=1')
-    worker_flags = ['-DPROSPERO_CHUNK_WORKERS_5=1'] if candidate in ('275', '278', '279') else []
+    worker_flags = ['-DPROSPERO_CHUNK_WORKERS_5=1'] if candidate in ('275', '278', '279', '280') else []
     if candidate == '276':
         worker_flags.append('-DPROSPERO_CHUNK_WORKER_TRIAL=1')
-    subprocess.run([str(llvm / 'clang++'), *flags, *gc_flags, *graphics_flags, *worker_flags, '-DPROSPERO_APP_VERSION="'+app_version+'"', '-DPROSPERO_LWJGL333_CLOSURE_RESERVE=' + str(512 if candidate in ('263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279') else 64), '-std=c++20',
+    subprocess.run([str(llvm / 'clang++'), *flags, *gc_flags, *graphics_flags, *worker_flags, '-DPROSPERO_APP_VERSION="'+app_version+'"', '-DPROSPERO_LWJGL333_CLOSURE_RESERVE=' + str(512 if candidate in ('263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280') else 64), '-std=c++20',
         '-Wall', '-Wextra', '-Werror', '-fno-exceptions', '-fno-rtti',
         *['-I' + str(p) for p in (runtime / 'native/renderer', runtime / 'build/native', runtime / 'src',
           runtime / 'native', work, ROOT / 'client/native', ROOT / 'client/launcher/toolkit/src',
@@ -468,7 +520,7 @@ def main():
         'package_bytes': package.stat().st_size, 'baseline_package_sha256': BASE_PACKAGE, 'baseline_relink_sha256': BASE_RELINK,
         'symbols_sha256': sha(pie), 'eboot_sha256': sha(app / 'eboot.bin'), 'runtime': pin,
         'jnaLoaderRuntime': jna_pin if args.jna_build else None,
-        'jnaProvider': provider if candidate in ('262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279') else None,
+        'jnaProvider': provider if candidate in ('262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280') else None,
         'parentNativeGroupsRetainedSha256': {n: sha(p) for n, p in old_groups.items() if n not in ('jvm','java','ps5sdl') and not (args.jna_build and n == 'jnidispatch')},
         'javaRuntimeClassesAndImage': 'exact204 modules retained; native libjava handle hook rebuilt',
         'compilerTlsBackendSha256': sha(emutls_backend),
@@ -480,6 +532,10 @@ def main():
         'tinyfd_sha256': TINYFD_SHA256, 'jitWarmupRuntime': jit_pin, 'extraMutexRuntime': sync_pin,
         'nativePresenterSha256':sha(presenter),'presentationRuntime':presentation_pin,'graphicsSupportSha256':sha(graphics_object),'newSdlGroupSha256':sha(registry/'embedded-ps5sdl.o'),'oshi665Sha256':sha(os_overlay),
         'console': 'NOT TESTED', 'releaseStore': 'No action'}
+    if http_image_audit:
+        record['javaRuntimeClassesAndImage'] = 'Target-built java.net.http added to the existing Java 25 module set'
+        record['httpModuleImage'] = http_image_audit
+        record['scope'] = 'Add OpenJDK java.net.http for mods using HttpClient, including OpSec on Fabric 26.3.'
     if args.oshi6410_build:
         record['oshi6410Sha256'] = sha(old_overlay)
         record['publisher121LockSha256'] = sha(ROOT / 'client/1.21.lock.json')
