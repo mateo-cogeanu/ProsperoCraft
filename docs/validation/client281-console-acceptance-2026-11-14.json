@@ -1,0 +1,10 @@
+{
+  "app_version": "01.000.281",
+  "title_id": "PPSA99874",
+  "package_sha256": "ab92eafe8a1569d90a6a6e26339ec29ba69f149f6bd3e4f3567eeb2215c770a9",
+  "date": "2026-11-14",
+  "keyboard": "Maintainer confirmed Controlify keyboard input works on PS5 with Fabric 26.3.",
+  "shaders": "Maintainer confirmed shaders work on PS5.",
+  "opsec_hypixel": "Maintainer reports the Loading Terrain stall did not recur. The original stall has no current-run log.",
+  "authorization": "Maintainer explicitly authorized the GitHub and ProsperoStore release."
+}

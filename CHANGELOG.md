@@ -1,14 +1,11 @@
 # Changelog
 
-## Local 281 · Controlify keyboard on Fabric 26.3, 2026-11-14
+## 01.000.281 · Controlify keyboard on Fabric 26.3, 2026-11-14
 
 - Restore text field focus after the Controlify keyboard opens, and correct
-  Backspace in its built-in layouts. [Build notes](docs/client-281-controlify-keyboard.md).
-
-## Local 280 · Java HTTP client for mods, 2026-11-13
-
-- Bundle OpenJDK's `java.net.http` module so OpSec can initialize its HTTP client
-  on Minecraft 26.3 Fabric. [Build notes and PS5 test](docs/client-280-http-client.md).
+  Backspace in its built-in layouts.
+- Bundle OpenJDK’s HTTP client module so OpSec can start on Fabric 26.3.
+- Confirmed on PS5 with shaders. [Release notes](docs/releases/client-controlify-keyboard-281.md).
 
 ## 01.000.279 · Chunk generation and menu headings, 2026-11-08
 
