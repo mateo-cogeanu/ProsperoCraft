@@ -62,7 +62,8 @@ public final class ProsperoLauncher {
   synchronized(current){if(!current.launch)throw new IllegalStateException("No launch selected");}
   return current.arguments(null,null);
  }
- static String prepareControlifyKeyboard()throws java.io.IOException{return ProsperoControlifyKeyboard.prepare(selectedWork(),current.detail.version,current.detail.loader);}
+ static String prepareControlifyKeyboard()throws java.io.IOException{return ProsperoControlifyKeyboard.prepare(selectedWork(),current.detail.version,current.detail.loader,
+     Path.of("/app0/assets/java25/ports/prosperocraft-controlify-keyboard.jar"));}
  static String selectedRenderSize(){int[]size=ProsperoLibrary.RESOLUTIONS[current.library.settings().resolution];return size[0]+"x"+size[1];}
  static Path selectedWork(){return current.library.game(current.detail);}
  static String controllerBindings(){return ProsperoInput.hint(current.library.settings().controllerKeys);}

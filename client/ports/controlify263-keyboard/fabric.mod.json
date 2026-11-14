@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "prosperocraft_controlify_keyboard",
+  "version": "1.0.0",
+  "name": "ProsperoCraft Controlify keyboard compatibility",
+  "environment": "client",
+  "license": "GPL-3.0-or-later",
+  "depends": {
+    "fabricloader": ">=0.20.1",
+    "minecraft": "26.3",
+    "controlify": "3.5.3+mc26.3"
+  },
+  "mixins": ["prosperocraft-controlify-keyboard.mixins.json"]
+}

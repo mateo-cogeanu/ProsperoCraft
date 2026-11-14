@@ -13,6 +13,9 @@ final class ProsperoControlifyKeyboard {
  private static final String OWNER="prosperocraft-controlify-keyboard-v1";
  private static final String MARKER="prosperocraft-keyboard-fix.txt";
  static String prepare(Path game,String version,String loader)throws IOException {
+  return prepare(game,version,loader,null);
+ }
+ static String prepare(Path game,String version,String loader,Path compatibilityMod)throws IOException {
   if(!"26.3".equals(version)||!"fabric".equals(loader))return "NOT_APPLICABLE";
   Path pack=game.resolve("resourcepacks").resolve(PACK),mods=game.resolve("mods");
   Path controlify=null;int count=0;
@@ -25,9 +28,11 @@ final class ProsperoControlifyKeyboard {
     }catch(ZipException|IllegalStateException|JsonParseException invalid){/* Not a loadable Fabric metadata record. */}
    }
   }
+  boolean pinned=count==1&&MOD_SHA256.equals(sha(controlify));
+  if(pinned&&compatibilityMod!=null)registerCompatibilityMod(compatibilityMod);
   boolean exists=Files.exists(pack),owned=exists&&owned(pack);
   if(exists&&!owned)return "SKIPPED_PACK_NAME_COLLISION";
-  if(count!=1||!MOD_SHA256.equals(sha(controlify))){
+  if(!pinned){
    if(owned){select(game,false);Files.delete(pack);}
    return "NOT_PINNED";
   }
@@ -62,6 +67,14 @@ final class ProsperoControlifyKeyboard {
    try{select(game,true);}catch(IOException|RuntimeException failure){Files.deleteIfExists(pack);throw failure;}
   }finally{Files.deleteIfExists(temp);}
   return "INSTALLED_LAYOUTS_3";
+ }
+ private static void registerCompatibilityMod(Path jar){
+  if(!Files.isRegularFile(jar))return;
+  String path=jar.toAbsolutePath().normalize().toString();
+  String separator=File.pathSeparator;
+  String existing=System.getProperty("fabric.addMods","");
+  if(Arrays.asList(existing.split(java.util.regex.Pattern.quote(separator))).contains(path))return;
+  System.setProperty("fabric.addMods",existing.isEmpty()?path:existing+separator+path);
  }
  private static int backspace(JsonElement value){
   if(value==null)return 0;int changed=0;

@@ -1,0 +1,8 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "prosperocraft.controlify",
+  "compatibilityLevel": "JAVA_25",
+  "client": ["KeyWidgetMixin", "KeyboardOverlayMixin"],
+  "injectors": {"defaultRequire": 1}
+}

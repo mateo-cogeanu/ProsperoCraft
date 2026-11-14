@@ -1,0 +1,26 @@
+{
+  "app_version": "01.000.281",
+  "title_id": "PPSA99874",
+  "package_sha256": "ab92eafe8a1569d90a6a6e26339ec29ba69f149f6bd3e4f3567eeb2215c770a9",
+  "package_bytes": 128572074,
+  "symbols_sha256": "fa4d8a7277ee43f22e295dfd5af712e12c42d7c692d98e3373c9bc7ac5c2fe01",
+  "eboot_sha256": "cdce00060f2b77a3898d7cea83db6c252b999d8bf23e4df4cb358e011ed1d040",
+  "controlifyKeyboardModSha256": "d90b23ad9e9e6b382bf3ff84b96b452837b0668bf0cd1f8b89f517d5d98dd320",
+  "httpModuleImage": {
+    "module": "java.net.http",
+    "module_entries": 363,
+    "http_client_class_sha256": "b7dc02f2db10e98e0caecc6e4c3a47af9c27342c42872849cc93280ef10718c2",
+    "baseline_image_sha256": "775a5141c1d63af2568ff2d4cdf49bb55b953d4cac7d24a43e23980f52a789a3",
+    "image_sha256": "998041d89c473145ca3124a136dae964188e74fae88b1cdeefb5e3f96217e652"
+  },
+  "controlify_publisher_sha256": "bc759f557d122079bb9078741065935bf3aa9bfd5e60b414e242633c0dded86a",
+  "reported_failure": "Controlify on-screen keyboard in Fabric 26.3 inserts no letters and cannot delete.",
+  "checks": [
+    "Headless Fabric Knot run with original Minecraft 26.3 and Controlify 3.5.3: reproduced text rejection after focus clear and zero-code Backspace refusal. The companion restored the same editor focus and enabled typing and Backspace. Focused chat typing passed both runs.",
+    "Existing original layout/pack codec and Backspace fixture passed, including all three layouts, Unicode deletion, preserved options and explicit pack disablement.",
+    "All 21 offline launcher policy checks passed.",
+    "Signed target package and independent audit passed. The packaged companion matches the host-tested JAR byte for byte. Comparison with build 280 confirmed identical Java module image and game payloads."
+  ],
+  "console": "Pending exact PS5 test in the affected field, chat and server address. World, save, quit and shaders pending.",
+  "release_store": "Local candidate."
+}

@@ -1,5 +1,10 @@
 # Changelog
 
+## Local 281 · Controlify keyboard on Fabric 26.3, 2026-11-14
+
+- Restore text field focus after the Controlify keyboard opens, and correct
+  Backspace in its built-in layouts. [Build notes](docs/client-281-controlify-keyboard.md).
+
 ## Local 280 · Java HTTP client for mods, 2026-11-13
 
 - Bundle OpenJDK's `java.net.http` module so OpSec can initialize its HTTP client
