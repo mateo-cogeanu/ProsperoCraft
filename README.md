@@ -113,9 +113,14 @@ If Play says Coming soon, compare the **version and loader** with the compatibil
 
 ## Roadmap
 
-![ProsperoCraft roadmap showing 1.21.x support as complete alongside planned NeoForge, Forge, older Minecraft versions and .mrpack imports](assets/roadmap/prosperocraft-roadmap.png)
+![ProsperoCraft roadmap with local offline profiles and third-party accounts planned before Forge and Minecraft 1.20.x](assets/roadmap/prosperocraft-roadmap.png)
 
-Next compatibility work proceeds from Vanilla 1.20 upward through 1.20.6, before NeoForge. See the [1.20.x and Java 17/21 investigation](docs/client-1.20-plan.md).
+Offline profiles and third-party accounts are the next priorities, ahead of Minecraft 1.20.1 and Forge.
+
+- **Local offline profiles.** Create a username-only profile and launch an installed instance without signing in to Microsoft. The planned scope covers singleplayer and servers configured for offline mode. Players can reuse installed game files or use the existing Microsoft sign-in flow to download them.
+- **Third-party accounts.** Explore Ely.by as the first provider alongside Microsoft, with support for compatible community servers and skin services. Wider support for authlib-injector-compatible providers depends on what works on PS5. [Ely.by integration documentation](https://docs.ely.by/en/minecraft-auth.html)
+
+The [1.20.x compatibility plan](docs/client-1.20-plan.md) still covers Vanilla 1.20 through 1.20.6 ahead of NeoForge.
 
 ### Completed milestones
 

@@ -21,7 +21,7 @@ def main():
     draw = ImageDraw.Draw(canvas)
     svg = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
            '<title>ProsperoCraft roadmap</title>',
-           '<desc>White completed milestones: Full 26.x.x support, microphone support, shader support, OpenGL support and 1.21.x support. Dark planned milestones: Forge support, 1.20.x support, NeoForge support, .mrpack imports, 1.19.x support, 1.18.x support, 1.17.x support, 1.16.x support and older versions.</desc>',
+           '<desc>White completed milestones: Full 26.x.x support, microphone support, shader support, OpenGL support and 1.21.x support. Dark planned milestones: local offline profiles, third-party accounts, Forge support, 1.20.x support, NeoForge support, .mrpack imports, 1.19.x support, 1.18.x support, 1.17.x support, 1.16.x support and older versions.</desc>',
            f'<rect width="{width}" height="{height}" fill="{bg}"/>']
 
     def rect(x, y, w, h, fill, radius=0):
@@ -56,10 +56,10 @@ def main():
     curve((258,910),(40,910),(40,1270),(258,1270))
     road.extend((258+i*1284/100,1270) for i in range(1,101))
     curve((1542,1270),(1760,1270),(1760,1630),(1542,1630))
-    road.extend((1542-i*428/100,1630) for i in range(1,101))
+    road.extend((1542-i*1284/100,1630) for i in range(1,101))
     line(road, '#35403A', 3)
     line(road[:101], '#A9B6AD', 3)
-    for x,y,direction in [(940,550,1),(870,910,-1),(720,1270,1),(1350,1630,-1)]:
+    for x,y,direction in [(940,550,1),(870,910,-1),(720,1270,1),(940,1630,-1)]:
         line([(x-7*direction,y-6),(x,y),(x-7*direction,y+6)], muted, 2)
 
     def card(x, y, title, done, road_y, number):
@@ -85,15 +85,16 @@ def main():
     completed[1]=['Microphone','support']
     for x,title in zip(xs,completed): card(x,330,title,True,550,0)
     milestones = [
-        '1.21.x support', 'Forge support', '1.20.x support', 'NeoForge support',
-        '.mrpack imports', '1.19.x support', '1.18.x support', '1.17.x support',
-        '1.16.x support', 'Older versions',
+        ['1.21.x support'], ['Local offline', 'profiles'], ['Third-party', 'accounts'],
+        ['Forge support'], ['1.20.x support'], ['NeoForge support'], ['.mrpack imports'],
+        ['1.19.x support'], ['1.18.x support'], ['1.17.x support'],
+        ['1.16.x support'], ['Older versions'],
     ]
     for index, title in enumerate(milestones):
         row, column = divmod(index, 4)
         x = xs[3-column] if row % 2 == 0 else xs[column]
-        card(x,690+row*360,[title],title == '1.21.x support',910+row*360,index+1)
-    circle(1114,1630,4,'#84958A')
+        card(x,690+row*360,title,index == 0,910+row*360,index+1)
+    circle(258,1630,4,'#84958A')
     circle(84,1740,5,'#F4F6F3')
     text(101,1730,'Completed',18,muted)
     circle(256,1740,5,'#68786D')

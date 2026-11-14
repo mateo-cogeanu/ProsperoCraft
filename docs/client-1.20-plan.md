@@ -4,6 +4,9 @@ Maintainer direction, 2026-11-08: work upward from Vanilla 1.20 through 1.20.6,
 then return to NeoForge. Investigate both Java 17 and Java 21 as possible runtime
 options. Existing working releases and their runtime remain unchanged.
 
+The [current roadmap](../README.md#roadmap) prioritizes local offline profiles
+and third-party accounts ahead of Minecraft 1.20.1 and Forge.
+
 ## Verified publisher inputs
 
 | Releases | Publisher Java major | Publisher LWJGL | Modules |

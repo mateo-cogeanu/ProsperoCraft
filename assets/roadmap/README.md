@@ -20,7 +20,6 @@ python3 tools/draw_roadmap.py --font /path/to/Arial.ttf --bold-font /path/to/Ari
 ```
 
 The lower rows follow the road right to left, left to right, then right to
-left. 1.21.x support is marked complete. NeoForge follows 1.20.x support at the
-maintainer's request on 2026-11-08. Numbered
-milestones make the reading order explicit. The roadmap shows capabilities
-rather than release dates.
+left. 1.21.x support is marked complete. Local offline profiles and third-party accounts precede Forge and 1.20.x.
+NeoForge follows 1.20.x support. The numbered milestones show the planned
+order of work.
