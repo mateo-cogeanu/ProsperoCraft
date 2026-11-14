@@ -4,6 +4,11 @@
   "package_sha256": "ab92eafe8a1569d90a6a6e26339ec29ba69f149f6bd3e4f3567eeb2215c770a9",
   "date": "2026-11-14",
   "user_report": "The Controlify keyboard works on PS5 in the Fabric 26.3 test.",
-  "remaining": "The user reports a stall at Loading Terrain when joining Hypixel with OpSec enabled. The cause is unverified. Gameplay, save, quit and shaders remain pending on this build.",
-  "release_store": "Local candidate."
+  "remaining": "OpSec join diagnosis and PS5 save, quit and shader validation remain pending.",
+  "release_store": "Local candidate.",
+  "hypixel_join": {
+    "with_opsec": "User reports a stall at Loading Terrain.",
+    "without_opsec": "User reports the join succeeds.",
+    "evidence": "PS5 user comparison on Fabric 26.3. Current-run console logs were unavailable, so the specific failure mechanism remains unverified."
+  }
 }
