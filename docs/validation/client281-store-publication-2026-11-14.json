@@ -1,0 +1,43 @@
+{
+  "app_version": "01.000.281",
+  "title_id": "PPSA99874",
+  "package_sha256": "ab92eafe8a1569d90a6a6e26339ec29ba69f149f6bd3e4f3567eeb2215c770a9",
+  "release": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.281",
+  "release_tag_commit": "ad3ef64c8319a4406a24c509053f7e7b15e75017",
+  "matching_build_source_commit": "eb2323aa4661d638d692fbf63c32e056ed8e3aba",
+  "catalog_pr": "https://github.com/darkxex/ps5-homebrew-catalog/pull/1299",
+  "archive": "https://github.com/mateo-cogeanu/ps5-homebrew-history/tree/a6f64ab191344bc28687d608f78aa343b2950acc/prosperocraft/Client_281_Controlify_Keyboard",
+  "uploaded_assets": [
+    {
+      "name": "PPSA99874.zip",
+      "bytes": 128572074,
+      "sha256": "ab92eafe8a1569d90a6a6e26339ec29ba69f149f6bd3e4f3567eeb2215c770a9"
+    },
+    {
+      "name": "SHA256SUMS",
+      "bytes": 379,
+      "sha256": "438b64899fe9b1fb8c312d429e230b81e967a46dd01eb9d5165f862f8b7f4e37"
+    },
+    {
+      "name": "client281-build-validation.json",
+      "bytes": 9280,
+      "sha256": "544f91c6fafdcbfb04774b80ceb2f38c62c6d2ec1c4072465ac2ac9e52db9290"
+    },
+    {
+      "name": "client281-console-validation.json",
+      "bytes": 544,
+      "sha256": "4d37047d7aaa598b0c211c973aee32f965ad52568bbc9730885abce9b7ea45b6"
+    },
+    {
+      "name": "client281-openal-source-relink.zip",
+      "bytes": 198777105,
+      "sha256": "9217385298cb44c5205818534bbc42e795d1c74331ec68686e03076eaca9e35f"
+    }
+  ],
+  "checks": [
+    "Independent downloads matched all five assets.",
+    "Normal and compatible OpenAL replacement relinks reproduced the tested native ELF.",
+    "Catalog format and online artifact and contentVersion verification passed. Catalog unit tests completed with two skips."
+  ],
+  "status": "GitHub release published and ProsperoStore catalog PR submitted."
+}
