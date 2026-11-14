@@ -1,0 +1,9 @@
+{
+  "app_version": "01.000.281",
+  "title_id": "PPSA99874",
+  "package_sha256": "ab92eafe8a1569d90a6a6e26339ec29ba69f149f6bd3e4f3567eeb2215c770a9",
+  "date": "2026-11-14",
+  "user_report": "The Controlify keyboard works on PS5 in the Fabric 26.3 test.",
+  "remaining": "The user reports a stall at Loading Terrain when joining Hypixel with OpSec enabled. The cause is unverified. Gameplay, save, quit and shaders remain pending on this build.",
+  "release_store": "Local candidate."
+}
