@@ -1,0 +1,15 @@
+{
+  "title_id": "PPSA99874",
+  "app_version": "01.000.283",
+  "package_sha256": "b8a46e3d266a5a7928c3b18219ddbc893b67a4003f05a7458ab99d905e92423d",
+  "console_282": "The maintainer reports the same spikes. The matching PS5 startup log confirms gameplay compilation logging was disabled for Fabric 26.3. Render and simulation distances were both 12 and no shader pack was active.",
+  "gc_282": {
+    "safepoints": 247,
+    "longest_ms": 11.145,
+    "longest_ms_in_final_100_seconds": 0.220429,
+    "reported_allocation_stalls": 0
+  },
+  "change_283": "Report rolling frame durations from the existing Minecraft frame sample buffer once per second for at most 300 samples and 15 minutes. Sample on the render thread and write summaries from a separate daemon. Each report includes JVM uptime and the frame window duration. Windows overlap. Five workers and build 282 compiler logging policy are retained.",
+  "checks": "A host fixture ran the shipped observer with the original Minecraft 26.3 ring buffer and known frame durations, verifying wraparound, maximum and threshold counts after the game class loader handoff. The fixture supplies the client and render queue. The signed package and independent package audit passed.",
+  "console_pending": "Launch 282 or 283 with the same settings when comparing performance. On 283, enter the affected world, stand still briefly, then move until a spike occurs. Leave the app open for retrieval. Frame timings, the cause of the recurring spikes and shaders remain unverified on 283."
+}

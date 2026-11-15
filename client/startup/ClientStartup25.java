@@ -252,6 +252,86 @@ public final class ClientStartup25 {
    stage("PS5_JIT gameplay compilation logging unchanged, reason="+failure.getClass().getSimpleName());
   }
  }
+ // Sample Minecraft's existing frame-duration ring on its owner thread.
+ // The monitor writes the summaries, keeping file I/O off the render thread.
+ static final class FrameObserver implements AutoCloseable {
+  private final PrintStream console;
+  private final Thread worker;
+
+  FrameObserver(Thread owner,PrintStream console) {
+   this.console=console;
+   ClassLoader parent=owner.getContextClassLoader();
+   worker=Thread.ofPlatform().daemon().name("Prospero frame timing").unstarted(()->run(owner,parent));
+  }
+  void start(){worker.start();}
+  private void run(Thread owner,ClassLoader parent) {
+   try {
+    var vm=java.lang.management.ManagementFactory.getRuntimeMXBean();
+    long deadline=System.nanoTime()+900_000_000_000L;
+    // Wait for the original client loop. Loading its classes earlier could
+    // interfere with Fabric transformation or the client's initialization.
+    while(System.nanoTime()<deadline&&!java.util.Arrays.stream(owner.getStackTrace())
+        .anyMatch(frame->frame.getClassName().equals("net.minecraft.client.Minecraft")&&frame.getMethodName().equals("run"))) {
+     Thread.sleep(1000);
+    }
+    ClassLoader game=owner.getContextClassLoader();
+    if(game==parent||System.nanoTime()>=deadline)return;
+
+    Class<?> minecraft=Class.forName("net.minecraft.client.Minecraft",false,game);
+    Class<?> overlay=Class.forName("net.minecraft.client.gui.components.DebugScreenOverlay",false,game);
+    Class<?> logger=Class.forName("net.minecraft.util.debugchart.LocalSampleLogger",false,game);
+    Method instance=minecraft.getMethod("getInstance");
+    Method getOverlay=minecraft.getMethod("getDebugOverlay");
+    Method execute=minecraft.getMethod("execute",Runnable.class);
+    Field level=minecraft.getField("level");
+    Field frameLogger=accessibleField(overlay,"frameTimeLogger");
+    Field samples=accessibleField(logger,"samples");
+    Field start=accessibleField(logger,"start");
+    Field size=accessibleField(logger,"size");
+    Object runningClient=instance.invoke(null);
+    if(runningClient==null)return;
+    for(int count=0;count<300&&System.nanoTime()<deadline;count++) {
+     var result=new java.util.concurrent.CompletableFuture<String>();
+     execute.invoke(runningClient,(Runnable)()->{
+      if(result.isCancelled())return;
+      try {
+       if(level.get(runningClient)==null){result.complete("");return;}
+       Object buffer=frameLogger.get(getOverlay.invoke(runningClient));
+       long[][] ring=(long[][])samples.get(buffer);
+       int first=start.getInt(buffer),length=size.getInt(buffer);
+       long max=0,sum=0;
+       int over33=0,over50=0;
+       for(int i=0;i<length;i++) {
+        long ns=ring[(first+i)%ring.length][0];
+        max=Math.max(max,ns);sum+=ns;
+        if(ns>=33_333_334)over33++;
+        if(ns>=50_000_000)over50++;
+       }
+       result.complete("PS5_FRAME uptimeMs="+vm.getUptime()+" frames="+length
+           +" windowMs="+sum/1_000_000+" maxUs="+max/1_000+" over33ms="+over33+" over50ms="+over50);
+      }catch(ReflectiveOperationException|RuntimeException failure){result.completeExceptionally(failure);}
+     });
+     try {
+      String report=result.get(4,java.util.concurrent.TimeUnit.SECONDS);
+      if(!report.isEmpty())console.println(report);
+     }catch(java.util.concurrent.TimeoutException stalled) {
+      result.cancel(false);
+      console.println("PS5_FRAME render task timeout uptimeMs="+vm.getUptime());
+     }
+     Thread.sleep(1000);
+    }
+   }catch(InterruptedException interrupted){Thread.currentThread().interrupt();}
+   catch(ReflectiveOperationException|java.util.concurrent.ExecutionException|RuntimeException unavailable) {
+    console.println("PS5_FRAME unavailable reason="+unavailable.getClass().getSimpleName());
+   }
+  }
+  private static Field accessibleField(Class<?> owner,String name)throws ReflectiveOperationException {
+   Field field=owner.getDeclaredField(name);
+   field.setAccessible(true);
+   return field;
+  }
+  @Override public void close(){worker.interrupt();}
+ }
  public static void main(String[] args)throws Throwable{
   boolean showLibraryProgress="1".equals(System.getenv("PROSPERO_LIBRARY_PROGRESS"));
   if(showLibraryProgress)libraryProgress("Opening startup reports",0,0);
@@ -350,10 +430,13 @@ public final class ClientStartup25 {
    }else console.println("PS5 startup observer disabled for performance run;enable ps5.startupObserver explicitly for stack sampling");
    ProsperoSession session=new ProsperoSession(reports.resolve("mc-client/logs"),ProsperoLauncher.selectedShutdownAccessors(),ProsperoLauncher.selected121Fabric());
    Thread gameThread=Thread.currentThread();
-   try(ProsperoExit exit=cleanSystemExit(false)?new ProsperoExit(
+   try(FrameObserver frames="01.000.283".equals(ProsperoBuild.VERSION)
+       &&ProsperoLauncher.quietGameplayCompilerLog()?new FrameObserver(gameThread,console):null;
+       ProsperoExit exit=cleanSystemExit(false)?new ProsperoExit(
      ()->session.awaitCleanReturn(gameThread.getContextClassLoader(),2000,ClientStartup25::stage),
      ()->{if(!cleanSystemExit(true))throw new IllegalStateException("Clean exit unavailable");},console,ClientStartup25::stage):null){
     if(exit!=null)stage("PS5_SESSION SYSTEM_EXIT_OBSERVER_REGISTERED");
+    if(frames!=null)frames.start();
     method.invoke(null,(Object)selectedArguments);
    }
    catch(InvocationTargetException failure){throw failure.getCause();}
