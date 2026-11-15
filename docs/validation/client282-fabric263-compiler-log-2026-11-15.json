@@ -1,0 +1,9 @@
+{
+  "title_id": "PPSA99874",
+  "app_version": "01.000.282",
+  "package_sha256": "d2515db762ff7098d4a3b6fa9be6e95a90d01fe31177685001d625f57def5e87",
+  "evidence_281": "The maintainer reports that five workers improved the spikes and reducing simulation distance to six did not resolve them. A captured 163-second log contained 9,452 JIT compilation entries. There is no frame timing evidence tying the file writes to individual hitches.",
+  "change": "On 26.3 Fabric only, disable per-method compilation logging after the existing JIT warmup succeeds. Keep five workers and retain code cache, GC and safepoint logging.",
+  "checks": "The compiled launcher helper changed the intended HotSpot output on a host JDK while preserving code cache, GC and safepoint output. The signed target package, independent package audit and offline launcher policy checks passed.",
+  "console_pending": "Confirm PS5_JIT gameplay compilation logging OFF in the startup report. Compare build 281 and 282 in the same world with the same settings and movement. PS5 effectiveness, shaders and release acceptance are pending."
+}

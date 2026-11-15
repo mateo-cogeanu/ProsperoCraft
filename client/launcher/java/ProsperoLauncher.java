@@ -91,6 +91,10 @@ public final class ProsperoLauncher {
  static String[] selectedShutdownAccessors()throws java.io.IOException{return selected121()?Prospero121.shutdownAccessors(current.receipt.version):null;}
  static String gameMain(){return "fabric".equals(current.detail.loader)?ProsperoFabric.MAIN:"net.minecraft.client.main.Main";}
  static ClassLoader runningGameLoader(){return "fabric".equals(current.detail.loader)?Thread.currentThread().getContextClassLoader():gameLoader();}
+ static boolean quietGameplayCompilerLog(){
+  return "01.000.282".equals(ProsperoBuild.VERSION)
+      &&"26.3".equals(current.detail.version)&&"fabric".equals(current.detail.loader);
+ }
  static void configureGameLaunch(){if("fabric".equals(current.detail.loader))ProsperoFabric.configure(current.loader,current.cacheRoot.resolve("versions/"+current.detail.version+"/client.jar"),current.detail.version);}
  static boolean selectedResidentJna(){return current.receipt!=null&&(selected121()||current.receipt.classpath.stream().anyMatch(p->p.endsWith("/jna-5.19.1.jar")));}
  static boolean verifySelected()throws Exception{current.installer.verify(current.receipt);return true;}

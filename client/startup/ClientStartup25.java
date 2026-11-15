@@ -239,6 +239,19 @@ public final class ClientStartup25 {
   System.setProperty("jna.nosys",resident?"false":"true");
   if(resident){System.setProperty("jna.boot.library.name","jnidispatch");System.setProperty("jna.noclasspath","true");System.setProperty("jna.nounpack","true");}
  }
+ static void quietCompilerLog() {
+  String path=System.getProperty("ps5.probe.jitLog");
+  if(path==null)return;
+  try {
+   var server=java.lang.management.ManagementFactory.getPlatformMBeanServer();
+   var command=new javax.management.ObjectName("com.sun.management:type=DiagnosticCommand");
+   String[] options={"output=file="+path,"what=jit+compilation=off"};
+   Object result=server.invoke(command,"vmLog",new Object[]{options},new String[]{String[].class.getName()});
+   stage("PS5_JIT gameplay compilation logging "+("".equals(result)?"OFF":"UNCONFIRMED"));
+  } catch(javax.management.JMException|RuntimeException failure) {
+   stage("PS5_JIT gameplay compilation logging unchanged, reason="+failure.getClass().getSimpleName());
+  }
+ }
  public static void main(String[] args)throws Throwable{
   boolean showLibraryProgress="1".equals(System.getenv("PROSPERO_LIBRARY_PROGRESS"));
   if(showLibraryProgress)libraryProgress("Opening startup reports",0,0);
@@ -325,6 +338,7 @@ public final class ClientStartup25 {
    stage(verifyNativeAllocation());
    Runtime heap=Runtime.getRuntime();stage("heap maxMiB="+(heap.maxMemory()/1048576)+" committedMiB="+(heap.totalMemory()/1048576)+" usedMiB="+((heap.totalMemory()-heap.freeMemory())/1048576));
    Thread.currentThread().setContextClassLoader(ProsperoLauncher.gameLoader());
+   if(ProsperoLauncher.quietGameplayCompilerLog())quietCompilerLog();
    ProsperoLauncher.configureGameLaunch();
    Class<?> main=Class.forName(ProsperoLauncher.gameMain(),false,ProsperoLauncher.gameLoader());Method method=main.getMethod("main",String[].class);
    stage(ProsperoLauncher.launchIdentity());
