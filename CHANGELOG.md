@@ -1,5 +1,12 @@
 # Changelog
 
+## 01.000.285 · PS5 shader cache and frame pacing, 2026-11-15
+
+- Prepare Mesa’s shader cache directory before graphics startup to support reuse across launches.
+- Reduce per-method JVM logging during Minecraft 26.3 Fabric gameplay.
+
+The maintainer confirmed the build and shader rendering on PS5. See the [release notes](docs/releases/client-frame-pacing-285.md).
+
 ## 01.000.281 · Controlify keyboard on Fabric 26.3, 2026-11-14
 
 - Restore text field focus after the Controlify keyboard opens, and correct

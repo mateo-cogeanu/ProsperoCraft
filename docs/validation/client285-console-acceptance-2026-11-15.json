@@ -1,0 +1,9 @@
+{
+  "app_version": "01.000.285",
+  "title_id": "PPSA99874",
+  "package_sha256": "c46d07bb0ca56988e83cacc7f5b2b495f8ff70f36c4dbaca134d5ba15f505ae4",
+  "date": "2026-11-15",
+  "console_acceptance": "The maintainer confirmed satisfaction with the delivered build and confirmed that shaders work on PS5.",
+  "scope": "Maintainer confirmation. The shader pack and quantitative performance results were not specified, and the maintainer requested no log review.",
+  "authorization": "The maintainer explicitly requested a ProsperoStore release of the confirmed build."
+}
