@@ -290,6 +290,8 @@ public final class ClientStartup25 {
     Field size=accessibleField(logger,"size");
     Object runningClient=instance.invoke(null);
     if(runningClient==null)return;
+    FrameStallProbe stalls="01.000.284".equals(ProsperoBuild.VERSION)
+        ?new FrameStallProbe(minecraft,game,runningClient,owner,console):null;
     for(int count=0;count<300&&System.nanoTime()<deadline;count++) {
      var result=new java.util.concurrent.CompletableFuture<String>();
      execute.invoke(runningClient,(Runnable)()->{
@@ -311,14 +313,17 @@ public final class ClientStartup25 {
            +" windowMs="+sum/1_000_000+" maxUs="+max/1_000+" over33ms="+over33+" over50ms="+over50);
       }catch(ReflectiveOperationException|RuntimeException failure){result.completeExceptionally(failure);}
      });
+     boolean inWorld=false;
      try {
       String report=result.get(4,java.util.concurrent.TimeUnit.SECONDS);
-      if(!report.isEmpty())console.println(report);
+      inWorld=!report.isEmpty();
+      if(inWorld)console.println(report);
      }catch(java.util.concurrent.TimeoutException stalled) {
       result.cancel(false);
       console.println("PS5_FRAME render task timeout uptimeMs="+vm.getUptime());
      }
-     Thread.sleep(1000);
+     if(stalls!=null&&inWorld)stalls.poll(vm);
+     else Thread.sleep(1000);
     }
    }catch(InterruptedException interrupted){Thread.currentThread().interrupt();}
    catch(ReflectiveOperationException|java.util.concurrent.ExecutionException|RuntimeException unavailable) {
@@ -331,6 +336,50 @@ public final class ClientStartup25 {
    return field;
   }
   @Override public void close(){worker.interrupt();}
+ }
+ // The completed-frame clock is sampled without changing Minecraft's frame loop.
+ static final class FrameStallProbe {
+  private final java.lang.invoke.VarHandle frameClock;
+  private final Method nanoTime;
+  private final Object client;
+  private final Thread renderThread;
+  private final PrintStream console;
+  private long previousSample;
+  private int remaining=48;
+
+  FrameStallProbe(Class<?> minecraft,ClassLoader game,Object client,Thread owner,PrintStream console)
+      throws ReflectiveOperationException {
+   var lookup=java.lang.invoke.MethodHandles.privateLookupIn(minecraft,java.lang.invoke.MethodHandles.lookup());
+   frameClock=lookup.findVarHandle(minecraft,"lastNanoTime",long.class);
+   nanoTime=Class.forName("net.minecraft.util.Util",false,game).getMethod("getNanos");
+   this.client=client;
+   renderThread=owner;
+   this.console=console;
+  }
+  void poll(java.lang.management.RuntimeMXBean vm)throws ReflectiveOperationException,InterruptedException {
+   if(remaining==0){Thread.sleep(1000);return;}
+   long end=System.nanoTime()+1_000_000_000L;
+   do {
+    Thread.sleep(10);
+    long completed=(long)frameClock.getOpaque(client);
+    if(completed==0||completed==previousSample)continue;
+    long age=(long)nanoTime.invoke(null)-completed;
+    if(age<40_000_000)continue;
+    long uptime=vm.getUptime();
+    StackTraceElement[] stack=renderThread.getStackTrace();
+    // The thread can finish the stalled frame while its stack is requested.
+    if((long)frameClock.getOpaque(client)!=completed||stack.length==0)continue;
+    previousSample=completed;
+    remaining--;
+    StringBuilder text=new StringBuilder("PS5_FRAME_STALL uptimeMs=").append(uptime)
+        .append(" frameAgeUs=").append(age/1000);
+    for(int i=0;i<Math.min(stack.length,12);i++) {
+     text.append(i==0?" stack=":" <- ").append(stack[i].getClassName())
+         .append('.').append(stack[i].getMethodName());
+    }
+    console.println(text);
+   }while(System.nanoTime()<end&&remaining>0);
+  }
  }
  public static void main(String[] args)throws Throwable{
   boolean showLibraryProgress="1".equals(System.getenv("PROSPERO_LIBRARY_PROGRESS"));
@@ -430,7 +479,7 @@ public final class ClientStartup25 {
    }else console.println("PS5 startup observer disabled for performance run;enable ps5.startupObserver explicitly for stack sampling");
    ProsperoSession session=new ProsperoSession(reports.resolve("mc-client/logs"),ProsperoLauncher.selectedShutdownAccessors(),ProsperoLauncher.selected121Fabric());
    Thread gameThread=Thread.currentThread();
-   try(FrameObserver frames="01.000.283".equals(ProsperoBuild.VERSION)
+   try(FrameObserver frames=("01.000.283".equals(ProsperoBuild.VERSION)||"01.000.284".equals(ProsperoBuild.VERSION))
        &&ProsperoLauncher.quietGameplayCompilerLog()?new FrameObserver(gameThread,console):null;
        ProsperoExit exit=cleanSystemExit(false)?new ProsperoExit(
      ()->session.awaitCleanReturn(gameThread.getContextClassLoader(),2000,ClientStartup25::stage),

@@ -1,0 +1,12 @@
+{
+  "title_id": "PPSA99874",
+  "app_version": "01.000.284",
+  "package_sha256": "3e83beebe198628a81b374503b2bdba23aef3137885b7af358428aa37c7c5c2b",
+  "baseline": "Client 283 with the same Fabric 26.3 profile, five worker threads, gameplay compiler-log policy and package inputs.",
+  "console_283": "The maintainer reports that drops continued after trying the 60 FPS limit. Cyberduck retrieved an extension of the existing client 283 session. The final 240-frame windows span about four seconds, consistent with the reported cap. The exact option change was not logged.",
+  "frame_evidence_283": "250 overlapping frame summaries were retrieved. After the first five world-entry samples, the largest measured interval was 155.192 ms, present in four windows ending at JVM uptime 338001 through 341019 ms. The largest JVM safepoint across those windows was 4.438 ms. Window overlap prevents treating repeated maxima as separate hitches.",
+  "gc_evidence_283": "At JVM uptime 326248 ms five Worker-Main threads and the integrated server logged allocation stalls of roughly 52 to 54 ms. A separate 48.792 ms safepoint at 332003 ms was dominated by time reaching the safepoint. Both occurred before the available windows containing the 155.192 ms interval. The evidence does not establish a common cause.",
+  "change_284": "Fabric 26.3 retains frame summaries and adds a daemon that checks Minecraft's existing frame clock between playable-world summaries. Every 10 ms during those intervals it checks for frame age of at least 40 ms. It reports only when the frame clock stays unchanged across the render stack request. Limits are 48 traces, 12 stack entries per trace, and the existing observer lifetime. Frames between polling intervals or below 40 ms can be missed, and the extra sampling has unmeasured console overhead.",
+  "checks": "All 21 launcher host checks passed. A host fixture exercised the packaged render-stall probe against a stalled thread and verified stack capture, suppression before the frame clock starts, and deduplication. The original Minecraft 26.3 bytecode exposes the expected clock field and clock method. Exact target package and independent package audit passed.",
+  "console_pending": "Run the same route with the same video settings. Collect java25-exceptions.log and java25-gc.log after the drops recur. Verify capture on PS5 and correlate any PS5_FRAME_STALL stacks before changing worker, collector or graphics defaults. Shader and release validation remain pending."
+}
