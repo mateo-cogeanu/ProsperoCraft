@@ -16,6 +16,9 @@
 #endif
 namespace prospero_storage {
 inline bool shared=false;
+#ifdef PROSPERO_PERSISTENT_SHADER_CACHE
+inline bool shader_cache_ready=false;
+#endif
 inline const char* report_root()noexcept{return shared?PROSPERO_SHARED_STORAGE "/reports":PROSPERO_LEGACY_STORAGE "";}
 inline const char* base_root()noexcept{return shared?PROSPERO_SHARED_STORAGE "":PROSPERO_LEGACY_STORAGE "/ProsperoCraft";}
 inline bool directory(const char* path,bool browse=false)noexcept{
@@ -29,6 +32,11 @@ inline bool directory(const char* path,bool browse=false)noexcept{
   (void)::fchmod(fd,(value.st_mode&0777)|browse_bits);
  if(::close(fd)!=0)ok=false;
  return ok;
+}
+// Use Mesa's existing default location so earlier cache entries remain reusable.
+inline bool configure_shader_cache()noexcept{
+ const char* cache=shared?PROSPERO_SHARED_STORAGE "/.cache":PROSPERO_LEGACY_STORAGE "/ProsperoCraft/.cache";
+ return directory(base_root())&&directory(cache);
 }
 inline bool shared_access()noexcept{
  if(!directory(PROSPERO_SHARED_STORAGE "",true)||!directory(PROSPERO_SHARED_STORAGE "/reports",true)||!directory(PROSPERO_SHARED_STORAGE "/tmp")||!directory(PROSPERO_SHARED_STORAGE "/reports/mc-client")||!directory(PROSPERO_SHARED_STORAGE "/reports/mc-client/logs"))return false;
@@ -45,6 +53,9 @@ inline bool initialize(bool enable_shared=true)noexcept{
  // Set before core/library constructors and Java's environment snapshot.
  if(::setenv("PROSPERO_LIBRARY_PROGRESS","1",1))return false;
  if(::setenv("PROSPERO_DIAGNOSTIC_ROOT",report_root(),1)||::setenv("PROSPERO_STORAGE_BASE",base_root(),1)||::setenv("ALSOFT_LOCAL_PATH",shared?PROSPERO_SHARED_STORAGE "":PROSPERO_LEGACY_STORAGE "/mc-client",1)||::setenv("HOME",base_root(),1)||::setenv("TMPDIR",shared?PROSPERO_SHARED_STORAGE "/tmp":PROSPERO_LEGACY_STORAGE "",1))return false;
+#ifdef PROSPERO_PERSISTENT_SHADER_CACHE
+ shader_cache_ready=configure_shader_cache();
+#endif
  return ps5::log_share::configure_root(report_root());
 }
 }

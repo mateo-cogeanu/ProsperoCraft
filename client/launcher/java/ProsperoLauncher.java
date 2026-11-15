@@ -93,7 +93,7 @@ public final class ProsperoLauncher {
  static ClassLoader runningGameLoader(){return "fabric".equals(current.detail.loader)?Thread.currentThread().getContextClassLoader():gameLoader();}
  static boolean quietGameplayCompilerLog(){
   return ("01.000.282".equals(ProsperoBuild.VERSION)||"01.000.283".equals(ProsperoBuild.VERSION)
-      ||"01.000.284".equals(ProsperoBuild.VERSION))
+      ||"01.000.284".equals(ProsperoBuild.VERSION)||"01.000.285".equals(ProsperoBuild.VERSION))
       &&"26.3".equals(current.detail.version)&&"fabric".equals(current.detail.loader);
  }
  static void configureGameLaunch(){if("fabric".equals(current.detail.loader))ProsperoFabric.configure(current.loader,current.cacheRoot.resolve("versions/"+current.detail.version+"/client.jar"),current.detail.version);}

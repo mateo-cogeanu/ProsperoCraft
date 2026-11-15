@@ -290,7 +290,7 @@ public final class ClientStartup25 {
     Field size=accessibleField(logger,"size");
     Object runningClient=instance.invoke(null);
     if(runningClient==null)return;
-    FrameStallProbe stalls="01.000.284".equals(ProsperoBuild.VERSION)
+    FrameStallProbe stalls=("01.000.284".equals(ProsperoBuild.VERSION)||"01.000.285".equals(ProsperoBuild.VERSION))
         ?new FrameStallProbe(minecraft,game,runningClient,owner,console):null;
     for(int count=0;count<300&&System.nanoTime()<deadline;count++) {
      var result=new java.util.concurrent.CompletableFuture<String>();
@@ -479,7 +479,7 @@ public final class ClientStartup25 {
    }else console.println("PS5 startup observer disabled for performance run;enable ps5.startupObserver explicitly for stack sampling");
    ProsperoSession session=new ProsperoSession(reports.resolve("mc-client/logs"),ProsperoLauncher.selectedShutdownAccessors(),ProsperoLauncher.selected121Fabric());
    Thread gameThread=Thread.currentThread();
-   try(FrameObserver frames=("01.000.283".equals(ProsperoBuild.VERSION)||"01.000.284".equals(ProsperoBuild.VERSION))
+   try(FrameObserver frames=("01.000.283".equals(ProsperoBuild.VERSION)||"01.000.284".equals(ProsperoBuild.VERSION)||"01.000.285".equals(ProsperoBuild.VERSION))
        &&ProsperoLauncher.quietGameplayCompilerLog()?new FrameObserver(gameThread,console):null;
        ProsperoExit exit=cleanSystemExit(false)?new ProsperoExit(
      ()->session.awaitCleanReturn(gameThread.getContextClassLoader(),2000,ClientStartup25::stage),

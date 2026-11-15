@@ -1,0 +1,10 @@
+{
+  "title_id": "PPSA99874",
+  "app_version": "01.000.285",
+  "package_sha256": "c46d07bb0ca56988e83cacc7f5b2b495f8ff70f36c4dbaca134d5ba15f505ae4",
+  "baseline": "Client 284, Minecraft 26.3 Fabric. The maintainer reports that a second pass along the same route was smooth on PS5 and that flying around on the Mac was smooth. Second-pass PS5 timings and a matched Mac comparison are unavailable.",
+  "evidence": "Client 284 caught late frames waiting for first-use Minecraft pipeline compilation with Vitrail absent. The bundled Mesa source falls back to HOME/.cache when no cache-path overrides are set, and startup assigns HOME to the title-local ProsperoCraft directory. The native fallback previously created mc-client report directories without ensuring the separate ProsperoCraft parent directory existed before the first graphics initialization. If that parent was absent Mesa could not create its disk cache. A warm in-process pass can also reuse game state or already compiled Java and graphics code, so this evidence does not identify the cause of every drop or establish that the test PS5 had no disk cache.",
+  "change": "Before graphics initialization, candidate 285 provisions the default Mesa cache parent and .cache using the existing checked private directory helper. It retains Mesa’s path overrides, default cache backend and existing cache entries. An unavailable cache directory is logged after the current run header and startup continues. Client 284 frame diagnostics remain active on Fabric 26.3.",
+  "checks": "All 21 launcher policy and 14 native host checks passed. The native storage test covers fresh fallback setup, the shared path and nonfatal cache-directory refusal. The signed PS5 package and independent audit passed.",
+  "console_pending": "On the same route and profile at 120 FPS, record the first pass on 285, exit cleanly, fully reopen and repeat the route. Verify the startup cache-directory status and persisted driver cache files where accessible, then compare frame summaries and pipeline wait stacks. Directory creation alone does not prove cache hits, faster traversal, or shader acceptance."
+}

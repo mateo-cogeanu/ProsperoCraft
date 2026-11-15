@@ -4,6 +4,16 @@ import re
 
 def normalize(name, text):
     if name == 'client/startup/bootstrap.cpp':
+        persistent_cache_record = (
+            '#ifdef PROSPERO_PERSISTENT_SHADER_CACHE\n'
+            '  log_stage(prospero_storage::shader_cache_ready\n'
+            '      ? "PS5_MESA_CACHE persistent directory ready"\n'
+            '      : "PS5_MESA_CACHE directory unavailable");\n'
+            '#endif\n'
+        )
+        if text.count(persistent_cache_record) != 1:
+            raise ValueError('Candidate persistent shader cache status changed')
+        text = text.replace(persistent_cache_record, '')
         synchronous_compile = (
             '#ifdef PROSPERO_ZINK_SYNC_COMPILE\n'
             ' log_stage("PS5_ZINK pipeline shaders with synchronous compilation");\n'

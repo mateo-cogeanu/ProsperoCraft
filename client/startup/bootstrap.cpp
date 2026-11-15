@@ -327,6 +327,11 @@ void run_test(int i) {
   startup_log=std::fopen(PROSPERO_REPORT_PATH("java25-startup.log"),"a");
   if(!startup_log) {result(i,errno,"Cannot open persistent startup log");return;}
   std::fprintf(startup_log,"\n=== CLIENT RUN %s BUILD %s ===\n",run_id,build_version);std::fflush(startup_log);
+#ifdef PROSPERO_PERSISTENT_SHADER_CACHE
+  log_stage(prospero_storage::shader_cache_ready
+      ? "PS5_MESA_CACHE persistent directory ready"
+      : "PS5_MESA_CACHE directory unavailable");
+#endif
   {
    FILE* prior_vm=std::fopen(PROSPERO_REPORT_PATH("java25-vm-trace.log"),"rb");
    if(prior_vm){
