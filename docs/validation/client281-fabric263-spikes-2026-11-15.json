@@ -8,6 +8,7 @@
     "longest_safepoint_ms": 87.707,
     "longest_safepoint_ms_in_final_100_seconds": 3.348
   },
-  "next_test": "Compare movement across already loaded terrain and into new terrain at the same settings. Compare the new-terrain run with simulation distance reduced from 12 to 6 while retaining render distance 12. Record the times of noticeable hitches so the GC and compiler logs can be correlated with them.",
-  "limits": "Frame and tick durations were unavailable. The native trace was inaccessible through FTP. The logs do not establish a cause for the recurring spikes."
+  "next_test": "Compare movement across already loaded terrain and into new terrain at the same settings. Capture the frame-time and integrated-server tick charts during a hitch and retain the matching GC and compiler logs.",
+  "limits": "Frame and tick durations were unavailable. The native trace was inaccessible through FTP. The logs do not establish a cause for the recurring spikes.",
+  "simulation_distance_6": "The maintainer reports that spikes persist at simulation distance 6. The change is insufficient as a workaround. No matching frame or tick durations were captured."
 }
