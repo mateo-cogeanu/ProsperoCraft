@@ -1,0 +1,9 @@
+{
+  "title_id": "PPSA99874",
+  "app_version": "01.000.284",
+  "package_sha256": "3e83beebe198628a81b374503b2bdba23aef3137885b7af358428aa37c7c5c2b",
+  "console_report": "The maintainer reports no improvement with Vitrail disabled. The retrieved new run identifies Fabric 26.3, Sodium 0.9.3-beta.1 and render and simulation distances of 12. Vitrail is absent from the loaded mod list. Later 240-frame windows span about two seconds, consistent with the reported 120 FPS cap.",
+  "frame_evidence": "28 overlapping windows and 11 render-thread stacks. The largest frame interval after the first four world-entry windows was 84.252 ms. The largest JVM safepoint across both windows containing that interval was 2.243 ms. No allocation stalls were logged.",
+  "stack_evidence": "Two distinct late frames sampled at uptime 1856800 ms and 1861757 ms show the render thread parked in CompletableFuture.join inside PipelineCache.get, reached from Sodium terrain and Minecraft's PreparedRenderType respectively. Read-only inspection of the original 26.3 bytecode shows a cache miss submits pipeline compilation to Minecraft's background executor and joins the result before finishing compile and caching the pipeline. The other stacks include client particle and GUI work, Vulkan command recording and class definition. The samples do not apportion time between compilation and executor queueing or explain all late frames.",
+  "next_console_check": "Keep this exact build running at 120 FPS. With the same settings traverse the affected route twice in one world session and compare cold and repeat passes. Avoid resource reloads and reopening the world between passes so the existing pipeline cache and terrain can remain warm. Persisting hitches or pipeline waits on the second pass would merit separate timing of the compiler's queue and execution. No fix or release validation is claimed."
+}
