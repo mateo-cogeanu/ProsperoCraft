@@ -1,0 +1,17 @@
+{
+  "app_version": "01.000.283",
+  "title_id": "PPSA99874",
+  "package_sha256": "b8a46e3d266a5a7928c3b18219ddbc893b67a4003f05a7458ab99d905e92423d",
+  "profile": "Minecraft 26.3 Fabric, singleplayer, shaders off, render and simulation distances 12",
+  "console": "Maintainer reports repeated spikes. Matching startup report identifies build 283 and confirms per-method compiler logging stayed disabled during gameplay.",
+  "frame_evidence": {
+    "overlapping_windows": 75,
+    "largest_interval_near_world_entry_ms": 739.183,
+    "windows_after_first_five_samples": 70,
+    "later_windows_with_intervals_at_least_50ms": 19,
+    "largest_later_interval_ms": 74.998,
+    "example_steady_frame_interval_ms": 8.34
+  },
+  "gc_evidence": "The windows containing the 74.998 ms frame had maximum JVM safepoints of 1.081 ms and 3.339 ms. No allocation stall was logged. Window overlap prevents counting these as distinct hitches. The trace locates gaps between render-loop frames and does not time chunk generation, individual submits, GPU waits or presentation.",
+  "follow_up": "Compare the same route at a 60 FPS cap with identical world and video settings, using the same diagnostic build. Record the result before changing the default frame limit or worker policy."
+}
