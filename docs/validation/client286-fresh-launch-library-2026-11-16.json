@@ -1,0 +1,11 @@
+{
+  "app_version": "01.000.286",
+  "title_id": "PPSA99874",
+  "package_sha256": "6c7e019ec85cfc74085fe1de1e7213a589dc9e0ce3c8d8271feee0a88aa3c031",
+  "report": "https://github.com/mateo-cogeanu/ProsperoCraft/issues/17#issuecomment-6918223804",
+  "console_285": "A fresh ProsperoStore install on PS5 Slim firmware 11.40 reaches the native launcher, initializes the JVM, reports that the Mesa cache directory is ready, then repeatedly stops with the library metadata verification exception before Minecraft starts.",
+  "cause": "Build 285 creates the title-local ProsperoCraft directory and its .cache child before Java selects the launcher library. With no selected shared catalog, the old startup path treats any child in the local directory as evidence of a library and then requires library.json. A host fixture with only the populated cache reproduced the exact exception on the old code. The reporter's filesystem contents were not inspected, and no firmware dependency was established.",
+  "change": "The startup path can initialize a local library if its only entry is a real .cache directory. Other entries and invalid metadata still require verification. Existing shader cache files and shared-library selection are retained.",
+  "checks": "The host storage regression reproduces the 285 failure, then verifies 286 initialization and reopen with the cache retained, plus refusal to overwrite malformed metadata or uncatalogued world files. The 21 launcher host checks and independent PS5 package audit passed.",
+  "console_pending": "Test an in-place app update on the maintainer's 13.60 PS5 with the current library and settings. Verify launcher startup, existing instances and shader rendering. The reporter's 11.40 fresh-install and failed-285 retry paths remain pending."
+}

@@ -109,6 +109,28 @@ public class StorageCheck {
    throw new AssertionError("second instance did not move independently");
   var unmoved=ProsperoStorageRoot.rollback(freshLegacy.resolveSibling("other"),freshShared);
   if(!unmoved.root().equals(freshLegacy.resolveSibling("other")))throw new AssertionError("empty shared root took precedence");
+  Path cacheOnly=folder.resolve("cache-only-legacy");
+  Path shaderCache=cacheOnly.resolve(".cache/mesa_shader_cache/fixture");
+  Files.createDirectories(shaderCache.getParent());
+  Files.writeString(shaderCache,"compiled shader");
+  Path absentShared=folder.resolve("absent-shared");
+  var freshFromCache=ProsperoStorageRoot.rollback(cacheOnly,absentShared);
+  var newLibrary=new ProsperoLibrary(freshFromCache.root(),freshFromCache.legacy());
+  if(!freshFromCache.root().equals(cacheOnly)||!newLibrary.instances().isEmpty()
+      ||!Files.isRegularFile(cacheOnly.resolve("library.json"))||!Files.readString(shaderCache).equals("compiled shader"))
+   throw new AssertionError("cache-only startup did not initialize the local library");
+  new ProsperoLibrary(ProsperoStorageRoot.rollback(cacheOnly,absentShared).root());
+  Files.writeString(cacheOnly.resolve("library.json"),"{bad");
+  try{ProsperoStorageRoot.rollback(cacheOnly,absentShared);throw new AssertionError("accepted malformed metadata");}
+  catch(IOException expected){}
+  if(!Files.readString(cacheOnly.resolve("library.json")).equals("{bad"))throw new AssertionError("overwrote malformed metadata");
+  Files.delete(cacheOnly.resolve("library.json"));
+  Path orphan=cacheOnly.resolve("instances/world/data");
+  Files.createDirectories(orphan.getParent());
+  Files.writeString(orphan,"preserve");
+  try{ProsperoStorageRoot.rollback(cacheOnly,absentShared);throw new AssertionError("accepted uncatalogued world data");}
+  catch(IOException expected){}
+  if(!Files.readString(orphan).equals("preserve"))throw new AssertionError("modified uncatalogued world data");
   var rolled=ProsperoStorageRoot.rollback(legacyUnit,primaryUnit);
   if(!rolled.root().equals(primaryUnit)||!rolled.legacy().equals(legacyUnit))
    throw new AssertionError("rollback hid an already-migrated catalog");

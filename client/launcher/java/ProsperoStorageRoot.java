@@ -62,8 +62,18 @@ final class ProsperoStorageRoot {
    ProsperoLibrary.verifyReadable(primary);
    return new Selection(primary,"");
   }
-  if(nonempty(legacy))ProsperoLibrary.verifyReadable(legacy);
+  if(hasLibraryEntries(legacy))ProsperoLibrary.verifyReadable(legacy);
   return new Selection(legacy,"");
+ }
+ // Mesa can create this directory before the launcher writes its first catalog.
+ private static boolean hasLibraryEntries(Path legacy)throws IOException {
+  if(!directory(legacy))return false;
+  try(var entries=Files.newDirectoryStream(legacy)){
+   for(Path entry:entries)
+    if(!entry.getFileName().toString().equals(".cache")
+        ||!Files.isDirectory(entry,LinkOption.NOFOLLOW_LINKS))return true;
+   return false;
+  }
  }
  static BasicFileAttributes attributes(Path path)throws IOException {
   try{return Files.readAttributes(path,BasicFileAttributes.class,LinkOption.NOFOLLOW_LINKS);}catch(NoSuchFileException absent){return null;}
