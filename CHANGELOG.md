@@ -1,5 +1,11 @@
 # Changelog
 
+## 01.000.286 · First-launch library fix, 2026-11-16
+
+- Fix a startup failure on fresh installs when the launcher finds a shader cache before its library catalog exists.
+
+The maintainer tested the build on PS5 firmware 13.60. See the [release notes](docs/releases/client-first-launch-286.md).
+
 ## 01.000.285 · PS5 shader cache and frame pacing, 2026-11-15
 
 - Prepare Mesa’s shader cache directory before graphics startup to support reuse across launches.
