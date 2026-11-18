@@ -121,7 +121,7 @@ If Play says Coming soon, compare the **version and loader** with the compatibil
 
 Offline profiles and third-party accounts are the next priorities, ahead of Minecraft 1.20.1 and Forge.
 
-- **Local offline profiles.** Create a username-only profile and launch an installed instance without signing in to Microsoft. The planned scope covers singleplayer and servers configured for offline mode. Players can reuse installed game files or use the existing Microsoft sign-in flow to download them.
+- **Local offline profiles.** Candidate 287 adds username-only profiles and downloads without Microsoft sign-in, covering singleplayer and servers configured for offline mode. Downloading missing files needs internet access. Installed instances can reuse verified files while offline. PS5 validation is pending. [Candidate notes](docs/client-local-profiles-287.md)
 - **Third-party accounts.** Explore Ely.by as the first provider alongside Microsoft, with support for compatible community servers and skin services. Wider support for authlib-injector-compatible providers depends on what works on PS5. [Ely.by integration documentation](https://docs.ely.by/en/minecraft-auth.html)
 
 The [1.20.x compatibility plan](docs/client-1.20-plan.md) still covers Vanilla 1.20 through 1.20.6 ahead of NeoForge.

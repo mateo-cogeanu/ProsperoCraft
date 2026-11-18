@@ -67,6 +67,9 @@ int main(){
  PageTurn turn;turn.start(1,100,false);assert(turn.progress(100)==0&&turn.progress(240)>0&&turn.progress(240)<1&&turn.progress(380)==1);turn.start(-1,400,true);assert(turn.direction==-1&&!turn.moving(400));
 
  CursorShape shape;assert(shape.count>90&&shape.count<128);for(int i=0;i<shape.count;i++){int a=(i+shape.count-1)%shape.count,b=(i+1)%shape.count;float ax=shape.xy[i*2]-shape.xy[a*2],ay=shape.xy[i*2+1]-shape.xy[a*2+1],bx=shape.xy[b*2]-shape.xy[i*2],by=shape.xy[b*2+1]-shape.xy[i*2+1];float lengths=std::sqrt((ax*ax+ay*ay)*(bx*bx+by*by));assert(lengths>0&&(ax*bx+ay*by)/lengths>0.8f);}
+ assert(desktop_hit(3,1200,480,0,0,0,false,false,false,true).target==1);
+ assert(desktop_hit(3,1200,580,0,0,0,false,false,false,true).target==2);
+ assert(desktop_hit(3,1200,480,0,0).kind==-1);
  assert(desktop_hit(0,70,342,0,2).target==0);assert(desktop_hit(0,69,342,0,2).kind==-1);assert(desktop_hit(0,520,342,0,2).target==1);assert(desktop_hit(0,491,342,0,2).kind==-1);
  assert(desktop_hit(5,110,805,0,0).kind==-1);assert(desktop_hit(5,800,760,0,0).target==8);assert(desktop_hit(5,1400,760,0,0).target==8);assert(desktop_hit(5,800,850,0,0).target==5);assert(desktop_hit(5,1400,850,0,0).target==6);assert(desktop_hit(6,900,70,0,0).kind==-1);assert(desktop_hit(10,300,285,8,20).target==8);assert(desktop_hit(5,1350,650,0,0).target==7);assert(desktop_hit(12,1600,550,0,1,0,false,true).target==20);
  assert(desktop_char(4,false,false)=='a'&&desktop_char(4,true,false)=='A'&&desktop_char(4,true,true)=='a');

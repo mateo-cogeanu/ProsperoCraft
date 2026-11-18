@@ -23,7 +23,7 @@ public final class ProsperoLauncher {
  private boolean launchPrepared=false,awaitingTutorial=false;
  private boolean top=false,busy=false,launch=false,lowercase=false,customName=false;private String task="",message="",code="",uri="",draftName="",keyboard="",originalText="";
  private List<ProsperoInstall.Version> versions=List.of();private ProsperoLibrary.Instance detail;
- private int guideReturn=0,guideTab=0,guideSection=0;private boolean guideTop=false;private ProsperoOfflineAccount offlineAccount;private boolean offlineLaunch;
+ private int guideReturn=0,guideTab=0,guideSection=0;private boolean guideTop=false;private ProsperoOfflineAccount offlineAccount;private boolean offlineLaunch;private String localLaunchName="";
  private String fabricLoaderVersion="";private String avatar="";private final ProsperoAccountStore accounts;
  private ProsperoAuth.Session session;private Thread worker;private long completed,total,lastProgress;private String[] cached;
  private Path cacheRoot;
@@ -51,7 +51,7 @@ public final class ProsperoLauncher {
    if(ProsperoStorageRoot.directory(original)&&!ProsperoMigration.published(original,cacheRoot))cacheRoot=original;
   }
   fabric=new ProsperoFabric(cacheRoot);
-  installer=source==null?new ProsperoInstall(cacheRoot):new ProsperoInstall(cacheRoot,source);if(library.settings().showIntro&&!Boolean.getBoolean("ps5.launcher.resume")){page=7;row=1;}if(ProsperoChannel.tempGameTest()&&accounts.exists())restoreAccount();}
+  installer=source==null?new ProsperoInstall(cacheRoot):new ProsperoInstall(cacheRoot,source);if(library.settings().showIntro&&!Boolean.getBoolean("ps5.launcher.resume")){page=7;row=1;}if(ProsperoChannel.tempGameTest()&&!localProfileSelected()&&accounts.exists())restoreAccount();}
  static String[] run(Menu menu,ProsperoStorageRoot.Progress progress)throws Exception {
   var storage=ProsperoStorageRoot.current(progress);
   progress.update("Loading instances and settings",0,0);
@@ -94,7 +94,7 @@ public final class ProsperoLauncher {
  static boolean quietGameplayCompilerLog(){
   return ("01.000.282".equals(ProsperoBuild.VERSION)||"01.000.283".equals(ProsperoBuild.VERSION)
       ||"01.000.284".equals(ProsperoBuild.VERSION)||"01.000.285".equals(ProsperoBuild.VERSION)
-        ||"01.000.286".equals(ProsperoBuild.VERSION))
+        ||"01.000.286".equals(ProsperoBuild.VERSION)||"01.000.287".equals(ProsperoBuild.VERSION))
       &&"26.3".equals(current.detail.version)&&"fabric".equals(current.detail.loader);
  }
  static void configureGameLaunch(){if("fabric".equals(current.detail.loader))ProsperoFabric.configure(current.loader,current.cacheRoot.resolve("versions/"+current.detail.version+"/client.jar"),current.detail.version);}
@@ -111,9 +111,27 @@ public final class ProsperoLauncher {
  private ProsperoAuth.View accountView(int attempt){return new ProsperoAuth.View(){public void stage(String text){synchronized(ProsperoLauncher.this){if(!cancelled(attempt)){message=text;cached=null;}}}public void code(String value,String address){synchronized(ProsperoLauncher.this){if(!cancelled(attempt)){code=value;uri=address;cached=null;}}}};}
  private void acceptAccount(ProsperoAuth.Session result,int attempt)throws Exception {acceptAccount(result,attempt,true);}
  private void acceptAccount(ProsperoAuth.Session result,int attempt,boolean interactive)throws Exception {
-  synchronized(this){if(cancelled(attempt))return;session=result;avatar="";if(interactive&&page!=7)selectTab(0);code="";uri="";message="Connected. Owned Minecraft Java is ready to play.";feedback("success");cached=null;try{accounts.save(auth.refreshCredential(result));}catch(Exception storage){message="Connected. Account could not be saved on this console.";}}
+  synchronized(this){if(cancelled(attempt))return;if(interactive&&localProfileSelected())library.localProfile(library.settings().localPlayer,false);session=result;avatar="";if(interactive&&page!=7)selectTab(0);code="";uri="";message="Connected. Owned Minecraft Java is ready to play.";feedback("success");cached=null;try{accounts.save(auth.refreshCredential(result));}catch(Exception storage){message="Connected. Account could not be saved on this console.";}}
   String face="";try{face=ProsperoAvatar.fetch(auth.skin(result));if(face.isEmpty()&&auth.skin(result).isEmpty())face=ProsperoAvatar.defaultFace(library.root,result.id);}catch(Exception unavailable){}
   synchronized(this){if(!cancelled(attempt)&&session==result){avatar=face;cached=null;}}
+ }
+ private boolean localProfileSelected(){return ProsperoChannel.tempGameTest()&&library.settings().localProfile;}
+ private void editLocalProfile(){
+  keyboardReturn=3;page=6;keyboard=library.settings().localPlayer;originalText=keyboard;key=0;
+ }
+ private void chooseLocalProfile()throws Exception {
+  if(library.settings().localPlayer.isEmpty()){editLocalProfile();return;}
+  library.localProfile(library.settings().localPlayer,true);
+  message="Offline profile selected. Singleplayer and offline-mode servers are available.";
+ }
+ private void microsoftAccount()throws Exception {
+  if(localProfileSelected()){
+   if(session==null||!session.valid(System.currentTimeMillis())){signIn();return;}
+   library.localProfile(library.settings().localPlayer,false);
+   message="Microsoft account selected.";return;
+  }
+  if(session==null){signIn();return;}
+  cancel();session=null;avatar="";accounts.clear();message="Signed out. Saved account removed from this console.";
  }
  private void restoreAccount(){runTask("ACCOUNT",attempt->{String refresh;try{refresh=accounts.load();}catch(ProsperoAccountStore.SignInRequired changedApp){synchronized(this){if(!cancelled(attempt)){message=changedApp.getMessage();cached=null;}}return;}if(refresh.isEmpty())return;try{acceptAccount(auth.resume(refresh,accountView(attempt),()->cancelled(attempt)),attempt,false);}catch(ProsperoAuth.Failure failure){if(failure.code.equals("DECLINED")||failure.code.equals("REGISTRATION"))accounts.clear();throw failure;}});}
  private void signIn(){if(busy)return;message="Connecting to Microsoft";runTask("AUTH",attempt->acceptAccount(auth.signIn(accountView(attempt),()->cancelled(attempt)),attempt));}
@@ -165,12 +183,12 @@ public final class ProsperoLauncher {
  private void prepareLaunch(ProsperoLibrary.Instance instance,ProsperoInstall.Receipt installed)throws Exception {prepareLaunch(instance,installed,false);}
  private void prepareLaunch(ProsperoLibrary.Instance instance,ProsperoInstall.Receipt installed,boolean offline)throws Exception {
   if(offline&&(!ProsperoChannel.offline()||offlineAccount==null||!offlineAccount.valid(System.currentTimeMillis())))throw new java.io.IOException("Offline profile expired. Verify your account again on your computer.");
-  if(ProsperoChannel.tempGameTest()&&!offline&&(session==null||!session.valid(System.currentTimeMillis())))throw new java.io.IOException("Sign in with an owning Microsoft account before playing the full game.");
+  if(ProsperoChannel.tempGameTest()&&!offline&&!localProfileSelected()&&(session==null||!session.valid(System.currentTimeMillis())))throw new java.io.IOException("Sign in with an owning Microsoft account before playing the full game.");
   if(installed.javaMajor>Runtime.version().feature())throw new java.io.IOException("This instance requires Java "+installed.javaMajor+"; this app includes Java "+Runtime.version().feature());
   if(!launchable(instance.version,instance.loader)||!("SDL".equals(installed.window)||(ProsperoGraphics.glfw(instance.version)&&"GLFW".equals(installed.window)))){message="Coming soon for this version. Downloads are kept.";return;}
 
   microphone.prepare(); // Automatic system input; physical controller/system mute remains authoritative.
-  installer.verify(installed);receipt=installed;loader=installer.loader(installed);if("fabric".equals(instance.loader)){var f=fabric.read(instance.version);loader=fabric.loader(f,loader);fabricLoaderVersion=f.loader;}detail=instance;offlineLaunch=offline;launchPrepared=true;launch=!awaitingTutorial;message="Starting "+instance.name;
+  installer.verify(installed);receipt=installed;loader=installer.loader(installed);if("fabric".equals(instance.loader)){var f=fabric.read(instance.version);loader=fabric.loader(f,loader);fabricLoaderVersion=f.loader;}detail=instance;offlineLaunch=offline;localLaunchName=localProfileSelected()?library.settings().localPlayer:"";launchPrepared=true;launch=!awaitingTutorial;message="Starting "+instance.name;
  }
  static boolean supported(String version){return "26.2".equals(version)||"26.3".equals(version)||snapshot(version)||Prospero121.supported(version,"vanilla");}
  static boolean supported(String version,String loader){return ProsperoVersions.release121(version)?Prospero121.supported(version,loader):supported(version);}
@@ -183,7 +201,7 @@ public final class ProsperoLauncher {
  static boolean configureSelectedSodiumLwjglTest(){return current.receipt!=null&&ProsperoGraphics.configureSodiumLwjglTest(current.receipt.version,current.detail.loader);}
  static boolean selectedGlfw(){return current.receipt!=null&&ProsperoGraphics.glfw(current.receipt.version)&&"GLFW".equals(current.receipt.window);}
  static boolean snapshot(String version){return java.util.Set.of("26.4-snapshot-1","26.4-snapshot-2","26.4-snapshot-3","26.4-snapshot-4","26.4-snapshot-5","26.4-snapshot-6").contains(version==null?"":version);}
- private void play(){if(detail==null||busy)return;if(!launchable(detail.version,detail.loader)){message="26.2".equals(detail.version)&&"fabric".equals(detail.loader)?"Fabric for Minecraft 26.2 is coming soon. Your downloads and worlds are kept.":ProsperoGraphics.release261(detail.version)?"26.1 Zink development testing is unavailable in this build. Downloads and worlds are kept.":"Coming soon for this version. Downloads and worlds are kept.";feedback("error");return;}if(ProsperoChannel.tempGameTest()&&(session==null||!session.valid(System.currentTimeMillis()))){page=3;tab=2;top=false;row=0;signIn();return;}awaitingTutorial=ProsperoChannel.tempGameTest()&&library.settings().showControls;if(awaitingTutorial){page=11;row=1;top=false;launchPrepared=false;}if(!detail.ready){install(true);return;}var instance=detail;runTask("VERIFY",attempt->{var installed=installer.ensure(instance.version,library.settings().workers,refreshProgress(attempt),()->cancelled(attempt),false);ensureFabricCache(instance,attempt,false);synchronized(this){if(!cancelled(attempt)){task="VERIFY";completed=0;total=1;cached=null;}}installDefaultContent(instance,attempt);repairDependencies(instance,attempt,false);synchronized(this){if(!cancelled(attempt))prepareLaunch(instance,installed);}});}
+ private void play(){if(detail==null||busy)return;if(!launchable(detail.version,detail.loader)){message="26.2".equals(detail.version)&&"fabric".equals(detail.loader)?"Fabric for Minecraft 26.2 is coming soon. Your downloads and worlds are kept.":ProsperoGraphics.release261(detail.version)?"26.1 Zink development testing is unavailable in this build. Downloads and worlds are kept.":"Coming soon for this version. Downloads and worlds are kept.";feedback("error");return;}if(ProsperoChannel.tempGameTest()&&!localProfileSelected()&&(session==null||!session.valid(System.currentTimeMillis()))){page=3;tab=2;top=false;row=0;signIn();return;}awaitingTutorial=ProsperoChannel.tempGameTest()&&library.settings().showControls;if(awaitingTutorial){page=11;row=1;top=false;launchPrepared=false;}if(!detail.ready){install(true);return;}var instance=detail;runTask("VERIFY",attempt->{var installed=installer.ensure(instance.version,library.settings().workers,refreshProgress(attempt),()->cancelled(attempt),false);ensureFabricCache(instance,attempt,false);synchronized(this){if(!cancelled(attempt)){task="VERIFY";completed=0;total=1;cached=null;}}installDefaultContent(instance,attempt);repairDependencies(instance,attempt,false);synchronized(this){if(!cancelled(attempt))prepareLaunch(instance,installed);}});}
  private void playOffline(){
   if(detail==null||busy)return;
   if(!ProsperoChannel.offline()){message="This is the Demo branch.";return;}
@@ -208,12 +226,12 @@ public final class ProsperoLauncher {
 
   final String chars=lowercase?"1234567890qwertyuiopasdfghjkl_zxcvbnm .-":"1234567890QWERTYUIOPASDFGHJKL_ZXCVBNM .-";
   if((buttons&0x100)!=0)lowercase=!lowercase;
-  if((buttons&0x200)!=0&&keyboard.length()<40)keyboard+=" ";
+  if((buttons&0x200)!=0&&keyboard.length()<(keyboardReturn==3?16:40))keyboard+=" ";
   if((buttons&0x8)!=0)keyboard="";
 
-  if((buttons&0x4000)!=0&&keyboard.length()<40)keyboard+=chars.charAt(key);
+  if((buttons&0x4000)!=0&&keyboard.length()<(keyboardReturn==3?16:40))keyboard+=chars.charAt(key);
   if((buttons&0x1000)!=0&&!keyboard.isEmpty())keyboard=keyboard.substring(0,keyboard.length()-1);
-  if((buttons&0x8000)!=0){if(keyboardReturn==12){contentQuery=keyboard.strip();contentOffset=0;contentHits=List.of();browse();}else if(keyboardReturn==5)library.rename(detail,keyboard);else{draftName=ProsperoLibrary.clean(keyboard);customName=true;}page=keyboardReturn;}
+  if((buttons&0x8000)!=0){if(keyboardReturn==3){library.localProfile(keyboard,true);message="Offline profile saved. You can download and play without Microsoft sign-in.";}else if(keyboardReturn==12){contentQuery=keyboard.strip();contentOffset=0;contentHits=List.of();browse();}else if(keyboardReturn==5)library.rename(detail,keyboard);else{draftName=ProsperoLibrary.clean(keyboard);customName=true;}page=keyboardReturn;}
   if((buttons&0x2000)!=0){keyboard=originalText;page=keyboardReturn;}
  }
  private void openWeb()throws Exception {
@@ -400,7 +418,7 @@ public final class ProsperoLauncher {
    if(key==1)return tickModel(page==6?0x8000:0x4000);
    if(key==2&&page==6){if(!keyboard.isEmpty())keyboard=keyboard.substring(0,keyboard.offsetByCodePoints(keyboard.length(),-1));}
    if(key==3||key==4){if(page==6)return state();if(page==7||page==9||page==11||page==14)row=1-row;else if(page==10||page==13)return tickModel(key==3?0x40:0x10);else return tickModel(key==3?0x800:0x400);}
-  }else if(tag==3&&page==6&&!busy){char ch=(char)(command&127);if(ch>=32&&ch<127&&keyboard.length()<40)keyboard+=ch;}
+  }else if(tag==3&&page==6&&!busy){char ch=(char)(command&127);if(ch>=32&&ch<127&&keyboard.length()<(keyboardReturn==3?16:40))keyboard+=ch;}
   cached=null;return state();
  }
  private String[] tickModel(int buttons){
@@ -459,7 +477,7 @@ public final class ProsperoLauncher {
     if((buttons&0x10)!=0){if(row==0)top=true;else row=switch(row){case 1->0;case 2,3->1;case 4->2;case 7->3;case 5->8;case 6->8;case 8->4;default->7;};}
     if((buttons&0x40)!=0)row=switch(row){case 0->1;case 1->2;case 2->4;case 3->7;case 4->8;case 7->8;case 8->5;default->row;};
    }else if((buttons&0x10)!=0){if(row==0)top=true;else row--;}
-   if(page!=5&&(buttons&0x40)!=0)row=Math.min(page==1?4:page==2?6:page==3?0:page==4?(ProsperoChannel.offline()&&offlineAccount!=null?3:2):page==5?6:2,row+1);
+   if(page!=5&&(buttons&0x40)!=0)row=Math.min(page==1?4:page==2?6:page==3?(ProsperoChannel.tempGameTest()?2:0):page==4?(ProsperoChannel.offline()&&offlineAccount!=null?3:2):page==5?6:2,row+1);
    int direction=(buttons&0x80)!=0?-1:(buttons&0x20)!=0?1:0;
    if(!top&&page==1&&direction!=0&&!busy){if(row==0&&!versions.isEmpty()){versionChoice=Math.floorMod(versionChoice+direction,versions.size());if(!customName)draftName=defaultName(versions.get(versionChoice).id());}if(row==3)draftIcon=Math.floorMod(draftIcon+direction,ProsperoLibrary.ICONS.length);}
    if(!top&&page==5&&row==1&&direction!=0)library.icon(detail,Math.floorMod(detail.icon+direction,ProsperoLibrary.ICONS.length));
@@ -469,7 +487,7 @@ public final class ProsperoLauncher {
    if((buttons&0x4000)!=0){
     if(!top&&page==1&&!busy){if(row==0){if(versions.isEmpty())catalog();else{dropdown(0,versionChoice);cached=null;return state();}}if(row==1){dropdown(6,draftLoader);cached=null;return state();}if(row==2)beginName(1);if(row==3){dropdown(1,draftIcon);cached=null;return state();}if(row==4){if(versions.isEmpty())throw new java.io.IOException("Choose a version first");detail=library.add(draftName,versions.get(versionChoice).id(),draftIcon,draftLoader==1?"fabric":"vanilla");selected=library.instances().size()-1;page=4;row=0;install(false);customName=false;draftName=defaultName(versions.get(versionChoice).id());}}
     else if(page==2){if(row==6){dropdown(8,library.settings().theme);cached=null;return state();}if(row==5){page=13;row=0;listFirst=0;cached=null;return state();}var settings=library.settings();if(row==0){dropdown(3,settings.resolution);cached=null;return state();}if(row==1){dropdown(4,settings.workers-1);cached=null;return state();}if(row==2)settings.reducedMotion=!settings.reducedMotion;if(row==3){settings.snapshots=!settings.snapshots;versions=List.of();}if(row==4)settings.showIntro=!settings.showIntro;library.save();}
-    else if(page==3&&row==0){if(session==null)signIn();else{cancel();session=null;avatar="";accounts.clear();message="Signed out. Saved account removed from this console.";}}
+    else if(page==3&&!busy){if(row==0)microsoftAccount();else if(ProsperoChannel.tempGameTest()){if(row==1)chooseLocalProfile();else if(row==2)editLocalProfile();}}
     else if(!top&&page==4){if(row==0){play();cached=null;return state();}else if(row==1){page=5;row=0;}else if(row==2&&!busy){dropdown(9,0);cached=null;return state();}else if(row==3)playOffline();}
     else if(page==5){if(row==8){openWeb();return state();}if(row==7){duplicateInstance();cached=null;return state();}if(row>=2&&row<=4&&!busy){openContent(ProsperoModrinth.Kind.values()[row-2]);cached=null;return state();}if(row==0)beginName(5);if(row==1){dropdown(2,detail.icon);cached=null;return state();}if(row==5){page=4;row=0;}if(row==6){if(busy){message="Wait for the current task before deleting an instance.";feedback("error");}else{page=9;row=0;}}}
    }
@@ -480,7 +498,7 @@ public final class ProsperoLauncher {
  private String[] state(){
   if(page==15&&System.currentTimeMillis()-webStateAt>500){cached=null;webStateAt=System.currentTimeMillis();}
   if(cached!=null)return cached;String[] f=new String[FIELD_COUNT];Arrays.fill(f,"");
-  f[0]="Instances";f[1]="";f[2]=message;f[3]=code;f[4]=uri;f[5]=session==null?"Not signed in":session.name;f[6]=detail!=null&&!launchable(detail.version,detail.loader)?"COMING SOON":ProsperoChannel.tempGameTest()&&(session==null||!session.valid(System.currentTimeMillis()))?"PLAY - Sign in":detail!=null&&detail.ready?(ProsperoChannel.tempGameTest()?"PLAY":"PLAY DEMO"):"DOWNLOAD & PLAY";if(detail!=null&&ProsperoVersions.release121(detail.version)&&developmentTest(detail.version,detail.loader)&&f[6].equals("PLAY"))f[6]=experimental(detail.version,detail.loader)?"EXPERIMENTAL - PLAY":"DEV TEST - PLAY";f[7]=page==0?"L1 / R1 Tabs     L2 / R2 Pages     D-PAD Navigate     X Select":page==10&&(dropdownKind==1||dropdownKind==2)?"D-PAD Choose icon     X Use icon     CIRCLE Cancel":page==10&&dropdownKind==8?"D-PAD / Hover Preview     X Save     CIRCLE Cancel":page==10||page==13?"D-PAD Scroll     X Confirm     CIRCLE Back":page==8?"L2 / R2 Pages     LEFT / RIGHT Pages     CIRCLE Back":page==11||page==7?"LEFT / RIGHT Choose     X Confirm":page==9?"X Confirm     CIRCLE No":busy?"CIRCLE Cancel":"L1 / R1 Pages     X Select     CIRCLE Back     OPTIONS Controls";f[8]=busy?task:session==null?"MICROSOFT ACCOUNT":"CONNECTED";f[9]=""+selected;f[10]=launch?"LAUNCH":"WAIT";f[11]=""+page;f[12]=""+tab;f[13]=""+library.instances().size();f[14]=""+(selected/8*8);f[15]=""+(top?-1:row);f[16]=detail==null?"":detail.name;f[17]=detail==null?"":detail.version+("fabric".equals(detail.loader)?" / Fabric":" / Vanilla");f[18]=""+(detail==null?1:detail.icon);f[19]=detail==null?"":detail.ready?"READY":"NOT DOWNLOADED";f[20]=""+(total==0?0:Math.min(1000,completed*1000/total));f[21]=busy&&"REFRESH".equals(task)?completed+" / "+total+" checks":total>1?String.format(java.util.Locale.ROOT,"%.0f / %.0f MB",completed/1048576.0,total/1048576.0):"";f[22]=draftName;f[23]=versions.isEmpty()?"Select to refresh versions":versions.get(versionChoice).id();f[24]=""+draftIcon;f[25]=ProsperoLibrary.resolutionLabel(library.settings().resolution);f[26]=""+library.settings().workers;f[27]=library.settings().snapshots?"ON":"OFF";f[28]=top?"TOP":"CONTENT";f[29]=keyboard;f[30]=library.settings().reducedMotion?"ON":"OFF";f[31]=""+key;
+  f[0]="Instances";f[1]="";f[2]=message;f[3]=code;f[4]=uri;f[5]=localProfileSelected()?"Offline profile":session==null?"Not signed in":session.name;f[6]=detail!=null&&!launchable(detail.version,detail.loader)?"COMING SOON":ProsperoChannel.tempGameTest()&&!localProfileSelected()&&(session==null||!session.valid(System.currentTimeMillis()))?"PLAY - Sign in":detail!=null&&detail.ready?(ProsperoChannel.tempGameTest()?"PLAY":"PLAY DEMO"):"DOWNLOAD & PLAY";if(detail!=null&&ProsperoVersions.release121(detail.version)&&developmentTest(detail.version,detail.loader)&&f[6].equals("PLAY"))f[6]=experimental(detail.version,detail.loader)?"EXPERIMENTAL - PLAY":"DEV TEST - PLAY";f[7]=page==0?"L1 / R1 Tabs     L2 / R2 Pages     D-PAD Navigate     X Select":page==10&&(dropdownKind==1||dropdownKind==2)?"D-PAD Choose icon     X Use icon     CIRCLE Cancel":page==10&&dropdownKind==8?"D-PAD / Hover Preview     X Save     CIRCLE Cancel":page==10||page==13?"D-PAD Scroll     X Confirm     CIRCLE Back":page==8?"L2 / R2 Pages     LEFT / RIGHT Pages     CIRCLE Back":page==11||page==7?"LEFT / RIGHT Choose     X Confirm":page==9?"X Confirm     CIRCLE No":busy?"CIRCLE Cancel":"L1 / R1 Pages     X Select     CIRCLE Back     OPTIONS Controls";f[8]=busy?task:localProfileSelected()?"OFFLINE PROFILE":session==null?"MICROSOFT ACCOUNT":"CONNECTED";f[9]=""+selected;f[10]=launch?"LAUNCH":"WAIT";f[11]=""+page;f[12]=""+tab;f[13]=""+library.instances().size();f[14]=""+(selected/8*8);f[15]=""+(top?-1:row);f[16]=detail==null?"":detail.name;f[17]=detail==null?"":detail.version+("fabric".equals(detail.loader)?" / Fabric":" / Vanilla");f[18]=""+(detail==null?1:detail.icon);f[19]=detail==null?"":detail.ready?"READY":"NOT DOWNLOADED";f[20]=""+(total==0?0:Math.min(1000,completed*1000/total));f[21]=busy&&"REFRESH".equals(task)?completed+" / "+total+" checks":total>1?String.format(java.util.Locale.ROOT,"%.0f / %.0f MB",completed/1048576.0,total/1048576.0):"";f[22]=draftName;f[23]=versions.isEmpty()?"Select to refresh versions":versions.get(versionChoice).id();f[24]=""+draftIcon;f[25]=ProsperoLibrary.resolutionLabel(library.settings().resolution);f[26]=""+library.settings().workers;f[27]=library.settings().snapshots?"ON":"OFF";f[28]=top?"TOP":"CONTENT";f[29]=keyboard;f[30]=library.settings().reducedMotion?"ON":"OFF";f[31]=""+key;
   var all=library.instances();int start=selected/8*8;
   f[13]=""+(all.size()+1);for(int i=0;i<8&&start+i<=all.size();i++){int at=32+i*4;if(start+i==all.size()){f[at]="";f[at+2]="-1";f[at+3]="ADD";}else{var instance=all.get(start+i);f[at]=instance.name;f[at+1]=instance.version+("fabric".equals(instance.loader)?" / Fabric":"");f[at+2]=""+instance.icon;f[at+3]=!launchable(instance.version,instance.loader)?"COMING SOON":experimental(instance.version,instance.loader)?"EXPERIMENTAL":ProsperoVersions.release121(instance.version)&&developmentTest(instance.version,instance.loader)?"DEV TEST":"";}}
   if(page==10){List<String> options=choices();f[109]=options.stream().max(Comparator.comparingInt(String::length)).orElse("");int first=dropdownKind==1||dropdownKind==2?0:visibleListFirst(options.size());f[107]=first>0?options.get(first-1):"";f[108]=first+8<options.size()?options.get(first+8):"";f[82]=switch(dropdownKind){case 0->"Choose version";case 1,2->"Choose instance icon";case 3->"Game resolution";case 4->"Parallel downloads";case 6->"Choose loader";case 7->"Choose key or mouse button";case 8->"Color theme";case 9->"Repair download";default->"Animated background";};f[83]=""+options.size();f[84]=""+first;for(int i=0;i<8&&first+i<options.size();i++)f[85+i]=options.get(first+i);f[93]=""+dropdownKind;}
@@ -492,7 +510,7 @@ public final class ProsperoLauncher {
    else{var hit=contentHits.get(n);boolean queued=contentQueue.stream().anyMatch(q->q.project().equals(hit.id())&&q.kind()==contentKind);boolean installed=localContent.stream().anyMatch(i->i.project().equals(hit.id()));f[85+n]=(installed?"[I] ":queued?"[X] ":"[ ] ")+hit.title()+"  /  "+hit.downloads()+" downloads";f[96+n]=contentIcons.getOrDefault(hit.id(),"");}
   }f[70]=contentInstalled?"Installed in this instance. RIGHT from Next switches back to Browse.":contentKind==ProsperoModrinth.Kind.MOD?"fabric".equals(detail.loader)?"Fabric mods for "+detail.version+". Required dependencies included.":"Mods need a Fabric instance. Create one with the Fabric loader.":contentKind==ProsperoModrinth.Kind.SHADER?(ProsperoGraphics.zink(detail.version,detail.loader)?"Iris: use a Fabric instance, install matching Iris from Mods, then choose your pack in-game.":"Vitrail: install the mod from Mods, then choose your pack in-game."):"Downloaded packs are available in Minecraft Resource Packs.";}
 
-  f[80]=avatar;f[81]=session==null?"Sign in":session.name;f[94]=library.settings().showControls?"ON":"OFF";f[95]=page==12?"SHADOWS: "+shadowScale+"%":launchPrepared?"READY":"WAIT";
+  f[80]=localProfileSelected()?"":avatar;f[81]=localProfileSelected()?library.settings().localPlayer:session==null?"Sign in":session.name;f[94]=library.settings().showControls?"ON":"OFF";f[95]=page==12?"SHADOWS: "+shadowScale+"%":launchPrepared?"READY":"WAIT";
   f[77]=""+feedbackSerial;f[78]=feedbackCue;f[79]=library.settings().vibration?"ON":"OFF";
   if(page==15){
    f[7]="CIRCLE  Close browser management";f[107]=web==null?webError:web.status().state();f[108]="";f[109]="";f[110]="";
@@ -502,19 +520,24 @@ public final class ProsperoLauncher {
     var qr=ProsperoQrCode.encodeText(address,ProsperoQrCode.Ecc.MEDIUM);StringBuilder matrix=new StringBuilder();int size=qr.size+8;matrix.append(size).append(':');for(int y=-4;y<qr.size+4;y++)for(int x=-4;x<qr.size+4;x++)matrix.append(qr.getModule(x,y)?'1':'0');f[102]=matrix.toString();
    }}
   }
-  f[105]=physicalEditing?"PHYSICAL":"CONTROLLER";f[106]=keyboardReturn==12?"Search content":keyboardReturn==5?"Rename instance":"Instance name";
+  f[105]=physicalEditing?"PHYSICAL":"CONTROLLER";f[106]=keyboardReturn==3?"Offline username":keyboardReturn==12?"Search content":keyboardReturn==5?"Rename instance":"Instance name";
   f[104]=""+(page==10&&dropdownKind==8?row:library.settings().theme);f[75]=""+library.settings().background;f[76]=BACKGROUNDS[library.settings().background-1];
   f[73]=ProsperoChannel.label();f[74]=page==8?""+guideSection:"";
-  f[71]=ProsperoChannel.offline()&&offlineAccount!=null&&offlineAccount.valid(System.currentTimeMillis())?"OFFLINE":"";f[72]=offlineAccount==null?"":offlineAccount.name;
-  f[69]=detail!=null&&launchable(detail.version,detail.loader)?"SUPPORTED":"PENDING";if(page!=12&&page!=13&&page!=14)f[70]=versions.isEmpty()?"":snapshot(versions.get(versionChoice).id())?versions.get(versionChoice).id()+" / supported snapshot. Use a separate world.":draftSupported(versions.get(versionChoice).id())?(ProsperoChannel.tempGameTest()?versions.get(versionChoice).id()+" full game requires Microsoft sign-in.":versions.get(versionChoice).id()+" demo can launch on this build."):"Download available. Play support coming soon.";f[68]=library.settings().showIntro?"ON":"OFF";f[67]="Data and downloads: "+library.root;f[66]=lowercase?"LOWER":"UPPER";f[64]=busy?"BUSY":"IDLE";f[65]=detail!=null&&ProsperoGraphics.zink(detail.version,detail.loader)?detail.version+" full game / native GLFW/Zink gameplay":detail!=null&&!launchable(detail.version,detail.loader)?"Download available. Play support coming soon.":detail!=null&&snapshot(detail.version)?detail.version+" / native SDL gameplay":((detail==null?"26.3":detail.version)+(ProsperoChannel.tempGameTest()?" full game / native ":" demo / native ")+(detail!=null&&"26.2".equals(detail.version)?"GLFW/SDL gameplay":"SDL gameplay"));if(page==4&&!busy&&detail!=null&&detail.id.equals(migratingId))f[2]=migrationStatus;return cached=f;
+  f[71]=ProsperoChannel.tempGameTest()?"LOCAL":ProsperoChannel.offline()&&offlineAccount!=null&&offlineAccount.valid(System.currentTimeMillis())?"OFFLINE":"";f[72]=ProsperoChannel.tempGameTest()?library.settings().localPlayer:offlineAccount==null?"":offlineAccount.name;
+  f[69]=detail!=null&&launchable(detail.version,detail.loader)?"SUPPORTED":"PENDING";if(page!=12&&page!=13&&page!=14)f[70]=versions.isEmpty()?"":snapshot(versions.get(versionChoice).id())?versions.get(versionChoice).id()+" / supported snapshot. Use a separate world.":draftSupported(versions.get(versionChoice).id())?(ProsperoChannel.tempGameTest()?versions.get(versionChoice).id()+" use a Microsoft account or an offline profile.":versions.get(versionChoice).id()+" demo can launch on this build."):"Download available. Play support coming soon.";f[68]=library.settings().showIntro?"ON":"OFF";f[67]="Data and downloads: "+library.root;f[66]=lowercase?"LOWER":"UPPER";f[64]=busy?"BUSY":"IDLE";f[65]=detail!=null&&ProsperoGraphics.zink(detail.version,detail.loader)?detail.version+" full game / native GLFW/Zink gameplay":detail!=null&&!launchable(detail.version,detail.loader)?"Download available. Play support coming soon.":detail!=null&&snapshot(detail.version)?detail.version+" / native SDL gameplay":((detail==null?"26.3":detail.version)+(ProsperoChannel.tempGameTest()?" full game / native ":" demo / native ")+(detail!=null&&"26.2".equals(detail.version)?"GLFW/SDL gameplay":"SDL gameplay"));if(page==4&&!busy&&detail!=null&&detail.id.equals(migratingId))f[2]=migrationStatus;return cached=f;
  }
  synchronized String[] arguments(Path ignoredWork,Path ignoredAssets)throws Exception {
   if(!launch||detail==null||receipt==null)throw new IllegalStateException("No installed instance selected");
   if(offlineLaunch){if(!ProsperoChannel.offline())throw new java.io.IOException("Offline launch is unavailable in the Demo branch");offlineAccount=ProsperoOfflineAccount.load(library.root,System.currentTimeMillis());if(offlineAccount==null)throw new java.io.IOException("Offline profile needs verification");}
-  boolean full=ProsperoChannel.tempGameTest()&&!offlineLaunch;
+  boolean local=!localLaunchName.isEmpty();
+  if(local){
+   if(!ProsperoChannel.tempGameTest())throw new java.io.IOException("Local profiles are unavailable in this build.");
+   ProsperoLibrary.localPlayerName(localLaunchName);
+  }
+  boolean full=ProsperoChannel.tempGameTest()&&!offlineLaunch&&!local;
   if(full&&(session==null||!session.valid(System.currentTimeMillis())))throw new java.io.IOException("Your session expired. Sign in again before launching.");
-  String player=full?session.name:offlineLaunch?offlineAccount.name:"PS5Demo",id=full?session.id:offlineLaunch?offlineAccount.id:UUID.nameUUIDFromBytes("OfflinePlayer:PS5Demo".getBytes(java.nio.charset.StandardCharsets.UTF_8)).toString();
-  java.util.List<String> args=new java.util.ArrayList<>(java.util.List.of("--username",player,"--uuid",id,"--accessToken",full?session.accessToken():"0","--version",detail.version,"--versionType",snapshot(detail.version)?"snapshot":"release","--gameDir",library.game(detail).toString(),"--assetsDir",cacheRoot.resolve("assets").toString(),"--assetIndex",receipt.assetIndex,"--width",""+ProsperoLibrary.RESOLUTIONS[library.settings().resolution][0],"--height",""+ProsperoLibrary.RESOLUTIONS[library.settings().resolution][1]));if(!full){args.add(0,"--disableChat");args.add(0,"--disableMultiplayer");if(!offlineLaunch)args.add(0,"--demo");}  if(ProsperoGraphics.vulkan(detail.version,receipt.window))java.util.Collections.addAll(args,"--graphicsBackend","vulkan");return args.toArray(String[]::new);
+  String player=local?localLaunchName:full?session.name:offlineLaunch?offlineAccount.name:"PS5Demo",id=local?UUID.nameUUIDFromBytes(("OfflinePlayer:"+localLaunchName).getBytes(java.nio.charset.StandardCharsets.UTF_8)).toString():full?session.id:offlineLaunch?offlineAccount.id:UUID.nameUUIDFromBytes("OfflinePlayer:PS5Demo".getBytes(java.nio.charset.StandardCharsets.UTF_8)).toString();
+  java.util.List<String> args=new java.util.ArrayList<>(java.util.List.of("--username",player,"--uuid",id,"--accessToken",full?session.accessToken():"0","--version",detail.version,"--versionType",snapshot(detail.version)?"snapshot":"release","--gameDir",library.game(detail).toString(),"--assetsDir",cacheRoot.resolve("assets").toString(),"--assetIndex",receipt.assetIndex,"--width",""+ProsperoLibrary.RESOLUTIONS[library.settings().resolution][0],"--height",""+ProsperoLibrary.RESOLUTIONS[library.settings().resolution][1]));if(!full&&!local){args.add(0,"--disableChat");args.add(0,"--disableMultiplayer");if(!offlineLaunch)args.add(0,"--demo");}  if(ProsperoGraphics.vulkan(detail.version,receipt.window))java.util.Collections.addAll(args,"--graphicsBackend","vulkan");return args.toArray(String[]::new);
  }
  @Override public String toString(){return "ProsperoCraft launcher [credentials redacted]";}
 }

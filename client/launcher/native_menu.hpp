@@ -322,11 +322,20 @@ inline void compose_content(Canvas& c) noexcept {
   const char* values[]={fields[25].data(),fields[26].data(),fields[30].data(),fields[27].data(),fields[68].data(),"Configure controls",themes[prospero_palette::selected]};
   for(int i=0;i<7;i++)row_control(c,300+i*96+slide,names[i],values[i],row==i,true,86);
  }else if(page==3){
-  label(c,70,185+slide,"Microsoft account",64);label(c,75,270+slide,"Sign in on your phone. Your password stays with Microsoft.",24,0x91ad9b);
-  c.rounded(70,340+slide,1000,548,28,ink(0x10221c));label(c,116,391+slide,"MICROSOFT ACCOUNT",24,0x8fbb9b);title(c,116,447+slide,fields[5].data(),42,750);if(signed_in)player_head(c,929,389+slide,96);
+  const bool local_profile=std::strcmp(fields[5].data(),"Offline profile")==0;
+  const bool local_available=std::strcmp(fields[71].data(),"LOCAL")==0;
+  label(c,70,185+slide,"Accounts",64);label(c,75,270+slide,"Choose a Microsoft account or a local offline profile.",24,0x91ad9b);
+  c.rounded(70,340+slide,1000,548,28,ink(0x10221c));label(c,116,391+slide,local_profile?"OFFLINE PROFILE":"MICROSOFT ACCOUNT",24,0x8fbb9b);title(c,116,447+slide,local_profile?fields[81].data():fields[5].data(),42,750);if(signed_in&&!local_profile)player_head(c,929,389+slide,96);
   if(fields[3][0]){login_qr(c,747,514+slide,7);label(c,116,539+slide,"ENTER THIS CODE",24,0x8eaf9a);label(c,115,584+slide,fields[3].data(),64,0xc9f5cd);wrap(c,117,699+slide,"https://www.microsoft.com/link",600,2);}
-  else wrap(c,117,547+slide,"Sign in with your Microsoft account to play Minecraft Java. Your saved account reconnects on future launches. You can sign out on this console at any time.",850,5);
-  action(c,1140,366+slide,700,signed_in?"SIGN OUT":"SIGN IN WITH MICROSOFT",row==0,true);wrap(c,1167,634+slide,fields[2].data(),620,6);
+  else wrap(c,117,547+slide,local_profile
+      ?"Download and play singleplayer or join servers configured for offline mode. Changing your offline username creates a different player identity."
+      :"Microsoft sign-in provides your owned Java profile and access to authenticated servers. You can also create an offline profile with a username.",850,5);
+  action(c,1140,366+slide,700,local_profile?"USE MICROSOFT ACCOUNT":signed_in?"SIGN OUT":"SIGN IN WITH MICROSOFT",row==0,true);
+  if(local_available){
+   action(c,1140,466+slide,700,fields[72][0]?"USE OFFLINE PROFILE":"CREATE OFFLINE PROFILE",row==1,false);
+   action(c,1140,566+slide,700,"EDIT OFFLINE USERNAME",row==2,false);
+  }
+  wrap(c,1167,690+slide,fields[2].data(),620,4);
  }else if(page==4){
   title(c,70,185+slide,fields[16].data(),64,1770);
   c.rounded(70,330+slide,620,560,28,ink(0x10221c));block(c,245,385+slide,270,number(18));
@@ -373,7 +382,7 @@ inline void compose_content(Canvas& c) noexcept {
   c.rounded(170,190,1580,745,32,ink(0x142e23));
   label(c,235,240,"Getting started",64);
   wrap(c,240,347,"Create an instance to choose a Minecraft version, loader, name and icon.",1390,3);
-  wrap(c,240,468,"Sign in with your Microsoft account, download 26.3, then choose PLAY. Your account, worlds and verified downloads are saved for future launches.",1390,3);
+  wrap(c,240,468,"Choose a Microsoft account or an offline profile, download 26.3, then choose PLAY. Your account, worlds and verified downloads are saved for future launches.",1390,3);
   wrap(c,240,570,"Use the shoulder buttons to explore Instances, Settings and your account. Press OPTIONS for the controller guide. All 26.x releases and snapshots are available to download; 26.2 and 26.3 Vanilla and Fabric are supported, alongside snapshots 1-6.",1390,5);
   action(c,240,773,330,"OK",row==1,true);
   if(row==0)selection(c,680,773,430,76);
@@ -392,6 +401,7 @@ inline void compose_content(Canvas& c) noexcept {
   label(c,766,795,"Show next time",30);
  }else if(page==6){
   label(c,70,185,fields[106].data(),64);c.rounded(70,300,1770,116,22,ink(0x183c2a));title(c,103,330,fields[29].data(),42,1650);
+  if(std::strcmp(fields[106].data(),"Offline username")==0)label(c,103,426,"1-16 letters, numbers or underscores",24,0x91ad9b);
   const char* chars=std::strcmp(fields[66].data(),"LOWER")==0?"1234567890qwertyuiopasdfghjkl_zxcvbnm .-":"1234567890QWERTYUIOPASDFGHJKL_ZXCVBNM .-";int chosen=number(31);
   bool physical=std::strcmp(fields[105].data(),"PHYSICAL")==0;
   if(physical)wrap(c,103,470,"Type on your keyboard. Enter confirms; Esc cancels. Use the controller to show its keyboard again.",1560,3);
@@ -460,7 +470,7 @@ inline void compose(Canvas& c) noexcept {
  const int slide=0;layout_slide=0;(void)slide;(void)elapsed;
  c.rounded(40,32,1840,108,24,ink(0x10221c));block(c,66,53,64,0);label(c,149,66,"ProsperoCraft",30);
  const bool signed_in=fields[81][0]&&std::strcmp(fields[5].data(),"Not signed in")!=0;
- const char* tabs[]={"Instances","Settings",signed_in?fields[81].data():"Sign in"};const int tx[]={865,1245,1555},tw[]={350,280,280};
+ const char* tabs[]={"Instances","Settings",signed_in?fields[81].data():"Accounts"};const int tx[]={865,1245,1555},tw[]={350,280,280};
  for(int i=0;i<3;i++){
   const bool current=tab==i,account=i==2&&signed_in;
   const int name_width=tw[i]-(account?68:0);
@@ -567,7 +577,7 @@ inline void draw(ps5::demo::Canvas& output) noexcept {compose(output);}
 #endif
 inline void pointer_input(int x,int y,bool click)noexcept{
   if(page_turn.moving(now_ms())||card_open.moving(now_ms()))return;
-  int page=number(11);auto hit=desktop_hit(page,x,y,page==0?number(14):number(84),page==0?number(13):page==12?number(93):number(83),layout_slide,std::strcmp(fields[71].data(),"OFFLINE")==0,std::strcmp(fields[103].data(),"INSTALLED")==0,std::strcmp(fields[82].data(),"Shaders")==0);
+  int page=number(11);auto hit=desktop_hit(page,x,y,page==0?number(14):number(84),page==0?number(13):page==12?number(93):number(83),layout_slide,std::strcmp(fields[71].data(),"OFFLINE")==0,std::strcmp(fields[103].data(),"INSTALLED")==0,std::strcmp(fields[82].data(),"Shaders")==0,std::strcmp(fields[71].data(),"LOCAL")==0);
 if(page==0&&y>=495&&y<585){if(x>=5&&x<58&&number(14)>0)hit={5,0};if(x>=1862&&x<1915&&number(14)+8<number(13))hit={5,1};}
 #ifdef PROSPERO_TOOLKIT
   if(page_turn.moving(now_ms()))hit={};

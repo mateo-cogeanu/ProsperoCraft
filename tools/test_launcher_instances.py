@@ -205,8 +205,82 @@ var store=new ProsperoLibrary(root.resolve("store"));if(!store.instances().isEmp
    var currentField=ProsperoLauncher.class.getDeclaredField("current");currentField.setAccessible(true);Object previous=currentField.get(null);currentField.set(null,fm);
    if(!ProsperoLauncher.gameMain().equals(ProsperoFabric.MAIN)||!ProsperoLauncher.selectedZink())throw new AssertionError("upstream Knot path");
    currentField.set(null,previous);sessionField.set(fm,null);denied(()->fm.arguments(null,null));
+   fl.localProfile("LocalFabric",true);
+   var localFabric=new ProsperoLauncher(testAuth,zr,InstanceCheck::open,()->{});
+   detailField.set(localFabric,fi);play.invoke(localFabric);waitFor(localFabric);
+   List<String> localFabricArgs=List.of(localFabric.arguments(null,null));
+   if(!localFabric.tick(0)[10].equals("LAUNCH")||!localFabricArgs.contains("LocalFabric")
+       ||localFabricArgs.contains("--demo")||localFabricArgs.contains("--disableMultiplayer"))
+    throw new AssertionError("local Fabric profile lost");
+
   }
   if(ProsperoLauncher.launchable("26.1.3","vanilla")||ProsperoLauncher.launchable("26.1-snapshot-1","vanilla")||ProsperoGraphics.zink("26.2","vanilla")||!ProsperoGraphics.vulkan("26.2","GLFW")||!ProsperoGraphics.vulkan("26.3","SDL"))throw new AssertionError("version/backend boundary");
+  // Download through the normal Play route with a local username and no Microsoft calls.
+  fixture();
+  for(var entry:files.entrySet())if(entry.getKey().equals(META)||entry.getKey().equals(ProsperoInstall.MANIFEST))
+   entry.setValue(bytes(new String(entry.getValue(),java.nio.charset.StandardCharsets.UTF_8).replace("26.1","26.3").replace("example:test:1","org.lwjgl:lwjgl-sdl:3.4.3")));
+  files.put(META.replace("26.1","26.3"),files.get(META));
+  byte[] localMetadata=files.get(META);
+  files.put(ProsperoInstall.MANIFEST,bytes("{\"versions\":[{\"id\":\"26.3\",\"type\":\"release\",\"url\":\""+META+"\",\"sha1\":\""+hash(localMetadata)+"\"}]}"));
+  Files.writeString(channel,"temp_gametest");
+  Path localRoot=root.resolve("local-profile");
+  var localLibrary=new ProsperoLibrary(localRoot);
+  localLibrary.settings().showIntro=false;localLibrary.settings().showControls=false;localLibrary.save();
+  var localInstance=localLibrary.add("Local world","26.3",1);
+  int authBeforeLocal=authRequests.get();
+  var localModel=new ProsperoLauncher(testAuth,localRoot,InstanceCheck::open,()->{});
+  localModel.tick(0x10008002); // Accounts tab through the actual desktop command.
+  if(!localModel.tick(0)[11].equals("3"))throw new AssertionError("accounts tab");
+  localModel.tick(0x40);
+  localModel.tick(0x4000);
+  if(!localModel.tick(0)[106].equals("Offline username"))throw new AssertionError("controller profile editor");
+  for(char ch:"Local_Player".toCharArray())localModel.tick(0x30000000|ch);
+  localModel.tick(0x20000001); // Enter commits through the physical-input route.
+  if(!localModel.tick(0)[5].equals("Offline profile")||!localModel.tick(0)[81].equals("Local_Player"))
+   throw new AssertionError("local selection");
+  localModel.tick(0x10008000|3<<20|3<<16|2);
+  localModel.tick(0x8); // Clear the username; invalid commit stays in the editor.
+  localModel.tick(0x8000);
+  if(!localModel.tick(0)[11].equals("6")||!new ProsperoLibrary(localRoot).settings().localPlayer.equals("Local_Player"))
+   throw new AssertionError("invalid username replaced profile");
+  localModel.tick(0x2000);
+  localModel.tick(0x10008000|3<<20|0<<16|0);
+  localModel.tick(0x4000);
+  int localDownloadReads=reads;
+  localModel.tick(0x4000);
+  waitFor(localModel);
+  if(!localModel.tick(0)[10].equals("LAUNCH")||reads<=localDownloadReads)throw new AssertionError("fresh local download: "+localModel.tick(0)[2]);
+  List<String> localArgs=List.of(localModel.arguments(null,null));
+  String localId=UUID.nameUUIDFromBytes(bytes("OfflinePlayer:Local_Player")).toString();
+  if(localArgs.contains("--demo")||localArgs.contains("--disableMultiplayer")||localArgs.contains("--disableChat")
+      ||!localArgs.get(localArgs.indexOf("--username")+1).equals("Local_Player")
+      ||!localArgs.get(localArgs.indexOf("--uuid")+1).equals(localId)
+      ||!localArgs.get(localArgs.indexOf("--accessToken")+1).equals("0"))
+   throw new AssertionError("local identity or multiplayer arguments");
+  if(!Files.readString(localRoot.resolve("cache/versions/26.3/client.jar")).equals("original client bytes"))
+   throw new AssertionError("publisher game bytes changed");
+  var installedLocalLibrary=new ProsperoLibrary(localRoot);
+  Files.writeString(installedLocalLibrary.game(installedLocalLibrary.instances().getFirst()).resolve("keep-world"),"keep");
+  new ProsperoAccountStore(localRoot).save("STORED_REFRESH_NOT_USED_OFFLINE");
+  var reopenedLocal=new ProsperoLauncher(testAuth,localRoot,url->{throw new AssertionError("healthy local launch requested download");},()->{});
+  reopenedLocal.tick(0x4000);reopenedLocal.tick(0x4000);waitFor(reopenedLocal);
+  if(!reopenedLocal.tick(0)[10].equals("LAUNCH")||!List.of(reopenedLocal.arguments(null,null)).contains(localId))
+   throw new AssertionError("offline restart identity/cache");
+  if(authRequests.get()!=authBeforeLocal)throw new AssertionError("local profile used Microsoft");
+  var switcher=new ProsperoLauncher(testAuth,localRoot,url->{throw new AssertionError("account switch download");},()->{});
+  sessionField.set(switcher,new ProsperoAuth.Session("OwnedPlayer","0123456789abcdef0123456789abcdef","MS_TOKEN",System.currentTimeMillis()+3600000));
+  switcher.tick(0x10008002);
+  switcher.tick(0x4000);
+  if(!switcher.tick(0)[5].equals("OwnedPlayer")||new ProsperoLibrary(localRoot).settings().localProfile)
+   throw new AssertionError("Microsoft selection not persisted");
+  switcher.tick(0x40);switcher.tick(0x4000);
+  if(!switcher.tick(0)[5].equals("Offline profile")||!new ProsperoLibrary(localRoot).settings().localProfile)
+   throw new AssertionError("offline reselection");
+  for(String invalid:new String[]{"","with space","../bad","Player-Name","abcdefghijklmnopq","é"})
+   denied(()->localLibrary.localProfile(invalid,true));
+  if(!Files.readString(installedLocalLibrary.game(installedLocalLibrary.instances().getFirst()).resolve("keep-world")).equals("keep"))
+   throw new AssertionError("local profile changed world");
+  System.out.println("PASS local username editor/download/verified original bytes/zero Microsoft requests/stable UUID/offline cache reuse/profile switching/multiplayer flags/validation/world preservation");
   Files.writeString(channel,"demo");if(ProsperoLauncher.launchable("26.1","vanilla"))throw new AssertionError("Zink leaked into default Demo");
   Files.delete(zinkResource);Files.delete(channel);System.clearProperty("ps5.glfw.binding");
   System.out.println("PASS normal launcher Zink build gate, all three Vanilla releases, normal labels, verified receipt/binding order, normal26.1.xVanilla/Fabric labels, owned-account guard, original GL arguments, genuine Fabric install/repair/Knot selection and untouched Iris test JAR launch preparation for all releases, Vulkan/default boundaries");
