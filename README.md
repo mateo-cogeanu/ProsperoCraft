@@ -6,9 +6,11 @@
 
 Download Minecraft on your console, keep separate instances for worlds and mods, and play with DualSense controls, native Vulkan graphics and game audio. ProsperoCraft includes Microsoft sign-in, a Modrinth content browser, controller remapping and six saved launcher themes.
 
-**[Download 01.000.286](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.286)** · [Latest release](https://github.com/mateo-cogeanu/ProsperoCraft/releases/latest) · [Changelog](CHANGELOG.md) · [Report an issue](https://github.com/mateo-cogeanu/ProsperoCraft/issues/new/choose)
+**[Download 01.000.287](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.287)** · [Latest release](https://github.com/mateo-cogeanu/ProsperoCraft/releases/latest) · [Changelog](CHANGELOG.md) · [Report an issue](https://github.com/mateo-cogeanu/ProsperoCraft/issues/new/choose)
 
 ProsperoCraft handles Minecraft installation, accounts, input and game integration. Its [Native Java 25 Runtime](https://github.com/mateo-cogeanu/ps5-java25-homebrew) is maintained separately. Official Minecraft game JARs and asset objects are downloaded and verified from the publisher, rather than bundled with the app.
+
+Release **01.000.287** adds local offline profiles and instance downloads without Microsoft sign-in. The maintainer confirmed the build and shader rendering on PS5. [Release notes](docs/releases/client-offline-profiles-287.md) · [Console acceptance](docs/validation/client287-console-acceptance-2026-11-18.json) · [ProsperoStore update submitted](https://github.com/darkxex/ps5-homebrew-catalog/pull/1340).
 
 Release **01.000.286** fixes a fresh-install startup error when the shader cache exists before the launcher writes its library catalog. The maintainer confirmed the build on PS5 firmware 13.60. [Release notes](docs/releases/client-first-launch-286.md) · [Console acceptance](docs/validation/client286-console-acceptance-2026-11-16.json) · [ProsperoStore update submitted](https://github.com/darkxex/ps5-homebrew-catalog/pull/1324).
 
@@ -119,9 +121,9 @@ If Play says Coming soon, compare the **version and loader** with the compatibil
 
 ![ProsperoCraft roadmap with local offline profiles and third-party accounts planned before Forge and Minecraft 1.20.x](assets/roadmap/prosperocraft-roadmap.png)
 
-Offline profiles and third-party accounts are the next priorities, ahead of Minecraft 1.20.1 and Forge.
+Local offline profiles are available in 01.000.287. Third-party accounts are the next priority, ahead of Minecraft 1.20.1 and Forge.
 
-- **Local offline profiles.** Candidate 287 adds username-only profiles and downloads without Microsoft sign-in, covering singleplayer and servers configured for offline mode. Downloading missing files needs internet access. Installed instances can reuse verified files while offline. PS5 validation is pending. [Candidate notes](docs/client-local-profiles-287.md)
+- **Local offline profiles.** Release 287 adds username-only profiles and downloads without Microsoft sign-in, covering singleplayer and servers configured for offline mode. Downloading missing files needs internet access. Installed instances can reuse verified files while offline. The maintainer confirmed the build on PS5. [Profile guide](docs/client-local-profiles-287.md)
 - **Third-party accounts.** Explore Ely.by as the first provider alongside Microsoft, with support for compatible community servers and skin services. Wider support for authlib-injector-compatible providers depends on what works on PS5. [Ely.by integration documentation](https://docs.ely.by/en/minecraft-auth.html)
 
 The [1.20.x compatibility plan](docs/client-1.20-plan.md) still covers Vanilla 1.20 through 1.20.6 ahead of NeoForge.
@@ -132,6 +134,7 @@ The table links each capability to its first public release. Initial development
 
 | Feature | First available version | What it enables |
 | --- | --- | --- |
+| Local offline profiles | [01.000.287](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.287) | Username-only profiles, verified instance downloads without Microsoft sign-in, singleplayer and offline-mode server access. |
 | Minecraft menu, then playable worlds | [Menu 062](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/Client_Menu-v01.000.062); [world 065](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/Client_World-v01.000.065); [playable 066](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/Client_Playable-v01.000.066) | The first menu, world entry and responsive gameplay checkpoints; 066 did not yet have audible sound. |
 | Native instance launcher and resolution selection | [Development 079](docs/client-instances-079.md) → [01.000.082](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.082) | Separate instances, resolution choices and quit/relaunch. Audio was confirmed on development 067 before this release. |
 | Vulkan launcher and authenticated play | [Development 087](docs/client-toolkit-087.md) / [090](docs/client-temp-gametest-090.md) → [01.000.096](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.096) | Animated Vulkan UI and owned-account play; saved sign-in began in 091, permanent deletion in 094, both first public in 096. |

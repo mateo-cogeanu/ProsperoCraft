@@ -1,0 +1,48 @@
+{
+  "app_version": "01.000.287",
+  "title_id": "PPSA99874",
+  "package_sha256": "59200aa6d31807952093c9104aa675c27788970a477a01f0f9f3799ff0e7999d",
+  "release": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.287",
+  "release_tag_commit": "86d118ef225d406dea24cdb557cb698fdd783b6c",
+  "matching_build_source_commit": "2096cd64c0e464c2b17e77a6df6a4a60d502f297",
+  "catalog_pr": "https://github.com/darkxex/ps5-homebrew-catalog/pull/1340",
+  "archive": "https://github.com/mateo-cogeanu/ps5-homebrew-history/tree/b673149d72d120d91d4947daa4d4baeac828579e/prosperocraft/Client_287_Local_Profiles",
+  "uploaded_assets": [
+    {
+      "name": "client287-build-validation.json",
+      "bytes": 9279,
+      "sha256": "19f4c313728248960999b17a155d3666ed12eb82a9a7f5aeec750509e27a5cdb",
+      "url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/download/01.000.287/client287-build-validation.json"
+    },
+    {
+      "name": "client287-console-validation.json",
+      "bytes": 552,
+      "sha256": "8c8eb291099f249f6e10f8527c8ad194a0c03905d0bbe47e839065d1d0edc9d8",
+      "url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/download/01.000.287/client287-console-validation.json"
+    },
+    {
+      "name": "client287-openal-source-relink.zip",
+      "bytes": 199412950,
+      "sha256": "acca4c543ec79adf9584da0694d83dbf605d6360779c1b99de322d3b57c7d2b4",
+      "url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/download/01.000.287/client287-openal-source-relink.zip"
+    },
+    {
+      "name": "PPSA99874.zip",
+      "bytes": 128588325,
+      "sha256": "59200aa6d31807952093c9104aa675c27788970a477a01f0f9f3799ff0e7999d",
+      "url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/download/01.000.287/PPSA99874.zip"
+    },
+    {
+      "name": "SHA256SUMS",
+      "bytes": 379,
+      "sha256": "253589f8746d51559f8e4920c5a36ea674672fcec2044a2de2032916cf4a6ad4",
+      "url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/download/01.000.287/SHA256SUMS"
+    }
+  ],
+  "checks": [
+    "All five independently downloaded assets matched local checksums.",
+    "Normal and compatible OpenAL replacement relinks from the downloaded kit reproduced the tested native executable.",
+    "Catalog format, online asset and contentVersion verification passed. 259 catalog tests passed with two skips."
+  ],
+  "status": "GitHub release published and ProsperoStore catalog pull request submitted."
+}
