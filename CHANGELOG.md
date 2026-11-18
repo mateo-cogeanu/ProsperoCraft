@@ -1,5 +1,13 @@
 # Changelog
 
+## 01.000.287 · Local offline profiles, 2026-11-18
+
+- Create a username-only profile in Accounts and download instances without Microsoft sign-in.
+- Play singleplayer and join offline-mode servers with a saved local identity.
+- Switch between offline profiles and Microsoft accounts.
+
+See the [release notes](docs/releases/client-offline-profiles-287.md).
+
 ## 01.000.286 · First-launch library fix, 2026-11-16
 
 - Fix a startup failure on fresh installs when the launcher finds a shader cache before its library catalog exists.
