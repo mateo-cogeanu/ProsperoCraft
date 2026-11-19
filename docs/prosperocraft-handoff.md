@@ -56,7 +56,7 @@ For launcher changes, run `python3 tools/run_host_tests.py` from ProsperoCraft, 
 
 ## Making a ProsperoStore release
 
-The current accepted build is `01.000.288`; GitHub release and ProsperoStore submission are authorized. [Release notes](releases/client-mod-toggle-288.md) · [Console acceptance](validation/client288-console-acceptance-2026-11-19.json)
+The last documented release is `01.000.288`. [Release notes](releases/client-mod-toggle-288.md) · [Console acceptance](validation/client288-console-acceptance-2026-11-19.json) · [Publication record](validation/client288-store-publication-2026-11-19.json)
 
 1. Build a new `PPSA99874` app candidate with the active package tooling for the change. For the current launcher line, start with [`tools/package_client_121.py`](../tools/package_client_121.py) and the matching build record. Check the artifact version and title ID inside the ZIP, its source/runtime/dependency provenance, and its hash. The public ZIP is an installable app folder with `eboot.bin` and `sce_sys/`. It provisions verified original game files on the console. Exclude official game JARs and asset objects from public packages.
 2. Get the maintainer's physical PS5 confirmation for those exact package bytes and the shader rendering check. Record the validated scope, title ID, version and digest. Get explicit release and Store authorization for the exact build. Tie that authorization to the confirmed package and version. Preserve the accepted archive byte for byte.

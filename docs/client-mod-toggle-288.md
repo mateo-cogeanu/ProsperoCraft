@@ -30,3 +30,6 @@ required dependency produces the expected explanation. Check save/reload and
 shader rendering before release approval. Public release 287 remains unchanged.
 
 [Build validation](validation/client288-mod-toggle-2026-11-19.json)
+
+The maintainer subsequently confirmed build 288 works well and shaders work, and
+requested publication. [Console acceptance](validation/client288-console-acceptance-2026-11-19.json) · [Publication record](validation/client288-store-publication-2026-11-19.json).
