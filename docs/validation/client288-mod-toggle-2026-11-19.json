@@ -1,0 +1,10 @@
+{
+  "app_version": "01.000.288",
+  "title_id": "PPSA99874",
+  "package_sha256": "e2e931fcabe01d9b8a4dd95bb03a55c4db1f611a074decbba5787b71b08b7766",
+  "change": "X toggles installed mods between .jar and .jar.disabled without changing original file bytes or canonical content receipts. Installed rows show state; RIGHT retains uninstall confirmation. Manual and managed mods are supported.",
+  "dependency_policy": "Only active mods participate in graphics and dependency checks. Disabled required providers, including nested Fabric module IDs and aliases, cause an actionable enable-or-disable explanation. Modrinth plans and web uploads cannot silently restore disabled mods; default installation respects disabled Controlify.",
+  "checks": "All 21 launcher and 14 native host checks pass. Fixtures exercise the actual controller selection handler, exact byte and receipt preservation, state after reopen, reenable, destination collision, symlink/traversal refusal, disabled uninstall, selected project refusal, nested Fabric dependency refusal without download requests, optional root disabling and Controlify default preservation. Genuine Fabric loader directory discovery accepts .jar and ignores .jar.disabled. Signed local package and independent 288 package audit pass.",
+  "provenance": "Uses the existing 287 production build inputs, runtime, native graphics and launch policies. Candidate packaging/version gates advance to 288. No game JAR transformations or runtime source changes.",
+  "console_pending": "Check 288 Installed layout/controller toggle and uninstall focus; toggle manual and managed mods, restart launcher, launch with an optional mod disabled, reenable, verify disabled required dependency explanation, save/reload and shader rendering. Exact physical-console confirmation and release/Store authorization remain required. Public release 287 is unchanged."
+}

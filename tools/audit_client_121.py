@@ -67,7 +67,7 @@ def main():
         allowed = {'PPSA99874/eboot.bin', 'PPSA99874/sce_sys/param.json', prefix + 'client-probe.jar',
                    prefix + 'lib/libjava.so', prefix + 'resident-libraries-audit.json',
                    prefix + 'classes/prosperocraft-build.properties', prefix+'log4j2-startup.xml', prefix+'launcher-icons/attribution.json', prefix+'launcher-icon-source/attribution.json', prefix+'launcher-toolkit/instance_icons.hpp'}
-        if candidate in ('280', '281', '282', '283', '284', '285', '286', '287'):
+        if candidate in ('280', '281', '282', '283', '284', '285', '286', '287', '288'):
             allowed.update({prefix + 'lib/modules', prefix + 'release'})
             with TemporaryDirectory(prefix='prosperocraft-http-package-') as temporary:
                 original = Path(old.extract(prefix + 'lib/modules', Path(temporary) / 'old'))
@@ -81,10 +81,10 @@ def main():
             raise ValueError('Unexpected baseline change: ' + repr(changed))
         added = sorted(set(names) - set(old.namelist()))
         older_provider = {prefix + n for n in ('ports/' + OSHI6410_JAR, 'oshi6410-source-pin.json',
-                                                'oshi6410-platform-audit.json')} if candidate in ('257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280', '281', '282', '283', '284', '285', '286', '287') else set()
-        if candidate in ('280', '281', '282', '283', '284', '285', '286', '287'):
+                                                'oshi6410-platform-audit.json')} if candidate in ('257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280', '281', '282', '283', '284', '285', '286', '287', '288') else set()
+        if candidate in ('280', '281', '282', '283', '284', '285', '286', '287', '288'):
             older_provider.add(prefix + HTTP_IMAGE_AUDIT)
-        if candidate in ('281', '282', '283', '284', '285', '286', '287'):
+        if candidate in ('281', '282', '283', '284', '285', '286', '287', '288'):
             keyboard_mod = prefix + 'ports/' + CONTROLIFY_KEYBOARD_MOD
             older_provider.add(keyboard_mod)
             mod_bytes = new.read(keyboard_mod)
@@ -127,7 +127,7 @@ def main():
         for name, digest in os_audit['source_sha256'].items():
             if hashlib.sha256(new.read(prefix + 'oshi665-source/' + name)).hexdigest() != digest:
                 raise ValueError('OSHI665 packaged source mismatch')
-        if candidate in ('257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280', '281', '282', '283', '284', '285', '286', '287'):
+        if candidate in ('257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280', '281', '282', '283', '284', '285', '286', '287', '288'):
             old_audit = json.loads(new.read(prefix + 'oshi6410-platform-audit.json'))
             source_pin = new.read(prefix + 'oshi6410-source-pin.json')
             if (old_audit['version'] != '6.4.10' or source_pin != OSHI6410_PIN.read_bytes()
@@ -189,7 +189,7 @@ def main():
     for value in (b'PS5_RENDER_SIZE',b'PS5 selected render resolution is malformed or unavailable'):
         if value not in linked_text:raise ValueError('Missing selected-resolution native path')
     native = args.lwjgl333_build / 'ps5/lwjgl333.o'
-    if candidate in ('263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280', '281', '282', '283', '284', '285', '286', '287'):
+    if candidate in ('263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280', '281', '282', '283', '284', '285', '286', '287', '288'):
         native_audit = json.loads((native.parent / 'audit.json').read_text())
         adapter = native.parent / 'closures_wx.c.o'
         sizes = subprocess.check_output([str(args.llvm_nm), '-S', str(adapter)], text=True)
@@ -242,12 +242,12 @@ def main():
     manifest = json.loads((baseline / 'manifest.json').read_text())
     linked = [json.loads(line) for line in (args.build_dir / f'link{candidate}.rsp').read_text().splitlines()]
     replaced = {'inputs/062-backend.o', 'inputs/031-embedded-jvm.o', 'inputs/022-renderer.o','inputs/110-graphics-support.o','inputs/104-main.o', 'inputs/044-embedded-ps5sdl.o', 'inputs/032-embedded-java.o', 'inputs/109-builtin-libraries.o'}
-    if candidate in ('260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280', '281', '282', '283', '284', '285', '286', '287'):
+    if candidate in ('260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280', '281', '282', '283', '284', '285', '286', '287', '288'):
         replaced.add('inputs/048-embedded-jnidispatch.o')
         pin = json.loads((ROOT / 'client/launcher/jna-loader-runtime.json').read_text())
         jna = args.build_dir / 'registry/embedded-jnidispatch.o'
         expected_group = pin['group_sha256']
-        if candidate in ('262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280', '281', '282', '283', '284', '285', '286', '287'):
+        if candidate in ('262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280', '281', '282', '283', '284', '285', '286', '287', '288'):
             provider = json.loads((ROOT / 'client/launcher/jna-provider.json').read_text())
             expected_group = provider['resident_group_sha256']
             undefined = {line.split()[-1] for line in subprocess.check_output(
@@ -291,7 +291,7 @@ def main():
         raise ValueError('Missing/duplicate rebuilt SDL group')
     stack_patch = '0008-radv-shader-object-stage-storage.patch'
     patches = graphics_audit['wsi_diagnostics']['source_recipe']['patches']
-    if (stack_patch in patches) != (candidate in ('250', '251', '252', '253', '254', '255', '256', '257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280', '281', '282', '283', '284', '285', '286', '287')):
+    if (stack_patch in patches) != (candidate in ('250', '251', '252', '253', '254', '255', '256', '257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280', '281', '282', '283', '284', '285', '286', '287', '288')):
         raise ValueError('Wrong linked RADV shader-stage storage policy')
     graphics = [Path(n) for n in linked if n.endswith('/graphics-support.o')]
     if len(graphics) != 1 or sha(graphics[0]) != graphics_audit['objects_sha256']['graphics-support.o']:
@@ -325,7 +325,7 @@ def main():
         raise ValueError('Unexpected Fabric 26.1 observer policy')
     if (b'-Dps5.save263Observer=true\0' in elf) != (candidate == '255'):
         raise ValueError('Unexpected 26.3 save observer policy')
-    if (b'-Dps5.world2612Observer=true\0' in elf) != (candidate in ('266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280', '281', '282', '283', '284', '285', '286', '287')):
+    if (b'-Dps5.world2612Observer=true\0' in elf) != (candidate in ('266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280', '281', '282', '283', '284', '285', '286', '287', '288')):
         raise ValueError('Unexpected 26.1.2 world observer policy')
     if b'-Dps5.startupObserver=false\0' not in elf:
         raise ValueError('Unexpected startup snapshot policy')
@@ -337,8 +337,8 @@ def main():
         if option + b'\0' not in elf:
             raise ValueError(f'Retained option missing from actual{candidate} ELF: ' + option.decode())
     worker_trial = candidate == '276'
-    tuned_workers = candidate in ('275', '276', '278', '279', '280', '281', '282', '283', '284', '285', '286', '287')
-    for option, expected in ((b'-XX:ActiveProcessorCount=4', candidate not in ('275', '278', '279', '280', '281', '282', '283', '284', '285', '286', '287')),
+    tuned_workers = candidate in ('275', '276', '278', '279', '280', '281', '282', '283', '284', '285', '286', '287', '288')
+    for option, expected in ((b'-XX:ActiveProcessorCount=4', candidate not in ('275', '278', '279', '280', '281', '282', '283', '284', '285', '286', '287', '288')),
                              (b'-XX:ActiveProcessorCount=6', tuned_workers),
                              (b'-Dmax.bg.threads=3', worker_trial),
                              (b'-Dmax.bg.threads=5', tuned_workers),
@@ -347,13 +347,13 @@ def main():
                              (b'PS5_CHUNK_TRIAL workers=5 activeProcessors=6', worker_trial)):
         if (option + b'\0' in elf) != expected:
             raise ValueError('Unexpected chunk worker option: ' + option.decode())
-    if (b'-XX:ZOldGCThreads=1\0' in elf) != (candidate in ('249', '250', '251', '252', '253', '254', '255', '256', '257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280', '281', '282', '283', '284', '285', '286', '287')):
+    if (b'-XX:ZOldGCThreads=1\0' in elf) != (candidate in ('249', '250', '251', '252', '253', '254', '255', '256', '257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280', '281', '282', '283', '284', '285', '286', '287', '288')):
         raise ValueError('Unexpected ZGC old-generation worker policy')
-    if (b'PS5_ZINK using Vulkan pipelines for shaders\n' in elf) != (candidate in ('252', '253', '254', '255', '256', '257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280', '281', '282', '283', '284', '285', '286', '287')):
+    if (b'PS5_ZINK using Vulkan pipelines for shaders\n' in elf) != (candidate in ('252', '253', '254', '255', '256', '257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280', '281', '282', '283', '284', '285', '286', '287', '288')):
         raise ValueError('Unexpected Zink shader object opt-out policy')
-    if (b'PS5_ZINK pipeline shaders with synchronous compilation\0' in elf) != (candidate in ('253', '254', '255', '256', '257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280', '281', '282', '283', '284', '285', '286', '287')):
+    if (b'PS5_ZINK pipeline shaders with synchronous compilation\0' in elf) != (candidate in ('253', '254', '255', '256', '257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280', '281', '282', '283', '284', '285', '286', '287', '288')):
         raise ValueError('Unexpected Zink synchronous compilation policy')
-    if (b'PS5_MESA_CACHE persistent directory ready\0' in elf) != (candidate in ('285', '286', '287')):
+    if (b'PS5_MESA_CACHE persistent directory ready\0' in elf) != (candidate in ('285', '286', '287', '288')):
         raise ValueError('Unexpected persistent Mesa shader cache policy')
     if b'-XX:ConcGCThreads=2\0' not in elf:
         raise ValueError('Missing ZGC concurrent worker budget')
@@ -364,7 +364,7 @@ def main():
         raise ValueError('Pre-JVM reserve priming missing from actual executable')
     if 'std::strcmp(name,"lwjgl333") == 0' not in source:
         raise ValueError('No scoped builtin handle')
-    if candidate in ('261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280', '281', '282', '283', '284', '285', '286', '287'):
+    if candidate in ('261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '278', '279', '280', '281', '282', '283', '284', '285', '286', '287', '288'):
         resident_audit = json.loads((args.build_dir / 'registry/builtin-resident-audit.json').read_text())
         expected = ['jnidispatch', 'ps5glfw', 'ps5openal']
         if resident_audit.get('library_scoped_handles') != expected:

@@ -94,7 +94,7 @@ public final class ProsperoLauncher {
  static boolean quietGameplayCompilerLog(){
   return ("01.000.282".equals(ProsperoBuild.VERSION)||"01.000.283".equals(ProsperoBuild.VERSION)
       ||"01.000.284".equals(ProsperoBuild.VERSION)||"01.000.285".equals(ProsperoBuild.VERSION)
-        ||"01.000.286".equals(ProsperoBuild.VERSION)||"01.000.287".equals(ProsperoBuild.VERSION))
+        ||"01.000.286".equals(ProsperoBuild.VERSION)||"01.000.287".equals(ProsperoBuild.VERSION)||"01.000.288".equals(ProsperoBuild.VERSION))
       &&"26.3".equals(current.detail.version)&&"fabric".equals(current.detail.loader);
  }
  static void configureGameLaunch(){if("fabric".equals(current.detail.loader))ProsperoFabric.configure(current.loader,current.cacheRoot.resolve("versions/"+current.detail.version+"/client.jar"),current.detail.version);}
@@ -177,7 +177,7 @@ public final class ProsperoLauncher {
  private void repairDependencies(ProsperoLibrary.Instance instance,int attempt,boolean offline)throws Exception {
   if(!"fabric".equals(instance.loader))return;
   var game=library.game(instance);
-  ProsperoDependencies.verifyGraphics(modrinth.local(game,ProsperoModrinth.Kind.MOD).stream().map(file->game.resolve("mods").resolve(file.filename())).toList(),ProsperoGraphics.zink(instance.version,instance.loader));
+  ProsperoDependencies.verifyGraphics(modrinth.local(game,ProsperoModrinth.Kind.MOD).stream().filter(file->!file.disabled()).map(file->game.resolve("mods").resolve(file.filename())).toList(),ProsperoGraphics.zink(instance.version,instance.loader));
   try(var checker=fabric.dependencies(instance.version)){modrinth.repair(library.game(instance),instance.version,instance.loader,checker,(text,done,size)->{synchronized(this){if(!cancelled(attempt)){message=text;completed=done;total=size;cached=null;}}},()->cancelled(attempt),offline);}
  }
  private void prepareLaunch(ProsperoLibrary.Instance instance,ProsperoInstall.Receipt installed)throws Exception {prepareLaunch(instance,installed,false);}
@@ -393,6 +393,14 @@ public final class ProsperoLauncher {
   });return;}
 
   if(row==2||row==3){int next=row==2?Math.max(0,contentOffset-4):contentOffset+4;if(next!=contentOffset&&next<contentTotal){contentOffset=next;contentHits=List.of();browse();}return;}
+  if(contentInstalled&&contentKind==ProsperoModrinth.Kind.MOD&&row>=4&&row-4<contentRows()){
+   var instance=detail;var item=localContent.get(contentOffset+row-4);message=item.disabled()?"Enabling mod":"Disabling mod";
+   runTask("MOD",attempt->{
+    ProsperoInstall.active(()->cancelled(attempt));modrinth.toggleEnabled(library.game(instance),item);
+    var locals=modrinth.local(library.game(instance),contentKind);
+    synchronized(this){if(!cancelled(attempt)){localContent=locals;message=item.disabled()?"Mod enabled.":"Mod disabled until you enable it again.";feedback("success");cached=null;}}
+   });return;
+  }
   if(contentInstalled){if(row>=20&&row-20<contentRows()){pendingUninstall=localContent.get(contentOffset+row-20);uninstallReturnRow=row;page=14;row=0;}else message="Press RIGHT to select Uninstall.";return;}
   if(row<4||row-4>=contentHits.size())return;
   var hit=contentHits.get(row-4);if(localContent.stream().anyMatch(i->i.project().equals(hit.id()))){message="Already installed. Open Installed to see the file.";return;}modrinth.toggle(library.game(detail),new ProsperoModrinth.Selection(hit.id(),hit.title(),contentKind));contentQueue=modrinth.queue(library.game(detail));
@@ -506,9 +514,9 @@ public final class ProsperoLauncher {
   if(page==13){f[109]=java.util.stream.IntStream.range(0,23).mapToObj(i->i==0?"Restore default controller bindings":ProsperoInput.ACTIONS[i+7]+"  :  "+ProsperoInput.label(library.settings().controllerKeys[i+7])).max(Comparator.comparingInt(String::length)).orElse("");f[82]="Controller keybinds";int first=visibleListFirst(23);f[107]=first>0?(first-1==0?"Restore default controller bindings":ProsperoInput.ACTIONS[first+6]+"  :  "+ProsperoInput.label(library.settings().controllerKeys[first+6])):"";f[108]=first+7<23?ProsperoInput.ACTIONS[first+14]+"  :  "+ProsperoInput.label(library.settings().controllerKeys[first+14]):"";f[83]="23";f[84]=""+first;for(int n=0;n<7&&first+n<23;n++){int index=first+n;f[85+n]=index==0?"Restore default controller bindings":ProsperoInput.ACTIONS[index+7]+"  :  "+ProsperoInput.label(library.settings().controllerKeys[index+7]);}f[70]="USB keyboard/mouse use Minecraft Controls. Controller menu controls stay available.";}
   if(page==1)f[82]=draftLoader==1?fabricLabel():"Vanilla";
   if(page==12){f[82]=contentKind.title;f[83]=""+contentTotal;f[84]=""+contentOffset;f[91]=""+contentQueue.size();f[92]=contentQuery.isEmpty()?"Search Modrinth...":contentQuery;f[93]=""+contentRows();f[103]=contentInstalled?"INSTALLED":"BROWSE";f[102]=activeContentIcon;for(int n=0;n<contentRows();n++){
-   if(contentInstalled){var item=localContent.get(contentOffset+n);f[85+n]="[I] "+item.title();f[96+n]=contentIcons.getOrDefault(item.project(),"");}
+   if(contentInstalled){var item=localContent.get(contentOffset+n);f[85+n]=(item.disabled()?"[D] ":"[I] ")+(item.kind()==ProsperoModrinth.Kind.MOD?(item.disabled()?"Disabled - ":"Enabled - "):"")+item.title();f[96+n]=contentIcons.getOrDefault(item.project(),"");}
    else{var hit=contentHits.get(n);boolean queued=contentQueue.stream().anyMatch(q->q.project().equals(hit.id())&&q.kind()==contentKind);boolean installed=localContent.stream().anyMatch(i->i.project().equals(hit.id()));f[85+n]=(installed?"[I] ":queued?"[X] ":"[ ] ")+hit.title()+"  /  "+hit.downloads()+" downloads";f[96+n]=contentIcons.getOrDefault(hit.id(),"");}
-  }f[70]=contentInstalled?"Installed in this instance. RIGHT from Next switches back to Browse.":contentKind==ProsperoModrinth.Kind.MOD?"fabric".equals(detail.loader)?"Fabric mods for "+detail.version+". Required dependencies included.":"Mods need a Fabric instance. Create one with the Fabric loader.":contentKind==ProsperoModrinth.Kind.SHADER?(ProsperoGraphics.zink(detail.version,detail.loader)?"Iris: use a Fabric instance, install matching Iris from Mods, then choose your pack in-game.":"Vitrail: install the mod from Mods, then choose your pack in-game."):"Downloaded packs are available in Minecraft Resource Packs.";}
+  }f[70]=contentInstalled?(contentKind==ProsperoModrinth.Kind.MOD?"X Enable / disable mod. RIGHT Uninstall.":"Installed in this instance. RIGHT from Next switches back to Browse."):contentKind==ProsperoModrinth.Kind.MOD?"fabric".equals(detail.loader)?"Fabric mods for "+detail.version+". Required dependencies included.":"Mods need a Fabric instance. Create one with the Fabric loader.":contentKind==ProsperoModrinth.Kind.SHADER?(ProsperoGraphics.zink(detail.version,detail.loader)?"Iris: use a Fabric instance, install matching Iris from Mods, then choose your pack in-game.":"Vitrail: install the mod from Mods, then choose your pack in-game."):"Downloaded packs are available in Minecraft Resource Packs.";}
 
   f[80]=localProfileSelected()?"":avatar;f[81]=localProfileSelected()?library.settings().localPlayer:session==null?"Sign in":session.name;f[94]=library.settings().showControls?"ON":"OFF";f[95]=page==12?"SHADOWS: "+shadowScale+"%":launchPrepared?"READY":"WAIT";
   f[77]=""+feedbackSerial;f[78]=feedbackCue;f[79]=library.settings().vibration?"ON":"OFF";

@@ -31,6 +31,12 @@ public class DependencyCheck {
    Path customJar=custom.resolve("mods/custom-controller.jar");byte[] customMod=jar("controlify","9.0.0","{}",null);Files.write(customJar,customMod);
    defaultsClient.installDefaults(custom,"26.3","fabric",versions,(m,d,t)->{},()->false);
    check(Arrays.equals(customMod,Files.readAllBytes(customJar))&&reads==afterUninstall,"default setup duplicated a manually installed Controlify");
+   var manualController=defaultsClient.local(custom,ProsperoModrinth.Kind.MOD).getFirst();
+   defaultsClient.toggleEnabled(custom,manualController);int disabledControllerReads=reads;
+   defaultsClient.installDefaults(custom,"26.3","fabric",versions,(m,d,t)->{},()->false);
+   check(!defaultsClient.hasControlify(custom)&&reads==disabledControllerReads&&!Files.exists(customJar),"disabled Controlify was active or reinstalled");
+   defaultsClient.toggleEnabled(custom,defaultsClient.local(custom,ProsperoModrinth.Kind.MOD).getFirst());
+   check(defaultsClient.hasControlify(custom),"Controlify reenable not detected");
    defaultsClient.uninstall(custom,defaultsClient.local(custom,ProsperoModrinth.Kind.MOD).getFirst());
    defaultsClient.installDefaults(custom,"26.3","fabric",versions,(m,d,t)->{},()->false);
    check(defaultsClient.local(custom,ProsperoModrinth.Kind.MOD).isEmpty()&&reads==afterUninstall,"manually removed Controlify reappeared");
@@ -44,6 +50,19 @@ public class DependencyCheck {
    check(ProsperoDependencies.missing(List.of(game.resolve("mods/vitrail.jar"),game.resolve("mods/fabric-api.jar")),"26.3",versions).isEmpty(),"nested API module not recognized");
    Path bundled=game.resolve("mods/bundled.jar");Files.write(bundled,jar("bundled","1.0.0","{}",jar("fabric-key-mapping-api-v1","2.0.0","{}",null)));
    var variants=new ArrayList<Path>(List.of(game.resolve("mods/vitrail.jar"),game.resolve("mods/fabric-api.jar"),bundled));check(ProsperoDependencies.missing(variants,"26.3",versions).isEmpty(),"compatible nested provider versions rejected");Files.delete(bundled);
+   var disabledAPI=client.local(game,ProsperoModrinth.Kind.MOD).stream().filter(f->f.filename().equals("fabric-api.jar")).findFirst().orElseThrow();
+   client.toggleEnabled(game,disabledAPI);int disabledReads=reads;
+   try{client.repair(game,"26.3","fabric",versions,(m,d,t)->{},()->false,false);throw new AssertionError("disabled dependency reinstalled");}
+   catch(IOException expected){check(expected.getMessage().contains("disabled mod fabric-key-mapping-api-v1"),"disabled nested dependency not explained");}
+   check(reads==disabledReads&&!Files.exists(game.resolve("mods/fabric-api.jar")),"disabled repair used network or restored jar");
+   disabledAPI=client.local(game,ProsperoModrinth.Kind.MOD).stream().filter(f->f.filename().equals("fabric-api.jar")).findFirst().orElseThrow();
+   client.toggleEnabled(game,disabledAPI);
+   var disabledRoot=client.local(game,ProsperoModrinth.Kind.MOD).stream().filter(f->f.filename().equals("vitrail.jar")).findFirst().orElseThrow();
+   client.toggleEnabled(game,disabledRoot);
+   client.repair(game,"26.3","fabric",versions,(m,d,t)->{},()->false,false);
+   check(reads==disabledReads&&!Files.exists(game.resolve("mods/vitrail.jar")),"disabled root loaded or caused downloads");
+   disabledRoot=client.local(game,ProsperoModrinth.Kind.MOD).stream().filter(f->f.filename().equals("vitrail.jar")).findFirst().orElseThrow();
+   client.toggleEnabled(game,disabledRoot);
    int before=reads;client.repair(game,"26.3","fabric",versions,(m,d,t)->{},()->false,false);check(reads==before,"healthy launch used network");
    var entry=client.local(game,ProsperoModrinth.Kind.MOD).stream().filter(i->i.project().equals("P7dR8mSH")).findFirst().orElseThrow();client.uninstall(game,entry);
    try{client.repair(game,"26.3","fabric",versions,(m,d,t)->{},()->false,true);throw new AssertionError("offline missing dependency allowed");}catch(IOException expected){}

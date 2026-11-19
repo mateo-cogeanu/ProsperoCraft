@@ -127,6 +127,7 @@ final class ProsperoWeb implements AutoCloseable {
      require(!managed(instance,name),409,"Use the launcher to uninstall Modrinth-managed content");Files.delete(target);changed=true;
     }else{
      require(instance.loader.equals("fabric")||kind.equals("resources"),409,"This content needs a compatible Fabric mod; use a Fabric instance");require(length>0,400,"Empty upload");require(!Files.exists(target,LinkOption.NOFOLLOW_LINKS),409,"Filename already exists. Remove it explicitly or rename your upload");
+     if(kind.equals("mods"))require(!Files.exists(target.resolveSibling(name+".disabled"),LinkOption.NOFOLLOW_LINKS),409,"A disabled mod uses this filename. Enable or uninstall it in the launcher.");
      Path staging=Files.createTempFile(folder,".prospero-upload-",".part");
      try{
       // Capacity query is unsupported on the console; ENOSPC/quota write errors are authoritative.

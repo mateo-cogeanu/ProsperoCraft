@@ -26,12 +26,13 @@ final class ProsperoModrinth {
  static List<Selection> defaultMods(String loader){return Set.of("fabric","neoforge").contains(loader)?List.of(new Selection(CONTROLIFY,"Controlify",Kind.MOD)):List.of();}
  void installDefaults(Path game,String version,String loader,ProsperoDependencies.Versions checker,ProsperoInstall.Progress progress,BooleanSupplier cancel)throws Exception{
   List<Selection> defaults=defaultMods(loader);
-  if(defaults.isEmpty()||installed(game).controlifyRemoved||hasControlify(game))return;
+  if(defaults.isEmpty()||installed(game).controlifyRemoved||hasControlify(game,true))return;
   installSelected(game,version,loader,progress,cancel,f->{},checker,defaults,Map.of(),false);
  }
- boolean hasControlify(Path game)throws Exception {
+ boolean hasControlify(Path game)throws Exception {return hasControlify(game,false);}
+ private boolean hasControlify(Path game,boolean includeDisabled)throws Exception {
   for(var file:local(game,Kind.MOD))
-   if(CONTROLIFY.equals(file.project)||isControlify(game.resolve("mods").resolve(file.filename)))return true;
+   if((includeDisabled||!file.disabled)&&(CONTROLIFY.equals(file.project)||isControlify(localPath(game,file))))return true;
   return false;
  }
  private static boolean isControlify(Path jar){
@@ -50,23 +51,46 @@ final class ProsperoModrinth {
   return new Results(List.copyOf(hits),data.get("total_hits").getAsInt());
  }
  // Installed lists use the actual instance folders, including manually added files.
- record Local(String title,String filename,String project,Kind kind){}
+ record Local(String title,String filename,String project,Kind kind,boolean disabled){
+  Local(String title,String filename,String project,Kind kind){this(title,filename,project,kind,false);}
+ }
+ private static Path localPath(Path game,Local item)throws IOException {
+  if(item==null||item.kind==null||item.filename==null||item.filename.isEmpty()
+      ||item.filename.contains("/")||item.filename.contains("\\")
+      ||!item.filename.endsWith(item.kind==Kind.MOD?".jar":".zip")||item.disabled&&item.kind!=Kind.MOD)
+   throw new IOException("Invalid installed file");
+  Path path=game.resolve(item.kind.folder).resolve(item.filename+(item.disabled?".disabled":""));
+  ProsperoDownloads.noLinks(path);
+  return path;
+ }
+ synchronized void toggleEnabled(Path game,Local item)throws Exception {
+  if(item==null||item.kind!=Kind.MOD)throw new IOException("Only mods can be enabled or disabled");
+  Path source=localPath(game,item);
+  Path target=localPath(game,new Local(item.title,item.filename,item.project,item.kind,!item.disabled));
+  if(!Files.isRegularFile(source,LinkOption.NOFOLLOW_LINKS))throw new IOException("Mod is no longer available. Refresh Installed.");
+  if(Files.exists(target,LinkOption.NOFOLLOW_LINKS))throw new IOException("Both enabled and disabled files exist. Resolve the duplicate before toggling.");
+  Files.move(source,target);
+ }
  List<Local> local(Path game,Kind kind)throws Exception {
   var receipt=installed(game);Path folder=game.resolve(kind.folder);ProsperoDownloads.noLinks(folder);
   if(!Files.isDirectory(folder))return List.of();var found=new ArrayList<Local>();
   try(var files=Files.list(folder)){for(Path p:files.limit(1025).toList()){
    if(found.size()>=1024)throw new IOException("Too many installed files");String name=p.getFileName().toString();
-   if(!Files.isRegularFile(p,LinkOption.NOFOLLOW_LINKS)||!name.endsWith(kind==Kind.MOD?".jar":".zip"))continue;
-   var known=receipt.files.stream().filter(f->f.kind==kind&&f.filename.equals(name)).findFirst();
-   found.add(new Local(name,name,known.isPresent()?known.get().project:"",kind));
+   boolean disabled=kind==Kind.MOD&&name.endsWith(".jar.disabled");
+   if(!Files.isRegularFile(p,LinkOption.NOFOLLOW_LINKS)||!disabled&&!name.endsWith(kind==Kind.MOD?".jar":".zip"))continue;
+   if(disabled)name=name.substring(0,name.length()-".disabled".length());
+   String filename=name;
+   var known=receipt.files.stream().filter(f->f.kind==kind&&f.filename.equals(filename)).findFirst();
+   found.add(new Local(name,name,known.isPresent()?known.get().project:"",kind,disabled));
   }}found.sort(Comparator.comparing(Local::title,String.CASE_INSENSITIVE_ORDER));return List.copyOf(found);
  }
  // Move out of the game's folders first, commit the receipt, then reclaim bytes.
  // If metadata cannot commit, put the exact original file back.
  synchronized boolean uninstall(Path game,Local item)throws Exception {
-  if(item==null||item.kind==null||item.filename==null||item.filename.isEmpty()||item.filename.contains("/")||item.filename.contains("\\")||item.filename.equals(".")||item.filename.equals("..")||!item.filename.endsWith(item.kind==Kind.MOD?".jar":".zip"))throw new IOException("Invalid installed file");
-  Path target=game.resolve(item.kind.folder).resolve(item.filename);ProsperoDownloads.noLinks(target);
+  Path target=localPath(game,item);
   if(!Files.isRegularFile(target,LinkOption.NOFOLLOW_LINKS))throw new IOException("Installed file is no longer available");
+  if(item.kind==Kind.MOD&&Files.exists(localPath(game,new Local(item.title,item.filename,item.project,item.kind,!item.disabled)),LinkOption.NOFOLLOW_LINKS))
+   throw new IOException("Both enabled and disabled files exist. Resolve the duplicate before uninstalling.");
   Installed receipt=installed(game);for(File f:receipt.files)if(f==null||f.kind==null||f.filename==null)throw new IOException("Invalid content receipt");
   if(item.kind==Kind.MOD&&(receipt.files.stream().anyMatch(f->f.kind==Kind.MOD&&f.filename.equals(item.filename)&&CONTROLIFY.equals(f.project))||isControlify(target)))
    receipt.controlifyRemoved=true;
@@ -218,7 +242,7 @@ final class ProsperoModrinth {
   }return r;
  }
  private List<Path> modPaths(Path game,Map<String,File> plan,Path stage,Set<Path> replaced)throws Exception {
-  Map<String,Path> paths=new LinkedHashMap<>();for(Local local:local(game,Kind.MOD)){Path path=game.resolve("mods").resolve(local.filename);if(!replaced.contains(path))paths.put(local.filename,path);}
+  Map<String,Path> paths=new LinkedHashMap<>();for(Local local:local(game,Kind.MOD)){if(local.disabled)continue;Path path=game.resolve("mods").resolve(local.filename);if(!replaced.contains(path))paths.put(local.filename,path);}
   for(File f:plan.values())if(f.kind==Kind.MOD)paths.put(f.filename,stage.resolve(f.pin.hash()+".bin"));return List.copyOf(paths.values());
  }
  private Map<Path,File> replacements(Path game,Installed receipt,Map<String,File> plan,Path stage,ProsperoDependencies.Versions checker)throws Exception {
@@ -254,9 +278,29 @@ final class ProsperoModrinth {
   // A cleanup failure leaves private backups outside mods; the committed instance stays valid.
   try{for(Path saved:moved.values())Files.delete(saved);Files.delete(backup);}catch(IOException cleanup){System.err.println("PS5_CONTENT update backup cleanup pending");}
  }
+ private Set<String> disabledIds(Path game)throws Exception {
+  Set<String> ids=new HashSet<>();
+  for(Local item:local(game,Kind.MOD))if(item.disabled){
+   try{ids.addAll(ProsperoDependencies.providedIds(localPath(game,item)));}
+   catch(IOException|RuntimeException invalid){/* Unloadable disabled mods need no metadata to stay disabled. */}
+  }
+  return ids;
+ }
+ private void checkDisabledNeeds(Path game,List<ProsperoDependencies.Need> needs)throws Exception {
+  Set<String> disabled=disabledIds(game);
+  for(var need:needs)if(disabled.contains(need.id()))
+   throw new IOException(need.owner()+" needs disabled mod "+need.id()+". Enable it in Installed, or disable the mod that needs it.");
+ }
+ private void checkDisabledPlan(Path game,Map<String,File> plan)throws Exception {
+  for(Local item:local(game,Kind.MOD))if(item.disabled)
+   for(File file:plan.values())if(file.kind==Kind.MOD&&(file.filename.equals(item.filename)||!item.project.isEmpty()&&file.project.equals(item.project)))
+    throw new IOException(item.filename+" is disabled. Enable or uninstall it in Installed before downloading this selection.");
+ }
  void repair(Path game,String version,String loader,ProsperoDependencies.Versions checker,ProsperoInstall.Progress progress,BooleanSupplier cancel,boolean offline)throws Exception {
-  var paths=new ArrayList<Path>();for(var local:local(game,Kind.MOD))paths.add(game.resolve("mods").resolve(local.filename));
-  if(ProsperoDependencies.requiredUpdates(paths,version,checker).isEmpty())return;
+  var paths=new ArrayList<Path>();for(var local:local(game,Kind.MOD))if(!local.disabled)paths.add(game.resolve("mods").resolve(local.filename));
+  var needs=ProsperoDependencies.requiredUpdates(paths,version,checker);
+  if(needs.isEmpty())return;
+  checkDisabledNeeds(game,needs);
   if(offline)throw new IOException("Required mod dependencies are missing. Connect online to repair this instance.");
   var roots=new ArrayList<Selection>();var pins=new HashMap<String,String>();
   for(File f:installed(game).files)if(f.kind==Kind.MOD&&Files.isRegularFile(game.resolve("mods").resolve(f.filename))){roots.add(new Selection(f.project,f.filename,Kind.MOD));pins.put(f.project,f.version);}
@@ -313,11 +357,16 @@ final class ProsperoModrinth {
   Installed receipt=installed(game);
   Path stage=game.getParent().resolve("content-downloads");long total=0,done=0;Map<Path,File> replaced=Map.of();
   for(int pass=0;pass<16;pass++){
+   checkDisabledPlan(game,plan);
    total=plan.values().stream().mapToLong(f->f.pin.size()).sum();done=0;
    for(File f:plan.values()){ProsperoInstall.active(cancel);current.accept(f);progress.update("Downloading "+f.filename,done,total);try{download.obtain(f.pin,stage.resolve(f.pin.hash()+".bin"),cancel);}catch(IOException failure){ProsperoInstall.active(cancel);throw new ContentDownloadFailure(f,failure);}done+=f.pin.size();progress.update("Downloading "+f.filename,done,total);}
    replaced=replacements(game,receipt,plan,stage,checker);
    if(!loader.equals("fabric"))break;
+   Set<String> disabled=disabledIds(game);
+   for(File file:plan.values())if(file.kind==Kind.MOD&&!Collections.disjoint(disabled,ProsperoDependencies.providedIds(stage.resolve(file.pin.hash()+".bin"))))
+    throw new IOException("A selected dependency is disabled. Enable it in Installed before downloading this selection.");
    var needs=ProsperoDependencies.requiredUpdates(modPaths(game,plan,stage,replaced.keySet()),gameVersion,checker);
+   if(!needs.isEmpty())checkDisabledNeeds(game,needs);
    if(needs.isEmpty())break;
    if(pass<15){
     Set<String> projects=new LinkedHashSet<>();
@@ -339,7 +388,7 @@ final class ProsperoModrinth {
   for(var v:versions)if(v.has("dependencies"))for(var item:v.getAsJsonArray("dependencies")){
    var d=item.getAsJsonObject();if(!"incompatible".equals(ProsperoDownloads.text(d,"dependency_type")))continue;
    String project=ProsperoDownloads.text(d,"project_id"),id=ProsperoDownloads.text(d,"version_id");
-   if(plan.values().stream().anyMatch(f->f.project.equals(project)||( !id.isEmpty()&&f.version.equals(id)))||receipt.files.stream().filter(f->!plan.containsKey(f.kind+":"+f.project)).anyMatch(f->f.project.equals(project)||(!id.isEmpty()&&f.version.equals(id))))throw new IOException("Selected content conflicts with another installed or queued mod");
+   if(plan.values().stream().anyMatch(f->f.project.equals(project)||( !id.isEmpty()&&f.version.equals(id)))||receipt.files.stream().filter(f->!plan.containsKey(f.kind+":"+f.project)&&Files.isRegularFile(game.resolve(f.kind.folder).resolve(f.filename),LinkOption.NOFOLLOW_LINKS)).anyMatch(f->f.project.equals(project)||(!id.isEmpty()&&f.version.equals(id))))throw new IOException("Selected content conflicts with another installed or queued mod");
   }
   Set<Path> targets=new HashSet<>();for(File f:plan.values()){
    Path target=game.resolve(f.kind.folder).resolve(f.filename);ProsperoDownloads.noLinks(target);if(!targets.add(target))throw new IOException("Two downloads use the same filename");
