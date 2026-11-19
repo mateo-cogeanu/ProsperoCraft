@@ -1,5 +1,13 @@
 # Changelog
 
+## 01.000.288 · Installed mod toggles, 2026-11-19
+
+- Enable and disable installed mods with X while keeping their files.
+- Show enabled state for managed and manually added mods.
+- Respect disabled mods during dependency repair and downloads.
+
+See the [release notes](docs/releases/client-mod-toggle-288.md).
+
 ## 01.000.287 · Local offline profiles, 2026-11-18
 
 - Create a username-only profile in Accounts and download instances without Microsoft sign-in.

@@ -1,0 +1,9 @@
+{
+  "app_version": "01.000.288",
+  "title_id": "PPSA99874",
+  "package_sha256": "e2e931fcabe01d9b8a4dd95bb03a55c4db1f611a074decbba5787b71b08b7766",
+  "date": "2026-11-19",
+  "console_acceptance": "The maintainer reports that the delivered mod-toggle candidate works well on PS5.",
+  "shader_confirmation": "The maintainer explicitly confirms shaders work on build 288.",
+  "publication": "The maintainer explicitly requests a ProsperoStore release of the exact tested build. GitHub release and Store submission are authorized."
+}

@@ -6,9 +6,11 @@
 
 Download Minecraft on your console, keep separate instances for worlds and mods, and play with DualSense controls, native Vulkan graphics and game audio. ProsperoCraft includes Microsoft sign-in, a Modrinth content browser, controller remapping and six saved launcher themes.
 
-**[Download 01.000.287](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.287)** · [Latest release](https://github.com/mateo-cogeanu/ProsperoCraft/releases/latest) · [Changelog](CHANGELOG.md) · [Report an issue](https://github.com/mateo-cogeanu/ProsperoCraft/issues/new/choose)
+**[Download 01.000.288](https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.288)** · [Latest release](https://github.com/mateo-cogeanu/ProsperoCraft/releases/latest) · [Changelog](CHANGELOG.md) · [Report an issue](https://github.com/mateo-cogeanu/ProsperoCraft/issues/new/choose)
 
 ProsperoCraft handles Minecraft installation, accounts, input and game integration. Its [Native Java 25 Runtime](https://github.com/mateo-cogeanu/ps5-java25-homebrew) is maintained separately. Official Minecraft game JARs and asset objects are downloaded and verified from the publisher, rather than bundled with the app.
+
+Release **01.000.288** adds enable/disable controls for installed mods, preserving disabled files and respecting their dependency state. The maintainer confirmed the build and shader rendering on PS5. [Release notes](docs/releases/client-mod-toggle-288.md) · [Console acceptance](docs/validation/client288-console-acceptance-2026-11-19.json).
 
 Release **01.000.287** adds local offline profiles and instance downloads without Microsoft sign-in. The maintainer confirmed the build and shader rendering on PS5. [Release notes](docs/releases/client-offline-profiles-287.md) · [Console acceptance](docs/validation/client287-console-acceptance-2026-11-18.json) · [ProsperoStore update submitted](https://github.com/darkxex/ps5-homebrew-catalog/pull/1340).
 
