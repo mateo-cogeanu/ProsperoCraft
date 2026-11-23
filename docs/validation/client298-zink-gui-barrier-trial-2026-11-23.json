@@ -19,5 +19,5 @@
     "Native host lane passed all 14 checks.",
     "PS5 target build, signing, package SHA-256 and static audit passed."
   ],
-  "pending_console": "Compare Languages and Resource Packs with the depth pack off in Vanilla 1.21.1. If flicker remains, collect a Minecraft screenshot of an affected frame when possible to check for corruption before presentation. Physical results and current-run logs are pending."
+  "console_feedback": "The user reports that the same flicker became more widespread in Minecraft 1.21.1 on the barrier trial. This diagnostic failed as a workaround. No screenshot or current-run logs have been collected for this result."
 }
