@@ -20,8 +20,13 @@ final class ProsperoDependencies {
   public void close()throws IOException{loader.close();}
  }
  static final class Scan {
+  interface ArchiveSource { InputStream open() throws IOException; }
+  interface NestedScan { void scan(String path,int depth) throws Exception; }
+  static final int MANIFEST_LIMIT=128*1024;
+  static final long SCAN_LIMIT=512L*1024*1024;
+  final byte[] skipBuffer=new byte[16384];
   final Map<String,List<Module>> modules=new LinkedHashMap<>();final Map<String,Module> roots=new HashMap<>();int count;long nestedBytes;
-  void manifest(byte[] json,java.util.function.Function<String,byte[]> nested,int depth)throws Exception {
+  void manifest(byte[] json,NestedScan nested,int depth)throws Exception {
    if(++count>1024||depth>8)throw new IOException("Too many nested Fabric modules");
    var m=JsonParser.parseString(new String(json,java.nio.charset.StandardCharsets.UTF_8)).getAsJsonObject();String id=ProsperoDownloads.text(m,"id"),version=ProsperoDownloads.text(m,"version");
    if(id.isEmpty()||version.isEmpty())throw new IOException("Invalid Fabric mod manifest");
@@ -29,15 +34,66 @@ final class ProsperoDependencies {
    Map<String,List<String>> depends=new LinkedHashMap<>();if(m.has("depends"))for(var e:m.getAsJsonObject("depends").entrySet()){ArrayList<String> terms=new ArrayList<>();if(e.getValue().isJsonArray())for(var v:e.getValue().getAsJsonArray())terms.add(v.getAsString());else terms.add(e.getValue().getAsString());if(terms.isEmpty())throw new IOException("Empty dependency condition");depends.put(e.getKey(),List.copyOf(terms));}
    Module module=new Module(id,version,depends);modules.computeIfAbsent(id,k->new ArrayList<>()).add(module);if(depth==0){Module prior=roots.putIfAbsent(id,module);if(prior!=null&&!prior.version.equals(version))throw new IOException("Multiple top-level versions provide mod "+id);}
    if(m.has("provides"))for(var v:m.getAsJsonArray("provides"))modules.computeIfAbsent(v.getAsString(),k->new ArrayList<>()).add(module);
-   if(m.has("jars"))for(var entry:m.getAsJsonArray("jars")){String path=entry.getAsJsonObject().get("file").getAsString();if(path.startsWith("/")||path.contains("\\")||Arrays.asList(path.split("/")).contains(".."))throw new IOException("Invalid nested mod path");byte[] bytes=nested.apply(path);nestedBytes+=bytes.length;if(nestedBytes>64L*1024*1024)throw new IOException("Nested mod metadata exceeds limit");archive(bytes,depth+1);}
+   if(m.has("jars"))for(var entry:m.getAsJsonArray("jars")){String path=entry.getAsJsonObject().get("file").getAsString();if(path.startsWith("/")||path.contains("\\")||Arrays.asList(path.split("/")).contains(".."))throw new IOException("Invalid nested mod path");nested.scan(path,depth+1);}
   }
-  byte[] bounded(InputStream in,int max)throws IOException {try(in){byte[] b=in.readNBytes(max+1);if(b.length>max)throw new IOException("Mod metadata exceeds limit");return b;}}
+  byte[] bounded(InputStream in)throws IOException {
+   byte[] bytes=in.readNBytes(MANIFEST_LIMIT+1);
+   if(bytes.length>MANIFEST_LIMIT)throw new IOException("Fabric mod manifest exceeds 128 KiB");
+   account(bytes.length);
+   return bytes;
+  }
+  void account(int bytes)throws IOException {
+   nestedBytes+=bytes;
+   if(nestedBytes>SCAN_LIMIT)throw new IOException("Nested mod scan exceeds 512 MiB");
+  }
+  void skipEntry(InputStream in)throws IOException {
+   for(int read;(read=in.read(skipBuffer))!=-1;)account(read);
+  }
+  InputStream nestedEntry(ArchiveSource source,String path)throws IOException {
+   ZipInputStream zip=new ZipInputStream(source.open());
+   try {
+    int seen=0;
+    for(ZipEntry entry;(entry=zip.getNextEntry())!=null;){
+     if(++seen>16384)throw new IOException("Nested mod archive exceeds entry limit");
+     if(entry.getName().equals(path))return zip;
+     skipEntry(zip);
+    }
+    throw new IOException("Nested mod missing");
+   } catch(IOException|RuntimeException failure) {
+    try{zip.close();}catch(IOException close){failure.addSuppressed(close);}
+    throw failure;
+   }
+  }
   void file(Path path)throws Exception {
-   ProsperoDownloads.noLinks(path);try(var zip=new ZipFile(path.toFile())){var entry=zip.getEntry("fabric.mod.json");if(entry==null)return;byte[] json=bounded(zip.getInputStream(entry),128*1024);manifest(json,p->{try{var nested=zip.getEntry(p);if(nested==null)throw new IOException("Nested mod missing");return bounded(zip.getInputStream(nested),16*1024*1024);}catch(IOException bad){throw new java.io.UncheckedIOException(bad);}},0);}
+   ProsperoDownloads.noLinks(path);
+   try(var zip=new ZipFile(path.toFile())){
+    var entry=zip.getEntry("fabric.mod.json");
+    if(entry==null)return;
+    byte[] json;
+    try(var in=zip.getInputStream(entry)){json=bounded(in);}
+    manifest(json,(name,depth)->{
+     var nested=zip.getEntry(name);
+     if(nested==null)throw new IOException("Nested mod missing");
+     archive(()->zip.getInputStream(nested),depth);
+    },0);
+   }
   }
-  void archive(byte[] bytes,int depth)throws Exception {
-   Map<String,byte[]> entries=new HashMap<>();int seen=0;try(var zip=new ZipInputStream(new ByteArrayInputStream(bytes))){for(ZipEntry e;(e=zip.getNextEntry())!=null;){if(++seen>16384||entries.size()>256)throw new IOException("Nested mod archive exceeds limit");if(e.getName().equals("fabric.mod.json")||e.getName().endsWith(".jar")){int max=e.getName().endsWith(".jar")?16*1024*1024:128*1024;byte[] body=zip.readNBytes(max+1);if(body.length>max)throw new IOException("Nested mod entry too large");nestedBytes+=body.length;if(nestedBytes>64L*1024*1024)throw new IOException("Nested mod metadata exceeds limit");entries.put(e.getName(),body);}}}
-   if(entries.containsKey("fabric.mod.json"))manifest(entries.get("fabric.mod.json"),p->{byte[] b=entries.get(p);if(b==null)throw new IllegalArgumentException("Nested mod missing");return b;},depth);
+  void archive(ArchiveSource source,int depth)throws Exception {
+   if(depth>8)throw new IOException("Too many nested Fabric modules");
+   byte[] json=null;
+   try(var zip=new ZipInputStream(source.open())){
+    int seen=0;
+    for(ZipEntry entry;(entry=zip.getNextEntry())!=null;){
+     if(++seen>16384)throw new IOException("Nested mod archive exceeds entry limit");
+     if(entry.getName().equals("fabric.mod.json")){
+      json=bounded(zip);
+      break;
+     }
+     skipEntry(zip);
+    }
+   }
+   if(json!=null)manifest(json,(name,nextDepth)->
+       archive(()->nestedEntry(source,name),nextDepth),depth);
   }
  }
  static void verifyVulkan(Collection<Path> jars)throws Exception {verifyGraphics(jars,false);}

@@ -1,0 +1,24 @@
+{
+  "app_version": "01.000.289",
+  "title_id": "PPSA99874",
+  "package_sha256": "35a6218d1d0fda5cbb6a7dfb573ec0a61761abc4143bfe36f1cc86e2e3f19d2f",
+  "problem": "Cobblemon 1.8.4F installation fails with Mod metadata exceeds limit: its declared GraalJS nested JAR is 23528385 bytes, exceeding the old 16 MiB whole-JAR read cap. The root Fabric manifest is only 2534 bytes.",
+  "change": "Stream nested ZIP entries, retain only bounded Fabric manifests, and reopen declared child archives on demand. Original mod files remain unchanged. Retain 128 KiB manifests, depth 8, 1024 modules and 16384 entries per archive; cap aggregate expanded scan work at 512 MiB.",
+  "upstream_artifact": {
+    "project": "cobblemon",
+    "version": "1.8.4F",
+    "minecraft": "1.21.1",
+    "loader": "fabric",
+    "file": "Cobblemon-fabric-1.8.4+1.21.1.jar",
+    "bytes": 139966403,
+    "sha512": "8ba3bc7eb0bb6d52309ca339dfc9fb11adcffebe36d183e0a8df7c8e741edbcbc436c60cc877fd2b42aa224670825cf4f55946676b58ecf0e998f9feae2173c2"
+  },
+  "checks": [
+    "All 21 host checks pass.",
+    "Actual hash-verified Cobblemon scanned under -Xmx64m -Xverify:all; 21 provider IDs, 174649393 expanded scan bytes.",
+    "Regression fixtures cover a library exceeding 16 MiB, a manifest following large ZIP entries, declared nested child modules, original bytes unchanged, oversized manifest refusal and aggregate scan budget refusal.",
+    "Signed local package produced.",
+    "Independent package/static ABI audit passes; console acceptance remains pending."
+  ],
+  "console_pending": "Install 289, retry Cobblemon installation on Fabric 1.21.1, then test launch and world loading. This validates metadata scanning locally; Cobblemon gameplay compatibility is not yet confirmed. No release or ProsperoStore publication."
+}

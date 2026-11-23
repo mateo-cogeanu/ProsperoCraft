@@ -12,10 +12,49 @@ public class DependencyCheck {
  static Map<String,byte[]> network=new HashMap<>();static int reads;
  static byte[] bytes(String s){return s.getBytes(java.nio.charset.StandardCharsets.UTF_8);}
  static byte[] jar(String id,String version,String depends,byte[] nested)throws Exception {var out=new ByteArrayOutputStream();try(var z=new ZipOutputStream(out)){z.putNextEntry(new ZipEntry("fabric.mod.json"));z.write(bytes("{\"id\":\""+id+"\",\"version\":\""+version+"\",\"depends\":"+depends+(nested==null?"":",\"jars\":[{\"file\":\"META-INF/jars/keys.jar\"}]")+"}"));z.closeEntry();if(nested!=null){z.putNextEntry(new ZipEntry("META-INF/jars/keys.jar"));z.write(nested);z.closeEntry();}}return out.toByteArray();}
+ static byte[] largeBundledLibrary(byte[] child)throws Exception {
+  var out=new ByteArrayOutputStream();
+  try(var zip=new ZipOutputStream(out)){
+   zip.setLevel(0);
+   zip.putNextEntry(new ZipEntry("unrelated.jar"));
+   byte[] block=new byte[8192];
+   for(int i=0;i<2560;i++)zip.write(block);
+   zip.closeEntry();
+   zip.putNextEntry(new ZipEntry("META-INF/jars/child.jar"));zip.write(child);zip.closeEntry();
+   zip.putNextEntry(new ZipEntry("fabric.mod.json"));
+   zip.write(bytes("{\"id\":\"large_library\",\"version\":\"1.0\",\"jars\":[{\"file\":\"META-INF/jars/child.jar\"}]}"));
+   zip.closeEntry();
+  }
+  return out.toByteArray();
+ }
  static void version(String project,String version,String filename,byte[] jar,String deps)throws Exception {String url="https://cdn.modrinth.com/data/"+project+"/"+version+"/"+filename;network.put(url,jar);String hash=HexFormat.of().formatHex(MessageDigest.getInstance("SHA-512").digest(jar));String metadata="{\"id\":\""+version+"\",\"project_id\":\""+project+"\",\"game_versions\":[\"26.3\"],\"loaders\":[\"fabric\"],\"dependencies\":"+deps+",\"files\":[{\"filename\":\""+filename+"\",\"url\":\""+url+"\",\"primary\":true,\"size\":"+jar.length+",\"hashes\":{\"sha512\":\""+hash+"\"}}]}";network.put("meta:"+project,bytes("["+metadata+"]"));network.put(ProsperoModrinth.API+"version/"+version,bytes(metadata));}
  static InputStream open(String url)throws Exception{reads++;byte[] b=network.get(url);if(b==null&&url.contains("/project/"))b=network.get("meta:"+url.split("/project/")[1].split("/")[0]);if(b==null)throw new IOException("Unexpected request "+url);return new ByteArrayInputStream(b);}
  static void check(boolean yes,String why){if(!yes)throw new AssertionError(why);}
  public static void main(String[]args)throws Exception {Path root=Path.of(args[0]),game=root.resolve("game");Files.createDirectories(game);Files.writeString(game.resolve("world-marker"),"KEEP");
+  Path large=root.resolve("large-bundle.jar");
+  byte[] child=jar("bundled_child","1.0","{}",null);
+  Files.write(large,jar("large_root","1.0","{}",largeBundledLibrary(child)));
+  check(ProsperoDependencies.providedIds(large).containsAll(Set.of("large_root","large_library","bundled_child")),"large nested library or reverse manifest order rejected");
+  byte[] unchanged=Files.readAllBytes(large);
+  ProsperoDependencies.rootModule(large);
+  check(Arrays.equals(unchanged,Files.readAllBytes(large)),"metadata scan changed archive");
+  Path oversized=root.resolve("oversized-manifest.jar");
+  try(var zip=new ZipOutputStream(Files.newOutputStream(oversized))){
+   zip.putNextEntry(new ZipEntry("fabric.mod.json"));zip.write(new byte[128*1024+1]);zip.closeEntry();
+  }
+  try{ProsperoDependencies.providedIds(oversized);throw new AssertionError("oversized manifest allowed");}
+  catch(IOException expected){check(expected.getMessage().contains("manifest"),"wrong manifest bound");}
+  Path bomb=root.resolve("scan-budget.jar");
+  var bombBytes=new ByteArrayOutputStream();
+  try(var zip=new ZipOutputStream(bombBytes)){
+   zip.putNextEntry(new ZipEntry("padding"));
+   byte[] block=new byte[65536];
+   for(int i=0;i<8193;i++)zip.write(block);
+   zip.closeEntry();
+  }
+  Files.write(bomb,jar("scan_budget","1.0","{}",bombBytes.toByteArray()));
+  try{ProsperoDependencies.providedIds(bomb);throw new AssertionError("scan budget ignored");}
+  catch(IOException expected){check(expected.getMessage().contains("512 MiB"),"wrong scan budget error");}
   try(var versions=new ProsperoDependencies.Versions(Path.of(args[1]),"0.20.1")){
    Path defaults=root.resolve("defaults/game");Files.createDirectories(defaults);var defaultsClient=new ProsperoModrinth(new ProsperoDownloads(DependencyCheck::open));
    version("defaultdep","vDefaultDep","dependency.jar",jar("defaultdep","1.0","{}",null),"[]");version("DOUdJVEm","vControlify","controlify.jar",jar("controlify","1.0","{\"defaultdep\":\"*\"}",null),"[{\"dependency_type\":\"required\",\"project_id\":\"defaultdep\",\"version_id\":null}]");
