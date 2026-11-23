@@ -1,0 +1,22 @@
+{
+  "app_version": "01.000.297",
+  "title_id": "PPSA99874",
+  "package_sha256": "775c4a10f7a173b05236e620240b50e20c622a26286fd552af411efb613e5931",
+  "package_bytes": 128617714,
+  "build_base_commit": "34c08e424332eb1748a36136bcec51e8b1afb58b",
+  "build_source": "Build base plus the source changes accompanying this validation record.",
+  "pins_retained_from_296": {
+    "runtime_commit": "51089be1c190354ac1a01a0ac04316773a939a11",
+    "graphics_support_sha256": "3eadab2efe6513a8087d33caca1c29ae3962a8dbc01acaf5faaddbcc689a348f",
+    "lwjgl333_overlay_sha256": "5baae8699c219db87845132c159c421d12926de461fe8b90890e7f40a74d9d20",
+    "publisher121_lock_sha256": "552805e92ee78b765fd887f9d083b517cf3008a41255128fa215a31d0a7c0da8"
+  },
+  "prior_console_evidence": "Two user recordings show intermittent glyph corruption in Languages and Resource Packs. Depth trial v2 is visibly enabled in Resource Packs. The recordings establish persistent visual corruption and leave the cause unresolved.",
+  "change": "Append Mesa Zink's noreorder debug option before screen creation for this candidate. The setting applies to the process's Zink renderer. Retain build 296's legacy frame summaries and JIT quieting.",
+  "checks": [
+    "Standard host lane passed all 21 checks.",
+    "Native host lane passed all 14 checks.",
+    "PS5 target build, signing, package SHA-256 and static audit passed."
+  ],
+  "pending_console": "On build 297, disable the depth pack and compare Languages, Resource Packs and the title suffix on Zink in 1.21.1 and 1.21. Compare gameplay frame pacing. Exact-build physical results and current-run logs are pending."
+}

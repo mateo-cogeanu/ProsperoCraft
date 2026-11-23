@@ -39,6 +39,11 @@ int main(int argc,char** argv){
  rc=prospero_zink::disable_background_compilation();
  if(rc){std::fprintf(stderr,"PS5_ZINK background compile opt-out failed result=%d\n",rc);return 1;}
 #endif
+#ifdef PROSPERO_ZINK_ORDER_TRIAL
+ rc=prospero_zink::enable_debug_option("noreorder", ::setenv);
+ if(rc){std::fprintf(stderr,"PS5_ZINK command order trial setup failed result=%d\n",rc);return 1;}
+ std::fprintf(stderr,"PS5_ZINK command reordering disabled for GUI corruption trial\n");
+#endif
  rc=prospero_zink::enable_synchronous_context();
  if(rc){std::fprintf(stderr,"PS5_ZINK direct context setup failed result=%d\n",rc);return 1;}
  return prospero_zink_main(argc,argv);

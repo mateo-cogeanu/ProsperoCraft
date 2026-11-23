@@ -148,6 +148,16 @@ def normalize(name, text):
             text = text.replace(token, '"' + fallback + '"')
         text = text.replace('Storage roots selected by verified shared access; legacy fallback is explicit; no measured-capacity claim', 'Storage /download0: title-local reservation requested4096MiB; actual capacity is unavailable, not zero')
     elif name == 'client/save_headroom/bootstrap.cpp':
+        order_trial = (
+            '#ifdef PROSPERO_ZINK_ORDER_TRIAL\n'
+            ' rc=prospero_zink::enable_debug_option("noreorder", ::setenv);\n'
+            ' if(rc){std::fprintf(stderr,"PS5_ZINK command order trial setup failed result=%d\\n",rc);return 1;}\n'
+            ' std::fprintf(stderr,"PS5_ZINK command reordering disabled for GUI corruption trial\\n");\n'
+            '#endif\n'
+        )
+        if text.count(order_trial) != 1:
+            raise ValueError('Candidate Zink command order trial changed')
+        text = text.replace(order_trial, '')
         synchronous_compile = (
             '#ifdef PROSPERO_ZINK_SYNC_COMPILE\n'
             ' rc=prospero_zink::disable_background_compilation();\n'
