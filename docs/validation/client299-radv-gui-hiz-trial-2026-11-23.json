@@ -19,5 +19,5 @@
     "All 14 native host checks passed, including RADV flag preservation and setter refusal.",
     "Target build, signing, ZIP checksum and package audit passed."
   ],
-  "pending_console": "Compare Vanilla 1.21.1 Languages, Resource Packs and the title suffix with the depth pack off. If the flicker clears, compare the same menus in 1.21 and check gameplay frame pacing. Root cause, performance, and physical package acceptance are pending."
+  "console_feedback": "The user reports that the Minecraft title text is steady and menu text still blinks. They cannot trigger Minecraft's F2 screenshot. Root cause and performance are unverified."
 }

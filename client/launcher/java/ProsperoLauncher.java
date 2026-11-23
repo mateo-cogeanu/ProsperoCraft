@@ -93,7 +93,11 @@ public final class ProsperoLauncher {
  static ClassLoader runningGameLoader(){return "fabric".equals(current.detail.loader)?Thread.currentThread().getContextClassLoader():gameLoader();}
  static boolean observeLegacy121Frames(){
   if (!"01.000.296".equals(ProsperoBuild.VERSION) && !"01.000.297".equals(ProsperoBuild.VERSION) &&
-      !"01.000.298".equals(ProsperoBuild.VERSION) && !"01.000.299".equals(ProsperoBuild.VERSION)) return false;
+      !"01.000.298".equals(ProsperoBuild.VERSION) && !"01.000.299".equals(ProsperoBuild.VERSION) &&
+      !"01.000.300".equals(ProsperoBuild.VERSION)) return false;
+  return selectedLegacy121();
+ }
+ static boolean selectedLegacy121(){
   String version = current.detail.version;
   return "1.21".equals(version) || "1.21.1".equals(version);
  }
