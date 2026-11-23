@@ -105,8 +105,8 @@ final class ProsperoControlifyKeyboard {
   try{MessageDigest digest=MessageDigest.getInstance("SHA-256");try(InputStream in=Files.newInputStream(path);DigestInputStream data=new DigestInputStream(in,digest)){data.transferTo(OutputStream.nullOutputStream());}return HexFormat.of().formatHex(digest.digest());}
   catch(NoSuchAlgorithmException impossible){throw new AssertionError(impossible);}
  }
- private static JsonArray selections(Path game)throws IOException {
-  Path options=game.resolve("options.txt");if(!Files.exists(options))return new JsonArray();
+ static JsonArray selections(Path game)throws IOException {
+  Path options=game.resolve("options.txt");ProsperoDownloads.noLinks(options);if(!Files.exists(options))return new JsonArray();
   String found=null;
   for(String line:Files.readString(options).split("\\R"))if(line.startsWith("resourcePacks:")){if(found!=null)throw new IOException("Duplicate resource pack option");found=line.substring("resourcePacks:".length());}
   try{JsonArray list=found==null?new JsonArray():JsonParser.parseString(found).getAsJsonArray();for(JsonElement e:list)if(!e.isJsonPrimitive()||!e.getAsJsonPrimitive().isString())throw new IOException("Invalid resource pack list");return list;}
@@ -114,14 +114,19 @@ final class ProsperoControlifyKeyboard {
  }
  private static boolean selected(Path game)throws IOException {for(JsonElement e:selections(game))if(ID.equals(e.getAsString()))return true;return false;}
  private static void select(Path game,boolean enable)throws IOException {
-  JsonArray list=selections(game),result=new JsonArray();for(JsonElement e:list)if(!ID.equals(e.getAsString()))result.add(e);
-  if(enable)result.add(ID);
+  select(game,ID,enable,"options.before-controlify-keyboard162.txt");
+ }
+ static void select(Path game,String id,boolean enable,String backupName)throws IOException {
+  JsonArray list=selections(game),result=new JsonArray();for(JsonElement e:list)if(!id.equals(e.getAsString()))result.add(e);
+  if(enable)result.add(id);
   Path options=game.resolve("options.txt");String original=Files.exists(options)?Files.readString(options):"";
   String replacement="resourcePacks:"+result;
   String desired=original.replaceAll("(?m)^resourcePacks:[^\\r\\n]*",java.util.regex.Matcher.quoteReplacement(replacement));
   if(!original.lines().anyMatch(s->s.startsWith("resourcePacks:")))desired=original+(original.isEmpty()||original.endsWith("\n")?"":"\n")+replacement+"\n";
   if(desired.equals(original))return;
-  Path backup=game.resolve("options.before-controlify-keyboard162.txt");if(Files.exists(options)&&!Files.exists(backup))Files.copy(options,backup);
+  Path backup=game.resolve(backupName);ProsperoDownloads.noLinks(backup);
+  if(Files.exists(options)&&!Files.exists(backup))Files.copy(options,backup);
+  ProsperoDownloads.noLinks(options.resolveSibling("options.txt.tmp"));
   ProsperoInstall.save(options,desired);
  }
 }

@@ -188,6 +188,13 @@ public final class ProsperoLauncher {
   if(!launchable(instance.version,instance.loader)||!("SDL".equals(installed.window)||(ProsperoGraphics.glfw(instance.version)&&"GLFW".equals(installed.window)))){message="Coming soon for this version. Downloads are kept.";return;}
 
   if("fabric".equals(instance.loader)){var work=library.game(instance);ProsperoDependencies.prepareJavaCompatibility(modrinth.local(work,ProsperoModrinth.Kind.MOD).stream().filter(file->!file.disabled()).map(file->work.resolve("mods").resolve(file.filename())).toList(),work,instance.version);}
+  if (ProsperoControlifyGuidePreset.applies(instance.version, instance.loader)) {
+   Path work = library.game(instance);
+   if (modrinth.hasControlify(work)) {
+    try { ProsperoControlifyGuidePreset.prepare(work); }
+    catch (java.io.IOException failure) { System.err.println("Controlify screen guide preset could not be saved."); }
+   }
+  }
   microphone.prepare(); // Automatic system input; physical controller/system mute remains authoritative.
   installer.verify(installed);receipt=installed;loader=installer.loader(installed);if("fabric".equals(instance.loader)){var f=fabric.read(instance.version);loader=fabric.loader(f,loader);fabricLoaderVersion=f.loader;}detail=instance;offlineLaunch=offline;localLaunchName=localProfileSelected()?library.settings().localPlayer:"";launchPrepared=true;launch=!awaitingTutorial;message="Starting "+instance.name;
  }
