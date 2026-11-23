@@ -47,6 +47,15 @@ int main(){
  setenv("ZINK_DEBUG","notnoshobj",1);
  assert(prospero_zink::disable_shader_objects(refusal)==ENOMEM&&calls==4);
  assert(std::string(getenv("ZINK_DEBUG"))=="notnoshobj");
+ unsetenv("RADV_DEBUG");
+ assert(prospero_zink::disable_radv_hiz(refusal)==ENOMEM&&calls==5);
+ assert(!getenv("RADV_DEBUG"));
+ setenv("RADV_DEBUG","nodcc",1);
+ assert(!prospero_zink::disable_radv_hiz());
+ assert(std::string(getenv("RADV_DEBUG"))=="nodcc,nohiz");
+ assert(!prospero_zink::disable_radv_hiz(refusal)&&calls==5);
+ assert(std::string(getenv("ZINK_DEBUG"))=="notnoshobj");
+ unsetenv("RADV_DEBUG");
  unsetenv("GALLIUM_THREAD");unsetenv("ZINK_DEBUG");return 0;
 }
 ''')

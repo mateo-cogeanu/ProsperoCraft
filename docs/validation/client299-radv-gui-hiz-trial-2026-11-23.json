@@ -1,0 +1,23 @@
+{
+  "app_version": "01.000.299",
+  "title_id": "PPSA99874",
+  "package_sha256": "1d758dda51369b8259b1966c4dccb359c21e308a7e44a457a7a30833d8e7c4e6",
+  "package_bytes": 128619778,
+  "build_base_commit": "73c7f1a2155f150391a5e8c03f2115c4881909d1",
+  "build_source": "Build base plus the source changes accompanying this validation record.",
+  "pins_retained_from_296": {
+    "runtime_commit": "51089be1c190354ac1a01a0ac04316773a939a11",
+    "graphics_support_sha256": "3eadab2efe6513a8087d33caca1c29ae3962a8dbc01acaf5faaddbcc689a348f",
+    "lwjgl333_overlay_sha256": "5baae8699c219db87845132c159c421d12926de461fe8b90890e7f40a74d9d20",
+    "publisher121_lock_sha256": "552805e92ee78b765fd887f9d083b517cf3008a41255128fa215a31d0a7c0da8"
+  },
+  "prior_console_evidence": "The resource-pack depth changes and build 297's Zink command order change did not resolve the menu glyph flicker. The user reported worse flicker on build 298 with barriers before draws.",
+  "basis": "The original 1.21.1 client allocates a depth texture for its main render target. RADV's use_hiz flag controls hierarchical depth metadata on eligible depth attachments. Changing glyph depth in the resource pack did not bypass this path.",
+  "change": "Append RADV_DEBUG=nohiz before screen creation, preserving existing flags and normal depth testing. This diagnostic is process-wide, with build 296's Zink options and frame summaries. It may affect rendering performance and the advertised VRS capability.",
+  "checks": [
+    "The standard host lane initially hit an instance-worker timeout during packaging. All 21 checks passed when rerun after packaging.",
+    "All 14 native host checks passed, including RADV flag preservation and setter refusal.",
+    "Target build, signing, ZIP checksum and package audit passed."
+  ],
+  "pending_console": "Compare Vanilla 1.21.1 Languages, Resource Packs and the title suffix with the depth pack off. If the flicker clears, compare the same menus in 1.21 and check gameplay frame pacing. Root cause, performance, and physical package acceptance are pending."
+}

@@ -6,9 +6,9 @@
 namespace prospero_zink {
 // Candidate-only upstream setting, applied once before the first Zink screen.
 // Existing diagnostic tokens remain intact. Never print environment contents.
-inline int enable_debug_option(const char* option,int (*setter)(const char*,const char*,int)){
+inline int append_driver_option(const char* variable,const char* option,int (*setter)(const char*,const char*,int)){
  const auto length=std::strlen(option);
- const char* current=std::getenv("ZINK_DEBUG");
+ const char* current=std::getenv(variable);
  if(current){
   const char* p=current;
   while(*p){while(*p==' '||*p==','||*p=='\t'||*p=='\n')++p;const char* start=p;
@@ -20,8 +20,14 @@ inline int enable_debug_option(const char* option,int (*setter)(const char*,cons
  if(length>sizeof(selected)-3||n>sizeof(selected)-length-3)return E2BIG;
  if(n){std::memcpy(selected,current,n);selected[n++]=',';}
  std::memcpy(selected+n,option,length+1);
- if(setter("ZINK_DEBUG",selected,1)!=0)return errno?errno:EIO;
+ if(setter(variable,selected,1)!=0)return errno?errno:EIO;
  return 0;
+}
+inline int enable_debug_option(const char* option,int (*setter)(const char*,const char*,int)){
+ return append_driver_option("ZINK_DEBUG",option,setter);
+}
+inline int disable_radv_hiz(int (*setter)(const char*,const char*,int)=::setenv){
+ return append_driver_option("RADV_DEBUG","nohiz",setter);
 }
 inline int enable_flushsync(int (*setter)(const char*,const char*,int)=::setenv){
  return enable_debug_option("flushsync",setter);

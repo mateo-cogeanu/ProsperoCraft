@@ -168,6 +168,16 @@ def normalize(name, text):
         if text.count(barrier_trial) != 1:
             raise ValueError('Candidate Zink draw barrier trial changed')
         text = text.replace(barrier_trial, '')
+        hiz_trial = (
+            '#ifdef PROSPERO_RADV_HIZ_TRIAL\n'
+            ' rc=prospero_zink::disable_radv_hiz();\n'
+            ' if(rc){std::fprintf(stderr,"PS5_RADV hierarchical depth trial setup failed result=%d\\n",rc);return 1;}\n'
+            ' std::fprintf(stderr,"PS5_RADV hierarchical depth disabled for GUI corruption trial\\n");\n'
+            '#endif\n'
+        )
+        if text.count(hiz_trial) != 1:
+            raise ValueError('Candidate RADV hierarchical depth trial changed')
+        text = text.replace(hiz_trial, '')
         synchronous_compile = (
             '#ifdef PROSPERO_ZINK_SYNC_COMPILE\n'
             ' rc=prospero_zink::disable_background_compilation();\n'
