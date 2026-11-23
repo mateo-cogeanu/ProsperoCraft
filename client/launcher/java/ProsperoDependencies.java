@@ -105,6 +105,50 @@ final class ProsperoDependencies {
  static Module rootModule(Path jar)throws Exception {
   Scan scan=new Scan();scan.file(jar);if(scan.roots.size()!=1)throw new IOException("Cannot identify installed Fabric mod for update");return scan.roots.values().iterator().next();
  }
+ // Cobblemon 1.8.4 pins Java 21 exactly. This is an explicit Java 25 test
+ // exception, shared by preflight and Fabric's documented dependency override.
+ static boolean cobblemonJava25(Module mod,String game,String actual) {
+  return mod!=null&&"cobblemon".equals(mod.id)&&"1.8.4+1.21.1".equals(mod.version)
+      &&"1.21.1".equals(game)&&"25".equals(actual)&&List.of("21").equals(mod.depends.get("java"));
+ }
+ static final String JAVA_OVERRIDE_OWNER="ProsperoCraft Cobblemon 1.8.4 Java 25 test v1\n";
+ static JsonObject javaOverride(){return JsonParser.parseString("{\"-depends\":{\"java\":\"*\"},\"+depends\":{\"java\":[\"21\",\"25\"]}}").getAsJsonObject();}
+ static void writeCompatibility(Path target,String text)throws IOException {
+  ProsperoDownloads.noLinks(target);Files.createDirectories(target.getParent());
+  Path temp=Files.createTempFile(target.getParent(),".prosperocraft-compat-",".tmp");
+  try{
+   Files.writeString(temp,text);
+   try{Files.move(temp,target,StandardCopyOption.ATOMIC_MOVE,StandardCopyOption.REPLACE_EXISTING);}
+   catch(AtomicMoveNotSupportedException unsupported){Files.move(temp,target,StandardCopyOption.REPLACE_EXISTING);}
+  }finally{Files.deleteIfExists(temp);}
+ }
+ static void prepareJavaCompatibility(Collection<Path> jars,Path game,String version)throws Exception {
+  Scan scan=new Scan();for(Path jar:jars)scan.file(jar);
+  boolean active=cobblemonJava25(scan.roots.get("cobblemon"),version,Integer.toString(Runtime.version().feature()));
+  Path file=game.resolve("config/fabric_loader_dependencies.json"),owner=game.resolve("config/.prosperocraft-cobblemon-java");
+  ProsperoDownloads.noLinks(file);ProsperoDownloads.noLinks(owner);
+  boolean owned=Files.exists(owner);
+  if(owned&&(Files.size(owner)>256||!JAVA_OVERRIDE_OWNER.equals(Files.readString(owner))))throw new IOException("Invalid managed Cobblemon Java override marker");
+  if(!active&&!owned)return;
+  JsonObject doc;
+  if(Files.exists(file)){
+   if(Files.size(file)>128*1024)throw new IOException("Fabric dependency overrides exceed 128 KiB");
+   doc=JsonParser.parseString(Files.readString(file)).getAsJsonObject();
+   if(!doc.has("version")||doc.get("version").getAsInt()!=1||!doc.has("overrides")||!doc.get("overrides").isJsonObject())throw new IOException("Invalid Fabric dependency overrides");
+  }else{doc=new JsonObject();doc.addProperty("version",1);doc.add("overrides",new JsonObject());}
+  JsonObject overrides=doc.getAsJsonObject("overrides"),rule=javaOverride();
+  if(active){
+   if(overrides.has("cobblemon")){
+    if(!rule.equals(overrides.get("cobblemon")))throw new IOException("Custom Cobblemon dependency override conflicts with the Java 25 test. Check config/fabric_loader_dependencies.json.");
+    return;
+   }
+   writeCompatibility(owner,JAVA_OVERRIDE_OWNER); // Record ownership before publishing the rule.
+   overrides.add("cobblemon",rule);writeCompatibility(file,new GsonBuilder().setPrettyPrinting().create().toJson(doc)+"\n");
+  }else{
+   if(rule.equals(overrides.get("cobblemon"))){overrides.remove("cobblemon");writeCompatibility(file,new GsonBuilder().setPrettyPrinting().create().toJson(doc)+"\n");}
+   Files.deleteIfExists(owner); // Preserve any user-edited rule rather than claiming it.
+  }
+ }
  static List<Need> missing(Collection<Path> jars,String game,Versions versions)throws Exception {return missing(jars,game,versions,false);}
  static List<Need> requiredUpdates(Collection<Path> jars,String game,Versions versions)throws Exception {return missing(jars,game,versions,true);}
  private static List<Need> missing(Collection<Path> jars,String game,Versions versions,boolean updates)throws Exception {
@@ -117,8 +161,8 @@ final class ProsperoDependencies {
    for(Module mod:new HashSet<>(chosen.values()))for(var dep:mod.depends.entrySet())requirements.computeIfAbsent(dep.getKey(),k->new ArrayList<>()).add(new Need(mod.id,dep.getKey(),dep.getValue()));
    var missing=new ArrayList<Need>();boolean changed=false;
    for(var entry:requirements.entrySet()){
-    String id=entry.getKey();String builtin=id.equals("minecraft")?game:id.equals("java")?"25":id.equals("fabricloader")?versions==null?"0.20.1":versions.fabric:null;
-    if(builtin!=null){for(Need need:entry.getValue())if(!accepts(versions,builtin,need.versions))throw new IOException(need.owner+" requires "+id+" "+need.versions+"; installed "+builtin);continue;}
+    String id=entry.getKey();String builtin=id.equals("minecraft")?game:id.equals("java")?Integer.toString(Runtime.version().feature()):id.equals("fabricloader")?versions==null?"0.20.1":versions.fabric:null;
+    if(builtin!=null){for(Need need:entry.getValue())if(!(id.equals("java")&&cobblemonJava25(chosen.get(need.owner),game,builtin))&&!accepts(versions,builtin,need.versions))throw new IOException(need.owner+" requires "+id+" "+need.versions+"; installed "+builtin);continue;}
     List<Module> candidates=scan.modules.get(id);if(candidates==null){missing.addAll(entry.getValue());continue;}
     Module fixed=scan.roots.get(id),best=null;
     for(Module candidate:candidates){if(fixed!=null&&!fixed.version.equals(candidate.version))continue;boolean fits=true;for(Need need:entry.getValue())if(!accepts(versions,candidate.version,need.versions)){fits=false;break;}

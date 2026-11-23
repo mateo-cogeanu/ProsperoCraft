@@ -56,6 +56,41 @@ public class DependencyCheck {
   try{ProsperoDependencies.providedIds(bomb);throw new AssertionError("scan budget ignored");}
   catch(IOException expected){check(expected.getMessage().contains("512 MiB"),"wrong scan budget error");}
   try(var versions=new ProsperoDependencies.Versions(Path.of(args[1]),"0.20.1")){
+   Path compat=root.resolve("java-compat"),cobble=compat.resolve("mods/cobblemon.jar");Files.createDirectories(cobble.getParent());
+   byte[] cobbleBytes=jar("cobblemon","1.8.4+1.21.1","{\"java\":\"21\",\"fabric-api\":\">=0.116.6\"}",null);Files.write(cobble,cobbleBytes);
+   var needs=ProsperoDependencies.missing(List.of(cobble),"1.21.1",versions);
+   check(needs.size()==1&&needs.getFirst().id().equals("fabric-api"),"scoped Java override removed another dependency");
+   for(String gameVersion:List.of("1.21.2","26.3"))try{ProsperoDependencies.missing(List.of(cobble),gameVersion,versions);throw new AssertionError("wrong game Java override");}catch(IOException expected){check(expected.getMessage().contains("requires java"),"wrong scope error");}
+   Path other=compat.resolve("other.jar");Files.write(other,jar("other","1.0","{\"java\":\"21\"}",null));
+   try{ProsperoDependencies.missing(List.of(other),"1.21.1",versions);throw new AssertionError("global Java spoof");}catch(IOException expected){}
+   Path config=compat.resolve("config"),override=config.resolve("fabric_loader_dependencies.json");Files.createDirectories(config);
+   String userConfig="{\"version\":1,\"overrides\":{\"other\":{\"+suggests\":{\"optional\":\"*\"}}}}";Files.writeString(override,userConfig);
+   var userRule=JsonParser.parseString(userConfig).getAsJsonObject().getAsJsonObject("overrides").get("other");
+   ProsperoDependencies.prepareJavaCompatibility(List.of(cobble),compat,"1.21.1");
+   String configured=Files.readString(override);
+   check(JsonParser.parseString(configured).getAsJsonObject().getAsJsonObject("overrides").get("other").equals(userRule),"user override altered");
+   ProsperoDependencies.prepareJavaCompatibility(List.of(cobble),compat,"1.21.1");check(configured.equals(Files.readString(override)),"override not idempotent");
+   Class<?> overridesType=versions.loader.loadClass("net.fabricmc.loader.impl.metadata.DependencyOverrides"),versionsType=versions.loader.loadClass("net.fabricmc.loader.impl.metadata.VersionOverrides");
+   Object overrides=overridesType.getConstructor(Path.class).newInstance(config);
+   var parser=versions.loader.loadClass("net.fabricmc.loader.impl.metadata.ModMetadataParser").getMethod("parseMetadata",InputStream.class,String.class,List.class,versionsType,overridesType,boolean.class);
+   String manifest="{\"schemaVersion\":1,\"id\":\"cobblemon\",\"version\":\"1.8.4+1.21.1\",\"depends\":{\"java\":\"21\",\"fabric-api\":\">=0.116.6\"}}";
+   Object metadata=parser.invoke(null,new ByteArrayInputStream(bytes(manifest)),"fixture.jar",List.of(),versionsType.getConstructor().newInstance(),overrides,false);
+   Class<?> metadataType=versions.loader.loadClass("net.fabricmc.loader.api.metadata.ModMetadata"),depType=versions.loader.loadClass("net.fabricmc.loader.api.metadata.ModDependency"),versionType=versions.loader.loadClass("net.fabricmc.loader.api.Version");
+   var dependencies=(Collection<?>)metadataType.getMethod("getDependencies").invoke(metadata);boolean sawJava=false,sawApi=false;
+   for(Object dep:dependencies){String id=(String)depType.getMethod("getModId").invoke(dep);if(id.equals("java")){sawJava=true;var match=depType.getMethod("matches",versionType);check((Boolean)match.invoke(dep,versions.parseVersion.invoke(null,"25"))&&(Boolean)match.invoke(dep,versions.parseVersion.invoke(null,"21"))&&!(Boolean)match.invoke(dep,versions.parseVersion.invoke(null,"17"))&&!(Boolean)match.invoke(dep,versions.parseVersion.invoke(null,"26")),"Fabric runtime override range wrong: "+dep+" config="+configured);}if(id.equals("fabric-api"))sawApi=true;}
+   check(sawJava&&sawApi,"Fabric parser lost required dependency");
+   ProsperoDependencies.prepareJavaCompatibility(List.of(),compat,"1.21.1");
+   check(!JsonParser.parseString(Files.readString(override)).getAsJsonObject().getAsJsonObject("overrides").has("cobblemon"),"stale override retained after disable/removal");
+   check(!Files.exists(config.resolve(".prosperocraft-cobblemon-java")),"stale ownership retained");
+   check(Arrays.equals(cobbleBytes,Files.readAllBytes(cobble)),"Java compatibility modified original mod");
+   Files.writeString(override,"{\"version\":1,\"overrides\":{\"cobblemon\":{\"+depends\":{\"java\":\"17\"}}}}");String customJavaRule=Files.readString(override);
+   try{ProsperoDependencies.prepareJavaCompatibility(List.of(cobble),compat,"1.21.1");throw new AssertionError("user rule silently replaced");}catch(IOException expected){}
+   check(customJavaRule.equals(Files.readString(override)),"custom rule changed");
+   Files.delete(override);Path target=root.resolve("untouched-config");Files.writeString(target,"KEEP");Files.createSymbolicLink(override,target);
+   try{ProsperoDependencies.prepareJavaCompatibility(List.of(cobble),compat,"1.21.1");throw new AssertionError("override link followed");}catch(IOException expected){}
+   check(Files.readString(target).equals("KEEP"),"symlink target changed");
+   check(System.getProperty("java.version").startsWith("25"),"global Java property changed");
+   System.out.println("PASS scoped Cobblemon Java25 preflight and genuine Fabric metadata override; unrelated requirements/user rules/original bytes preserved, idempotence, removal cleanup and link rejection");
    Path defaults=root.resolve("defaults/game");Files.createDirectories(defaults);var defaultsClient=new ProsperoModrinth(new ProsperoDownloads(DependencyCheck::open));
    version("defaultdep","vDefaultDep","dependency.jar",jar("defaultdep","1.0","{}",null),"[]");version("DOUdJVEm","vControlify","controlify.jar",jar("controlify","1.0","{\"defaultdep\":\"*\"}",null),"[{\"dependency_type\":\"required\",\"project_id\":\"defaultdep\",\"version_id\":null}]");
    defaultsClient.toggle(defaults,new ProsperoModrinth.Selection("userQueued","Keep queued",ProsperoModrinth.Kind.RESOURCE));

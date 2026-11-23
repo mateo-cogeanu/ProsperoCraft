@@ -1,0 +1,17 @@
+{
+  "app_version": "01.000.290",
+  "title_id": "PPSA99874",
+  "package_sha256": "f0b190efadc1e3c43977c931c3b9cf34ece8cca804bdc7b8607f71e5cd79a029",
+  "problem": "Cobblemon 1.8.4+1.21.1 declares exactly Java 21; launcher and Fabric correctly reject the installed Java 25 runtime against that predicate.",
+  "change": "Explicit experimental exception for this exact Cobblemon version, Minecraft 1.21.1 and runtime major 25. Shared preflight policy and standard Fabric dependency override remove only the Java dependency and add [21,25]; all other dependencies remain intact. Runtime properties and original mod JARs stay unchanged. Java preflight now reads Runtime.version().feature() instead of a literal 25.",
+  "override_lifecycle": "Per-instance config/fabric_loader_dependencies.json is merged atomically. A bounded ownership marker permits cleanup before launch if Cobblemon is disabled, removed, upgraded or the instance/runtime no longer matches. Preserve other mods overrides; refuse conflicting custom Cobblemon rules rather than replace them. Leave user-edited rules during cleanup. Reject symlink paths.",
+  "checks": [
+    "Real SHA512-verified Cobblemon 1.8.4F scans and passes Java preflight with a 64 MiB host heap; only fabric-api >=0.116.6+1.21.1 remains missing in isolation.",
+    "Actual Fabric 0.20.1 metadata parser applies the generated remove/add rule, accepts Java 21 and 25 and rejects 17 and 26, retaining the fabric-api dependency.",
+    "Regression fixtures exercise unrelated-mod rejection, wrong-game rejection, idempotence, unrelated user overrides, conflicting user rule preservation, original JAR bytes, removal cleanup and link rejection.",
+    "Signed local package produced.",
+    "All 21 launcher host checks pass.",
+    "Independent package/static ABI audit passes; physical-console test pending."
+  ],
+  "console_pending": "Install 290, retry Cobblemon 1.8.4F on Fabric 1.21.1, then launch and load a test world. Passing the Java dependency gate is not proof of GraalJS/Truffle or gameplay compatibility. No release or ProsperoStore publication."
+}
