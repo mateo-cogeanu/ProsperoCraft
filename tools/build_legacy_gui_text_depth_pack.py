@@ -21,15 +21,36 @@ TRIAL = """    vec3 textPosition = Position;
     gl_Position = ProjMat * ModelViewMat * vec4(textPosition, 1.0);"""
 
 
+LIST_TEXT_TRIAL = """    vec3 textPosition = Position;
+    bool guiProjection = ProjMat[3][3] == 1.0
+        && abs(ProjMat[2][2] + 0.0001) < 0.0000001
+        && abs(ModelViewMat[3].z + 11000.0) < 0.01;
+    if (guiProjection) {
+        // Minecraft uses integral GUI layers, with +0.03 for shadowed
+        // foreground glyphs. Move both passes clear of same-layer fills.
+        float layer = floor(Position.z + 0.5);
+        float offset = Position.z - layer;
+        if (abs(offset - 0.03) < 0.001) {
+            textPosition.z = layer + 0.5;
+        } else if (abs(offset) < 0.001) {
+            textPosition.z = layer + 0.125;
+        }
+    }
+    gl_Position = ProjMat * ModelViewMat * vec4(textPosition, 1.0);"""
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('client_jar', type=Path)
     parser.add_argument('output', type=Path)
+    parser.add_argument('--list-text', action='store_true', help='Also separate list text from same-layer fills')
     args = parser.parse_args()
+    trial = LIST_TEXT_TRIAL if args.list_text else TRIAL
 
     files = {'pack.mcmeta': json.dumps({'pack': {
         'pack_format': 34,
-        'description': 'ProsperoCraft GUI text depth trial for 1.21 and 1.21.1',
+        'description': ('ProsperoCraft GUI text depth trial v2' if args.list_text
+                        else 'ProsperoCraft GUI text depth trial for 1.21 and 1.21.1'),
     }}) + '\n'}
     with ZipFile(args.client_jar) as client:
         version = json.loads(client.read('version.json'))['id']
@@ -43,7 +64,7 @@ def main():
             text = original.decode()
             if text.count(POSITION) != 1:
                 raise ValueError(f'Expected one position calculation: {path}')
-            files[path] = text.replace(POSITION, TRIAL)
+            files[path] = text.replace(POSITION, trial)
 
     with ZipFile(args.output, 'x') as pack:
         for name, contents in files.items():
