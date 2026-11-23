@@ -91,7 +91,13 @@ public final class ProsperoLauncher {
  static String[] selectedShutdownAccessors()throws java.io.IOException{return selected121()?Prospero121.shutdownAccessors(current.receipt.version):null;}
  static String gameMain(){return "fabric".equals(current.detail.loader)?ProsperoFabric.MAIN:"net.minecraft.client.main.Main";}
  static ClassLoader runningGameLoader(){return "fabric".equals(current.detail.loader)?Thread.currentThread().getContextClassLoader():gameLoader();}
+ static boolean observeLegacy121Frames(){
+  if (!"01.000.296".equals(ProsperoBuild.VERSION)) return false;
+  String version = current.detail.version;
+  return "1.21".equals(version) || "1.21.1".equals(version);
+ }
  static boolean quietGameplayCompilerLog(){
+  if (observeLegacy121Frames()) return true;
   return ("01.000.282".equals(ProsperoBuild.VERSION)||"01.000.283".equals(ProsperoBuild.VERSION)
       ||"01.000.284".equals(ProsperoBuild.VERSION)||"01.000.285".equals(ProsperoBuild.VERSION)
         ||"01.000.286".equals(ProsperoBuild.VERSION)||"01.000.287".equals(ProsperoBuild.VERSION)||"01.000.288".equals(ProsperoBuild.VERSION))

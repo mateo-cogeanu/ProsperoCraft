@@ -258,8 +258,21 @@ public final class ClientStartup25 {
   private final PrintStream console;
   private final Thread worker;
 
-  FrameObserver(Thread owner,PrintStream console) {
+  private final Layout layout;
+
+  private record Layout(String client, String loop, String instance, String overlayGetter,
+                        String overlay, String buffer, String samples, String start, String size) {
+   static final Layout NAMED = new Layout("net.minecraft.client.Minecraft", "run", "getInstance",
+       "getDebugOverlay", "net.minecraft.client.gui.components.DebugScreenOverlay",
+       "frameTimeLogger", "samples", "start", "size");
+   static final Layout VANILLA_121 = new Layout("fgo", "f", "Q", "aN", "fiu", "r", "d", "e", "f");
+   static final Layout FABRIC_121 = new Layout("net.minecraft.class_310", "method_1514", "method_1551",
+       "method_53526", "net.minecraft.class_340", "field_45992", "field_48814", "field_48815", "field_48816");
+  }
+
+  FrameObserver(Thread owner, PrintStream console, boolean legacy, boolean fabric) {
    this.console=console;
+   layout = legacy ? (fabric ? Layout.FABRIC_121 : Layout.VANILLA_121) : Layout.NAMED;
    ClassLoader parent=owner.getContextClassLoader();
    worker=Thread.ofPlatform().daemon().name("Prospero frame timing").unstarted(()->run(owner,parent));
   }
@@ -271,23 +284,23 @@ public final class ClientStartup25 {
     // Wait for the original client loop. Loading its classes earlier could
     // interfere with Fabric transformation or the client's initialization.
     while(System.nanoTime()<deadline&&!java.util.Arrays.stream(owner.getStackTrace())
-        .anyMatch(frame->frame.getClassName().equals("net.minecraft.client.Minecraft")&&frame.getMethodName().equals("run"))) {
+        .anyMatch(frame->frame.getClassName().equals(layout.client())&&frame.getMethodName().equals(layout.loop()))) {
      Thread.sleep(1000);
     }
     ClassLoader game=owner.getContextClassLoader();
-    if(game==parent||System.nanoTime()>=deadline)return;
+    if((game==parent&&layout!=Layout.VANILLA_121)||System.nanoTime()>=deadline)return;
 
-    Class<?> minecraft=Class.forName("net.minecraft.client.Minecraft",false,game);
-    Class<?> overlay=Class.forName("net.minecraft.client.gui.components.DebugScreenOverlay",false,game);
-    Class<?> logger=Class.forName("net.minecraft.util.debugchart.LocalSampleLogger",false,game);
-    Method instance=minecraft.getMethod("getInstance");
-    Method getOverlay=minecraft.getMethod("getDebugOverlay");
+    Class<?> minecraft=Class.forName(layout.client(),false,game);
+    Class<?> overlay=Class.forName(layout.overlay(),false,game);
+    Method instance=minecraft.getMethod(layout.instance());
+    Method getOverlay=minecraft.getMethod(layout.overlayGetter());
     Method execute=minecraft.getMethod("execute",Runnable.class);
-    Field level=minecraft.getField("level");
-    Field frameLogger=accessibleField(overlay,"frameTimeLogger");
-    Field samples=accessibleField(logger,"samples");
-    Field start=accessibleField(logger,"start");
-    Field size=accessibleField(logger,"size");
+    Field level=layout==Layout.NAMED?minecraft.getField("level"):null;
+    Field frameLogger=accessibleField(overlay,layout.buffer());
+    Class<?> logger=frameLogger.getType();
+    Field samples=accessibleField(logger,layout.samples());
+    Field start=accessibleField(logger,layout.start());
+    Field size=accessibleField(logger,layout.size());
     Object runningClient=instance.invoke(null);
     if(runningClient==null)return;
     FrameStallProbe stalls=("01.000.284".equals(ProsperoBuild.VERSION)||"01.000.285".equals(ProsperoBuild.VERSION)
@@ -298,7 +311,7 @@ public final class ClientStartup25 {
      execute.invoke(runningClient,(Runnable)()->{
       if(result.isCancelled())return;
       try {
-       if(level.get(runningClient)==null){result.complete("");return;}
+       if(level!=null&&level.get(runningClient)==null){result.complete("");return;}
        Object buffer=frameLogger.get(getOverlay.invoke(runningClient));
        long[][] ring=(long[][])samples.get(buffer);
        int first=start.getInt(buffer),length=size.getInt(buffer);
@@ -322,9 +335,14 @@ public final class ClientStartup25 {
      }catch(java.util.concurrent.TimeoutException stalled) {
       result.cancel(false);
       console.println("PS5_FRAME render task timeout uptimeMs="+vm.getUptime());
+      if (layout != Layout.NAMED) {
+       var stack = owner.getStackTrace();
+       for (int frame = 0; frame < Math.min(stack.length, 12); frame++)
+        console.println("  at " + stack[frame]);
+      }
      }
      if(stalls!=null&&inWorld)stalls.poll(vm);
-     else Thread.sleep(1000);
+     else Thread.sleep(layout==Layout.NAMED?1000:2000);
     }
    }catch(InterruptedException interrupted){Thread.currentThread().interrupt();}
    catch(ReflectiveOperationException|java.util.concurrent.ExecutionException|RuntimeException unavailable) {
@@ -480,9 +498,11 @@ public final class ClientStartup25 {
    }else console.println("PS5 startup observer disabled for performance run;enable ps5.startupObserver explicitly for stack sampling");
    ProsperoSession session=new ProsperoSession(reports.resolve("mc-client/logs"),ProsperoLauncher.selectedShutdownAccessors(),ProsperoLauncher.selected121Fabric());
    Thread gameThread=Thread.currentThread();
-   try(FrameObserver frames=("01.000.283".equals(ProsperoBuild.VERSION)||"01.000.284".equals(ProsperoBuild.VERSION)||"01.000.285".equals(ProsperoBuild.VERSION)
+   boolean legacyFrameTiming = ProsperoLauncher.observeLegacy121Frames();
+   try(FrameObserver frames=(legacyFrameTiming || ("01.000.283".equals(ProsperoBuild.VERSION)||"01.000.284".equals(ProsperoBuild.VERSION)||"01.000.285".equals(ProsperoBuild.VERSION)
         ||"01.000.286".equals(ProsperoBuild.VERSION)||"01.000.287".equals(ProsperoBuild.VERSION)||"01.000.288".equals(ProsperoBuild.VERSION))
-       &&ProsperoLauncher.quietGameplayCompilerLog()?new FrameObserver(gameThread,console):null;
+       &&ProsperoLauncher.quietGameplayCompilerLog())
+       ?new FrameObserver(gameThread, console, legacyFrameTiming, ProsperoLauncher.selected121Fabric()):null;
        ProsperoExit exit=cleanSystemExit(false)?new ProsperoExit(
      ()->session.awaitCleanReturn(gameThread.getContextClassLoader(),2000,ClientStartup25::stage),
      ()->{if(!cleanSystemExit(true))throw new IllegalStateException("Clean exit unavailable");},console,ClientStartup25::stage):null){
