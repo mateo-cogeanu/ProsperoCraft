@@ -487,7 +487,13 @@ void run_test(int i) {
 #endif
    {const_cast<char *>("-Djava.awt.headless=true"),nullptr},
    {const_cast<char *>("-Xms128m"),nullptr},
+#ifdef PROSPERO_LARGE_MOD_HEAP
+   // Grow only on demand; retain the existing ZGC target for ordinary workloads.
+   {const_cast<char *>("-Xmx3072m"),nullptr},
+   {const_cast<char *>("-XX:SoftMaxHeapSize=1536m"),nullptr},
+#else
    {const_cast<char *>("-Xmx1536m"),nullptr},
+#endif
    {const_cast<char *>("-XX:-UseCompressedOops"),nullptr},
    // 063 world generation hit a real Java heap OOM at256MiB.
    // 064 anonymous384MiBreservationfailed. Runtime0118supports separatelybounded

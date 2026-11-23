@@ -4,6 +4,18 @@ import re
 
 def normalize(name, text):
     if name == 'client/startup/bootstrap.cpp':
+        large_mod_heap = (
+            '#ifdef PROSPERO_LARGE_MOD_HEAP\n'
+            '   // Grow only on demand; retain the existing ZGC target for ordinary workloads.\n'
+            '   {const_cast<char *>("-Xmx3072m"),nullptr},\n'
+            '   {const_cast<char *>("-XX:SoftMaxHeapSize=1536m"),nullptr},\n'
+            '#else\n'
+            '   {const_cast<char *>("-Xmx1536m"),nullptr},\n'
+            '#endif\n'
+        )
+        if text.count(large_mod_heap) != 1:
+            raise ValueError('Large-mod heap policy changed')
+        text = text.replace(large_mod_heap, '   {const_cast<char *>("-Xmx1536m"),nullptr},\n')
         persistent_cache_record = (
             '#ifdef PROSPERO_PERSISTENT_SHADER_CACHE\n'
             '  log_stage(prospero_storage::shader_cache_ready\n'

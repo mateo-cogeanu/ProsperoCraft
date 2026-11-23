@@ -1,0 +1,17 @@
+{
+  "app_version": "01.000.292",
+  "title_id": "PPSA99874",
+  "package_sha256": "179b4dae7ea842f58d24921fdf19d9c5918a2a034e5e8e26b2bd8eb93d4ccc5c",
+  "observed": "Retained build 291 PS5 report confirms one Java heap OOM and fatal native malloc failure for 32664 bytes (Chunk::new) on C1 CompilerThread0 after about 49.8 seconds. ZHeap used 1350 MiB, capacity 1494 MiB, maximum 1536 MiB; metaspace used about 152 MiB. Game log reached Cobblemon asset/particle/animation loading. No repeat of the prior missing Unsafe method in the retained exception log.",
+  "change": "Candidate-only PROSPERO_LARGE_MOD_HEAP selects 3072 MiB maximum, retaining 128 MiB initial heap and setting ZGC SoftMaxHeapSize to the former 1536 MiB ceiling. ZGC can exceed this soft target on allocation demand. Enable the existing pre-JVM PROSPERO_EXTENDED_NATIVE_DIRECT gate: 512 MiB native-data fallback and 4096 mapping ledger slots, previously 256 MiB/2048. SDK allocation success/failure and cleanup remain authoritative. Retain C2 tier 4, compiler count, GC workers, terrain workers, graphics, runtime binary and Java 25 compatibility image from 291.",
+  "limits": "This addresses observed Java heap headroom and tests a larger native fallback allowance; the fatal report alone does not prove whether the native refusal exhausted the ledger budget, mapping slots or OS memory. A larger allowed budget does not guarantee backing storage is available.",
+  "checks": [
+    "Compiled actual bootstrap option array in normal and large-mod modes; existing normal policy retains 1536 MiB ceiling.",
+    "Genuine host ZGC starts with the candidate 3072/1536/128 MiB maximum/soft/initial policy without committing the maximum.",
+    "Scaled retained-object allocation grows genuine host ZGC past its soft target and preserves data.",
+    "Existing ASan/UBSan actual raw allocator/direct-ledger tests pass in both 256 and 512 MiB modes: exact 32664-byte request, growth, slab occupancy, cleanup fault handling, budget/slot caps, and concurrent lifetimes.",
+    "Signed candidate produced. No HotSpot rebuild or runtime source changes.",
+    "Independent signed-package/static ABI audit passes, including exact heap options and native budget gate."
+  ],
+  "console_pending": "Update to 292 and launch the same Fabric 1.21.1 Cobblemon instance, then enter a test world if startup succeeds. PS5 allocation headroom and gameplay remain unverified. No release or Store submission."
+}
