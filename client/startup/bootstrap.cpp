@@ -731,7 +731,7 @@ int main(int argc,char** argv) {
 #ifdef PROSPERO_EXTENDED_NATIVE_DIRECT
  const int native_capacity_rc=JVM_PS5SetExtendedNativeDirectBudgetEnabled(1);
  if(native_capacity_rc){log_stage("Extended native direct policy rejected before JVM");notify("Native memory configuration failed; inspect logs.");for(;;)(void)sceKernelUsleep(1000000);}
- log_stage("PS5 native direct capacity requested4096slots/512MiB");
+ log_stage("PS5 native direct full-budget ledger requested32768slots/512MiB");
 #endif
  ps5_emutls_enable_direct(1);
  log_stage("PS5 compiler TLS direct fallback enabled after libc/anonymous ENOMEM; shared native-data ledger");

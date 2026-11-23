@@ -1,0 +1,17 @@
+{
+  "app_version": "01.000.293",
+  "title_id": "PPSA99874",
+  "package_sha256": "911d10c91fe56fc18ba668b28e5afccda7102920070a693d1235573ac6e18f38",
+  "observed": "Build292 crash: native ReallocateHeap(65536) failed on ZWorkerYoung#1 during Cobblemon animation loading. Heap used1376MiB, capacity1862MiB, maximum3072MiB. The startup report retained the failed run allocator trace: mappings0x323d minus releases0x223d equals4096 active ledger slots; held0x15a44000 bytes (about346MiB) is below the512MiB budget. Kernel allocation failures0, last_result0; policy rejections increased. This identifies slot exhaustion rather than evidence of total console RAM exhaustion.",
+  "fix": "Extended native ledger derives32768 slots from the existing512MiB budget /16KiB pages. Keep292 heap and native byte budgets, default-mode2048 slots/256MiB, map/unmap ownership, failure retention and runtime policy freezing. Static ledger storage grows to roughly1MiB. Update startup status to reflect actual slot policy.",
+  "runtime_source_commit": "8e59c01d761dd876d0c71932d4fc1d5ab475a6f6",
+  "checks": [
+    "ASan/UBSan actual native allocator and direct-ledger suite passes in both default and extended modes:32768 one-page mappings use the full512MiB budget, then refusal before OS allocation; complete release; original growth, cleanup faults and4000 concurrent lifetimes remain covered.",
+    "Adjacent native heap/NMT/arena-layout, compiler-TLS fallback and compact class-space/metadata fallback suites pass.",
+    "Target ps5-zgc objects compile and merge into embedded HotSpot. Native exported definitions exactly match prior production HotSpot (none removed or added). Generic shared-libjvm linking is unused and rejects incompatible shared/PIE options; signed consumer static linking passes.",
+    "New packaging and audit guard verifies actual ZGC/C2 definitions and compiled32768-entry ledger storage. It accepts the final object and rejects a non-ZGC test configuration.",
+    "Signed local package produced; existing291 compatibility image and292 memory/graphics policies retained.",
+    "Independent signed-package/static ABI audit passes, including final ZGC/C2 and native-ledger runtime input checks."
+  ],
+  "console_pending": "Update to293 and launch the same Cobblemon Fabric1.21.1 instance. Test a world only if startup completes. No console acceptance or complete Cobblemon support claimed. No GitHub release or ProsperoStore publication."
+}

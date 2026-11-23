@@ -1,0 +1,7 @@
+{
+  "commit": "8e59c01d761dd876d0c71932d4fc1d5ab475a6f6",
+  "patch": "java25/patches/0153-native-ledger-full-budget-coverage.patch",
+  "patch_sha256": "7bb53fa6eb9c74ff733967d037fc88dc928bcc902c0df4962d0bd73d6443a858",
+  "object_sha256": "7a4e8ee8a7c0f59adbb170d98e386b4e42dd6819b88cf34b54f98cea6257e21c",
+  "feature": "32768 extended native ledger slots cover the existing512MiB budget at16KiB page granularity; default2048 slots unchanged."
+}
