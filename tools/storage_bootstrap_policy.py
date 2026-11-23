@@ -158,6 +158,16 @@ def normalize(name, text):
         if text.count(order_trial) != 1:
             raise ValueError('Candidate Zink command order trial changed')
         text = text.replace(order_trial, '')
+        barrier_trial = (
+            '#ifdef PROSPERO_ZINK_BARRIER_TRIAL\n'
+            ' rc=prospero_zink::enable_debug_option("sync", ::setenv);\n'
+            ' if(rc){std::fprintf(stderr,"PS5_ZINK draw barrier trial setup failed result=%d\\n",rc);return 1;}\n'
+            ' std::fprintf(stderr,"PS5_ZINK full draw barriers enabled for GUI corruption trial\\n");\n'
+            '#endif\n'
+        )
+        if text.count(barrier_trial) != 1:
+            raise ValueError('Candidate Zink draw barrier trial changed')
+        text = text.replace(barrier_trial, '')
         synchronous_compile = (
             '#ifdef PROSPERO_ZINK_SYNC_COMPILE\n'
             ' rc=prospero_zink::disable_background_compilation();\n'

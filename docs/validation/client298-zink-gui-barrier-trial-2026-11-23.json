@@ -1,0 +1,23 @@
+{
+  "app_version": "01.000.298",
+  "title_id": "PPSA99874",
+  "package_sha256": "b93ec319b4fc35bc2acc506166e840242e28ab11c58942d8778dc421b0a48b13",
+  "package_bytes": 128617776,
+  "build_base_commit": "7d77396d2b301295c80b0c6abe9ba1e3cf5f957d",
+  "build_source": "Build base plus the source changes accompanying this validation record.",
+  "pins_retained_from_296": {
+    "runtime_commit": "51089be1c190354ac1a01a0ac04316773a939a11",
+    "graphics_support_sha256": "3eadab2efe6513a8087d33caca1c29ae3962a8dbc01acaf5faaddbcc689a348f",
+    "lwjgl333_overlay_sha256": "5baae8699c219db87845132c159c421d12926de461fe8b90890e7f40a74d9d20",
+    "publisher121_lock_sha256": "552805e92ee78b765fd887f9d083b517cf3008a41255128fa215a31d0a7c0da8"
+  },
+  "prior_console_evidence": "The user reports that disabling command reordering in build 297 did not improve the flicker. Earlier recordings reproduce the issue with the depth pack enabled.",
+  "change": "Enable the bundled Zink driver's sync debug mode before screen creation. The draw path ends the render pass and inserts a full Vulkan memory barrier. Build 297's noreorder flag is disabled for this trial. Build 296's frame summaries and JIT quieting are retained.",
+  "limitation": "This process-wide Zink diagnostic can substantially reduce frame rate. A visual change would justify investigating draw synchronization or render pass boundaries, but would not by itself identify the failing resource.",
+  "checks": [
+    "Standard host lane passed all 21 checks.",
+    "Native host lane passed all 14 checks.",
+    "PS5 target build, signing, package SHA-256 and static audit passed."
+  ],
+  "pending_console": "Compare Languages and Resource Packs with the depth pack off in Vanilla 1.21.1. If flicker remains, collect a Minecraft screenshot of an affected frame when possible to check for corruption before presentation. Physical results and current-run logs are pending."
+}

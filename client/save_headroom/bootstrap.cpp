@@ -44,6 +44,11 @@ int main(int argc,char** argv){
  if(rc){std::fprintf(stderr,"PS5_ZINK command order trial setup failed result=%d\n",rc);return 1;}
  std::fprintf(stderr,"PS5_ZINK command reordering disabled for GUI corruption trial\n");
 #endif
+#ifdef PROSPERO_ZINK_BARRIER_TRIAL
+ rc=prospero_zink::enable_debug_option("sync", ::setenv);
+ if(rc){std::fprintf(stderr,"PS5_ZINK draw barrier trial setup failed result=%d\n",rc);return 1;}
+ std::fprintf(stderr,"PS5_ZINK full draw barriers enabled for GUI corruption trial\n");
+#endif
  rc=prospero_zink::enable_synchronous_context();
  if(rc){std::fprintf(stderr,"PS5_ZINK direct context setup failed result=%d\n",rc);return 1;}
  return prospero_zink_main(argc,argv);
