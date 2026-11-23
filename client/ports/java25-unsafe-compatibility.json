@@ -1,0 +1,27 @@
+{
+  "runtime_commit": "78b79dd7ed6f3e06f8a4852431257e5302c979fc",
+  "patch": "https://github.com/mateo-cogeanu/ps5-java25-homebrew/blob/78b79dd7ed6f3e06f8a4852431257e5302c979fc/Development/java25/patches/0152-legacy-unsafe-class-initialization.patch",
+  "patch_sha256": "f0685c661f92078081cb91f6591ac732ec7e484bac087a73471e409f2b2e15ab",
+  "class": "jdk.unsupported/sun/misc/Unsafe.class",
+  "baseline_class_sha256": "3e6c328dabeaaf05e729241637663b2ac63442d708b3e72e52fcd101fe005c78",
+  "patched_class_sha256": "8f676d0451dec04b88d9449e6398476531b1e1e41bd20890425149717d18138d",
+  "scope": "Restore legacy ensureClassInitialized with a direct VM delegate; retain actual Java 25 properties and Unsafe access checks. Native runtime unchanged.",
+  "build_resource_changes": {
+    "jdk.unsupported/_the.jdk.unsupported_pubapi": {
+      "baseline_sha256": "952fc3153638f184479521ef3b14561c9d68a906300e92e410f65edbfc1cf416",
+      "patched_sha256": "9c5755bb8ff0ec4f18a494d382ba96a29978229640e8a6b9d0fe2f0d341f8e4b"
+    },
+    "jdk.unsupported/_the.jdk.unsupported_batch.modfiles": {
+      "baseline_sha256": "913ae9f0a8a4aa2d9153b09f139eddc418bb2a2cfe39d7d166611ad314daf006",
+      "patched_sha256": "12e55f0aa6275e564f8f60a92b89129373e629be0d54b23c71e95f3c3f9e58b0"
+    },
+    "jdk.unsupported/_the.jdk.unsupported_internalapi": {
+      "baseline_sha256": "bc40597fc0c6ea7b7dd205754841ed65253e9cd999840024d63360b846aaaa45",
+      "patched_sha256": "4e1443524ef3efce07c1c10279c0563ba541be443a78a83347388348d0099976"
+    },
+    "jdk.unsupported/_the.jdk.unsupported_batch.modfiles.fixed": {
+      "baseline_sha256": "913ae9f0a8a4aa2d9153b09f139eddc418bb2a2cfe39d7d166611ad314daf006",
+      "patched_sha256": "12e55f0aa6275e564f8f60a92b89129373e629be0d54b23c71e95f3c3f9e58b0"
+    }
+  }
+}

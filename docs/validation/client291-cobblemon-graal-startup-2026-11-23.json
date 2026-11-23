@@ -1,0 +1,17 @@
+{
+  "app_version": "01.000.291",
+  "title_id": "PPSA99874",
+  "package_sha256": "b71f3f5e2405a0389d9c105c7e8b05933ed1a3fefb2213da3ecf1cb790673d08",
+  "observed": "PS5 Fabric 1.21.1 with Cobblemon 1.8.4 reaches Cobblemon initialization; its Showdown thread throws NoSuchMethodError for void sun.misc.Unsafe.ensureClassInitialized(java.lang.Class), through Graal/Truffle IOHelper and LibraryFactory.",
+  "fix": "Restore the legacy API in the target-built jdk.unsupported class with a direct delegate to the existing jdk.internal.misc.Unsafe VM implementation. No Java version spoofing, mod JAR edits, native HotSpot rebuild or graphics changes. Retain the scoped 290 dependency override.",
+  "runtime_source_commit": "78b79dd7ed6f3e06f8a4852431257e5302c979fc",
+  "checks": [
+    "Unpatched Java25 rejects a compiled legacy invocation; patched target class and class extracted from linked image pass with -Xverify:all.",
+    "Eight concurrent callers initialize a class exactly once; repeat, primitive, array, null and initialization-failure semantics preserved. Unsafe.getUnsafe retains caller access checks.",
+    "Actual original Cobblemon-bundled GraalJS 22.3.0 and companion libraries evaluate JSON.parse JavaScript on the host with the patched target class.",
+    "Image audit pins both old and new Unsafe class hashes, expected generated build metadata and the existing HTTP-client addition; all other executable module classes are byte-identical to accepted baseline inputs.",
+    "Signed local candidate produced; native runtime and graphics inputs retain 290 policies.",
+    "Independent signed-package/static ABI audit passes; physical-console acceptance remains pending."
+  ],
+  "console_pending": "Update to 291 and launch the existing Cobblemon Fabric 1.21.1 instance, then load a test world. Host GraalJS evaluation does not establish complete mod/gameplay support. No release or Store submission."
+}
