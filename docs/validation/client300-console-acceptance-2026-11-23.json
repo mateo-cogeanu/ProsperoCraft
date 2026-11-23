@@ -1,0 +1,10 @@
+{
+  "app_version": "01.000.300",
+  "title_id": "PPSA99874",
+  "package_sha256": "15c2f1727bd056aad04a877dc756b84c8a77aaa7ecd11734454ec80969149e7b",
+  "date": "2026-11-23",
+  "console_acceptance": "The maintainer confirms the text flicker was fixed in the delivered build 300 after being asked to check Languages and Resource Packs on Vanilla 1.21.1.",
+  "shader_confirmation": "The maintainer explicitly confirms shaders work on build 300.",
+  "scope": "The user confirmed the text fix and shader rendering. Extended gameplay, performance and all loader/version combinations were not separately verified for this release.",
+  "publication": "The maintainer explicitly requests publication of the tested package through ProsperoStore."
+}

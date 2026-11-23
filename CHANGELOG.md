@@ -1,5 +1,13 @@
 # Changelog
 
+## 01.000.300 · Menu text and Fabric fixes, 2026-11-23
+
+- Fix flickering title and menu text in Minecraft 1.21 and 1.21.1 with a scoped vertex buffer upload change.
+- Default Controlify's on-screen button guides off on Fabric 1.21 and 1.21.1.
+- Stream large nested Fabric mod metadata and improve memory headroom for large mods such as Cobblemon.
+
+See the [release notes](docs/releases/client-gui-text-300.md).
+
 ## 01.000.288 · Installed mod toggles, 2026-11-19
 
 - Enable and disable installed mods with X while keeping their files.
