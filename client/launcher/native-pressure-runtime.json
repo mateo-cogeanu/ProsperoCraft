@@ -1,0 +1,7 @@
+{
+  "commit": "95fb41d8a11b7f0b66450b75ac6e17d095a1189f",
+  "patch": "java25/patches/0154-native-ledger-budget-and-scan-bounds.patch",
+  "patch_sha256": "4edda8ce6b1289a762533edc4093ccdcc2c195538188cab937e38fbdd983e169",
+  "object_sha256": "d724909135f53ccf603912c047c98817159056730d08a5b92a07fc5d803276fc",
+  "feature": "768 MiB extended native budget, 49152 mapping slots, bounded occupancy scans."
+}

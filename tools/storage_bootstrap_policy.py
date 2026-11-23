@@ -4,6 +4,16 @@ import re
 
 def normalize(name, text):
     if name == 'client/startup/bootstrap.cpp':
+        pressure_target = (
+            '#ifdef PROSPERO_MOD_MEMORY_PRESSURE\n'
+            '   {const_cast<char *>("-XX:SoftMaxHeapSize=2304m"),nullptr},\n'
+            '#else\n'
+            '   {const_cast<char *>("-XX:SoftMaxHeapSize=1536m"),nullptr},\n'
+            '#endif\n'
+        )
+        if text.count(pressure_target) != 1:
+            raise ValueError('Mod memory soft target changed')
+        text = text.replace(pressure_target, '   {const_cast<char *>("-XX:SoftMaxHeapSize=1536m"),nullptr},\n')
         large_mod_heap = (
             '#ifdef PROSPERO_LARGE_MOD_HEAP\n'
             '   // Grow only on demand; retain the existing ZGC target for ordinary workloads.\n'
@@ -72,6 +82,7 @@ def normalize(name, text):
         if text.count(zgc_policy) != 1:
             raise ValueError('ZGC policy selection changed')
         text = text.replace(zgc_policy, '#ifdef PROSPERO_TIERED_PARALLEL\n')
+        text = re.sub(r'^#ifdef PROSPERO_MOD_MEMORY_PRESSURE\n log_stage\([^\n]*\);\n#else\n( log_stage\([^\n]*\);\n)#endif\n', r'\1', text, flags=re.M)
         text, count = re.subn(r'^#ifdef PROSPERO_EXTENDED_NATIVE_DIRECT\n.*?^#endif\n',
                               '', text, flags=re.M | re.S)
         if count != 2:

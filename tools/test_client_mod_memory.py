@@ -33,17 +33,19 @@ public class MemoryCheck {
 with tempfile.TemporaryDirectory(prefix='mod-memory-') as tmp:
     w=Path(tmp);(w/'options.cpp').write_text(prefix+array+'\nfor(auto option:options)std::cout<<option.optionString<<"\\n";\n}\n')
     options={}
-    for large in (False,True):
-        binary=w/('large' if large else 'normal')
+    for mode in ('normal', 'large', 'pressure'):
+        binary=w/mode
         flags=['-DPROSPERO_ZGC=1','-DPROSPERO_TIERED_PARALLEL=1','-DPROSPERO_CHUNK_WORKERS_5=1']
-        if large:flags.append('-DPROSPERO_LARGE_MOD_HEAP=1')
+        if mode != 'normal':flags.append('-DPROSPERO_LARGE_MOD_HEAP=1')
+        if mode == 'pressure':flags.append('-DPROSPERO_MOD_MEMORY_PRESSURE=1')
         subprocess.run([executable('clang++'),'-std=c++17',*flags,str(w/'options.cpp'),'-o',str(binary)],check=True)
-        options[large]=subprocess.check_output([str(binary)],text=True).splitlines()
-    assert '-Xmx1536m' in options[False] and not any(o.startswith('-XX:SoftMaxHeapSize=') for o in options[False])
-    assert '-Xmx3072m' in options[True] and '-XX:SoftMaxHeapSize=1536m' in options[True] and '-Xmx1536m' not in options[True]
+        options[mode]=subprocess.check_output([str(binary)],text=True).splitlines()
+    assert '-Xmx1536m' in options['normal'] and not any(o.startswith('-XX:SoftMaxHeapSize=') for o in options['normal'])
+    assert '-Xmx3072m' in options['large'] and '-XX:SoftMaxHeapSize=1536m' in options['large'] and '-Xmx1536m' not in options['large']
+    assert '-Xmx3072m' in options['pressure'] and '-XX:SoftMaxHeapSize=2304m' in options['pressure']
     (w/'MemoryCheck.java').write_text(java);jdk=java_home()
     subprocess.run([str(jdk/'bin/javac'),str(w/'MemoryCheck.java')],check=True)
-    memory=[o for o in options[True] if o.startswith(('-Xms','-Xmx','-XX:SoftMaxHeapSize=')) or o=='-XX:+UseZGC']
-    subprocess.run([str(jdk/'bin/java'),*memory,'-cp',str(w),'MemoryCheck','3072','1536'],check=True,timeout=30)
+    memory=[o for o in options['pressure'] if o.startswith(('-Xms','-Xmx','-XX:SoftMaxHeapSize=')) or o=='-XX:+UseZGC']
+    subprocess.run([str(jdk/'bin/java'),*memory,'-cp',str(w),'MemoryCheck','3072','2304'],check=True,timeout=30)
     subprocess.run([str(jdk/'bin/java'),'-XX:+UseZGC','-Xms16m','-Xmx96m','-XX:SoftMaxHeapSize=32m','-cp',str(w),'MemoryCheck','96','32','allocate'],check=True,timeout=30)
 print('PASS actual bootstrap policies and genuine ZGC soft-target growth; host fixture, PS5 memory acceptance pending')

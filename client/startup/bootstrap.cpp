@@ -490,7 +490,11 @@ void run_test(int i) {
 #ifdef PROSPERO_LARGE_MOD_HEAP
    // Grow only on demand; retain the existing ZGC target for ordinary workloads.
    {const_cast<char *>("-Xmx3072m"),nullptr},
+#ifdef PROSPERO_MOD_MEMORY_PRESSURE
+   {const_cast<char *>("-XX:SoftMaxHeapSize=2304m"),nullptr},
+#else
    {const_cast<char *>("-XX:SoftMaxHeapSize=1536m"),nullptr},
+#endif
 #else
    {const_cast<char *>("-Xmx1536m"),nullptr},
 #endif
@@ -731,7 +735,11 @@ int main(int argc,char** argv) {
 #ifdef PROSPERO_EXTENDED_NATIVE_DIRECT
  const int native_capacity_rc=JVM_PS5SetExtendedNativeDirectBudgetEnabled(1);
  if(native_capacity_rc){log_stage("Extended native direct policy rejected before JVM");notify("Native memory configuration failed; inspect logs.");for(;;)(void)sceKernelUsleep(1000000);}
+#ifdef PROSPERO_MOD_MEMORY_PRESSURE
+ log_stage("PS5 native direct full-budget ledger requested49152slots/768MiB");
+#else
  log_stage("PS5 native direct full-budget ledger requested32768slots/512MiB");
+#endif
 #endif
  ps5_emutls_enable_direct(1);
  log_stage("PS5 compiler TLS direct fallback enabled after libc/anonymous ENOMEM; shared native-data ledger");
