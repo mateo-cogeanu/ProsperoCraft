@@ -1,0 +1,53 @@
+{
+  "app_version": "01.000.300",
+  "title_id": "PPSA99874",
+  "release": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.300",
+  "release_tag_commit": "33bce356cd4f13d96cffcaadbe576e9e3b087ead",
+  "matching_build_source_commit": "9e27c580f4e6f9e6c9ec71e0ce5f7c47e365aff4",
+  "catalog_pr": "https://github.com/darkxex/ps5-homebrew-catalog/pull/1399",
+  "uploaded_assets": [
+    {
+      "name": "PPSA99874.zip",
+      "bytes": 128618598,
+      "sha256": "15c2f1727bd056aad04a877dc756b84c8a77aaa7ecd11734454ec80969149e7b",
+      "url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/download/01.000.300/PPSA99874.zip"
+    },
+    {
+      "name": "SHA256SUMS",
+      "bytes": 474,
+      "sha256": "87c9de0e5f8b5604c554086e47cb998b8f934a3632d195b6ea5fded2ee3c758a",
+      "url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/download/01.000.300/SHA256SUMS"
+    },
+    {
+      "name": "client300-build-validation.json",
+      "bytes": 11210,
+      "sha256": "62216e3499f9c70bfb147b06944555a147ee4de46b98823fdb79b27931b262bb",
+      "url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/download/01.000.300/client300-build-validation.json"
+    },
+    {
+      "name": "client300-console-validation.json",
+      "bytes": 737,
+      "sha256": "0a8416b08ff17baed58d104453e2409b863a09551ab5c5fe257c030cad7a49c3",
+      "url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/download/01.000.300/client300-console-validation.json"
+    },
+    {
+      "name": "client300-openal-source-relink.zip",
+      "bytes": 210480529,
+      "sha256": "d1bf3cf3d48c7e822cda4d04db70f0b9e0c293571677a91396c506c8697a5612",
+      "url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/download/01.000.300/client300-openal-source-relink.zip"
+    },
+    {
+      "name": "client300-package-audit.json",
+      "bytes": 21725,
+      "sha256": "93726d134fcb6f50b8914ce589b3d71a133f3086e0a4af4f1ba5494573ca8ac6",
+      "url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/download/01.000.300/client300-package-audit.json"
+    }
+  ],
+  "checks": [
+    "All six downloaded release assets matched the local checksums.",
+    "Normal and compatible OpenAL replacement relinks from the downloaded kit reproduced the exact tested native executable.",
+    "Catalog format, release asset digest and contentVersion checks passed. The catalog ran 259 tests with five skips.",
+    "The catalog PR changes only the listing version, artifact URL and SHA-256."
+  ],
+  "status": "GitHub release published and ProsperoStore catalog update submitted."
+}

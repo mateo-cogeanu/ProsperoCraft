@@ -10,7 +10,7 @@ Download Minecraft on your console, keep separate instances for worlds and mods,
 
 ProsperoCraft handles Minecraft installation, accounts, input and game integration. Its [Native Java 25 Runtime](https://github.com/mateo-cogeanu/ps5-java25-homebrew) is maintained separately. Official Minecraft game JARs and asset objects are downloaded and verified from the publisher, rather than bundled with the app.
 
-Release **01.000.300** fixes flickering menu text in Minecraft 1.21 and 1.21.1 and improves handling of large Fabric mods. The maintainer confirmed the text fix and shader rendering on PS5. [Release notes](docs/releases/client-gui-text-300.md) · [Console acceptance](docs/validation/client300-console-acceptance-2026-11-23.json).
+Release **01.000.300** fixes flickering menu text in Minecraft 1.21 and 1.21.1 and improves handling of large Fabric mods. The maintainer confirmed the text fix and shader rendering on PS5. [Release notes](docs/releases/client-gui-text-300.md) · [Console acceptance](docs/validation/client300-console-acceptance-2026-11-23.json) · [ProsperoStore update submitted](https://github.com/darkxex/ps5-homebrew-catalog/pull/1399).
 
 Release **01.000.287** adds local offline profiles and instance downloads without Microsoft sign-in. The maintainer confirmed the build and shader rendering on PS5. [Release notes](docs/releases/client-offline-profiles-287.md) · [Console acceptance](docs/validation/client287-console-acceptance-2026-11-18.json) · [ProsperoStore update submitted](https://github.com/darkxex/ps5-homebrew-catalog/pull/1340).
 
