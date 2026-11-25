@@ -167,7 +167,7 @@ page_preview=r'''
   field(83,"EULA");field(15,"1");field(7,"X  Accept     CIRCLE  Back");settle_preview();save_scene("servers-eula");
   field(83,"PREPARING");field(7,"CIRCLE  Cancel download");field(20,"450");field(21,"27 / 59 MB");field(87,"Downloading Vanilla 26.3");
   settle_preview();save_scene("servers-download");
-  field(83,"RUNNING");field(7,"X  Select");field(84,"192.0.2.24:25565");field(85,"Existing world");field(88,"Online  ·  2 / 8 players  ·  up 1h 12m");field(89,"Alex, Steve");settle_preview();save_scene("servers-online");
+  field(83,"RUNNING");field(7,"X  Select");field(84,"192.0.2.24:25565");field(85,"Existing world");field(88,"Online  ·  2 / 8 players  ·  up 1h 12m");field(89,"Alex, Steve");settle_preview();save_scene("servers-online");prospero_menu::hold_start=prospero_menu::now_ms()-500;settle_preview();save_scene("servers-hold-stop");prospero_menu::hold_start=0;std::snprintf(prospero_menu::toast_text,sizeof(prospero_menu::toast_text),"%s","Could not reach Modrinth. Check the network and try again.");prospero_menu::toast_error=true;prospero_menu::toast_start=prospero_menu::now_ms()-1000;prospero_menu::toast_until=prospero_menu::now_ms()+600000;settle_preview();save_scene("servers-toast-error");prospero_menu::toast_until=0;
   field(83,"STOPPING");field(7,"");settle_preview();save_scene("servers-saving");
   field(83,"FAILED");field(7,"X  Select");settle_preview();save_scene("servers-failed");
   puts("PASS actual pointer callback rejects moving dropdown clicks and accepts settled visual row");

@@ -1,0 +1,21 @@
+{
+  "app_version": "01.000.308",
+  "title_id": "PPSA99874",
+  "package_sha256": "e1b48dcb60428229df05b8ad740ffbdf2820e8c439e7d865f2f5540938366c69",
+  "package_bytes": 128697374,
+  "build_base_commit": "4694bdb",
+  "build_source": "Built from the working tree on top of the base commit; the commit that adds this record contains exactly those sources.",
+  "eboot_sha256": "afeb48687ba3996b3eab3d59e781a18ae5122139c4a630e9c53cd9bf24dc2fc5",
+  "runtime_resident_ownership_commit": "51089be1c190354ac1a01a0ac04316773a939a11",
+  "publisher121_lock_sha256": "552805e92ee78b765fd887f9d083b517cf3008a41255128fa215a31d0a7c0da8",
+  "change": "Controller X must be held for 0.9 s to save and stop a running server, confirm instance deletion, or confirm an uninstall; a bottom progress pill shows the hold, and releasing, moving or pressing another button cancels it. Mouse and keyboard confirmation stay immediate. While hosting or in server setup, non-current tabs are dimmed and a HOSTING pill appears beside the brand. Success and error results appear as toasts in the bottom message slot (3.5 s and 7 s). Byte downloads and server setup show smoothed speed and time left. The browser upload area accepts drag and drop and shows a row with progress and result for each file.",
+  "checks": [
+    "All 21 standard and 14 native host checks passed.",
+    "test_launcher_web.py adds speed and time-left formatting and the hosted footer and status text for running and stopped servers.",
+    "Host Vulkan rendered the hold indicator, error toast, dimmed tabs and HOSTING pill on the Servers page.",
+    "The browser upload area was checked with two dropped files at phone width; the page script passes a syntax check.",
+    "Signed SELF integrity, ZIP checksum and the independent package audit passed for the recorded package."
+  ],
+  "pending_console": "Physical PS5: hold timing and cancellation for save-and-stop, delete and uninstall; toast readability and timing; dimmed tabs and HOSTING pill on a TV; download speed during a real install; drag and drop from a PC browser. The 307 browser server control checks also remain pending.",
+  "release_store": "Local test candidate only. No release, prerelease or Store action until the user confirms this exact build works on a physical PS5."
+}

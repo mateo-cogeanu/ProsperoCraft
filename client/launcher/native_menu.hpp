@@ -159,6 +159,20 @@ inline void content_icon(Canvas& c,int x,int y,int size,const char* pixels){
 }
 struct Focus {float x=0,y=0,w=0,h=0;bool initialized=false;};
 inline Focus focus{};inline std::uint64_t transition_start=0,last_draw_time=0,component_motion_until=0;inline bool animating=false;
+// Hold-to-confirm: the controller X press on a destructive target is forwarded only after a full hold.
+inline constexpr std::uint64_t hold_ms=900;inline std::uint64_t hold_start=0;inline int hold_page=-1,hold_row=-1;
+inline const char* hold_label(int page,int row,const Fields& f){
+ if(page==16&&std::strcmp(f[83].data(),"RUNNING")==0)return "Keep holding X to save and stop the server";
+ if(page==9&&row==1)return "Keep holding X to delete this instance";
+ if(page==14&&row==1)return "Keep holding X to uninstall";
+ return nullptr;
+}
+// Result toasts follow the existing feedback serial; text is copied when the cue arrives.
+inline int toast_serial=-1;inline std::uint64_t toast_start=0,toast_until=0;inline bool toast_error=false;inline char toast_text[512]{};
+inline bool toast_visible(std::uint64_t now){return toast_text[0]&&now<toast_until&&!hold_start;}
+inline bool bottom_slot_busy(std::uint64_t now){return toast_visible(now)||hold_start;}
+inline bool server_locked(const Fields& f){return std::atoi(f[11].data())==16&&f[83][0]&&std::strcmp(f[83].data(),"SELECT")!=0;}
+inline bool hosting(const Fields& f){const char* s=f[83].data();return std::atoi(f[11].data())==16&&(!std::strcmp(s,"RUNNING")||!std::strcmp(s,"STARTING")||!std::strcmp(s,"STOPPING")||!std::strcmp(s,"STOPPED")||!std::strcmp(s,"FAILED"));}
 inline std::uint64_t now_ms(){return sceKernelGetProcessTime()/1000;}
 inline void selection(Canvas& c,int x,int y,int w,int h){
 #ifdef PROSPERO_TOOLKIT
@@ -583,6 +597,29 @@ inline void compose_library_progress(Canvas& c) noexcept {
  label(c,1650,1020,PROSPERO_APP_VERSION,24,0x7d9f89);
  runtime_footer(c);
 }
+inline void overlays(Canvas& c) noexcept {
+ const auto now=now_ms();const bool reduced=std::strcmp(fields[30].data(),"ON")==0;
+ if(toast_visible(now)){
+  const unsigned width=std::min(1400u,Canvas::text_width(toast_text,24)+92);
+  const float in=reduced?1.0f:std::min(1.0f,float(now-toast_start)/160.0f);const int y=938+int((1-in)*14);
+  c.rounded(72,y,width,56,28,ink(toast_error?0x5a2a24:0x24533a));
+  c.rounded(96,y+22,12,12,6,ink(toast_error?0xffa395:0xb6f2be));
+  title(c,124,y+14,toast_text,24,width-72,toast_error?0xffd6cf:0xd8f7de);
+  animating=true;
+ }
+ if(hold_start){
+  const char* text=hold_label(number(11),number(15),fields);
+  if(text){
+   const float t=std::min(1.0f,float(now-hold_start)/float(hold_ms));
+   // Same bottom slot as toasts: toolkit text composites above shapes, so stay clear of content text.
+   constexpr int x=72,y=934,w=900,h=66;
+   c.rounded(x,y,w,h,22,ink(0x1f4630));
+   label(c,x+28,y+7,text,24,0xeaf0e8);
+   c.rounded(x+28,y+45,w-56,8,4,ink(0x2f5a43));c.rounded(x+28,y+45,unsigned((w-56)*t),8,4,ink(0xd0ff9a));
+   animating=true;
+  }
+ }
+}
 inline void compose(Canvas& c) noexcept {
  animating=false;last_draw_time=now_ms();prospero_palette::selected=std::clamp(number(104),0,5);
 #ifdef PROSPERO_TOOLKIT
@@ -606,6 +643,8 @@ inline void compose(Canvas& c) noexcept {
  float elapsed=float(now_ms()-transition_start)/180.0f;if(elapsed<0)elapsed=0;if(elapsed>1)elapsed=1;
  const int slide=0;layout_slide=0;(void)slide;(void)elapsed;
  c.rounded(40,32,1840,108,24,ink(0x10221c));block(c,66,53,64,0);label(c,149,66,"ProsperoCraft",30);
+ const bool locked=server_locked(fields);
+ if(hosting(fields)){const int px=149+int(Canvas::text_width("ProsperoCraft",30))+22;c.rounded(px,68,140,40,20,ink(0x2c5a3e));auto t=centered_text(px,68,140,40,"HOSTING",20);label(c,t.x,t.y,"HOSTING",20,0xc7f4cf);}
  const bool signed_in=fields[81][0]&&std::strcmp(fields[5].data(),"Not signed in")!=0;
  const char* tabs[]={"Instances","Settings",signed_in?fields[81].data():"Accounts","Servers"};
  const bool servers=std::strcmp(fields[1].data(),"ON")==0;
@@ -617,10 +656,10 @@ inline void compose(Canvas& c) noexcept {
   const bool current=tab==logical,account=logical==2&&signed_in;
   const int name_width=tw[i]-(account?68:0);
   if(current&&top)selection(c,tx[i],52,tw[i],68);
-  c.rounded(tx[i],52,name_width,68,18,ink(current?0x53885c:0x14251e));
+  c.rounded(tx[i],52,name_width,68,18,ink(current?0x53885c:locked?0x0f1b16:0x14251e));
   auto text=centered_text(tx[i],52,name_width,68,tabs[logical],logical==2?24:30);
   if(account)text.x=std::max(tx[i]+16,text.x);
-  title(c,text.x,text.y,tabs[logical],logical==2?24:30,account?name_width-32:tw[i]-45,current?0xc7f4cf:0xb0c4b5);
+  title(c,text.x,text.y,tabs[logical],logical==2?24:30,account?name_width-32:tw[i]-45,current?0xc7f4cf:locked?0x50645a:0xb0c4b5);
 
   if(account)player_head(c,tx[i]+tw[i]-51,66,40);
  }
@@ -676,14 +715,15 @@ inline void compose(Canvas& c) noexcept {
  c.end_content();
 #endif
  if(page!=15&&page!=16&&std::strcmp(fields[64].data(),"BUSY")==0){
-  if(page==12&&fields[102][0])content_icon(c,78,924,46,fields[102].data());if(page!=3)title(c,page==12&&fields[102][0]?144:78,942,fields[2].data(),24,1230,0xaac8b2);label(c,1450,942,fields[21].data(),24,0xaac8b2);
+  if(page==12&&fields[102][0])content_icon(c,78,924,46,fields[102].data());if(page!=3&&!bottom_slot_busy(now_ms()))title(c,page==12&&fields[102][0]?144:78,942,fields[2].data(),24,1230,0xaac8b2);label(c,1450,942,fields[21].data(),24,0xaac8b2);
 #ifdef PROSPERO_TOOLKIT
   c.progress(number(20));
 #else
   c.rounded(72,982,1770,5,2,ink(0x233c2c));if(number(20)>0)c.rounded(72,982,unsigned(1770*number(20)/1000),5,2,ink(0xa9eab6));
 #endif
- }else if(page!=3&&page!=15&&page!=16)
+ }else if(page!=3&&page!=15&&page!=16&&!bottom_slot_busy(now_ms()))
   title(c,page==2?settings_x:78,page==2?973:949,fields[2].data(),page==2?21:24,page==2?settings_width:1760,0x83a58d);
+ overlays(c);
  control_label(c,76,1020,desktop.cursor?"Click Select    Right click / Esc Back    Arrows Navigate    Enter Confirm    Tab Pages    F1 Controls":fields[7].data(),20,0x7d9f89);label(c,1650,1020,PROSPERO_APP_VERSION,24,0x7d9f89);
  runtime_footer(c);
 }
@@ -773,6 +813,12 @@ inline bool update() noexcept {
   return (pressed&0x40a0)!=0;
  }
 #endif
+ {
+  const int hold_row_now=number(15);const char* target=hold_label(input_page,hold_row_now,fields);
+  if(hold_start&&(!target||input_page!=hold_page||hold_row_now!=hold_row||!(navigation.previous&0x4000)||(pressed&~0x4000u)))hold_start=0;
+  if(target&&(pressed&0x4000)){pressed&=~0x4000u;hold_start=current_time?current_time:1;hold_page=input_page;hold_row=hold_row_now;}
+  else if(hold_start&&current_time-hold_start>=hold_ms){pressed|=0x4000;hold_start=0;}
+ }
  if(pressed&0x4000)pressed_at=current_time;
  if(pressed){desktop.cursor=false;pointer_kind=-1;}
  push_input(pressed);
@@ -804,6 +850,13 @@ inline bool update() noexcept {
    }
    if(before!=2&&after==2)settings_scroll.snap(float(std::atoi(published[84].data())*settings_pitch));
    fields=published;cache_scroll_rows();
+   const int serial=number(77);
+   if(toast_serial<0)toast_serial=serial;
+   else if(serial!=toast_serial){
+    toast_serial=serial;const bool error=std::strcmp(fields[78].data(),"error")==0;
+    const char* text=number(11)==16&&fields[87][0]?fields[87].data():fields[2].data();
+    if((error||std::strcmp(fields[78].data(),"success")==0)&&text[0]){std::snprintf(toast_text,sizeof(toast_text),"%s",text);toast_error=error;toast_start=current_time;toast_until=current_time+(error?7000:3500);}
+   }
   }
   pthread_mutex_unlock(&mailbox);
  }
@@ -824,7 +877,7 @@ inline bool update() noexcept {
  else if(current_page==8)available=3;
  else if(current_page==12&&std::strcmp(fields[64].data(),"BUSY")!=0)available=(number(84)>0?1u:0u)|(number(84)+4<number(83)?2u:0u);
  haptics.page_ready(available,trigger_held);haptics.observe(unsigned(number(77)),fields[78].data(),vibration,current_time);
- if(changed||desktop_changed||(pressed&0x4000)){component_motion_until=now_ms()+700;return true;}
+ if(changed||desktop_changed||(pressed&0x4000)||hold_start||toast_visible(current_time)){component_motion_until=now_ms()+700;return true;}
 #ifdef PROSPERO_TOOLKIT
  if(prospero_ui::healthy)return true; // VideoOut vblank owns pacing, including the animated backdrop.
 #endif
@@ -857,7 +910,7 @@ inline void* ui_main(void*) noexcept {
 inline bool start_frontend() noexcept {
  visible=false;online=false;exit_requested=false;display_done=false;display_ok=false;
  desktop=DesktopInput{};pointer_kind=pointer_target=pointer_page=-1;
- selector_depth=0;selector_reveal.snap(1);page_turn={};card_open={};opening_slot=0;card_reverse=false;list_scroll={};tab_x={};tab_w={};tabs_ready=false;library_bar.snap(0);page_direction=1;page_direction_at=0;trigger_held=0;list_page=-1;updates=0;navigation.clear();pressed_at=0;focus={};transition_start=now_ms();animating=false;event_read=event_write=0;fields={};published={};
+ hold_start=0;toast_serial=-1;toast_until=0;toast_text[0]=0;selector_depth=0;selector_reveal.snap(1);page_turn={};card_open={};opening_slot=0;card_reverse=false;list_scroll={};tab_x={};tab_w={};tabs_ready=false;library_bar.snap(0);page_direction=1;page_direction_at=0;trigger_held=0;list_page=-1;updates=0;navigation.clear();pressed_at=0;focus={};transition_start=now_ms();animating=false;event_read=event_write=0;fields={};published={};
  const char* boot[]={"Instances","","Starting the Java runtime...","","","Not signed in","","","PREPARING","0","WAIT","0"};
  for(int i=0;i<12;++i)std::snprintf(fields[i].data(),512,"%s",boot[i]);
  std::int32_t user=-1;if(sceUserServiceGetInitialUser(&user)<0)return false;controller=scePadOpen(user,0,0,nullptr);if(controller<0)return false;
