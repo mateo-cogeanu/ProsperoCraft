@@ -13,11 +13,11 @@ public class ThemeCheck {
   Path root=Path.of(args[0]);var library=new ProsperoLibrary(root);library.settings().showIntro=false;
   var instance=library.add("Keep my world","26.3",1);Path world=library.game(instance).resolve("saves/Keep/level.dat");Files.createDirectories(world.getParent());Files.writeString(world,"unchanged");library.save();
   var model=new ProsperoLauncher(new ProsperoAuth(),root,null);model.tick(0x800);model.tick(0x40);for(int i=0;i<6;i++)model.tick(0x40);
-  check(model.tick(0)[15].equals("6"),"theme row reachable");
+  check(model.tick(0)[15].equals("7"),"theme row reachable");
   for(int theme=0;theme<6;theme++){
    model.tick(0x4000);check(model.tick(0)[82].equals("Color theme"),"theme dropdown");int current=Integer.parseInt(model.tick(0)[15]);
    while(current>theme){model.tick(0x10);current--;}while(current<theme){model.tick(0x40);current++;}
-   var f=model.tick(0x4000);check(f.length==105&&f[104].equals(""+theme)&&f[11].equals("2")&&f[15].equals("6"),"live selection and return");
+   var f=model.tick(0x4000);check(f.length==ProsperoLauncher.FIELD_COUNT&&f[104].equals(""+theme)&&f[11].equals("2")&&f[15].equals("7"),"live selection and return");
    check(new ProsperoLibrary(root).settings().theme==theme,"theme persisted");
   }
   model.tick(0x4000);model.tick(0x10);model.tick(0x2000);check(model.tick(0)[104].equals("5"),"cancel keeps saved theme");

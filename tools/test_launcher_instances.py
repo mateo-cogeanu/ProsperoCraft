@@ -82,7 +82,7 @@ var store=new ProsperoLibrary(root.resolve("store"));if(!store.instances().isEmp
   model.tick(0x20);if(!model.tick(0)[15].equals("0")||!model.tick(0)[68].equals("ON"))throw new AssertionError("right should focus, not toggle");
   model.tick(0x4000);if(!model.tick(0)[68].equals("OFF"))throw new AssertionError("checkbox X");model.tick(0x80);model.tick(0x4000);if(!new ProsperoLauncher(new ProsperoAuth(),root.resolve("model"),InstanceCheck::open).tick(0)[11].equals("0"))throw new AssertionError("intro preference");
   var notice=new ProsperoLauncher(new ProsperoAuth(),root.resolve("model"),InstanceCheck::open);
-  notice.tick(0x800);for(int i=0;i<4;i++)notice.tick(0x40);notice.tick(0x4000);
+  notice.tick(0x800);for(int i=0;i<5;i++)notice.tick(0x40);notice.tick(0x4000);
   if(!new ProsperoLauncher(new ProsperoAuth(),root.resolve("model"),InstanceCheck::open).tick(0)[11].equals("7"))throw new AssertionError("Settings restore notice");notice.tick(0x4000);
   model.tick(0x800);if(!model.tick(0)[11].equals("2")||!model.tick(0)[28].equals("CONTENT"))throw new AssertionError("R1 auto settings");model.tick(0x4000);if(!model.tick(0)[11].equals("10"))throw new AssertionError("resolution dropdown");model.tick(0x2000);
   model.tick(0x400);model.tick(0x4000);waitFor(model);if(!model.tick(0)[23].equals("26.1"))throw new AssertionError("catalog");model.tick(0x40);model.tick(0x40);model.tick(0x4000);if(!model.tick(0)[11].equals("6"))throw new AssertionError("name keyboard");model.tick(0x4000);model.tick(0x8000);

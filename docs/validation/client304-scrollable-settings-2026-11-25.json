@@ -1,0 +1,11 @@
+{
+  "app_version": "01.000.304",
+  "title_id": "PPSA99874",
+  "package_sha256": "15eb9dba1b8bb9797a5b7c2aca868f12dd8ca0efbef13f84d2382d14ed6e96b0",
+  "package_bytes": 128654632,
+  "build_base_commit": "d8e0da410d51757d119c9b24b927aa79aa254416",
+  "change": "Settings uses a clipped scrolling viewport with a position indicator, supporting directional navigation, the right stick and mouse wheel. Background and Vibration are regular rows. Server [BETA] sits below Show Snapshots and defaults off, including on existing libraries. Turning it on reveals the Servers tab and its Early beta notice. Turning it off preserves hosted worlds.",
+  "scope": "The Vanilla 26.x dedicated-server backend from build 303 is retained. Minecraft Java client remains the primary experience.",
+  "checks": "All 21 standard and 14 native host checks passed after updating their old row and shortcut expectations. Standalone Background, Theme and Input checks passed. The package signature, checksum and static audit passed.",
+  "pending_console": "Check controller, mouse wheel and pointer alignment during scroll on PS5, including reduced motion and returning from a selector. Enable and disable Servers across a restart. The build 303 console hosting, authenticated join, save and reload checks also remain pending."
+}

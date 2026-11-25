@@ -28,8 +28,17 @@ public class DesktopCheck {
   String unfinished=m.tick(0)[29];for(int n=0;n<4;n++){m.tick(0x20);ok(m.tick(0)[105].equals("CONTROLLER"));ok(m.tick(0)[29].equals(unfinished));m.tick(0x40000001);ok(m.tick(0)[105].equals("PHYSICAL"));ok(m.tick(0)[29].equals(unfinished));}m.tick(0x40000002);ok(m.tick(0)[105].equals("CONTROLLER"));m.tick(0x40000001);m.tick(0x50000020);ok(m.tick(0)[105].equals("PHYSICAL"));m.tick(0x20000002);ok(m.tick(0)[29].equals("Az"));
   m.tick(0x2000);ok(m.tick(0)[11].equals("5"));ok(Files.readString(root.resolve("library.json")).equals(saved));
   m.tick(0x2000);ok(m.tick(0)[11].equals("4")&&m.tick(0)[16].equals("Preserved")&&m.tick(0)[15].equals("1"));m.tick(0x4000);ok(m.tick(0)[11].equals("5"));m.tick(click(5,4,3));ok(m.tick(0)[11].equals("4")&&m.tick(0)[16].equals("Preserved"));m.tick(0x4000);ok(m.tick(0)[11].equals("5"));
-  m.tick(click(5,0,1));ok(m.tick(0)[11].equals("2"));m.tick(click(2,3,6));ok(m.tick(0)[11].equals("10"));m.tick(click(10,3,2));ok(m.tick(0)[11].equals("2"));ok(m.tick(0)[104].equals("2"));
-  String beforeTheme=Files.readString(root.resolve("library.json"));m.tick(click(2,3,6));for(int preview=0;preview<6;preview++){m.tick(click(10,3,preview)&~0x8000);ok(m.tick(0)[104].equals(""+preview));ok(new ProsperoLibrary(root).settings().theme==2);ok(Files.readString(root.resolve("library.json")).equals(beforeTheme));}m.tick(click(10,3,31)&~0x8000);ok(m.tick(0)[104].equals("5"));m.tick(0x2000);ok(m.tick(0)[104].equals("2")&&Files.readString(root.resolve("library.json")).equals(beforeTheme));
+  m.tick(click(5,0,1));ok(m.tick(0)[11].equals("2"));m.tick(click(2,3,7));ok(m.tick(0)[11].equals("10"));m.tick(click(10,3,2));ok(m.tick(0)[11].equals("2"));ok(m.tick(0)[104].equals("2"));
+  String beforeTheme=Files.readString(root.resolve("library.json"));m.tick(click(2,3,7));for(int preview=0;preview<6;preview++){m.tick(click(10,3,preview)&~0x8000);ok(m.tick(0)[104].equals(""+preview));ok(new ProsperoLibrary(root).settings().theme==2);ok(Files.readString(root.resolve("library.json")).equals(beforeTheme));}m.tick(click(10,3,31)&~0x8000);ok(m.tick(0)[104].equals("5"));m.tick(0x2000);ok(m.tick(0)[104].equals("2")&&Files.readString(root.resolve("library.json")).equals(beforeTheme));
+  ok(m.tick(0)[1].equals("OFF"));m.tick(click(2,0,3));ok(m.tick(0)[11].equals("2"));
+  m.tick(click(2,3,4));ok(m.tick(0)[1].equals("ON")&&new ProsperoLibrary(root).settings().serverBeta);
+  m.tick(click(2,0,3));ok(m.tick(0)[11].equals("16"));m.tick(0x400);ok(m.tick(0)[11].equals("3"));
+  m.tick(click(3,0,1));m.tick(click(2,3,4));ok(m.tick(0)[1].equals("OFF")&&!new ProsperoLibrary(root).settings().serverBeta);
+  for(int step=0;step<5;step++)m.tick(0x50000040); // wheel input uses the same row scroll path
+  ok(m.tick(0)[15].equals("9")&&m.tick(0)[84].equals("4"));
+  m.tick(0x1000);ok(m.tick(0)[79].equals("ON"));m.tick(0x4000);ok(m.tick(0)[79].equals("OFF")&&!new ProsperoLibrary(root).settings().vibration);
+  m.tick(0x10);m.tick(0x8000);ok(m.tick(0)[11].equals("2"));m.tick(0x4000);ok(m.tick(0)[11].equals("10"));
+  m.tick(0x2000);ok(m.tick(0)[15].equals("8")&&m.tick(0)[84].equals("4"));
   set(grid,"page",1);set(grid,"row",3);set(grid,"top",false);grid.tick(0x4000);ok(grid.tick(0)[93].equals("1")&&grid.tick(0)[83].equals("32"));int initialIcon=Integer.parseInt(grid.tick(0)[15]);grid.tick(0x40);ok(Integer.parseInt(grid.tick(0)[15])==initialIcon+8&&grid.tick(0)[84].equals("0"));grid.tick(click(10,3,31));ok(grid.tick(0)[24].equals("31")&&grid.tick(0)[11].equals("1"));
   set(m,"page",9);set(m,"row",0);set(m,"detail",item);m.tick(click(9,0,1));ok(m.tick(0)[11].equals("9"));m.tick(click(9,3,0));ok(m.tick(0)[11].equals("5")); // modal blocks tabs, explicit No
   set(m,"page",6);set(m,"keyboard","");m.tick(0x30000000|'x');m.tick(click(6,4,4)&~0x8000);ok(m.tick(0)[11].equals("6"));m.tick(0x20000001);ok(m.tick(0)[11].equals("5"));ok(m.tick(0)[16].equals("x"));
@@ -72,6 +81,9 @@ int main(){
  assert(desktop_hit(3,1200,480,0,0).kind==-1);
  assert(desktop_hit(0,70,342,0,2).target==0);assert(desktop_hit(0,69,342,0,2).kind==-1);assert(desktop_hit(0,520,342,0,2).target==1);assert(desktop_hit(0,491,342,0,2).kind==-1);
  assert(desktop_hit(5,110,805,0,0).kind==-1);assert(desktop_hit(5,800,760,0,0).target==8);assert(desktop_hit(5,1400,760,0,0).target==8);assert(desktop_hit(5,800,850,0,0).target==5);assert(desktop_hit(5,1400,850,0,0).target==6);assert(desktop_hit(6,900,70,0,0).kind==-1);assert(desktop_hit(10,300,285,8,20).target==8);assert(desktop_hit(5,1350,650,0,0).target==7);assert(desktop_hit(12,1600,550,0,1,0,false,true).target==20);
+ assert(desktop_hit(2,1700,70,0,10,0,false,false,false,false,true).target==3);
+ assert(desktop_hit(2,800,302,4,10,0,false,false,false,false,false,384).target==4);
+ assert(desktop_hit(2,800,878,4,10,0,false,false,false,false,false,384).kind==-1);
  assert(desktop_char(4,false,false)=='a'&&desktop_char(4,true,false)=='A'&&desktop_char(4,true,true)=='a');
  DesktopInput d;std::vector<unsigned> events,modes;int clicks=0;auto emit=[&](unsigned x){if((x>>28)==4)modes.push_back(x);else events.push_back(x);};auto point=[&](int x,int y,bool c){assert(x>=0&&x<1920&&y>=0&&y<1080);clicks+=c;};
  prospero_keyboard_packet k{};k.connected=1;k.keys[0]=40;kp={k};d.poll(1,emit,point);assert(events.empty()); // held on entry
@@ -86,6 +98,7 @@ with tempfile.TemporaryDirectory() as td:
  w=Path(td);(w/'DesktopCheck.java').write_text(java);cp=launcher_classpath();out=w/'classes';out.mkdir()
  subprocess.run([str(J/'javac'),'--release','25','-cp',cp,'-d',str(out),*[str(p)for p in (R/'client/launcher/java').glob('*.java')],str(w/'DesktopCheck.java')],check=True)
  (out/'prosperocraft-channel.txt').write_text('temp_gametest\n')
+ (out/'prosperocraft-build.properties').write_text('app_version=01.000.304\ntitle_id=PPSA99874\n')
  subprocess.run([str(J/'java'),'-cp',str(out)+':'+cp,'DesktopCheck',str(w/'data')],check=True)
  (w/'test.cpp').write_text(cpp)
  subprocess.run([executable('clang++', env='CXX'),'-std=c++20','-fsanitize=address,undefined','-I'+str(R/'client/launcher'),str(w/'test.cpp'),'-o',str(w/'test')],check=True)

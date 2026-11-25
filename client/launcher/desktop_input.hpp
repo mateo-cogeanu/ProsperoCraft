@@ -4,23 +4,21 @@
 #include <cstdint>
 #include "../ports/sdl/ps5_hid.h"
 namespace prospero_menu {
-#ifdef PROSPERO_HOST_BETA
-inline constexpr int tab_x_positions[]={593,920,1227,1560};
-inline constexpr int tab_widths[]={307,287,313,275};
-inline constexpr int tab_count=4;
-#else
-inline constexpr int tab_x_positions[]={865,1245,1555};
-inline constexpr int tab_widths[]={350,280,280};
-inline constexpr int tab_count=3;
-#endif
+inline constexpr int standard_tab_x[]={865,1245,1555};
+inline constexpr int standard_tab_width[]={350,280,280};
+inline constexpr int server_tab_x[]={593,920,1227,1560};
+inline constexpr int server_tab_width[]={307,287,313,275};
+inline constexpr int settings_top=300,settings_pitch=96,settings_rows_visible=6;
 // Commands share the bounded UI mailbox. Expected page prevents stale clicks
 // from activating a different screen after an asynchronous transition.
 inline unsigned pointer_command(int page,int kind,int target,bool click){return 0x10000000u|(unsigned(page)<<20)|(unsigned(kind)<<16)|(click?0x8000:0)|unsigned(target);}
 struct DesktopHit {int kind=-1,target=0;};
-inline DesktopHit desktop_hit(int page,int x,int y,int first,int count,int slide=0,bool offline=false,bool installed=false,bool shader=false,bool local_profiles=false){
+inline DesktopHit desktop_hit(int page,int x,int y,int first,int count,int slide=0,bool offline=false,bool installed=false,bool shader=false,bool local_profiles=false,bool servers=false,int settings_offset=0){
  auto box=[&](int a,int b,int w,int h){return x>=a&&x<a+w&&y>=b&&y<b+h;};
  bool modal=page==6||(page>=7&&page<=11)||page==14||page==15;
- if(!modal)for(int i=0;i<tab_count;i++)if(box(tab_x_positions[i],52,tab_widths[i],68))return {0,i};
+ const int* tx=servers?server_tab_x:standard_tab_x;
+ const int* widths=servers?server_tab_width:standard_tab_width;
+ if(!modal)for(int i=0;i<(servers?4:3);i++)if(box(tx[i],52,widths[i],68))return {0,i};
  if(page==16){if(box(110,500,1650,90))return {3,0};if(box(110,625,1650,82))return {3,1};return {};}
  if(page==0){for(int i=0;i<8&&first+i<count;i++)if(box(70+i%4*450,342+i/4*272+slide,420,242))return {1,first+i};}
  if(page==6){for(int i=0;i<40;i++)if(box(80+i%10*176,465+i/10*91,152,73))return {2,i};for(int i=0;i<5;i++)if(box(70+i*360,855,330,76))return {4,i};return {};}
@@ -29,8 +27,12 @@ inline DesktopHit desktop_hit(int page,int x,int y,int first,int count,int slide
  if(page>=1&&page<=5)y-=slide;
  if(page==1){for(int i=0;i<4;i++)if(box(760,320+i*110,1080,96))return {3,i};if(box(760,774,1080,76))return {3,4};}
  if(page==8){if(box(78,825,700,76))return {4,5};if(box(1050,825,700,76))return {4,6};}
- if(page==2&&box(110,705+slide,530,76))return {4,7};if(page==2&&box(110,795+slide,530,76))return {4,8};
- if(page==2){for(int i=0;i<7;i++)if(box(760,300+i*96,1080,86))return {3,i};}
+ if(page==2){
+  if(!box(760,settings_top,1080,settings_pitch*settings_rows_visible))return {};
+  const int local=y-settings_top+settings_offset;
+  if(local>=0&&local/settings_pitch<count&&local%settings_pitch<86)return {3,local/settings_pitch};
+  return {};
+ }
  if(page==3){for(int i=0;i<(local_profiles?3:1);i++)if(box(1140,366+i*100,700,76))return {3,i};}
  if(page==4){for(int i=0;i<(offline?4:3);i++)if(box(760,505+i*100,1080,76))return {3,i};}
  if(page==5){if(box(760,310,1080,96))return {3,0};if(box(760,420,1080,96))return {3,1};int rows[]={2,3,4,7};for(int i=0;i<4;i++)if(box(760+i%2*560,535+i/2*95,520,76))return {3,rows[i]};if(box(760,725,1080,76))return {3,8};if(box(760,820,520,76))return {3,5};if(box(1320,820,520,76))return {3,6};}
@@ -69,7 +71,7 @@ struct DesktopInput {
   bool available=false;for(auto& k:keys)available|=k.connected;if(keyboard_available&&!available)emit(0x40000002u);keyboard_available=available;
   for(auto& m:mice){if(m.handle<0)continue;prospero_mouse_packet packets[16]{};int n=prospero_hid_read(1,m.handle,packets,16);if(n<0||n>16){prospero_hid_close(1,m.handle);m=Mouse{};continue;}
    for(int i=0;i<n;i++){auto& p=packets[i];if(!p.connected){m.primed=false;m.held=0;continue;}unsigned b=p.buttons&3;if(!m.primed){m.blocked=b;m.primed=true;}m.blocked&=b;b&=~m.blocked;
-    if(p.x||p.y||b!=m.held||p.wheel){x=std::clamp(x+p.x,0.f,1919.f);y=std::clamp(y+p.y,0.f,1079.f);cursor=true;changed=true;if(b!=m.held||p.wheel)emit(0x40000001u);point(int(x),int(y),(b&1)&&!(m.held&1));if((b&2)&&!(m.held&2))emit(0x50002000u);if(p.wheel)emit(0x50000000u|(p.wheel>0?0x10:0x40));}m.held=b;
+    if(p.x||p.y||b!=m.held||p.wheel){x=std::clamp(x+p.x,0.f,1919.f);y=std::clamp(y+p.y,0.f,1079.f);cursor=true;changed=true;if(b!=m.held||p.wheel)emit(0x40000001u);if(p.x||p.y||b!=m.held)point(int(x),int(y),(b&1)&&!(m.held&1));if((b&2)&&!(m.held&2))emit(0x50002000u);if(p.wheel)emit(0x50000000u|(p.wheel>0?0x10:0x40));}m.held=b;
    }
   }return changed;
  }

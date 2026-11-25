@@ -12,12 +12,12 @@ public class Input105 {
  public static void main(String[]a)throws Exception{
   Path root=Path.of(a[0]);var lib=new ProsperoLibrary(root);lib.settings().showIntro=false;lib.save();
   var old=JsonParser.parseString(Files.readString(root.resolve("library.json"))).getAsJsonObject();old.getAsJsonObject("settings").remove("controllerKeys");Files.writeString(root.resolve("library.json"),old.toString());check(Arrays.equals(new ProsperoLibrary(root).settings().controllerKeys,ProsperoInput.DEFAULT),"legacy binding migration");
-  var model=new ProsperoLauncher(new ProsperoAuth(),root,u->{throw new java.io.IOException();});set(model,"page",2);set(model,"tab",1);set(model,"row",5);model.tick(0x4000);check(model.tick(0)[11].equals("13")&&model.tick(0)[83].equals("23"),"input settings route");
+  var model=new ProsperoLauncher(new ProsperoAuth(),root,u->{throw new java.io.IOException();});set(model,"page",2);set(model,"tab",1);set(model,"row",6);model.tick(0x4000);check(model.tick(0)[11].equals("13")&&model.tick(0)[83].equals("23"),"input settings route");
   model.tick(0x40);check(model.tick(0)[85].contains("Restore"),"reset first");model.tick(0x4000);check(model.tick(0)[11].equals("10")&&model.tick(0)[82].contains("key"),"binding dropdown");
   int chosen=ProsperoInput.CODES.indexOf(12);set(model,"row",chosen);model.tick(0x4000);check(model.tick(0)[11].equals("13"),"binding return");check(new ProsperoLibrary(root).settings().controllerKeys[8]==12,"mapped I not saved");
   set(model,"row",21);model.tick(0x4000);set(model,"row",ProsperoInput.CODES.indexOf(515));model.tick(0x4000);check(new ProsperoLibrary(root).settings().controllerKeys[28]==515,"trigger mouse mapping");
   set(model,"row",0);model.tick(0x4000);check(Arrays.equals(new ProsperoLibrary(root).settings().controllerKeys,ProsperoInput.DEFAULT),"reset not saved");
-  model.tick(0x2000);check(model.tick(0)[11].equals("2")&&model.tick(0)[15].equals("5"),"back loses route");
+  model.tick(0x2000);check(model.tick(0)[11].equals("2")&&model.tick(0)[15].equals("6"),"back loses route");
   int[] invalid=ProsperoInput.DEFAULT.clone();invalid[0]=4;try{ProsperoInput.validate(invalid);throw new AssertionError("menu navigation remapped");}catch(IllegalArgumentException expected){}
   try(var loader=new java.net.URLClassLoader(new URL[0])){URLConnection.setDefaultUseCaches("jar",false);ProsperoFabric.configure(loader,root.resolve("client.jar"),"26.3");check(URLConnection.getDefaultUseCaches("jar"),"uncached Fabric regression");}
   check(ProsperoInput.hint(ProsperoInput.DEFAULT).split(",").length==30,"hint serialization");
