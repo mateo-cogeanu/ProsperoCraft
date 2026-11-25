@@ -304,7 +304,8 @@ public final class ClientStartup25 {
     Object runningClient=instance.invoke(null);
     if(runningClient==null)return;
     FrameStallProbe stalls=("01.000.284".equals(ProsperoBuild.VERSION)||"01.000.285".equals(ProsperoBuild.VERSION)
-        ||"01.000.286".equals(ProsperoBuild.VERSION)||"01.000.287".equals(ProsperoBuild.VERSION)||"01.000.288".equals(ProsperoBuild.VERSION))
+        ||"01.000.286".equals(ProsperoBuild.VERSION)||"01.000.287".equals(ProsperoBuild.VERSION)||"01.000.288".equals(ProsperoBuild.VERSION)
+        ||("01.000.302".equals(ProsperoBuild.VERSION)&&layout==Layout.NAMED))
         ?new FrameStallProbe(minecraft,game,runningClient,owner,console):null;
     for(int count=0;count<300&&System.nanoTime()<deadline;count++) {
      var result=new java.util.concurrent.CompletableFuture<String>();
@@ -451,7 +452,8 @@ public final class ClientStartup25 {
     if(!org.lwjgl.sdl.SDLHints.SDL_SetHint("PS5_RENDER_SIZE",size))throw new IllegalStateException("Selected Zink resolution hint refused");
     stage("PS5_ZINK selected render size="+size+" source=launcher-setting");
     System.setProperty("ps5.opengl.provider","zink");
-    if(("01.000.300".equals(ProsperoBuild.VERSION)||"01.000.301".equals(ProsperoBuild.VERSION))&&ProsperoLauncher.selectedLegacy121()){
+    if(("01.000.300".equals(ProsperoBuild.VERSION)||"01.000.301".equals(ProsperoBuild.VERSION)||
+        "01.000.302".equals(ProsperoBuild.VERSION))&&ProsperoLauncher.selectedLegacy121()){
      if(!org.lwjgl.sdl.SDLHints.SDL_SetHint("PS5_LEGACY_GUI_VERTEX_UPLOAD","1"))
       throw new IllegalStateException("Legacy Zink upload hint refused");
      stage("PS5_ZINK legacy immediate vertex upload policy requested");
@@ -504,9 +506,7 @@ public final class ClientStartup25 {
    ProsperoSession session=new ProsperoSession(reports.resolve("mc-client/logs"),ProsperoLauncher.selectedShutdownAccessors(),ProsperoLauncher.selected121Fabric());
    Thread gameThread=Thread.currentThread();
    boolean legacyFrameTiming = ProsperoLauncher.observeLegacy121Frames();
-   try(FrameObserver frames=(legacyFrameTiming || ("01.000.283".equals(ProsperoBuild.VERSION)||"01.000.284".equals(ProsperoBuild.VERSION)||"01.000.285".equals(ProsperoBuild.VERSION)
-        ||"01.000.286".equals(ProsperoBuild.VERSION)||"01.000.287".equals(ProsperoBuild.VERSION)||"01.000.288".equals(ProsperoBuild.VERSION))
-       &&ProsperoLauncher.quietGameplayCompilerLog())
+   try(FrameObserver frames=(legacyFrameTiming || ProsperoLauncher.observeFabric263Stalls())
        ?new FrameObserver(gameThread, console, legacyFrameTiming, ProsperoLauncher.selected121Fabric()):null;
        ProsperoExit exit=cleanSystemExit(false)?new ProsperoExit(
      ()->session.awaitCleanReturn(gameThread.getContextClassLoader(),2000,ClientStartup25::stage),

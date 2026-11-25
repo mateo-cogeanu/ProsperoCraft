@@ -94,7 +94,8 @@ public final class ProsperoLauncher {
  static boolean observeLegacy121Frames(){
   if (!"01.000.296".equals(ProsperoBuild.VERSION) && !"01.000.297".equals(ProsperoBuild.VERSION) &&
       !"01.000.298".equals(ProsperoBuild.VERSION) && !"01.000.299".equals(ProsperoBuild.VERSION) &&
-      !"01.000.300".equals(ProsperoBuild.VERSION) && !"01.000.301".equals(ProsperoBuild.VERSION)) return false;
+      !"01.000.300".equals(ProsperoBuild.VERSION) && !"01.000.301".equals(ProsperoBuild.VERSION) &&
+      !"01.000.302".equals(ProsperoBuild.VERSION)) return false;
   return selectedLegacy121();
  }
  static boolean selectedLegacy121(){
@@ -105,8 +106,12 @@ public final class ProsperoLauncher {
   if (observeLegacy121Frames()) return true;
   return ("01.000.282".equals(ProsperoBuild.VERSION)||"01.000.283".equals(ProsperoBuild.VERSION)
       ||"01.000.284".equals(ProsperoBuild.VERSION)||"01.000.285".equals(ProsperoBuild.VERSION)
-        ||"01.000.286".equals(ProsperoBuild.VERSION)||"01.000.287".equals(ProsperoBuild.VERSION)||"01.000.288".equals(ProsperoBuild.VERSION))
+        ||"01.000.286".equals(ProsperoBuild.VERSION)||"01.000.287".equals(ProsperoBuild.VERSION)||"01.000.288".equals(ProsperoBuild.VERSION)
+        ||"01.000.302".equals(ProsperoBuild.VERSION))
       &&"26.3".equals(current.detail.version)&&"fabric".equals(current.detail.loader);
+ }
+ static boolean observeFabric263Stalls(){
+  return !observeLegacy121Frames() && quietGameplayCompilerLog() && !"01.000.282".equals(ProsperoBuild.VERSION);
  }
  static void configureGameLaunch(){if("fabric".equals(current.detail.loader))ProsperoFabric.configure(current.loader,current.cacheRoot.resolve("versions/"+current.detail.version+"/client.jar"),current.detail.version);}
  static boolean selectedResidentJna(){return current.receipt!=null&&(selected121()||current.receipt.classpath.stream().anyMatch(p->p.endsWith("/jna-5.19.1.jar")));}

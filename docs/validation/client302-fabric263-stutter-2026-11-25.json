@@ -1,0 +1,11 @@
+{
+  "app_version": "01.000.302",
+  "title_id": "PPSA99874",
+  "package_sha256": "91c66f987824685e6ca867107a0e9dc9d0f145624f11951e42cd5e8536322903",
+  "package_bytes": 128619313,
+  "build_base_commit": "cfd4139d24dea2bfdd00c0933b1d5e5f1293cf71",
+  "prior_console_evidence": "The maintainer reports persistent stutter on build 301. Same-session LAN reports confirm Fabric 26.3, Sodium 0.9.2 and Vitrail 0.13.0-beta. The captured run reported no active shader pack. The captured GC log contains no allocation stalls and a maximum recorded safepoint of 20.921 ms. Per-method JIT compilation logging was still active. No current-run frame timings tie these observations to the reported pauses.",
+  "change": "After the existing warmup, turn off per-method JIT compilation logging for Fabric 26.3 and restore the existing bounded frame interval and late-frame stack reports. Retain code cache, GC and safepoint logging and the build 301 compatibility policy.",
+  "checks": "All 21 host checks, target build, package signature, checksum and static package audit passed. Runtime, graphics and dependency pins match build 301.",
+  "pending_console": "Use the same instance, world, video settings and shader state as build 301. Reproduce along the same route and leave the game open for a matching frame, render-stack and GC sample. The earlier build 283 still showed slow frames with quieter logging, so this package does not establish that logging caused the current stutter."
+}
