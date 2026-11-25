@@ -1,0 +1,11 @@
+{
+  "app_version": "01.000.308",
+  "title_id": "PPSA99874",
+  "package_sha256": "e1b48dcb60428229df05b8ad740ffbdf2820e8c439e7d865f2f5540938366c69",
+  "matching_build_source_commit": "491093b21bee820bbb9c4521b2bd00d4cc297824",
+  "date": "2026-11-25",
+  "console_acceptance": "The maintainer reported that hold to confirm, hosting tab state, toasts, download speed and time remaining, and browser drag-and-drop work on a physical PS5.",
+  "shader_confirmation": "The maintainer confirmed that their usual shader pack loaded and rendered correctly on the physical PS5 in build 308. The pack and profile were not separately identified.",
+  "scope": "End-to-end browser administration with a real joining player, remote save and stop, reload and endurance are not separately confirmed on the console.",
+  "publication": "The maintainer requested a release for build 308."
+}

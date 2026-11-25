@@ -1,5 +1,14 @@
 # Changelog
 
+## 01.000.308 · Dedicated hosting beta and launcher improvements, 2026-11-25
+
+- Host Vanilla Minecraft Java 26.x on your local network and manage it from a paired phone or browser.
+- View the console, player list and uptime, copy the join address, and configure the server while it is stopped.
+- Added hold-to-confirm, launcher notifications, download estimates, and drag-and-drop uploads with per-file progress.
+- Fixed garbled server names containing non-ASCII characters.
+
+See the [release notes](docs/releases/client-server-browser-308.md).
+
 ## 01.000.302 · Fabric 26.3 frame pacing and shader compatibility, 2026-11-25
 
 - Reduce gameplay compilation logging and restore bounded slow-frame diagnostics on Fabric 26.3. The maintainer reported fewer hitches that cleared up after playing for a while.
