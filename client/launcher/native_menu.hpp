@@ -404,17 +404,24 @@ inline void compose_content(Canvas& c) noexcept {
   constexpr int left=server_x+server_inset, left_width=server_world_width-2*server_inset;
   constexpr int control_right=server_control_x+server_control_width;
   label(c,server_x,170,"Dedicated servers",68);
-  label(c,server_x,251,"Host a Minecraft Java world for players on your local network.",26,0xaac8b2);
-  // Browser control: address and pairing code, right-aligned under the beta badge.
+  label(c,server_x,251,fields[88][0]?fields[88].data():"Host a Minecraft Java world for players on your local network.",26,fields[88][0]?0xb6f2be:0xaac8b2);
+  // Browser control: QR at the header's right edge, address and pairing code beside it.
+  const char* matrix=fields[102].data();const int qr_size=std::atoi(matrix);const char* bits=std::strchr(matrix,':');
+  const bool qr=fields[108][0]&&bits&&qr_size>=21&&qr_size<=49&&std::strlen(bits+1)==size_t(qr_size*qr_size);
+  constexpr int qr_box=148;const int right=qr?panel_end-qr_box-24:panel_end;
+  if(qr){
+   ++bits;const int scale=qr_box/qr_size,side=qr_size*scale,qx=panel_end-side,qy=154+(qr_box-side)/2;
+   c.rectangle(qx,qy,side,side,static_cast<ps5::demo::Color>(prospero_palette::raw_ink(0xffffff)));
+   for(int y=0;y<qr_size;y++)for(int x=0;x<qr_size;x++)if(bits[y*qr_size+x]=='1')c.rectangle(qx+x*scale,qy+y*scale,scale,scale,static_cast<ps5::demo::Color>(prospero_palette::raw_ink(0)));
+  }
   if(fields[108][0]){
    char remote[160];std::snprintf(remote,sizeof(remote),"Browser control  %.64s   Code  %.16s",fields[108].data(),fields[109].data());
-   const int width=int(Canvas::text_width(remote,26));
-   label(c,panel_end-width,251,remote,26,0xc7eed0);
+   label(c,right-int(Canvas::text_width(remote,26)),251,remote,26,0xc7eed0);
   }else if(fields[107][0]&&std::strcmp(fields[107].data(),"Starting")!=0&&std::strcmp(fields[107].data(),"Discovering local addresses")!=0){
-   title(c,panel_end-640,251,fields[107].data(),24,640,0x8fae9d);
+   title(c,right-640,251,fields[107].data(),24,640,0x8fae9d);
   }
-  c.rounded(panel_end-170,195,170,46,23,ink(0x29473a));
-  auto badge=centered_text(panel_end-170,195,170,46,"Early beta",23);
+  c.rounded(right-170,195,170,46,23,ink(0x29473a));
+  auto badge=centered_text(right-170,195,170,46,"Early beta",23);
   label(c,badge.x,badge.y,"Early beta",23,0xc7eed0);
   card(c,server_x,server_top,server_world_width,panel_height);
   card(c,server_controls_panel,server_top,panel_end-server_controls_panel,panel_height);
@@ -465,6 +472,10 @@ inline void compose_content(Canvas& c) noexcept {
      :status=="STOPPING"?"Wait for the server to finish saving before closing ProsperoCraft."
      :"Loading the server and preparing the world. The first start can take longer.";
    wrap(c,server_control_x,445,detail,server_control_width,4,27);
+   if(running){
+    label(c,server_control_x,612,"Players online",27,0xc7eed0);
+    wrap(c,server_control_x,656,fields[89][0]?fields[89].data():"Nobody yet",server_control_width,3,27);
+   }
   }
   if(ready||consent||running||finished)
    action(c,server_control_x,server_action_y,server_control_width,

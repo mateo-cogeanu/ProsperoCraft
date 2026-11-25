@@ -61,6 +61,63 @@ final class ProsperoDedicatedServer {
       "enable-rcon=false\nenable-query=false\nmanagement-server-enabled=false\nlevel-name=world\n",
       StandardOpenOption.CREATE_NEW);
  }
+ /** UTF-8 like the dedicated server, with its ISO-8859-1 fallback for older files. */
+ static Properties loadProperties(Path file)throws IOException {
+  var options=new Properties();
+  try(var in=Files.newBufferedReader(file,StandardCharsets.UTF_8)){options.load(in);}
+  catch(java.nio.charset.CharacterCodingException legacy){options.clear();try(var in=Files.newBufferedReader(file,StandardCharsets.ISO_8859_1)){options.load(in);}}
+  return options;
+ }
+ /** Browser-editable server.properties keys, validated; applied on the next start. */
+ static final List<String> EDITABLE=List.of("motd","max-players","difficulty","gamemode","view-distance","simulation-distance","pvp","white-list");
+ static String validSetting(String key,String value){
+  String v=value==null?"":value.strip();
+  boolean ok=switch(key){
+   case "motd"->v.length()<=59&&v.codePoints().allMatch(c->c>=32&&c!=127&&c!=0xa7&&!Character.isISOControl(c));
+   case "max-players"->v.matches("[0-9]{1,2}")&&Integer.parseInt(v)>=1&&Integer.parseInt(v)<=20;
+   case "view-distance","simulation-distance"->v.matches("[0-9]{1,2}")&&Integer.parseInt(v)>=3&&Integer.parseInt(v)<=12;
+   case "difficulty"->List.of("peaceful","easy","normal","hard").contains(v);
+   case "gamemode"->List.of("survival","creative","adventure","spectator").contains(v);
+   case "pvp","white-list"->v.equals("true")||v.equals("false");
+   default->false;
+  };
+  if(!ok)throw new IllegalArgumentException("Invalid value for "+key);
+  return v;
+ }
+ static Map<String,String> settings(Path home)throws IOException {
+  Path file=home.resolve("server.properties");ProsperoDownloads.noLinks(file);
+  var options=Files.isRegularFile(file,LinkOption.NOFOLLOW_LINKS)&&Files.size(file)<=65536?loadProperties(file):new Properties();
+  var result=new LinkedHashMap<String,String>();
+  var fallback=Map.of("motd","ProsperoCraft Vanilla Server","max-players","8","difficulty","easy","gamemode","survival","view-distance","6","simulation-distance","4","pvp","true","white-list","false");
+  for(String key:EDITABLE){String value=options.getProperty(key,fallback.get(key));try{result.put(key,validSetting(key,value));}catch(IllegalArgumentException invalid){result.put(key,fallback.get(key));}}
+  return result;
+ }
+ static void saveSettings(Path home,Map<String,String> changes)throws IOException {
+  if(changes.isEmpty()||changes.size()>EDITABLE.size())throw new IllegalArgumentException("No server settings to save");
+  var valid=new LinkedHashMap<String,String>();
+  for(var e:changes.entrySet()){if(!EDITABLE.contains(e.getKey()))throw new IllegalArgumentException("Unsupported server setting");valid.put(e.getKey(),validSetting(e.getKey(),e.getValue()));}
+  Files.createDirectories(home);defaults(home);
+  Path file=home.resolve("server.properties");
+  if(Files.size(file)>65536)throw new IOException("Server settings file is too large");
+  var options=loadProperties(file);
+  valid.forEach(options::setProperty);
+  var text=new StringWriter();options.store(text,"ProsperoCraft Vanilla Server");
+  ProsperoDependencies.writeCompatibility(file,text.toString());
+ }
+ /** Browser console accepts a small set of standard administration commands only. */
+ static String validCommand(String raw){
+  String command=raw==null?"":raw.strip();
+  if(command.startsWith("/"))command=command.substring(1);
+  if(command.isEmpty()||command.length()>200||!command.chars().allMatch(c->c>=32&&c<127))throw new IllegalArgumentException("Enter a short command using plain characters");
+  String name="[A-Za-z0-9_]{1,16}";
+  boolean ok=command.matches("say .{1,180}")||command.matches("list( uuids)?")||command.matches("(op|deop|pardon) "+name)
+   ||command.matches("whitelist (on|off|list|reload)")||command.matches("whitelist (add|remove) "+name)
+   ||command.matches("(kick|ban) "+name+"( .{1,120})?")||command.matches("time set (day|noon|night|midnight|[0-9]{1,6})")
+   ||command.matches("weather (clear|rain|thunder)")||command.matches("difficulty (peaceful|easy|normal|hard)")
+   ||command.matches("save-all( flush)?")||command.matches("seed");
+  if(!ok)throw new IllegalArgumentException("Command not allowed here. Try say, list, op, deop, whitelist, kick, ban, pardon, time, weather, difficulty or save-all");
+  return command;
+ }
  static URLClassLoader open(Path home,Release release)throws Exception {
   Path bundle=home.resolve("server.jar");
   ProsperoDownloads.noLinks(bundle);
@@ -109,6 +166,27 @@ final class ProsperoDedicatedServer {
   volatile boolean stopRequested;
   private volatile boolean ready,saveFailed;
   private volatile String address="";
+  private final ArrayDeque<String> console=new ArrayDeque<>();private long consoleSerial;
+  private final Set<String> players=new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+  private final java.util.concurrent.ConcurrentLinkedQueue<String> pending=new java.util.concurrent.ConcurrentLinkedQueue<>();
+  private volatile long onlineSince;private volatile int maxPlayers=8;
+  static final int CONSOLE_LINES=50,CONSOLE_WIDTH=300;
+  private static final java.util.regex.Pattern JOINED=java.util.regex.Pattern.compile("\\[Server thread/INFO\\]: ([A-Za-z0-9_]{1,16}) (joined|left) the game$");
+  synchronized List<String> console(){return List.copyOf(console);}
+  synchronized long consoleSerial(){return consoleSerial;}
+  synchronized List<String> players(){return List.copyOf(players);}
+  int maxPlayers(){return maxPlayers;}
+  long uptimeSeconds(){long since=onlineSince;return status==Status.RUNNING&&since>0?Math.max(0,(System.currentTimeMillis()-since)/1000):0;}
+  void command(String raw){
+   if(status!=Status.RUNNING)throw new IllegalStateException("Commands are available while the server is online");
+   if(pending.size()>=16)throw new IllegalStateException("Too many commands waiting. Try again in a moment");
+   pending.add(validCommand(raw));
+  }
+  synchronized void observe(String text){
+   String shown=text.length()>CONSOLE_WIDTH?text.substring(0,CONSOLE_WIDTH)+"...":text;
+   console.addLast(shown);consoleSerial++;while(console.size()>CONSOLE_LINES)console.removeFirst();
+   var m=JOINED.matcher(text);if(m.find()){if(m.group(2).equals("joined"))players.add(m.group(1));else players.remove(m.group(1));}
+  }
   private final Path home;
   private final Release release;
   Session(Path home,Release release){this.home=home;this.release=release;}
@@ -146,6 +224,7 @@ final class ProsperoDedicatedServer {
          if(c!='\n'){if(line.size()<4096)line.write(c);return;}
          String text=line.toString(StandardCharsets.UTF_8);
          line.reset();
+         observe(text);
          if(text.contains("Server thread/INFO")&&text.contains("Done (")&&text.contains("For help"))ready=true;
          if(text.contains("Server thread/ERROR"))saveFailed=true;
          output.flush();
@@ -158,9 +237,9 @@ final class ProsperoDedicatedServer {
     List<String> ips=ProsperoWeb.localAddresses();
     Path settings=home.resolve("server.properties");
     if(ips.isEmpty()||Files.size(settings)>65536)throw new IOException("A local IPv4 address and valid server settings are required.");
-    var options=new Properties();
-    try(var in=Files.newInputStream(settings)){options.load(in);}
+    var options=loadProperties(settings);
     String ip=ips.getFirst();address=ip+":"+PORT;
+    try{maxPlayers=Math.clamp(Integer.parseInt(options.getProperty("max-players","8").strip()),1,1000);}catch(NumberFormatException ignored){maxPlayers=8;}
     options.setProperty("server-ip",ip);
     options.setProperty("server-port",Integer.toString(PORT));
     options.setProperty("online-mode","true");
@@ -177,7 +256,8 @@ final class ProsperoDedicatedServer {
     Thread server=serverThread(group);
     if(server==null)throw new IOException("The dedicated server did not start.");
     while(server.isAlive()){
-     if(ready&&status==Status.STARTING)status=Status.RUNNING;
+     if(ready&&status==Status.STARTING){onlineSince=System.currentTimeMillis();status=Status.RUNNING;}
+     for(String queued;status==Status.RUNNING&&!stopRequested&&(queued=pending.poll())!=null;){commands.write((queued+"\n").getBytes(StandardCharsets.US_ASCII));commands.flush();}
      if(stopRequested&&status==Status.RUNNING){
       commands.write("stop\n".getBytes(StandardCharsets.US_ASCII));commands.flush();
       status=Status.STOPPING;

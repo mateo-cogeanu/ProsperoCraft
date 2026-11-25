@@ -78,7 +78,7 @@ public final class ProsperoLauncher {
   if(current.hosted!=null||!current.serverBoot.isEmpty())return new String[0];
   return current.arguments(null,null);
  }
- static boolean serverBeta(){return "01.000.303".equals(ProsperoBuild.VERSION)||"01.000.304".equals(ProsperoBuild.VERSION)||"01.000.305".equals(ProsperoBuild.VERSION)||"01.000.306".equals(ProsperoBuild.VERSION);}
+ static boolean serverBeta(){return "01.000.303".equals(ProsperoBuild.VERSION)||"01.000.304".equals(ProsperoBuild.VERSION)||"01.000.305".equals(ProsperoBuild.VERSION)||"01.000.306".equals(ProsperoBuild.VERSION)||"01.000.307".equals(ProsperoBuild.VERSION);}
  private boolean serverTabVisible(){return serverBeta()&&(library.settings().serverBeta||hosted!=null||"01.000.303".equals(ProsperoBuild.VERSION));}
  private void settingsInput(int direction,boolean confirm)throws Exception {
   var settings=library.settings();
@@ -183,7 +183,7 @@ public final class ProsperoLauncher {
       !"01.000.298".equals(ProsperoBuild.VERSION) && !"01.000.299".equals(ProsperoBuild.VERSION) &&
       !"01.000.300".equals(ProsperoBuild.VERSION) && !"01.000.301".equals(ProsperoBuild.VERSION) &&
       !"01.000.302".equals(ProsperoBuild.VERSION) && !"01.000.303".equals(ProsperoBuild.VERSION) &&
-      !"01.000.304".equals(ProsperoBuild.VERSION)&&!"01.000.305".equals(ProsperoBuild.VERSION)&&!"01.000.306".equals(ProsperoBuild.VERSION)) return false;
+      !"01.000.304".equals(ProsperoBuild.VERSION)&&!"01.000.305".equals(ProsperoBuild.VERSION)&&!"01.000.306".equals(ProsperoBuild.VERSION)&&!"01.000.307".equals(ProsperoBuild.VERSION)) return false;
   return selectedLegacy121();
  }
  static boolean selectedLegacy121(){
@@ -195,7 +195,7 @@ public final class ProsperoLauncher {
   return ("01.000.282".equals(ProsperoBuild.VERSION)||"01.000.283".equals(ProsperoBuild.VERSION)
       ||"01.000.284".equals(ProsperoBuild.VERSION)||"01.000.285".equals(ProsperoBuild.VERSION)
         ||"01.000.286".equals(ProsperoBuild.VERSION)||"01.000.287".equals(ProsperoBuild.VERSION)||"01.000.288".equals(ProsperoBuild.VERSION)
-        ||"01.000.302".equals(ProsperoBuild.VERSION)||"01.000.303".equals(ProsperoBuild.VERSION)||"01.000.304".equals(ProsperoBuild.VERSION)||"01.000.305".equals(ProsperoBuild.VERSION)||"01.000.306".equals(ProsperoBuild.VERSION))
+        ||"01.000.302".equals(ProsperoBuild.VERSION)||"01.000.303".equals(ProsperoBuild.VERSION)||"01.000.304".equals(ProsperoBuild.VERSION)||"01.000.305".equals(ProsperoBuild.VERSION)||"01.000.306".equals(ProsperoBuild.VERSION)||"01.000.307".equals(ProsperoBuild.VERSION))
       &&"26.3".equals(current.detail.version)&&"fabric".equals(current.detail.loader);
  }
  static boolean observeFabric263Stalls(){
@@ -372,6 +372,7 @@ public final class ProsperoLauncher {
    public void end(boolean changed){}
    public Object server(){synchronized(ProsperoLauncher.this){return serverSnapshot();}}
    public void serverAction(String action,String version,boolean acceptEula)throws Exception{synchronized(ProsperoLauncher.this){remoteServer(action,version,acceptEula);}}
+   public void serverRequest(String action,String body)throws Exception{synchronized(ProsperoLauncher.this){remoteServerRequest(action,body);}}
   },Integer.getInteger("ps5.launcher.web.port",8092));serverWeb=true;}
   catch(java.io.IOException unavailable){webError="Browser control unavailable: port in use";}
   cached=null;
@@ -388,8 +389,37 @@ public final class ProsperoLauncher {
   result.put("download",Files.isRegularFile(home.resolve("server.jar"),LinkOption.NOFOLLOW_LINKS)?"Stored locally":Math.round(release.size()/1048576.0)+" MB download");
   result.put("message",serverMessage);
   result.put("progress",serverPreparing&&total>0?Math.min(1000,completed*1000/total):0);
+  result.put("players",hosted==null?List.of():hosted.players());
+  result.put("maxPlayers",hosted==null?0:hosted.maxPlayers());
+  result.put("uptime",hosted==null?0:hosted.uptimeSeconds());
+  result.put("console",hosted==null?List.of():hosted.console());
+  result.put("consoleSerial",hosted==null?0:hosted.consoleSerial());
+  try{result.put("settings",ProsperoDedicatedServer.settings(home));}catch(java.io.IOException unreadable){result.put("settings",Map.of());}
+  result.put("settingsEditable",!serverPreparing&&(hosted==null||hosted.finished()));
   return result;
  }
+ private void remoteServerRequest(String action,String body)throws Exception {
+  try{
+   if(action.equals("command")){
+    if(hosted==null)throw new ProsperoWeb.Refused(409,"Commands are available while the server is online");
+    hosted.command(body);
+   }else if(action.equals("settings")){
+    if(serverPreparing||(hosted!=null&&!hosted.finished()))throw new ProsperoWeb.Refused(409,"Stop the server before changing its settings");
+    var changes=new LinkedHashMap<String,String>();
+    var json=com.google.gson.JsonParser.parseString(body);
+    if(!json.isJsonObject())throw new ProsperoWeb.Refused(400,"Invalid settings");
+    for(var e:json.getAsJsonObject().entrySet()){if(!e.getValue().isJsonPrimitive())throw new ProsperoWeb.Refused(400,"Invalid settings");changes.put(e.getKey(),e.getValue().getAsString());}
+    ProsperoDedicatedServer.saveSettings(serverHome(),changes);
+    serverMessage="Server settings saved. They apply the next time the server starts.";
+   }else throw new ProsperoWeb.Refused(404,"Unknown server action");
+  }catch(ProsperoWeb.Refused refused){throw refused;}
+  catch(com.google.gson.JsonParseException invalid){throw new ProsperoWeb.Refused(400,"Invalid settings");}
+  catch(IllegalArgumentException rejected){throw new ProsperoWeb.Refused(400,rejected.getMessage());}
+  catch(IllegalStateException rejected){throw new ProsperoWeb.Refused(409,rejected.getMessage());}
+  catch(java.io.IOException failed){throw new ProsperoWeb.Refused(500,"Server settings could not be saved. Check storage and retry.");}
+  cached=null;
+ }
+ static String uptime(long seconds){long h=seconds/3600,m=seconds%3600/60;return h>0?h+"h "+m+"m":m>0?m+"m":"under a minute";}
  private void remoteServer(String action,String version,boolean acceptEula)throws Exception {
   switch(action){
    case "start"->{
@@ -732,7 +762,12 @@ public final class ProsperoLauncher {
    f[87]=serverMessage;
    f[107]=web==null?webError:web.status().state();f[108]="";f[109]="";
    if(serverWeb&&web!=null){var status=web.status();if(!status.addresses().isEmpty()&&status.state().equals("Ready")){
-    f[108]=status.addresses().get(0)+":"+status.port()+"/s";f[109]=web.pairing();}}
+    f[108]=status.addresses().get(0)+":"+status.port()+"/s";f[109]=web.pairing();
+    var qr=ProsperoQrCode.encodeText("http://"+f[108],ProsperoQrCode.Ecc.MEDIUM);StringBuilder matrix=new StringBuilder();int size=qr.size+8;matrix.append(size).append(':');for(int y=-4;y<qr.size+4;y++)for(int x=-4;x<qr.size+4;x++)matrix.append(qr.getModule(x,y)?'1':'0');f[102]=matrix.toString();}}
+   if(hosted!=null&&hosted.status==ProsperoDedicatedServer.Session.Status.RUNNING)
+    f[88]="Online  ·  "+hosted.players().size()+" / "+hosted.maxPlayers()+" players  ·  up "+uptime(hosted.uptimeSeconds());
+   else if(hosted!=null)f[88]="";
+   f[89]=hosted==null?"":String.join(", ",hosted.players());if(f[89].length()>200)f[89]=f[89].substring(0,197)+"...";
    if(serverPreparing)f[21]=String.format(Locale.ROOT,"%.0f / %.0f MB",completed/1048576.0,total/1048576.0);
   }
   f[104]=""+(page==10&&dropdownKind==8?row:library.settings().theme);f[75]=""+library.settings().background;f[76]=BACKGROUNDS[library.settings().background-1];

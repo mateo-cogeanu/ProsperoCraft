@@ -115,6 +115,31 @@ public class WebCheck {
   ok(request(hosting,"POST","/server/stop","Cookie: prospero=forged\r\n",new byte[0]).code==401);
   try(Socket s=new Socket("127.0.0.1",hosting.port())){String h="127.0.0.1:"+hosting.port();s.getOutputStream().write(("POST /server/stop HTTP/1.1\r\nHost: "+h+"\r\nOrigin: http://evil.invalid\r\nX-Prospero-Request: 1\r\n"+hostAuth+"\r\n").getBytes());ok(new String(s.getInputStream().readAllBytes()).startsWith("HTTP/1.1 403"));}
   ok(actions.equals(List.of("start:26.3:true")));hosting.close();ok(hosting.stopped());
+  // Console/command/settings bodies through the real parser; bounded UTF-8 bodies only.
+  var requests=new ArrayList<String>();
+  var bodyOwner=new Owner(){public Object server(){return Map.of("state","RUNNING");}public void serverRequest(String action,String body){requests.add(action+"="+body);}};
+  var bodies=new ProsperoWeb(lib,bodyOwner,0,()->List.of("127.0.0.1"),clock::get);waitReady(bodies);String bodyAuth="Cookie: "+request(bodies,"POST","/pair","X-Pair-Code: "+bodies.pairing()+"\r\n",new byte[0]).cookie+"\r\n";
+  ok(request(bodies,"POST","/server/command",bodyAuth,"say héllo".getBytes(java.nio.charset.StandardCharsets.UTF_8)).code==200);
+  ok(request(bodies,"POST","/server/settings",bodyAuth,"{\"motd\":\"x\"}".getBytes()).code==200);
+  ok(request(bodies,"POST","/server/command",bodyAuth,new byte[0]).code==400&&request(bodies,"POST","/server/command",bodyAuth,new byte[4097]).code==400);
+  ok(request(bodies,"POST","/server/command",bodyAuth,new byte[]{(byte)0xff,(byte)0xfe}).code==400);ok(request(bodies,"POST","/server/command","",new byte[]{'x'}).code==401);
+  ok(requests.equals(List.of("command=say héllo","settings={\"motd\":\"x\"}")));bodies.close();ok(bodies.stopped());
+  // Command allowlist, settings validation/persistence and console/player tracking.
+  for(String good:List.of("say hi all","/list","op Steve","whitelist add Alex_2","kick Steve griefing","time set day","weather clear","save-all","difficulty hard"))ProsperoDedicatedServer.validCommand(good);
+  for(String bad:List.of("stop","op Steve; stop","say","execute run stop","op Way_Too_Long_Player_Name","say hi\nstop","gamemode creative Steve","whitelist add Bad-Name",""))try{ProsperoDedicatedServer.validCommand(bad);throw new AssertionError(bad);}catch(IllegalArgumentException expected){}
+  Path serverHome=root.resolve("servers/test");ok(ProsperoDedicatedServer.settings(serverHome).get("max-players").equals("8"));
+  ProsperoDedicatedServer.saveSettings(serverHome,Map.of("motd","Friends ✓","max-players","12","difficulty","hard","pvp","false","white-list","true"));
+  var saved=ProsperoDedicatedServer.settings(serverHome);ok(saved.get("motd").equals("Friends ✓")&&saved.get("max-players").equals("12")&&saved.get("difficulty").equals("hard")&&saved.get("pvp").equals("false")&&saved.get("white-list").equals("true")&&saved.get("view-distance").equals("6"));
+  ok(Files.readString(serverHome.resolve("server.properties")).contains("enable-rcon=false"));
+  for(var bad:List.of(Map.of("max-players","0"),Map.of("max-players","21"),Map.of("difficulty","impossible"),Map.of("view-distance","40"),Map.of("motd","§cred"),Map.of("motd","a\nb"),Map.of("server-port","1"),Map.of("online-mode","false")))try{ProsperoDedicatedServer.saveSettings(serverHome,bad);throw new AssertionError(bad.toString());}catch(IllegalArgumentException expected){}
+  ok(ProsperoDedicatedServer.settings(serverHome).equals(saved));
+  Path legacy=root.resolve("servers/legacy");Files.createDirectories(legacy);Files.write(legacy.resolve("server.properties"),"motd=Café\n".getBytes(java.nio.charset.StandardCharsets.ISO_8859_1));ok(ProsperoDedicatedServer.settings(legacy).get("motd").equals("Café"));
+  var session=new ProsperoDedicatedServer.Session(serverHome,ProsperoDedicatedServer.RELEASES.get(0));
+  for(int n=0;n<60;n++)session.observe("[00:00:00] [Server thread/INFO]: line "+n);ok(session.console().size()==50&&session.console().get(0).endsWith("line 10")&&session.consoleSerial()==60);
+  session.observe("[00:00:01] [Server thread/INFO]: Steve joined the game");session.observe("[00:00:01] [Server thread/INFO]: Alex joined the game");session.observe("[00:00:02] [Server thread/INFO]: <Steve> Mallory joined the game");session.observe("[00:00:03] [Server thread/INFO]: Steve left the game");
+  ok(session.players().equals(List.of("Alex")));session.observe("x".repeat(5000));ok(session.console().getLast().length()==303);
+  try{session.command("list");throw new AssertionError();}catch(IllegalStateException expected){}
+  ok(ProsperoLauncher.uptime(30).equals("under a minute")&&ProsperoLauncher.uptime(125).equals("2m")&&ProsperoLauncher.uptime(4320).equals("1h 12m"));
   var instanceOnly=new ProsperoWeb(lib,owner,0,()->List.of("127.0.0.1"),clock::get);waitReady(instanceOnly);String instanceAuth="Cookie: "+request(instanceOnly,"POST","/pair","X-Pair-Code: "+instanceOnly.pairing()+"\r\n",new byte[0]).cookie+"\r\n";
   ok(request(instanceOnly,"GET","/server",instanceAuth,new byte[0]).code==409&&request(instanceOnly,"POST","/server/start",instanceAuth+"X-Accept-Eula: yes\r\n",new byte[0]).code==409);instanceOnly.close();ok(instanceOnly.stopped());
   // Real launcher screen owns service and blocks mutation when leaving/launching.
@@ -129,6 +154,10 @@ public class WebCheck {
   ok(new Gson().toJson(launcherOwner.server()).contains("\"state\":\"SELECT\""));
   for(String[] refused:new String[][]{{"stop","26.3","no"},{"return","26.3","no"},{"cancel","26.3","no"},{"start","0.0","yes"},{"jump","26.3","no"}})try{launcherOwner.serverAction(refused[0],refused[1],refused[2].equals("yes"));throw new AssertionError(refused[0]);}catch(ProsperoWeb.Refused expected){}
   try{launcherOwner.begin();throw new AssertionError();}catch(ProsperoWeb.Refused expected){ok(expected.status==409);}
+  try{launcherOwner.serverRequest("command","list");throw new AssertionError();}catch(ProsperoWeb.Refused expected){ok(expected.status==409);}
+  try{launcherOwner.serverRequest("settings","{\"difficulty\":\"impossible\"}");throw new AssertionError();}catch(ProsperoWeb.Refused expected){ok(expected.status==400);}
+  try{launcherOwner.serverRequest("settings","not json");throw new AssertionError();}catch(ProsperoWeb.Refused expected){ok(expected.status==400);}
+  launcherOwner.serverRequest("settings","{\"max-players\":\"4\",\"gamemode\":\"creative\"}");var after=(Map<?,?>)((Map<?,?>)launcherOwner.server()).get("settings");ok(after.get("max-players").equals("4")&&after.get("gamemode").equals("creative"));
   launcher.tick(0x400);ok(!launcher.tick(0)[11].equals("16")&&webField.get(launcher)==null);ok(served.stopped());
   System.out.println("PASS16GiB policy/10GiB sparse ZIP64 offsets/65537entries/malformed64bit metadata;129MiB resource+shader streaming with64MiB heap, dense pack directory, injected slow/deadline cleanup; real bounded HTTP/pair/session expiry/revoke/origin/traversal/formats/duplicates/staging/disconnect/locks/network changes/restarts/launcher lifecycle; shared themes current");
  }

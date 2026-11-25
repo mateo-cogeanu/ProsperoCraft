@@ -1,0 +1,21 @@
+{
+  "app_version": "01.000.307",
+  "title_id": "PPSA99874",
+  "package_sha256": "9e2829ba849847185de162a0b1c86fdc718fd108538f5bb5e323d952f8c82cdf",
+  "package_bytes": 128689532,
+  "build_base_commit": "7b6d56671849963017b3f68c0c4280a65c6a7b91",
+  "build_source": "Built from the working tree on top of the base commit; the commit that adds this record contains exactly those sources.",
+  "eboot_sha256": "6e4cb844f8c4e6a20ebb12d61ea4b42ff16d21783d7e39181f52004081bdee05",
+  "runtime_resident_ownership_commit": "51089be1c190354ac1a01a0ac04316773a939a11",
+  "publisher121_lock_sha256": "552805e92ee78b765fd887f9d083b517cf3008a41255128fa215a31d0a7c0da8",
+  "change": "Adds to the 7b6d566 browser server control. The PS5 Servers page shows a QR code for <address>:8092/s, a live status subtitle (players, uptime) and online player names. The /s page adds a copy button for the join address, players and uptime, a live console (last 50 lines) with an allowlist of standard administration commands, and server.properties editing (MOTD, max players, difficulty, game mode, view and simulation distance, PvP, whitelist) applied on next start and editable only while the server is stopped. server.properties is now read as UTF-8 with ISO-8859-1 fallback, matching the dedicated server, so non-ASCII names survive a start.",
+  "checks": [
+    "All 21 standard and 14 native host checks passed.",
+    "test_launcher_web.py covers command/settings body limits and UTF-8 handling, the command allowlist, settings validation and persistence, the legacy ISO-8859-1 fallback, the 50-line console bound, join/leave player tracking that ignores chat, uptime formatting, and launcher refusals.",
+    "The packaged 307 launcher classes ran the original Vanilla 26.2 server bundle on the host: saved settings were applied (max players 5), stop was refused, list/say/difficulty reached the server and their output appeared in the console buffer, save and stop reached STOPPED, and a non-ASCII MOTD survived the server rewriting server.properties.",
+    "Host Vulkan rendered the Servers setup and online states with the QR, browser line, status subtitle and player names. The /s page was checked in a browser with mocked data at phone width.",
+    "Signed SELF integrity, ZIP checksum and the independent package audit passed for the recorded package."
+  ],
+  "pending_console": "Physical PS5: tab order and readability on a TV, QR scanning and pairing from a phone, remote start including EULA, pairing again after the restart into server mode, console commands, players and uptime with a real joining client, settings saved while stopped and applied on next start, remote save-and-stop, and return to the launcher.",
+  "release_store": "Local test candidate only. No release, prerelease or Store action until the user confirms this exact build works on a physical PS5."
+}

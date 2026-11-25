@@ -25,6 +25,7 @@ final class ProsperoWeb implements AutoCloseable {
   /** Dedicated-server status for the Servers tab; null when this service is instance-scoped. */
   default Object server()throws Exception{return null;}
   default void serverAction(String action,String version,boolean acceptEula)throws Exception{throw new Refused(409,"Open the Servers tab on your PS5");}
+  default void serverRequest(String action,String body)throws Exception{throw new Refused(409,"Open the Servers tab on your PS5");}
  }
  interface Addresses {List<String> get()throws Exception;}
  interface UploadSink {OutputStream open(Path staging)throws IOException;}
@@ -120,6 +121,14 @@ final class ProsperoWeb implements AutoCloseable {
     require(length==0,400,"Unexpected body");require(owner.server()!=null,409,"Open the Servers tab on your PS5");
     String version=headers.getOrDefault("x-server-version","");require(version.matches("[0-9.]{0,16}"),400,"Invalid server version");
     owner.serverAction(path.substring(8),version,"yes".equals(headers.get("x-accept-eula")));
+    respond(out,200,"application/json",new Gson().toJson(owner.server()),"");return;
+   }
+   if(method.equals("POST")&&path.matches("/server/(command|settings)")){
+    require(length>0&&length<=4096,400,"Request body must be 1 to 4096 bytes");require(owner.server()!=null,409,"Open the Servers tab on your PS5");
+    byte[] body=new byte[(int)length];int read=0;long until=clock.getAsLong()+5000;
+    while(read<body.length){require(clock.getAsLong()<until,408,"Request timed out");int n=in.read(body,read,body.length-read);if(n<0)throw new Refused(400,"Request interrupted");read+=n;}
+    String text;try{text=StandardCharsets.UTF_8.newDecoder().decode(java.nio.ByteBuffer.wrap(body)).toString();}catch(java.nio.charset.CharacterCodingException invalid){throw new Refused(400,"Request must be UTF-8 text");}
+    owner.serverRequest(path.substring(8),text);
     respond(out,200,"application/json",new Gson().toJson(owner.server()),"");return;
    }
    String[] route=path.split("/");require(route.length==5&&route[1].equals("content"),404,"Page unavailable");
