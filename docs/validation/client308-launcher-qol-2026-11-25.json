@@ -16,6 +16,7 @@
     "The browser upload area was checked with two dropped files at phone width; the page script passes a syntax check.",
     "Signed SELF integrity, ZIP checksum and the independent package audit passed for the recorded package."
   ],
-  "pending_console": "Physical PS5: hold timing and cancellation for save-and-stop, delete and uninstall; toast readability and timing; dimmed tabs and HOSTING pill on a TV; download speed during a real install; drag and drop from a PC browser. The 307 browser server control checks also remain pending.",
-  "release_store": "Local test candidate only. No release, prerelease or Store action until the user confirms this exact build works on a physical PS5."
+  "pending_console": "Not separately reported: the 307 browser server control rows (QR pairing, remote start and re-pairing, console, players and uptime with a joining client, settings applied on next start, remote save and stop), endurance, and save/reload.",
+  "release_store": "Local test candidate. The user confirmed it works but asked for no release yet; no release, prerelease or Store action.",
+  "user_console_report": "2026-11-25: the user reported that all five 308 changes work on a physical PS5 (hold to confirm, dimmed tabs and HOSTING pill, toasts, download speed and time left, browser drag and drop). This is a user report for this exact package, not a formal ALL PASS; no independent console evidence was retrieved."
 }
