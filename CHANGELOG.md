@@ -1,5 +1,12 @@
 # Changelog
 
+## 01.000.302 · Fabric 26.3 frame pacing and shader compatibility, 2026-11-25
+
+- Reduce gameplay compilation logging and restore bounded slow-frame diagnostics on Fabric 26.3. The maintainer reported fewer hitches that cleared up after playing for a while.
+- Select Sodium 0.9.2 when installing Vitrail 0.13.0-beta on Fabric 26.3, and explain how to resolve reported conflicts in existing instances.
+
+See the [release notes](docs/releases/client-fabric-pacing-302.md).
+
 ## 01.000.300 · Menu text and Fabric fixes, 2026-11-23
 
 - Fix flickering title and menu text in Minecraft 1.21 and 1.21.1 with a scoped vertex buffer upload change.

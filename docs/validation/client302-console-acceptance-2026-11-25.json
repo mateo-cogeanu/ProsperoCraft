@@ -1,0 +1,10 @@
+{
+  "app_version": "01.000.302",
+  "title_id": "PPSA99874",
+  "package_sha256": "91c66f987824685e6ca867107a0e9dc9d0f145624f11951e42cd5e8536322903",
+  "date": "2026-11-25",
+  "console_acceptance": "The maintainer reports that build 302 stutters much less and that occasional hitches clear up after playing for a while.",
+  "shader_confirmation": "The maintainer explicitly confirms shaders work on build 302.",
+  "scope": "The stutter improvement is qualitative. Timing, cause, cold-start repeatability and the exact shader pack were not independently verified.",
+  "publication": "The maintainer explicitly requests a ProsperoStore release."
+}
