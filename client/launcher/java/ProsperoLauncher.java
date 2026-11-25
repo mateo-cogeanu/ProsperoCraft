@@ -7,7 +7,7 @@ public final class ProsperoLauncher {
  private static final int SETTINGS_CONTROLS=6,SETTINGS_ROWS=10,SETTINGS_VISIBLE=6;
  private int settingsFirst;
  private boolean physicalEditing=false,desktopDispatch=false;
- private ProsperoWeb web;private boolean webMutating;private int webAddress;private long webStateAt;private String webError="Stopped";
+ private ProsperoWeb web;private boolean webMutating;private int webAddress;private long webStateAt;private String webError="Stopped";private boolean serverWeb;private long serverWebRetry;
  private int feedbackSerial;private String feedbackCue="";
  private void feedback(String cue){feedbackCue=cue;feedbackSerial=feedbackSerial==Integer.MAX_VALUE?1:feedbackSerial+1;cached=null;}
  static final String[] THEMES=ProsperoTheme.NAMES;
@@ -357,7 +357,58 @@ public final class ProsperoLauncher {
   },Integer.getInteger("ps5.launcher.web.port",8092));}catch(java.io.IOException unavailable){webError="Unavailable: port binding failed. Close and reopen to retry.";}
   cached=null;
  }
- private void stopWeb(){if(web!=null){web.close();web=null;}cached=null;}
+ private void stopWeb(){if(web!=null){web.close();web=null;}serverWeb=false;cached=null;}
+ private boolean serverWebScope(){return serverTabVisible()&&(page==16||(page==10&&dropdownKind==10&&dropdownReturn==16));}
+ /** Servers-tab browser control: same bounded service and pairing, server routes only, no content mutation. */
+ private void serverWebLifecycle(){
+  boolean scope=serverWebScope();
+  if(web!=null&&(serverWeb?!scope:page!=15)){stopWeb();serverWebRetry=0;}
+  if(!scope){if(web==null)serverWebRetry=0;return;}
+  if(web!=null||System.currentTimeMillis()<serverWebRetry)return;
+  webAddress=0;webError="Starting";serverWebRetry=System.currentTimeMillis()+5000;
+  try{web=new ProsperoWeb(library,new ProsperoWeb.Owner(){
+   public Object snapshot(){synchronized(ProsperoLauncher.this){return Map.of("instances",List.of(),"mode","server","theme",ProsperoTheme.web(library.settings().theme));}}
+   public void begin()throws Exception{throw new ProsperoWeb.Refused(409,"Instance content is managed from Instance settings on your PS5");}
+   public void end(boolean changed){}
+   public Object server(){synchronized(ProsperoLauncher.this){return serverSnapshot();}}
+   public void serverAction(String action,String version,boolean acceptEula)throws Exception{synchronized(ProsperoLauncher.this){remoteServer(action,version,acceptEula);}}
+  },Integer.getInteger("ps5.launcher.web.port",8092));serverWeb=true;}
+  catch(java.io.IOException unavailable){webError="Browser control unavailable: port in use";}
+  cached=null;
+ }
+ private Map<String,Object> serverSnapshot(){
+  var release=ProsperoDedicatedServer.RELEASES.get(serverRelease);Path home=serverHome();
+  String state=hosted!=null?hosted.status.name():serverPreparing?"PREPARING":"SELECT";
+  var result=new LinkedHashMap<String,Object>();
+  result.put("state",state);result.put("version",release.version());
+  result.put("versions",ProsperoDedicatedServer.RELEASES.stream().map(ProsperoDedicatedServer.Release::version).toList());
+  result.put("address",hosted==null?"":hosted.address());
+  result.put("world",Files.isRegularFile(home.resolve("world").resolve("level.dat"),LinkOption.NOFOLLOW_LINKS)?"Existing world":"New world");
+  try{result.put("eula",ProsperoDedicatedServer.accepted(home));}catch(java.io.IOException unreadable){result.put("eula",false);}
+  result.put("download",Files.isRegularFile(home.resolve("server.jar"),LinkOption.NOFOLLOW_LINKS)?"Stored locally":Math.round(release.size()/1048576.0)+" MB download");
+  result.put("message",serverMessage);
+  result.put("progress",serverPreparing&&total>0?Math.min(1000,completed*1000/total):0);
+  return result;
+ }
+ private void remoteServer(String action,String version,boolean acceptEula)throws Exception {
+  switch(action){
+   case "start"->{
+    if(hosted!=null||serverPreparing)throw new ProsperoWeb.Refused(409,"The server is already starting or running");
+    if(page!=16||busy)throw new ProsperoWeb.Refused(409,"Finish the current step on your PS5 first");
+    int index=-1;for(int n=0;n<ProsperoDedicatedServer.RELEASES.size();n++)if(ProsperoDedicatedServer.RELEASES.get(n).version().equals(version))index=n;
+    if(index<0)throw new ProsperoWeb.Refused(400,"Choose a supported Vanilla server release");
+    serverRelease=index;serverMessage="";
+    boolean accepted=ProsperoDedicatedServer.accepted(serverHome());
+    if(!accepted&&!acceptEula)throw new ProsperoWeb.Refused(409,"Read and accept the Minecraft EULA first");
+    serverConsent=false;prepareServer(!accepted);
+   }
+   case "cancel"->{if(!serverPreparing)throw new ProsperoWeb.Refused(409,"No server setup is in progress");cancel();serverMessage="Server setup cancelled.";}
+   case "stop"->{if(hosted==null||hosted.status!=ProsperoDedicatedServer.Session.Status.RUNNING)throw new ProsperoWeb.Refused(409,"The server is not running");hosted.requestStop();}
+   case "return"->{if(hosted==null||!hosted.finished())throw new ProsperoWeb.Refused(409,"Stop the server before returning to the launcher");launch=true;}
+   default->throw new ProsperoWeb.Refused(404,"Unknown server action");
+  }
+  cached=null;
+ }
  synchronized String[] tick(int buttons){
   int desktopTag=buttons>>>28;
   boolean action=desktopTag==0?(buttons&0xf008)!=0:
@@ -368,7 +419,7 @@ public final class ProsperoLauncher {
    migrationAfter=System.nanoTime()+600_000_000L;
   }
   String[] before=state();int serial=feedbackSerial;String[] after=tickModel(buttons);
-  if(page!=15&&web!=null)stopWeb();
+  serverWebLifecycle();
   if(buttons==0)queueMigration();
   if(buttons!=0&&serial==feedbackSerial){
    boolean changed=false;for(int at:new int[]{2,8,9,10,11,12,13,15,19,22,24,26,27,28,29,30,31,64,68,75,79})changed|=!before[at].equals(after[at]);
@@ -446,8 +497,11 @@ public final class ProsperoLauncher {
   }
  }
  private int tabPage(){return switch(tab){case 0->0;case 1->2;case 3->16;default->3;};}
- private int tabSlot(int logical){return serverTabVisible()&&logical>=2?5-logical:logical;}
- private void moveTab(int direction){selectTab(tabSlot(Math.floorMod(tabSlot(tab)+direction,serverTabVisible()?4:3)));}
+ // Logical IDs stay stable (0 Instances, 1 Settings, 2 Accounts, 3 Servers); visible order puts Servers before Settings.
+ private static final int[] SERVER_SLOT={0,2,3,1},SERVER_TAB={0,3,1,2};
+ private int tabSlot(int logical){return serverTabVisible()?SERVER_SLOT[logical]:logical;}
+ private int slotTab(int slot){return serverTabVisible()?SERVER_TAB[slot]:slot;}
+ private void moveTab(int direction){selectTab(slotTab(Math.floorMod(tabSlot(tab)+direction,serverTabVisible()?4:3)));}
  private void selectTab(int next){
   int keep=(page==4||page==5)&&detail!=null?library.instances().indexOf(detail):0;
   tab=next;page=tabPage();
@@ -633,7 +687,7 @@ public final class ProsperoLauncher {
   return state();
  }
  private String[] state(){
-  if(page==15&&System.currentTimeMillis()-webStateAt>500){cached=null;webStateAt=System.currentTimeMillis();}
+  if((page==15||page==16)&&System.currentTimeMillis()-webStateAt>500){cached=null;webStateAt=System.currentTimeMillis();}
   if(cached!=null)return cached;String[] f=new String[FIELD_COUNT];Arrays.fill(f,"");
   f[0]="Instances";f[1]=serverTabVisible()?"ON":"OFF";f[2]=message;f[3]=code;f[4]=uri;f[5]=localProfileSelected()?"Offline profile":session==null?"Not signed in":session.name;f[6]=detail!=null&&!launchable(detail.version,detail.loader)?"COMING SOON":ProsperoChannel.tempGameTest()&&!localProfileSelected()&&(session==null||!session.valid(System.currentTimeMillis()))?"PLAY - Sign in":detail!=null&&detail.ready?(ProsperoChannel.tempGameTest()?"PLAY":"PLAY DEMO"):"DOWNLOAD & PLAY";if(detail!=null&&ProsperoVersions.release121(detail.version)&&developmentTest(detail.version,detail.loader)&&f[6].equals("PLAY"))f[6]=experimental(detail.version,detail.loader)?"EXPERIMENTAL - PLAY":"DEV TEST - PLAY";f[7]=page==0?"L1 / R1 Tabs     L2 / R2 Pages     D-PAD Navigate     X Select":page==10&&(dropdownKind==1||dropdownKind==2)?"D-PAD Choose icon     X Use icon     CIRCLE Cancel":page==10&&dropdownKind==8?"D-PAD / Hover Preview     X Save     CIRCLE Cancel":page==10||page==13?"D-PAD Scroll     X Confirm     CIRCLE Back":page==8?"L2 / R2 Pages     LEFT / RIGHT Pages     CIRCLE Back":page==11||page==7?"LEFT / RIGHT Choose     X Confirm":page==9?"X Confirm     CIRCLE No":busy?"CIRCLE Cancel":"L1 / R1 Pages     X Select     CIRCLE Back     OPTIONS Controls";f[8]=busy?task:localProfileSelected()?"OFFLINE PROFILE":session==null?"MICROSOFT ACCOUNT":"CONNECTED";f[9]=""+selected;f[10]=launch?"LAUNCH":"WAIT";f[11]=""+page;f[12]=""+tab;f[13]=""+library.instances().size();f[14]=""+(selected/8*8);f[15]=""+(top?-1:row);f[16]=detail==null?"":detail.name;f[17]=detail==null?"":detail.version+("fabric".equals(detail.loader)?" / Fabric":" / Vanilla");f[18]=""+(detail==null?1:detail.icon);f[19]=detail==null?"":detail.ready?"READY":"NOT DOWNLOADED";f[20]=""+(total==0?0:Math.min(1000,completed*1000/total));f[21]=busy&&"REFRESH".equals(task)?completed+" / "+total+" checks":total>1?String.format(java.util.Locale.ROOT,"%.0f / %.0f MB",completed/1048576.0,total/1048576.0):"";f[22]=draftName;f[23]=versions.isEmpty()?"Select to refresh versions":versions.get(versionChoice).id();f[24]=""+draftIcon;f[25]=ProsperoLibrary.resolutionLabel(library.settings().resolution);f[26]=""+library.settings().workers;f[27]=library.settings().snapshots?"ON":"OFF";f[28]=top?"TOP":"CONTENT";f[29]=keyboard;f[30]=library.settings().reducedMotion?"ON":"OFF";f[31]=""+key;
   var all=library.instances();int start=selected/8*8;
@@ -676,6 +730,9 @@ public final class ProsperoLauncher {
    f[85]=Files.isRegularFile(home.resolve("world").resolve("level.dat"),LinkOption.NOFOLLOW_LINKS)?"Existing world":"New world";
    f[86]=Files.isRegularFile(home.resolve("server.jar"),LinkOption.NOFOLLOW_LINKS)?"Stored locally":Long.toString(Math.round(release.size()/1048576.0))+" MB download";
    f[87]=serverMessage;
+   f[107]=web==null?webError:web.status().state();f[108]="";f[109]="";
+   if(serverWeb&&web!=null){var status=web.status();if(!status.addresses().isEmpty()&&status.state().equals("Ready")){
+    f[108]=status.addresses().get(0)+":"+status.port()+"/s";f[109]=web.pairing();}}
    if(serverPreparing)f[21]=String.format(Locale.ROOT,"%.0f / %.0f MB",completed/1048576.0,total/1048576.0);
   }
   f[104]=""+(page==10&&dropdownKind==8?row:library.settings().theme);f[75]=""+library.settings().background;f[76]=BACKGROUNDS[library.settings().background-1];

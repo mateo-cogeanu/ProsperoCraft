@@ -160,7 +160,7 @@ page_preview=r'''
   field(15,"9");field(84,"4");prospero_menu::settings_scroll.snap(4*prospero_menu::settings_pitch);
   settle_preview();save_scene("settings-bottom");
   field(11,"16");field(12,"3");field(15,"0");field(82,"26.3");field(83,"SELECT");
-  field(84,"");field(85,"New world");field(86,"59 MB download");field(87,"");
+  field(84,"");field(85,"New world");field(86,"59 MB download");field(87,"");field(107,"Ready");field(108,"192.0.2.24:8092/s");field(109,"A2E-34E");
   field(7,"L1 / R1  Tabs     D-PAD  Navigate     X  Select     CIRCLE  Instances");
   prospero_menu::tabs_ready=false;
   settle_preview();save_scene("servers-setup");

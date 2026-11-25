@@ -32,10 +32,13 @@ public class DesktopCheck {
   String beforeTheme=Files.readString(root.resolve("library.json"));m.tick(click(2,3,7));for(int preview=0;preview<6;preview++){m.tick(click(10,3,preview)&~0x8000);ok(m.tick(0)[104].equals(""+preview));ok(new ProsperoLibrary(root).settings().theme==2);ok(Files.readString(root.resolve("library.json")).equals(beforeTheme));}m.tick(click(10,3,31)&~0x8000);ok(m.tick(0)[104].equals("5"));m.tick(0x2000);ok(m.tick(0)[104].equals("2")&&Files.readString(root.resolve("library.json")).equals(beforeTheme));
   ok(m.tick(0)[1].equals("OFF"));m.tick(click(2,0,3));ok(m.tick(0)[11].equals("2"));
   m.tick(click(2,3,4));ok(m.tick(0)[1].equals("ON")&&new ProsperoLibrary(root).settings().serverBeta);
-  m.tick(0x800);ok(m.tick(0)[11].equals("16"));
+  // Visible order with hosting: Instances, Servers, Settings, Accounts.
   m.tick(0x800);ok(m.tick(0)[11].equals("3"));
-  m.tick(0x400);ok(m.tick(0)[11].equals("16"));
   m.tick(0x400);ok(m.tick(0)[11].equals("2"));
+  m.tick(0x400);ok(m.tick(0)[11].equals("16"));
+  m.tick(0x400);ok(m.tick(0)[11].equals("0"));
+  m.tick(0x800);ok(m.tick(0)[11].equals("16"));
+  m.tick(0x800);ok(m.tick(0)[11].equals("2"));
   m.tick(click(2,0,3));ok(m.tick(0)[82].equals("26.3")&&m.tick(0)[85].equals("New world"));
   m.tick(click(16,3,0));ok(m.tick(0)[93].equals("10")&&m.tick(0)[83].equals("5"));
   m.tick(0x40);m.tick(0x2000);ok(m.tick(0)[82].equals("26.3"));
@@ -92,7 +95,7 @@ int main(){
  assert(desktop_hit(3,1200,480,0,0).kind==-1);
  assert(desktop_hit(0,70,342,0,2).target==0);assert(desktop_hit(0,69,342,0,2).kind==-1);assert(desktop_hit(0,520,342,0,2).target==1);assert(desktop_hit(0,491,342,0,2).kind==-1);
  assert(desktop_hit(5,110,805,0,0).kind==-1);assert(desktop_hit(5,800,760,0,0).target==8);assert(desktop_hit(5,1400,760,0,0).target==8);assert(desktop_hit(5,800,850,0,0).target==5);assert(desktop_hit(5,1400,850,0,0).target==6);assert(desktop_hit(6,900,70,0,0).kind==-1);assert(desktop_hit(10,300,285,8,20).target==8);assert(desktop_hit(5,1350,650,0,0).target==7);assert(desktop_hit(12,1600,550,0,1,0,false,true).target==20);
- assert(desktop_hit(2,1400,70,0,10,0,false,false,false,false,true).target==3);
+ assert(desktop_hit(2,1000,70,0,10,0,false,false,false,false,true).target==3);assert(desktop_hit(2,1400,70,0,10,0,false,false,false,false,true).target==1);
  assert(desktop_hit(2,1700,70,0,10,0,false,false,false,false,true).target==2);
  assert(desktop_hit(2,1700,70,0,10).target==2);
  static_assert(settings_x*2+settings_width==1920);
@@ -112,6 +115,8 @@ int main(){
  assert(desktop_hit(16,server_x,server_version_y,0,0).kind==-1);
  assert(desktop_hit(16,server_control_x,server_version_y,0,0,0,false,false,false,false,true,0,false,true).kind==-1);
  assert(desktop_hit(16,server_control_x,server_action_y,0,0,0,false,false,false,false,true,0,false,false).kind==-1);
+for(int slot=0;slot<4;slot++){assert(tab_slot(slot_tab(slot,true),true)==slot);assert(desktop_hit(0,server_tab_x[slot]+5,60,0,0,0,false,false,false,false,true).target==slot_tab(slot,true));}
+assert(slot_tab(1,true)==3&&slot_tab(2,true)==1&&slot_tab(3,true)==2&&slot_tab(1,false)==1&&tab_slot(2,false)==2);
  assert(desktop_char(4,false,false)=='a'&&desktop_char(4,true,false)=='A'&&desktop_char(4,true,true)=='a');
  DesktopInput d;std::vector<unsigned> events,modes;int clicks=0;auto emit=[&](unsigned x){if((x>>28)==4)modes.push_back(x);else events.push_back(x);};auto point=[&](int x,int y,bool c){assert(x>=0&&x<1920&&y>=0&&y<1080);clicks+=c;};
  prospero_keyboard_packet k{};k.connected=1;k.keys[0]=40;kp={k};d.poll(1,emit,point);assert(events.empty()); // held on entry

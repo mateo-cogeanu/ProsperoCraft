@@ -9,7 +9,10 @@ inline constexpr int standard_tab_width[]={350,280,280};
 inline constexpr int server_tab_x[]={593,920,1227,1560};
 inline constexpr int server_tab_width[]={307,287,313,275};
 // Logical IDs stay stable in the Java model and the input mailbox.
-inline constexpr int tab_slot(int tab,bool servers){return servers&&tab>=2?5-tab:tab;}
+// Logical 0 Instances, 1 Settings, 2 Accounts, 3 Servers; visible: Instances, Servers, Settings, Accounts.
+inline constexpr int server_slot_of_tab[]={0,2,3,1},server_tab_of_slot[]={0,3,1,2};
+inline constexpr int tab_slot(int tab,bool servers){return servers&&tab>=0&&tab<4?server_slot_of_tab[tab]:tab;}
+inline constexpr int slot_tab(int slot,bool servers){return servers&&slot>=0&&slot<4?server_tab_of_slot[slot]:slot;}
 inline constexpr int settings_x=104,settings_width=1712,settings_top=306;
 inline constexpr int settings_pitch=103,settings_row_height=93,settings_rows_visible=6;
 inline constexpr int settings_height=settings_pitch*settings_rows_visible;
@@ -29,7 +32,7 @@ inline DesktopHit desktop_hit(int page,int x,int y,int first,int count,int slide
  bool modal=page==6||(page>=7&&page<=11)||page==14||page==15;
  const int* tx=servers?server_tab_x:standard_tab_x;
  const int* widths=servers?server_tab_width:standard_tab_width;
- if(!modal)for(int i=0;i<(servers?4:3);i++)if(box(tx[i],52,widths[i],68))return {0,tab_slot(i,servers)};
+ if(!modal)for(int i=0;i<(servers?4:3);i++)if(box(tx[i],52,widths[i],68))return {0,slot_tab(i,servers)};
  if(page==16){
   if(server_select&&box(server_control_x,server_version_y,server_control_width,server_version_height))return {3,0};
   if(server_action&&box(server_control_x,server_action_y,server_control_width,server_action_height))return {3,1};

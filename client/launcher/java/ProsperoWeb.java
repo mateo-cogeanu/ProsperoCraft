@@ -22,6 +22,9 @@ final class ProsperoWeb implements AutoCloseable {
   default String selectedInstance(){return "";}
   void begin()throws Exception;
   void end(boolean changed);
+  /** Dedicated-server status for the Servers tab; null when this service is instance-scoped. */
+  default Object server()throws Exception{return null;}
+  default void serverAction(String action,String version,boolean acceptEula)throws Exception{throw new Refused(409,"Open the Servers tab on your PS5");}
  }
  interface Addresses {List<String> get()throws Exception;}
  interface UploadSink {OutputStream open(Path staging)throws IOException;}
@@ -101,7 +104,7 @@ final class ProsperoWeb implements AutoCloseable {
     String id=owner.selectedInstance();require(id.matches("[a-f0-9-]{36}")&&library.instances().stream().anyMatch(i->i.id.equals(id)),404,"Selected instance unavailable");
     respond(out,302,"text/plain","Opening your instance","Location: /instance/"+id+"\r\n");return;
    }
-   if(method.equals("GET")&&(path.equals("/")||path.matches("/instance/[a-f0-9-]{36}"))){respond(out,200,"text/html; charset=utf-8",ProsperoWebPage.HTML,"");return;}
+   if(method.equals("GET")&&(path.equals("/")||path.equals("/s")||path.matches("/instance/[a-f0-9-]{36}"))){respond(out,200,"text/html; charset=utf-8",ProsperoWebPage.HTML,"");return;}
    if(method.equals("POST")&&path.equals("/pair")){
     require(length==0,400,"Unexpected pairing body");long now=clock.getAsLong();if(now-attemptWindow>=60_000){attemptWindow=now;attempts=0;}require(++attempts<=5,429,"Too many attempts. Wait one minute");
     require(now<pairingExpires,401,"Pairing code expired. Use the new code on your PS5");String supplied=normalizeCode(headers.getOrDefault("x-pair-code",""));require(!closed&&!supplied.isEmpty()&&MessageDigest.isEqual(normalizeCode(pairing).getBytes(StandardCharsets.US_ASCII),supplied.getBytes(StandardCharsets.US_ASCII)),401,"Pairing code did not match");
@@ -112,6 +115,13 @@ final class ProsperoWeb implements AutoCloseable {
    require(authorized&&clock.getAsLong()<expires,401,"Session expired. Pair using the code on your PS5");
    if(method.equals("POST")&&path.equals("/revoke")){session="";expires=0;respond(out,200,"application/json","{}","Set-Cookie: prospero=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0\r\n");return;}
    if(method.equals("GET")&&path.equals("/api")){respond(out,200,"application/json",new Gson().toJson(owner.snapshot()),"");return;}
+   if(method.equals("GET")&&path.equals("/server")){Object server=owner.server();require(server!=null,409,"Open the Servers tab on your PS5");respond(out,200,"application/json",new Gson().toJson(server),"");return;}
+   if(method.equals("POST")&&path.matches("/server/(start|cancel|stop|return)")){
+    require(length==0,400,"Unexpected body");require(owner.server()!=null,409,"Open the Servers tab on your PS5");
+    String version=headers.getOrDefault("x-server-version","");require(version.matches("[0-9.]{0,16}"),400,"Invalid server version");
+    owner.serverAction(path.substring(8),version,"yes".equals(headers.get("x-accept-eula")));
+    respond(out,200,"application/json",new Gson().toJson(owner.server()),"");return;
+   }
    String[] route=path.split("/");require(route.length==5&&route[1].equals("content"),404,"Page unavailable");
    var instance=library.instances().stream().filter(i->i.id.equals(route[2])).findFirst().orElseThrow(()->new Refused(404,"Instance unavailable"));
    String kind=route[3];require(DESTINATIONS.containsKey(kind),400,"Invalid content destination");

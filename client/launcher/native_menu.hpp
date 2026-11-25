@@ -405,6 +405,14 @@ inline void compose_content(Canvas& c) noexcept {
   constexpr int control_right=server_control_x+server_control_width;
   label(c,server_x,170,"Dedicated servers",68);
   label(c,server_x,251,"Host a Minecraft Java world for players on your local network.",26,0xaac8b2);
+  // Browser control: address and pairing code, right-aligned under the beta badge.
+  if(fields[108][0]){
+   char remote[160];std::snprintf(remote,sizeof(remote),"Browser control  %.64s   Code  %.16s",fields[108].data(),fields[109].data());
+   const int width=int(Canvas::text_width(remote,26));
+   label(c,panel_end-width,251,remote,26,0xc7eed0);
+  }else if(fields[107][0]&&std::strcmp(fields[107].data(),"Starting")!=0&&std::strcmp(fields[107].data(),"Discovering local addresses")!=0){
+   title(c,panel_end-640,251,fields[107].data(),24,640,0x8fae9d);
+  }
   c.rounded(panel_end-170,195,170,46,23,ink(0x29473a));
   auto badge=centered_text(panel_end-170,195,170,46,"Early beta",23);
   label(c,badge.x,badge.y,"Early beta",23,0xc7eed0);
@@ -594,7 +602,7 @@ inline void compose(Canvas& c) noexcept {
  const int* tw=servers?server_tab_width:standard_tab_width;
  const int tab_count=servers?4:3;
  for(int i=0;i<tab_count;i++){
-  const int logical=tab_slot(i,servers);
+  const int logical=slot_tab(i,servers);
   const bool current=tab==logical,account=logical==2&&signed_in;
   const int name_width=tw[i]-(account?68:0);
   if(current&&top)selection(c,tx[i],52,tw[i],68);

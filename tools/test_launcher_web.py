@@ -101,8 +101,35 @@ public class WebCheck {
   firstWrite.set(false);expireTransfer.set(true);ok(request(slow,"PUT",base+"resources/expired.zip",slowAuth,zip("pack.mcmeta")).code==408);ok(!Files.exists(lib.game(item).resolve("resourcepacks/expired.zip"))&&!owner.busy);try(var paths=Files.walk(lib.game(item))){ok(paths.noneMatch(p->p.toString().endsWith(".part")));}slow.close();ok(slow.stopped());
   for(int n=0;n<4;n++){var again=new ProsperoWeb(lib,owner,0,()->List.of("127.0.0.1"),clock::get);waitReady(again);again.close();ok(again.stopped());}
   var limited=new ProsperoWeb(lib,owner,0,()->List.of("127.0.0.1"),clock::get);waitReady(limited);for(int i=0;i<5;i++)ok(request(limited,"POST","/pair","X-Pair-Code: WRONG2\r\n",new byte[0]).code==401);ok(request(limited,"POST","/pair","X-Pair-Code: "+limited.pairing()+"\r\n",new byte[0]).code==429);clock.addAndGet(60_001);ok(request(limited,"POST","/pair","X-Pair-Code: "+limited.pairing()+"\r\n",new byte[0]).code==200);limited.close();ok(limited.stopped());
+  // Servers-tab service: /s page, authenticated status/actions, content refused, instance service refuses server routes.
+  var actions=new ArrayList<String>();
+  var serverOwner=new Owner(){public Object server(){return Map.of("state","SELECT","version","26.3");}public void serverAction(String action,String version,boolean eula)throws Exception{if(action.equals("start")&&!eula)throw new ProsperoWeb.Refused(409,"Read and accept the Minecraft EULA first");actions.add(action+":"+version+":"+eula);}};
+  var hosting=new ProsperoWeb(lib,serverOwner,0,()->List.of("127.0.0.1"),clock::get);waitReady(hosting);
+  ok(request(hosting,"GET","/s","",new byte[0]).code==200&&request(hosting,"GET","/s","",new byte[0]).body.contains("Dedicated server"));ok(request(hosting,"GET","/server","",new byte[0]).code==401);ok(request(hosting,"POST","/server/stop","",new byte[0]).code==401);
+  String hostAuth="Cookie: "+request(hosting,"POST","/pair","X-Pair-Code: "+hosting.pairing()+"\r\n",new byte[0]).cookie+"\r\n";
+  ok(request(hosting,"GET","/server",hostAuth,new byte[0]).body.contains("SELECT"));
+  ok(request(hosting,"POST","/server/start",hostAuth+"X-Server-Version: 26.3\r\n",new byte[0]).code==409);
+  ok(request(hosting,"POST","/server/start",hostAuth+"X-Server-Version: 26.3\r\nX-Accept-Eula: yes\r\n",new byte[0]).code==200);
+  ok(request(hosting,"POST","/server/start",hostAuth+"X-Server-Version: ../x\r\n",new byte[0]).code==400);
+  ok(request(hosting,"POST","/server/explode",hostAuth,new byte[0]).code==404);ok(request(hosting,"POST","/server/stop",hostAuth,"x".getBytes()).code==400);
+  ok(request(hosting,"POST","/server/stop","Cookie: prospero=forged\r\n",new byte[0]).code==401);
+  try(Socket s=new Socket("127.0.0.1",hosting.port())){String h="127.0.0.1:"+hosting.port();s.getOutputStream().write(("POST /server/stop HTTP/1.1\r\nHost: "+h+"\r\nOrigin: http://evil.invalid\r\nX-Prospero-Request: 1\r\n"+hostAuth+"\r\n").getBytes());ok(new String(s.getInputStream().readAllBytes()).startsWith("HTTP/1.1 403"));}
+  ok(actions.equals(List.of("start:26.3:true")));hosting.close();ok(hosting.stopped());
+  var instanceOnly=new ProsperoWeb(lib,owner,0,()->List.of("127.0.0.1"),clock::get);waitReady(instanceOnly);String instanceAuth="Cookie: "+request(instanceOnly,"POST","/pair","X-Pair-Code: "+instanceOnly.pairing()+"\r\n",new byte[0]).cookie+"\r\n";
+  ok(request(instanceOnly,"GET","/server",instanceAuth,new byte[0]).code==409&&request(instanceOnly,"POST","/server/start",instanceAuth+"X-Accept-Eula: yes\r\n",new byte[0]).code==409);instanceOnly.close();ok(instanceOnly.stopped());
   // Real launcher screen owns service and blocks mutation when leaving/launching.
   lib.settings().showIntro=false;lib.save();var launcher=new ProsperoLauncher(new ProsperoAuth(),root,url->{throw new AssertionError();});launcher.tick(0x4000);launcher.tick(0x10008000|4<<20|3<<16|1);launcher.tick(0x10008000|5<<20|3<<16|8);ok(launcher.tick(0)[11].equals("15"));launcher.tick(0x2000);ok(launcher.tick(0)[11].equals("5"));launcher.tick(0x20);ok(launcher.tick(0)[15].equals("8"));launcher.tick(0x10);ok(launcher.tick(0)[15].equals("4"));launcher.tick(0x20);ok(launcher.tick(0)[15].equals("7"));launcher.tick(0x40);ok(launcher.tick(0)[15].equals("8"));launcher.tick(0x40);ok(launcher.tick(0)[15].equals("5"));launcher.tick(0x20);ok(launcher.tick(0)[15].equals("6"));launcher.tick(0x10);ok(launcher.tick(0)[15].equals("8"));
+  // Launcher owns Servers-tab browser control only while that tab (or its version picker) is shown.
+  System.setProperty("ps5.launcher.web.port","0");launcher.tick(0x2000);
+  var libraryField=ProsperoLauncher.class.getDeclaredField("library");libraryField.setAccessible(true);((ProsperoLibrary)libraryField.get(launcher)).settings().serverBeta=true;
+  var webField=ProsperoLauncher.class.getDeclaredField("web");webField.setAccessible(true);var serverWebField=ProsperoLauncher.class.getDeclaredField("serverWeb");serverWebField.setAccessible(true);
+  set(launcher,"tab",3);set(launcher,"page",16);launcher.tick(0);ok(webField.get(launcher)!=null&&(boolean)serverWebField.get(launcher));Object first=webField.get(launcher);
+  launcher.tick(0x10008000|16<<20|3<<16|0);ok(launcher.tick(0)[11].equals("10")&&webField.get(launcher)==first);launcher.tick(0x2000);ok(launcher.tick(0)[11].equals("16")&&webField.get(launcher)==first);
+  var served=(ProsperoWeb)first;var ownerField=ProsperoWeb.class.getDeclaredField("owner");ownerField.setAccessible(true);var launcherOwner=(ProsperoWeb.Owner)ownerField.get(served);
+  ok(new Gson().toJson(launcherOwner.server()).contains("\"state\":\"SELECT\""));
+  for(String[] refused:new String[][]{{"stop","26.3","no"},{"return","26.3","no"},{"cancel","26.3","no"},{"start","0.0","yes"},{"jump","26.3","no"}})try{launcherOwner.serverAction(refused[0],refused[1],refused[2].equals("yes"));throw new AssertionError(refused[0]);}catch(ProsperoWeb.Refused expected){}
+  try{launcherOwner.begin();throw new AssertionError();}catch(ProsperoWeb.Refused expected){ok(expected.status==409);}
+  launcher.tick(0x400);ok(!launcher.tick(0)[11].equals("16")&&webField.get(launcher)==null);ok(served.stopped());
   System.out.println("PASS16GiB policy/10GiB sparse ZIP64 offsets/65537entries/malformed64bit metadata;129MiB resource+shader streaming with64MiB heap, dense pack directory, injected slow/deadline cleanup; real bounded HTTP/pair/session expiry/revoke/origin/traversal/formats/duplicates/staging/disconnect/locks/network changes/restarts/launcher lifecycle; shared themes current");
  }
 }
@@ -110,4 +137,5 @@ public class WebCheck {
 with tempfile.TemporaryDirectory(prefix='prospero-web-') as td:
     w=Path(td).resolve();(w/'WebCheck.java').write_text(source);cp=launcher_classpath();jdk=java_home()
     subprocess.run([str(jdk/'bin/javac'),'--release','25','-cp',cp,'-d',str(w),*[str(p) for p in (ROOT/'client/launcher/java').glob('*.java')],str(w/'WebCheck.java')],check=True)
+    (w/'prosperocraft-build.properties').write_text('app_version=01.000.306\ntitle_id=PPSA99874\n')
     subprocess.run([str(jdk/'bin/java'),'-Xmx64m','-cp',str(w)+':'+cp,'WebCheck',str(w/'data')],check=True,timeout=60)

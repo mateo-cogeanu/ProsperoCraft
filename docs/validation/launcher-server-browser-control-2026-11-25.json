@@ -1,0 +1,14 @@
+{
+  "app_version": "unbuilt source change after 01.000.306",
+  "title_id": "PPSA99874",
+  "package_sha256": null,
+  "change": "Servers now sits before Settings in the launcher tabs (Instances, Servers, Settings, Accounts); logical tab IDs and mailbox commands are unchanged. While the Servers tab or its version picker is open, the launcher runs the existing paired local manager on port 8092 in a server-only mode. The Servers page shows <address>:8092/s and the pairing code. A paired browser at /s can read status, choose the version, accept the EULA, start, cancel setup, save and stop, and return to the launcher. Instance content uploads are refused in this mode. Starting or returning restarts the app, so the browser pairs again with the new code.",
+  "checks": [
+    "All 21 standard and 14 native host checks passed.",
+    "test_launcher_web.py covers the real /s page, authenticated /server status and actions, EULA refusal without consent, version validation, unknown actions, body/cookie/origin refusal, server routes refused by the instance-scoped service, launcher service lifetime across the version picker and on leaving the tab, launcher refusal of invalid remote actions, and content refusal.",
+    "test_launcher_desktop.py covers the new L1/R1 order and pointer hits for every server-mode tab slot.",
+    "Host Vulkan rendered the Servers setup state with the browser-control line and the new tab order."
+  ],
+  "pending_console": "Build a package. On a physical PS5, check the Servers browser address and code, pairing from a phone or PC, remote start (including EULA), re-pairing after the restart into server mode, remote save-and-stop, return to the launcher, and tab order and readability on a TV.",
+  "release_store": "Source only; no package, release or Store action."
+}
