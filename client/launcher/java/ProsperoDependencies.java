@@ -96,10 +96,14 @@ final class ProsperoDependencies {
        archive(()->nestedEntry(source,name),nextDepth),depth);
   }
  }
- static void verifyVulkan(Collection<Path> jars)throws Exception {verifyGraphics(jars,false);}
- static void verifyGraphics(Collection<Path> jars,boolean zink)throws Exception {
+ static void verifyVulkan(Collection<Path> jars)throws Exception {verifyGraphics(jars,false,"");}
+ static void verifyGraphics(Collection<Path> jars,boolean zink,String game)throws Exception {
   Scan scan=new Scan();for(Path path:jars)scan.file(path);
   if(!zink&&scan.modules.containsKey("iris"))throw new IOException("Iris needs OpenGL; this build uses Vulkan. Uninstall Iris in Installed. Use Vitrail for shaders.");
+  Module vitrail=scan.roots.get("vitrail"),sodium=scan.roots.get("sodium");
+  if(!zink&&"26.3".equals(game)&&vitrail!=null&&"0.13.0-beta".equals(vitrail.version)&&sodium!=null
+      &&Set.of("0.9.3-beta.5+mc26.3","0.9.3+mc26.3","0.9.4-beta.1+mc26.3").contains(sodium.version))
+   throw new IOException("Vitrail 0.13.0 can crash with this Sodium version. Disable Vitrail in Installed, or replace Sodium with 0.9.2 for Fabric 26.3.");
  }
  static Set<String> providedIds(Path jar)throws Exception {Scan scan=new Scan();scan.file(jar);return Set.copyOf(scan.modules.keySet());}
  static Module rootModule(Path jar)throws Exception {

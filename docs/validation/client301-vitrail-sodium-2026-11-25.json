@@ -1,0 +1,21 @@
+{
+  "app_version": "01.000.301",
+  "title_id": "PPSA99874",
+  "package_sha256": "1a6df9ef3b2978ba5c20f949bafdea8e157c899063d756afa479344c5b71cff8",
+  "package_bytes": 128619178,
+  "build_base_commit": "9b27143657766aad4eefcc942f30ddb8b9a72e0a",
+  "reports": [
+    "https://github.com/mateo-cogeanu/ProsperoCraft/issues/21",
+    "https://github.com/mateo-cogeanu/ProsperoCraft/issues/23"
+  ],
+  "upstream": "https://github.com/avpbynf/vitrail-shaders/pull/520",
+  "change": "For Vitrail 0.13.0-beta on Fabric 26.3, resolve its unpinned required Sodium dependency to published Sodium 0.9.2 (Modrinth bAZQdGpg). Preflight warns and stops Play for the reported 0.9.3-beta.5, 0.9.3 and 0.9.4-beta.1 pairings among enabled mods. Leave existing mods untouched and keep the established no-automatic-downgrade rule.",
+  "preserved": "Build 300's 1.21/1.21.1 text fix and runtime, graphics and LWJGL pins.",
+  "checks": [
+    "Original hash-verified Vitrail and Sodium JARs establish manifest IDs and versions. The Vitrail manifest accepts Sodium 0.9.x.",
+    "Live publisher download and resolver checks selected and preserved the exact Sodium 0.9.2 artifact alongside Vitrail and Fabric API.",
+    "All 21 standard host checks passed, including both queue orders, the launch warning online and offline, manual mod detection, Sodium-only selection and downgrade refusal.",
+    "Target build, signing, ZIP checksum and package audit passed."
+  ],
+  "pending_console": "Confirm build 301 shows the warning before Play with the conflicting pair, then use a fresh Fabric 26.3 instance to install Vitrail, confirm Sodium 0.9.2 and enter a world with a shader pack. The intermittent stutter remains separate and unverified."
+}

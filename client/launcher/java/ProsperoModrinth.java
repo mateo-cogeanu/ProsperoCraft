@@ -208,6 +208,9 @@ final class ProsperoModrinth {
   if(v.has("dependencies"))for(var element:v.getAsJsonArray("dependencies")){
    var dep=element.getAsJsonObject();if(!"required".equals(ProsperoDownloads.text(dep,"dependency_type")))continue;
    String project=ProsperoDownloads.text(dep,"project_id"),id=ProsperoDownloads.text(dep,"version_id");
+   // Vitrail 0.13.0-beta targets Sodium 0.9.2 on 26.3 despite declaring 0.9.x.
+   if(id.isEmpty()&&game.equals("26.3")&&f.project.equals("oSIKhgz3")&&f.version.equals("Q3nKuPKJ")&&project.equals("AANobbMI"))
+    id="bAZQdGpg";
    // Modrinth libraries required by Fabric mods are mods, never desktop natives.
    if(s.kind!=Kind.MOD)throw new IOException("This pack has required dependencies; install them separately first");
    var pinnedDependency=id.isEmpty()?null:requiredVersion(project,id,game,cancel);

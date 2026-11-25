@@ -154,10 +154,10 @@ public class DependencyCheck {
    ProsperoDependencies.verifyVulkan(List.of(game.resolve("mods/vitrail.jar"),game.resolve("mods/fabric-api.jar")));
    Path renamed=root.resolve("renamed-shader.jar");byte[] irisBytes=jar("iris","1.11.7+mc26.3","{}",null);Files.write(renamed,irisBytes);
    try{ProsperoDependencies.verifyVulkan(List.of(renamed));throw new AssertionError("Iris Vulkan launch allowed");}catch(IOException expected){check(expected.getMessage().contains("OpenGL")&&expected.getMessage().contains("Vitrail")&&expected.getMessage().contains("Uninstall"),"Iris launch explanation missing");}
-   ProsperoDependencies.verifyGraphics(List.of(renamed),true); // User-authorized original Iris testing on genuine Zink/OpenGL.
+   ProsperoDependencies.verifyGraphics(List.of(renamed),true,"26.3"); // User-authorized original Iris testing on genuine Zink/OpenGL.
    check(Arrays.equals(irisBytes,Files.readAllBytes(renamed)),"Iris guard modified mod");
    Files.write(renamed,jar("shader-wrapper","1.0","{}",irisBytes));
-   byte[] nestedIris=Files.readAllBytes(renamed);ProsperoDependencies.verifyGraphics(List.of(renamed),true);check(Arrays.equals(nestedIris,Files.readAllBytes(renamed)),"nested Iris testing altered mod");
+   byte[] nestedIris=Files.readAllBytes(renamed);ProsperoDependencies.verifyGraphics(List.of(renamed),true,"26.3");check(Arrays.equals(nestedIris,Files.readAllBytes(renamed)),"nested Iris testing altered mod");
    try{ProsperoDependencies.verifyVulkan(List.of(renamed));throw new AssertionError("nested Iris launch allowed");}catch(IOException expected){check(expected.getMessage().contains("OpenGL"),"nested Iris not identified");}
 
    Path launchRoot=root.resolve("launcher-guard");var launchLibrary=new ProsperoLibrary(launchRoot);var launchInstance=launchLibrary.add("Iris test","26.3",0,"fabric");Path launchMods=launchLibrary.game(launchInstance).resolve("mods");Files.createDirectories(launchMods);Files.write(launchMods.resolve("arbitrary-name.jar"),irisBytes);
@@ -165,6 +165,40 @@ public class DependencyCheck {
    var prepare=ProsperoLauncher.class.getDeclaredMethod("repairDependencies",ProsperoLibrary.Instance.class,int.class,boolean.class);prepare.setAccessible(true);
    for(boolean offline:List.of(false,true))try{prepare.invoke(launcher,launchInstance,0,offline);throw new AssertionError("launcher accepted Iris");}catch(java.lang.reflect.InvocationTargetException expected){check(expected.getCause() instanceof IOException&&expected.getCause().getMessage().contains("OpenGL"),"launcher failed before compatibility explanation");}
    var launched=ProsperoLauncher.class.getDeclaredField("launch");launched.setAccessible(true);check(!launched.getBoolean(launcher)&&Arrays.equals(irisBytes,Files.readAllBytes(launchMods.resolve("arbitrary-name.jar"))),"guard handed off or modified files");
+   Files.delete(launchMods.resolve("arbitrary-name.jar"));
+   Path vitrailJar=launchMods.resolve("manual-shaders.jar"),sodiumJar=launchMods.resolve("manual-renderer.jar");
+   byte[] vitrailBytes=jar("vitrail","0.13.0-beta","{\"sodium\":\"0.9.x\"}",null);
+   Files.write(vitrailJar,vitrailBytes);
+   for(String bad:List.of("0.9.3-beta.5+mc26.3","0.9.3+mc26.3","0.9.4-beta.1+mc26.3")){
+    byte[] sodiumBytes=jar("sodium",bad,"{}",null);Files.write(sodiumJar,sodiumBytes);
+    for(boolean offline:List.of(false,true))try{prepare.invoke(launcher,launchInstance,0,offline);throw new AssertionError("launcher accepted conflicting renderer");}
+    catch(java.lang.reflect.InvocationTargetException expected){check(expected.getCause() instanceof IOException&&expected.getCause().getMessage().contains("Sodium with 0.9.2"),"missing Vitrail workaround");}
+    ProsperoDependencies.verifyGraphics(List.of(vitrailJar,sodiumJar),true,"26.3");
+    ProsperoDependencies.verifyGraphics(List.of(vitrailJar,sodiumJar),false,"26.2");
+    ProsperoDependencies.verifyGraphics(List.of(sodiumJar),false,"26.3");
+    check(!launched.getBoolean(launcher)&&Arrays.equals(sodiumBytes,Files.readAllBytes(sodiumJar)),"Vitrail guard handed off or modified Sodium");
+   }
+   Files.write(sodiumJar,jar("sodium","0.9.2+mc26.3","{}",null));
+   ProsperoDependencies.verifyGraphics(List.of(vitrailJar,sodiumJar),false,"26.3");
+   check(Arrays.equals(vitrailBytes,Files.readAllBytes(vitrailJar)),"Vitrail mod modified");
+   version("AANobbMI","bAZQdGpg","sodium-092.jar",jar("sodium","0.9.2+mc26.3","{}",null),"[]");
+   version("AANobbMI","6etTPjD5","sodium-094.jar",jar("sodium","0.9.4-beta.1+mc26.3","{}",null),"[]");
+   version("oSIKhgz3","Q3nKuPKJ","vitrail-013.jar",vitrailBytes,"[{\"project_id\":\"AANobbMI\",\"dependency_type\":\"required\"}]");
+   for(boolean reverse:List.of(false,true)){
+    Path shaderGame=root.resolve("vitrail-queue-"+reverse+"/game");Files.createDirectories(shaderGame);
+    for(String project:reverse?List.of("AANobbMI","oSIKhgz3"):List.of("oSIKhgz3","AANobbMI"))
+     client.toggle(shaderGame,new ProsperoModrinth.Selection(project,project,ProsperoModrinth.Kind.MOD));
+    client.downloadAll(shaderGame,"26.3","fabric",(m,d,t)->{},()->false,f->{},versions);
+    check(Files.isRegularFile(shaderGame.resolve("mods/sodium-092.jar"))&&!Files.exists(shaderGame.resolve("mods/sodium-094.jar")),"Vitrail queue selected incompatible Sodium");
+   }
+   Path sodiumOnly=root.resolve("sodium-only/game");Files.createDirectories(sodiumOnly);
+   client.toggle(sodiumOnly,new ProsperoModrinth.Selection("AANobbMI","Sodium",ProsperoModrinth.Kind.MOD));
+   client.downloadAll(sodiumOnly,"26.3","fabric",(m,d,t)->{},()->false,f->{},versions);
+   check(Files.isRegularFile(sodiumOnly.resolve("mods/sodium-094.jar")),"Sodium-only selection was pinned");
+   client.toggle(sodiumOnly,new ProsperoModrinth.Selection("oSIKhgz3","Vitrail",ProsperoModrinth.Kind.MOD));
+   try{client.downloadAll(sodiumOnly,"26.3","fabric",(m,d,t)->{},()->false,f->{},versions);throw new AssertionError("automatic downgrade allowed");}
+   catch(IOException expected){check(expected.getMessage().contains("Automatic downgrades"),"wrong downgrade error");}
+   check(Files.isRegularFile(sodiumOnly.resolve("mods/sodium-094.jar"))&&!Files.exists(sodiumOnly.resolve("mods/vitrail-013.jar")),"downgrade modified installed mods");
    version("sodium","oldSodium","sodium-old.jar",jar("sodium","0.9.2","{}",null),"[]");
    version("unused","unusedVersion","unused.jar",jar("unused","1.0","{}",null),"[]");
    version("sodium","newSodium","sodium-new.jar",jar("sodium","0.9.3-beta.1","{}",null),"[{\"project_id\":\"unused\",\"version_id\":\"unusedVersion\",\"dependency_type\":\"required\"}]");

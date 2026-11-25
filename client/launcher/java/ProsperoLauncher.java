@@ -94,7 +94,7 @@ public final class ProsperoLauncher {
  static boolean observeLegacy121Frames(){
   if (!"01.000.296".equals(ProsperoBuild.VERSION) && !"01.000.297".equals(ProsperoBuild.VERSION) &&
       !"01.000.298".equals(ProsperoBuild.VERSION) && !"01.000.299".equals(ProsperoBuild.VERSION) &&
-      !"01.000.300".equals(ProsperoBuild.VERSION)) return false;
+      !"01.000.300".equals(ProsperoBuild.VERSION) && !"01.000.301".equals(ProsperoBuild.VERSION)) return false;
   return selectedLegacy121();
  }
  static boolean selectedLegacy121(){
@@ -188,7 +188,7 @@ public final class ProsperoLauncher {
  private void repairDependencies(ProsperoLibrary.Instance instance,int attempt,boolean offline)throws Exception {
   if(!"fabric".equals(instance.loader))return;
   var game=library.game(instance);
-  ProsperoDependencies.verifyGraphics(modrinth.local(game,ProsperoModrinth.Kind.MOD).stream().filter(file->!file.disabled()).map(file->game.resolve("mods").resolve(file.filename())).toList(),ProsperoGraphics.zink(instance.version,instance.loader));
+  ProsperoDependencies.verifyGraphics(modrinth.local(game,ProsperoModrinth.Kind.MOD).stream().filter(file->!file.disabled()).map(file->game.resolve("mods").resolve(file.filename())).toList(),ProsperoGraphics.zink(instance.version,instance.loader),instance.version);
   try(var checker=fabric.dependencies(instance.version)){modrinth.repair(library.game(instance),instance.version,instance.loader,checker,(text,done,size)->{synchronized(this){if(!cancelled(attempt)){message=text;completed=done;total=size;cached=null;}}},()->cancelled(attempt),offline);}
  }
  private void prepareLaunch(ProsperoLibrary.Instance instance,ProsperoInstall.Receipt installed)throws Exception {prepareLaunch(instance,installed,false);}
