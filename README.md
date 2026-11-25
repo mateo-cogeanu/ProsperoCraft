@@ -10,7 +10,7 @@ Download Minecraft on your console, keep separate instances for worlds and mods,
 
 ProsperoCraft handles Minecraft installation, accounts, input and game integration. Its [Native Java 25 Runtime](https://github.com/mateo-cogeanu/ps5-java25-homebrew) is maintained separately. Official Minecraft game JARs and asset objects are downloaded and verified from the publisher, rather than bundled with the app.
 
-Release **01.000.302** improves Fabric 26.3 frame pacing and handles the reported Vitrail and Sodium conflict. The maintainer confirmed improved stutter and working shaders on PS5. [Release notes](docs/releases/client-fabric-pacing-302.md) · [Console acceptance](docs/validation/client302-console-acceptance-2026-11-25.json).
+Release **01.000.302** improves Fabric 26.3 frame pacing and handles the reported Vitrail and Sodium conflict. The maintainer confirmed improved stutter and working shaders on PS5. [Release notes](docs/releases/client-fabric-pacing-302.md) · [Console acceptance](docs/validation/client302-console-acceptance-2026-11-25.json) · [ProsperoStore update submitted](https://github.com/darkxex/ps5-homebrew-catalog/pull/1433).
 
 Release **01.000.287** adds local offline profiles and instance downloads without Microsoft sign-in. The maintainer confirmed the build and shader rendering on PS5. [Release notes](docs/releases/client-offline-profiles-287.md) · [Console acceptance](docs/validation/client287-console-acceptance-2026-11-18.json) · [ProsperoStore update submitted](https://github.com/darkxex/ps5-homebrew-catalog/pull/1340).
 

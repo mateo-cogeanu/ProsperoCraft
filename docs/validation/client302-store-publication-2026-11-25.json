@@ -1,0 +1,53 @@
+{
+  "app_version": "01.000.302",
+  "title_id": "PPSA99874",
+  "release": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.302",
+  "release_tag_commit": "a2f7b8c5bbbd1118ec2f5e1c59dd933a7bd3667d",
+  "matching_build_source_commit": "85f4a81e87238ef800a6dae248be76d7c7ebb836",
+  "catalog_pr": "https://github.com/darkxex/ps5-homebrew-catalog/pull/1433",
+  "uploaded_assets": [
+    {
+      "name": "PPSA99874.zip",
+      "bytes": 128619313,
+      "sha256": "91c66f987824685e6ca867107a0e9dc9d0f145624f11951e42cd5e8536322903",
+      "url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/download/01.000.302/PPSA99874.zip"
+    },
+    {
+      "name": "SHA256SUMS",
+      "bytes": 474,
+      "sha256": "0c0a6d28cd33db4b9ea1aacbb34a3b2cf27d3b617ab4a8aec832018f9cb25944",
+      "url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/download/01.000.302/SHA256SUMS"
+    },
+    {
+      "name": "client302-build-validation.json",
+      "bytes": 11209,
+      "sha256": "97023624afd510c097e06b3d724f8aba901c94f70182ebe7ea7aaea1014501e9",
+      "url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/download/01.000.302/client302-build-validation.json"
+    },
+    {
+      "name": "client302-console-validation.json",
+      "bytes": 644,
+      "sha256": "100f8e3a1feb8f5026a7bb107a76403f488c8c37890beea781d278d8faa3c9e1",
+      "url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/download/01.000.302/client302-console-validation.json"
+    },
+    {
+      "name": "client302-openal-source-relink.zip",
+      "bytes": 210684110,
+      "sha256": "dbe183a22efd9d4e0eb4214c00689b3d4604257271a0807547a154ff378c002c",
+      "url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/download/01.000.302/client302-openal-source-relink.zip"
+    },
+    {
+      "name": "client302-package-audit.json",
+      "bytes": 21725,
+      "sha256": "afdc1087f77f564468b345482d1671a580e0a3e27c102bd9cb06dce6b010cb8d",
+      "url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/download/01.000.302/client302-package-audit.json"
+    }
+  ],
+  "checks": [
+    "All six downloaded assets matched the local checksums.",
+    "Normal and compatible OpenAL replacement relinks from the downloaded kit reproduced the exact tested ELF.",
+    "Catalog format, release digest and contentVersion checks passed. The test suite ran 259 tests with five skips.",
+    "The catalog PR changes only the version, artifact URL and SHA-256."
+  ],
+  "status": "GitHub release published and ProsperoStore catalog update submitted."
+}
