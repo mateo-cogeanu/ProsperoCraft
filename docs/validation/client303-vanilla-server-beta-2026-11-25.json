@@ -1,0 +1,17 @@
+{
+  "app_version": "01.000.303",
+  "title_id": "PPSA99874",
+  "package_sha256": "0db9f867ccc98193984f40b72df74389259df32f49b82aa14d0c3065e2078418",
+  "package_bytes": 128652156,
+  "build_base_commit": "21999d3864a0d1e7c21c33b78b6285f4e182cd6e",
+  "feature": "Servers tab with an Early beta notice, stable Vanilla version selection, explicit Minecraft EULA consent, verified publisher bundle downloads, LAN address and a save-and-stop action.",
+  "versions": ["26.3", "26.2", "26.1.2", "26.1.1", "26.1"],
+  "publisher_manifest": "https://piston-meta.mojang.com/mc/game/version_manifest_v2.json",
+  "design": "A fresh process selects the dedicated server's working directory before initializing Java. One world per release is isolated under the selected application storage base. Original Vanilla server and libraries are extracted unchanged from SHA-1 pinned Mojang bundles and individually SHA-256 verified. The server binds to a discovered private LAN IPv4 address on port 25565 with vanilla online authentication and remote administration disabled. The server stays in the foreground and its console command is used to stop and save before returning to the launcher.",
+  "checks": [
+    "The host launcher fixture reached the Servers tab, selected a version, cancelled and accepted the EULA prompt, verified the original bundle and produced the handoff state.",
+    "Each of the five original Vanilla servers independently reached readiness, accepted a TCP connection to its private LAN address, stopped through the vanilla console and produced a nonempty world level.dat. No player login was performed on the host.",
+    "The standard and native host suites passed 21 and 14 checks respectively. The signed PS5 candidate passed its checksum and static package audit."
+  ],
+  "pending_console": "On physical PS5, check notice, consent, download, process restart, ready/address, authenticated join from another device, world save and reload after stopping, and return to the normal launcher. No PS5 release or Store approval for this beta."
+}

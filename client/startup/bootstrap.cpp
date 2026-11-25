@@ -137,6 +137,17 @@ extern "C" unsigned ps5shaderc_fault_extended_status(unsigned*);
 extern "C" void ps5shaderc_fault_end(void);
 namespace {
 bool resume_library=false,return_to_library=false;
+#ifdef PROSPERO_HOST_BETA
+static const char* hosting_version=nullptr;
+static const char* selected_host=nullptr;
+static char host_work_option[256];
+static const char* host_version(const char* version) {
+ if(!version)return nullptr;
+ for(const char* known:{"26.3","26.2","26.1.2","26.1.1","26.1"})
+  if(std::strcmp(version,known)==0)return known;
+ return nullptr;
+}
+#endif
 // One outer reference survives nested compiler begin/end calls. Restore the
 // previous JVM handlers on every normal/Java-exception return from run_test.
 struct StartupFaultScope {
@@ -577,6 +588,10 @@ void run_test(int i) {
   JavaVMInitArgs args{};args.version=JNI_VERSION_24;
   JavaVMOption session_options[sizeof(options)/sizeof(options[0])+1];
   std::copy(std::begin(options),std::end(options),session_options);
+#ifdef PROSPERO_HOST_BETA
+  if(hosting_version)for(size_t i=0;i<sizeof(options)/sizeof(options[0]);++i)
+   if(std::strncmp(session_options[i].optionString,"-Duser.dir=",11)==0)session_options[i].optionString=host_work_option;
+#endif
   const int option_count=sizeof(options)/sizeof(options[0]);session_options[option_count]=resume_option;
   args.nOptions=option_count+(resume_library?1:0);args.options=session_options;args.ignoreUnrecognized=JNI_FALSE;
   // Verify the raw diagnostic write path before entering JVM code. Each
@@ -672,6 +687,18 @@ void run_test(int i) {
   if(!failed&&i==3){
    jmethodID normal=java_env->GetStaticMethodID(klass,"normalQuit","()Z");
    return_to_library=normal&&java_env->CallStaticBooleanMethod(klass,normal);
+#ifdef PROSPERO_HOST_BETA
+   if(return_to_library&&!java_env->ExceptionCheck()){
+    jmethodID selection=java_env->GetStaticMethodID(klass,"serverBoot","()Ljava/lang/String;");
+    auto value=selection?static_cast<jstring>(java_env->CallStaticObjectMethod(klass,selection)):nullptr;
+    if(value){
+     const char* version=java_env->GetStringUTFChars(value,nullptr);
+     selected_host=host_version(version);
+     if(version)java_env->ReleaseStringUTFChars(value,version);
+     java_env->DeleteLocalRef(value);
+    }
+   }
+#endif
    failed=java_env->ExceptionCheck()||!return_to_library;
   }
   if(failed) java_failure(i,-1307,fixture);
@@ -716,6 +743,17 @@ static void notify(const char* text) {
 }
 int main(int argc,char** argv) {
  for(int i=0;i<argc;++i)if(argv[i]&&std::strcmp(argv[i],"--prospero-library")==0)resume_library=true;
+#ifdef PROSPERO_HOST_BETA
+ for(int i=0;i+1<argc;++i)
+  if(argv[i]&&std::strcmp(argv[i],"--prospero-server")==0)hosting_version=host_version(argv[i+1]);
+ if(hosting_version){
+  const char* base=std::getenv("PROSPERO_STORAGE_BASE");
+  if(!base)return 1;
+  int length=std::snprintf(host_work_option,sizeof(host_work_option),"-Duser.dir=%s/servers/%s",base,hosting_version);
+  if(length<0||size_t(length)>=sizeof(host_work_option)||setenv("PROSPERO_SERVER_VERSION",hosting_version,1)!=0)return 1;
+  resume_library=true;
+ }else if(unsetenv("PROSPERO_SERVER_VERSION")!=0)return 1;
+#endif
  ps5::log_share::write_note(PROSPERO_REPORT_PATH("probe-build.txt"),PROSPERO_CLIENT_FIXTURE_TITLE " " PROSPERO_APP_VERSION " / PPSA99874\n");
  ps5::log_share::start();
  read_previous_log();
@@ -814,7 +852,15 @@ int main(int argc,char** argv) {
   session_status("CLEAN QUIT: replacing process for native library;not a gameplay PASS");
   if(startup_log)std::fflush(startup_log);
   std::fflush(nullptr);
+#ifdef PROSPERO_HOST_BETA
+  int rc;
+  if(selected_host){
+   const char* arguments[]={"--prospero-server",selected_host,nullptr};
+   rc=sceSystemServiceLoadExec("/app0/eboot.bin",arguments);
+  }else rc=prospero_session::restart_library();
+#else
   int rc=prospero_session::restart_library();
+#endif
   char note[240];std::snprintf(note,sizeof(note),"Client083 library restart failed: LoadExec returned0x%08x. Keep open for logs; close/reopen to retry.",unsigned(rc));
   log_stage(note);session_status(note);notify(note);
  }

@@ -4,6 +4,15 @@
 #include <cstdint>
 #include "../ports/sdl/ps5_hid.h"
 namespace prospero_menu {
+#ifdef PROSPERO_HOST_BETA
+inline constexpr int tab_x_positions[]={593,920,1227,1560};
+inline constexpr int tab_widths[]={307,287,313,275};
+inline constexpr int tab_count=4;
+#else
+inline constexpr int tab_x_positions[]={865,1245,1555};
+inline constexpr int tab_widths[]={350,280,280};
+inline constexpr int tab_count=3;
+#endif
 // Commands share the bounded UI mailbox. Expected page prevents stale clicks
 // from activating a different screen after an asynchronous transition.
 inline unsigned pointer_command(int page,int kind,int target,bool click){return 0x10000000u|(unsigned(page)<<20)|(unsigned(kind)<<16)|(click?0x8000:0)|unsigned(target);}
@@ -11,7 +20,8 @@ struct DesktopHit {int kind=-1,target=0;};
 inline DesktopHit desktop_hit(int page,int x,int y,int first,int count,int slide=0,bool offline=false,bool installed=false,bool shader=false,bool local_profiles=false){
  auto box=[&](int a,int b,int w,int h){return x>=a&&x<a+w&&y>=b&&y<b+h;};
  bool modal=page==6||(page>=7&&page<=11)||page==14||page==15;
- if(!modal){int tx[]={865,1245,1555},tw[]={350,280,280};for(int i=0;i<3;i++)if(box(tx[i],52,tw[i],68))return {0,i};}
+ if(!modal)for(int i=0;i<tab_count;i++)if(box(tab_x_positions[i],52,tab_widths[i],68))return {0,i};
+ if(page==16){if(box(110,500,1650,90))return {3,0};if(box(110,625,1650,82))return {3,1};return {};}
  if(page==0){for(int i=0;i<8&&first+i<count;i++)if(box(70+i%4*450,342+i/4*272+slide,420,242))return {1,first+i};}
  if(page==6){for(int i=0;i<40;i++)if(box(80+i%10*176,465+i/10*91,152,73))return {2,i};for(int i=0;i<5;i++)if(box(70+i*360,855,330,76))return {4,i};return {};}
  if(page==10){for(int i=0;i<8&&first+i<count;i++)if(box(265,285+i*72,1390,66))return {3,first+i};return {};}

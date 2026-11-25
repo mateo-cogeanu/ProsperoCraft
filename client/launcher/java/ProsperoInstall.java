@@ -70,7 +70,7 @@ public final class ProsperoInstall {
  }
  private void obtain(FilePin pin,BooleanSupplier cancelled)throws Exception {obtain(pin,cancelled,false);}
  private void obtain(FilePin pin,BooleanSupplier cancelled,boolean offline)throws Exception {obtain(pin,cancelled,offline,n->{});}
- private void obtain(FilePin pin,BooleanSupplier cancelled,boolean offline,java.util.function.LongConsumer transferred)throws Exception {
+ void obtain(FilePin pin,BooleanSupplier cancelled,boolean offline,java.util.function.LongConsumer transferred)throws Exception {
   if(!pin.sha1.matches("[a-f0-9]{40}")||pin.size<0||pin.size>1024L*1024*1024)throw new IOException("Invalid publisher file pin");
   safeUrl(pin.url);Path path=relative(root,pin.path);ProsperoDownloads.noLinks(path);active(cancelled);
   if(Files.isRegularFile(path)&&Files.size(path)==pin.size&&hash(path).equals(pin.sha1))return;

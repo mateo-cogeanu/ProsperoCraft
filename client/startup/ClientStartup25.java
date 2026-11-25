@@ -16,6 +16,7 @@ public final class ClientStartup25 {
  public static native boolean cleanSystemExit(boolean arm);
  private static boolean normalQuit=false;
  public static boolean normalQuit(){return normalQuit;}
+ public static String serverBoot(){return ProsperoLauncher.serverBoot();}
  public static boolean gamePreflight()throws Exception{return ProsperoLauncher.verifySelected();}
  public static String[] launcherTick(int buttons){return ProsperoLauncher.nativeTick(buttons);}
  private static void stage(String text){checkpoint("MC Startup083: "+text);}
@@ -305,7 +306,7 @@ public final class ClientStartup25 {
     if(runningClient==null)return;
     FrameStallProbe stalls=("01.000.284".equals(ProsperoBuild.VERSION)||"01.000.285".equals(ProsperoBuild.VERSION)
         ||"01.000.286".equals(ProsperoBuild.VERSION)||"01.000.287".equals(ProsperoBuild.VERSION)||"01.000.288".equals(ProsperoBuild.VERSION)
-        ||("01.000.302".equals(ProsperoBuild.VERSION)&&layout==Layout.NAMED))
+        ||(("01.000.302".equals(ProsperoBuild.VERSION)||"01.000.303".equals(ProsperoBuild.VERSION))&&layout==Layout.NAMED))
         ?new FrameStallProbe(minecraft,game,runningClient,owner,console):null;
     for(int count=0;count<300&&System.nanoTime()<deadline;count++) {
      var result=new java.util.concurrent.CompletableFuture<String>();
@@ -414,6 +415,9 @@ public final class ClientStartup25 {
    stage("Opening ProsperoCraft launcher; account credentials remain in memory");
    String[] selectedArguments=ProsperoLauncher.run(ClientStartup25::launcherMenu,
        showLibraryProgress?ClientStartup25::libraryProgress:ProsperoStorageRoot.SILENT);
+   if(ProsperoLauncher.serverBeta()&&ProsperoLauncher.serverHandoff()){
+    normalQuit=true;return;
+   }
    stage("Launcher display closed; handing off to original Minecraft Main");
    if(!gamePreflight())throw new IllegalStateException("Original artifact preflight failed; inspect startup logs");
    stage("PS5_LAUNCH phase=PREPARE_INSTANCE");
@@ -453,7 +457,7 @@ public final class ClientStartup25 {
     stage("PS5_ZINK selected render size="+size+" source=launcher-setting");
     System.setProperty("ps5.opengl.provider","zink");
     if(("01.000.300".equals(ProsperoBuild.VERSION)||"01.000.301".equals(ProsperoBuild.VERSION)||
-        "01.000.302".equals(ProsperoBuild.VERSION))&&ProsperoLauncher.selectedLegacy121()){
+        "01.000.302".equals(ProsperoBuild.VERSION)||"01.000.303".equals(ProsperoBuild.VERSION))&&ProsperoLauncher.selectedLegacy121()){
      if(!org.lwjgl.sdl.SDLHints.SDL_SetHint("PS5_LEGACY_GUI_VERTEX_UPLOAD","1"))
       throw new IllegalStateException("Legacy Zink upload hint refused");
      stage("PS5_ZINK legacy immediate vertex upload policy requested");

@@ -344,6 +344,28 @@ inline void compose_content(Canvas& c) noexcept {
   const char* actions[]={fields[6].data(),"INSTANCE SETTINGS","REPAIR DOWNLOAD","PLAY OFFLINE"};
   int y=505;for(int i=0;i<4;i++){if(i==3&&std::strcmp(fields[71].data(),"OFFLINE")!=0)continue;action(c,760,y+slide,1080,actions[i],row==i,i==0&&std::strcmp(fields[69].data(),"PENDING")!=0);y+=100;}
   if(y<920)wrap(c,790,y+8+slide,fields[65].data(),1000,1);
+ }else if(page==16){
+  label(c,76,185,"Dedicated servers",58);
+  c.rounded(70,305,1770,487,28,ink(0x10221c));
+  label(c,110,345,"Early beta",32,0xd0ff9a);
+  wrap(c,110,398,"Host Vanilla 26.x worlds for players on your local network.",1580,2);
+  const char* status=fields[83].data();
+  if(std::strcmp(status,"EULA")==0){
+   title(c,110,506,"Read the Minecraft EULA at minecraft.net/eula",31,1600);
+   action(c,110,625,1650,"Accept EULA and start server",true,true);
+   control_label(c,110,738,"CIRCLE  Back",22,0xaac8b2);
+  }else if(std::strcmp(status,"SELECT")==0||std::strcmp(status,"PREPARING")==0){
+   char version[96];std::snprintf(version,sizeof(version),"Minecraft Vanilla %.16s",fields[82].data());
+   action(c,110,500,1650,version,row==0,true);
+   action(c,110,625,1650,std::strcmp(status,"PREPARING")==0?"Preparing server...":"Start Vanilla server",row==1,true);
+   control_label(c,110,738,"LEFT / RIGHT  Version     X  Select",22,0xaac8b2);
+  }else{
+   const bool running=std::strcmp(status,"RUNNING")==0;
+   const bool finished=std::strcmp(status,"STOPPED")==0||std::strcmp(status,"FAILED")==0;
+   const char* label_text=running?fields[84].data():finished?(std::strcmp(status,"STOPPED")==0?"World saved and server stopped":"Server stopped with an error. See reports."):(std::strcmp(status,"STOPPING")==0?"Saving and stopping...":"Starting Vanilla server...");
+   title(c,110,506,label_text,32,1600);
+   action(c,110,625,1650,finished?"Return to launcher":running?"Save and stop server":"Please wait",true,running||finished);
+  }
  }else if(page==10){
   if(number(93)==1||number(93)==2)icon_selector(c);else scrolling_list(c,true);
  }else if(page==9){
@@ -470,8 +492,9 @@ inline void compose(Canvas& c) noexcept {
  const int slide=0;layout_slide=0;(void)slide;(void)elapsed;
  c.rounded(40,32,1840,108,24,ink(0x10221c));block(c,66,53,64,0);label(c,149,66,"ProsperoCraft",30);
  const bool signed_in=fields[81][0]&&std::strcmp(fields[5].data(),"Not signed in")!=0;
- const char* tabs[]={"Instances","Settings",signed_in?fields[81].data():"Accounts"};const int tx[]={865,1245,1555},tw[]={350,280,280};
- for(int i=0;i<3;i++){
+ const char* tabs[]={"Instances","Settings",signed_in?fields[81].data():"Accounts","Servers"};
+ const auto& tx=tab_x_positions;const auto& tw=tab_widths;
+ for(int i=0;i<tab_count;i++){
   const bool current=tab==i,account=i==2&&signed_in;
   const int name_width=tw[i]-(account?68:0);
   if(current&&top)selection(c,tx[i],52,tw[i],68);
@@ -482,7 +505,7 @@ inline void compose(Canvas& c) noexcept {
 
   if(account)player_head(c,tx[i]+tw[i]-51,66,40);
  }
- bool reduced=std::strcmp(fields[30].data(),"ON")==0;int active_tab=std::clamp(tab,0,2);
+ bool reduced=std::strcmp(fields[30].data(),"ON")==0;int active_tab=std::clamp(tab,0,tab_count-1);
  if(!tabs_ready){tab_x.snap(float(tx[active_tab]+24));tab_w.snap(float(tw[active_tab]-48));tabs_ready=true;}
  tab_x.to(float(tx[active_tab]+24),now_ms(),reduced);tab_w.to(float(tw[active_tab]-48),now_ms(),reduced);
  c.rounded(int(tab_x.value(now_ms())),124,unsigned(tab_w.value(now_ms())),6,3,ink(0xd0ff9a));
@@ -628,8 +651,8 @@ inline bool update() noexcept {
  if(pressed&0xf00){page_direction=(pressed&0xa00)?1:-1;page_direction_at=now_ms();}
  bool changed=false;
  if(!online.load(std::memory_order_acquire)){
-  if(pressed&0x400){std::snprintf(fields[12].data(),512,"%d",(number(12)+2)%3);std::snprintf(fields[28].data(),512,"TOP");changed=true;}
-  if(pressed&0x800){std::snprintf(fields[12].data(),512,"%d",(number(12)+1)%3);std::snprintf(fields[28].data(),512,"TOP");changed=true;}
+  if(pressed&0x400){std::snprintf(fields[12].data(),512,"%d",(number(12)+tab_count-1)%tab_count);std::snprintf(fields[28].data(),512,"TOP");changed=true;}
+  if(pressed&0x800){std::snprintf(fields[12].data(),512,"%d",(number(12)+1)%tab_count);std::snprintf(fields[28].data(),512,"TOP");changed=true;}
  }else{
   pthread_mutex_lock(&mailbox);changed=fields!=published;
   if(changed){
