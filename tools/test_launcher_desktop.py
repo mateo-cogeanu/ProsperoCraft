@@ -13,7 +13,7 @@ public class DesktopCheck {
  static int click(int page,int kind,int row){return 0x10008000|page<<20|kind<<16|row;}
  public static void main(String[] args)throws Exception{
   ok(ProsperoLauncher.supported("26.2","fabric"));ok(!ProsperoLauncher.developmentTest("26.2","fabric"));ok(!ProsperoChannel.fabric262Test());ok(!ProsperoLauncher.supported("26.1","fabric"));
-  var root=Path.of(args[0]);var lib=new ProsperoLibrary(root);lib.settings().showIntro=false;lib.save();var item=lib.add("Preserved","26.2",1,"fabric");lib.ready(item,true);String saved=Files.readString(root.resolve("library.json"));
+  var root=Files.createDirectories(Path.of(args[0])).toRealPath();var lib=new ProsperoLibrary(root);lib.settings().showIntro=false;lib.save();var item=lib.add("Preserved","26.2",1,"fabric");lib.ready(item,true);String saved=Files.readString(root.resolve("library.json"));
   var m=new ProsperoLauncher(new ProsperoAuth(),root,url->{throw new AssertionError("No network");});
   var manyRoot=root.resolve("many");var manyLib=new ProsperoLibrary(manyRoot);manyLib.settings().showIntro=false;manyLib.save();for(int i=0;i<17;i++)manyLib.add("Card"+i,"26.2",1,"vanilla");
   var grid=new ProsperoLauncher(new ProsperoAuth(),manyRoot,url->{throw new AssertionError("No network");});
@@ -32,9 +32,20 @@ public class DesktopCheck {
   String beforeTheme=Files.readString(root.resolve("library.json"));m.tick(click(2,3,7));for(int preview=0;preview<6;preview++){m.tick(click(10,3,preview)&~0x8000);ok(m.tick(0)[104].equals(""+preview));ok(new ProsperoLibrary(root).settings().theme==2);ok(Files.readString(root.resolve("library.json")).equals(beforeTheme));}m.tick(click(10,3,31)&~0x8000);ok(m.tick(0)[104].equals("5"));m.tick(0x2000);ok(m.tick(0)[104].equals("2")&&Files.readString(root.resolve("library.json")).equals(beforeTheme));
   ok(m.tick(0)[1].equals("OFF"));m.tick(click(2,0,3));ok(m.tick(0)[11].equals("2"));
   m.tick(click(2,3,4));ok(m.tick(0)[1].equals("ON")&&new ProsperoLibrary(root).settings().serverBeta);
-  m.tick(click(2,0,3));ok(m.tick(0)[11].equals("16"));m.tick(0x400);ok(m.tick(0)[11].equals("3"));
+  m.tick(0x800);ok(m.tick(0)[11].equals("16"));
+  m.tick(0x800);ok(m.tick(0)[11].equals("3"));
+  m.tick(0x400);ok(m.tick(0)[11].equals("16"));
+  m.tick(0x400);ok(m.tick(0)[11].equals("2"));
+  m.tick(click(2,0,3));ok(m.tick(0)[82].equals("26.3")&&m.tick(0)[85].equals("New world"));
+  m.tick(click(16,3,0));ok(m.tick(0)[93].equals("10")&&m.tick(0)[83].equals("5"));
+  m.tick(0x40);m.tick(0x2000);ok(m.tick(0)[82].equals("26.3"));
+  Path savedWorld=root.resolve("servers/26.2/world");Files.createDirectories(savedWorld);Files.createFile(savedWorld.resolve("level.dat"));
+  m.tick(0x4000);m.tick(click(10,3,1));ok(m.tick(0)[11].equals("16")&&m.tick(0)[82].equals("26.2")&&m.tick(0)[85].equals("Existing world"));
+  m.tick(click(16,3,1));ok(m.tick(0)[83].equals("EULA"));m.tick(click(16,0,2));ok(m.tick(0)[11].equals("16"));
+  m.tick(0x2000);ok(m.tick(0)[83].equals("SELECT"));m.tick(click(16,0,2));ok(m.tick(0)[11].equals("3"));
   m.tick(click(3,0,1));m.tick(click(2,3,4));ok(m.tick(0)[1].equals("OFF")&&!new ProsperoLibrary(root).settings().serverBeta);
-  for(int step=0;step<5;step++)m.tick(0x50000040); // wheel input uses the same row scroll path
+  m.tick(0x800);ok(m.tick(0)[11].equals("3"));m.tick(0x400);ok(m.tick(0)[11].equals("2"));
+  for(int step=0;step<10;step++)m.tick(0x50000040); // wheel input uses the same row scroll path
   ok(m.tick(0)[15].equals("9")&&m.tick(0)[84].equals("4"));
   m.tick(0x1000);ok(m.tick(0)[79].equals("ON"));m.tick(0x4000);ok(m.tick(0)[79].equals("OFF")&&!new ProsperoLibrary(root).settings().vibration);
   m.tick(0x10);m.tick(0x8000);ok(m.tick(0)[11].equals("2"));m.tick(0x4000);ok(m.tick(0)[11].equals("10"));
@@ -81,9 +92,21 @@ int main(){
  assert(desktop_hit(3,1200,480,0,0).kind==-1);
  assert(desktop_hit(0,70,342,0,2).target==0);assert(desktop_hit(0,69,342,0,2).kind==-1);assert(desktop_hit(0,520,342,0,2).target==1);assert(desktop_hit(0,491,342,0,2).kind==-1);
  assert(desktop_hit(5,110,805,0,0).kind==-1);assert(desktop_hit(5,800,760,0,0).target==8);assert(desktop_hit(5,1400,760,0,0).target==8);assert(desktop_hit(5,800,850,0,0).target==5);assert(desktop_hit(5,1400,850,0,0).target==6);assert(desktop_hit(6,900,70,0,0).kind==-1);assert(desktop_hit(10,300,285,8,20).target==8);assert(desktop_hit(5,1350,650,0,0).target==7);assert(desktop_hit(12,1600,550,0,1,0,false,true).target==20);
- assert(desktop_hit(2,1700,70,0,10,0,false,false,false,false,true).target==3);
- assert(desktop_hit(2,800,302,4,10,0,false,false,false,false,false,384).target==4);
- assert(desktop_hit(2,800,878,4,10,0,false,false,false,false,false,384).kind==-1);
+ assert(desktop_hit(2,1400,70,0,10,0,false,false,false,false,true).target==3);
+ assert(desktop_hit(2,1700,70,0,10,0,false,false,false,false,true).target==2);
+ assert(desktop_hit(2,1700,70,0,10).target==2);
+ static_assert(settings_x*2+settings_width==1920);
+ assert(desktop_hit(2,settings_x-1,settings_top,0,10).kind==-1);
+ assert(desktop_hit(2,settings_x,settings_top,0,10).kind==3);
+ assert(desktop_hit(2,settings_x+settings_width-1,settings_top,0,10).kind==3);
+ assert(desktop_hit(2,settings_x,settings_top+settings_row_height,0,10).kind==-1);
+ assert(desktop_hit(2,settings_x,settings_top,4,10,0,false,false,false,false,false,4*settings_pitch).target==4);
+ assert(desktop_hit(2,settings_x,settings_top+6*settings_pitch,4,10,0,false,false,false,false,false,4*settings_pitch).kind==-1);
+ assert(desktop_hit(16,server_control_x,server_version_y,0,0).kind==3);
+ assert(desktop_hit(16,server_control_x,server_action_y,0,0).target==1);
+ assert(desktop_hit(16,server_x,server_version_y,0,0).kind==-1);
+ assert(desktop_hit(16,server_control_x,server_version_y,0,0,0,false,false,false,false,true,0,false,true).kind==-1);
+ assert(desktop_hit(16,server_control_x,server_action_y,0,0,0,false,false,false,false,true,0,false,false).kind==-1);
  assert(desktop_char(4,false,false)=='a'&&desktop_char(4,true,false)=='A'&&desktop_char(4,true,true)=='a');
  DesktopInput d;std::vector<unsigned> events,modes;int clicks=0;auto emit=[&](unsigned x){if((x>>28)==4)modes.push_back(x);else events.push_back(x);};auto point=[&](int x,int y,bool c){assert(x>=0&&x<1920&&y>=0&&y<1080);clicks+=c;};
  prospero_keyboard_packet k{};k.connected=1;k.keys[0]=40;kp={k};d.poll(1,emit,point);assert(events.empty()); // held on entry
@@ -98,7 +121,7 @@ with tempfile.TemporaryDirectory() as td:
  w=Path(td);(w/'DesktopCheck.java').write_text(java);cp=launcher_classpath();out=w/'classes';out.mkdir()
  subprocess.run([str(J/'javac'),'--release','25','-cp',cp,'-d',str(out),*[str(p)for p in (R/'client/launcher/java').glob('*.java')],str(w/'DesktopCheck.java')],check=True)
  (out/'prosperocraft-channel.txt').write_text('temp_gametest\n')
- (out/'prosperocraft-build.properties').write_text('app_version=01.000.304\ntitle_id=PPSA99874\n')
+ (out/'prosperocraft-build.properties').write_text('app_version=01.000.305\ntitle_id=PPSA99874\n')
  subprocess.run([str(J/'java'),'-cp',str(out)+':'+cp,'DesktopCheck',str(w/'data')],check=True)
  (w/'test.cpp').write_text(cpp)
  subprocess.run([executable('clang++', env='CXX'),'-std=c++20','-fsanitize=address,undefined','-I'+str(R/'client/launcher'),str(w/'test.cpp'),'-o',str(w/'test')],check=True)

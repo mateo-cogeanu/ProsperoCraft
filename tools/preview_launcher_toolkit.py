@@ -26,6 +26,7 @@ cpu=cpu[:start]+'    std::memcpy(destination,source,frame_bytes);'+cpu[end:]
 source=(ROOT/'build/launcher-preview/preview.cpp').read_text()
 source=source.replace(str(runtime/'native/renderer/demo_renderer.cpp'),str(work/'videoout_host.cpp'))
 source=source.replace('#include "'+str(ROOT/'client/launcher/native_menu.hpp')+'"', '#define PROSPERO_TOOLKIT 1\n#define PROSPERO_TOOLKIT_FONT_DIR "'+str(KIT/'assets/fonts')+'"\n#include "'+str(ROOT/'client/launcher/native_menu.hpp')+'"\nnamespace prospero_menu {void initialize_toolkit_graphics(){}}')
+source=source.replace('int prospero_hid_open', 'int scePadSetLightBar(std::int32_t,const void*){return 0;}\nint scePadResetLightBar(std::int32_t){return 0;}\nint prospero_hid_open',1)
 source=source.replace('output=std::string(argv[1])+"/"+scene+".ppm";prospero_menu::focus={};', 'output=std::string(argv[1])+"/"+scene+".ppm";prospero_menu::focus={};for(int settle=0;settle<60;settle++){prospero_ui::surface->list.clear();prospero_ui::Canvas canvas;prospero_menu::compose(canvas);}')
 source=source.replace('snprintf(prospero_menu::fields[at+3].data(),512,"READY");', 'snprintf(prospero_menu::fields[at+3].data(),512,"%s",i==4?"COMING SOON":i==3?"DEV TEST":"");')
 source=source.replace('snprintf(prospero_menu::fields[13].data(),512,"6");', 'snprintf(prospero_menu::fields[13].data(),512,"6");snprintf(prospero_menu::fields[30].data(),512,"OFF");snprintf(prospero_menu::fields[73].data(),512,"TEMP GAMETEST");')
@@ -78,10 +79,15 @@ if a.motion:
     source=source.replace(' for(failure=1;failure<=3;failure++)',motion+'\n for(failure=1;failure<=3;failure++)')
 # Render each actual color palette through the production Settings paint path.
 theme_preview=r'''
-  snprintf(prospero_menu::fields[11].data(),512,"2");snprintf(prospero_menu::fields[15].data(),512,"6");snprintf(prospero_menu::fields[30].data(),512,"ON");
+  snprintf(prospero_menu::fields[11].data(),512,"2");snprintf(prospero_menu::fields[15].data(),512,"0");snprintf(prospero_menu::fields[30].data(),512,"ON");
   for(int theme=0;theme<6;theme++){
    snprintf(prospero_menu::fields[104].data(),512,"%d",theme);settle_preview();assert(prospero_ui::surface->render());
-   for(int bar=0;bar<7;bar++){const auto& b=(*prospero_ui::buttons)[bar];assert(b.w==1080&&b.h==86&&b.x==760&&b.y==300+96*bar);}
+   using namespace prospero_menu;
+   for(int row=0;row<settings_rows_visible;row++){
+    const auto& b=(*prospero_ui::buttons)[row];
+    assert(b.x==settings_x&&b.y==settings_top+settings_pitch*row);
+    assert(b.w==settings_width&&b.h==settings_row_height);
+   }
    auto* px=static_cast<const unsigned char*>(prospero_ui::surface->pixels);std::ofstream f(std::string(argv[1])+"/theme-"+std::to_string(theme)+".ppm",std::ios::binary);f<<"P6\n1920 1080\n255\n";
    for(int pixel=0;pixel<1920*1080;pixel++)f.write(reinterpret_cast<const char*>(px+pixel*4),3);
   }
@@ -145,6 +151,23 @@ page_preview=r'''
   for(int i=0;i<32;i++){auto grid=prospero_menu::icon_grid(32);prospero_menu::pointer_kind=-1;auto before=prospero_menu::event_write;prospero_menu::pointer_input(int(grid.x)+24+i%8*128+64,int(grid.y)+24+i/8*128+64,false);assert(prospero_menu::event_write==before+1);assert((prospero_menu::events[before%64]&0x7fff)==unsigned(i));prospero_menu::event_read=prospero_menu::event_write;}
   field(93,"3");field(83,"5");field(15,"0");field(109,"3840 x 2160");for(int i=0;i<8;i++)field(85+i,i<5?modes[i]:"");prospero_menu::list_page=-1;prospero_menu::list_scroll.snap(0);
   auto before_click=prospero_menu::event_write;prospero_menu::page_turn.start(1,prospero_menu::now_ms(),false);prospero_menu::pointer_input(int(prospero_menu::menu_layout().x+24),int(prospero_menu::menu_layout().first_y()+10),true);assert(prospero_menu::event_write==before_click);prospero_menu::page_turn.enabled=false;prospero_menu::pointer_input(int(prospero_menu::menu_layout().x+24),int(prospero_menu::menu_layout().first_y()+10),true);assert(prospero_menu::event_write==before_click+1);prospero_menu::event_read=prospero_menu::event_write;
+  field(1,"ON");field(2,"");field(11,"2");field(12,"1");field(15,"4");field(30,"OFF");field(64,"IDLE");field(104,"0");
+  field(7,"L1 / R1  Tabs     X  Select     CIRCLE  Back     OPTIONS  Controls");field(75,"5");
+  prospero_menu::tabs_ready=false;
+  field(25,"1920 x 1080");field(26,"5");field(27,"OFF");field(67,"Data and downloads: /data/ProsperoCraft/library");
+  field(68,"ON");field(76,"Gradient");field(79,"ON");field(83,"10");field(84,"0");field(107,"ON");
+  prospero_menu::settings_scroll.snap(0);settle_preview();save_scene("settings-top");
+  field(15,"9");field(84,"4");prospero_menu::settings_scroll.snap(4*prospero_menu::settings_pitch);
+  settle_preview();save_scene("settings-bottom");
+  field(11,"16");field(12,"3");field(15,"0");field(82,"26.3");field(83,"SELECT");
+  field(84,"");field(85,"New world");field(86,"59 MB download");field(87,"");
+  field(7,"L1 / R1  Tabs     D-PAD  Navigate     X  Select     CIRCLE  Instances");
+  prospero_menu::tabs_ready=false;
+  settle_preview();save_scene("servers-setup");
+  field(83,"EULA");field(15,"1");field(7,"X  Accept     CIRCLE  Back");settle_preview();save_scene("servers-eula");
+  field(83,"PREPARING");field(7,"CIRCLE  Cancel download");field(20,"450");field(21,"27 / 59 MB");field(87,"Downloading Vanilla 26.3");
+  settle_preview();save_scene("servers-download");
+  field(83,"RUNNING");field(7,"X  Select");field(84,"192.0.2.24:25565");field(85,"Existing world");settle_preview();save_scene("servers-online");
   puts("PASS actual pointer callback rejects moving dropdown clicks and accepts settled visual row");
   puts("PASS actual Vulkan horizontal outgoing/incoming page frames, both side chevrons across six themes and fractional clipped dropdown scrolling with thumb");
 '''

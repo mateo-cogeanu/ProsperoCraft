@@ -1,0 +1,20 @@
+{
+  "app_version": "01.000.305",
+  "title_id": "PPSA99874",
+  "package_sha256": "76c8a4c21e32f5cc2ea92da66f830e2da3a1cf89d7dd797b6a0090fa70cdfd59",
+  "package_bytes": 128662747,
+  "build_base_commit": "cbe1c7ffe1dc895c48866c9ec9a24977032dcecc",
+  "eboot_sha256": "40fb3b9bf00fb66bb4e76f587b0d8798c92d536ff1369838de67f358de08c7aa",
+  "runtime_resident_ownership_commit": "51089be1c190354ac1a01a0ac04316773a939a11",
+  "publisher121_lock_sha256": "552805e92ee78b765fd887f9d083b517cf3008a41255128fa215a31d0a7c0da8",
+  "change": "Settings aligns the heading, data path, scrollable preference rows and status along a centered column. Servers moves between Settings and Accounts and remains opt-in.",
+  "hosting": "The Vanilla 26.x dashboard shows the selected version's world and download state, a version picker, Minecraft EULA consent, download progress, the live LAN address and a save-and-stop action.",
+  "checks": [
+    "All 21 standard and 14 native host checks passed. The desktop fixture covers both tab orders, pointer hit boundaries, selecting a saved server world and cancelling EULA consent.",
+    "Inspected six native toolkit renders on host Vulkan covering Settings at both scroll limits and server setup, consent, preparation and online states.",
+    "The packaged launcher classes cancelled a pending Vanilla 26.2 download, retried with the locally held original Mojang bundle, verified its SHA-1, recorded consent and produced a server handoff request.",
+    "Signed SELF integrity, ZIP checksum and package audit passed for the recorded package."
+  ],
+  "pending_console": "Physical PS5 layout and input, client and shader rendering, and dedicated server process handoff, authenticated LAN join, save and reload.",
+  "release_store": "Local candidate."
+}

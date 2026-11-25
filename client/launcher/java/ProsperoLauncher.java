@@ -18,7 +18,8 @@ public final class ProsperoLauncher {
  private static ProsperoLauncher current;
  private int serverRelease;
  private boolean serverConsent;
- private String serverBoot="";
+ private String serverBoot="",serverMessage="";
+ private boolean serverPreparing;
  private ProsperoDedicatedServer.Session hosted;
  private final ProsperoAuth auth;private final ProsperoLibrary library;private ProsperoInstall installer;
  private ProsperoFabric fabric;private final ProsperoModrinth modrinth=new ProsperoModrinth();
@@ -77,7 +78,7 @@ public final class ProsperoLauncher {
   if(current.hosted!=null||!current.serverBoot.isEmpty())return new String[0];
   return current.arguments(null,null);
  }
- static boolean serverBeta(){return "01.000.303".equals(ProsperoBuild.VERSION)||"01.000.304".equals(ProsperoBuild.VERSION);}
+ static boolean serverBeta(){return "01.000.303".equals(ProsperoBuild.VERSION)||"01.000.304".equals(ProsperoBuild.VERSION)||"01.000.305".equals(ProsperoBuild.VERSION);}
  private boolean serverTabVisible(){return serverBeta()&&(library.settings().serverBeta||hosted!=null||"01.000.303".equals(ProsperoBuild.VERSION));}
  private void settingsInput(int direction,boolean confirm)throws Exception {
   var settings=library.settings();
@@ -107,8 +108,8 @@ public final class ProsperoLauncher {
    }
    return;
   }
-  if(busy){
-   if((buttons&0x2000)!=0)cancel();
+  if(serverPreparing){
+   if((buttons&0x2000)!=0){cancel();serverMessage="Server setup cancelled.";}
    return;
   }
   if(serverConsent){
@@ -117,11 +118,16 @@ public final class ProsperoLauncher {
    return;
   }
   if((buttons&0x2000)!=0){selectTab(0);return;}
-  if((buttons&0x50)!=0)row=1-row;
-  if(row==0&&(buttons&0xa0)!=0)
+  if((buttons&0x10)!=0)row=0;
+  if((buttons&0x40)!=0)row=1;
+  if(row==0&&(buttons&0xa0)!=0){
    serverRelease=Math.floorMod(serverRelease+((buttons&0x20)!=0?1:-1),ProsperoDedicatedServer.RELEASES.size());
+   serverMessage="";
+  }
   if((buttons&0x4000)!=0){
-   if(row==0){serverRelease=(serverRelease+1)%ProsperoDedicatedServer.RELEASES.size();return;}
+   if(row==0){dropdown(10,serverRelease);return;}
+   if(busy){serverMessage="Wait for the current launcher task to finish.";return;}
+   serverMessage="";
    if(!ProsperoDedicatedServer.accepted(serverHome()))serverConsent=true;
    else prepareServer(false);
   }
@@ -129,10 +135,17 @@ public final class ProsperoLauncher {
  private void prepareServer(boolean consent){
   Path home=serverHome();
   var release=ProsperoDedicatedServer.RELEASES.get(serverRelease);
+  completed=0;total=release.size();serverPreparing=true;
+  serverMessage="Checking server files";
   runTask("HOST",attempt->{
-   ProsperoDedicatedServer.prepare(home,release,consent,installSource,refreshProgress(attempt),()->cancelled(attempt));
-   synchronized(this){
-    if(!cancelled(attempt)){serverBoot=release.version();launch=true;cached=null;}
+   try{
+    ProsperoDedicatedServer.prepare(home,release,consent,installSource,(text,done,size)->{
+     synchronized(this){if(!cancelled(attempt)){serverMessage=text;completed=done;total=size;cached=null;}}
+    },()->cancelled(attempt));
+    synchronized(this){if(!cancelled(attempt)){serverBoot=release.version();launch=true;cached=null;}}
+   }catch(Exception failure){
+    synchronized(this){if(!cancelled(attempt))serverMessage=friendly(failure);}
+    throw failure;
    }
   });
  }
@@ -170,7 +183,7 @@ public final class ProsperoLauncher {
       !"01.000.298".equals(ProsperoBuild.VERSION) && !"01.000.299".equals(ProsperoBuild.VERSION) &&
       !"01.000.300".equals(ProsperoBuild.VERSION) && !"01.000.301".equals(ProsperoBuild.VERSION) &&
       !"01.000.302".equals(ProsperoBuild.VERSION) && !"01.000.303".equals(ProsperoBuild.VERSION) &&
-      !"01.000.304".equals(ProsperoBuild.VERSION)) return false;
+      !"01.000.304".equals(ProsperoBuild.VERSION)&&!"01.000.305".equals(ProsperoBuild.VERSION)) return false;
   return selectedLegacy121();
  }
  static boolean selectedLegacy121(){
@@ -182,7 +195,7 @@ public final class ProsperoLauncher {
   return ("01.000.282".equals(ProsperoBuild.VERSION)||"01.000.283".equals(ProsperoBuild.VERSION)
       ||"01.000.284".equals(ProsperoBuild.VERSION)||"01.000.285".equals(ProsperoBuild.VERSION)
         ||"01.000.286".equals(ProsperoBuild.VERSION)||"01.000.287".equals(ProsperoBuild.VERSION)||"01.000.288".equals(ProsperoBuild.VERSION)
-        ||"01.000.302".equals(ProsperoBuild.VERSION)||"01.000.303".equals(ProsperoBuild.VERSION)||"01.000.304".equals(ProsperoBuild.VERSION))
+        ||"01.000.302".equals(ProsperoBuild.VERSION)||"01.000.303".equals(ProsperoBuild.VERSION)||"01.000.304".equals(ProsperoBuild.VERSION)||"01.000.305".equals(ProsperoBuild.VERSION))
       &&"26.3".equals(current.detail.version)&&"fabric".equals(current.detail.loader);
  }
  static boolean observeFabric263Stalls(){
@@ -193,7 +206,7 @@ public final class ProsperoLauncher {
  static boolean verifySelected()throws Exception{current.installer.verify(current.receipt);return true;}
  public static String[] nativeTick(int buttons){return current.tick(buttons);}
  synchronized void cancel(){generation++;code="";uri="";if(worker!=null&&worker.isAlive()){worker.interrupt();busy=true;task="STOPPING";}else{busy=false;task="";}cached=null;}
- private void runTask(String kind,Job job){if(busy){message="A task is running. Circle cancels it.";return;}busy=true;task=kind;migrationEpoch++;int attempt=++generation;worker=new Thread(()->{try{job.run(attempt);}catch(Exception failure){synchronized(this){if(generation==attempt){message=failure instanceof ProsperoAuth.Failure?failure.getMessage():friendly(failure);feedback("error");System.err.println("PS5_LAUNCHER task="+kind+" result=FAILED storageCode="+(failure instanceof java.io.IOException io?ProsperoStorage.code(io):"NONE"));}}}finally{synchronized(this){if(generation==attempt||worker==Thread.currentThread()){busy=false;task="";code="";uri="";cached=null;}}}},"ProsperoCraft "+kind);worker.setDaemon(true);worker.start();}
+ private void runTask(String kind,Job job){if(busy){message="A task is running. Circle cancels it.";return;}busy=true;task=kind;migrationEpoch++;int attempt=++generation;worker=new Thread(()->{try{job.run(attempt);}catch(Exception failure){synchronized(this){if(generation==attempt){message=failure instanceof ProsperoAuth.Failure?failure.getMessage():friendly(failure);feedback("error");System.err.println("PS5_LAUNCHER task="+kind+" result=FAILED storageCode="+(failure instanceof java.io.IOException io?ProsperoStorage.code(io):"NONE"));}}}finally{synchronized(this){if(generation==attempt||worker==Thread.currentThread()){busy=false;task="";if(kind.equals("HOST"))serverPreparing=false;code="";uri="";cached=null;}}}},"ProsperoCraft "+kind);worker.setDaemon(true);worker.start();}
  interface Job{void run(int attempt)throws Exception;}
  private static String friendly(Exception error){if(error instanceof java.io.IOException io&&java.util.Set.of("ENOSPC","QUOTA").contains(ProsperoStorage.code(io)))return "App storage is full. Free space in this app, or refresh the loader metadata and relaunch to apply its storage request.";if(error instanceof IllegalArgumentException)return "Use1-40 letters, numbers, spaces or ._()!+-";if(error instanceof java.io.IOException)return error.getMessage()==null?"Storage or download error. Retry when ready.":error.getMessage();return "This action could not finish. Your worlds are kept. Try again.";}
  private synchronized boolean cancelled(int attempt){return attempt!=generation;}
@@ -433,7 +446,15 @@ public final class ProsperoLauncher {
   }
  }
  private int tabPage(){return switch(tab){case 0->0;case 1->2;case 3->16;default->3;};}
- private void selectTab(int next){int keep=(page==4||page==5)&&detail!=null?library.instances().indexOf(detail):0;tab=Math.floorMod(next,serverTabVisible()?4:3);page=tabPage();if(page==2)settingsFirst=0;top=false;selected=tab==0?Math.max(0,keep):0;row=0;cached=null;}
+ private int tabSlot(int logical){return serverTabVisible()&&logical>=2?5-logical:logical;}
+ private void moveTab(int direction){selectTab(tabSlot(Math.floorMod(tabSlot(tab)+direction,serverTabVisible()?4:3)));}
+ private void selectTab(int next){
+  int keep=(page==4||page==5)&&detail!=null?library.instances().indexOf(detail):0;
+  tab=next;page=tabPage();
+  if(page==2)settingsFirst=0;
+  if(page==16)serverMessage="";
+  top=false;selected=tab==0?Math.max(0,keep):0;row=0;cached=null;
+ }
  private void createInstance(){page=1;tab=0;top=false;row=0;if(versions.isEmpty()&&!busy)catalog();}
  private int cardCount(){return library.instances().size()+1;}
  private void navigateCards(int buttons){
@@ -446,9 +467,9 @@ public final class ProsperoLauncher {
  private void cardPage(int direction){int next=selected/8*8+direction*8;if(next>=0&&next<cardCount()){selected=Math.min(cardCount()-1,next+selected%8);top=false;}}
  private int listFirst=0,listReturnFirst=0;
  private int visibleListFirst(int size){int visible=page==13?7:8;listFirst=Math.max(0,Math.min(Math.min(listFirst,row),Math.max(0,size-visible)));if(row>=listFirst+visible)listFirst=row-visible+1;return listFirst;}
- private List<String> choices(){return switch(dropdownKind){case 0->versions.stream().map(v->v.id()+(v.type().equals("snapshot")?"  [snapshot]":"")+(draftSupported(v.id())?"":"  [Coming soon]")).toList();case 1,2->List.of(ProsperoLibrary.ICONS);case 3->java.util.stream.IntStream.range(0,ProsperoLibrary.RESOLUTIONS.length).mapToObj(ProsperoLibrary::resolutionLabel).toList();case 4->List.of("1","2","3","4","5","6");case 6->List.of("Vanilla",fabricLabel(),"NeoForge  [Coming soon]");case 7->ProsperoInput.LABELS;case 8->List.of(THEMES);case 9->List.of("Quick refresh - launch cache","Full repair - verify every file");default->List.of(BACKGROUNDS);};}
+ private List<String> choices(){return switch(dropdownKind){case 0->versions.stream().map(v->v.id()+(v.type().equals("snapshot")?"  [snapshot]":"")+(draftSupported(v.id())?"":"  [Coming soon]")).toList();case 1,2->List.of(ProsperoLibrary.ICONS);case 3->java.util.stream.IntStream.range(0,ProsperoLibrary.RESOLUTIONS.length).mapToObj(ProsperoLibrary::resolutionLabel).toList();case 4->List.of("1","2","3","4","5","6");case 6->List.of("Vanilla",fabricLabel(),"NeoForge  [Coming soon]");case 7->ProsperoInput.LABELS;case 8->List.of(THEMES);case 9->List.of("Quick refresh - launch cache","Full repair - verify every file");case 10->ProsperoDedicatedServer.RELEASES.stream().map(ProsperoDedicatedServer.Release::version).toList();default->List.of(BACKGROUNDS);};}
  private void dropdown(int kind,int choice){dropdownKind=kind;dropdownChoice=choice;dropdownReturn=page;dropdownRow=row;listReturnFirst=listFirst;page=10;row=choice;listFirst=Math.max(0,choice-7);top=false;}
- private void choose()throws Exception {if(dropdownKind==9){int choice=row;page=dropdownReturn;row=dropdownRow;listFirst=listReturnFirst;if(choice==0)refreshCache();else install(false);return;}switch(dropdownKind){case 0->{versionChoice=row;if(!customName)draftName=defaultName(versions.get(row).id());}case 1->draftIcon=row;case 2->library.icon(detail,row);case 3->{library.settings().resolution=row;library.save();}case 4->{library.settings().workers=row+1;library.save();}case 5->{library.settings().background=row+1;library.save();}case 8->{int before=library.settings().theme;library.settings().theme=row;try{library.save();}catch(Exception failed){library.settings().theme=before;throw failed;}}case 7->{int before=library.settings().controllerKeys[bindingIndex];library.settings().controllerKeys[bindingIndex]=ProsperoInput.CODES.get(row);try{library.save();}catch(Exception failed){library.settings().controllerKeys[bindingIndex]=before;throw failed;}}case 6->{if(row==2)throw new java.io.IOException("NeoForge is coming soon");draftLoader=row;if(!customName&&!versions.isEmpty())draftName=defaultName(versions.get(versionChoice).id());}}page=dropdownReturn;row=dropdownRow;listFirst=listReturnFirst;}
+ private void choose()throws Exception {if(dropdownKind==9){int choice=row;page=dropdownReturn;row=dropdownRow;listFirst=listReturnFirst;if(choice==0)refreshCache();else install(false);return;}switch(dropdownKind){case 10->{serverRelease=row;serverMessage="";}case 0->{versionChoice=row;if(!customName)draftName=defaultName(versions.get(row).id());}case 1->draftIcon=row;case 2->library.icon(detail,row);case 3->{library.settings().resolution=row;library.save();}case 4->{library.settings().workers=row+1;library.save();}case 5->{library.settings().background=row+1;library.save();}case 8->{int before=library.settings().theme;library.settings().theme=row;try{library.save();}catch(Exception failed){library.settings().theme=before;throw failed;}}case 7->{int before=library.settings().controllerKeys[bindingIndex];library.settings().controllerKeys[bindingIndex]=ProsperoInput.CODES.get(row);try{library.save();}catch(Exception failed){library.settings().controllerKeys[bindingIndex]=before;throw failed;}}case 6->{if(row==2)throw new java.io.IOException("NeoForge is coming soon");draftLoader=row;if(!customName&&!versions.isEmpty())draftName=defaultName(versions.get(versionChoice).id());}}page=dropdownReturn;row=dropdownRow;listFirst=listReturnFirst;}
  private void openContent(ProsperoModrinth.Kind kind)throws Exception {contentKind=kind;shadowScale=kind==ProsperoModrinth.Kind.SHADER?ProsperoShaderSettings.scale(library.game(detail)):100;contentInstalled=false;activeContentIcon="";contentQuery="";contentOffset=0;contentTotal=0;contentHits=List.of();contentQueue=modrinth.queue(library.game(detail));page=12;row=0;top=false;browse();}
  private void browse(){if(busy)return;var instance=detail;var kind=contentKind;String query=contentQuery;int offset=contentOffset;boolean installedView=contentInstalled;message=installedView?"Reading installed files":"Loading Modrinth";
   runTask("MODRINTH",attempt->{
@@ -514,11 +535,11 @@ public final class ProsperoLauncher {
    int expected=(command>>>20)&255,kind=(command>>>16)&15,target=command&0x7fff;
    if(expected!=page)return state();
    boolean click=(command&0x8000)!=0;
-   if(page==16&&kind==3&&(hosted!=null||serverConsent||busy)){
+   if(page==16&&kind==3&&(hosted!=null||serverConsent||serverPreparing)){
     if(click&&target==1)return tickModel(0x4000);
     return state();
    }
-   if(kind==0){if(click&&target<(serverTabVisible()?4:3)&&page!=6&&!(page>=7&&page<=11)&&page!=14&&hosted==null&&!serverConsent&&!(page==16&&busy))selectTab(target);}
+   if(kind==0){if(click&&target<(serverTabVisible()?4:3)&&page!=6&&!(page>=7&&page<=11)&&page!=14&&hosted==null&&!serverConsent&&!(page==16&&serverPreparing))selectTab(target);}
    else if(kind==1&&page==0&&target>=0&&target<=library.instances().size()){selected=target;top=false;if(click)return tickModel(0x4000);}
    else if(kind==2&&page==6&&!physicalEditing&&target<40){key=target;if(click)return tickModel(0x4000);}
    else if(kind==4&&page==6&&target<5){if(physicalEditing&&target<3)return state();if(!physicalEditing)key=40+target;if(click){int[] actions={0x1000,0x200,0x100,0x2000,0x8000};return tickModel(actions[target]);}}
@@ -537,7 +558,7 @@ public final class ProsperoLauncher {
   if(buttons!=0&&!desktopDispatch)physicalEditing=false;
   try{
    if(page==16){
-    if(hosted!=null||serverConsent||busy||(buttons&0xc00)==0){
+    if(hosted!=null||serverConsent||serverPreparing||(buttons&0xc00)==0){
      if(buttons!=0){serverInput(buttons);cached=null;}
      if(hosted!=null&&cached!=null&&!cached[83].equals(hosted.status.name()))cached=null;
      return state();
@@ -581,10 +602,10 @@ public final class ProsperoLauncher {
    if(page==8){if((buttons&0x2008)!=0){page=guideReturn;tab=guideTab;top=guideTop;}else if((buttons&0x220)!=0)guideSection=(guideSection+1)%5;else if((buttons&0x180)!=0)guideSection=Math.floorMod(guideSection-1,5);if(buttons!=0)cached=null;return state();}
    if(page==6){keyboard(buttons);if(buttons!=0)cached=null;return state();}
    if((buttons&0x8)!=0){guideReturn=page;guideTab=tab;guideTop=top;guideSection=0;page=8;cached=null;return state();}
-   if((buttons&0xc00)!=0){selectTab(tab+((buttons&0x800)!=0?1:-1));return state();}
+   if((buttons&0xc00)!=0){moveTab((buttons&0x800)!=0?1:-1);return state();}
    if((buttons&0x2000)!=0){if(busy){cancel();message="Cancelled. Verified downloads are kept.";}if(page==5&&detail!=null){page=4;top=false;row=1;cached=null;return state();}int keep=(page==4||page==5)&&detail!=null?library.instances().indexOf(detail):0;page=tabPage();top=false;row=0;selected=Math.max(0,keep);cached=null;return state();}
    if(page==0&&(buttons&0x300)!=0){cardPage((buttons&0x200)!=0?1:-1);cached=null;return state();}
-   if(top){if((buttons&0xa0)!=0){selectTab(tab+((buttons&0x20)!=0?1:-1));return state();}if((buttons&0x4040)!=0){top=false;row=0;}cached=null;return state();}
+   if(top){if((buttons&0xa0)!=0){moveTab((buttons&0x20)!=0?1:-1);return state();}if((buttons&0x4040)!=0){top=false;row=0;}cached=null;return state();}
    if(page==0){navigateCards(buttons);
     if((buttons&0x4000)!=0&&!top){if(selected==library.instances().size())createInstance();else{detail=library.instances().get(selected);page=4;row=0;}}
     if(buttons!=0)cached=null;return state();
@@ -608,7 +629,7 @@ public final class ProsperoLauncher {
     else if(page==5){if(row==8){openWeb();return state();}if(row==7){duplicateInstance();cached=null;return state();}if(row>=2&&row<=4&&!busy){openContent(ProsperoModrinth.Kind.values()[row-2]);cached=null;return state();}if(row==0)beginName(5);if(row==1){dropdown(2,detail.icon);cached=null;return state();}if(row==5){page=4;row=0;}if(row==6){if(busy){message="Wait for the current task before deleting an instance.";feedback("error");}else{page=9;row=0;}}}
    }
    if(buttons!=0)cached=null;
-  }catch(Exception error){message=friendly(error);feedback("error");}
+  }catch(Exception error){if(page==16)serverMessage=friendly(error);else message=friendly(error);feedback("error");}
   return state();
  }
  private String[] state(){
@@ -617,7 +638,7 @@ public final class ProsperoLauncher {
   f[0]="Instances";f[1]=serverTabVisible()?"ON":"OFF";f[2]=message;f[3]=code;f[4]=uri;f[5]=localProfileSelected()?"Offline profile":session==null?"Not signed in":session.name;f[6]=detail!=null&&!launchable(detail.version,detail.loader)?"COMING SOON":ProsperoChannel.tempGameTest()&&!localProfileSelected()&&(session==null||!session.valid(System.currentTimeMillis()))?"PLAY - Sign in":detail!=null&&detail.ready?(ProsperoChannel.tempGameTest()?"PLAY":"PLAY DEMO"):"DOWNLOAD & PLAY";if(detail!=null&&ProsperoVersions.release121(detail.version)&&developmentTest(detail.version,detail.loader)&&f[6].equals("PLAY"))f[6]=experimental(detail.version,detail.loader)?"EXPERIMENTAL - PLAY":"DEV TEST - PLAY";f[7]=page==0?"L1 / R1 Tabs     L2 / R2 Pages     D-PAD Navigate     X Select":page==10&&(dropdownKind==1||dropdownKind==2)?"D-PAD Choose icon     X Use icon     CIRCLE Cancel":page==10&&dropdownKind==8?"D-PAD / Hover Preview     X Save     CIRCLE Cancel":page==10||page==13?"D-PAD Scroll     X Confirm     CIRCLE Back":page==8?"L2 / R2 Pages     LEFT / RIGHT Pages     CIRCLE Back":page==11||page==7?"LEFT / RIGHT Choose     X Confirm":page==9?"X Confirm     CIRCLE No":busy?"CIRCLE Cancel":"L1 / R1 Pages     X Select     CIRCLE Back     OPTIONS Controls";f[8]=busy?task:localProfileSelected()?"OFFLINE PROFILE":session==null?"MICROSOFT ACCOUNT":"CONNECTED";f[9]=""+selected;f[10]=launch?"LAUNCH":"WAIT";f[11]=""+page;f[12]=""+tab;f[13]=""+library.instances().size();f[14]=""+(selected/8*8);f[15]=""+(top?-1:row);f[16]=detail==null?"":detail.name;f[17]=detail==null?"":detail.version+("fabric".equals(detail.loader)?" / Fabric":" / Vanilla");f[18]=""+(detail==null?1:detail.icon);f[19]=detail==null?"":detail.ready?"READY":"NOT DOWNLOADED";f[20]=""+(total==0?0:Math.min(1000,completed*1000/total));f[21]=busy&&"REFRESH".equals(task)?completed+" / "+total+" checks":total>1?String.format(java.util.Locale.ROOT,"%.0f / %.0f MB",completed/1048576.0,total/1048576.0):"";f[22]=draftName;f[23]=versions.isEmpty()?"Select to refresh versions":versions.get(versionChoice).id();f[24]=""+draftIcon;f[25]=ProsperoLibrary.resolutionLabel(library.settings().resolution);f[26]=""+library.settings().workers;f[27]=library.settings().snapshots?"ON":"OFF";f[28]=top?"TOP":"CONTENT";f[29]=keyboard;f[30]=library.settings().reducedMotion?"ON":"OFF";f[31]=""+key;
   var all=library.instances();int start=selected/8*8;
   f[13]=""+(all.size()+1);for(int i=0;i<8&&start+i<=all.size();i++){int at=32+i*4;if(start+i==all.size()){f[at]="";f[at+2]="-1";f[at+3]="ADD";}else{var instance=all.get(start+i);f[at]=instance.name;f[at+1]=instance.version+("fabric".equals(instance.loader)?" / Fabric":"");f[at+2]=""+instance.icon;f[at+3]=!launchable(instance.version,instance.loader)?"COMING SOON":experimental(instance.version,instance.loader)?"EXPERIMENTAL":ProsperoVersions.release121(instance.version)&&developmentTest(instance.version,instance.loader)?"DEV TEST":"";}}
-  if(page==10){List<String> options=choices();f[109]=options.stream().max(Comparator.comparingInt(String::length)).orElse("");int first=dropdownKind==1||dropdownKind==2?0:visibleListFirst(options.size());f[107]=first>0?options.get(first-1):"";f[108]=first+8<options.size()?options.get(first+8):"";f[82]=switch(dropdownKind){case 0->"Choose version";case 1,2->"Choose instance icon";case 3->"Game resolution";case 4->"Parallel downloads";case 6->"Choose loader";case 7->"Choose key or mouse button";case 8->"Color theme";case 9->"Repair download";default->"Animated background";};f[83]=""+options.size();f[84]=""+first;for(int i=0;i<8&&first+i<options.size();i++)f[85+i]=options.get(first+i);f[93]=""+dropdownKind;}
+  if(page==10){List<String> options=choices();f[109]=options.stream().max(Comparator.comparingInt(String::length)).orElse("");int first=dropdownKind==1||dropdownKind==2?0:visibleListFirst(options.size());f[107]=first>0?options.get(first-1):"";f[108]=first+8<options.size()?options.get(first+8):"";f[82]=switch(dropdownKind){case 0->"Choose version";case 1,2->"Choose instance icon";case 3->"Game resolution";case 4->"Parallel downloads";case 6->"Choose loader";case 7->"Choose key or mouse button";case 8->"Color theme";case 9->"Repair download";case 10->"Server version";default->"Animated background";};f[83]=""+options.size();f[84]=""+first;for(int i=0;i<8&&first+i<options.size();i++)f[85+i]=options.get(first+i);f[93]=""+dropdownKind;}
   if(page==14&&pendingUninstall!=null){f[82]="Uninstall this file?";f[85]=pendingUninstall.filename();f[96]=contentIcons.getOrDefault(pendingUninstall.project(),"");f[70]="Only this file is removed. Worlds and settings are kept. Mods that depend on it may stop working.";}
   if(page==13){f[109]=java.util.stream.IntStream.range(0,23).mapToObj(i->i==0?"Restore default controller bindings":ProsperoInput.ACTIONS[i+7]+"  :  "+ProsperoInput.label(library.settings().controllerKeys[i+7])).max(Comparator.comparingInt(String::length)).orElse("");f[82]="Controller keybinds";int first=visibleListFirst(23);f[107]=first>0?(first-1==0?"Restore default controller bindings":ProsperoInput.ACTIONS[first+6]+"  :  "+ProsperoInput.label(library.settings().controllerKeys[first+6])):"";f[108]=first+7<23?ProsperoInput.ACTIONS[first+14]+"  :  "+ProsperoInput.label(library.settings().controllerKeys[first+14]):"";f[83]="23";f[84]=""+first;for(int n=0;n<7&&first+n<23;n++){int index=first+n;f[85+n]=index==0?"Restore default controller bindings":ProsperoInput.ACTIONS[index+7]+"  :  "+ProsperoInput.label(library.settings().controllerKeys[index+7]);}f[70]="USB keyboard/mouse use Minecraft Controls. Controller menu controls stay available.";}
   if(page==1)f[82]=draftLoader==1?fabricLabel():"Vanilla";
@@ -638,15 +659,24 @@ public final class ProsperoLauncher {
   }
   f[105]=physicalEditing?"PHYSICAL":"CONTROLLER";f[106]=keyboardReturn==3?"Offline username":keyboardReturn==12?"Search content":keyboardReturn==5?"Rename instance":"Instance name";
   if(page==2){
+   f[7]="L1 / R1  Tabs     X  Select     CIRCLE  Back     OPTIONS  Controls";
    settingsFirst=Math.min(settingsFirst,row);
    if(row>=settingsFirst+SETTINGS_VISIBLE)settingsFirst=row-SETTINGS_VISIBLE+1;
    f[83]=Integer.toString(SETTINGS_ROWS);f[84]=Integer.toString(settingsFirst);
    f[107]=library.settings().serverBeta?"ON":"OFF";
   }
   if(page==16){
-   f[82]=ProsperoDedicatedServer.RELEASES.get(serverRelease).version();
-   f[83]=hosted!=null?hosted.status.name():serverConsent?"EULA":busy?"PREPARING":"SELECT";
+   var release=ProsperoDedicatedServer.RELEASES.get(serverRelease);
+   Path home=serverHome();
+   f[7]=serverPreparing?"CIRCLE  Cancel download":serverConsent?"X  Accept     CIRCLE  Back":
+       hosted==null?"L1 / R1  Tabs     D-PAD  Navigate     X  Select     CIRCLE  Instances":"X  Select";
+   f[82]=release.version();
+   f[83]=hosted!=null?hosted.status.name():serverConsent?"EULA":serverPreparing?"PREPARING":"SELECT";
    f[84]=hosted==null?"":hosted.address();
+   f[85]=Files.isRegularFile(home.resolve("world").resolve("level.dat"),LinkOption.NOFOLLOW_LINKS)?"Existing world":"New world";
+   f[86]=Files.isRegularFile(home.resolve("server.jar"),LinkOption.NOFOLLOW_LINKS)?"Stored locally":Long.toString(Math.round(release.size()/1048576.0))+" MB download";
+   f[87]=serverMessage;
+   if(serverPreparing)f[21]=String.format(Locale.ROOT,"%.0f / %.0f MB",completed/1048576.0,total/1048576.0);
   }
   f[104]=""+(page==10&&dropdownKind==8?row:library.settings().theme);f[75]=""+library.settings().background;f[76]=BACKGROUNDS[library.settings().background-1];
   f[73]=ProsperoChannel.label();f[74]=page==8?""+guideSection:"";

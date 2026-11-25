@@ -8,18 +8,29 @@ inline constexpr int standard_tab_x[]={865,1245,1555};
 inline constexpr int standard_tab_width[]={350,280,280};
 inline constexpr int server_tab_x[]={593,920,1227,1560};
 inline constexpr int server_tab_width[]={307,287,313,275};
-inline constexpr int settings_top=300,settings_pitch=96,settings_rows_visible=6;
+// Logical IDs stay stable in the Java model and the input mailbox.
+inline constexpr int tab_slot(int tab,bool servers){return servers&&tab>=2?5-tab:tab;}
+inline constexpr int settings_x=280,settings_width=1360,settings_top=316;
+inline constexpr int settings_pitch=94,settings_row_height=84,settings_rows_visible=6;
+inline constexpr int server_x=settings_x,server_top=316,server_world_width=752,server_gap=24;
+inline constexpr int server_control_x=server_x+server_world_width+server_gap+32;
+inline constexpr int server_control_width=settings_width-server_world_width-server_gap-64;
+inline constexpr int server_version_y=443,server_version_height=88,server_action_y=715;
 // Commands share the bounded UI mailbox. Expected page prevents stale clicks
 // from activating a different screen after an asynchronous transition.
 inline unsigned pointer_command(int page,int kind,int target,bool click){return 0x10000000u|(unsigned(page)<<20)|(unsigned(kind)<<16)|(click?0x8000:0)|unsigned(target);}
 struct DesktopHit {int kind=-1,target=0;};
-inline DesktopHit desktop_hit(int page,int x,int y,int first,int count,int slide=0,bool offline=false,bool installed=false,bool shader=false,bool local_profiles=false,bool servers=false,int settings_offset=0){
+inline DesktopHit desktop_hit(int page,int x,int y,int first,int count,int slide=0,bool offline=false,bool installed=false,bool shader=false,bool local_profiles=false,bool servers=false,int settings_offset=0,bool server_select=true,bool server_action=true){
  auto box=[&](int a,int b,int w,int h){return x>=a&&x<a+w&&y>=b&&y<b+h;};
  bool modal=page==6||(page>=7&&page<=11)||page==14||page==15;
  const int* tx=servers?server_tab_x:standard_tab_x;
  const int* widths=servers?server_tab_width:standard_tab_width;
- if(!modal)for(int i=0;i<(servers?4:3);i++)if(box(tx[i],52,widths[i],68))return {0,i};
- if(page==16){if(box(110,500,1650,90))return {3,0};if(box(110,625,1650,82))return {3,1};return {};}
+ if(!modal)for(int i=0;i<(servers?4:3);i++)if(box(tx[i],52,widths[i],68))return {0,tab_slot(i,servers)};
+ if(page==16){
+  if(server_select&&box(server_control_x,server_version_y,server_control_width,server_version_height))return {3,0};
+  if(server_action&&box(server_control_x,server_action_y,server_control_width,76))return {3,1};
+  return {};
+ }
  if(page==0){for(int i=0;i<8&&first+i<count;i++)if(box(70+i%4*450,342+i/4*272+slide,420,242))return {1,first+i};}
  if(page==6){for(int i=0;i<40;i++)if(box(80+i%10*176,465+i/10*91,152,73))return {2,i};for(int i=0;i<5;i++)if(box(70+i*360,855,330,76))return {4,i};return {};}
  if(page==10){for(int i=0;i<8&&first+i<count;i++)if(box(265,285+i*72,1390,66))return {3,first+i};return {};}
@@ -28,9 +39,9 @@ inline DesktopHit desktop_hit(int page,int x,int y,int first,int count,int slide
  if(page==1){for(int i=0;i<4;i++)if(box(760,320+i*110,1080,96))return {3,i};if(box(760,774,1080,76))return {3,4};}
  if(page==8){if(box(78,825,700,76))return {4,5};if(box(1050,825,700,76))return {4,6};}
  if(page==2){
-  if(!box(760,settings_top,1080,settings_pitch*settings_rows_visible))return {};
+  if(!box(settings_x,settings_top,settings_width,settings_pitch*settings_rows_visible))return {};
   const int local=y-settings_top+settings_offset;
-  if(local>=0&&local/settings_pitch<count&&local%settings_pitch<86)return {3,local/settings_pitch};
+  if(local>=0&&local/settings_pitch<count&&local%settings_pitch<settings_row_height)return {3,local/settings_pitch};
   return {};
  }
  if(page==3){for(int i=0;i<(local_profiles?3:1);i++)if(box(1140,366+i*100,700,76))return {3,i};}

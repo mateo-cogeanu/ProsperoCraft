@@ -317,14 +317,25 @@ inline void compose_content(Canvas& c) noexcept {
    }else if(installed)label(c,1640,y+31,"INSTALLED",18,0xa9eab6);}
 
  }else if(page==2){
-  label(c,70,185+slide,"Settings",64);
-  control_label(c,75,272+slide,"D-PAD / RIGHT STICK / MOUSE WHEEL   Scroll",24,0x91ad9b);
-  title(c,75,365+slide,fields[67].data(),20,610,0x83a58d);
+  label(c,settings_x,192+slide,"Settings",60);
+  title(c,settings_x,270+slide,fields[67].data(),22,settings_width,0x9cb9a7);
   const char* themes[]={"Forest","Ocean","Amethyst","Rose","Amber","Graphite"};
-  const char* names[]={"GAME RESOLUTION","PARALLEL DOWNLOADS","REDUCED MOTION","SHOW SNAPSHOTS","Server [BETA]","STARTUP NOTICE","INPUT & CONTROLLER KEYBINDS","COLOR THEME","BACKGROUND","VIBRATION"};
-  const char* values[]={fields[25].data(),fields[26].data(),fields[30].data(),fields[27].data(),fields[107].data(),fields[68].data(),"Configure controls",themes[prospero_palette::selected],fields[76].data(),fields[79].data()};
-  constexpr int count=sizeof(names)/sizeof(names[0]),height=settings_pitch*settings_rows_visible;
-  int offset=std::clamp(number(84),0,count-settings_rows_visible)*settings_pitch;
+  struct Setting {const char* name;const char* detail;const char* value;int toggle=-1;};
+  const Setting rows[]={
+   {"Game resolution","Sets the resolution Minecraft renders at.",fields[25].data()},
+   {"Parallel downloads","Number of game files to download at the same time.",fields[26].data()},
+   {"Reduced motion","Reduces motion in launcher transitions.",fields[30].data(),0},
+   {"Show snapshots","Includes preview builds when you create an instance.",fields[27].data(),1},
+   {"Server [BETA]","Shows the dedicated Vanilla hosting tab.",fields[107].data(),8},
+   {"Startup notice","Shows the notice when ProsperoCraft opens.",fields[68].data(),2},
+   {"Controller keybinds","Change in-game button mappings.","Configure"},
+   {"Color theme","Applies to the launcher and controller light.",themes[prospero_palette::selected]},
+   {"Background","Choose the animation behind the launcher.",fields[76].data()},
+   {"Vibration","Controller feedback in the launcher.",fields[79].data(),9},
+  };
+  constexpr int count=sizeof(rows)/sizeof(rows[0]),height=settings_pitch*settings_rows_visible;
+  const int first=std::clamp(number(84),0,count-settings_rows_visible);
+  int offset=first*settings_pitch;
 #ifdef PROSPERO_TOOLKIT
   if(!prospero_ui::outgoing){
    settings_scroll.to(float(offset),now_ms(),prospero_ui::reduced);
@@ -332,18 +343,39 @@ inline void compose_content(Canvas& c) noexcept {
    if(settings_scroll.moving(now_ms()))animating=true;
   }
   auto& list=prospero_ui::surface->list;
-  list.push_clip({742,float(settings_top+slide),1115,float(height)});
+  list.push_clip({float(settings_x-8),float(settings_top-6+slide),float(settings_width+16),float(height+6)});
 #endif
   for(int i=0;i<count;i++){
-   int y=settings_top+i*settings_pitch-offset;
-   if(y+86>settings_top&&y<settings_top+height)row_control(c,y+slide,names[i],values[i],row==i,true,86);
+   const int y=settings_top+i*settings_pitch-offset;
+   if(y+settings_row_height<=settings_top||y>=settings_top+height)continue;
+   const auto& setting=rows[i];
+   const bool active=row==i;
+   if(active)selection(c,settings_x,y+slide,settings_width,settings_row_height);
+#ifdef PROSPERO_TOOLKIT
+   c.control(settings_x,y+slide,settings_width,settings_row_height,active,active&&pressed_at&&now_ms()-pressed_at<110);
+#else
+   c.rounded(settings_x,y+slide,settings_width,settings_row_height,18,ink(active?0x1e3c30:0x142b24));
+#endif
+   label(c,settings_x+30,y+14+slide,setting.name,28);
+   label(c,settings_x+31,y+49+slide,setting.detail,20,0x98b4a3);
+   const int right=settings_x+settings_width;
+   const bool toggle=setting.toggle>=0;
+   const int value_right=right-(toggle?126:72);
+   label(c,value_right-int(Canvas::text_width(setting.value,24)),y+29+slide,setting.value,24,0xc7eed0);
+#ifdef PROSPERO_TOOLKIT
+   if(toggle)c.toggle(setting.toggle,right-101,y+22+slide,std::strcmp(setting.value,"ON")==0);
+   else c.chevron(right-35,y+42+slide,1);
+#else
+   if(!toggle)label(c,right-44,y+28+slide,">",27,0xa9eab6);
+#endif
   }
 #ifdef PROSPERO_TOOLKIT
   list.pop_clip();
 #endif
-  constexpr int thumb=height*settings_rows_visible/count;
-  c.rounded(1854,settings_top+slide,6,height,3,ink(0x29473a));
-  c.rounded(1854,settings_top+slide+offset*(height-thumb)/((count-settings_rows_visible)*settings_pitch),6,thumb,3,ink(0x91bb9d));
+  constexpr int thumb=height*settings_rows_visible/count,track_x=settings_x+settings_width+20;
+  c.rounded(track_x,settings_top+slide,6,height,3,ink(0x29473a));
+  c.rounded(track_x,settings_top+slide+offset*(height-thumb)/((count-settings_rows_visible)*settings_pitch),6,thumb,3,ink(0x91bb9d));
+  control_label(c,settings_x,906+slide,"D-PAD / Right stick / Mouse wheel   Scroll",21,0x9cb9a7);
  }else if(page==3){
   const bool local_profile=std::strcmp(fields[5].data(),"Offline profile")==0;
   const bool local_available=std::strcmp(fields[71].data(),"LOCAL")==0;
@@ -368,27 +400,73 @@ inline void compose_content(Canvas& c) noexcept {
   int y=505;for(int i=0;i<4;i++){if(i==3&&std::strcmp(fields[71].data(),"OFFLINE")!=0)continue;action(c,760,y+slide,1080,actions[i],row==i,i==0&&std::strcmp(fields[69].data(),"PENDING")!=0);y+=100;}
   if(y<920)wrap(c,790,y+8+slide,fields[65].data(),1000,1);
  }else if(page==16){
-  label(c,76,185,"Dedicated servers",58);
-  c.rounded(70,305,1770,487,28,ink(0x10221c));
-  label(c,110,345,"Early beta",32,0xd0ff9a);
-  wrap(c,110,398,"Host Vanilla 26.x worlds for players on your local network.",1580,2);
-  const char* status=fields[83].data();
-  if(std::strcmp(status,"EULA")==0){
-   title(c,110,506,"Read the Minecraft EULA at minecraft.net/eula",31,1600);
-   action(c,110,625,1650,"Accept EULA and start server",true,true);
-   control_label(c,110,738,"CIRCLE  Back",22,0xaac8b2);
-  }else if(std::strcmp(status,"SELECT")==0||std::strcmp(status,"PREPARING")==0){
-   char version[96];std::snprintf(version,sizeof(version),"Minecraft Vanilla %.16s",fields[82].data());
-   action(c,110,500,1650,version,row==0,true);
-   action(c,110,625,1650,std::strcmp(status,"PREPARING")==0?"Preparing server...":"Start Vanilla server",row==1,true);
-   control_label(c,110,738,"LEFT / RIGHT  Version     X  Select",22,0xaac8b2);
+  constexpr int right_x=server_x+server_world_width+server_gap;
+  constexpr int panel_end=settings_x+settings_width, panel_height=529;
+  constexpr int left=server_x+34, left_width=server_world_width-68;
+  label(c,server_x,192,"Dedicated servers",60);
+  label(c,server_x,270,"Host a Minecraft Java world for players on your local network.",24,0xaac8b2);
+  c.rounded(panel_end-147,211,147,40,20,ink(0x29473a));
+  auto badge=centered_text(panel_end-147,211,147,40,"Early beta",20);
+  label(c,badge.x,badge.y,"Early beta",20,0xc7eed0);
+  card(c,server_x,server_top,server_world_width,panel_height);
+  card(c,right_x,server_top,panel_end-right_x,panel_height);
+  const std::string_view status=fields[83].data();
+  const bool running=status=="RUNNING",ready=status=="SELECT",consent=status=="EULA",preparing=status=="PREPARING";
+  const bool stopped=status=="STOPPED",failed=status=="FAILED",finished=stopped||failed;
+  const bool active=running||status=="STARTING"||status=="STOPPING";
+  const char* state=running?"Online on your network":status=="STARTING"?"Starting server":status=="STOPPING"?"Saving world":
+    stopped?"Server stopped":failed?"Server stopped with an error":preparing?"Preparing server":"Server offline";
+  c.rounded(left,367,10,10,5,ink(running?0xb6f2be:0x829b8e));
+  label(c,left+25,354,state,24,running?0xb6f2be:0xc1d2c8);
+  char world[64];std::snprintf(world,sizeof(world),"Vanilla %.16s",fields[82].data());
+  label(c,left,404,world,44);
+  label(c,left,467,fields[85].data(),23,0xa2beab);
+  c.rounded(left,521,left_width,2,1,ink(0x355346));
+  label(c,left,551,"How to join",24,0xc7eed0);
+  if(running&&fields[84][0]){
+   c.rounded(left,590,left_width,63,13,ink(0x1e3a2e));
+   label(c,left+20,604,fields[84].data(),30);
+   wrap(c,left,679,"On another device, open Multiplayer, choose Direct Connection, and enter this address.",left_width,3);
   }else{
-   const bool running=std::strcmp(status,"RUNNING")==0;
-   const bool finished=std::strcmp(status,"STOPPED")==0||std::strcmp(status,"FAILED")==0;
-   const char* label_text=running?fields[84].data():finished?(std::strcmp(status,"STOPPED")==0?"World saved and server stopped":"Server stopped with an error. See reports."):(std::strcmp(status,"STOPPING")==0?"Saving and stopping...":"Starting Vanilla server...");
-   title(c,110,506,label_text,32,1600);
-   action(c,110,625,1650,finished?"Return to launcher":running?"Save and stop server":"Please wait",true,running||finished);
+   wrap(c,left,593,"Players need Minecraft Java Edition on the same version. Use Multiplayer > Direct Connection.",left_width,2);
+   wrap(c,left,685,"The server address appears here once the world is online.",left_width,2);
   }
+  label(c,server_control_x,353,consent?"Minecraft EULA":ready?"Server setup":"Server controls",34);
+  if(ready){
+   if(row==0)selection(c,server_control_x,server_version_y,server_control_width,server_version_height);
+#ifdef PROSPERO_TOOLKIT
+   c.control(server_control_x,server_version_y,server_control_width,server_version_height,row==0,false);
+   c.chevron(server_control_x+server_control_width-35,server_version_y+server_version_height/2,1);
+#else
+   c.rounded(server_control_x,server_version_y,server_control_width,server_version_height,17,ink(0x1e3c30));
+#endif
+   label(c,server_control_x+23,server_version_y+12,"Version",21,0x9cb9a7);
+   label(c,server_control_x+23,server_version_y+42,fields[82].data(),30);
+   label(c,server_control_x,562,fields[86].data(),23,0xc7eed0);
+   wrap(c,server_control_x,605,fields[87][0]?fields[87].data():
+       "Each version has its own world. Hosting pauses access to your client instances.",server_control_width,3);
+  }else if(consent){
+   wrap(c,server_control_x,436,"Read the Minecraft EULA before starting this server.",server_control_width,3);
+   title(c,server_control_x,548,"minecraft.net/eula",28,server_control_width,0xc7eed0);
+  }else if(preparing){
+   wrap(c,server_control_x,438,fields[87].data(),server_control_width,2);
+   c.rounded(server_control_x,536,server_control_width,8,4,ink(0x29473a));
+   if(number(20)>0)c.rounded(server_control_x,536,unsigned(server_control_width*number(20)/1000),8,4,ink(0xa9eab6));
+   label(c,server_control_x,565,fields[21].data(),22,0xa2beab);
+   control_label(c,server_control_x,736,"CIRCLE  Cancel setup",22);
+  }else{
+   const char* detail=running?"Players can connect while this screen stays open. Save and stop before leaving."
+     :stopped?"The server shut down and saved its world."
+     :failed?"Open the reports to see the server log."
+     :status=="STOPPING"?"Wait for the server to finish saving before closing ProsperoCraft."
+     :"Loading the server and preparing the world. The first start can take longer.";
+   wrap(c,server_control_x,438,detail,server_control_width,4);
+  }
+  if(ready||consent||running||finished)
+   action(c,server_control_x,server_action_y,server_control_width,
+       ready?"Start server":consent?"Accept EULA and start":running?"Save and stop":"Return to launcher",
+       !ready||row==1,true);
+  else if(active)label(c,server_control_x,736,"Please wait",22,0xa2beab);
  }else if(page==10){
   if(number(93)==1||number(93)==2)icon_selector(c);else scrolling_list(c,true);
  }else if(page==9){
@@ -521,17 +599,18 @@ inline void compose(Canvas& c) noexcept {
  const int* tw=servers?server_tab_width:standard_tab_width;
  const int tab_count=servers?4:3;
  for(int i=0;i<tab_count;i++){
-  const bool current=tab==i,account=i==2&&signed_in;
+  const int logical=tab_slot(i,servers);
+  const bool current=tab==logical,account=logical==2&&signed_in;
   const int name_width=tw[i]-(account?68:0);
   if(current&&top)selection(c,tx[i],52,tw[i],68);
   c.rounded(tx[i],52,name_width,68,18,ink(current?0x53885c:0x14251e));
-  auto text=centered_text(tx[i],52,name_width,68,tabs[i],i==2?24:30);
+  auto text=centered_text(tx[i],52,name_width,68,tabs[logical],logical==2?24:30);
   if(account)text.x=std::max(tx[i]+16,text.x);
-  title(c,text.x,text.y,tabs[i],i==2?24:30,account?name_width-32:tw[i]-45,current?0xc7f4cf:0xb0c4b5);
+  title(c,text.x,text.y,tabs[logical],logical==2?24:30,account?name_width-32:tw[i]-45,current?0xc7f4cf:0xb0c4b5);
 
   if(account)player_head(c,tx[i]+tw[i]-51,66,40);
  }
- bool reduced=std::strcmp(fields[30].data(),"ON")==0;int active_tab=std::clamp(tab,0,tab_count-1);
+ bool reduced=std::strcmp(fields[30].data(),"ON")==0;int active_tab=std::clamp(tab_slot(tab,servers),0,tab_count-1);
  if(!tabs_ready){tab_x.snap(float(tx[active_tab]+24));tab_w.snap(float(tw[active_tab]-48));tabs_ready=true;}
  tab_x.to(float(tx[active_tab]+24),now_ms(),reduced);tab_w.to(float(tw[active_tab]-48),now_ms(),reduced);
  c.rounded(int(tab_x.value(now_ms())),124,unsigned(tab_w.value(now_ms())),6,3,ink(0xd0ff9a));
@@ -582,14 +661,15 @@ inline void compose(Canvas& c) noexcept {
 #ifdef PROSPERO_TOOLKIT
  c.end_content();
 #endif
- if(page!=15&&std::strcmp(fields[64].data(),"BUSY")==0){
+ if(page!=15&&page!=16&&std::strcmp(fields[64].data(),"BUSY")==0){
   if(page==12&&fields[102][0])content_icon(c,78,924,46,fields[102].data());if(page!=3)title(c,page==12&&fields[102][0]?144:78,942,fields[2].data(),24,1230,0xaac8b2);label(c,1450,942,fields[21].data(),24,0xaac8b2);
 #ifdef PROSPERO_TOOLKIT
   c.progress(number(20));
 #else
   c.rounded(72,982,1770,5,2,ink(0x233c2c));if(number(20)>0)c.rounded(72,982,unsigned(1770*number(20)/1000),5,2,ink(0xa9eab6));
 #endif
- }else if(page!=3&&page!=15&&page!=16)title(c,78,949,fields[2].data(),24,1760,0x83a58d);
+ }else if(page!=3&&page!=15&&page!=16)
+  title(c,page==2?settings_x:78,949,fields[2].data(),24,page==2?settings_width:1760,0x83a58d);
  control_label(c,76,1020,desktop.cursor?"Click Select    Right click / Esc Back    Arrows Navigate    Enter Confirm    Tab Pages    F1 Controls":fields[7].data(),20,0x7d9f89);label(c,1650,1020,PROSPERO_APP_VERSION,24,0x7d9f89);
  runtime_footer(c);
 }
@@ -630,7 +710,9 @@ inline void pointer_input(int x,int y,bool click)noexcept{
 #ifdef PROSPERO_TOOLKIT
   if(page==2)settings_offset=int(settings_scroll.value(now_ms()));
 #endif
-  auto hit=desktop_hit(page,x,y,page==0?number(14):number(84),page==0?number(13):page==12?number(93):number(83),layout_slide,std::strcmp(fields[71].data(),"OFFLINE")==0,std::strcmp(fields[103].data(),"INSTALLED")==0,std::strcmp(fields[82].data(),"Shaders")==0,std::strcmp(fields[71].data(),"LOCAL")==0,std::strcmp(fields[1].data(),"ON")==0,settings_offset);
+  const std::string_view server_status=page==16?fields[83].data():"";
+  auto hit=desktop_hit(page,x,y,page==0?number(14):number(84),page==0?number(13):page==12?number(93):number(83),layout_slide,std::strcmp(fields[71].data(),"OFFLINE")==0,std::strcmp(fields[103].data(),"INSTALLED")==0,std::strcmp(fields[82].data(),"Shaders")==0,std::strcmp(fields[71].data(),"LOCAL")==0,std::strcmp(fields[1].data(),"ON")==0,settings_offset,server_status=="SELECT",
+      server_status=="SELECT"||server_status=="EULA"||server_status=="RUNNING"||server_status=="STOPPED"||server_status=="FAILED");
 if(page==0&&y>=495&&y<585){if(x>=5&&x<58&&number(14)>0)hit={5,0};if(x>=1862&&x<1915&&number(14)+8<number(13))hit={5,1};}
 #ifdef PROSPERO_TOOLKIT
   if(page_turn.moving(now_ms()))hit={};
@@ -702,8 +784,8 @@ inline bool update() noexcept {
    if(before==7||after==7){page_turn.enabled=false;focus.initialized=false;}
    if(before!=after)card_open.enabled=false;
    if(opening||closing){card_reverse=closing;outgoing_fields=fields;std::snprintf(outgoing_fields[9].data(),512,"%s",published[9].data());opening_slot=std::clamp(std::atoi(published[9].data())-std::atoi((closing?published:fields)[14].data()),0,7);card_open.start(1,now_ms(),std::strcmp(published[30].data(),"ON")==0);page_turn.enabled=false;focus.initialized=false;}
-   if(turn){int a=before==0&&after==0?number(14):before==8&&after==8?number(74):number(12)*20+before;
-    int b=before==0&&after==0?std::atoi(published[14].data()):before==8&&after==8?std::atoi(published[74].data()):std::atoi(published[12].data())*20+after;
+   if(turn){int a=before==0&&after==0?number(14):before==8&&after==8?number(74):tab_slot(number(12),std::strcmp(fields[1].data(),"ON")==0)*20+before;
+    int b=before==0&&after==0?std::atoi(published[14].data()):before==8&&after==8?std::atoi(published[74].data()):tab_slot(std::atoi(published[12].data()),std::strcmp(published[1].data(),"ON")==0)*20+after;
     outgoing_fields=fields;page_turn.start(now_ms()-page_direction_at<400&&((before==0&&after==0)||std::strcmp(fields[12].data(),published[12].data())!=0)?page_direction:(b>=a?1:-1),now_ms(),std::strcmp(published[30].data(),"ON")==0);focus.initialized=false;list_page=-1;
    }
    if(before!=2&&after==2)settings_scroll.snap(float(std::atoi(published[84].data())*settings_pitch));
