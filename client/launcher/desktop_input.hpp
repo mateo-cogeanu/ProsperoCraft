@@ -10,12 +10,16 @@ inline constexpr int server_tab_x[]={593,920,1227,1560};
 inline constexpr int server_tab_width[]={307,287,313,275};
 // Logical IDs stay stable in the Java model and the input mailbox.
 inline constexpr int tab_slot(int tab,bool servers){return servers&&tab>=2?5-tab:tab;}
-inline constexpr int settings_x=280,settings_width=1360,settings_top=316;
-inline constexpr int settings_pitch=94,settings_row_height=84,settings_rows_visible=6;
-inline constexpr int server_x=settings_x,server_top=316,server_world_width=752,server_gap=24;
-inline constexpr int server_control_x=server_x+server_world_width+server_gap+32;
-inline constexpr int server_control_width=settings_width-server_world_width-server_gap-64;
-inline constexpr int server_version_y=443,server_version_height=88,server_action_y=715;
+inline constexpr int settings_x=104,settings_width=1712,settings_top=306;
+inline constexpr int settings_pitch=103,settings_row_height=93,settings_rows_visible=6;
+inline constexpr int settings_height=settings_pitch*settings_rows_visible;
+inline constexpr int server_x=settings_x,server_top=306,server_bottom=924;
+inline constexpr int server_world_width=968,server_gap=28,server_inset=42;
+inline constexpr int server_controls_panel=server_x+server_world_width+server_gap;
+inline constexpr int server_control_x=server_controls_panel+server_inset;
+inline constexpr int server_control_width=settings_width-server_world_width-server_gap-2*server_inset;
+inline constexpr int server_version_y=432,server_version_height=108,server_action_height=92;
+inline constexpr int server_action_y=server_bottom-server_inset-server_action_height;
 // Commands share the bounded UI mailbox. Expected page prevents stale clicks
 // from activating a different screen after an asynchronous transition.
 inline unsigned pointer_command(int page,int kind,int target,bool click){return 0x10000000u|(unsigned(page)<<20)|(unsigned(kind)<<16)|(click?0x8000:0)|unsigned(target);}
@@ -28,7 +32,7 @@ inline DesktopHit desktop_hit(int page,int x,int y,int first,int count,int slide
  if(!modal)for(int i=0;i<(servers?4:3);i++)if(box(tx[i],52,widths[i],68))return {0,tab_slot(i,servers)};
  if(page==16){
   if(server_select&&box(server_control_x,server_version_y,server_control_width,server_version_height))return {3,0};
-  if(server_action&&box(server_control_x,server_action_y,server_control_width,76))return {3,1};
+  if(server_action&&box(server_control_x,server_action_y,server_control_width,server_action_height))return {3,1};
   return {};
  }
  if(page==0){for(int i=0;i<8&&first+i<count;i++)if(box(70+i%4*450,342+i/4*272+slide,420,242))return {1,first+i};}
@@ -39,7 +43,7 @@ inline DesktopHit desktop_hit(int page,int x,int y,int first,int count,int slide
  if(page==1){for(int i=0;i<4;i++)if(box(760,320+i*110,1080,96))return {3,i};if(box(760,774,1080,76))return {3,4};}
  if(page==8){if(box(78,825,700,76))return {4,5};if(box(1050,825,700,76))return {4,6};}
  if(page==2){
-  if(!box(settings_x,settings_top,settings_width,settings_pitch*settings_rows_visible))return {};
+  if(!box(settings_x,settings_top,settings_width,settings_height))return {};
   const int local=y-settings_top+settings_offset;
   if(local>=0&&local/settings_pitch<count&&local%settings_pitch<settings_row_height)return {3,local/settings_pitch};
   return {};

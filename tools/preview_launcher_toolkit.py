@@ -155,7 +155,7 @@ page_preview=r'''
   field(7,"L1 / R1  Tabs     X  Select     CIRCLE  Back     OPTIONS  Controls");field(75,"5");
   prospero_menu::tabs_ready=false;
   field(25,"1920 x 1080");field(26,"5");field(27,"OFF");field(67,"Data and downloads: /data/ProsperoCraft/library");
-  field(68,"ON");field(76,"Gradient");field(79,"ON");field(83,"10");field(84,"0");field(107,"ON");
+  field(68,"ON");field(76,"Waves");field(79,"ON");field(83,"10");field(84,"0");field(107,"ON");
   prospero_menu::settings_scroll.snap(0);settle_preview();save_scene("settings-top");
   field(15,"9");field(84,"4");prospero_menu::settings_scroll.snap(4*prospero_menu::settings_pitch);
   settle_preview();save_scene("settings-bottom");
@@ -168,6 +168,8 @@ page_preview=r'''
   field(83,"PREPARING");field(7,"CIRCLE  Cancel download");field(20,"450");field(21,"27 / 59 MB");field(87,"Downloading Vanilla 26.3");
   settle_preview();save_scene("servers-download");
   field(83,"RUNNING");field(7,"X  Select");field(84,"192.0.2.24:25565");field(85,"Existing world");settle_preview();save_scene("servers-online");
+  field(83,"STOPPING");field(7,"");settle_preview();save_scene("servers-saving");
+  field(83,"FAILED");field(7,"X  Select");settle_preview();save_scene("servers-failed");
   puts("PASS actual pointer callback rejects moving dropdown clicks and accepts settled visual row");
   puts("PASS actual Vulkan horizontal outgoing/incoming page frames, both side chevrons across six themes and fractional clipped dropdown scrolling with thumb");
 '''

@@ -1,0 +1,20 @@
+{
+  "app_version": "01.000.306",
+  "title_id": "PPSA99874",
+  "package_sha256": "33469c2777c2af6379996f57bf71a6331cfd1c15bc2be14e2fe943d9db7beb81",
+  "package_bytes": 128662854,
+  "build_base_commit": "870842129034313b67afb28ee0cc2f57eaa83972",
+  "eboot_sha256": "b24da7f14467dd35331e2e4a787e4a6599e7eb3b054bdd37c519f4cf58f3875b",
+  "runtime_resident_ownership_commit": "51089be1c190354ac1a01a0ac04316773a939a11",
+  "publisher121_lock_sha256": "552805e92ee78b765fd887f9d083b517cf3008a41255128fa215a31d0a7c0da8",
+  "change": "Settings and Servers expand from 1360 to 1712 logical pixels on the 1920-wide launcher canvas. Settings uses taller rows and larger labels. Servers uses taller panels, a larger version picker and action targets, and a dedicated address field.",
+  "checks": [
+    "All 21 standard and 14 native host checks passed.",
+    "Host Vulkan rendered Settings at both scroll limits and Servers in setup, consent, download, online, saving and error states. Reviewed the renders for alignment, legibility and footer clearance.",
+    "The desktop launcher test exercised pointer hits at the enlarged controls' edges and at the bottom of scrolled Settings.",
+    "The packaged launcher classes passed opt-in, version selection, EULA, progress, cancellation, verified retry and handoff preparation with the original Vanilla 26.2 server bundle.",
+    "Signed SELF integrity, ZIP checksum and static package audit passed for the recorded package."
+  ],
+  "pending_console": "Check readability and controller/mouse behavior from a TV on physical PS5. Dedicated server handoff, authenticated LAN join, save and reload still need console verification.",
+  "release_store": "Local candidate."
+}

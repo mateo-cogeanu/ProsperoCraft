@@ -78,7 +78,7 @@ public final class ProsperoLauncher {
   if(current.hosted!=null||!current.serverBoot.isEmpty())return new String[0];
   return current.arguments(null,null);
  }
- static boolean serverBeta(){return "01.000.303".equals(ProsperoBuild.VERSION)||"01.000.304".equals(ProsperoBuild.VERSION)||"01.000.305".equals(ProsperoBuild.VERSION);}
+ static boolean serverBeta(){return "01.000.303".equals(ProsperoBuild.VERSION)||"01.000.304".equals(ProsperoBuild.VERSION)||"01.000.305".equals(ProsperoBuild.VERSION)||"01.000.306".equals(ProsperoBuild.VERSION);}
  private boolean serverTabVisible(){return serverBeta()&&(library.settings().serverBeta||hosted!=null||"01.000.303".equals(ProsperoBuild.VERSION));}
  private void settingsInput(int direction,boolean confirm)throws Exception {
   var settings=library.settings();
@@ -183,7 +183,7 @@ public final class ProsperoLauncher {
       !"01.000.298".equals(ProsperoBuild.VERSION) && !"01.000.299".equals(ProsperoBuild.VERSION) &&
       !"01.000.300".equals(ProsperoBuild.VERSION) && !"01.000.301".equals(ProsperoBuild.VERSION) &&
       !"01.000.302".equals(ProsperoBuild.VERSION) && !"01.000.303".equals(ProsperoBuild.VERSION) &&
-      !"01.000.304".equals(ProsperoBuild.VERSION)&&!"01.000.305".equals(ProsperoBuild.VERSION)) return false;
+      !"01.000.304".equals(ProsperoBuild.VERSION)&&!"01.000.305".equals(ProsperoBuild.VERSION)&&!"01.000.306".equals(ProsperoBuild.VERSION)) return false;
   return selectedLegacy121();
  }
  static boolean selectedLegacy121(){
@@ -195,7 +195,7 @@ public final class ProsperoLauncher {
   return ("01.000.282".equals(ProsperoBuild.VERSION)||"01.000.283".equals(ProsperoBuild.VERSION)
       ||"01.000.284".equals(ProsperoBuild.VERSION)||"01.000.285".equals(ProsperoBuild.VERSION)
         ||"01.000.286".equals(ProsperoBuild.VERSION)||"01.000.287".equals(ProsperoBuild.VERSION)||"01.000.288".equals(ProsperoBuild.VERSION)
-        ||"01.000.302".equals(ProsperoBuild.VERSION)||"01.000.303".equals(ProsperoBuild.VERSION)||"01.000.304".equals(ProsperoBuild.VERSION)||"01.000.305".equals(ProsperoBuild.VERSION))
+        ||"01.000.302".equals(ProsperoBuild.VERSION)||"01.000.303".equals(ProsperoBuild.VERSION)||"01.000.304".equals(ProsperoBuild.VERSION)||"01.000.305".equals(ProsperoBuild.VERSION)||"01.000.306".equals(ProsperoBuild.VERSION))
       &&"26.3".equals(current.detail.version)&&"fabric".equals(current.detail.loader);
  }
  static boolean observeFabric263Stalls(){

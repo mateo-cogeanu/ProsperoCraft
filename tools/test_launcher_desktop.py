@@ -96,6 +96,8 @@ int main(){
  assert(desktop_hit(2,1700,70,0,10,0,false,false,false,false,true).target==2);
  assert(desktop_hit(2,1700,70,0,10).target==2);
  static_assert(settings_x*2+settings_width==1920);
+ static_assert(settings_height+settings_top<=server_bottom);
+ static_assert(server_action_y+server_action_height<server_bottom);
  assert(desktop_hit(2,settings_x-1,settings_top,0,10).kind==-1);
  assert(desktop_hit(2,settings_x,settings_top,0,10).kind==3);
  assert(desktop_hit(2,settings_x+settings_width-1,settings_top,0,10).kind==3);
@@ -104,6 +106,9 @@ int main(){
  assert(desktop_hit(2,settings_x,settings_top+6*settings_pitch,4,10,0,false,false,false,false,false,4*settings_pitch).kind==-1);
  assert(desktop_hit(16,server_control_x,server_version_y,0,0).kind==3);
  assert(desktop_hit(16,server_control_x,server_action_y,0,0).target==1);
+ assert(desktop_hit(16,server_control_x+server_control_width-1,server_action_y+server_action_height-1,0,0).target==1);
+ assert(desktop_hit(16,server_control_x,server_action_y+server_action_height,0,0).kind==-1);
+ assert(desktop_hit(2,settings_x+settings_width-1,settings_top+5*settings_pitch+settings_row_height-1,4,10,0,false,false,false,false,false,4*settings_pitch).target==9);
  assert(desktop_hit(16,server_x,server_version_y,0,0).kind==-1);
  assert(desktop_hit(16,server_control_x,server_version_y,0,0,0,false,false,false,false,true,0,false,true).kind==-1);
  assert(desktop_hit(16,server_control_x,server_action_y,0,0,0,false,false,false,false,true,0,false,false).kind==-1);
@@ -121,7 +126,7 @@ with tempfile.TemporaryDirectory() as td:
  w=Path(td);(w/'DesktopCheck.java').write_text(java);cp=launcher_classpath();out=w/'classes';out.mkdir()
  subprocess.run([str(J/'javac'),'--release','25','-cp',cp,'-d',str(out),*[str(p)for p in (R/'client/launcher/java').glob('*.java')],str(w/'DesktopCheck.java')],check=True)
  (out/'prosperocraft-channel.txt').write_text('temp_gametest\n')
- (out/'prosperocraft-build.properties').write_text('app_version=01.000.305\ntitle_id=PPSA99874\n')
+ (out/'prosperocraft-build.properties').write_text('app_version=01.000.306\ntitle_id=PPSA99874\n')
  subprocess.run([str(J/'java'),'-cp',str(out)+':'+cp,'DesktopCheck',str(w/'data')],check=True)
  (w/'test.cpp').write_text(cpp)
  subprocess.run([executable('clang++', env='CXX'),'-std=c++20','-fsanitize=address,undefined','-I'+str(R/'client/launcher'),str(w/'test.cpp'),'-o',str(w/'test')],check=True)
