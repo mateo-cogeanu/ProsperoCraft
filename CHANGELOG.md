@@ -9,12 +9,20 @@
 
 See the [release notes](docs/releases/client-server-browser-308.md).
 
+**Console:** The maintainer confirmed shader rendering on PS5.
+
+[Console acceptance](docs/validation/client308-console-acceptance-2026-11-25.json) · [ProsperoStore update submitted](https://github.com/darkxex/ps5-homebrew-catalog/pull/1435)
+
 ## 01.000.302 · Fabric 26.3 frame pacing and shader compatibility, 2026-11-25
 
 - Reduce gameplay compilation logging and restore bounded slow-frame diagnostics on Fabric 26.3. The maintainer reported fewer hitches that cleared up after playing for a while.
 - Select Sodium 0.9.2 when installing Vitrail 0.13.0-beta on Fabric 26.3, and explain how to resolve reported conflicts in existing instances.
 
 See the [release notes](docs/releases/client-fabric-pacing-302.md).
+
+**Console:** The maintainer confirmed improved stutter and working shaders on PS5.
+
+[Console acceptance](docs/validation/client302-console-acceptance-2026-11-25.json) · [ProsperoStore update submitted](https://github.com/darkxex/ps5-homebrew-catalog/pull/1433)
 
 ## 01.000.300 · Menu text and Fabric fixes, 2026-11-23
 
@@ -40,11 +48,19 @@ See the [release notes](docs/releases/client-mod-toggle-288.md).
 
 See the [release notes](docs/releases/client-offline-profiles-287.md).
 
+**Console:** The maintainer confirmed the build and shader rendering on PS5.
+
+[Console acceptance](docs/validation/client287-console-acceptance-2026-11-18.json) · [ProsperoStore update submitted](https://github.com/darkxex/ps5-homebrew-catalog/pull/1340)
+
 ## 01.000.286 · First-launch library fix, 2026-11-16
 
 - Fix a startup failure on fresh installs when the launcher finds a shader cache before its library catalog exists.
 
 The maintainer tested the build on PS5 firmware 13.60. See the [release notes](docs/releases/client-first-launch-286.md).
+
+**Console:** The maintainer confirmed the build on PS5 firmware 13.60.
+
+[Console acceptance](docs/validation/client286-console-acceptance-2026-11-16.json) · [ProsperoStore update submitted](https://github.com/darkxex/ps5-homebrew-catalog/pull/1324)
 
 ## 01.000.285 · PS5 shader cache and frame pacing, 2026-11-15
 
@@ -53,12 +69,20 @@ The maintainer tested the build on PS5 firmware 13.60. See the [release notes](d
 
 The maintainer confirmed the build and shader rendering on PS5. See the [release notes](docs/releases/client-frame-pacing-285.md).
 
+**Console:** The maintainer approved the exact build and confirmed shader rendering on PS5.
+
+[Console acceptance](docs/validation/client285-console-acceptance-2026-11-15.json) · [ProsperoStore update submitted](https://github.com/darkxex/ps5-homebrew-catalog/pull/1307)
+
 ## 01.000.281 · Controlify keyboard on Fabric 26.3, 2026-11-14
 
 - Restore text field focus after the Controlify keyboard opens, and correct
   Backspace in its built-in layouts.
 - Bundle OpenJDK’s HTTP client module so OpSec can start on Fabric 26.3.
 - Confirmed on PS5 with shaders. [Release notes](docs/releases/client-controlify-keyboard-281.md).
+
+**Console:** The maintainer confirmed the keyboard fix and shader rendering on PS5.
+
+[Console acceptance](docs/validation/client281-console-acceptance-2026-11-14.json) · [ProsperoStore update submitted](https://github.com/darkxex/ps5-homebrew-catalog/pull/1299)
 
 ## 01.000.279 · Chunk generation and menu headings, 2026-11-08
 
@@ -68,12 +92,20 @@ The maintainer confirmed the build and shader rendering on PS5. See the [release
 - Keep the phone sign-in guidance on the Microsoft account screen.
 - Bug fixes.
 
+**Console:** The user confirmed this build and shader rendering on PS5.
+
+[Release notes](docs/releases/client-chunks-menus-279.md) · [Console acceptance](docs/validation/client279-console-acceptance-2026-11-08.json) · [ProsperoStore update submitted](https://github.com/darkxex/ps5-homebrew-catalog/pull/1201)
+
 ## 01.000.274 · Fabric mod dependencies, 2026-11-08
 
 - Fixed Modrinth installs that rejected compatible Fabric mods because a required dependency pointed to a build for another loader.
 - The installer now uses the matching Fabric build of the same dependency release when there is exactly one for the instance's Minecraft version.
 - Fixes installing Mielon's The Sift 2.0 on Minecraft 26.3 Fabric when its GeckoLib dependency points to NeoForge.
 - Bug fixes.
+
+**Console:** The user confirmed the mod install improvements and shader rendering on PS5.
+
+[Release notes](docs/releases/client-fabric-dependencies-274.md) · [Console acceptance](docs/validation/client274-console-acceptance-2026-11-08.json) · [ProsperoStore update submitted](https://github.com/darkxex/ps5-homebrew-catalog/pull/1198)
 
 ## 01.000.273 · Launcher themes and Fabric 1.21.x, 2026-11-08
 
@@ -84,6 +116,10 @@ The maintainer confirmed the build and shader rendering on PS5. See the [release
 - Improved YACL and Controlify dependency selection for Fabric 1.21.2.
 - Bug fixes.
 
+**Console:** The user confirmed the exact build and shader rendering on PS5.
+
+[Release notes](docs/releases/client-themes-fabric-273.md) · [Console acceptance](docs/validation/client273-console-acceptance-2026-11-08.json) · [ProsperoStore update submitted](https://github.com/darkxex/ps5-homebrew-catalog/pull/1197)
+
 ## 01.000.267 · Cache recovery, 2026-11-08
 
 - Recover missing or invalid launch metadata automatically when pressing Play.
@@ -92,6 +128,10 @@ The maintainer confirmed the build and shader rendering on PS5. See the [release
 - Preserve worlds, mods and settings.
 - Bug fixes.
 
+**Console:** The user confirmed this exact build and shader rendering on PS5.
+
+[Release notes](docs/releases/client-cache-recovery-267.md) · [Console acceptance](docs/validation/client267-console-acceptance-2026-11-08.json) · [ProsperoStore update submitted](https://github.com/darkxex/ps5-homebrew-catalog/pull/1194)
+
 ## 01.000.265 · Fabric 1.21.x, 2026-11-07
 
 - Add Vanilla 1.21–1.21.8 and Fabric 1.21.7–1.21.11 support.
@@ -99,6 +139,10 @@ The maintainer confirmed the build and shader rendering on PS5. See the [release
 - Install removable Controlify defaults and repair native lookup, allocation and callback capacity.
 - Select compatible YACL dependencies for 1.21.9.
 - Bug fixes.
+
+**Console:** Catalog approval and deployment are pending.
+
+[Release notes](docs/releases/client-fabric-121-265.md) · [Console acceptance](docs/validation/client265-console-acceptance-2026-11-07.json) · [ProsperoStore update submitted](https://github.com/darkxex/ps5-homebrew-catalog/pull/1179)
 
 ## Local 259 · Removable Controlify defaults and 1.21.x SDL setup, 2026-11-07
 
@@ -167,25 +211,35 @@ The maintainer confirmed the build and shader rendering on PS5. See the [release
   shader databases dominated a live EMFILE inventory. Cache warmup and chunk
   save/reload tests remain pending on console.
 
+[Validation record](docs/validation/client248-shader-cache-handles-2026-11-06.json)
+
 ## Local 247 · Pool medium native buffers, 2026-11-06
 
 - Share slabs for native requests through64KiB to reduce mapping entries.
   Sparse-class overhead and sustained Fabric gameplay need console validation.
+
+[Validation record](docs/validation/client247-native-medium-pools-2026-11-06.json)
 
 ## Local 246 · Pool native buffers through 8 KiB, 2026-11-06
 
 - Add a ninth native slab class to reduce mapping demand for small buffers
   above4KiB. Fabric26.2 gameplay and lifecycle tests remain pending on console.
 
+[Validation record](docs/validation/client246-native-8k-pool-2026-11-06.json)
+
 ## Local 245 · Fabric 26.2 Sodium startup test, 2026-11-06
 
 - Extend the candidate Sodium exact-version check opt-out to Fabric26.2, with
   truthful LWJGL3.4.3 identity. Rendering and ABI compatibility remain pending.
 
+[Validation record](docs/validation/client245-fabric262-version-check-2026-11-06.json)
+
 ## Local 244 · Sample successful allocation reports, 2026-11-06
 
 - Apply the selected startup diagnostic sampling interval to successful native
   allocations, retaining every failure. Console frame pacing needs retesting.
+
+[Validation record](docs/validation/client244-native-trace-sampling-2026-11-06.json)
 
 ## Local 243 · ZGC compiled-method locks, 2026-11-06
 
@@ -193,16 +247,22 @@ The maintainer confirmed the build and shader rendering on PS5. See the [release
   reducing native mutex demand. Fabric startup and contention/frame pacing
   validation remain pending on console.
 
+[Validation record](docs/validation/client243-zgc-compiled-locks-2026-11-06.json)
+
 ## Local 242 · Native ZGC view restoration, 2026-11-06
 
 - Detach heap views and restore their reservations with native PS5 APIs,
   retaining backing ownership and other aliases. Rejoin and frame pacing
   validation remain pending on console.
 
+[Validation record](docs/validation/client242-zgc-native-restore-2026-11-06.json)
+
 ## Local 241 · Exact ZGC direct-memory views, 2026-11-06
 
 - Fall back to shared direct-memory device mappings when native heap mapping
   is refused or returns a different address. Console initialization is pending.
+
+[Validation record](docs/validation/client241-zgc-device-maps-2026-11-06.json)
 
 ## Local 240 · ZGC mapping into native reservations, 2026-11-06
 
@@ -210,21 +270,29 @@ The maintainer confirmed the build and shader rendering on PS5. See the [release
 - Retain the native result and physical offset for mapping failures. Console
   initialization and collection remain pending.
 
+[Validation record](docs/validation/client240-zgc-reserved-maps-2026-11-06.json)
+
 ## Local 239 · Lower ZGC heap address window, 2026-11-06
 
 - Select PS5 ZGC heap offsets within35..37bits, placing the current heap window
   at32GiB after native reservations at4TiB were refused. Console tests are pending.
+
+[Validation record](docs/validation/client239-zgc-address-window-2026-11-06.json)
 
 ## Local 238 · Native ZGC heap reservation, 2026-11-06
 
 - Use the PS5 virtual reservation API for ZGC heap views, verify exact placement
   and record native failure details. Console initialization remains pending.
 
+[Validation record](docs/validation/client238-zgc-reservation-2026-11-06.json)
+
 ## Local 237 · Experimental generational ZGC, 2026-11-06
 
 - Select OpenJDK generational ZGC with PS5 physical backing and retain C2 tier4.
 - Use four parallel and two concurrent GC workers with a 1536 MiB maximum heap.
   Physical-console startup, frame pacing and world saves are pending.
+
+[Validation record](docs/validation/client237-zgc-2026-11-06.json)
 
 ## Local 235 · Native compilation headroom, 2026-11-06
 
@@ -233,25 +301,35 @@ The maintainer confirmed the build and shader rendering on PS5. See the [release
 - Rebuild the compiler TLS adapter against the matching runtime ledger layout.
   Physical console validation is pending.
 
+[Validation record](docs/validation/client235-fabric-native-capacity-2026-11-06.json)
+
 ## Local 233 · File descriptor exhaustion capture, 2026-11-06
 
 - Save the first tracked EMFILE inventory through the existing native stderr log
   so it can be read after restarting the launcher.
+
+[Validation record](docs/validation/client233-emfile-capture-2026-11-06.json)
 
 ## Local 232 · Bounded Fabric startup mutex use, 2026-11-06
 
 - Share 64 HotSpot profiling locks across methods on PS5 to reduce native
   mutex demand. Keep tiered C2 and Parallel GC. Console validation is pending.
 
+[Validation record](docs/validation/client232-fabric-method-locks-2026-11-06.json)
+
 ## Local 231 · Fabric startup condition reserve, 2026-11-06
 
 - Keep native condition variables available for HotSpot monitors by skipping
   their allocation for lock-only mutexes on PS5. Console validation is pending.
 
+[Validation record](docs/validation/client231-fabric-condition-reserve-2026-11-06.json)
+
 ## Local 230 · Fabric startup mutex reserve, 2026-11-06
 
 - Request 12,288 HotSpot mutexes after 26.3 Fabric exhausted the 8,192-entry reserve.
 - Keep tiered C2 and Parallel GC. Physical console validation is pending.
+
+[Validation record](docs/validation/client230-fabric-mutex-reserve-2026-11-06.json)
 
 ## Local 229 · Tiered JIT and Parallel GC experiment, 2026-11-06
 
@@ -259,15 +337,39 @@ The maintainer confirmed the build and shader rendering on PS5. See the [release
 - Select Parallel GC and log threads that hold up long JVM pauses.
 - Keep live descriptor tracking for investigation of the 1.21.9 save failure.
 
+[Validation record](docs/validation/client229-tiered-parallel-2026-11-06.json)
+
+## Local 228 · Save descriptor diagnostics, 2026-11-06
+
+- Restores live handle tracking after 1.21.9 hit descriptor exhaustion during saves.
+
+[Validation record](docs/validation/client228-save-descriptors-2026-11-06.json)
+
 ## Local 227 · Vanilla 1.21 launcher labels and 1.21.9, 2026-11-06
 
 - Use normal labels for Vanilla 1.21.10 and 1.21.11. Add Vanilla 1.21.9
   as a development test using the matched LWJGL and Zink path.
 
+[Validation record](docs/validation/client227-vanilla1219-2026-11-06.json)
+
 ## Local 226 · Restore download0 defaults, 2026-11-06
 
 - Use download0 for the default library, reports and temporary files. Existing
   migrated libraries stay accessible, with further automatic moves disabled.
+
+[Validation record](docs/validation/client226-download0-default-2026-11-06.json)
+
+## Local 225 · 26.3 Vanilla audio tracing test, 2026-11-05
+
+- Tests whether synchronous audio tracing contributes to the 26.3 Vanilla slowdown.
+
+[Validation record](docs/validation/client225-vanilla-startup-trace-2026-11-06.json)
+
+## Local 224 · 26.3 loading freeze diagnostics, 2026-11-05
+
+- Samples startup threads for the reported 26.3 freezes.
+
+[Validation record](docs/validation/client224-loading-freeze-diagnostics-2026-11-05.json)
 
 ## Local 223 · Repair Minecraft startup on shared storage, 2026-11-05
 
@@ -275,11 +377,15 @@ The maintainer confirmed the build and shader rendering on PS5. See the [release
   Build 222 compiled the kernel but checked the old location and stopped
   before entering Minecraft.
 
+[Validation record](docs/validation/client223-shared-jit-startup-2026-11-05.json)
+
 ## Local 222 · Shared folder browsing and cleanup recovery, 2026-11-05
 
 - Allow read and traverse access on the shared app and reports directories.
   Private files, account storage, temporary files and staging retain their modes.
 - Keep the cleanup journal until the retired files have been removed.
+
+[Validation record](docs/validation/client222-incremental-storage-2026-11-05.json)
 
 ## Local 221 · Incremental library move, 2026-11-05
 
@@ -292,11 +398,15 @@ The maintainer confirmed the build and shader rendering on PS5. See the [release
 
 - Tell players on the migration panel that their library only needs to move once.
 
+[Validation record](docs/validation/client220-one-time-move-2026-11-05.json)
+
 ## Local 219 · Library migration progress bar, 2026-11-05
 
 - Show a startup panel with measured percentages for moving and verifying the
   library. Use a moving segment while scanning and during other startup phases
   without a known total. Circle still pauses the move and opens the original library.
+
+[Validation record](docs/validation/client219-library-progress-2026-11-05.json)
 
 ## Local 218 · Library startup progress, 2026-11-05
 
@@ -305,11 +415,15 @@ The maintainer confirmed the build and shader rendering on PS5. See the [release
   for that session. Restart to resume. A shared library load error also retries
   the verified original library. Console diagnosis and retest are pending.
 
+[Validation record](docs/validation/client218-library-startup-2026-11-05.json)
+
 ## Local 217 · 26.2 startup repair, 2026-11-05
 
 - Restore the verified original LWJGL TinyFD 3.4.1 Java JAR on the shared
   26.x classpath. The existing PS5 JNI adapter continues to report desktop
   dialogs unavailable. Physical Vanilla and Fabric launch checks are pending.
+
+[Validation record](docs/validation/client262-crash-report-2026-11-05.json)
 
 ## Local216 — primary shared content/reports/tmp and clean cards,2026-11-05
 
@@ -363,6 +477,9 @@ The maintainer confirmed the build and shader rendering on PS5. See the [release
 - Replace a late211macOS fixture’s15ms trigger-state assumption with bounded
   response polling; physical212 visual/feel/handoff checks remain pending.
 
+**Console:** The physical tester accepts the launcher and explicitly authorizes release of the exact package. Existing26.x game paths and shader/quit/save repairs remain. Numeric FPS, broad game/mod/shader/device regressions and endurance are unmeasured; all1.21Fabric and earlier1.21 releases remain unavailable.
+
+[Release notes](docs/releases/client-launcher-vanilla-212.md) · [Console acceptance and limits](docs/validation/client212-console-acceptance-2026-11-04.json) · [ProsperoStore update submitted](https://github.com/darkxex/ps5-homebrew-catalog/pull/1121)
 
 ## Local211 — whole-launcher120 target, 2026-11-04
 
@@ -375,7 +492,6 @@ The maintainer confirmed the build and shader rendering on PS5. See the [release
   and rearm on neutral, only for available directions. Preserve login/notice fixes,
   haptic opt-out/watchdog/reset and unchanged game/native/Java policies.
 
-
 ## Local210 — launcher layout and focused startup, 2026-11-04
 
 - Repair209 bottom clipping and move the footer fade below existing controls.
@@ -387,7 +503,6 @@ The maintainer confirmed the build and shader rendering on PS5. See the [release
 - Native lane gains the portable real haptic-worker fixture; physical210 layout,
   trigger feel, startup/account behavior and game handoff remain pending.
 
-
 ## Local209 — launcher page motion, 2026-11-04
 
 - Record positive208 feedback and preserve its exact package.
@@ -398,7 +513,6 @@ The maintainer confirmed the build and shader rendering on PS5. See the [release
   and pointer hit testing at the visible position; honor Reduced motion.
 - Keep208 game/native/runtime policies. Local model/native and actual Vulkan
   preview checks pass; physical209 launcher/game handoff remains pending.
-
 
 ## Local208 — 1.21.10 Vanilla, resolution and launcher keyboard, 2026-11-04
 
@@ -583,6 +697,10 @@ The maintainer confirmed the build and shader rendering on PS5. See the [release
 
 - 191 gets past flush-queue creation to real context/swapchain/first flip, then genuine LWJGL aborts allocating its JNI environment copy.192 scopes ThreadLocalUtil and its common_tools TLS allocator/free owner to the existing graphics allocation family, with unchanged machine instructions and paired lifetime. Actual JNI failure/lifecycle controls pass; PS5 capabilities/title/world remain pending. [192 guide](docs/client-zink-jni-env-192.md). Quit repair deferred; no release/Store change.
 
+## Local 202–204 · Shader and quit checks, 26.1 labels and save handles, 2026-11-03
+
+- The user confirms shader rendering and Quit Game pass on local build 202. Build 203 uses normal PLAY/READY/SUPPORTED labels for 26.1, 26.1.1 and 26.1.2 Vanilla/Fabric. Ordinary gameplay was previously reported working across all six combinations; a complete shader/quit version matrix, performance and endurance remain separately scoped. 26.3 save failures now reproduce EMFILE; 204 tests reduced archive descriptor use and fuller handle diagnostics, with physical save/reload and regression pending. These local builds are not a new released/Store version. [Status and exact test scope](docs/client-zink-ready-203.md).
+
 ## 01.000.179 — automatic microphone and simpler instance settings
 
 - Prepare the working system microphone automatically before every supported game launch; remove the launcher Microphone button, toggle and test page. Existing saved microphoneEnabled:false no longer blocks preparation. Use the controller's physical microphone mute button or PS5 system mute.
@@ -645,12 +763,20 @@ The maintainer confirmed the build and shader rendering on PS5. See the [release
 - Add real-socket and HID/model tests, browser phone/desktop verification and exact local test packaging. Host results do not establish reachable PS5 networking.
 - Investigate original Simple Voice Chat Fabric2.6.27 artifacts and upstream OpenAL capture; built-in controller capture is blocked by missing verified AudioIn/routing/mute contracts. No capture implementation or microphone/mod compatibility claim. [Scope and console plan](docs/client-local-management-170.md). No release/Store update.
 
+## Local 168 · Shared-tooling regression candidate
+
+- [168 shared-tooling regression candidate](docs/client-shared-tooling-test-168.md) passes host/SDK/package/relink checks; exact PS5 validation remains pending. This is not a public binary release.
+
 ## 01.000.167 — accepted launcher keyboard/mouse and Fabric26.2 release
 
 - Enable normal Fabric26.2 support after user acceptance of exact166.
 - Add launcher physical keyboard navigation and text editing, mouse selection/clicks, scrolling and right-click Back.
 - Add a rounded vector cursor matching the supplied silhouette, with theme fill and a single light outline; controller navigation hides it until mouse use.
 - Preserve the accepted166 candidate. User accepted exact167 and explicitly requested release; broader per-device regression and endurance remain unmeasured.
+
+**Console:** added supported Minecraft26.2 Fabric, controller/keyboard/mouse handoff fixes, launcher mouse and keyboard controls, and a rounded vector cursor that follows the saved theme. The user accepts this exact build and explicitly requests release. [Release notes](docs/releases/client-input-fabric-167.md) · [Console acceptance](docs/validation/client167-console-acceptance-2026-10-30.json). Broader device coverage and long-session endurance remain unmeasured.
+
+The user accepted166’s Controlify controller detection and physical input handoff repair, then accepted167’s launcher keyboard/mouse and cursor work.167 removes the Fabric26.2 development labels. Mod compatibility still depends on the exact game/mod versions; no universal compatibility or endurance claim is made. [Launcher input details](docs/client-launcher-desktop-167.md).
 
 ## 01.000.166 — local Controlify library-path repair
 
@@ -1066,13 +1192,11 @@ Microphone capture remains deferred. [Release notes](docs/releases/client-contro
 - Repair existing instances before launch. Healthy instances need no dependency network requests; version conflicts and unmapped missing dependencies stop in the launcher.
 - Record positive PS5 keyboard feedback on107. Dependency108 console testing remains pending; Store stays unchanged until accepted.
 
-
 ## Development 01.000.107
 
 - Add an Uninstall button beside each installed mod, shader or resource pack, with Cancel as the default confirmation action. Other files, worlds and settings are kept.
 - Show actual project artwork for WebP, indexed PNG, RGB/RGBA PNG and JPEG icons. Replace the Modrinth-logo fallback with a neutral placeholder when artwork is unavailable.
 - Preserve106's audio, physical input and Controlify candidates. PS5 validation remains pending.
-
 
 ## Development 01.000.106
 
@@ -1080,7 +1204,6 @@ Microphone capture remains deferred. [Release notes](docs/releases/client-contro
 - Share resident SDL as SDL3 for Controlify; retain temporary controls until a mod opens a controller. Console validation pending.
 - Add actual Installed inventories for mods, shaders and resource packs, notice-style checkboxes and cached project/download thumbnails.
 - Add an optional reversible Vitrail shadow-map scale control, preserving other settings. Shader FPS improvements are not yet measured.
-
 
 ## 2026-10-27 — Fabric recovery and input105
 
@@ -2202,7 +2325,6 @@ failure-site/errno/JNI-state diagnostics and Java heap counters. The host
 server reaches ready/save/stop with about 1 MiB of code cache used. The
 PS5 failure is not yet confirmed resolved.
 
-
 ## Download diagnostic logs (01.000.009)
 
 Keep the probe open and visit **`http://<PS5-IP>:8765/`** from a browser on the
@@ -2269,7 +2391,6 @@ The target library was rebuilt and verified against the packaged copy.
 **PS5 validation is pending.** Management-library and OS-telemetry warnings remain
 separate unresolved issues; the server has not yet reached ready on PS5.
 
-
 ## Current fixes in 01.000.012
 
 - **JVM management:** the real target `libmanagement` is embedded and connected
@@ -2297,7 +2418,6 @@ Host management, diagnostic adaptation, restricted-module preflight/help, and
 real server readiness/save/stop checks pass. **PS5 testing remains pending** for
 management, the verifier fallback and real server ready/save/stop. Use the log
 page on port 8765 to collect results after the attempt.
-
 
 ## Class loading and log identity in 01.000.013
 
@@ -2545,7 +2665,6 @@ Build040 pins a runtime repair that reports no desktop core path on PS5, allowin
 
 The subsequently saved039 trace confirms native OOM followed by a current-directory query fault during fatal reporting. Build040 package SHA-256: `42caf2dc57df38b7b8348f3bafdcda0abb0c8f4c81391b1a92d05d5560e17502`. Console results remain pending.
 
-
 ## Build040 console failure and build041 follow-up
 
 The user reports a crash on flat-world startup in040. Retrieved current-run
@@ -2577,7 +2696,6 @@ all console rows and actual readiness/save/stop require validation.**
 
 Build041 package SHA-256: `d95e4458cc35bf2cd3009bbaca15268a3c4b9df10c98e7157538c93d7bb90df2`.
 
-
 ## Build041 console failure and build042 allocator mitigation
 
 The current-run reports for `01.000.041-1792232186-809546025` confirm a failed
@@ -2607,7 +2725,6 @@ The consumer Java harness is unchanged from the host-tested041 source.
 
 Build042 package SHA-256: `3005ff93a3d8098148e3232e6419480877a293ada83381959d805abd94332a48`.
 
-
 ## Build042 returned failure; build043 class scratch mitigation
 
 The human reports042 failed at58 seconds without crashing. Current-run session
@@ -2635,7 +2752,6 @@ real readiness/save/stop remain pending.** Discovery DNS remains unresolved.
 
 Build043 package SHA-256: `f523a0dceb4fc068fcee45af35dd6a3304b30c396c7751a42b3be92eb6bf761c`.
 
-
 ## Build043 medium class scratch failure; build044 reusable storage
 
 The user reports043 failed without crashing. Live session
@@ -2662,7 +2778,6 @@ with both backends refused and retain >32KiB allocation/OOM checks. Target build
 passes. **All044 PS5 rows and real readiness/save/stop remain pending.**
 
 Build044 package SHA-256: `9c617614a4f4e2627521e255181d9319574848e7bc8f9542f4701c8c75e91bd9`.
-
 
 ## Build044 native arena abort
 
@@ -2700,7 +2815,6 @@ Final target rebuild and package checks pass. Initial compile was restarted afte
 a source-header edit invalidated its precompiled header; the final rebuild passed.
 Build045 package SHA-256: `f59d9ffedfc4e1e9548b01dc18bf4c8f430997ef4be93dc0e20a38f599d6d754`.
 
-
 ## Build045 saved read failure and build046 bounded native reads
 
 The human reports045 crashed and relaunched. Preserved session
@@ -2733,7 +2847,6 @@ Target rebuild passes. **All046 PS5 rows and readiness/save/stop remain pending.
 
 Build046 package SHA-256: `bf498ad48ca257bd9ed5550e25e3b3248cbcb39392215ac7edd44a366cb7d3b7`.
 
-
 ## Build046 exhausted slabs; build047 lower Java heap budget experiment
 
 The human reports046 crashed/relaunched. Saved session
@@ -2759,7 +2872,6 @@ The historical128MiB host OOM remains recorded and is not contradicted by this
 and overall native resource capacity remain unresolved.
 
 Build047 package checks pass; SHA-256: `bb7193b2526bdb77b04c91af81f6f82a6750dfe2a014a061f9bbd690b229bb90`.
-
 
 ## Build047 external-address signal; build048 native-preparation diagnostics
 
@@ -2787,7 +2899,6 @@ Actual formatter ASan/UBSan tests and target build pass. **All048 PS5 rows,
 trace usefulness, native fault resolution and readiness/save/stop remain pending.**
 
 Build048 package checks pass; SHA-256: `c4b44bf6871d7c8023b7cb8c8a8c09a4bced523e5b5139e616bc51619cc0a74a`.
-
 
 ## Build048 identifies JFR default-directory query; build049 repair
 
