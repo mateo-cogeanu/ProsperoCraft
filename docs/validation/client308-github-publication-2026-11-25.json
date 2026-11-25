@@ -1,0 +1,52 @@
+{
+  "app_version": "01.000.308",
+  "title_id": "PPSA99874",
+  "release": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/tag/01.000.308",
+  "release_tag_commit": "bd5d7f4d9ab66ee8ba8d6d67e3e1e3c67278df39",
+  "matching_build_source_commit": "491093b21bee820bbb9c4521b2bd00d4cc297824",
+  "published_at": "2026-11-25T16:50:12Z",
+  "uploaded_assets": [
+    {
+      "name": "PPSA99874.zip",
+      "bytes": 128697374,
+      "sha256": "e1b48dcb60428229df05b8ad740ffbdf2820e8c439e7d865f2f5540938366c69",
+      "url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/download/01.000.308/PPSA99874.zip"
+    },
+    {
+      "name": "SHA256SUMS",
+      "bytes": 474,
+      "sha256": "b2ac253414d4328a1af69745caefa1d9a65af41ee76669e778a58a5678dec8dd",
+      "url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/download/01.000.308/SHA256SUMS"
+    },
+    {
+      "name": "client308-build-validation.json",
+      "bytes": 11254,
+      "sha256": "d1be4c652ac8d349c2e984d6d17a3dc24511a7a9074d312cc9ccf1624198f265",
+      "url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/download/01.000.308/client308-build-validation.json"
+    },
+    {
+      "name": "client308-console-validation.json",
+      "bytes": 869,
+      "sha256": "9e14b9624da11a9f13a16fa73a58a892a42300a3876699548f4658fc2c6fb303",
+      "url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/download/01.000.308/client308-console-validation.json"
+    },
+    {
+      "name": "client308-openal-source-relink.zip",
+      "bytes": 210928192,
+      "sha256": "17e7149bdab92f0a94c001b28dab628dd627a3426acb76019c6f511af37d33f1",
+      "url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/download/01.000.308/client308-openal-source-relink.zip"
+    },
+    {
+      "name": "client308-package-audit.json",
+      "bytes": 22175,
+      "sha256": "cb048e1cfeb0dc63f30a87fbf219f06588380aeb2098f407c003929c95525000",
+      "url": "https://github.com/mateo-cogeanu/ProsperoCraft/releases/download/01.000.308/client308-package-audit.json"
+    }
+  ],
+  "checks": [
+    "All six GitHub assets were downloaded and independently matched to the prepared files.",
+    "Normal and compatible OpenAL replacement relinks from the downloaded kit reproduced the exact tested ELF.",
+    "GitHub confirmed the public stable release as latest and the release tag resolves to the prepared release commit."
+  ],
+  "status": "GitHub release published."
+}
